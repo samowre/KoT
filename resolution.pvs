@@ -1,0 +1,38 @@
+resolution : THEORY
+
+  BEGIN
+
+  IMPORTING rule
+
+    r, s, t: VAR term
+    rr, ss, tt: VAR list[term]
+    i, j, k: VAR nat
+    ii, jj, kk: VAR list[nat]
+    f, g, h: VAR (fun?)
+    p, q: VAR (pred?)
+    A, B, C: VAR fmla
+    AA, BB, CC: VAR list[fmla]
+    x, y, z: VAR (var?)
+    xx, yy, zz: VAR list[(var?)]
+    nr, ns, nt: VAR nterm
+
+    atom?(A): bool = (atom?(A) AND upred?(pred(A)) AND arity(pred(A)) = 0)
+
+    pA, pB, pC: VAR (atom?)
+
+    literal?(A): bool = (atom?(A) OR (f_not?(A) AND atom?(arg(A))))
+
+    lA, lB, lC: VAR (literal?)
+
+    lAA, lBB, lCC: VAR list[(literal?)]
+
+    clause_lit_list?(lAA): bool =
+      CASES lAA OF
+       null: TRUE,
+       cons(lA, lBB): NOT member(lA, lBB) AND
+                      NOT member(f_neg(lA), lBB) AND
+		      
+
+  
+
+  END resolution

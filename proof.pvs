@@ -1,0 +1,92 @@
+proof	: THEORY
+
+%A proof is an array where each element is a semi-proof of a sequent, i.e., 
+%a proof from other sequents.  A semi-proof consists of an array consisting of
+%a sequent and proof rule.  The sequent must follow from prior sequents
+%by the proof rules.  Some of the sequents in a semi-proof can be lemmas
+%in which case, they are linked to semi-proofs in the larger proof.  Thus
+%a proof is 2-dimensional.  The reason is so that we try to keep proofs
+%parametric with respect to proofs of lemmas.
+
+  BEGIN
+
+  rule: DATATYPE 
+  BEGIN
+   ax: ax? : no_premise?
+   orr: orr?: one_premise?
+   norr : norr?: two_premise?
+   neg : neg? : one_premise?
+   cut(cut_fmla: fmla) : cut? : two_premise?
+   existsr(witness: term): existsr? : one_premise?
+   allr(skoconst: (ufun?)): allr? : one_premise?
+   fschema(fun: (ufun?), vars: list[(t_vars?)], body: term): fscheme? : one_premise?
+   pschema(fun: (ufun?), vars: list[(t_vars?)], body: fmla): pscheme? : one_premise?
+   reflex: reflex? : no_premise?
+   lemma(index: nat) : lemma? : no_premise?
+  END rule
+
+  proof_step : TYPE
+   = [# sequent: sequent,
+        rule: rule,
+	subs: list[nat] #]
+
+  proof_seq: TYPE =  finite_seq[proof_step]
+  R, S: VAR proof_step
+  RR, SS: VAR proof_seq
+
+  ne_proof_seq: TYPE = {RR | RR`length > 0}
+
+  nRR, nSS: VAR ne_proof_seq
+
+  conclusion(RR: nRR): sequent =
+    (RR`sequence(RR`length - 1))
+  
+  checkProof(lemmas: finite_seq[sequent])(RR): bool =
+    (FORALL (i: below(RR`length)):
+     (LET R = RR`sequence(i) IN
+      (one_premise?(R`rule) OR two_premise?(R`rule)
+       => (cons?(R`subs) AND car(R`subs) < i)) AND
+      (two_premise?(R`rule) => (cons?(cdr(R`subs)) AND
+				car(cdr(R`subs)) < i )) AND
+      (CASES R`rule OF
+       ax : ax_rule?(R`sequent),
+       orr : or_rule?(R`sequence(car(R`subs))`sequent, R`sequent),
+       norr: nor_rule?(R`sequence(car(R`subs))`sequent,
+	               R`sequence(car(cdr(R`subs)))`sequent,
+	               R`sequent),
+       neg : neg_rule?(R`sequence(car(R`subs))`sequent, R`sequent),
+       cut(A): cut_rule?(A, car(R`subs), car(cdr(R`subs)), R`sequent),
+       existsr(u, vars, body):
+         exists_rule?(u, vars, body, car(R`subs), R`sequent),
+       allr(f): forall_rule?(f, car(R`subs), R`sequent),
+       fschema(u, vars, s): fschema_rule?(u, vars, s, car(R`subs), R`sequent),
+       pschema(u, vars, A): pschema_rule?(u, vars, A, car(R`subs), R`sequent),
+       reflex: reflex_rule?(R`sequent),
+       lemma(i): (i < lemmas`length AND
+                  R`sequent = lemmas`sequence(i))
+      ENDCASES)))
+
+
+    proof: DATATYPE
+     BEGIN
+       compose(lemmas : finite_seq[proof], 
+               main : (checkProof(map(conclusion)(lemmas)))): compose?
+     END proof
+  
+%Each proof_entry can be independently checked.  We can then
+%compose these into a proof where we associate proofs with
+%the lemmas.  Since we are not actually interested in running
+%the proof checker, we can live with tree-like proofs.
+%The lemmas include function and predicate definitions.
+%A whole proof is then relative to these definitions.
+%A predicate definition is given as p(x, y, z) <-> A, whereas a
+%function definition has the form (all x: exists! y: A(x, y)) => A(x, f(x)).
+
+		  
+
+  					  
+
+  					  
+  
+
+  END proof

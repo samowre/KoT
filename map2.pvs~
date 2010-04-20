@@ -1,0 +1,20 @@
+map2   [S, T: TYPE ]
+		: THEORY
+
+  BEGIN
+
+    kk, ll, kk1, ll1: VAR list[S]
+    x, y: VAR S
+
+    map2(f : [S, S -> T],  kk, ll): RECURSIVE list[T] =
+     CASES kk OF
+      null: null,
+      cons(x, kk1): IF cons? (ll)
+                     THEN cons(f(x, car(ll)),
+		               map2(f, kk1, cdr(ll)))
+	             ELSE null
+		    ENDIF
+     ENDCASES
+     MEASURE length(kk)
+
+  END map2

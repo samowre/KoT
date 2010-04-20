@@ -1,0 +1,60 @@
+map2   [S, T: TYPE ]
+		: THEORY
+
+  BEGIN
+
+    kk, ll, kk1, ll1: VAR list[S]
+    x, y: VAR S
+
+    map2(f : [S, S -> T],  kk, ll): RECURSIVE list[T] =
+     CASES kk OF
+      null: null,
+      cons(x, kk1): IF cons? (ll)
+                     THEN cons(f(x, car(ll)),
+		               map2(f, kk1, cdr(ll)))
+	             ELSE null
+		    ENDIF
+     ENDCASES
+     MEASURE length(kk)
+
+     reduce2(a: T, f: [S, S, T -> T], kk, ll): RECURSIVE T = 
+     CASES kk OF
+      null: a, 
+      cons(x, kk1): IF cons? (ll)
+                     THEN f(x, car(ll), reduce2(a, f, kk1, cdr(ll)))
+	             ELSE a
+		    ENDIF
+     ENDCASES
+     MEASURE length(kk)
+
+     f, g: VAR [S -> list[T]]
+
+     h: VAR [S -> S]
+
+     a, b, c: VAR T
+     A, B, C: VAR list[T]
+
+     IMPORTING minlist
+
+     delete_reduce: LEMMA
+       delete(a, reduce(null, LAMBDA x, A: append(f(x), A))(kk)) =
+       reduce(null, LAMBDA x, A: append(delete(a, f(x)), A))(kk)
+	    
+     every_reduce: LEMMA
+       every(LAMBDA x: f(x) = g(x))(kk) =>
+       reduce(null, LAMBDA x, A: append(f(x), A))(kk) =
+       reduce(null, LAMBDA x, A: append(g(x), A))(kk)
+
+     reduce_map: LEMMA
+       reduce(null, LAMBDA x, A: append(f(x), A))(map(h)(kk)) =
+       reduce(null, LAMBDA x, A: append(f(h(x)), A))(kk)
+
+     every_forall: LEMMA
+      (FORALL (p: [S, T -> bool]):
+        every(LAMBDA x: (FORALL a: p(x, a)))(ll) =
+	(FORALL a: every(LAMBDA x: p(x, a))(ll)))
+       
+
+  END map2
+
+

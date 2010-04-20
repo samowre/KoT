@@ -1,0 +1,204 @@
+(rule (goodproof?_TCC1 0
+       (goodproof?_TCC1-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC2 0
+       (goodproof?_TCC2-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC3 0
+       (goodproof?_TCC3-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC4 0
+       (goodproof?_TCC4-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC5 0
+       (goodproof?_TCC5-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC6 0
+       (goodproof?_TCC6-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC7 0
+       (goodproof?_TCC7-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC8 0
+       (goodproof?_TCC8-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC9 0
+       (goodproof?_TCC9-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (goodproof?_TCC10 0
+       (goodproof?_TCC10-1 nil 3474924292 nil
+        ("" (termination-tcc) nil nil) unfinished nil nil nil nil nil))
+      (reflex_thm_TCC1 0
+       (reflex_thm_TCC1-1 nil 3474924292 nil ("" (subtype-tcc) nil nil)
+        unfinished nil nil nil nil nil))
+      (reflex_thm 0
+       (reflex_thm-1 nil 3474924292 3474925768
+        ("" (grind)
+         ((""
+           (inst +
+            "reflex(cons(atom(ipred(0, 2), (: ns!1, ns!1 :)), G!1))")
+           (("" (grind :defs !) nil nil)) nil))
+         nil)
+        unchecked
+        ((nnint_plus_posint_is_posint application-judgement "posint"
+          integers nil)
+         (append def-decl "list[T]" list_props nil)
+         (proof type-decl nil rule nil)
+         (reflex? adt-recognizer-decl "[proof -> boolean]" rule nil)
+         (reflex adt-constructor-decl "[sequent -> (reflex?)]" rule
+          nil)
+         (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+         (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt
+               nil)
+         (funpred type-decl nil funpred_adt nil)
+         (pred? adt-def-decl "boolean" funpred_adt nil)
+         (number nonempty-type-decl nil numbers nil)
+         (= const-decl "[T, T -> boolean]" equalities nil)
+         (number_field_pred const-decl "[number -> boolean]"
+          number_fields nil)
+         (number_field nonempty-type-from-decl nil number_fields nil)
+         (real_pred const-decl "[number_field -> boolean]" reals nil)
+         (real nonempty-type-from-decl nil reals nil)
+         (rational_pred const-decl "[real -> boolean]" rationals nil)
+         (rational nonempty-type-from-decl nil rationals nil)
+         (integer_pred const-decl "[rational -> boolean]" integers nil)
+         (int nonempty-type-eq-decl nil integers nil)
+         (>= const-decl "bool" reals nil)
+         (nat nonempty-type-eq-decl nil naturalnumbers nil)
+         (length def-decl "nat" list_props nil)
+         (arity shared-adt-accessor-decl "[funpred -> nat]" funpred_adt
+                nil)
+         (atom? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+         (atom adt-constructor-decl
+               "[[pred: (pred?), {ss: list[term] | length(ss) = arity(pred)}] -> (atom?)]"
+               fmla nil)
+         (ipred? adt-recognizer-decl "[funpred -> boolean]" funpred_adt
+          nil)
+         (ipred adt-constructor-decl "[[nat, nat] -> (ipred?)]"
+          funpred_adt nil)
+         (null adt-constructor-decl "(null?)" list_adt nil)
+         (equality? const-decl "bool" sequents nil)
+         (nth def-decl "T" list_props nil)
+         (refl_equality? const-decl "bool" sequents nil)
+         (reflex_rule? const-decl "bool" sequents nil)
+         (goodproof? def-decl "bool" rule nil)
+         (odd_minus_odd_is_even application-judgement "even_int"
+          integers nil)
+         (boolean nonempty-type-decl nil booleans nil)
+         (bool nonempty-type-eq-decl nil booleans nil)
+         (NOT const-decl "[bool -> bool]" booleans nil)
+         (fmla type-decl nil fmla nil)
+         (list type-decl nil list_adt nil)
+         (sequent type-eq-decl nil sequents nil)
+         (term type-decl nil fmla nil)
+         (PRED type-eq-decl nil defined_types nil)
+         (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+         (theorem? const-decl "bool" rule nil))
+        46428 9500 t shostak))
+      (trans_thm_TCC1 0
+       (trans_thm_TCC1-1 nil 3474925722 nil ("" (subtype-tcc) nil nil)
+        unfinished nil nil nil nil nil))
+      (trans_thm 0
+       (trans_thm-1 nil 3474926238 3474955738
+        ("" (grind)
+         ((""
+           (inst +
+            "pschema(upred(0, 2), (: v(0), v(1) :), f_eq(v(0), v(1)),
+                         (: atom(ipred(0, 2), (: nr!1, nt!1 :)),
+               f_not(atom(ipred(0, 2), (: nr!1, ns!1 :))),
+               f_not(atom(ipred(0, 2), (: ns!1, nt!1 :))) :),
+                pcongruence((: atom(upred(0, 2), (: nr!1, nt!1 :)),
+               f_not(atom(upred(0, 2), (: nr!1, ns!1 :))),
+               f_not(f_eq(ns!1, nt!1)) :)))")
+           (("" (grind) nil nil)) nil))
+         nil)
+        proved
+        ((nnint_plus_posint_is_posint application-judgement "posint"
+          integers nil)
+         (freevars def-decl "list[(var?)]" fmla nil)
+         (freevars def-decl "list[(var?)]" fmla nil)
+         (append def-decl "list[T]" list_props nil)
+         (termvars def-decl "list[(var?)]" fmla nil)
+         (proof type-decl nil rule nil)
+         (funpred type-decl nil funpred_adt nil)
+         (upred? adt-recognizer-decl "[funpred -> boolean]" funpred_adt
+          nil)
+         (fmla type-decl nil fmla nil)
+         (sentence? const-decl "bool" fmla nil)
+         (sequent type-eq-decl nil sequents nil)
+         (pscheme? adt-recognizer-decl "[proof -> boolean]" rule nil)
+         (pschema adt-constructor-decl
+          "[[(upred?), list[(var?)], fmla, sequent, proof] -> (pscheme?)]"
+          rule nil)
+         (number nonempty-type-decl nil numbers nil)
+         (number_field_pred const-decl "[number -> boolean]"
+          number_fields nil)
+         (number_field nonempty-type-from-decl nil number_fields nil)
+         (real_pred const-decl "[number_field -> boolean]" reals nil)
+         (real nonempty-type-from-decl nil reals nil)
+         (rational_pred const-decl "[real -> boolean]" rationals nil)
+         (rational nonempty-type-from-decl nil rationals nil)
+         (integer_pred const-decl "[rational -> boolean]" integers nil)
+         (int nonempty-type-eq-decl nil integers nil)
+         (>= const-decl "bool" reals nil)
+         (nat nonempty-type-eq-decl nil naturalnumbers nil)
+         (upred adt-constructor-decl "[[nat, nat] -> (upred?)]"
+          funpred_adt nil)
+         (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+         (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt
+               nil)
+         (v adt-constructor-decl "[nat -> (var?)]" fmla nil)
+         (null adt-constructor-decl "(null?)" list_adt nil)
+         (pred? adt-def-decl "boolean" funpred_adt nil)
+         (= const-decl "[T, T -> boolean]" equalities nil)
+         (length def-decl "nat" list_props nil)
+         (arity shared-adt-accessor-decl "[funpred -> nat]" funpred_adt
+                nil)
+         (atom? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+         (atom adt-constructor-decl
+               "[[pred: (pred?), {ss: list[term] | length(ss) = arity(pred)}] -> (atom?)]"
+               fmla nil)
+         (ipred? adt-recognizer-decl "[funpred -> boolean]" funpred_adt
+          nil)
+         (ipred adt-constructor-decl "[[nat, nat] -> (ipred?)]"
+          funpred_adt nil)
+         (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+         (f_not adt-constructor-decl "[fmla -> (f_not?)]" fmla nil)
+         (pcongruence? adt-recognizer-decl "[proof -> boolean]" rule
+          nil)
+         (pcongruence adt-constructor-decl
+          "[sequent -> (pcongruence?)]" rule nil)
+         (finite_emptyset name-judgement "finite_set" finite_sets nil)
+         (subset_is_partial_order name-judgement
+          "(partial_order?[set[T]])" sets_lemmas nil)
+         (list2set def-decl "set[T]" list2set nil)
+         (emptyset const-decl "set" sets nil)
+         (member const-decl "bool" sets nil)
+         (add const-decl "(nonempty?)" sets nil)
+         (subset? const-decl "bool" sets nil)
+         (max_index const-decl "nat" fmla nil)
+         (rassoc2 def-decl "T" minlist nil)
+         (parsubst def-decl "term" fmla nil)
+         (map adt-def-decl "list[T1]" list_adt_map nil)
+         (parsubstr def-decl "fmla" fmla nil)
+         (parsubst const-decl "fmla" fmla nil)
+         (psubst def-decl "fmla" fmla nil)
+         (pschema_rule? const-decl "bool" sequents nil)
+         (member def-decl "bool" list_props nil)
+         (reduce2 def-decl "T" map2 nil)
+         (pcongruence_rule? const-decl "bool" sequents nil)
+         (goodproof? def-decl "bool" rule nil)
+         (boolean nonempty-type-decl nil booleans nil)
+         (bool nonempty-type-eq-decl nil booleans nil)
+         (NOT const-decl "[bool -> bool]" booleans nil)
+         (term type-decl nil fmla nil)
+         (list type-decl nil list_adt nil)
+         (PRED type-eq-decl nil defined_types nil)
+         (every adt-def-decl "boolean" list_adt nil)
+         (var? adt-recognizer-decl "[term -> boolean]" fmla nil)
+         (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+         (termvars def-decl "list[(var?)]" fmla nil)
+         (theorem? const-decl "bool" rule nil)
+         (f_eq const-decl "fmla" sequents nil))
+        16279 8740 t shostak)))
+

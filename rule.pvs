@@ -1,0 +1,125 @@
+rule  % [ parameters ]
+		: THEORY
+
+  BEGIN
+
+  IMPORTING sequents
+
+  proof: DATATYPE 
+  BEGIN
+   ax(conc: sequent): ax?
+   subsetr(conc: sequent, sub: proof): subsetr?
+   orr(conc: sequent, sub:  proof): orr?
+   norr(conc: sequent, sub1, sub2: proof) : norr?
+   neg(conc: sequent, sub: proof) : neg?
+   cut(cut_fmla: fmla, conc: sequent, sub1, sub2: proof) : cut? 
+   existsr(witness: term, conc: sequent, sub: proof): existsr?
+   allr(skoconst: (ufun?), conc: sequent, sub: proof): allr?
+   fschema(fun: (ufun?), vars: list[(var?)], body: term,
+           conc: sequent, sub: proof): fscheme?
+   pschema(fun: (upred?), vars: list[(var?)], body: fmla,
+           conc: sequent, sub: proof): pscheme?
+   reflex(conc: sequent): reflex?
+   fcongruence(conc:sequent): fcongruence?
+   pcongruence(conc:sequent): pcongruence?
+  END proof
+
+  pf, prf: VAR proof
+  H, G: VAR sequent
+
+  goodproof?(pf: proof): RECURSIVE bool =
+    CASES pf OF
+    ax(G) : ax_rule?(G),
+    subsetr(G, H_pf): subset_rule?(conc(H_pf), G),
+    orr(G, H_pf): or_rule?(conc(H_pf), G) AND
+                  goodproof?(H_pf),
+    norr(G, H1_pf, H2_pf): nor_rule?(conc(H1_pf), conc(H2_pf), G) AND
+                           goodproof?(H1_pf) AND
+			   goodproof?(H2_pf),
+    neg(G, H_pf): neg_rule?(conc(H_pf), G) AND goodproof?(H_pf),
+    cut(A, G, H1_pf, H2_pf): cut_rule?(A, conc(H1_pf), conc(H2_pf), G) AND
+    	      	     	     goodproof?(H1_pf) AND
+			     goodproof?(H2_pf),
+    existsr(s, G, H_pf): exists_rule?(s, conc(H_pf), G) AND
+                         goodproof?(H_pf),
+    allr(f, G, H_pf): forall_rule?(f, conc(H_pf), G) AND
+                      goodproof?(H_pf),
+    fschema(f, vars, t, G, H_pf): fschema_rule?(f, vars, t, conc(H_pf), G) AND
+                                  goodproof?(H_pf),
+    pschema(p, vars, A, G, H_pf): pschema_rule?(p, vars, A, conc(H_pf), G) AND
+                                  goodproof?(H_pf),
+    reflex(G): reflex_rule?(G),
+    fcongruence(G): fcongruence_rule?(G),
+    pcongruence(G): pcongruence_rule?(G)
+    ENDCASES
+    MEASURE pf BY <<
+
+    theorem?(G): bool = (EXISTS pf: goodproof?(pf) AND conc(pf) = G)
+
+    r, s, t: VAR term
+    rr, ss, tt: VAR list[term]
+    i, j, k: VAR nat
+    ii, jj, kk: VAR list[nat]
+    f, g, h: VAR (fun?)
+    p, q: VAR (pred?)
+    A, B, C: VAR fmla
+    AA, BB, CC: VAR list[fmla]
+    x, y, z: VAR (var?)
+    xx, yy, zz: VAR list[(var?)]
+
+    nterm: TYPE = {s | null?(termvars(s))}
+
+    nr, ns, nt: VAR nterm
+    
+
+    tactic: TYPE = {f : [sequent -> list[sequent]] |
+                     (FORALL G: every(theorem?)(f(G)) => theorem?(G))}
+
+    reflex_thm: LEMMA theorem?(cons(f_eq(ns, ns), G))
+
+    trans_thm: LEMMA theorem?((: f_eq(nr, nt), f_not(f_eq(nr, ns)), f_not(f_eq(ns, nt)) :))
+
+    f_exists(xx, A): RECURSIVE fmla =
+     CASES xx OF
+       null: A,
+       cons(x, yy): f_exists(x, f_exists(yy, A))
+     ENDCASES
+     MEASURE length(xx)
+
+     f_forall(x, A): fmla = f_not(f_exists(x, f_neg(A)))
+
+     f_forall(xx, A): fmla =
+       f_neg(f_exists(xx, f_neg(A)))  %when xx is empty: needs to be f_neg not f_not
+
+     f_forall?(A): bool =
+       (f_not?(A) AND f_exists?(arg(A)))
+
+     f_exists_bindings(A): RECURSIVE list[(var?)]  =
+      (IF f_exists?(A)
+        THEN cons(bvar(A), f_exists_bindings(body(A)))
+	ELSE null
+	ENDIF)
+      MEASURE A BY <<
+
+     f_exists_body(A): RECURSIVE fmla =
+     (IF f_exists?(A)
+       THEN f_exists_body(body(A))
+       ELSE A
+      ENDIF)
+      MEASURE A BY <<
+
+     f_forall_bindings(A): list[(var?)] =
+      (IF f_not?(A)
+        THEN f_exists_bindings(arg(A))
+	ELSE null
+	ENDIF)
+
+     f_forall_body(A): fmla =
+      (IF f_not?(A)
+        THEN f_neg(f_exists_body(A))
+	ELSE A
+       ENDIF)
+       
+  
+
+  END rule

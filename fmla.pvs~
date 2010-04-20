@@ -1,0 +1,312 @@
+funpred: DATATYPE WITH SUBTYPES pred?, fun?
+  BEGIN
+   ipred(index, arity: nat): ipred? : pred?
+   upred(index, arity: nat): upred? : pred?
+   ifun(index, arity: nat): ifun?   : fun?
+   ufun(index, arity: nat): ufun?   : fun?
+  END funpred
+
+fmla: THEORY
+%fmla theory introduces the datatypes for the pre-terms and pre-formulas
+BEGIN
+
+%funpred is a combined datatype for interpreted/uninterpreted function and
+%predicate symbols. 
+
+  IMPORTING funpred, minlist
+
+%term is the pre-term datatype with variables and compound terms  
+term  : DATATYPE 
+  BEGIN
+   v(v_index: nat): var?
+   apply(fun: (fun?),
+         args: {ss: list[term] | length(ss) = arity(fun)}): apply?
+  END term
+
+
+%fmla is pre-formula
+fmla: DATATYPE
+  BEGIN
+   atom(pred: (pred?), args: {ss: list[term] | length(ss) = arity(pred)}): atom?
+   f_not(arg: fmla): f_not?
+   f_or(arg1, arg2: fmla): f_or?
+   f_exists(bvar: (var?), body: fmla): f_exists? 
+  END fmla
+
+r, s, t: VAR term
+ss, tt: VAR list[term]
+i, j, k: VAR nat
+ii, jj, kk: VAR list[nat]
+f, g, h: VAR (fun?)
+p, q: VAR (pred?)
+A, B, C: VAR fmla
+AA, BB, CC: VAR list[fmla]
+x, y, z: VAR (var?)
+xx, yy, zz: VAR list[(var?)]
+
+termvars(s): RECURSIVE list[(var?)] =
+  CASES s OF
+    v(i): (: s :),
+    apply(f, ss): reduce(null,
+                         (LAMBDA (t | t << s), (vv: list[(var?)]): 
+			 append(termvars(t), vv)))(ss)
+   ENDCASES
+   MEASURE s BY <<
+
+ F: VAR [term, list[(var?)] -> list[(var?)]]
+ G, H: VAR [term -> term]
+
+
+ reduce_reduce: LEMMA
+  length(ss) = arity(f) AND 
+  s = apply(f, ss) IMPLIES 
+  (FORALL tt: suffix?(ss)(tt) IMPLIES
+   reduce(null, (LAMBDA (t | t << s), (vv: list[(var?)]): F(t, vv)))(tt) =
+   reduce(null, F)(tt))
+
+ map_map: LEMMA
+   length(ss) = arity(f) AND 
+   s = apply(f, ss) IMPLIES 
+  (FORALL tt: suffix?(ss)(tt) IMPLIES
+   map(LAMBDA (t | t << s): G(t))(tt) =
+   map(G)(tt))
+
+ IMPORTING list_subtype
+
+ length_length: LEMMA
+   length(ss) = arity(f) AND 
+   s = apply(f, ss) IMPLIES 
+  (FORALL tt: suffix?(ss)(tt) IMPLIES
+   length[{t | t << s}](tt) =
+   length(tt))
+
+
+%substitute t for x in s
+subst(s, x, t): RECURSIVE term =
+  CASES s OF
+    v(i): (IF x = s THEN t ELSE s ENDIF),
+    apply(f, ss): apply(f, map((LAMBDA (r : term | r << s): 
+			            subst(r, x, t)))(ss))
+   ENDCASES
+   MEASURE s BY <<
+
+termvars(ss): RECURSIVE list[(var?)] =
+   CASES ss OF
+     null: null,
+     cons(s, tt): append(termvars(s), termvars(tt))
+   ENDCASES
+   MEASURE length(ss)
+
+subst(ss, x, t): RECURSIVE list[term] =
+    CASES ss OF
+      null: null,
+      cons(s, tt): cons(subst(s, x, t), subst(tt, x, t))
+     ENDCASES
+  MEASURE ss BY <<
+
+ IMPORTING map2, map3
+      
+term_equal(s, t, (s_vars, t_vars: list[(var?)])): RECURSIVE bool =
+  CASES s OF
+    v(i): (var?(t) AND rassoc2(s, s_vars, t_vars) = t),
+    apply(f, ss): (apply?(t) AND
+                   f = fun(t) AND
+		   % modif
+		   % default value is TRUE, not FALSE.
+		   % We can prove that length(ss)==length(args(t))
+                   reduce3(TRUE ,
+		           (LAMBDA ((s1 : term | s1 << s),
+			            t1 : term,
+				    b: bool):
+			       b AND term_equal(s1, t1, s_vars, t_vars)),
+			    ss, args(t)))
+   ENDCASES
+   MEASURE s BY <<
+
+parsubst(s, xx, tt): RECURSIVE term =
+  CASES s OF
+     v(i): rassoc2(s, xx, tt),
+     apply(f, ss): apply(f, map(LAMBDA (r: term | r <<s):
+			       parsubst(r, xx, tt))(ss))
+   ENDCASES
+   MEASURE s BY <<
+
+%free variables in (A:fmla)
+freevars(A): RECURSIVE list[(var?)]  = 
+  CASES A OF
+    atom(p, ss): termvars(ss),
+    f_not(B): freevars(B),
+    f_or(B, C): append(freevars(B), freevars(C)),
+    f_exists(x, B): delete(x, freevars(B))
+  ENDCASES
+  MEASURE A BY <<
+
+sentence?(A): bool = null?(freevars(A))
+
+% checks that variables in yy are not bound by exists in A 
+freefor(A, x, yy): RECURSIVE bool =
+  CASES A OF
+    atom(p, ss): TRUE,
+    f_not(B): freefor(B, x, yy), 
+    f_or(B, C): freefor(B, x, yy) AND freefor(C, x, yy), 
+    f_exists(y, B): NOT member(y, yy) AND
+                    freefor(B, x, yy)
+  ENDCASES
+  MEASURE A BY <<
+
+aux_subst: LEMMA  length[term](subst(ss, x, t)) = length(ss)
+
+subst(A, x, (t | freefor(A, x, termvars(t)))): RECURSIVE fmla =
+  CASES A OF
+    atom(p, ss): atom(p, subst(ss, x, t)),
+    f_not(B): f_not(subst(B, x, t)),
+    f_or(B, C): f_or(subst(B, x, t), subst(C, x, t)), 
+    f_exists(y, B): (IF x = y THEN A
+                     ELSE f_exists(y, subst(B, x, t))
+		     ENDIF)
+  ENDCASES
+  MEASURE A BY <<
+  
+max_index(xx): nat =
+  (IF cons?(xx) THEN v_index(maxlist(xx, (LAMBDA x: v_index(x))))
+   ELSE 0 ENDIF)
+
+M: VAR nat
+
+ub_max_index: LEMMA
+	      (FORALL (x: (var?) | member(x, xx)): v_index(x) <= M) <=> max_index(xx) <= M
+
+% using max_index(termvars(tt)) to eliminate obligation cons?(termvars(tt))
+parsubstr(A, xx	, tt, (m: nat | max_index(termvars(tt)) <= m)):
+  RECURSIVE fmla =
+  CASES A OF
+    atom(p, ss): atom(p, map(LAMBDA s: parsubst(s, xx, tt))(ss)),
+    f_not(B): f_not(parsubstr(B, xx, tt, m)),
+    f_or(B, C): f_or(parsubstr(B, xx, tt, m), parsubstr(C, xx, tt, m)),
+    f_exists(y, B): (IF member(y, termvars(tt))
+                      THEN f_exists(v(m+1),
+		                     parsubstr(B, cons(y, xx),
+				                 cons(v(m+1), tt), m+1))
+	              ELSE f_exists(y, parsubstr(B, cons(y, xx),
+		      	   	       		    %max(m, v_index(y)) to satisfy the condition on m
+				                  cons(y, tt), max(m, v_index(y))))
+	             ENDIF)
+  ENDCASES
+  MEASURE A BY <<
+
+% replaces variables in xx with the terms in tt in formula A
+parsubst(A, xx, tt):  fmla =
+  parsubstr(A, xx, tt, max_index(termvars(tt)))
+
+  
+%Need to assert that t has no freevars outside vars, and vars is a set.
+%if s is a function app with f=u, then substitute in t the variables vars with the call parameters in ss in witch we substitute recursively
+%(u ss1..ssN) -> [ss/vars]t (fsubst in each ss recursively)
+fsubst(s, (u : (ufun?)), vars: list[(var?)], t): RECURSIVE term =
+  CASES s OF
+    v(i): s,
+    apply(f, ss): (IF f = u
+                    THEN parsubst(t, vars,
+		                     map(LAMBDA (r: term | r <<s):
+				        fsubst(r, u, vars, t))(ss))
+                    ELSE apply(f, map(LAMBDA (r: term | r <<s):
+					       fsubst(r, u, vars, t))(ss))
+                   ENDIF)
+   ENDCASES
+   MEASURE s BY <<
+
+%simple recursion on formula structure
+fsubst(A, (u : (ufun?)), vars: list[(var?)], t): RECURSIVE fmla =
+  CASES A OF
+    atom(p, ss): atom(p, map(LAMBDA s: fsubst(s, u, vars, t))(ss)),
+    f_not(A1): f_not(fsubst(A1, u, vars, t)),
+    f_or(A1, A2): f_or(fsubst(A1, u, vars, t), fsubst(A2, u, vars, t)), 
+    f_exists(y, A1): f_exists(y, fsubst(A1, u, vars, t))
+  ENDCASES
+  MEASURE A BY <<
+ 
+psubst(A, (u : (upred?)), vars: list[(var?)], B): RECURSIVE fmla =
+  CASES A OF
+    atom(p, ss): IF p = u
+                  THEN parsubst(B, vars, ss)
+		  ELSE A
+		  ENDIF,
+    f_not(A1): f_not(psubst(A1, u, vars, B)),
+    f_or(A1, A2): f_or(psubst(A1, u, vars, B), psubst(A2, u, vars, B)), 
+    f_exists(y, A1): f_exists(y, psubst(A1, u, vars, B))
+  ENDCASES
+  MEASURE A BY <<
+   
+
+fmla_equal(A, B, (A_vars, B_vars: list[(var?)])): RECURSIVE bool =
+  CASES A OF
+    atom(p, ss): (atom?(B) AND pred(B) = p AND
+                  reduce2(TRUE,
+		          LAMBDA s, t, (b:bool):
+			    b AND term_equal(s, t, A_vars, B_vars),
+			  ss, args(B))),
+    f_not(A1): (f_not?(B) AND fmla_equal(A1, arg(B), A_vars, B_vars)),
+    f_or(A1, A2): (f_or?(B) AND fmla_equal(A1, arg1(B), A_vars, B_vars) AND
+                   fmla_equal(A2, arg2(B), A_vars, B_vars)), 
+    f_exists(y, A1): (f_exists?(B) AND
+                     fmla_equal(A1, body(B),
+		                cons(y, A_vars),
+				cons(bvar(B), B_vars)))
+  ENDCASES
+  MEASURE A BY <<
+
+
+freevars(AA): RECURSIVE list[(var?)] =
+  CASES AA OF
+   null: null,
+   cons(A, BB): append(freevars(A), freevars(BB))
+  ENDCASES
+  MEASURE length(AA)
+
+sentence_list?(AA): bool = null?(freevars(AA))
+
+
+usymb?(pf: funpred): bool =
+  (upred?(pf) OR ufun?(pf))
+
+freesymbols(s): RECURSIVE list[(ufun?)] =
+  CASES s OF
+    v(i): null,
+    apply(f, ss): IF ufun?(f) THEN (: f :)
+                    ELSE reduce(null,
+		                (LAMBDA (t | t << s), (vv: list[(ufun?)]):
+				   append(freesymbols(t), vv)))(ss)
+                  ENDIF
+  ENDCASES
+  MEASURE s BY <<
+
+freesymbols(ss): RECURSIVE list[(ufun?)] =
+   CASES ss OF
+     null: null,
+     cons(s, tt): append(freesymbols(s), freesymbols(tt))
+   ENDCASES
+   MEASURE length(ss)
+  
+
+freesymbols(A): RECURSIVE list[(usymb?)] =
+  CASES A OF
+    atom(p, ss): freesymbols(ss),
+    f_not(B): freesymbols(B),
+    f_or(B, C): append(freesymbols(B), freesymbols(C)),
+    f_exists(x, B): freesymbols(B)
+  ENDCASES
+  MEASURE A BY <<
+
+freesymbols(AA): RECURSIVE list[(usymb?)] =
+  CASES AA OF
+    null: null,
+    cons(A, BB): append(freesymbols(A), freesymbols(BB))
+  ENDCASES
+  MEASURE length(AA)
+
+f_neg(A): fmla =
+  (IF f_not?(A) THEN arg(A) ELSE f_not(A) ENDIF)
+
+   END fmla
+
+  

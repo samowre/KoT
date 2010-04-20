@@ -1,0 +1,77 @@
+rewrite  : THEORY
+
+  BEGIN
+
+  %A rewrite checker is proved correct.  It applies a sequence of rewrites
+  %at specified positions.  Each rewrite application is saved in terms of
+  %the rule,  position, and substitution.  A sequence of these is a proof.
+  %The claim that a rewrites to b is checked by applying these rewrites
+  %to a to get b.
+
+  %A rewrite rule must be a universally quantified equality where the lhs
+  %is not a variable, and the rhs freevars must be a subset of those in the lhs.
+
+  IMPORTING rule
+
+    r, s, t: VAR term
+    rr, ss, tt: VAR list[term]
+    i, j, k: VAR nat
+    ii, jj, kk: VAR list[nat]
+    f, g, h: VAR (fun?)
+    p, q: VAR (pred?)
+    A, B, C: VAR fmla
+    AA, BB, CC: VAR list[fmla]
+    x, y, z: VAR (var?)
+    xx, yy, zz: VAR list[(var?)]
+    nr, ns, nt: VAR nterm
+
+  rewrite?(A: (sentence?)): bool =
+  (LET B = f_forall_body(A)
+    IN 
+    (equality?(B) AND
+     subset(f_forall_bindings(A), termvars(f_lhs(B))) AND
+     subset(termvars(f_rhs(B)), termvars(f_lhs(B)))))
+  
+  mk_rewrite(s: (apply?), (t | subset(termvars(t), termvars(s)))): (rewrite?) =
+     f_forall(setify(termvars(s)), f_eq(s, t))
+
+  rw_bindings(A: (rewrite?)): list[(var?)] =
+    f_forall_bindings(A)
+
+  rw_lhs(A: (rewrite?)): term =
+    f_lhs(f_forall_body(A))
+
+  rw_rhs(A: (rewrite?)): term =
+    f_rhs(f_forall_body(A))
+
+  ntt: VAR list[nterm]
+
+  substr(s, xx, (ntt | length(ntt) = length(xx))): RECURSIVE term =
+   CASES xx OF
+     null: s,
+     cons(x, yy): substr(subst(s, x, car(ntt)), yy, cdr(ntt))
+   ENDCASES
+   MEASURE length(xx)
+
+  substr(A, xx, (ntt | length(ntt) = length(xx))): RECURSIVE fmla =
+   CASES xx OF
+     null: A,
+     cons(x, yy): substr(subst(A, x, car(ntt)), yy, cdr(ntt))
+   ENDCASES
+   MEASURE length(xx)
+
+   IMPORTING map2
+
+   subst_termvars: LEMMA
+     termvars(subst(s, x, nt)) = delete(x, termvars(s))
+
+  inst_thm: LEMMA
+   xx = setify(freevars(A)) AND 
+   length(ntt) = length(xx) AND theorem?((: f_forall(xx, A) :))
+      => theorem?((: substr(A, xx, ntt):))
+   
+     
+
+       
+
+  end rewrite

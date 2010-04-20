@@ -1,0 +1,24 @@
+rule  % [ parameters ]
+		: THEORY
+
+  BEGIN
+
+  proof: DATATYPE 
+  BEGIN
+   ax(conc: sequent): ax?
+   orr(conc: sequent, sub: proof): orr?
+   norr(conc: sequent, sub1, sub2: proof) : norr?
+   neg(conc: sequent, sub: proof) : neg?
+   cut(cut_fmla: fmla, conc: sequent, sub1, sub2: proof) : cut? 
+   existsr(witness: term, conc: sequent, sub: proof): existsr?
+   allr(skoconst: (ufun?), conc: sequent, sub: proof): allr?
+   fschema(fun: (ufun?), vars: list[(t_vars?)], body: term,
+           conc: sequent, sub: proof): fscheme?
+   pschema(fun: (ufun?), vars: list[(t_vars?)], body: fmla,
+           conc: sequent, sub: proof): pscheme?
+   reflex(conc: sequent): reflex?
+  END rule
+
+  
+
+  END rule

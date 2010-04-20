@@ -1,0 +1,312 @@
+(rewrite
+ (mk_rewrite_TCC1 0
+  (mk_rewrite_TCC1-1 nil 3475125112 nil ("" (subtype-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (rw_lhs_TCC1 0
+  (rw_lhs_TCC1-1 nil 3475125112 nil ("" (subtype-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (substr_TCC1 0
+  (substr_TCC1-1 nil 3475125112 nil ("" (subtype-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (substr_TCC2 0
+  (substr_TCC2-1 nil 3475125112 nil ("" (subtype-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (substr_TCC3 0
+  (substr_TCC3-1 nil 3475125112 nil ("" (termination-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (substr_TCC4 0
+  (substr_TCC4-1 nil 3475125112 nil ("" (subtype-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (subst_termvars 0
+  (subst_termvars-1 nil 3475212839 3476471486
+   ("" (induct "s")
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (expand "subst" +)
+        (("2" (expand "termvars" +)
+          (("2"
+            (use "reduce_reduce" :subst
+                 ("F"
+                  "LAMBDA t, (vv: list[(var?)]): append(termvars(t), vv)"))
+            (("2" (ground)
+              (("1" (replace -1 :hide? t)
+                (("1"
+                  (use "reduce_reduce" :subst
+                       ("F"
+                        "LAMBDA t, (vv: list[(var?)]): append(termvars(t), vv)"
+                        "ss"
+                        "map(LAMBDA (r: term | r << apply(apply1_var!1, apply2_var!1)):
+                                         subst(r, x!1, nt!1))
+                                      (apply2_var!1)" "s"
+                        "apply(apply1_var!1, map(LAMBDA (r: term | r << apply(apply1_var!1, apply2_var!1)):
+                                         subst(r, x!1, nt!1))
+                                      (apply2_var!1))"))
+                  (("1" (ground)
+                    (("1" (replace -1 :hide? t)
+                      (("1"
+                        (use "map_map" :subst
+                             ("G" "LAMBDA r: subst(r, x!1, nt!1)"))
+                        (("1" (ground)
+                          (("1" (replace -1 :hide? t)
+                            (("1" (rewrite "reduce_map[term, (var?)]")
+                              (("1"
+                                (rewrite "delete_reduce[term, (var?)]")
+                                (("1"
+                                  (rewrite
+                                   "every_reduce[term, (var?)]")
+                                  (("1"
+                                    (use
+                                     "every_forall[term, [nterm, (var?)]]")
+                                    (("1"
+                                      (inst
+                                       -
+                                       "(LAMBDA s, (ntx: [nterm, (var?)]):
+                termvars(subst(s, ntx`2, ntx`1)) = delete(ntx`2, termvars(s)))")
+                                      (("1"
+                                        (replace -1 :hide? t)
+                                        (("1"
+                                          (inst - "(nt!1, x!1)")
+                                          nil
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil)
+                           ("2" (expand "suffix?" +)
+                            (("2" (grind) nil nil)) nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("2" (expand "suffix?") (("2" (grind) nil nil))
+                      nil))
+                    nil)
+                   ("2" (rewrite "map_length")
+                    (("2" (typepred "apply2_var!1")
+                      (("2" (assert)
+                        (("2" (hide 2)
+                          (("2" (lemma "fmla.length_length")
+                            (("2" (inst?)
+                              (("2"
+                                (inst
+                                 -
+                                 "apply(apply1_var!1, apply2_var!1)"
+                                 "apply2_var!1")
+                                (("2"
+                                  (inst?)
+                                  (("2"
+                                    (grind)
+                                    (("2"
+                                      (expand "suffix?")
+                                      (("2" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (expand "suffix?") (("2" (grind) nil nil)) nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   proved
+   ((term type-decl nil fmla nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (var? adt-recognizer-decl "[term -> boolean]" fmla nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (termvars def-decl "list[(var?)]" fmla nil)
+    (nterm type-eq-decl nil rule nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (subst def-decl "term" fmla nil)
+    (member def-decl "bool" list_props nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (/= const-decl "boolean" notequal nil)
+    (delete def-decl
+            "{l1 | (FORALL c: member(c, l1) = (c /= a AND member(c, l)))}"
+      minlist nil)
+    (term_induction formula-decl nil fmla nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (append def-decl "list[T]" list_props nil)
+    (reduce_reduce formula-decl nil fmla nil)
+    (apply adt-constructor-decl
+           "[[fun: (fun?), {ss: list[term] | length(ss) = arity(fun)}] -> (apply?)]"
+           fmla nil)
+    (apply? adt-recognizer-decl "[term -> boolean]" fmla nil)
+    (arity shared-adt-accessor-decl "[funpred -> nat]" funpred_adt nil)
+    (length def-decl "nat" list_props nil)
+    (fun? adt-def-decl "boolean" funpred_adt nil)
+    (funpred type-decl nil funpred_adt nil)
+    (map_length formula-decl nil more_map_props nil)
+    (length_length formula-decl nil fmla nil)
+    (map_map formula-decl nil fmla nil)
+    (suffix? def-decl "bool" minlist nil)
+    (delete_reduce formula-decl nil map2 nil)
+    (every_forall formula-decl nil map2 nil)
+    (every_reduce formula-decl nil map2 nil)
+    (reduce_map formula-decl nil map2 nil)
+    (pred type-eq-decl nil defined_types nil)
+    (well_founded? const-decl "bool" orders nil)
+    (<< adt-def-decl "(well_founded?[term])" fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil))
+   591932 11870 t shostak))
+ (inst_thm_TCC1 0
+  (inst_thm_TCC1-1 nil 3475125112 nil ("" (subtype-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (inst_thm_TCC2 0
+  (inst_thm_TCC2-1 nil 3475125112 nil ("" (subtype-tcc) nil nil)
+   unchecked nil nil nil nil nil))
+ (inst_thm 0
+  (inst_thm-2 "" 3475211693 3475298585
+   ("" (induct "ntt")
+    (("1" (grind :if-match nil)
+      (("1" (expand "f_exists")
+        (("1" (grind :if-match nil)
+          (("1" (inst + "neg(cons(A!1, null), pf!1)")
+            (("1" (grind) nil nil)
+             ("2" (rewrite "append_null")
+              (("2" (rewrite "setify_null") nil nil)) nil))
+            nil))
+          nil))
+        nil)
+       ("2" (expand "f_exists") (("2" (grind) nil nil)) nil)
+       ("3" (grind)
+        (("3" (expand "substr") (("3" (grind) nil nil)) nil)) nil)
+       ("4" (expand "f_exists") (("4" (grind) nil nil)) nil))
+      nil)
+     ("2" (skosimp*)
+      (("2" (grind :if-match nil :exclude "f_neg")
+        (("2" (expand "substr" +)
+          (("2" (grind :if-match nil :exclude "f_neg")
+            (("2" (rewrite "setify_null")
+              (("2"
+                (inst -
+                 "subst(A!1, car(setify(freevars(A!1))), cons1_var!1)"
+                 "cdr(setify(freevars(A!1)))")
+                (("1" (prop)
+                  (("1" (postpone) nil nil)
+                   ("2"
+                    (case-replace
+                     "f_neg(f_exists(cdr(setify(freevars(A!1))),
+                            f_neg(subst(A!1,
+                                        car(setify(freevars(A!1))),
+                                        cons1_var!1)))) = subst(f_neg(f_exists(cdr(setify(freevars(A!1))),
+                            f_neg(A!1))),
+                                        car(setify(freevars(A!1))),
+                                        cons1_var!1)" :hide? t)
+                    (("1"
+                      (inst + "cut(f_exists(car(setify(freevars(A!1))),
+                         f_exists(cdr(setify(freevars(A!1))),
+                                  f_neg(A!1))), (: subst(f_neg(f_exists(cdr(setify(freevars(A!1))), f_neg(A!1))),
+                   car(setify(freevars(A!1))), cons1_var!1) :), existsr(cons1_var!1, (: f_exists(car(setify(freevars(A!1))),
+                         f_exists(cdr(setify(freevars(A!1))),
+                                  f_neg(A!1))), subst(f_neg(f_exists(cdr(setify(freevars(A!1))), f_neg(A!1))),
+                   car(setify(freevars(A!1))), cons1_var!1) :), ax((: f_exists(car(setify(freevars(A!1))),
+                         f_exists(cdr(setify(freevars(A!1))),
+                                  f_neg(A!1))), f_not(f_exists(car(setify(freevars(A!1))),
+                         f_exists(cdr(setify(freevars(A!1))),
+                                  f_neg(A!1)))) :))), pf!1)")
+                      (("1" (hide 2 3)
+                        (("1" (grind)
+                          (("1" (postpone) nil nil)
+                           ("2" (postpone) nil nil))
+                          nil))
+                        nil)
+                       ("2" (postpone) nil nil)
+                       ("3" (postpone) nil nil)
+                       ("4" (postpone) nil nil)
+                       ("5" (postpone) nil nil))
+                      nil)
+                     ("2" (postpone) nil nil) ("3" (postpone) nil nil)
+                     ("4" (postpone) nil nil))
+                    nil))
+                  nil)
+                 ("2" (postpone) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("3" (postpone) nil nil) ("4" (postpone) nil nil))
+    nil)
+   unfinished nil 6247909 75460 t shostak)
+  (inst_thm-1 nil 3475125113 3475127475
+   ("" (induct "ntt")
+    (("1" (skosimp*)
+      (("1" (beta)
+        (("1" (skosimp*) (("1" (inst?) (("1" (ground) nil nil)) nil))
+          nil))
+        nil))
+      nil)
+     ("2" (grind :if-match nil)
+      (("1" (expand "f_exists")
+        (("1" (grind :if-match nil)
+          (("1" (inst + "neg(cons(A!1, null), pf!1)")
+            (("1" (grind) nil nil)
+             ("2" (rewrite "append_null")
+              (("2" (expand "setify")
+                (("2" (grind) (("2" (postpone) nil nil)) nil)) nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("2" (grind)
+        (("2" (expand "substr")
+          (("2" (grind) (("2" (apply-extensionality 2) nil nil)) nil))
+          nil))
+        nil)
+       ("3" (grind)
+        (("3" (expand "substr") (("3" (grind) nil nil)) nil)) nil)
+       ("4"
+        (inst +
+         "cut(f_not(A!1), (: A!1 :), ax((: f_not(A!1), A!1 :)), pf!1)")
+        (("1" (grind)
+          (("1" (expand "substr") (("1" (grind) nil nil)) nil)
+           ("2" (expand "f_exists") (("2" (grind) nil nil)) nil))
+          nil)
+         ("2" (postpone) nil nil) ("3" (postpone) nil nil))
+        nil))
+      nil)
+     ("3" (skosimp*)
+      (("3" (grind :if-match nil :exclude "f_neg")
+        (("3" (inst? -)
+          (("3" (ground)
+            (("1" (skosimp*) (("1" (postpone) nil nil)) nil)
+             ("2" (postpone) nil nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("4" (postpone) nil nil) ("5" (postpone) nil nil))
+    nil)
+   unfinished nil 1567067 80900 t shostak)))
+
