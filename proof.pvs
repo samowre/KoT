@@ -9,52 +9,64 @@ proof	: THEORY
 %parametric with respect to proofs of lemmas.
 
   BEGIN
-
-  rule: DATATYPE 
+  
+  %for fmla type
+  importing fmla
+  % added with subtypes...
+  rule: DATATYPE WITH SUBTYPES no_premise?, one_premise?, two_premise? 
   BEGIN
-   ax: ax? : no_premise?
-   orr: orr?: one_premise?
-   norr : norr?: two_premise?
-   neg : neg? : one_premise?
-   cut(cut_fmla: fmla) : cut? : two_premise?
-   existsr(witness: term): existsr? : one_premise?
-   allr(skoconst: (ufun?)): allr? : one_premise?
-   fschema(fun: (ufun?), vars: list[(t_vars?)], body: term): fscheme? : one_premise?
-   pschema(fun: (ufun?), vars: list[(t_vars?)], body: fmla): pscheme? : one_premise?
+   ax: ax?	: no_premise?
+   orr: orr?	: one_premise?
+   norr : norr?	: two_premise?
+   neg : neg? 	: one_premise?
+   cut(cut_fmla: fmla) : cut?		: two_premise?
+   existsr(witness: term): existsr?	: one_premise?
+   allr(skoconst: (ufun?)): allr? 	: one_premise?
+   fschema(fun: (ufun?), vars: list[(var?)], body: term): fscheme? : one_premise?
+   pschema(fun: (ufun?), vars: list[(var?)], body: fmla): pscheme? : one_premise?
    reflex: reflex? : no_premise?
-   lemma(index: nat) : lemma? : no_premise?
+   % renamed to lemma_
+   lemma_(index: nat) : lemma?		: no_premise?
   END rule
+
+  %for sequent type
+  importing sequents
 
   proof_step : TYPE
    = [# sequent: sequent,
         rule: rule,
 	subs: list[nat] #]
-
-  proof_seq: TYPE =  finite_seq[proof_step]
+  
+  %replaced finite_seq with finseq
+  proof_seq: TYPE =  finseq[proof_step]
   R, S: VAR proof_step
   RR, SS: VAR proof_seq
 
   ne_proof_seq: TYPE = {RR | RR`length > 0}
 
   nRR, nSS: VAR ne_proof_seq
-
-  conclusion(RR: nRR): sequent =
-    (RR`sequence(RR`length - 1))
   
-  checkProof(lemmas: finite_seq[sequent])(RR): bool =
+  %deleted :nRR
+  %added `sequent at the end
+  conclusion(RR): sequent =
+    (RR`seq(RR`length - 1))`sequent
+  
+  checkProof(lemmas: finseq[sequent])(RR): bool =
     (FORALL (i: below(RR`length)):
-     (LET R = RR`sequence(i) IN
+     (LET R = RR`seq(i) IN
       (one_premise?(R`rule) OR two_premise?(R`rule)
        => (cons?(R`subs) AND car(R`subs) < i)) AND
       (two_premise?(R`rule) => (cons?(cdr(R`subs)) AND
 				car(cdr(R`subs)) < i )) AND
       (CASES R`rule OF
        ax : ax_rule?(R`sequent),
-       orr : or_rule?(R`sequence(car(R`subs))`sequent, R`sequent),
-       norr: nor_rule?(R`sequence(car(R`subs))`sequent,
-	               R`sequence(car(cdr(R`subs)))`sequent,
+       %replaced R`sequence with RR.seq
+       orr : or_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
+       norr: nor_rule?(RR`seq(car(R`subs))`sequent,
+	               RR`seq(car(cdr(R`subs)))`sequent,
 	               R`sequent),
-       neg : neg_rule?(R`sequence(car(R`subs))`sequent, R`sequent),
+       neg : neg_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
+       %typecheck error
        cut(A): cut_rule?(A, car(R`subs), car(cdr(R`subs)), R`sequent),
        existsr(u, vars, body):
          exists_rule?(u, vars, body, car(R`subs), R`sequent),
@@ -62,7 +74,7 @@ proof	: THEORY
        fschema(u, vars, s): fschema_rule?(u, vars, s, car(R`subs), R`sequent),
        pschema(u, vars, A): pschema_rule?(u, vars, A, car(R`subs), R`sequent),
        reflex: reflex_rule?(R`sequent),
-       lemma(i): (i < lemmas`length AND
+       lemma_(i): (i < lemmas`length AND
                   R`sequent = lemmas`sequence(i))
       ENDCASES)))
 

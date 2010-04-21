@@ -12,7 +12,6 @@ BEGIN
 
 %funpred is a combined datatype for interpreted/uninterpreted function and
 %predicate symbols. 
-%test
 
   IMPORTING funpred, minlist
 
@@ -114,7 +113,7 @@ term_equal(s, t, (s_vars, t_vars: list[(var?)])): RECURSIVE bool =
                    f = fun(t) AND
 		   % modif
 		   % default value is TRUE, not FALSE.
-		   % We can prove that length(ss)==length(args(t))
+		   % We can prove that length(ssp)==length(args(t))
                    reduce3(TRUE ,
 		           (LAMBDA ((s1 : term | s1 << s),
 			            t1 : term,
@@ -174,6 +173,7 @@ max_index(xx): nat =
 
 M: VAR nat
 
+%used to prove TCCs of parsubstr
 ub_max_index: LEMMA
 	      (FORALL (x: (var?) | member(x, xx)): v_index(x) <= M) <=> max_index(xx) <= M
 
@@ -189,7 +189,7 @@ parsubstr(A, xx	, tt, (m: nat | max_index(termvars(tt)) <= m)):
 		                     parsubstr(B, cons(y, xx),
 				                 cons(v(m+1), tt), m+1))
 	              ELSE f_exists(y, parsubstr(B, cons(y, xx),
-		      	   	       		    %max(m, v_index(y)) to satisfy the condition on m
+		      	   	       	%max(m, v_index(y)) to satisfy the condition on m
 				                  cons(y, tt), max(m, v_index(y))))
 	             ENDIF)
   ENDCASES
@@ -231,7 +231,6 @@ fsubst(A, (u : (ufun?)), vars: list[(var?)], t): RECURSIVE fmla =
 psubst(A, (u : (upred?)), vars: list[(var?)], B): RECURSIVE fmla =
   CASES A OF
     atom(p, ss): IF p = u
-    	    	 % should add recursive psubst to vars?
                   THEN parsubst(B, vars, ss)
 		  ELSE A
 		  ENDIF,
@@ -282,7 +281,7 @@ freesymbols(s): RECURSIVE list[(ufun?)] =
 				   append(freesymbols(t), vv)))(ss)
                   ENDIF
   ENDCASES
-  MEASURE s BY <<
+  Measure s BY <<
 
 freesymbols(ss): RECURSIVE list[(ufun?)] =
    CASES ss OF

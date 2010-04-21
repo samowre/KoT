@@ -12,6 +12,7 @@ BEGIN
 
 %funpred is a combined datatype for interpreted/uninterpreted function and
 %predicate symbols. 
+%test
 
   IMPORTING funpred, minlist
 
@@ -199,9 +200,10 @@ parsubst(A, xx, tt):  fmla =
   parsubstr(A, xx, tt, max_index(termvars(tt)))
 
   
-%Need to assert that t has no freevars outside vars, and vars is a set.
-%if s is a function app with f=u, then substitute in t the variables vars with the call parameters in ss in witch we substitute recursively
-%(u ss1..ssN) -> [ss/vars]t (fsubst in each ss recursively)
+% Need to assert that t has no freevars outside vars, and vars is a set.
+% If s is a function app with f=u, then substitute in t the variables vars 
+% with the call parameters in ss in witch we substitute recursively
+% (u ss1..ssN) -> [ss/vars]t (fsubst in each ss recursively)
 fsubst(s, (u : (ufun?)), vars: list[(var?)], t): RECURSIVE term =
   CASES s OF
     v(i): s,
@@ -215,7 +217,7 @@ fsubst(s, (u : (ufun?)), vars: list[(var?)], t): RECURSIVE term =
    ENDCASES
    MEASURE s BY <<
 
-%simple recursion on formula structure
+% Simple recursion on formula structure
 fsubst(A, (u : (ufun?)), vars: list[(var?)], t): RECURSIVE fmla =
   CASES A OF
     atom(p, ss): atom(p, map(LAMBDA s: fsubst(s, u, vars, t))(ss)),
@@ -225,9 +227,11 @@ fsubst(A, (u : (ufun?)), vars: list[(var?)], t): RECURSIVE fmla =
   ENDCASES
   MEASURE A BY <<
  
+% If A is the predicate u with vars, we substitute in B vars with ss
 psubst(A, (u : (upred?)), vars: list[(var?)], B): RECURSIVE fmla =
   CASES A OF
     atom(p, ss): IF p = u
+    	    	 % should add recursive psubst to vars?
                   THEN parsubst(B, vars, ss)
 		  ELSE A
 		  ENDIF,
