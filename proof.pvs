@@ -23,7 +23,7 @@ proof	: THEORY
    existsr(witness: term): existsr?	: one_premise?
    allr(skoconst: (ufun?)): allr? 	: one_premise?
    fschema(fun: (ufun?), vars: list[(var?)], body: term): fscheme? : one_premise?
-   pschema(fun: (ufun?), vars: list[(var?)], body: fmla): pscheme? : one_premise?
+   pschema(fun: (upred?), vars: list[(var?)], body: fmla): pscheme? : one_premise?
    reflex: reflex? : no_premise?
    % renamed to lemma_
    lemma_(index: nat) : lemma?		: no_premise?
@@ -67,22 +67,24 @@ proof	: THEORY
 	               R`sequent),
        neg : neg_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
        %typecheck error
-       cut(A): cut_rule?(A, car(R`subs), car(cdr(R`subs)), R`sequent),
-       existsr(u, vars, body):
-         exists_rule?(u, vars, body, car(R`subs), R`sequent),
-       allr(f): forall_rule?(f, car(R`subs), R`sequent),
-       fschema(u, vars, s): fschema_rule?(u, vars, s, car(R`subs), R`sequent),
-       pschema(u, vars, A): pschema_rule?(u, vars, A, car(R`subs), R`sequent),
+       cut(A): cut_rule?(A, RR`seq(car(R`subs))`sequent,
+                            RR`seq(car(cdr(R`subs)))`sequent,
+			    R`sequent),
+       existsr(u):
+         exists_rule?(u, RR`seq(car(R`subs))`sequent, R`sequent),
+       allr(f): forall_rule?(f, RR`seq(car(R`subs))`sequent, R`sequent),
+       fschema(u, vars, s): fschema_rule?(u, vars, s, RR`seq(car(R`subs))`sequent, R`sequent),
+       pschema(p, vars, A): pschema_rule?(p, vars, A, RR`seq(car(R`subs))`sequent, R`sequent),
        reflex: reflex_rule?(R`sequent),
        lemma_(i): (i < lemmas`length AND
-                  R`sequent = lemmas`sequence(i))
+                  R`sequent = lemmas(i))
       ENDCASES)))
 
 
     proof: DATATYPE
      BEGIN
-       compose(lemmas : finite_seq[proof], 
-               main : (checkProof(map(conclusion)(lemmas)))): compose?
+       compose(lemma_proofs : finseq[proof_seq], 
+               main : (checkProof(map(conclusion)(lemma_proofs)))): compose?
      END proof
   
 %Each proof_entry can be independently checked.  We can then

@@ -53,6 +53,10 @@ map2   [S, T: TYPE ]
       (FORALL (p: [S, T -> bool]):
         every(LAMBDA x: (FORALL a: p(x, a)))(ll) =
 	(FORALL a: every(LAMBDA x: p(x, a))(ll)))
+
+     map(f: [S -> T])(ss: finseq[S]): finseq[T] =
+       (# length := ss`length,
+          seq := (LAMBDA (i: below(ss`length)): f(ss(i))) #)
        
 
   END map2
