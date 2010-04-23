@@ -20,7 +20,6 @@ sequents  : THEORY
 
   sequent: TYPE = {AA | sentence_list?(AA)}
 
-
   G, H, G1, G2, H1, H2: VAR sequent
 
   ax_rule?(G): bool =    %G = A, -A, ..
@@ -66,7 +65,7 @@ sequents  : THEORY
       f_exists?(arg(car(G))) AND
       NOT member(f, freesymbols(G)) AND
       arity(f) = 0 AND
-      subset?(H, cons(f_neg(subst(body(arg(car(G))), bvar(car(G)), apply(f, null))),
+      subset?(H, cons(f_neg(subst(body(arg(car(G))), bvar(arg(car(G))), apply(f, null))),
                       G)))
 
    fschema_rule?(u: (ufun?), vars: list[(var?)], s, H, G): bool =

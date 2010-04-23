@@ -144,19 +144,19 @@ freevars(A): RECURSIVE list[(var?)]  =
 sentence?(A): bool = null?(freevars(A))
 
 % checks that variables in yy are not bound by exists in A 
-freefor(A, x, yy): RECURSIVE bool =
+freefor(A, yy): RECURSIVE bool =
   CASES A OF
     atom(p, ss): TRUE,
-    f_not(B): freefor(B, x, yy), 
-    f_or(B, C): freefor(B, x, yy) AND freefor(C, x, yy), 
+    f_not(B): freefor(B, yy), 
+    f_or(B, C): freefor(B, yy) AND freefor(C, yy), 
     f_exists(y, B): NOT member(y, yy) AND
-                    freefor(B, x, yy)
+                    freefor(B, yy)
   ENDCASES
   MEASURE A BY <<
 
 aux_subst: LEMMA  length[term](subst(ss, x, t)) = length(ss)
 
-subst(A, x, (t | freefor(A, x, termvars(t)))): RECURSIVE fmla =
+subst(A, x, (t | freefor(A, termvars(t)))): RECURSIVE fmla =
   CASES A OF
     atom(p, ss): atom(p, subst(ss, x, t)),
     f_not(B): f_not(subst(B, x, t)),
