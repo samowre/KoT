@@ -16,23 +16,84 @@ resolution : THEORY
     xx, yy, zz: VAR list[(var?)]
     nr, ns, nt: VAR nterm
 
-    atom?(A): bool = (atom?(A) AND upred?(pred(A)) AND arity(pred(A)) = 0)
+    atom?(A): bool = (atom?(A) AND 
+    	      	   upred?(pred(A)) AND 
+		   arity(pred(A)) = 0)
 
     pA, pB, pC: VAR (atom?)
 
-    literal?(A): bool = (atom?(A) OR (f_not?(A) AND atom?(arg(A))))
+    literal?(A): bool = (atom?(A) OR 
+    		      (f_not?(A) AND atom?(arg(A))))
 
     lA, lB, lC: VAR (literal?)
 
-    lAA, lBB, lCC: VAR list[(literal?)]
+    lAA, lBB, lCC: VAR set[(literal?)]
 
     clause_lit_list?(lAA): bool =
-      CASES lAA OF
-       null: TRUE,
-       cons(lA, lBB): NOT member(lA, lBB) AND
-                      NOT member(f_neg(lA), lBB) AND
+      FORALL (lA : (literal?)) : member(lA, lAA) => NOT member(f_neg(lA), lAA) %AND ??
+
+    % unifies the two sets and removes occurrences of p and ~p
+    % Returns emptyset if the resulting clause is always true
+    apply_resolution( a:(clause_lit_list?), b: (clause_lit_list?), p : (literal?)) : (clause_lit_list?) = 
+		      LET new_clause = remove(p, (remove(f_neg(p), union(a, b)))) IN
+		      	  IF (EXISTS (a:(literal?)): member(a, new_clause) AND member(f_neg(a), new_clause))
+		      	  THEN emptyset
+		      	  ELSE new_clause
+		      	  ENDIF
+    
+    resolution_step : DATATYPE  
+    BEGIN
+	ax (axiom_clauses:(clause_lit_list?)) : ax?
+	res_step (i, j: nat, p : (literal?))  : res_step?
+    END resolution_step
+
+    clauses_list: TYPE = list[(clause_lit_list?)]
+
+    %adds a clause at the end of a list of clauses
+    append_clause(l : clauses_list, e : (clause_lit_list?)) : clauses_list= 
+    		    append(l, cons(e, null))		    
 		      
+    resolution_certificate: TYPE = list[resolution_step]
 
-  
+    %verifies that each resolution step refers to previous clauses 
+    good_indices (cert : resolution_certificate, n:nat) : RECURSIVE bool = 
+    		  IF null?(cert) 
+		  THEN TRUE
+		  ELSE 
+		       CASES car(cert) OF
+		       	     ax(l) : good_indices(cdr(cert), n+1),
+		  	     res_step(i, j, p) : 
+			     		 i<n AND j<n AND good_indices(cdr(cert), n+1)
+		       ENDCASES
+		  ENDIF
+    MEASURE length(cert)
 
+    good_indices_cert?(cert : resolution_certificate) : bool = 
+    				  good_indices(cert, 0)
+    
+    % Creates from the certificate a list of clauses. 
+    % Each clause coresponds to an axiom or a resolution step in the certificate.
+    % Returns null if the indices do not refer to previous clauses
+
+    create_clauses (cert : resolution_certificate, 
+    		   context : {c : clauses_list | good_indices(cert, length(c))}) 
+		   : RECURSIVE clauses_list = 
+    		   IF null?(cert) 
+		   THEN context
+		   ELSE 
+		   	LET step = car(cert) IN
+		   	    CASES step OF
+		   	    ax(lst) : 
+			    	    create_clauses( cdr(cert), append_clause(context, lst)),
+		   	    res_step(i, j, p) : 
+				    create_clauses( cdr(cert), 
+		   	       		  append_clause( context, apply_resolution(nth(context, i), 
+					  nth(context, j), p) ) )				       
+		   	    ENDCASES
+    		   ENDIF
+     MEASURE length(cert)
+
+
+    check_certificate(cert: (good_indices_cert?)) : clauses_list = 
+    			    create_clauses(cert, null)
   END resolution

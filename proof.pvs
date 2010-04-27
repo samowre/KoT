@@ -22,9 +22,9 @@ proof	: THEORY
    cut(cut_fmla: fmla) : cut?		: two_premise?
    existsr(witness: term): existsr?	: one_premise?
    allr(skoconst: (ufun?)): allr? 	: one_premise?
-   fschema(fun: (ufun?), vars: list[(var?)], body: term): fscheme? : one_premise?
+   fschema(fun: (ufun?), vars: list[(var?)], body: term): fscheme?  : one_premise?
    pschema(fun: (upred?), vars: list[(var?)], body: fmla): pscheme? : one_premise?
-   reflex: reflex? : no_premise?
+   reflex: reflex? 	  	        : no_premise?
    % renamed to lemma_
    lemma_(index: nat) : lemma?		: no_premise?
   END rule
@@ -53,6 +53,7 @@ proof	: THEORY
   
   checkProof(lemmas: finseq[sequent])(RR): bool =
     (FORALL (i: below(RR`length)):
+     % checks if rule has enough parameters
      (LET R = RR`seq(i) IN
       (one_premise?(R`rule) OR two_premise?(R`rule)
        => (cons?(R`subs) AND car(R`subs) < i)) AND
