@@ -27,24 +27,28 @@ resolution : THEORY
 
     lA, lB, lC: VAR (literal?)
 
-    lAA, lBB, lCC: VAR set[(literal?)]
+    lAA, lBB, lCC: VAR finite_set[(literal?)]
 
     clause_lit_list?(lAA): bool =
       FORALL (lA : (literal?)) : member(lA, lAA) => NOT member(f_neg(lA), lAA) %AND ??
 
+    remove_p_nonp(lAA) : (clause_lit_list?) =
+    			{p:(literal?) | member(p, lAA) AND NOT member(f_neg(p), lAA)}
+
     % unifies the two sets and removes occurrences of p and ~p
     % Returns emptyset if the resulting clause is always true
-    apply_resolution( a:(clause_lit_list?), b: (clause_lit_list?), p : (literal?)) : (clause_lit_list?) = 
-		      LET new_clause = remove(p, (remove(f_neg(p), union(a, b)))) IN
-		      	  IF (EXISTS (a:(literal?)): member(a, new_clause) AND member(f_neg(a), new_clause))
+    apply_resolution( a:(clause_lit_list?), b: (clause_lit_list?)) : (clause_lit_list?) = 
+		      LET new_clause = union(a, b) IN
+		      LET result = remove_p_nonp(new_clause) IN
+		      	  IF (card(result) < card(new_clause) - 2)
 		      	  THEN emptyset
-		      	  ELSE new_clause
+		      	  ELSE result
 		      	  ENDIF
     
     resolution_step : DATATYPE  
     BEGIN
 	ax (axiom_clauses:(clause_lit_list?)) : ax?
-	res_step (i, j: nat, p : (literal?))  : res_step?
+	res_step (clauses : {l : list[nat] | length(l) > 1})  : res_step?
     END resolution_step
 
     clauses_list: TYPE = list[(clause_lit_list?)]
@@ -62,11 +66,14 @@ resolution : THEORY
 		  ELSE 
 		       CASES car(cert) OF
 		       	     ax(l) : good_indices(cdr(cert), n+1),
-		  	     res_step(i, j, p) : 
-			     		 i<n AND j<n AND good_indices(cdr(cert), n+1)
+		  	     res_step(l) : (FORALL (i:nat) : member(i, l) AND (i<n))
+			     		 AND good_indices(cdr(cert), n+1)
 		       ENDCASES
 		  ENDIF
     MEASURE length(cert)
+
+    multiple_resolutions(l : {lst : list[nat] | length(lst) > 1}, acc : (clause_lit_list?) : (clause_lit_list?) =
+    			   
 
     good_indices_cert?(cert : resolution_certificate) : bool = 
     				  good_indices(cert, 0)
@@ -85,10 +92,10 @@ resolution : THEORY
 		   	    CASES step OF
 		   	    ax(lst) : 
 			    	    create_clauses( cdr(cert), append_clause(context, lst)),
-		   	    res_step(i, j, p) : 
+		   	    res_step(l) : 
 				    create_clauses( cdr(cert), 
 		   	       		  append_clause( context, apply_resolution(nth(context, i), 
-					  nth(context, j), p) ) )				       
+					  nth(context, j)) ) )				       
 		   	    ENDCASES
     		   ENDIF
      MEASURE length(cert)
@@ -96,4 +103,6 @@ resolution : THEORY
 
     check_certificate(cert: (good_indices_cert?)) : clauses_list = 
     			    create_clauses(cert, null)
+
+    %apply_resolution_check: LEMMA  
   END resolution
