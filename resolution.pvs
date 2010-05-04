@@ -30,8 +30,8 @@ resolution : THEORY
     lAA, lBB, lCC: VAR list[(literal?)]
 
     index(lA) : nat = 
-    	  IF atom?(lA) THEN index(lA)
-	  ELSE index(arg(lA))
+    	  IF atom?(lA) THEN index(pred(lA))
+	  ELSE index(pred(arg(lA)))
 	  ENDIF
 
     sorted_no_duplicates?(lAA) : RECURSIVE bool = 
@@ -41,12 +41,12 @@ resolution : THEORY
 		         CASES r OF
 			   null: TRUE,	
 			   cons(f, s) :
-			     index(e) < index(f) AND sorted_no_duplicates(r)
+			     index(e) < index(f) AND sorted_no_duplicates?(r)
 			 ENDCASES
 		 ENDCASES
 	MEASURE length(lAA)
 
-    no_duplicates? : RECURSIVE bool = 
+    no_duplicates?(lAA) : RECURSIVE bool = 
     		    CASES lAA OF
 		    	  null : TRUE,
 			  cons(e, r) : NOT member(e, r) AND no_duplicates?(r)
@@ -54,18 +54,18 @@ resolution : THEORY
 	MEASURE length(lAA)
 
     clause_lit_list?(lAA): bool =
-      FORALL (lA : (literal?)) : member(lA, lAA) => NOT member(f_neg(lA), lAA) AND 
-      	     no_duplicates?(lAA)
+      no_duplicates?(lAA) AND
+      FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
 
     sorted_no_duplicates:  LEMMA
-       sorted_no_duplicates? <=> clause_lit_list?
+       sorted_no_duplicates?(lAA) <=> clause_lit_list?(lAA)
 
     clAA, clBB, clCC : VAR (clause_lit_list?)
 
     remove(lA, clAA) : RECURSIVE (clause_lit_list?) = 
     	       CASES clAA OF
 	         null : clAA,
-		 cons(e, r) : IF e=lA 
+		 cons(e, r) : IF index(e) = index(lA) 
 		 	      THEN r
 			      ELSE cons(e, remove(lA, r))
 			      ENDIF
@@ -88,13 +88,10 @@ resolution : THEORY
 		ENDCASES
 	MEASURE length(clAA) + length(clBB)
 
-    remove_p_nonp(lAA) : (clause_lit_list?) = 
-    			{p:(literal?) | member(p, lAA) AND NOT member(f_neg(p), lAA)} 
-
     % unifies the two sets and removes occurrences of p and ~p
     % Returns emptyset if the resulting clause is always true
     apply_resolution( clAA, clBB ) : (clause_lit_list?) = 
-		      LET p_nonp_set = {q | member(q, clAA) AND member(f_neg(q), clBB)} IN
+		      LET p_nonp_set = {q:(literal?) | member(q, clAA) AND member(f_neg(q), clBB)} IN
 		        IF card(p_nonp_set) > 1 
 			THEN null
 			ELSIF card(p_nonp_set) = 1
