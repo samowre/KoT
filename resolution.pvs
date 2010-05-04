@@ -72,6 +72,7 @@ resolution : THEORY
 	       ENDCASES
 	    MEASURE length(clAA)
 
+    %merge and eliminates duplicates and pairs (p, ~p)
     strict_merge(clAA, clBB) : RECURSIVE (clause_lit_list?) = 
     		CASES clAA OF
 		  null : clBB,
@@ -82,6 +83,8 @@ resolution : THEORY
 		      	      	    THEN cons(a, strict_merge(rA, clBB))
 				    ELSIF index(a) > index(b) 
 				    THEN cons(b, strict_merge(clAA, rB))
+				    ELSIF a = f_neg(b) 
+				    THEN strict_merge(rA, rB)
 				    ELSE cons(a, strict_merge(rA, rB))
 				    ENDIF
 		    ENDCASES
@@ -89,7 +92,7 @@ resolution : THEORY
 	MEASURE length(clAA) + length(clBB)
 
     % unifies the two sets and removes occurrences of p and ~p
-    % Returns emptyset if the resulting clause is always true
+    % Returns null if the resulting clause is always true
     apply_resolution( clAA, clBB ) : (clause_lit_list?) = 
 		      LET p_nonp_set = {q:(literal?) | member(q, clAA) AND member(f_neg(q), clBB)} IN
 		        IF card(p_nonp_set) > 1 
@@ -182,8 +185,11 @@ resolution : THEORY
 			  ELSE FALSE
 			  ENDIF
 		 ENDIF
-    
 
-%    apply_resolution_check: LEMMA  
-%    		apply_resolution(lAA, lBB)
+ %   apply_resolution_check: LEMMA  
+ %   			    LET h1 = cons(lA, clAA) IN
+ %			    LET h2 = cons(f_neg(lA), clBB) IN
+ %			    LET res_result = apply_resolution(h1, h2) IN
+ %   			    LET seqent = cons(f_not(h1), cons(f_not(h2), cons(clCC, null))) IN
+		
   END resolution
