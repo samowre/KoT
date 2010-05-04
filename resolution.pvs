@@ -54,11 +54,11 @@ resolution : THEORY
 	MEASURE length(lAA)
 
     clause_lit_list?(lAA): bool =
-      no_duplicates?(lAA) AND
-      FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
+      sorted_no_duplicates?(lAA)
+      
 
     sorted_no_duplicates:  LEMMA
-       sorted_no_duplicates?(lAA) <=> clause_lit_list?(lAA)
+       sorted_no_duplicates?(lAA) => FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
 
     clAA, clBB, clCC : VAR (clause_lit_list?)
 
@@ -84,6 +84,7 @@ resolution : THEORY
 				    ELSIF index(a) > index(b) 
 				    THEN cons(b, strict_merge(clAA, rB))
 				    ELSIF a = f_neg(b) 
+				    %eliminates p, ~p
 				    THEN strict_merge(rA, rB)
 				    ELSE cons(a, strict_merge(rA, rB))
 				    ENDIF
@@ -93,7 +94,7 @@ resolution : THEORY
 
     % unifies the two sets and removes occurrences of p and ~p
     % Returns null if the resulting clause is always true
-    apply_resolution( clAA, clBB ) : (clause_lit_list?) = 
+    resolve( clAA, clBB ) : (clause_lit_list?) = 
 		      LET p_nonp_set = {q:(literal?) | member(q, clAA) AND member(f_neg(q), clBB)} IN
 		        IF card(p_nonp_set) > 1 
 			THEN null
@@ -131,10 +132,10 @@ resolution : THEORY
 		  ENDIF
     MEASURE length(cert) 
 
-    multiple_resolutions(l : clauses_list, acc : (clause_lit_list?)) : RECURSIVE (clause_lit_list?) =
+    fold_resolutions(l : clauses_list, acc : (clause_lit_list?)) : RECURSIVE (clause_lit_list?) =
     			   CASES l OF
 			   null : acc,
-			   cons(e, rest) : multiple_resolutions(rest, apply_resolution(acc, e))
+			   cons(e, rest) : fold_resolutions(rest, resolve(acc, e))
 			   ENDCASES
 		MEASURE length(l)
 
@@ -161,12 +162,12 @@ resolution : THEORY
 				%second clause
 				LET clause2 = car(cdr(clauses_used)) IN
 				%resolution applied to the first two clauses
-				LET first_res = apply_resolution(clause1, clause2) IN
+				LET first_res = resolve(clause1, clause2) IN
 				%other resolution steps
 				LET rest_used = cdr(cdr(clauses_used)) IN
 				    create_clauses( cdr(cert), 
 		   	       		  append_clause( context, 
-					    multiple_resolutions(rest_used, first_res) ) )				       
+					    fold_resolutions(rest_used, first_res) ) )				       
 		   	    ENDCASES
     		   ENDIF
      MEASURE length(cert)
@@ -186,10 +187,9 @@ resolution : THEORY
 			  ENDIF
 		 ENDIF
 
- %   apply_resolution_check: LEMMA  
- %   			    LET h1 = cons(lA, clAA) IN
- %			    LET h2 = cons(f_neg(lA), clBB) IN
- %			    LET res_result = apply_resolution(h1, h2) IN
- %   			    LET seqent = cons(f_not(h1), cons(f_not(h2), cons(clCC, null))) IN
+    %apply_resolution_check: LEMMA  
+ %			    LET res_result = resolve(clAA, clBB) IN
+  %  			    LET seqent = cons(f_not(clAA), cons(f_not(clBB), cons(clCC, null))) IN
+	%		    TRUE
 		
   END resolution
