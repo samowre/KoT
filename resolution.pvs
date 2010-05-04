@@ -84,8 +84,9 @@ resolution : THEORY
 				    ELSIF index(a) > index(b) 
 				    THEN cons(b, strict_merge(clAA, rB))
 				    ELSIF a = f_neg(b) 
-				    %eliminates p, ~p
+				    % a = ~b
 				    THEN strict_merge(rA, rB)
+				    % a = b
 				    ELSE cons(a, strict_merge(rA, rB))
 				    ENDIF
 		    ENDCASES
@@ -94,16 +95,10 @@ resolution : THEORY
 
     % unifies the two sets and removes occurrences of p and ~p
     % Returns null if the resulting clause is always true
-    resolve( clAA, clBB ) : (clause_lit_list?) = 
-		      LET p_nonp_set = {q:(literal?) | member(q, clAA) AND member(f_neg(q), clBB)} IN
-		        IF card(p_nonp_set) > 1 
-			THEN null
-			ELSIF card(p_nonp_set) = 1
-			THEN 
-			  LET q = choose(p_nonp_set) IN
-			  strict_merge(remove(q, clAA), remove(f_neg(q), clBB ))
-			ELSE strict_merge(clAA, clBB)
-		        ENDIF
+    resolve = LAMBDA clAA :
+    	     (LAMBDA 
+	       ( clBB : {c : (clause_lit_list?) | EXISTS (e : (literal?)) : member(e, clAA) AND member(f_neg(e), c)}) : 
+	         strict_merge(clAA, clBB) )
     
     resolution_step : DATATYPE  
     BEGIN
@@ -187,9 +182,9 @@ resolution : THEORY
 			  ENDIF
 		 ENDIF
 
-    %apply_resolution_check: LEMMA  
- %			    LET res_result = resolve(clAA, clBB) IN
-  %  			    LET seqent = cons(f_not(clAA), cons(f_not(clBB), cons(clCC, null))) IN
-	%		    TRUE
+    resolve_check: LEMMA  
+ 		LET res_result = resolve(clAA, clBB) IN
+    		LET seqent = cons(f_not(clAA), cons(f_not(clBB), cons(clCC, null))) IN
+			TRUE
 		
   END resolution
