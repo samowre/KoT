@@ -46,6 +46,10 @@ resolution : THEORY
 		 ENDCASES
 	MEASURE length(lAA)
 
+    sorted_clause_lit_list: LEMMA
+         clause_lit_list?(lAA) AND cons?(lAA) IMPLIES (FORALL (e: (literal?)) : member(e, cdr(lAA)) IMPLIES index(car(lAA)) < index(e))	
+
+
     no_duplicates?(lAA) : RECURSIVE bool = 
     		    CASES lAA OF
 		    	  null : TRUE,
@@ -54,7 +58,7 @@ resolution : THEORY
 	MEASURE length(lAA)
       
 
-    sorted_no_duplicates:  LEMMA
+    no_pairs:  LEMMA
       clause_lit_list?(lAA) => FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
 
     clAA, clBB, clCC : VAR (clause_lit_list?)
