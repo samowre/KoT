@@ -68,7 +68,10 @@ resolution : THEORY
 	         null : clAA,
 		 cons(e, r) : IF index(e) = index(lA) 
 		 	      THEN r
+			      ELSE IF index(lA) < index(e)
+			      THEN clAA
 			      ELSE cons(e, remove(lA, r))
+			      ENDIF
 			      ENDIF
 	       ENDCASES
 	    MEASURE length(clAA)
