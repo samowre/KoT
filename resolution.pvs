@@ -182,9 +182,9 @@ resolution : THEORY
     nclAA : VAR (non_empty_clause_list?)
 
     list_to_or(nclAA) : RECURSIVE fmla = 
-    		      IF cons?(nclAA) 
-		      cons(e, null) : e,
-		      cons(e, ncl) : f_or(e, list_to_or(ncl))
+    		      CASES cdr(nclAA) OF
+		      null : car(nclAA),
+		      cons(e, r) : f_or(car(nclAA), list_to_or(cdr(nclAA)))
 		      ENDCASES
 	MEASURE length(nclAA)
     		     
