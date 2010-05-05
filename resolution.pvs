@@ -34,14 +34,14 @@ resolution : THEORY
 	  ELSE index(pred(arg(lA)))
 	  ENDIF
 
-    sorted_no_duplicates?(lAA) : RECURSIVE bool = 
+    clause_lit_list?(lAA) : RECURSIVE bool = 
     		 CASES lAA OF	  
 		       null: TRUE,
 		       cons(e, r) : 
 		         CASES r OF
 			   null: TRUE,	
 			   cons(f, s) :
-			     index(e) < index(f) AND sorted_no_duplicates?(r)
+			     index(e) < index(f) AND clause_lit_list?(r)
 			 ENDCASES
 		 ENDCASES
 	MEASURE length(lAA)
@@ -52,13 +52,10 @@ resolution : THEORY
 			  cons(e, r) : NOT member(e, r) AND no_duplicates?(r)
 		    ENDCASES
 	MEASURE length(lAA)
-
-    clause_lit_list?(lAA): bool =
-      sorted_no_duplicates?(lAA)
       
 
     sorted_no_duplicates:  LEMMA
-       sorted_no_duplicates?(lAA) => FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
+      clause_lit_list?(lAA) => FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
 
     clAA, clBB, clCC : VAR (clause_lit_list?)
 
@@ -182,12 +179,17 @@ resolution : THEORY
 
     non_empty_clause_list?(clAA) : bool= NOT null?(clAA)
 
-    nclAA : (non_empty_clause_list?)
+    nclAA : VAR (non_empty_clause_list?)
 
-    %list_to_or(nclAA) : fmla = 
+    list_to_or(nclAA) : RECURSIVE fmla = 
+    		      IF cons?(nclAA) 
+		      cons(e, null) : e,
+		      cons(e, ncl) : f_or(e, list_to_or(ncl))
+		      ENDCASES
+	MEASURE length(nclAA)
     		     
 
-    resolve_check: LEMMA  
+    %resolve_check: LEMMA  
  	%	LET res_result = resolve(clAA) (clBB) IN
     		%LET seqent = cons(f_neg(clAA), cons(f_neg(clBB), cons(clCC, null))) IN
 			%TRUE
