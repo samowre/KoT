@@ -95,10 +95,8 @@ resolution : THEORY
 
     % unifies the two sets and removes occurrences of p and ~p
     % Returns null if the resulting clause is always true
-    resolve = LAMBDA clAA :
-    	     (LAMBDA 
-	       ( clBB : {c : (clause_lit_list?) | EXISTS (e : (literal?)) : member(e, clAA) AND member(f_neg(e), c)}) : 
-	         strict_merge(clAA, clBB) )
+    resolve (clAA)( clBB : {c : (clause_lit_list?) | EXISTS (e : (literal?)) : member(e, clAA) AND member(f_neg(e), c)}) : (clause_lit_list?) =
+	         strict_merge(clAA, clBB) 
     
     resolution_step : DATATYPE  
     BEGIN
@@ -130,7 +128,7 @@ resolution : THEORY
     fold_resolutions(l : clauses_list, acc : (clause_lit_list?)) : RECURSIVE (clause_lit_list?) =
     			   CASES l OF
 			   null : acc,
-			   cons(e, rest) : fold_resolutions(rest, resolve(acc, e))
+			   cons(e, rest) : fold_resolutions(rest, resolve(acc)( e))
 			   ENDCASES
 		MEASURE length(l)
 
@@ -157,7 +155,7 @@ resolution : THEORY
 				%second clause
 				LET clause2 = car(cdr(clauses_used)) IN
 				%resolution applied to the first two clauses
-				LET first_res = resolve(clause1, clause2) IN
+				LET first_res = resolve(clause1)( clause2) IN
 				%other resolution steps
 				LET rest_used = cdr(cdr(clauses_used)) IN
 				    create_clauses( cdr(cert), 
@@ -182,9 +180,16 @@ resolution : THEORY
 			  ENDIF
 		 ENDIF
 
-    resolve_check: LEMMA  
- 		LET res_result = resolve(clAA, clBB) IN
-    		LET seqent = cons(f_not(clAA), cons(f_not(clBB), cons(clCC, null))) IN
-			TRUE
+    non_empty_clause_list?(clAA) : bool= NOT null?(clAA)
+
+    nclAA : (non_empty_clause_list?)
+
+    %list_to_or(nclAA) : fmla = 
+    		     
+
+   % resolve_check: LEMMA  
+ 	%	LET res_result = resolve(clAA) (clBB) IN
+    		%LET seqent = cons(f_neg(clAA), cons(f_neg(clBB), cons(clCC, null))) IN
+			%TRUE
 		
   END resolution
