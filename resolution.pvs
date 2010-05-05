@@ -16,21 +16,21 @@ resolution : THEORY
     xx, yy, zz: VAR list[(var?)]
     nr, ns, nt: VAR nterm
 
-    atom?(A): bool = (atom?(A) AND 
-    	      	   upred?(pred(A)) AND 
-		   arity(pred(A)) = 0)
+    prop_atom?(A): bool = (atom?(A) AND 
+    	      	           upred?(pred(A)) AND 
+		           arity(pred(A)) = 0)
 
-    pA, pB, pC: VAR (atom?)
+    pA, pB, pC: VAR (prop_atom?)
 
-    literal?(A): bool = (atom?(A) OR 
-    		      (f_not?(A) AND atom?(arg(A))))
+    literal?(A): bool = (prop_atom?(A) OR 
+    		         (f_not?(A) AND prop_atom?(arg(A))))
 
     lA, lB, lC: VAR (literal?)
 
     lAA, lBB, lCC: VAR list[(literal?)]
 
     index(lA) : nat = 
-    	  IF atom?(lA) THEN index(pred(lA))
+    	  IF prop_atom?(lA) THEN index(pred(lA))
 	  ELSE index(pred(arg(lA)))
 	  ENDIF
 
@@ -47,7 +47,10 @@ resolution : THEORY
 	MEASURE length(lAA)
 
     sorted_clause_lit_list: LEMMA
-         clause_lit_list?(lAA) AND cons?(lAA) IMPLIES (FORALL (e: (literal?)) : member(e, cdr(lAA)) IMPLIES index(car(lAA)) < index(e))	
+         clause_lit_list?(lAA) AND cons?(lAA)
+	 IMPLIES
+	 (FORALL (e: (literal?)) : member(e, cdr(lAA))
+	        IMPLIES index(car(lAA)) < index(e))	
 
 
     no_duplicates?(lAA) : RECURSIVE bool = 
@@ -68,10 +71,9 @@ resolution : THEORY
 	         null : clAA,
 		 cons(e, r) : IF index(e) = index(lA) 
 		 	      THEN r
-			      ELSE IF index(lA) < index(e)
+			      ELSIF index(lA) < index(e)
 			      THEN clAA
 			      ELSE cons(e, remove(lA, r))
-			      ENDIF
 			      ENDIF
 	       ENDCASES
 	    MEASURE length(clAA)
@@ -117,18 +119,19 @@ resolution : THEORY
     resolution_certificate: TYPE = list[resolution_step]
 
     %verifies that each resolution step refers to previous clauses 
-    good_indices (cert : resolution_certificate, n:nat) : RECURSIVE bool = 
+    good_indices? (cert : resolution_certificate, n:nat) : RECURSIVE bool = 
     		  IF null?(cert) 
 		  THEN TRUE
 		  ELSE 
 		       CASES car(cert) OF
-		       	     ax(l) : good_indices(cdr(cert), n+1),
-		  	     res_step(l) : (FORALL (i:nat) : member(i, l) AND (i<n))
-			     		 AND good_indices(cdr(cert), n+1)
+		       	     ax(l) : good_indices?(cdr(cert), n+1),
+		  	     res_step(l) : (FORALL (i:nat) : member(i, l) IMPLIES (i<n))
+			     		 AND good_indices?(cdr(cert), n+1)
 		       ENDCASES
 		  ENDIF
     MEASURE length(cert) 
 
+    %Performs linear resolution with acc as the current clause
     fold_resolutions(l : clauses_list, acc : (clause_lit_list?)) : RECURSIVE (clause_lit_list?) =
     			   CASES l OF
 			   null : acc,
@@ -156,15 +159,10 @@ resolution : THEORY
 			    	LET clauses_used = map(LAMBDA i : nth(context, i))(l) IN
 				%first clause for resolution
 				LET clause1 = car(clauses_used) IN
-				%second clause
-				LET clause2 = car(cdr(clauses_used)) IN
-				%resolution applied to the first two clauses
-				LET first_res = resolve(clause1)( clause2) IN
-				%other resolution steps
-				LET rest_used = cdr(cdr(clauses_used)) IN
+				LET rest_used = cdr(clauses_used) IN
 				    create_clauses( cdr(cert), 
 		   	       		  append_clause( context, 
-					    fold_resolutions(rest_used, first_res) ) )				       
+					    fold_resolutions(clause1, rest_used) ) )))
 		   	    ENDCASES
     		   ENDIF
      MEASURE length(cert)

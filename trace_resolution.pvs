@@ -1,0 +1,23 @@
+trace_resolution[m, n: nat, i : upto(n)]: THEORY
+BEGIN
+
+  literal?(k: nzint): bool = (abs(k) < m)
+
+  k, l: VAR (literal?)
+  index(k): posnat = abs(k)
+
+  clause_rec?(ll: list[(literal?)], (j: nat)): RECURSIVE bool =
+    CASES ll OF
+     null: TRUE,
+     cons(k, jj): index(k)> j AND clause_rec?(jj, index(k))
+     ENDCASES
+     MEASURE length(ll)
+
+   clause?(ll: list[(literal?)]): bool = clause_rec?(ll, 0)
+     
+
+  trace_entry: DATATYPE
+
+  trace: TYPE = [below(n)
+ 
+END trace_resolution
