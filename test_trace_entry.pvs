@@ -1,0 +1,27 @@
+test: theory
+  
+  BEGIN
+
+  IMPORTING trace_resolution[3,7,4]
+
+  c1: (clause?) = cons(1, cons(2,null))
+  c2: (clause?) = cons(-1, cons(2,null))
+  c3: (clause?) = cons(1, cons(-2,null))
+  c4: (clause?) = cons(-1, cons(-2,null))
+
+  m1: (cons?[below(7)]) = cons(0, cons(1, null))
+  m2: (cons?[below(7)]) = cons(2, cons(3, null))
+  m3: (cons?[below(7)]) = cons(4, cons(5, null))
+
+  tr(j: below(7)): trace_entry = 
+    COND
+      j = 0 -> tr_clause(c1),
+      j = 1 -> tr_clause(c2),
+      j = 2 -> tr_clause(c3),
+      j = 3 -> tr_clause(c4),
+      j = 4 -> tr_merg(m1),
+      j = 5 -> tr_merg(m2),
+      j = 6 -> tr_merg(m3)
+    ENDCOND    
+
+  END test
