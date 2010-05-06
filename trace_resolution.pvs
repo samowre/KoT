@@ -15,9 +15,15 @@ BEGIN
      ENDCASES
      MEASURE length(ll)
 
+  sorted_clause_rec: LEMMA 
+  	FORALL (l: (cons?[(literal?)]), j: nat): clause_rec?(l,j) IMPLIES 
+	  (FORALL (e:(literal?)): member(e,cdr(l)) IMPLIES (index(e)>index(car(l))))  
+
   clause?(ll: list[(literal?)]): bool = clause_rec?(ll, 0)
 
   ck, cl: VAR (clause?)
+
+  cons_clause: LEMMA (clause?(ck) AND cons?(ck)) IMPLIES (clause?(cdr(ck)))
 
   trace_entry: DATATYPE
     BEGIN
