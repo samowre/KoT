@@ -88,8 +88,10 @@ BEGIN
       map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)  		    
   
   resolve_rec ( j: upto(n), cert ): RECURSIVE certificate = 
-    IF j=n OR null?( cert(j)`chn )
+    IF j=n 
     THEN cert
+    ELSIF null?( cert(j)`chn )
+    THEN resolve_rec(j+1, cert)
     ELSE resolve_rec(j+1, cert WITH [(j)`cl := resolution_list(build_chain_list(j, cert))])
     ENDIF 
   MEASURE n-j
