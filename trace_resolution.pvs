@@ -7,7 +7,7 @@ BEGIN
 
   k, l: VAR (literal?)
 
-  index(k): posnat = abs(k)
+  index(k): posnat = IF (k<0) THEN 2*abs(k)-1 ELSE 2*k ENDIF
 
   clause_rec?(ll: list[(literal?)], (j: nat)): RECURSIVE bool =
     CASES ll OF
@@ -43,11 +43,22 @@ BEGIN
   certificate: TYPE = ARRAY[index: below(n) -> clause_chain(index)]
 
   cert : VAR certificate
-
+    
+  delete_pivot(ck) : RECURSIVE {cl | subset(cl, ck)} = 
+    CASES ck OF
+      null: ck,
+      cons(k, ckk): IF k<0 AND cons?(ckk) AND (car(ckk) + k = 0) 
+      	      	    THEN cdr(ckk)
+      	      	    ELSE cons(k, delete_pivot(ckk))
+		    ENDIF
+    ENDCASES
+  MEASURE length(ck)
+      
+  %eliminates duplicates
   merge(ck, cl) : RECURSIVE 
-       {cla: (clause?) | (FORALL k: 
-       	     	 (member(k,cla) OR (member(k,ck) AND member(-k,cl)) OR (member(-k,ck) AND member(k,cl))) 
-		 IFF (member(k,ck) OR member(k,cl)))} = 
+       {cla: (clause?) | FORALL k: 
+       	     	 member(k,cla)  
+		 IFF (member(k,ck) OR member(k,cl))} = 
        	     CASES ck OF
    	         null : cl,
 		 cons(k, ckk) : 
@@ -62,12 +73,14 @@ BEGIN
 	         ENDCASES
              ENDCASES
       	     MEASURE length(ck) + length(cl)
+
+  resolution(ck, cl) : (clause?) = delete_pivot(merge(ck, cl))
       
   %applies merge on a non-empty list of clauses
-  merge_list(lck: (cons?[(clause?)])): RECURSIVE (clause?) =
+  resolution_list(lck: (cons?[(clause?)])): RECURSIVE (clause?) =
      CASES cdr(lck) OF
        null : car(lck),
-       cons(ck, lcl) : merge_list(cons(merge(car(lck), ck), lcl))
+       cons(ck, lcl) : resolution_list(cons(resolution(car(lck), ck), lcl))
      ENDCASES
      MEASURE length(lck)
 
@@ -77,7 +90,7 @@ BEGIN
   resolve_rec ( j: upto(n), cert ): RECURSIVE certificate = 
     IF j=n OR null?( cert(j)`chn )
     THEN cert
-    ELSE resolve_rec(j+1, cert WITH [(j)`cl := merge_list(build_chain_list(j, cert))])
+    ELSE resolve_rec(j+1, cert WITH [(j)`cl := resolution_list(build_chain_list(j, cert))])
     ENDIF 
   MEASURE n-j
 
