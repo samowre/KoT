@@ -37,10 +37,10 @@ BEGIN
   chain(index : below(n)) : TYPE = list[below(index)]
   
   %record with fields clause and chain(i)
-  clause_chain(index : below(n)) : TYPE = [# cl: (clause?), chain: chain(index) #]
+  clause_chain(index : below(n)) : TYPE = [# cl: (clause?), chn: chain(index) #]
 
   %array of records
-  certificate : TYPE = [index:below(n) -> clause_chain(index)]
+  certificate: TYPE = ARRAY[index: below(n) -> clause_chain(index)]
 
   cert : VAR certificate
 
@@ -51,9 +51,9 @@ BEGIN
      ENDCASES  
      MEASURE length(s)
 
-
+  %check that each chain element is smaller than the index of the chain
   good_certificate : LEMMA
-    FORALL (index : below(n)) : good_trace_1(cert(index)`chain, index)
+    FORALL (index : below(n)) : good_trace_1(cert(index)`chn, index)
 
 
   good_trace?(tr: [below(n) -> trace_entry]): bool = 
@@ -92,16 +92,15 @@ BEGIN
      ENDCASES
      MEASURE length(lck)
 
+  emptychain(cert) : bool = null?(cert(0)`chn)
   
-  resolve_rec(cert, j: upto(n)) : RECURSIVE certificate = 
-    IF j=n OR (null?( cert(j)`chain ))
+  resolve_rec ( j: upto(n), cert ): RECURSIVE certificate = 
+    IF j=n OR null?( cert(j)`chn )
     THEN cert
-    ELSE resolve_rec( cert WITH [(j)`cl := merge_list(map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chain))], j+1)
+    ELSE resolve_rec(j+1, cert WITH [(j)`cl := merge_list(map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn))])
     ENDIF 
   MEASURE n-j
 
-  resolve(cert): certificate = resolve_rec(cert, 0) 
-    
-   
+  resolve(cert): certificate = resolve_rec(0, cert) 
  
 END trace_resolution
