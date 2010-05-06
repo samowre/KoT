@@ -1,6 +1,8 @@
 trace_resolution[m, n: nat, i : upto(n)]: THEORY
 BEGIN
 
+  IMPORTING minlist
+
   literal?(k: nzint): bool = (abs(k) < m)
 
   k, l: VAR (literal?)
@@ -13,11 +15,76 @@ BEGIN
      ENDCASES
      MEASURE length(ll)
 
-   clause?(ll: list[(literal?)]): bool = clause_rec?(ll, 0)
-     
+  clause?(ll: list[(literal?)]): bool = clause_rec?(ll, 0)
+
+  ck, cl: VAR (clause?)
 
   trace_entry: DATATYPE
+    BEGIN
+     tr_clause(clause:(clause?)): tr_clause?
+     tr_merg(merg_list: (cons?[below(n)])) : tr_merg?
+    END trace_entry
 
-  trace: TYPE = [below(n)
+  good_trace_1(s: list[below(n)], j: below(n)): RECURSIVE bool = 
+     CASES s OF
+      null: TRUE,
+      cons(u, s1): ((u < j) AND good_trace_1(s1, j))
+     ENDCASES  
+     MEASURE length(s)
+
+  good_trace?(tr: [below(n) -> trace_entry]): bool = 
+     (FORALL (j: below(n)): 
+         ((j < i) IMPLIES tr_clause?(tr(j))) 
+	 AND (j >= i IMPLIES ((tr_merg?(tr(j))) AND good_trace_1(merg_list(tr(j)),j))))  
+
+  trace: TYPE = (good_trace?)
+
+  % accumulator useless?
+  merge_rec(ck, cl, (acc : nat)) : RECURSIVE (clause?) = 
+     CASES ck OF
+       null : cl,
+       cons(k, ckk) : 
+	  CASES cl OF
+	    null : ck,
+	    cons(l, cll) : IF index(k) < index(l) 
+	          	   THEN cons(k, merge_rec(ckk, cl, acc))
+			   ELSIF index(k) > index(l) 
+			   THEN cons(l, merge_rec(ck, cll, acc))
+			   ELSIF k + l = 0
+			   % a = ~b
+			   THEN merge_rec(ckk, cll, acc+1)
+			   % a = b
+			   ELSE cons(k, merge_rec(ckk, cll, acc))
+			  ENDIF
+	   ENDCASES
+      ENDCASES
+      MEASURE length(ck) + length(cl)
+      
+  merge(ck, cl) : (clause?) = merge_rec(ck, cl, 0)
+
+  merge_list(lck: (cons?[(clause?)])): RECURSIVE (clause?) =
+     CASES cdr(lck) OF
+       null : car(lck),
+       cons(ck, lcl) : merge_list(cons(merge(car(lck), ck), lcl))
+     ENDCASES
+     MEASURE length(lck)
+
+  resolution : TYPE = [below(n) -> (clause?)]
+
+  resolve_step(r: resolution, tr:trace, (j: upto(n))) : RECURSIVE resolution = 
+     IF j = n THEN r
+     ELSE
+       CASES tr(j) OF
+         tr_clause(ck) : resolve_step(r WITH[(j) := ck], tr, j+1),
+         tr_merg(l) : resolve_step(r WITH[(j) := merge_list(map(r)(l))],tr,j+1)
+       ENDCASES
+     ENDIF
+     MEASURE (n-j) 
+
+  r_init(j: below(n)): (clause?) = null
+
+  resolve(tr: trace): resolution = resolve_step(r_init, tr, 0) 
+    
+   
  
 END trace_resolution
