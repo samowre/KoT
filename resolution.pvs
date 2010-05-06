@@ -3,6 +3,7 @@ resolution : THEORY
   BEGIN
 
   IMPORTING rule
+  IMPORTING minlist
 
     r, s, t: VAR term
     rr, ss, tt: VAR list[term]
@@ -34,49 +35,47 @@ resolution : THEORY
 	  ELSE index(pred(arg(lA)))
 	  ENDIF
 
-    clause_lit_list?(lAA) : RECURSIVE bool = 
-    		 CASES lAA OF	  
-		       null: TRUE,
-		       cons(e, r) : 
-		         CASES r OF
-			   null: TRUE,	
-			   cons(f, s) :
-			     index(e) < index(f) AND clause_lit_list?(r)
-			 ENDCASES
-		 ENDCASES
-	MEASURE length(lAA)
+    car_clause_lit_list?(lAA : (cons?[(literal?)])): bool = (null?(cdr(lAA)) OR (index(car(lAA)) < index(car(cdr(lAA)))))
+%       CASES cdr(lAA) OF
+%	   null: TRUE,	
+%	   cons(f, s) :index(car(lAA)) < index(f)
+%       ENDCASES
+	
+    clause_lit_list?(lAA) : bool = every_suffix?(car_clause_lit_list?)(lAA)
 
     sorted_clause_lit_list: LEMMA
          clause_lit_list?(lAA) AND cons?(lAA)
 	 IMPLIES
 	 (FORALL (e: (literal?)) : member(e, cdr(lAA))
 	        IMPLIES index(car(lAA)) < index(e))	
+  
+    no_duplicates?(lAA) : bool = setlist?(lAA)  
 
+    clause_lit_list_implie_no_duplicate: LEMMA
+      clause_lit_list?(lAA) IMPLIES no_duplicates?(lAA)
 
-    no_duplicates?(lAA) : RECURSIVE bool = 
-    		    CASES lAA OF
-		    	  null : TRUE,
-			  cons(e, r) : NOT member(e, r) AND no_duplicates?(r)
-		    ENDCASES
-	MEASURE length(lAA)
-      
+    index_inj_clause_lit_list : LEMMA
+      clause_lit_list?(lAA) IMPLIES 
+       (FORALL lA, lB : (member(lA, lAA) AND member(lB, lAA)) IMPLIES
+        (lA /= lB IMPLIES index(lA) /= index(lB)))    
 
     no_pairs:  LEMMA
       clause_lit_list?(lAA) => FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
 
     clAA, clBB, clCC : VAR (clause_lit_list?)
 
-    remove(lA, clAA) : RECURSIVE (clause_lit_list?) = 
-    	       CASES clAA OF
-	         null : clAA,
-		 cons(e, r) : IF index(e) = index(lA) 
-		 	      THEN r
-			      ELSIF index(lA) < index(e)
-			      THEN clAA
-			      ELSE cons(e, remove(lA, r))
-			      ENDIF
-	       ENDCASES
-	    MEASURE length(clAA)
+    remove(lA, clAA) : RECURSIVE 
+       {clBB | (FORALL lB : member(lB, clBB) = (lB /= lA AND member(lB, clAA)))} = 
+      CASES clAA OF
+        null : clAA,
+	cons(e, r) : IF index(e) = index(lA) 
+		      THEN r
+		      ELSIF index(lA) < index(e)
+		      THEN clAA
+		      ELSE cons(e, remove(lA, r))
+		      ENDIF
+      ENDCASES
+      MEASURE length(clAA)
 
     %merge and eliminates duplicates and pairs (p, ~p)
     strict_merge(clAA, clBB) : RECURSIVE (clause_lit_list?) = 
@@ -140,12 +139,12 @@ resolution : THEORY
 		MEASURE length(l)
 
     good_indices_cert?(cert : resolution_certificate) : bool = 
-    				  good_indices(cert, 0)
+    				  good_indices?(cert, 0)
     
     % Creates from the certificate a list of clauses. 
     % Each clause coresponds to an axiom or a resolution step in the certificate.
     create_clauses (cert : resolution_certificate, 
-    		   context : {c : clauses_list | good_indices(cert, length(c))}) 
+    		   context : {c : clauses_list | good_indices?(cert, length(c))}) 
 		   : RECURSIVE clauses_list = 
     		   IF null?(cert) 
 		   THEN context
@@ -162,7 +161,8 @@ resolution : THEORY
 				LET rest_used = cdr(clauses_used) IN
 				    create_clauses( cdr(cert), 
 		   	       		  append_clause( context, 
-					    fold_resolutions(clause1, rest_used) ) )))
+					  % ????????? 
+					    fold_resolutions(cons(clause1, null), car(rest_used)) ))
 		   	    ENDCASES
     		   ENDIF
      MEASURE length(cert)
