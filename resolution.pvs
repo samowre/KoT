@@ -184,7 +184,7 @@ resolution : THEORY
 
     non_empty_clause_list?(clAA) : bool= NOT null?(clAA)
 
-    nclAA : VAR (non_empty_clause_list?)
+    nclAA, nclBB : VAR (non_empty_clause_list?)
 
     list_to_or(nclAA) : RECURSIVE fmla = 
     		      CASES cdr(nclAA) OF
@@ -192,11 +192,25 @@ resolution : THEORY
 		      cons(e, r) : f_or(car(nclAA), list_to_or(cdr(nclAA)))
 		      ENDCASES
 	MEASURE length(nclAA)
+
+    importing proof
     		     
 
-    %resolve_check: LEMMA  
- 	%	LET res_result = resolve(clAA) (clBB) IN
-    		%LET seqent = cons(f_neg(clAA), cons(f_neg(clBB), cons(clCC, null))) IN
-			%TRUE
+    resolve_check: LEMMA  
+    	EXISTS lA : member(lA, nclAA) AND member(f_neg(lA), nclBB)
+ 		AND LET res_result = resolve(clAA) (clBB) IN
+		LET h1 = list_to_or(clAA) IN
+		LET h2 = list_to_or(clBB) IN
+		LET gamma = list_to_or(remove(lA, nclAA)) IN
+		LET delta = list_to_or(remove(f_neg(lA), nclAA)) IN
+    		LET concl = cons(h1, cons(h2, cons(f_or(gamma, delta), null))) IN
+		LET or_c = cons(h1, cons(h2, cons(gamma, cons(delta, null)))) IN
+		LET ng_g = cons(f_not(gamma), cons(gamma, null)) IN
+		LET np = cons(f_neg(lA), cons(f_not(h2), cons(delta, null))) IN
+		LET np_p = cons(f_not(lA), cons( f_not(f_not(lA)), null)) IN
+		LET nd_d = cons(f_not(delta), cons(delta, null)) IN
+		LET ax1 = proof_step(`sequent = ng_g, `rule = ax, `subs = null) IN
+		true
+		
 		
   END resolution

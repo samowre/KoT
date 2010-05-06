@@ -6,6 +6,7 @@ BEGIN
   literal?(k: nzint): bool = (abs(k) < m)
 
   k, l: VAR (literal?)
+
   index(k): posnat = abs(k)
 
   clause_rec?(ll: list[(literal?)], (j: nat)): RECURSIVE bool =
@@ -31,12 +32,31 @@ BEGIN
      tr_merg(merg_list: (cons?[below(n)])) : tr_merg?
     END trace_entry
 
+
+  %list of integers smaller than i
+  chain(i : below(n)) : TYPE = list[below(i)]
+  
+  %record with fields clause and chain(i)
+  clause_chain(i : below(n)) : TYPE = [# cl: (clause?), chain: chain(i) #]
+
+  %array of records
+  certificate : TYPE = [i:below(n) -> clause_chain(i)]
+
+  cert : VAR certificate
+
+  
+
+ 
+
   good_trace_1(s: list[below(n)], j: below(n)): RECURSIVE bool = 
      CASES s OF
       null: TRUE,
       cons(u, s1): ((u < j) AND good_trace_1(s1, j))
      ENDCASES  
      MEASURE length(s)
+
+  good_certificate : LEMMA
+    FORALL (i : below(n)) : good_trace_1(cert(i)`chain, i)
 
   good_trace?(tr: [below(n) -> trace_entry]): bool = 
      (FORALL (j: below(n)): 
@@ -67,6 +87,8 @@ BEGIN
       MEASURE length(ck) + length(cl)
       
   merge(ck, cl) : (clause?) = merge_rec(ck, cl, 0)
+
+  
 
   merge_list(lck: (cons?[(clause?)])): RECURSIVE (clause?) =
      CASES cdr(lck) OF
