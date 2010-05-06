@@ -34,19 +34,15 @@ BEGIN
 
 
   %list of integers smaller than i
-  chain(i : below(n)) : TYPE = list[below(i)]
+  chain(index : below(n)) : TYPE = list[below(index)]
   
   %record with fields clause and chain(i)
-  clause_chain(i : below(n)) : TYPE = [# cl: (clause?), chain: chain(i) #]
+  clause_chain(index : below(n)) : TYPE = [# cl: (clause?), chain: chain(index) #]
 
   %array of records
-  certificate : TYPE = [i:below(n) -> clause_chain(i)]
+  certificate : TYPE = [index:below(n) -> clause_chain(index)]
 
   cert : VAR certificate
-
-  
-
- 
 
   good_trace_1(s: list[below(n)], j: below(n)): RECURSIVE bool = 
      CASES s OF
@@ -55,15 +51,15 @@ BEGIN
      ENDCASES  
      MEASURE length(s)
 
+
   good_certificate : LEMMA
-    FORALL (i : below(n)) : good_trace_1(cert(i)`chain, i)
+    FORALL (index : below(n)) : good_trace_1(cert(index)`chain, index)
+
 
   good_trace?(tr: [below(n) -> trace_entry]): bool = 
      (FORALL (j: below(n)): 
          ((j < i) IMPLIES tr_clause?(tr(j))) 
-	 AND (j >= i IMPLIES ((tr_merg?(tr(j))) AND good_trace_1(merg_list(tr(j)),j))))  
-
-  trace: TYPE = (good_trace?)
+	 AND (j >= i IMPLIES ((tr_merg?(tr(j))) AND good_trace_1(merg_list(tr(j)),j))))
 
   % accumulator useless?
   merge_rec(ck, cl, (acc : nat)) : RECURSIVE (clause?) = 
@@ -88,8 +84,7 @@ BEGIN
       
   merge(ck, cl) : (clause?) = merge_rec(ck, cl, 0)
 
-  
-
+  %applies merge on a non-empty list of clauses
   merge_list(lck: (cons?[(clause?)])): RECURSIVE (clause?) =
      CASES cdr(lck) OF
        null : car(lck),
@@ -97,21 +92,15 @@ BEGIN
      ENDCASES
      MEASURE length(lck)
 
-  resolution : TYPE = [below(n) -> (clause?)]
+  
+  resolve_rec(cert, j: upto(n)) : RECURSIVE certificate = 
+    IF j=n OR (null?( cert(j)`chain ))
+    THEN cert
+    ELSE resolve_rec( cert WITH [(j)`cl := merge_list(map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chain))], j+1)
+    ENDIF 
+  MEASURE n-j
 
-  resolve_step(r: resolution, tr:trace, (j: upto(n))) : RECURSIVE resolution = 
-     IF j = n THEN r
-     ELSE
-       CASES tr(j) OF
-         tr_clause(ck) : resolve_step(r WITH[(j) := ck], tr, j+1),
-         tr_merg(l) : resolve_step(r WITH[(j) := merge_list(map(r)(l))],tr,j+1)
-       ENDCASES
-     ENDIF
-     MEASURE (n-j) 
-
-  r_init(j: below(n)): (clause?) = null
-
-  resolve(tr: trace): resolution = resolve_step(r_init, tr, 0) 
+  resolve(cert): certificate = resolve_rec(cert, 0) 
     
    
  
