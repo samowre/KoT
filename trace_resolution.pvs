@@ -26,11 +26,11 @@ BEGIN
 
   cons_clause: LEMMA (clause?(ck) AND cons?(ck)) IMPLIES (clause?(cdr(ck)))
 
-  trace_entry: DATATYPE
-    BEGIN
-     tr_clause(clause:(clause?)): tr_clause?
-     tr_merg(merg_list: (cons?[below(n)])) : tr_merg?
-    END trace_entry
+%  trace_entry: DATATYPE
+%    BEGIN
+%     tr_clause(clause:(clause?)): tr_clause?
+%     tr_merg(merg_list: (cons?[below(n)])) : tr_merg?
+%    END trace_entry
 
 
   %list of integers smaller than i
@@ -44,46 +44,25 @@ BEGIN
 
   cert : VAR certificate
 
-  good_trace_1(s: list[below(n)], j: below(n)): RECURSIVE bool = 
-     CASES s OF
-      null: TRUE,
-      cons(u, s1): ((u < j) AND good_trace_1(s1, j))
-     ENDCASES  
-     MEASURE length(s)
-
-  %check that each chain element is smaller than the index of the chain
-  good_certificate : LEMMA
-    FORALL (index : below(n)) : good_trace_1(cert(index)`chn, index)
-
-
-  good_trace?(tr: [below(n) -> trace_entry]): bool = 
-     (FORALL (j: below(n)): 
-         ((j < i) IMPLIES tr_clause?(tr(j))) 
-	 AND (j >= i IMPLIES ((tr_merg?(tr(j))) AND good_trace_1(merg_list(tr(j)),j))))
-
-  % accumulator useless?
-  merge_rec(ck, cl, (acc : nat)) : RECURSIVE (clause?) = 
-     CASES ck OF
-       null : cl,
-       cons(k, ckk) : 
-	  CASES cl OF
-	    null : ck,
-	    cons(l, cll) : IF index(k) < index(l) 
-	          	   THEN cons(k, merge_rec(ckk, cl, acc))
-			   ELSIF index(k) > index(l) 
-			   THEN cons(l, merge_rec(ck, cll, acc))
-			   ELSIF k + l = 0
-			   % a = ~b
-			   THEN merge_rec(ckk, cll, acc+1)
-			   % a = b
-			   ELSE cons(k, merge_rec(ckk, cll, acc))
-			  ENDIF
-	   ENDCASES
-      ENDCASES
-      MEASURE length(ck) + length(cl)
+  merge(ck, cl) : RECURSIVE 
+       {cla: (clause?) | (FORALL k: 
+       	     	 (member(k,cla) OR (member(k,ck) AND member(-k,cl)) OR (member(-k,ck) AND member(k,cl))) 
+		 IFF (member(k,ck) OR member(k,cl)))} = 
+       	     CASES ck OF
+   	         null : cl,
+		 cons(k, ckk) : 
+	  	  CASES cl OF
+	    	  	null : ck,
+	    		cons(l, cll) : IF k = l
+				        THEN cons(k, merge(ckk, cll))
+					ELSIF index(k) < index(l) 
+	          	   	        THEN cons(k, merge(ckk, cl))
+			    		ELSE cons(l, merge(ck, cll))
+			  	       ENDIF
+	         ENDCASES
+             ENDCASES
+      	     MEASURE length(ck) + length(cl)
       
-  merge(ck, cl) : (clause?) = merge_rec(ck, cl, 0)
-
   %applies merge on a non-empty list of clauses
   merge_list(lck: (cons?[(clause?)])): RECURSIVE (clause?) =
      CASES cdr(lck) OF
@@ -92,12 +71,13 @@ BEGIN
      ENDCASES
      MEASURE length(lck)
 
-  emptychain(cert) : bool = null?(cert(0)`chn)
+  build_chain_list(j: below(n), cert): (cons?[(clause?)]) = 
+      map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)  		    
   
   resolve_rec ( j: upto(n), cert ): RECURSIVE certificate = 
     IF j=n OR null?( cert(j)`chn )
     THEN cert
-    ELSE resolve_rec(j+1, cert WITH [(j)`cl := merge_list(map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn))])
+    ELSE resolve_rec(j+1, cert WITH [(j)`cl := merge_list(build_chain_list(j, cert))])
     ENDIF 
   MEASURE n-j
 
