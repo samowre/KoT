@@ -10,22 +10,22 @@ BEGIN
   % (-1) -> 1, (1) -> 2, (-2) -> 3, (2) -> 4 ...
   index(k): posnat = IF (k<0) THEN 2*abs(k)-1 ELSE 2*k ENDIF
 
-  clause_rec?(ll: list[(tr_literal?)], (j: nat)): RECURSIVE bool =
+  tr_clause_rec?(ll: list[(tr_literal?)], (j: nat)): RECURSIVE bool =
     CASES ll OF
      null: TRUE,
-     cons(k, jj): index(k)> j AND clause_rec?(jj, index(k))
+     cons(k, jj): index(k)> j AND tr_clause_rec?(jj, index(k))
      ENDCASES
      MEASURE length(ll)
 
-  sorted_clause_rec: LEMMA 
-  	FORALL (l: (cons?[(tr_literal?)]), j: nat): clause_rec?(l,j) IMPLIES 
+  sorted_tr_clause_rec: LEMMA 
+  	FORALL (l: (cons?[(tr_literal?)]), j: nat): tr_clause_rec?(l,j) IMPLIES 
 	  (FORALL (e:(tr_literal?)): member(e,cdr(l)) IMPLIES (index(e)>index(car(l))))  
 
-  clause?(ll: list[(tr_literal?)]): bool = clause_rec?(ll, 0)
+  tr_clause?(ll: list[(tr_literal?)]): bool = tr_clause_rec?(ll, 0)
 
-  ck, cl: VAR (clause?)
+  ck, cl: VAR (tr_clause?)
 
-  cons_clause: LEMMA (clause?(ck) AND cons?(ck)) IMPLIES (clause?(cdr(ck)))
+  cons_tr_clause: LEMMA (tr_clause?(ck) AND cons?(ck)) IMPLIES tr_clause?(cdr(ck))
 
 %  trace_entry: DATATYPE
 %    BEGIN
@@ -38,7 +38,7 @@ BEGIN
   chain(j : below(n)) : TYPE = list[below(j)]
   
   %record with fields clause and chain(i)
-  clause_chain(j : below(n)) : TYPE = [# cl: (clause?), chn: chain(j) #]
+  clause_chain(j : below(n)) : TYPE = [# cl: (tr_clause?), chn: chain(j) #]
 
   %array of records
   certificate: TYPE = [j: below(n) -> clause_chain(j)]
@@ -57,7 +57,7 @@ BEGIN
       
   %eliminates duplicates
   merge(ck, cl) : RECURSIVE 
-       {cla: (clause?) | FORALL k: 
+       {cla: (tr_clause?) | FORALL k: 
        	     	 member(k,cla)  
 		 IFF (member(k,ck) OR member(k,cl))} = 
        	     CASES ck OF
@@ -75,17 +75,17 @@ BEGIN
              ENDCASES
       	     MEASURE length(ck) + length(cl)
 
-  resolution(ck, cl) : (clause?) = delete_pivot(merge(ck, cl))
+  resolution(ck, cl) : (tr_clause?) = delete_pivot(merge(ck, cl))
       
   %applies merge on a non-empty list of clauses
-  resolution_list(lck: (cons?[(clause?)])): RECURSIVE (clause?) =
+  resolution_list(lck: (cons?[(tr_clause?)])): RECURSIVE (tr_clause?) =
      CASES cdr(lck) OF
        null : car(lck),
        cons(ck, lcl) : resolution_list(cons(resolution(car(lck), ck), lcl))
      ENDCASES
      MEASURE length(lck)
 
-  build_chain_list(j: below(n), cert): (cons?[(clause?)]) = 
+  build_chain_list(j: below(n), cert): (cons?[(tr_clause?)]) = 
       map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)  		    
   
   resolve_rec ( j: upto(n), cert ): RECURSIVE certificate = 

@@ -1,4 +1,20 @@
-trace2fmla: THEORY
+trace2fmla[m, n: nat, i : upto(n)]: THEORY
 BEGIN
 
+  IMPORTING trace_resolution[m, n, i]
+  IMPORTING resolution
+
+  k: VAR (tr_literal?)
+  cl: VAR (tr_clause?)
+
+  translate_lit(k): (literal?) = IF k > 0 
+  		    	       	 THEN atom(upred(k, 0), null)
+				 ELSE f_not(atom(upred(-k, 0), null))
+				 ENDIF
+
+  index_index: LEMMA index(translate_lit(k)) = abs(k)
+
+  translate_clause(cl): (clause_lit_list?) = map(translate_lit)(cl)
+
 END trace2fmla
+

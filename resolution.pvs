@@ -35,34 +35,31 @@ resolution : THEORY
 	  ELSE index(pred(arg(lA)))
 	  ENDIF
 
-    car_clause_lit_list?(lAA : (cons?[(literal?)])): bool = (null?(cdr(lAA)) OR (index(car(lAA)) < index(car(cdr(lAA)))))
+    car_clause?(lAA : (cons?[(literal?)])): bool = (null?(cdr(lAA)) OR (index(car(lAA)) < index(car(cdr(lAA)))))
 %       CASES cdr(lAA) OF
 %	   null: TRUE,	
 %	   cons(f, s) :index(car(lAA)) < index(f)
 %       ENDCASES
 	
-    clause_lit_list?(lAA) : bool = every_suffix?(car_clause_lit_list?)(lAA)
+    clause?(lAA) : bool = every_suffix?(car_clause?)(lAA)
 
-    sorted_clause_lit_list: LEMMA
-         clause_lit_list?(lAA) AND cons?(lAA)
+    sorted_clause: LEMMA
+         clause?(lAA) AND cons?(lAA)
 	 IMPLIES
 	 (FORALL (e: (literal?)) : member(e, cdr(lAA))
 	        IMPLIES index(car(lAA)) < index(e))	
   
     no_duplicates?(lAA) : bool = setlist?(lAA)  
 
-    clause_lit_list_implie_no_duplicate: LEMMA
-      clause_lit_list?(lAA) IMPLIES no_duplicates?(lAA)
+    clause_implie_no_duplicate: LEMMA
+      clause?(lAA) IMPLIES no_duplicates?(lAA)
 
-    index_inj_clause_lit_list : LEMMA
-      clause_lit_list?(lAA) IMPLIES 
+    index_inj_clause : LEMMA
+      clause?(lAA) IMPLIES 
        (FORALL lA, lB : (member(lA, lAA) AND member(lB, lAA)) IMPLIES
         (lA /= lB IMPLIES index(lA) /= index(lB)))    
 
-    no_pairs:  LEMMA
-      clause_lit_list?(lAA) => FORALL (q : (literal?)) : member(q, lAA) => NOT member(f_neg(q), lAA)
-
-    clAA, clBB, clCC : VAR (clause_lit_list?)
+    clAA, clBB, clCC : VAR (clause?)
 
     remove(lA, clAA) : RECURSIVE 
        {clBB | (FORALL lB : member(lB, clBB) = (lB /= lA AND member(lB, clAA)))} = 
@@ -78,7 +75,7 @@ resolution : THEORY
       MEASURE length(clAA)
 
     %merge and eliminates duplicates and pairs (p, ~p)
-    strict_merge(clAA, clBB) : RECURSIVE (clause_lit_list?) = 
+    strict_merge(clAA, clBB) : RECURSIVE (clause?) = 
     		CASES clAA OF
 		  null : clBB,
 		  cons(a, rA) : 
@@ -100,19 +97,19 @@ resolution : THEORY
 
     % unifies the two sets and removes occurrences of p and ~p
     % Returns null if the resulting clause is always true
-    resolve (clAA)( clBB : {c : (clause_lit_list?) | EXISTS (e : (literal?)) : member(e, clAA) AND member(f_neg(e), c)}) : (clause_lit_list?) =
+    resolve (clAA)( clBB : {c : (clause?) | EXISTS (e : (literal?)) : member(e, clAA) AND member(f_neg(e), c)}) : (clause?) =
 	         strict_merge(clAA, clBB) 
     
     resolution_step : DATATYPE  
     BEGIN
-	ax (axiom_clauses:(clause_lit_list?)) : ax?
+	ax (axiom_clauses:(clause?)) : ax?
 	res_step (clauses : {l : list[nat] | length(l) > 1})  : res_step?
     END resolution_step
 
-    clauses_list: TYPE = list[(clause_lit_list?)]
+    clauses_list: TYPE = list[(clause?)]
 
     %adds a clause at the end of a list of clauses
-    append_clause(l : clauses_list, e : (clause_lit_list?)) : clauses_list= 
+    append_clause(l : clauses_list, e : (clause?)) : clauses_list= 
     		    append(l, cons(e, null))		    
 		      
     resolution_certificate: TYPE = list[resolution_step]
@@ -131,7 +128,7 @@ resolution : THEORY
     MEASURE length(cert) 
 
     %Performs linear resolution with acc as the current clause
-    fold_resolutions(l : clauses_list, acc : (clause_lit_list?)) : RECURSIVE (clause_lit_list?) =
+    fold_resolutions(l : clauses_list, acc : (clause?)) : RECURSIVE (clause?) =
     			   CASES l OF
 			   null : acc,
 			   cons(e, rest) : fold_resolutions(rest, resolve(acc)( e))
