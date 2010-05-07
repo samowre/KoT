@@ -1,0 +1,96 @@
+kot_resolve  % [ parameters ]
+		: THEORY
+
+  BEGIN
+
+  IMPORTING fmla
+  
+  IMPORTING proof
+
+  % p \/ gamma
+  first_resolve_fmla : TYPE = 
+  {f : fmla| 
+    EXISTS(i:nat, gamma:fmla): 
+      f = f_or(atom(upred(i, 0), null), gamma)}
+  
+  % ~q \/ delta
+  second_resolve_fmla : TYPE = 
+  {f : fmla| 
+    EXISTS(i:nat, delta:fmla): 
+      f = f_or(f_not(atom(upred(i, 0), null)), delta)}
+
+  % p \/ gamma,  ~p \/ delta
+  resolve_pair : TYPE = 
+    [# h1: first_resolve_fmla, 
+       h2: {h : second_resolve_fmla | 
+         index(pred(arg1(h1))) = 
+         index(pred(arg(arg1(h)))) } #]
+
+  h: VAR resolve_pair
+
+  % gamma \/ delta
+  kot_resolve(h) : fmla = 
+    f_or( arg2(h`h1), arg2(h`h2) )
+    
+  % |- ~(p\/gamma), ~(~p\/delta), (gamma\/delta) 
+  concl_sequent(h): sequent = 
+    cons(f_not(h`h1), 
+     cons(f_not(h`h2), 
+      cons(kot_resolve(h), null)))
+
+  % |- ~(p\/gamma), ~(~p\/delta), gamma, delta
+  or_sequent(h): sequent = 
+    cons(f_not(h`h1), 
+     cons(f_not(h`h2), 
+      cons(arg1(kot_resolve(h)), 
+       cons(arg2(kot_resolve(h)), null))))
+
+  % |- ~gamma, gamma
+  nor1_sequent(h): sequent = 
+    cons(f_not(arg2(h`h1)), 
+     cons(arg1(kot_resolve(h)), null))
+
+  % ax( |- ~gamma, gamma )
+  ax1(h) : proof_step = 
+    (# sequent:=nor1_sequent(h), 
+       rule:=ax, 
+       subs:=null #)
+
+  % |- ~p, ~~p
+  nor1_nor2_sequent(h): sequent =
+    cons(f_not(arg1(h`h2)),
+     cons(f_not(arg1(h`h2)), null))
+
+  % ax( |- ~p, ~~p )
+  ax2(h) : proof_step = 
+    (# sequent:=nor1_nor2_sequent(h), 
+       rule:=ax, 
+       subs:=null #)
+
+  % |- ~delta, delta
+  nor2_nor2_sequent(h): sequent = 
+    cons(f_not(arg2(h`h2)),
+     cons(arg2(kot_resolve(h)), null))
+  
+  % ax( |- ~delta, delta )
+  ax3(h) : proof_step = 
+    (# sequent:=nor2_nor2_sequent(h), 
+       rule:=ax, 
+       subs:=null #)
+
+  % |- ~p, ~(~p \/ delta), delta
+  nor2_sequent(h): sequent = 
+    cons(f_not(arg1(h`h1)), 
+     cons(f_not(h`h2), 
+      cons(arg2(kot_resolve(h)), null)))
+
+  %nor rule using previous two axioms
+  nor1(h) : proof_step = 
+    (# sequent:=nor2_sequent(h), 
+       rule:=norr, 
+       subs:=cons(1, cons(2, null)) #)
+
+
+  %build_proof(h : resolve_pair): proof_seq
+
+  END kot_resolve

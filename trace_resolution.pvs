@@ -35,13 +35,13 @@ BEGIN
 
 
   %list of integers smaller than i
-  chain(j : below(n)) : TYPE = list[below(j)]
+  chain(index : below(n)) : TYPE = list[below(index)]
   
   %record with fields clause and chain(i)
   clause_chain(j : below(n)) : TYPE = [# cl: (tr_clause?), chn: chain(j) #]
 
   %array of records
-  certificate: TYPE = [j: below(n) -> clause_chain(j)]
+  certificate: TYPE = ARRAY[index: below(n) -> clause_chain(index)]
 
   cert : VAR certificate
     
@@ -100,3 +100,7 @@ BEGIN
   resolve(cert): certificate = resolve_rec(0, cert) 
  
 END trace_resolution
+
+
+
+
