@@ -9,10 +9,11 @@ BEGIN
 
   translate_lit(k): (literal?) = IF k > 0 
   		    	       	 THEN atom(upred(k, 0), null)
-				 ELSE f_not(atom(upred(-k, 0), null))
+				 ELSE f_not(atom(upred(abs(k), 0), null))
 				 ENDIF
 
-  index_index: LEMMA index(translate_lit(k)) = index(k)
+  index_index: LEMMA 
+    index(translate_lit(k)) = index(k)
 
   translate_clause(cl): (clause?) = map(translate_lit)(cl)
 
