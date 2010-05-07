@@ -12,9 +12,9 @@ BEGIN
 				 ELSE f_not(atom(upred(-k, 0), null))
 				 ENDIF
 
-  index_index: LEMMA index(translate_lit(k)) = abs(k)
+  index_index: LEMMA index(translate_lit(k)) = index(k)
 
-  translate_clause(cl): (clause_lit_list?) = map(translate_lit)(cl)
+  translate_clause(cl): (clause?) = map(translate_lit)(cl)
 
 END trace2fmla
 

@@ -30,16 +30,13 @@ resolution : THEORY
 
     lAA, lBB, lCC: VAR list[(literal?)]
 
+    % (not 1) -> 1, (1) -> 2, (not 2) -> 3, (2) -> 4...
     index(lA) : nat = 
-    	  IF prop_atom?(lA) THEN index(pred(lA))
-	  ELSE index(pred(arg(lA)))
+    	  IF prop_atom?(lA) THEN 2*index(pred(lA))
+	  ELSE 2*index(pred(arg(lA)))-1
 	  ENDIF
 
     car_clause?(lAA : (cons?[(literal?)])): bool = (null?(cdr(lAA)) OR (index(car(lAA)) < index(car(cdr(lAA)))))
-%       CASES cdr(lAA) OF
-%	   null: TRUE,	
-%	   cons(f, s) :index(car(lAA)) < index(f)
-%       ENDCASES
 	
     clause?(lAA) : bool = every_suffix?(car_clause?)(lAA)
 
