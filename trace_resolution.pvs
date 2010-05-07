@@ -10,16 +10,19 @@ BEGIN
   % (-1) -> 1, (1) -> 2, (-2) -> 3, (2) -> 4 ...
   index(k): posnat = IF (k<0) THEN 2*abs(k)-1 ELSE 2*k ENDIF
 
+  % clauses are sorted by index value
   tr_clause_rec?(ll: list[(tr_literal?)], (j: nat)): RECURSIVE bool =
     CASES ll OF
-     null: TRUE,
-     cons(k, jj): index(k)> j AND tr_clause_rec?(jj, index(k))
-     ENDCASES
-     MEASURE length(ll)
+      null: TRUE,
+      cons(k, jj): index(k)> j AND tr_clause_rec?(jj, index(k))
+    ENDCASES
+  MEASURE length(ll)
 
   sorted_tr_clause_rec: LEMMA 
-  	FORALL (l: (cons?[(tr_literal?)]), j: nat): tr_clause_rec?(l,j) IMPLIES 
-	  (FORALL (e:(tr_literal?)): member(e,cdr(l)) IMPLIES (index(e)>index(car(l))))  
+    FORALL (l: (cons?[(tr_literal?)]), j: nat): 
+      tr_clause_rec?(l,j) 
+       IMPLIES 
+	(FORALL (e:(tr_literal?)): member(e,cdr(l)) IMPLIES (index(e)>index(car(l))))  
 
   tr_clause?(ll: list[(tr_literal?)]): bool = tr_clause_rec?(ll, 0)
 
@@ -44,7 +47,9 @@ BEGIN
   certificate: TYPE = ARRAY[index: below(n) -> clause_chain(index)]
 
   cert : VAR certificate
-    
+
+  % tr_clause is sorted by index => ~p, p are on consecutive positions.
+  % deletes the first pair (~p, p) encountered    
   delete_pivot(ck) : RECURSIVE {cl | subset(cl, ck)} = 
     CASES ck OF
       null: ck,
@@ -85,9 +90,11 @@ BEGIN
      ENDCASES
      MEASURE length(lck)
 
+  % creates the list of clauses corresponding to the chain values
   build_chain_list(j: below(n), cert): (cons?[(tr_clause?)]) = 
-      map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)  		    
-  
+      map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)
+  		    
+  % applies resolution_list on all chains starting from j  
   resolve_rec ( j: upto(n), cert ): RECURSIVE certificate = 
     IF j=n 
     THEN cert

@@ -31,38 +31,14 @@ kot_resolve  % [ parameters ]
   % gamma \/ delta
   kot_resolve(h) : fmla = 
     f_or( arg2(h`h1), arg2(h`h2) )
-    
-  % |- ~(p\/gamma), ~(~p\/delta), (gamma\/delta) 
-  concl_sequent(h): sequent = 
-    cons(f_not(h`h1), 
-     cons(f_not(h`h2), 
-      cons(kot_resolve(h), null)))
-
-  % |- ~(p\/gamma), ~(~p\/delta), gamma, delta
-  or_sequent(h): sequent = 
-    cons(f_not(h`h1), 
-     cons(f_not(h`h2), 
-      cons(arg1(kot_resolve(h)), 
-       cons(arg2(kot_resolve(h)), null))))
-
-  % |- ~gamma, gamma
-  nor1_sequent(h): sequent = 
-    cons(f_not(arg2(h`h1)), 
-     cons(arg1(kot_resolve(h)), null))
-
-  % ax( |- ~gamma, gamma )
-  ax1(h) : proof_step = 
-    (# sequent:=nor1_sequent(h), 
-       rule:=ax, 
-       subs:=null #)
 
   % |- ~p, ~~p
   nor1_nor2_sequent(h): sequent =
     cons(f_not(arg1(h`h2)),
      cons(f_not(arg1(h`h2)), null))
 
-  % ax( |- ~p, ~~p )
-  ax2(h) : proof_step = 
+  % 1:ax( |- ~p, ~~p )
+  ax1(h) : proof_step = 
     (# sequent:=nor1_nor2_sequent(h), 
        rule:=ax, 
        subs:=null #)
@@ -72,8 +48,8 @@ kot_resolve  % [ parameters ]
     cons(f_not(arg2(h`h2)),
      cons(arg2(kot_resolve(h)), null))
   
-  % ax( |- ~delta, delta )
-  ax3(h) : proof_step = 
+  % 2:ax( |- ~delta, delta )
+  ax2(h) : proof_step = 
     (# sequent:=nor2_nor2_sequent(h), 
        rule:=ax, 
        subs:=null #)
@@ -84,13 +60,60 @@ kot_resolve  % [ parameters ]
      cons(f_not(h`h2), 
       cons(arg2(kot_resolve(h)), null)))
 
-  %nor rule using previous two axioms
+  %3:nor(1,2)=> |- ~p, ~(~p \/ delta), delta
   nor1(h) : proof_step = 
     (# sequent:=nor2_sequent(h), 
        rule:=norr, 
        subs:=cons(1, cons(2, null)) #)
 
+  % |- ~gamma, gamma
+  nor1_sequent(h): sequent = 
+    cons(f_not(arg2(h`h1)), 
+     cons(arg1(kot_resolve(h)), null))
 
-  %build_proof(h : resolve_pair): proof_seq
+  % 4:ax( |- ~gamma, gamma )
+  ax3(h) : proof_step = 
+    (# sequent:=nor1_sequent(h), 
+       rule:=ax, 
+       subs:=null #)
+
+  % |- ~(p\/gamma), ~(~p\/delta), gamma, delta
+  or_sequent(h): sequent = 
+    cons(f_not(h`h1), 
+     cons(f_not(h`h2), 
+      cons(arg1(kot_resolve(h)), 
+       cons(arg2(kot_resolve(h)), null))))
+
+  % 5:nor(3,4) => |- ~(p\/gamma), ~(~p\/delta), gamma, delta
+  nor2(h): proof_step = 
+    (# sequent:=or_sequent(h), 
+       rule:=norr, 
+       subs:=cons(3, cons(4, null)) #)
+
+  % |- ~(p\/gamma), ~(~p\/delta), (gamma\/delta) 
+  concl_sequent(h): sequent = 
+    cons(f_not(h`h1), 
+     cons(f_not(h`h2), 
+      cons(kot_resolve(h), null)))
+
+  % 6:or(5) => |- ~(p\/gamma), ~(~p\/delta), (gamma\/delta) 
+  concl(h): proof_step = 
+    (# sequent:=or_sequent(h), 
+       rule:=orr, 
+       subs:=cons(5, null) #)
+
+  build_proof(h : resolve_pair): proof_seq = 
+  (# length:=6, 
+     seq:=LAMBDA(j:below(6)):
+      COND
+        j = 0 -> ax1(h),
+	j = 1 -> ax2(h),
+	j = 2 -> nor1(h),
+	j = 3 -> ax3(h),
+	j = 4 -> nor2(h),
+	j = 5 -> concl(h)
+      ENDCOND #)
+
+  ex1: LEMMA checkProof(empty_seq)(build_proof(h))
 
   END kot_resolve
