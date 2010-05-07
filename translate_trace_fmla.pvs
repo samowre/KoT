@@ -1,0 +1,12 @@
+translate[m, n: nat, i : upto(n)]: THEORY
+BEGIN
+
+  IMPORTING trace_resolution[m, n ,i]
+  IMPORTING resolution
+
+  translate_lit(k: (tr_literal?)): (literal?) = IF k > 0 
+  		   		   	      	THEN atom(upred(k, 0), null) 
+						ELSE f_not(atom(upred(-k, 0), null)) 
+						ENDIF
+
+END translate
