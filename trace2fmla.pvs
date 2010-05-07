@@ -18,10 +18,10 @@ BEGIN
   translate_clause(cl): (clause?) = map(translate_lit)(cl)
 
   clause_clause: LEMMA
-    member(k, cl) <=> member(translate_lit(k), translate_clause(cl))
+    member(k, cl) IFF member(translate_lit(k), translate_clause(cl))
 
   translate_cons: LEMMA
-    cons?(cl) =>
+    cons?(cl) IMPLIES
      translate_clause(cl) = cons(translate_lit(car(cl)), translate_clause(cdr(cl)))
 
 

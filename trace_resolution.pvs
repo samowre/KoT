@@ -6,6 +6,7 @@ BEGIN
   tr_literal?(k: nzint): bool = (abs(k) < m)
 
   k, l: VAR (tr_literal?)
+  ll: VAR list[(tr_literal?)]
 
   % (-1) -> 1, (1) -> 2, (-2) -> 3, (2) -> 4 ...
   index(k): posnat = IF (k<0) THEN 2*abs(k)-1 ELSE 2*k ENDIF
@@ -25,6 +26,14 @@ BEGIN
 	(FORALL (e:(tr_literal?)): member(e,cdr(l)) IMPLIES (index(e)>index(car(l))))  
 
   tr_clause?(ll: list[(tr_literal?)]): bool = tr_clause_rec?(ll, 0)
+
+  tr_clause_rec_red: LEMMA FORALL(j1, j2: nat): 
+  		     (tr_clause_rec?(ll, j1) AND j2<j1) IMPLIES tr_clause_rec?(ll, j2)
+
+  tr_clause_prop: LEMMA tr_clause?(ll) IFF 
+    		       (null?(ll) 
+		        OR null?(cdr(ll)) 
+			OR (index(car(ll))<index(car(cdr(ll))) AND tr_clause?(cdr(ll))))
 
   ck, cl: VAR (tr_clause?)
 
