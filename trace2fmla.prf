@@ -1,6 +1,6 @@
 (trace2fmla
  (translate_lit_TCC1 0
-  (translate_lit_TCC1-1 nil 3482241771 3482241937
+  (translate_lit_TCC1-1 nil 3482241771 3482242497
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -33,38 +33,39 @@
      real_defs nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   95 100 nil nil))
+   95 90 nil nil))
  (translate_lit_TCC2 0
-  (translate_lit_TCC2-1 nil 3482241771 3482241937 ("" (grind) nil nil)
-   proved ((pred? adt-def-decl "boolean" funpred_adt nil)) 33 20 t
+  (translate_lit_TCC2-1 nil 3482241771 3482242497 ("" (grind) nil nil)
+   proved ((pred? adt-def-decl "boolean" funpred_adt nil)) 32 20 t
    nil))
  (translate_lit_TCC3 0
-  (translate_lit_TCC3-1 nil 3482241771 3482241937 ("" (grind) nil nil)
-   proved ((length def-decl "nat" list_props nil)) 25 20 t nil))
+  (translate_lit_TCC3-1 nil 3482241771 3482242497 ("" (grind) nil nil)
+   proved ((length def-decl "nat" list_props nil)) 24 20 t nil))
  (translate_lit_TCC4 0
-  (translate_lit_TCC4-1 nil 3482241771 3482241937
-   ("" (subtype-tcc) nil nil) proved
-   ((prop_atom? const-decl "bool" resolution nil)
-    (literal? const-decl "bool" resolution nil))
-   55 40 nil nil))
- (translate_lit_TCC5 0
-  (translate_lit_TCC5-1 nil 3482241771 3482241974 ("" (grind) nil nil)
-   proved
-   ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
-         nil)
-    (pred? adt-def-decl "boolean" funpred_adt nil))
-   8209 30 t nil))
- (translate_lit_TCC6 0
-  (translate_lit_TCC6-1 nil 3482241771 3482241992 ("" (grind) nil nil)
-   proved ((length def-decl "nat" list_props nil)) 5712 20 t nil))
- (translate_lit_TCC7 0
-  (translate_lit_TCC7-1 nil 3482241771 3482241938
+  (translate_lit_TCC4-1 nil 3482241771 3482242497
    ("" (subtype-tcc) nil nil) proved
    ((prop_atom? const-decl "bool" resolution nil)
     (literal? const-decl "bool" resolution nil))
    56 40 nil nil))
+ (translate_lit_TCC5 0
+  (translate_lit_TCC5-1 nil 3482241771 3482242497 ("" (grind) nil nil)
+   proved
+   ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (pred? adt-def-decl "boolean" funpred_adt nil))
+   39 30 t nil))
+ (translate_lit_TCC6 0
+  (translate_lit_TCC6-1 nil 3482241771 3482242497 ("" (grind) nil nil)
+   proved ((length def-decl "nat" list_props nil)) 84 40 t nil))
+ (translate_lit_TCC7 0
+  (translate_lit_TCC7-1 nil 3482241771 3482242497
+   ("" (subtype-tcc) nil nil) proved
+   ((prop_atom? const-decl "bool" resolution nil)
+    (literal? const-decl "bool" resolution nil))
+   47 40 nil nil))
  (index_index 0
-  (index_index-1 nil 3482242179 3482242185 ("" (grind) nil nil) proved
+  (index_index-1 nil 3482242179 3482242185 ("" (grind) nil nil)
+   unchecked
    ((tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
     (/= const-decl "boolean" notequal nil)
@@ -109,6 +110,27 @@
     (minus_nzint_is_nzint application-judgement "nzint" integers nil))
    5679 300 t shostak))
  (translate_clause_TCC1 0
-  (translate_clause_TCC1-1 nil 3482241771 3482242169
-   ("" (subtype-tcc) nil nil) unfinished nil 156279 6770 t nil)))
+  (translate_clause_TCC1-1 nil 3482241771 3482242497
+   ("" (subtype-tcc) nil nil) unfinished nil 144 120 t nil))
+ (clause_clause 0
+  (clause_clause-1 nil 3482242503 3482242947
+   ("" (skolem-typepred)
+    (("" (split)
+      (("1" (flatten)
+        (("1" (expand member)
+          (("1" (lift-if)
+            (("1" (split)
+              (("1" (propax) nil nil)
+               ("2" (split)
+                (("1" (flatten) (("1" (grind) nil nil)) nil)
+                 ("2" (flatten) (("2" (postpone) nil nil)) nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("2" (postpone) nil nil))
+      nil))
+    nil)
+   unfinished nil 444567 4520 t shostak)))
 
