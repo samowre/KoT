@@ -100,7 +100,7 @@ BEGIN
      MEASURE length(lck)
 
   % creates the list of clauses corresponding to the chain values
-  build_chain_list(j: below(n), cert): (cons?[(tr_clause?)]) = 
+  build_chain_list(j: below(n), cert : {c : certificate|cons?(c(j)`chn)}): (cons?[(tr_clause?)]) = 
       map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)
   		    
   % applies resolution_list on all chains starting from j  
