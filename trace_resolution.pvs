@@ -114,14 +114,6 @@ BEGIN
   MEASURE n-j
 
   resolve(cert): certificate = resolve_rec(0, cert) 
-
-
-  resolution: LEMMA
-    card( {k | 
-      member(k, ck) AND 
-       member(-k, cl) AND 
-        (NOT member(k, resolution(ck, cl))) AND 
-	 (NOT member(-k, resolution(ck, cl)))} ) <= 1
  
 END trace_resolution
 

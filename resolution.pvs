@@ -2,8 +2,9 @@ resolution : THEORY
 
   BEGIN
 
-  IMPORTING rule
   IMPORTING minlist
+  IMPORTING sequents
+  IMPORTING proof
 
     r, s, t: VAR term
     rr, ss, tt: VAR list[term]
@@ -15,7 +16,6 @@ resolution : THEORY
     AA, BB, CC: VAR list[fmla]
     x, y, z: VAR (var?)
     xx, yy, zz: VAR list[(var?)]
-    nr, ns, nt: VAR nterm
 
     prop_atom?(A): bool = (atom?(A) AND 
     	      	           upred?(pred(A)) AND 
@@ -35,6 +35,8 @@ resolution : THEORY
     	  IF prop_atom?(lA) THEN 2*index(pred(lA))
 	  ELSE 2*index(pred(arg(lA)))-1
 	  ENDIF
+ 
+    index_inj: LEMMA index(lA) = index(lB) IMPLIES lA = lB
 
     clause_rec?(lAA, (j: nat)): RECURSIVE bool =
       CASES lAA OF
@@ -82,141 +84,54 @@ resolution : THEORY
 		      ENDIF
       ENDCASES
       MEASURE length(clAA)
+  
 
-    %merge and eliminates duplicates and pairs (p, ~p)
-    strict_merge(clAA, clBB) : RECURSIVE (clause?) = 
-    		CASES clAA OF
-		  null : clBB,
-		  cons(a, rA) : 
-		    CASES clBB OF
-		      null : clAA,
-		      cons(b, rB) : IF index(a) < index(b) 
-		      	      	    THEN cons(a, strict_merge(rA, clBB))
-				    ELSIF index(a) > index(b) 
-				    THEN cons(b, strict_merge(clAA, rB))
-				    ELSIF a = f_neg(b) 
-				    % a = ~b
-				    THEN strict_merge(rA, rB)
-				    % a = b
-				    ELSE cons(a, strict_merge(rA, rB))
-				    ENDIF
-		    ENDCASES
-		ENDCASES
-	MEASURE length(clAA) + length(clBB)
+   clauses_list: TYPE = list[(clause?)]
 
-    % unifies the two sets and removes occurrences of p and ~p
-    % Returns null if the resulting clause is always true
-    resolve (clAA)( clBB : {c : (clause?) | EXISTS (e : (literal?)) : member(e, clAA) AND member(f_neg(e), c)}) : (clause?) =
-	         strict_merge(clAA, clBB) 
+    %non empty clause
+    nclause?(clAA): bool = cons?(clAA)
+
+    nclAA, nclBB : VAR (nclause?)
+
+    % transform p1::p2::...pn into p1 or (p2 or ...(pn-1 or pn))...)
+    nclause2fmla(nclAA): RECURSIVE fmla = 
+    		IF null?(cdr(nclAA)) 
+    		 THEN car(nclAA)
+		 ELSE f_or(car(nclAA), nclause2fmla(cdr(nclAA)))
+		ENDIF
+		MEASURE length(nclAA)
+
+    clause_sentence_list: LEMMA sentence_list?(clAA)
+
+    % transform p1::p2::..pn into |- p1 or (p2 or ...pn))   and null into |- null (i.e |- false)
+    or_reduction(clAA): sequent = IF null?(clAA) THEN null ELSE cons(nclause2fmla(clAA), null) ENDIF
+
+    % transform p1::p2::..pn into |- not[p1 or (p2 or ...pn))]  
+    not_or_reduction(nclAA): sequent = cons(f_not(nclause2fmla(nclAA)), null) 
     
-    resolution_step : DATATYPE  
-    BEGIN
-	ax (axiom_clauses:(clause?)) : ax?
-	res_step (clauses : {l : list[nat] | length(l) > 1})  : res_step?
-    END resolution_step
+    % inclusion efficiently implemented for clauses
+    include_clause(clAA, clBB): RECURSIVE bool = 
+    	 CASES clAA OF
+	   null: true,
+	   cons(lA, clAAA): CASES clBB OF
+	     	    	      null: false,
+			      cons(lB, clBBB): COND
+			      	       	        index(lA) < index(lB) -> false, 
+						index(lA) = index(lB) -> include_clause(clAAA, clBBB),
+						index(lA) > index(lB) -> include_clause(clAA, clBBB)
+					       ENDCOND
+		    	    ENDCASES
+   	 ENDCASES
+	 MEASURE length(clBB)
 
-    clauses_list: TYPE = list[(clause?)]
-
-    %adds a clause at the end of a list of clauses
-    append_clause(l : clauses_list, e : (clause?)) : clauses_list= 
-    		    append(l, cons(e, null))		    
-		      
-    resolution_certificate: TYPE = list[resolution_step]
-
-    %verifies that each resolution step refers to previous clauses 
-    good_indices? (cert : resolution_certificate, n:nat) : RECURSIVE bool = 
-    		  IF null?(cert) 
-		  THEN TRUE
-		  ELSE 
-		       CASES car(cert) OF
-		       	     ax(l) : good_indices?(cdr(cert), n+1),
-		  	     res_step(l) : (FORALL (i:nat) : member(i, l) IMPLIES (i<n))
-			     		 AND good_indices?(cdr(cert), n+1)
-		       ENDCASES
-		  ENDIF
-    MEASURE length(cert) 
-
-    %Performs linear resolution with acc as the current clause
-    fold_resolutions(l : clauses_list, acc : (clause?)) : RECURSIVE (clause?) =
-    			   CASES l OF
-			   null : acc,
-			   cons(e, rest) : fold_resolutions(rest, resolve(acc)( e))
-			   ENDCASES
-		MEASURE length(l)
-
-    good_indices_cert?(cert : resolution_certificate) : bool = 
-    				  good_indices?(cert, 0)
-    
-    % Creates from the certificate a list of clauses. 
-    % Each clause coresponds to an axiom or a resolution step in the certificate.
-    create_clauses (cert : resolution_certificate, 
-    		   context : {c : clauses_list | good_indices?(cert, length(c))}) 
-		   : RECURSIVE clauses_list = 
-    		   IF null?(cert) 
-		   THEN context
-		   ELSE 
-		   	LET step = car(cert) IN
-		   	    CASES step OF
-		   	    ax(lst) : 
-			    	    create_clauses( cdr(cert), append_clause(context, lst)),
-		   	    res_step(l) : 
-			        %the list of clauses corresponding to the list of indices
-			    	LET clauses_used = map(LAMBDA i : nth(context, i))(l) IN
-				%first clause for resolution
-				LET clause1 = car(clauses_used) IN
-				LET rest_used = cdr(clauses_used) IN
-				    create_clauses( cdr(cert), 
-		   	       		  append_clause( context, 
-					  % ????????? 
-					    fold_resolutions(cons(clause1, null), car(rest_used)) ))
-		   	    ENDCASES
-    		   ENDIF
-     MEASURE length(cert)
+    subset_include_clause: LEMMA include_clause(clAA, clBB) IMPLIES subset(clAA, clBB)
 
 
-    execute_certificate(cert: (good_indices_cert?)) : clauses_list = 
-    			    create_clauses(cert, null)
-
-    %returns true if the certificate ends with an empty clause
-    unsat?(cert: resolution_certificate) : bool = 
-    		 IF NOT good_indices_cert?(cert) 
-		 THEN FALSE
-		 ELSE LET clauses = execute_certificate(cert) IN
-		      	  IF nth(clauses, length(clauses) - 1) = emptyset 
-			  THEN TRUE
-			  ELSE FALSE
-			  ENDIF
-		 ENDIF
-
-    non_empty_clause_list?(clAA) : bool= NOT null?(clAA)
-
-    nclAA, nclBB : VAR (non_empty_clause_list?)
-
-    list_to_or(nclAA) : RECURSIVE fmla = 
-    		      CASES cdr(nclAA) OF
-		      null : car(nclAA),
-		      cons(e, r) : f_or(car(nclAA), list_to_or(cdr(nclAA)))
-		      ENDCASES
-	MEASURE length(nclAA)
-
-    importing proof
-    		     
-
- %   resolve_check: LEMMA  
- %   	EXISTS lA : member(lA, nclAA) AND member(f_neg(lA), nclBB)
- %		AND LET res_result = resolve(clAA) (clBB) IN
-%		LET h1 = list_to_or(clAA) IN
-%		LET h2 = list_to_or(clBB) IN
-%		LET gamma = list_to_or(remove(lA, nclAA)) IN
-%		LET delta = list_to_or(remove(f_neg(lA), nclAA)) IN
-%    		LET concl = cons(h1, cons(h2, cons(f_or(gamma, delta), null))) IN
-%		LET or_c = cons(h1, cons(h2, cons(gamma, cons(delta, null)))) IN
-%		LET ng_g = cons(f_not(gamma), cons(gamma, null)) IN
-%		LET np = cons(f_neg(lA), cons(f_not(h2), cons(delta, null))) IN
-%		LET np_p = cons(f_not(lA), cons( f_not(f_not(lA)), null)) IN
-%		LET nd_d = cons(f_not(delta), cons(delta, null)) IN
-%		LET ax1 = proof_step(`sequent = ng_g, `rule = ax, `subs = null) IN
-%		true
-		
-		
+    % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
+    th1: LEMMA (include_clause(nclAA, clCC) AND include_clause(nclBB, clCC)) 
+    	        IMPLIES (EXISTS(RR: ne_proof_seq): 
+		           conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
+			   AND checkProof(empty_seq)(RR))
+			       
+ 		
   END resolution

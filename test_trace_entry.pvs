@@ -4,10 +4,10 @@ test: theory
 
   IMPORTING trace_resolution[3,7,4]
 
-  c1: (clause?) = cons(1, cons(2,null))
-  c2: (clause?) = cons(-1, cons(2,null))
-  c3: (clause?) = cons(1, cons(-2,null))
-  c4: (clause?) = cons(-1, cons(-2,null))
+  c1: (tr_clause?) = cons(1, cons(2,null))
+  c2: (tr_clause?) = cons(-1, cons(2,null))
+  c3: (tr_clause?) = cons(1, cons(-2,null))
+  c4: (tr_clause?) = cons(-1, cons(-2,null))
 
   m1: chain(4) = cons(0, cons(1, null))
   m2: chain(5) = cons(2, cons(3, null))
@@ -29,36 +29,4 @@ test: theory
     ENDCOND    
 
   END test
-
-test1: theory
-  
-  BEGIN
-
-  IMPORTING trace_resolution[3,7,4]
-
-  c1: (clause?) = cons(1, cons(2,null))
-  c2: (clause?) = cons(-1, cons(2,null))
-  c3: (clause?) = cons(1, cons(-2,null))
-  c4: (clause?) = cons(-1, cons(-2,null))
-
-  m1: chain(4) = cons(0, cons(1, null))
-  m2: chain(5) = cons(2, cons(3, null))
-  m3: chain(6) = cons(4, cons(5, null))
-
-  cc4: clause_chain(4) = (# cl := null, chn := m1 #)
-  cc5: clause_chain(5) = (# cl := null, chn := m2 #)
-  cc6: clause_chain(6) = (# cl := null, chn := m3 #)
-
-  c: certificate = LAMBDA (j:below(7)):
-    COND
-      j = 0 -> (# cl := c1, chn := null #),
-      j = 1 -> (# cl := c2, chn := null #),
-      j = 2 -> (# cl := c3, chn := null #),
-      j = 3 -> (# cl := c4, chn := null #),
-      j = 4 -> cc4,
-      j = 5 -> cc5,
-      j = 6 -> cc6
-    ENDCOND    
-
-  END test1
 
