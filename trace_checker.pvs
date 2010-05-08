@@ -1,0 +1,90 @@
+trace_checker : THEORY
+
+  BEGIN
+
+    IMPORTING minlist
+    IMPORTING fmla
+    IMPORTING rule
+    IMPORTING proof
+
+    r, s, t: VAR term
+    rr, ss, tt: VAR list[term]
+    i, j, k: VAR nat
+    ii, jj, kk: VAR list[nat]
+    f, g, h: VAR (fun?)
+    p, q: VAR (pred?)
+    A, B, C: VAR fmla
+    AA, BB, CC: VAR list[fmla]
+    x, y, z: VAR (var?)
+    xx, yy, zz: VAR list[(var?)]
+    nr, ns, nt: VAR nterm
+
+    prop_atom?(A): bool = (atom?(A) AND 
+    	      	           upred?(pred(A)) AND 
+		           arity(pred(A)) = 0)
+
+    pA, pB, pC: VAR (prop_atom?)
+
+    literal?(A): bool = (prop_atom?(A) OR 
+    		         (f_not?(A) AND prop_atom?(arg(A))))
+
+    lA, lB, lC: VAR (literal?)
+
+    lAA, lBB, lCC: VAR list[(literal?)]
+
+    % (not 1) -> 1, (1) -> 2, (not 2) -> 3, (2) -> 4...
+    index(lA) : posnat = 
+    	  IF prop_atom?(lA) THEN 2*index(pred(lA))
+	  ELSE 2*index(pred(arg(lA)))-1
+	  ENDIF
+
+    clause_rec?(lAA, (j: nat)): RECURSIVE bool =
+      CASES lAA OF
+        null: TRUE,
+     	cons(k, lBB): index(k)> j AND clause_rec?(lBB, index(k))
+      ENDCASES
+     MEASURE length(lAA)
+	
+    clause?(lAA) : bool = clause_rec?(lAA, 0)
+
+    clause_rec_red: LEMMA FORALL(j1, j2: nat): (clause_rec?(lAA, j1) AND j2<j1) IMPLIES clause_rec?(lAA, j2)
+
+    clause_prop: LEMMA clause?(lAA) IFF 
+    		       (null?(lAA) 
+		        OR null?(cdr(lAA)) 
+			OR (index(car(lAA))<index(car(cdr(lAA))) AND clause?(cdr(lAA))))
+
+    sorted_clause: LEMMA
+         clause?(lAA) AND cons?(lAA)
+	 IMPLIES
+	 (FORALL (e: (literal?)) : member(e, cdr(lAA))
+	        IMPLIES index(car(lAA)) < index(e))	
+  
+    no_duplicates?(lAA) : bool = setlist?(lAA)  
+
+    clause_implie_no_duplicate: LEMMA
+      clause?(lAA) IMPLIES no_duplicates?(lAA)
+
+    index_inj_clause : LEMMA
+      clause?(lAA) IMPLIES 
+       (FORALL lA, lB : (member(lA, lAA) AND member(lB, lAA)) IMPLIES
+        (lA /= lB IMPLIES index(lA) /= index(lB)))    
+
+    clAA, clBB, clCC : VAR (clause?)
+
+    remove(lA, clAA) : RECURSIVE 
+       {clBB | (FORALL lB : member(lB, clBB) = (lB /= lA AND member(lB, clAA)))} = 
+      CASES clAA OF
+        null : clAA,
+	cons(e, r) : IF index(e) = index(lA) 
+		      THEN r
+		      ELSIF index(lA) < index(e)
+		      THEN clAA
+		      ELSE cons(e, remove(lA, r))
+		      ENDIF
+      ENDCASES
+      MEASURE length(clAA)
+
+    clauses_list: TYPE = list[(clause?)]
+	
+  END trace_checker
