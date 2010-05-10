@@ -78,6 +78,8 @@ resolution : THEORY
 
     nclAA, nclBB : VAR (nclause?)
 
+    include_clause(clAA, clBB): bool = sorted_include(clAA, clBB)
+
     % transform p1::p2::...pn into p1 or (p2 or ...(pn-1 or pn))...)
     % obs: add stronger type to fmla ?
     nclause2fmla(nclAA): RECURSIVE fmla= 
@@ -104,15 +106,17 @@ resolution : THEORY
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % lemma 1 : |- ~p::l if p belongs l 
     
-    sdi: proof_step = (# sequent:= null, rule:= ax, subs:= null #)
+    cut1_lemma1(lA): proof_step = (# sequent:= cons(lA, cons(f_not(lA), null)), rule:= ax, subs:= null #)
+    cut2_lemma1(lA): proof_step = (# sequent:= cons(f_not(lA), cons(f_not(f_not(lA)), null)), rule:= ax, subs:= null #)
+    concl_lemma1(lA, clAA): proof_step = (# sequent:= cons(f_not(lA), clAA) , rule:= cut(f_not(lA)), subs:= cons(0,cons(1,null)) #)
 
     RR_lemma1(lA, clAA): ne_proof_seq = 
     (# length:=3, 
        seq:= LAMBDA(j:below(3)):
 		COND
-        	  j = 0 -> sdi,
-		  j = 1 -> sdi,
-		  j = 2 -> sdi 
+        	  j = 0 -> cut1_lemma1(lA),
+		  j = 1 -> cut2_lemma1(lA),
+		  j = 2 -> concl_lemma1(lA, clAA) 
       		ENDCOND #)
 
     lemma1: LEMMA member(lA, clAA)  
@@ -124,8 +128,8 @@ resolution : THEORY
 
     % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
     th1: THEOREM 
-      (sorted_include(nclAA, clCC) AND 
-       sorted_include(nclBB, clCC)) 
+      (include_clause(nclAA, clCC) AND 
+       include_clause(nclBB, clCC)) 
       => 
       (EXISTS(RR: ne_proof_seq): 
       	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
