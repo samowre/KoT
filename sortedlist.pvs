@@ -1,0 +1,64 @@
+sortedlist   [ T: TYPE, key: {k: [T-> real]| injective?(k)} ]
+		: THEORY
+
+  BEGIN
+
+  IMPORTING minlist
+
+  lAA, lBB : VAR list[T]
+  e, f: VAR T
+
+  sorted?(lAA): RECURSIVE bool =
+      CASES lAA OF
+        null: TRUE,
+     	cons(k, lBB): 
+	  CASES lBB OF
+	    null: TRUE,
+	    cons(l, lCC): key(k) < key(l) AND sorted?(lBB)
+	  ENDCASES
+      ENDCASES
+     MEASURE length(lAA)
+
+  sAA, sBB : VAR (sorted?)
+
+  sorted_prop: LEMMA 
+      sorted?(lAA) 
+      <=> 
+      (null?(lAA) 
+	OR null?(cdr(lAA)) 
+	OR (key(car(lAA)) < key(car(cdr (lAA) ))) AND 
+	    sorted?(cdr(lAA)))
+
+  sorted_clause: LEMMA
+      cons?(sAA)
+      => 
+      (member(e, cdr(sAA))
+	=> 
+	key(car(sAA)) < key(e))
+
+  no_duplicates?(lAA) : bool = setlist?(lAA)
+
+  sorted_implies_no_duplicates: LEMMA
+      no_duplicates?(sAA)
+
+  remove(e, sAA) : RECURSIVE 
+       {sBB | 
+         (FORALL f : 
+	   member(f, sAA) => (key(f) = key(e) 
+	     OR member(f, sBB)))} = 
+      CASES sAA OF
+        null : sAA,
+	cons(f, r) : IF key(e) = key(f) 
+		      THEN r
+		      ELSIF key(e) < key(f)
+		      % lA not in the list
+		      THEN sAA
+		      ELSE cons(f, remove(e, r))
+		      ENDIF
+      ENDCASES
+      MEASURE length(sAA)
+
+  cons_sorted: LEMMA 
+    cons?(sAA) => sorted?(cdr(sAA))
+
+  END sortedlist

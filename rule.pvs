@@ -52,7 +52,7 @@ rule  % [ parameters ]
     fcongruence(G): fcongruence_rule?(G),
     pcongruence(G): pcongruence_rule?(G)
     ENDCASES
-    MEASURE pf BY <<
+  MEASURE pf BY <<
 
     theorem?(G): bool = (EXISTS pf: goodproof?(pf) AND conc(pf) = G)
 
@@ -75,9 +75,11 @@ rule  % [ parameters ]
     tactic: TYPE = {f : [sequent -> list[sequent]] |
                      (FORALL G: every(theorem?)(f(G)) => theorem?(G))}
 
-    reflex_thm: LEMMA theorem?(cons(f_eq(ns, ns), G))
+    reflex_thm: LEMMA 
+      theorem?(cons(f_eq(ns, ns), G))
 
-    trans_thm: LEMMA theorem?((: f_eq(nr, nt), f_not(f_eq(nr, ns)), f_not(f_eq(ns, nt)) :))
+    trans_thm: LEMMA 
+      theorem?((: f_eq(nr, nt), f_not(f_eq(nr, ns)), f_not(f_eq(ns, nt)) :))
 
     f_exists(xx, A): RECURSIVE fmla =
      CASES xx OF

@@ -11,24 +11,11 @@ BEGIN
   % (-1) -> 1, (1) -> 2, (-2) -> 3, (2) -> 4 ...
   index(k): posnat = IF (k<0) THEN 2*abs(k)-1 ELSE 2*k ENDIF
 
-  % clauses are sorted by index value
-  tr_clause_rec?(ll: list[(tr_literal?)], (j: nat)): RECURSIVE bool =
-    CASES ll OF
-      null: TRUE,
-      cons(k, jj): index(k)> j AND tr_clause_rec?(jj, index(k))
-    ENDCASES
-  MEASURE length(ll)
+  %index must be injective?
+  IMPORTING sortedlist[(tr_literal?), index]
 
-  sorted_tr_clause_rec: LEMMA 
-    FORALL (l: (cons?[(tr_literal?)]), j: nat): 
-      tr_clause_rec?(l,j) 
-       IMPLIES 
-	(FORALL (e:(tr_literal?)): member(e,cdr(l)) IMPLIES (index(e)>index(car(l))))  
-
-  tr_clause?(ll: list[(tr_literal?)]): bool = tr_clause_rec?(ll, 0)
-
-  tr_clause_rec_red: LEMMA FORALL(j1, j2: nat): 
-  		     (tr_clause_rec?(ll, j1) AND j2<j1) IMPLIES tr_clause_rec?(ll, j2)
+  % A trace clause is a list of trace literals sorted by index
+  tr_clause?(ll): bool = sorted?(ll)
 
   tr_clause_prop: LEMMA tr_clause?(ll) IFF 
     		       (null?(ll) 
