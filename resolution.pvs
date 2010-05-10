@@ -144,9 +144,28 @@ resolution : THEORY
    	 ENDCASES
     MEASURE length(clBB)
 
-    subset_include_clause: LEMMA	
-      include_clause(clAA, clBB) IMPLIES subset(clAA, clBB)
+    subset_include_clause: LEMMA include_clause(clAA, clBB) <=> subset(clAA, clBB)
 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % lemma 1 : |- ~p::l if p belongs l 
+    
+    sdi: proof_step = (# sequent:= null, rule:= ax, subs:= null #)
+
+    RR_lemma1(lA, clAA): ne_proof_seq = 
+    (# length:=3, 
+       seq:= LAMBDA(j:below(3)):
+		COND
+        	  j = 0 -> sdi,
+		  j = 1 -> sdi,
+		  j = 2 -> sdi 
+      		ENDCOND #)
+
+    lemma1: LEMMA member(lA, clAA)  
+    	    	  =>
+      		  conclusion(RR_lemma1(lA, clAA))= cons(f_not(lA), clAA) AND checkProof(empty_seq)(RR_lemma1(lA, clAA))
+
+    % end lemma 1		  
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
     % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
     th1: THEOREM 

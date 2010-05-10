@@ -38,62 +38,115 @@ funpred_adt: THEORY
   funpred_ord: [funpred -> upto(3)]
 
   funpred_ord_defaxiom: AXIOM
-    (FORALL (index: nat, arity: nat): funpred_ord(ipred(index, arity)) = 0) AND
-     (FORALL (index: nat, arity: nat): funpred_ord(upred(index, arity)) = 1) AND
-      (FORALL (index: nat, arity: nat): funpred_ord(ifun(index, arity)) = 2) AND (FORALL (index: nat, arity: nat): funpred_ord(ufun(index, arity)) = 3);
+    (FORALL (index: nat, arity: nat): funpred_ord(ipred(index, arity)) = 0)
+     AND
+     (FORALL (index: nat, arity: nat):
+        funpred_ord(upred(index, arity)) = 1)
+      AND
+      (FORALL (index: nat, arity: nat):
+         funpred_ord(ifun(index, arity)) = 2)
+       AND
+       (FORALL (index: nat, arity: nat):
+          funpred_ord(ufun(index, arity)) = 3);
 
   ord(x: funpred): upto(3) =
-      CASES x OF ipred(ipred1_var, ipred2_var): 0, upred(upred1_var, upred2_var): 1, ifun(ifun1_var, ifun2_var): 2, ufun(ufun1_var, ufun2_var): 3
+      CASES x
+        OF ipred(ipred1_var, ipred2_var): 0,
+           upred(upred1_var, upred2_var): 1,
+           ifun(ifun1_var, ifun2_var): 2,
+           ufun(ufun1_var, ufun2_var): 3
         ENDCASES
 
   funpred_ipred_extensionality: AXIOM
     FORALL (ipred?_var: (ipred?), ipred?_var2: (ipred?)):
-      index(ipred?_var) = index(ipred?_var2) AND arity(ipred?_var) = arity(ipred?_var2) IMPLIES ipred?_var = ipred?_var2;
+      index(ipred?_var) = index(ipred?_var2) AND
+       arity(ipred?_var) = arity(ipred?_var2)
+       IMPLIES ipred?_var = ipred?_var2;
 
-  funpred_ipred_eta: AXIOM FORALL (ipred?_var: (ipred?)): ipred(index(ipred?_var), arity(ipred?_var)) = ipred?_var;
+  funpred_ipred_eta: AXIOM
+    FORALL (ipred?_var: (ipred?)):
+      ipred(index(ipred?_var), arity(ipred?_var)) = ipred?_var;
 
   funpred_upred_extensionality: AXIOM
     FORALL (upred?_var: (upred?), upred?_var2: (upred?)):
-      index(upred?_var) = index(upred?_var2) AND arity(upred?_var) = arity(upred?_var2) IMPLIES upred?_var = upred?_var2;
+      index(upred?_var) = index(upred?_var2) AND
+       arity(upred?_var) = arity(upred?_var2)
+       IMPLIES upred?_var = upred?_var2;
 
-  funpred_upred_eta: AXIOM FORALL (upred?_var: (upred?)): upred(index(upred?_var), arity(upred?_var)) = upred?_var;
+  funpred_upred_eta: AXIOM
+    FORALL (upred?_var: (upred?)):
+      upred(index(upred?_var), arity(upred?_var)) = upred?_var;
 
   funpred_ifun_extensionality: AXIOM
     FORALL (ifun?_var: (ifun?), ifun?_var2: (ifun?)):
-      index(ifun?_var) = index(ifun?_var2) AND arity(ifun?_var) = arity(ifun?_var2) IMPLIES ifun?_var = ifun?_var2;
+      index(ifun?_var) = index(ifun?_var2) AND
+       arity(ifun?_var) = arity(ifun?_var2)
+       IMPLIES ifun?_var = ifun?_var2;
 
-  funpred_ifun_eta: AXIOM FORALL (ifun?_var: (ifun?)): ifun(index(ifun?_var), arity(ifun?_var)) = ifun?_var;
+  funpred_ifun_eta: AXIOM
+    FORALL (ifun?_var: (ifun?)):
+      ifun(index(ifun?_var), arity(ifun?_var)) = ifun?_var;
 
   funpred_ufun_extensionality: AXIOM
     FORALL (ufun?_var: (ufun?), ufun?_var2: (ufun?)):
-      index(ufun?_var) = index(ufun?_var2) AND arity(ufun?_var) = arity(ufun?_var2) IMPLIES ufun?_var = ufun?_var2;
+      index(ufun?_var) = index(ufun?_var2) AND
+       arity(ufun?_var) = arity(ufun?_var2)
+       IMPLIES ufun?_var = ufun?_var2;
 
-  funpred_ufun_eta: AXIOM FORALL (ufun?_var: (ufun?)): ufun(index(ufun?_var), arity(ufun?_var)) = ufun?_var;
+  funpred_ufun_eta: AXIOM
+    FORALL (ufun?_var: (ufun?)):
+      ufun(index(ufun?_var), arity(ufun?_var)) = ufun?_var;
 
-  funpred_index_ipred: AXIOM FORALL (ipred1_var: nat, ipred2_var: nat): index(ipred(ipred1_var, ipred2_var)) = ipred1_var;
+  funpred_index_ipred: AXIOM
+    FORALL (ipred1_var: nat, ipred2_var: nat):
+      index(ipred(ipred1_var, ipred2_var)) = ipred1_var;
 
-  funpred_arity_ipred: AXIOM FORALL (ipred1_var: nat, ipred2_var: nat): arity(ipred(ipred1_var, ipred2_var)) = ipred2_var;
+  funpred_arity_ipred: AXIOM
+    FORALL (ipred1_var: nat, ipred2_var: nat):
+      arity(ipred(ipred1_var, ipred2_var)) = ipred2_var;
 
-  funpred_index_upred: AXIOM FORALL (upred1_var: nat, upred2_var: nat): index(upred(upred1_var, upred2_var)) = upred1_var;
+  funpred_index_upred: AXIOM
+    FORALL (upred1_var: nat, upred2_var: nat):
+      index(upred(upred1_var, upred2_var)) = upred1_var;
 
-  funpred_arity_upred: AXIOM FORALL (upred1_var: nat, upred2_var: nat): arity(upred(upred1_var, upred2_var)) = upred2_var;
+  funpred_arity_upred: AXIOM
+    FORALL (upred1_var: nat, upred2_var: nat):
+      arity(upred(upred1_var, upred2_var)) = upred2_var;
 
-  funpred_index_ifun: AXIOM FORALL (ifun1_var: nat, ifun2_var: nat): index(ifun(ifun1_var, ifun2_var)) = ifun1_var;
+  funpred_index_ifun: AXIOM
+    FORALL (ifun1_var: nat, ifun2_var: nat):
+      index(ifun(ifun1_var, ifun2_var)) = ifun1_var;
 
-  funpred_arity_ifun: AXIOM FORALL (ifun1_var: nat, ifun2_var: nat): arity(ifun(ifun1_var, ifun2_var)) = ifun2_var;
+  funpred_arity_ifun: AXIOM
+    FORALL (ifun1_var: nat, ifun2_var: nat):
+      arity(ifun(ifun1_var, ifun2_var)) = ifun2_var;
 
-  funpred_index_ufun: AXIOM FORALL (ufun1_var: nat, ufun2_var: nat): index(ufun(ufun1_var, ufun2_var)) = ufun1_var;
+  funpred_index_ufun: AXIOM
+    FORALL (ufun1_var: nat, ufun2_var: nat):
+      index(ufun(ufun1_var, ufun2_var)) = ufun1_var;
 
-  funpred_arity_ufun: AXIOM FORALL (ufun1_var: nat, ufun2_var: nat): arity(ufun(ufun1_var, ufun2_var)) = ufun2_var;
+  funpred_arity_ufun: AXIOM
+    FORALL (ufun1_var: nat, ufun2_var: nat):
+      arity(ufun(ufun1_var, ufun2_var)) = ufun2_var;
 
-  funpred_inclusive: AXIOM FORALL (funpred_var: funpred): ipred?(funpred_var) OR upred?(funpred_var) OR ifun?(funpred_var) OR ufun?(funpred_var);
+  funpred_inclusive: AXIOM
+    FORALL (funpred_var: funpred):
+      ipred?(funpred_var) OR
+       upred?(funpred_var) OR ifun?(funpred_var) OR ufun?(funpred_var);
 
   funpred_induction: AXIOM
     FORALL (p: [funpred -> boolean]):
-      ((FORALL (ipred1_var: nat, ipred2_var: nat): p(ipred(ipred1_var, ipred2_var))) AND
-        (FORALL (upred1_var: nat, upred2_var: nat): p(upred(upred1_var, upred2_var))) AND
-         (FORALL (ifun1_var: nat, ifun2_var: nat): p(ifun(ifun1_var, ifun2_var))) AND
-          (FORALL (ufun1_var: nat, ufun2_var: nat): p(ufun(ufun1_var, ufun2_var))))
+      ((FORALL (ipred1_var: nat, ipred2_var: nat):
+          p(ipred(ipred1_var, ipred2_var)))
+        AND
+        (FORALL (upred1_var: nat, upred2_var: nat):
+           p(upred(upred1_var, upred2_var)))
+         AND
+         (FORALL (ifun1_var: nat, ifun2_var: nat):
+            p(ifun(ifun1_var, ifun2_var)))
+          AND
+          (FORALL (ufun1_var: nat, ufun2_var: nat):
+             p(ufun(ufun1_var, ufun2_var))))
        IMPLIES (FORALL (funpred_var: funpred): p(funpred_var));
 
   subterm(x: funpred, y: funpred):  boolean = x = y;
@@ -102,51 +155,80 @@ funpred_adt: THEORY
 
   funpred_well_founded: AXIOM well_founded?[funpred](<<);
 
-  reduce_nat(ipred?_fun: [[nat, nat] -> nat], upred?_fun: [[nat, nat] -> nat], ifun?_fun: [[nat, nat] -> nat], ufun?_fun: [[nat, nat] -> nat]):
+  reduce_nat(ipred?_fun: [[nat, nat] -> nat],
+             upred?_fun: [[nat, nat] -> nat],
+             ifun?_fun: [[nat, nat] -> nat],
+             ufun?_fun: [[nat, nat] -> nat]):
         [funpred -> nat] =
       LAMBDA (funpred_adtvar: funpred):
-        LET red: [funpred -> nat] = reduce_nat(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun) IN
+        LET red: [funpred -> nat] =
+              reduce_nat(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun)
+          IN
           CASES funpred_adtvar
-            OF ipred(ipred1_var, ipred2_var): ipred?_fun(ipred1_var, ipred2_var),
-               upred(upred1_var, upred2_var): upred?_fun(upred1_var, upred2_var),
+            OF ipred(ipred1_var, ipred2_var):
+                 ipred?_fun(ipred1_var, ipred2_var),
+               upred(upred1_var, upred2_var):
+                 upred?_fun(upred1_var, upred2_var),
                ifun(ifun1_var, ifun2_var): ifun?_fun(ifun1_var, ifun2_var),
                ufun(ufun1_var, ufun2_var): ufun?_fun(ufun1_var, ufun2_var)
             ENDCASES;
 
-  REDUCE_nat(ipred?_fun: [[nat, nat, funpred] -> nat], upred?_fun: [[nat, nat, funpred] -> nat], ifun?_fun: [[nat, nat, funpred] -> nat],
+  REDUCE_nat(ipred?_fun: [[nat, nat, funpred] -> nat],
+             upred?_fun: [[nat, nat, funpred] -> nat],
+             ifun?_fun: [[nat, nat, funpred] -> nat],
              ufun?_fun: [[nat, nat, funpred] -> nat]):
         [funpred -> nat] =
       LAMBDA (funpred_adtvar: funpred):
-        LET red: [funpred -> nat] = REDUCE_nat(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun) IN
+        LET red: [funpred -> nat] =
+              REDUCE_nat(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun)
+          IN
           CASES funpred_adtvar
-            OF ipred(ipred1_var, ipred2_var): ipred?_fun(ipred1_var, ipred2_var, funpred_adtvar),
-               upred(upred1_var, upred2_var): upred?_fun(upred1_var, upred2_var, funpred_adtvar),
-               ifun(ifun1_var, ifun2_var): ifun?_fun(ifun1_var, ifun2_var, funpred_adtvar),
-               ufun(ufun1_var, ufun2_var): ufun?_fun(ufun1_var, ufun2_var, funpred_adtvar)
+            OF ipred(ipred1_var, ipred2_var):
+                 ipred?_fun(ipred1_var, ipred2_var, funpred_adtvar),
+               upred(upred1_var, upred2_var):
+                 upred?_fun(upred1_var, upred2_var, funpred_adtvar),
+               ifun(ifun1_var, ifun2_var):
+                 ifun?_fun(ifun1_var, ifun2_var, funpred_adtvar),
+               ufun(ufun1_var, ufun2_var):
+                 ufun?_fun(ufun1_var, ufun2_var, funpred_adtvar)
             ENDCASES;
 
-  reduce_ordinal(ipred?_fun: [[nat, nat] -> ordinal], upred?_fun: [[nat, nat] -> ordinal], ifun?_fun: [[nat, nat] -> ordinal],
+  reduce_ordinal(ipred?_fun: [[nat, nat] -> ordinal],
+                 upred?_fun: [[nat, nat] -> ordinal],
+                 ifun?_fun: [[nat, nat] -> ordinal],
                  ufun?_fun: [[nat, nat] -> ordinal]):
         [funpred -> ordinal] =
       LAMBDA (funpred_adtvar: funpred):
-        LET red: [funpred -> ordinal] = reduce_ordinal(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun) IN
+        LET red: [funpred -> ordinal] =
+              reduce_ordinal(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun)
+          IN
           CASES funpred_adtvar
-            OF ipred(ipred1_var, ipred2_var): ipred?_fun(ipred1_var, ipred2_var),
-               upred(upred1_var, upred2_var): upred?_fun(upred1_var, upred2_var),
+            OF ipred(ipred1_var, ipred2_var):
+                 ipred?_fun(ipred1_var, ipred2_var),
+               upred(upred1_var, upred2_var):
+                 upred?_fun(upred1_var, upred2_var),
                ifun(ifun1_var, ifun2_var): ifun?_fun(ifun1_var, ifun2_var),
                ufun(ufun1_var, ufun2_var): ufun?_fun(ufun1_var, ufun2_var)
             ENDCASES;
 
-  REDUCE_ordinal(ipred?_fun: [[nat, nat, funpred] -> ordinal], upred?_fun: [[nat, nat, funpred] -> ordinal],
-                 ifun?_fun: [[nat, nat, funpred] -> ordinal], ufun?_fun: [[nat, nat, funpred] -> ordinal]):
+  REDUCE_ordinal(ipred?_fun: [[nat, nat, funpred] -> ordinal],
+                 upred?_fun: [[nat, nat, funpred] -> ordinal],
+                 ifun?_fun: [[nat, nat, funpred] -> ordinal],
+                 ufun?_fun: [[nat, nat, funpred] -> ordinal]):
         [funpred -> ordinal] =
       LAMBDA (funpred_adtvar: funpred):
-        LET red: [funpred -> ordinal] = REDUCE_ordinal(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun) IN
+        LET red: [funpred -> ordinal] =
+              REDUCE_ordinal(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun)
+          IN
           CASES funpred_adtvar
-            OF ipred(ipred1_var, ipred2_var): ipred?_fun(ipred1_var, ipred2_var, funpred_adtvar),
-               upred(upred1_var, upred2_var): upred?_fun(upred1_var, upred2_var, funpred_adtvar),
-               ifun(ifun1_var, ifun2_var): ifun?_fun(ifun1_var, ifun2_var, funpred_adtvar),
-               ufun(ufun1_var, ufun2_var): ufun?_fun(ufun1_var, ufun2_var, funpred_adtvar)
+            OF ipred(ipred1_var, ipred2_var):
+                 ipred?_fun(ipred1_var, ipred2_var, funpred_adtvar),
+               upred(upred1_var, upred2_var):
+                 upred?_fun(upred1_var, upred2_var, funpred_adtvar),
+               ifun(ifun1_var, ifun2_var):
+                 ifun?_fun(ifun1_var, ifun2_var, funpred_adtvar),
+               ufun(ufun1_var, ufun2_var):
+                 ufun?_fun(ufun1_var, ufun2_var, funpred_adtvar)
             ENDCASES;
  END funpred_adt
 
@@ -155,26 +237,41 @@ funpred_adt_reduce[range: TYPE]: THEORY
 
   IMPORTING funpred_adt
 
-  reduce(ipred?_fun: [[nat, nat] -> range], upred?_fun: [[nat, nat] -> range], ifun?_fun: [[nat, nat] -> range], ufun?_fun: [[nat, nat] -> range]):
+  reduce(ipred?_fun: [[nat, nat] -> range],
+         upred?_fun: [[nat, nat] -> range],
+         ifun?_fun: [[nat, nat] -> range],
+         ufun?_fun: [[nat, nat] -> range]):
         [funpred -> range] =
       LAMBDA (funpred_adtvar: funpred):
-        LET red: [funpred -> range] = reduce(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun) IN
+        LET red: [funpred -> range] =
+              reduce(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun)
+          IN
           CASES funpred_adtvar
-            OF ipred(ipred1_var, ipred2_var): ipred?_fun(ipred1_var, ipred2_var),
-               upred(upred1_var, upred2_var): upred?_fun(upred1_var, upred2_var),
+            OF ipred(ipred1_var, ipred2_var):
+                 ipred?_fun(ipred1_var, ipred2_var),
+               upred(upred1_var, upred2_var):
+                 upred?_fun(upred1_var, upred2_var),
                ifun(ifun1_var, ifun2_var): ifun?_fun(ifun1_var, ifun2_var),
                ufun(ufun1_var, ufun2_var): ufun?_fun(ufun1_var, ufun2_var)
             ENDCASES;
 
-  REDUCE(ipred?_fun: [[nat, nat, funpred] -> range], upred?_fun: [[nat, nat, funpred] -> range], ifun?_fun: [[nat, nat, funpred] -> range],
+  REDUCE(ipred?_fun: [[nat, nat, funpred] -> range],
+         upred?_fun: [[nat, nat, funpred] -> range],
+         ifun?_fun: [[nat, nat, funpred] -> range],
          ufun?_fun: [[nat, nat, funpred] -> range]):
         [funpred -> range] =
       LAMBDA (funpred_adtvar: funpred):
-        LET red: [funpred -> range] = REDUCE(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun) IN
+        LET red: [funpred -> range] =
+              REDUCE(ipred?_fun, upred?_fun, ifun?_fun, ufun?_fun)
+          IN
           CASES funpred_adtvar
-            OF ipred(ipred1_var, ipred2_var): ipred?_fun(ipred1_var, ipred2_var, funpred_adtvar),
-               upred(upred1_var, upred2_var): upred?_fun(upred1_var, upred2_var, funpred_adtvar),
-               ifun(ifun1_var, ifun2_var): ifun?_fun(ifun1_var, ifun2_var, funpred_adtvar),
-               ufun(ufun1_var, ufun2_var): ufun?_fun(ufun1_var, ufun2_var, funpred_adtvar)
+            OF ipred(ipred1_var, ipred2_var):
+                 ipred?_fun(ipred1_var, ipred2_var, funpred_adtvar),
+               upred(upred1_var, upred2_var):
+                 upred?_fun(upred1_var, upred2_var, funpred_adtvar),
+               ifun(ifun1_var, ifun2_var):
+                 ifun?_fun(ifun1_var, ifun2_var, funpred_adtvar),
+               ufun(ufun1_var, ufun2_var):
+                 ufun?_fun(ufun1_var, ufun2_var, funpred_adtvar)
             ENDCASES;
  END funpred_adt_reduce
