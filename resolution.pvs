@@ -80,12 +80,6 @@ resolution : THEORY
     clause_implies_no_duplicates: LEMMA
       clause?(lAA) IMPLIES no_duplicates?(lAA)
 
-    % obs: (lA /= lB => index(lA) /= index(lB))) is true FORALL lA, lB
-    index_inj_clause : LEMMA
-      clause?(lAA) => 
-       (FORALL lA, lB : (member(lA, lAA) AND member(lB, lAA)) =>
-        (lA /= lB => index(lA) /= index(lB)))    
-
     clAA, clBB, clCC : VAR (clause?)
 
     remove(lA, clAA) : RECURSIVE 
