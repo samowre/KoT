@@ -124,8 +124,8 @@ resolution : THEORY
 
     % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
     th1: THEOREM 
-      (include_clause(nclAA, clCC) AND 
-       include_clause(nclBB, clCC)) 
+      (sorted_include(nclAA, clCC) AND 
+       sorted_include(nclBB, clCC)) 
       => 
       (EXISTS(RR: ne_proof_seq): 
       	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
