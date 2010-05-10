@@ -42,21 +42,10 @@ resolution : THEORY
       => 
       lA = lB
 
-    clause_rec?(lAA, (j: nat)): RECURSIVE bool =
-      CASES lAA OF
-        null: TRUE,
-     	cons(k, lBB): index(k)> j AND clause_rec?(lBB, index(k))
-      ENDCASES
-     MEASURE length(lAA)
+    IMPORTING sortedlist[(literal?), index]
 	
     %list[literal?] sorted by index
-    clause?(lAA) : bool = clause_rec?(lAA, 0)
-
-    clause_rec_red: LEMMA 
-      FORALL(j1, j2: nat): 
-        (clause_rec?(lAA, j1) AND j2<j1) 
-        => 
-        clause_rec?(lAA, j2)
+    clause?(lAA) : bool = sorted?(lAA)
 
     clause_prop: LEMMA 
       clause?(lAA) 
@@ -81,21 +70,6 @@ resolution : THEORY
       clause?(lAA) IMPLIES no_duplicates?(lAA)
 
     clAA, clBB, clCC : VAR (clause?)
-
-    remove(lA, clAA) : RECURSIVE 
-       {clBB | (FORALL lB : member(lB, clBB) = (lB /= lA AND member(lB, clAA)))} = 
-      CASES clAA OF
-        null : clAA,
-	cons(e, r) : IF index(e) = index(lA) 
-		      THEN r
-		      ELSIF index(lA) < index(e)
-		      % lA not in the list
-		      THEN clAA
-		      ELSE cons(e, remove(lA, r))
-		      ENDIF
-      ENDCASES
-      MEASURE length(clAA)
-  
 
     clauses_list: TYPE = list[(clause?)]
 
@@ -126,25 +100,6 @@ resolution : THEORY
     % transform p1::p2::..pn into |- not[p1 or (p2 or ...pn))]  
     not_or_reduction(nclAA): sequent = 
       cons(f_not(nclause2fmla(nclAA)), null) 
-    
-    % inclusion efficiently implemented for clauses
-    include_clause(clAA, clBB): RECURSIVE bool = 
-    	 CASES clAA OF
-	   null: true,
-	   cons(lA, clAAA): 
-	     CASES clBB OF
-	       null: false,
-	       cons(lB, clBBB): 
-	         COND
-		   index(lA) < index(lB) -> false, 
-		   index(lA) = index(lB) -> include_clause(clAAA, clBBB),
-		   index(lA) > index(lB) -> include_clause(clAA, clBBB)
-		 ENDCOND
-	     ENDCASES
-   	 ENDCASES
-    MEASURE length(clBB)
-
-    subset_include_clause: LEMMA include_clause(clAA, clBB) <=> subset(clAA, clBB)
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % lemma 1 : |- ~p::l if p belongs l 

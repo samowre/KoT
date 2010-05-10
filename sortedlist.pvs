@@ -19,7 +19,7 @@ sortedlist   [ T: TYPE, key: {k: [T-> real]| injective?(k)} ]
       ENDCASES
      MEASURE length(lAA)
 
-  sAA, sBB : VAR (sorted?)
+  sAA, sBB, sAAA, sBBB : VAR (sorted?)
 
   sorted_prop: LEMMA 
       sorted?(lAA) 
@@ -60,5 +60,24 @@ sortedlist   [ T: TYPE, key: {k: [T-> real]| injective?(k)} ]
 
   cons_sorted: LEMMA 
     cons?(sAA) => sorted?(cdr(sAA))
+
+  sorted_include(sAA, sBB): RECURSIVE bool = 
+    	 CASES sAA OF
+	   null: true,
+	   cons(e, sAAA): 
+	     CASES sBB OF
+	       null: false,
+	       cons(f, sBBB): 
+	         COND
+		   key(e) < key(f) -> false, 
+		   key(e) = key(f) -> sorted_include(sAAA, sBBB),
+		   key(e) > key(f) -> sorted_include(sAA, sBBB)
+		 ENDCOND
+	     ENDCASES
+   	 ENDCASES
+    MEASURE length(sBB)
+
+  subset_include_clause: LEMMA 
+    sorted_include(sAA, sBB) <=> subset(sAA, sBB)
 
   END sortedlist
