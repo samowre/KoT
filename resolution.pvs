@@ -32,11 +32,15 @@ resolution : THEORY
 
     % (not 1) -> 1, (1) -> 2, (not 2) -> 3, (2) -> 4...
     index(lA) : posnat = 
-    	  IF prop_atom?(lA) THEN 2*index(pred(lA))
+    	  IF prop_atom?(lA) 
+	  THEN 2*index(pred(lA))
 	  ELSE 2*index(pred(arg(lA)))-1
 	  ENDIF
  
-    index_inj: LEMMA index(lA) = index(lB) IMPLIES lA = lB
+    index_inj: LEMMA 
+      index(lA) = index(lB) 
+      => 
+      lA = lB
 
     clause_rec?(lAA, (j: nat)): RECURSIVE bool =
       CASES lAA OF
@@ -45,30 +49,42 @@ resolution : THEORY
       ENDCASES
      MEASURE length(lAA)
 	
+    %list[literal?] sorted by index
     clause?(lAA) : bool = clause_rec?(lAA, 0)
 
-    clause_rec_red: LEMMA FORALL(j1, j2: nat): (clause_rec?(lAA, j1) AND j2<j1) IMPLIES clause_rec?(lAA, j2)
+    clause_rec_red: LEMMA 
+      FORALL(j1, j2: nat): 
+        (clause_rec?(lAA, j1) AND j2<j1) 
+        => 
+        clause_rec?(lAA, j2)
 
-    clause_prop: LEMMA clause?(lAA) IFF 
-    		       (null?(lAA) 
-		        OR null?(cdr(lAA)) 
-			OR (index(car(lAA))<index(car(cdr(lAA))) AND clause?(cdr(lAA))))
+    clause_prop: LEMMA 
+      clause?(lAA) 
+      <=> 
+      (null?(lAA) 
+	OR null?(cdr(lAA)) 
+	OR (index(car(lAA)) < index(car(cdr(lAA))) AND 
+	    clause?(cdr(lAA))))
 
     sorted_clause: LEMMA
-         clause?(lAA) AND cons?(lAA)
-	 IMPLIES
-	 (FORALL (e: (literal?)) : member(e, cdr(lAA))
-	        IMPLIES index(car(lAA)) < index(e))	
+      clause?(lAA) AND cons?(lAA)
+      =>
+      (FORALL (e: (literal?)) : 
+        member(e, cdr(lAA))
+	=> 
+	index(car(lAA)) < index(e))	
   
+    % obs: setlist? is O(n^2). 
     no_duplicates?(lAA) : bool = setlist?(lAA)  
 
-    clause_implie_no_duplicate: LEMMA
+    clause_implies_no_duplicates: LEMMA
       clause?(lAA) IMPLIES no_duplicates?(lAA)
 
+    % obs: (lA /= lB => index(lA) /= index(lB))) is true FORALL lA, lB
     index_inj_clause : LEMMA
-      clause?(lAA) IMPLIES 
-       (FORALL lA, lB : (member(lA, lAA) AND member(lB, lAA)) IMPLIES
-        (lA /= lB IMPLIES index(lA) /= index(lB)))    
+      clause?(lAA) => 
+       (FORALL lA, lB : (member(lA, lAA) AND member(lB, lAA)) =>
+        (lA /= lB => index(lA) /= index(lB)))    
 
     clAA, clBB, clCC : VAR (clause?)
 
@@ -79,6 +95,7 @@ resolution : THEORY
 	cons(e, r) : IF index(e) = index(lA) 
 		      THEN r
 		      ELSIF index(lA) < index(e)
+		      % lA not in the list
 		      THEN clAA
 		      ELSE cons(e, remove(lA, r))
 		      ENDIF
@@ -86,7 +103,7 @@ resolution : THEORY
       MEASURE length(clAA)
   
 
-   clauses_list: TYPE = list[(clause?)]
+    clauses_list: TYPE = list[(clause?)]
 
     %non empty clause
     nclause?(clAA): bool = cons?(clAA)
@@ -94,44 +111,56 @@ resolution : THEORY
     nclAA, nclBB : VAR (nclause?)
 
     % transform p1::p2::...pn into p1 or (p2 or ...(pn-1 or pn))...)
-    nclause2fmla(nclAA): RECURSIVE fmla = 
-    		IF null?(cdr(nclAA)) 
-    		 THEN car(nclAA)
-		 ELSE f_or(car(nclAA), nclause2fmla(cdr(nclAA)))
-		ENDIF
-		MEASURE length(nclAA)
+    % obs: add stronger type to fmla ?
+    nclause2fmla(nclAA): RECURSIVE fmla= 
+      IF null?(cdr(nclAA)) 
+      THEN car(nclAA)
+      ELSE f_or(car(nclAA), nclause2fmla(cdr(nclAA)))
+      ENDIF
+    MEASURE length(nclAA)
 
-    clause_sentence_list: LEMMA sentence_list?(clAA)
+    clause_sentence_list: LEMMA 
+      sentence_list?(clAA)
 
     % transform p1::p2::..pn into |- p1 or (p2 or ...pn))   and null into |- null (i.e |- false)
-    or_reduction(clAA): sequent = IF null?(clAA) THEN null ELSE cons(nclause2fmla(clAA), null) ENDIF
+    or_reduction(clAA): sequent = 
+      IF null?(clAA) 
+      THEN null 
+      ELSE cons(nclause2fmla(clAA), null) 
+      ENDIF
 
     % transform p1::p2::..pn into |- not[p1 or (p2 or ...pn))]  
-    not_or_reduction(nclAA): sequent = cons(f_not(nclause2fmla(nclAA)), null) 
+    not_or_reduction(nclAA): sequent = 
+      cons(f_not(nclause2fmla(nclAA)), null) 
     
     % inclusion efficiently implemented for clauses
     include_clause(clAA, clBB): RECURSIVE bool = 
     	 CASES clAA OF
 	   null: true,
-	   cons(lA, clAAA): CASES clBB OF
-	     	    	      null: false,
-			      cons(lB, clBBB): COND
-			      	       	        index(lA) < index(lB) -> false, 
-						index(lA) = index(lB) -> include_clause(clAAA, clBBB),
-						index(lA) > index(lB) -> include_clause(clAA, clBBB)
-					       ENDCOND
-		    	    ENDCASES
+	   cons(lA, clAAA): 
+	     CASES clBB OF
+	       null: false,
+	       cons(lB, clBBB): 
+	         COND
+		   index(lA) < index(lB) -> false, 
+		   index(lA) = index(lB) -> include_clause(clAAA, clBBB),
+		   index(lA) > index(lB) -> include_clause(clAA, clBBB)
+		 ENDCOND
+	     ENDCASES
    	 ENDCASES
-	 MEASURE length(clBB)
+    MEASURE length(clBB)
 
     subset_include_clause: LEMMA include_clause(clAA, clBB) IMPLIES subset(clAA, clBB)
 
 
     % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
-    th1: LEMMA (include_clause(nclAA, clCC) AND include_clause(nclBB, clCC)) 
-    	        IMPLIES (EXISTS(RR: ne_proof_seq): 
-		           conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
-			   AND checkProof(empty_seq)(RR))
+    th1: THEOREM 
+      (include_clause(nclAA, clCC) AND 
+       include_clause(nclBB, clCC)) 
+      => 
+      (EXISTS(RR: ne_proof_seq): 
+      	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
+	 AND checkProof(empty_seq)(RR))
 			       
  		
   END resolution
