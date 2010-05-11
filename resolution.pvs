@@ -28,7 +28,13 @@ resolution : THEORY
 
     lA, lB, lC: VAR (literal?)
 
+    literal_sentence: LEMMA sentence?(lA)
+
     lAA, lBB, lCC: VAR list[(literal?)]
+
+    literal_list_sentence_list: LEMMA sentence_list?(lAA) 
+
+    member_lit_member_fmla: LEMMA member[fmla](lA, lAA) = member[(literal?)](lA, lAA)
 
     % (not 1) -> 1, (1) -> 2, (not 2) -> 3, (2) -> 4...
     index(lA) : posnat = 
@@ -89,8 +95,9 @@ resolution : THEORY
       ENDIF
     MEASURE length(nclAA)
 
-    clause_sentence_list: LEMMA 
-      sentence_list?(clAA)
+    nclause2fmla_sentence: LEMMA sentence?(nclause2fmla(nclAA))
+
+    clause_sentence_list: LEMMA sentence_list?(clAA)
 
     % transform p1::p2::..pn into |- p1 or (p2 or ...pn))   and null into |- null (i.e |- false)
     or_reduction(clAA): sequent = 
@@ -106,22 +113,22 @@ resolution : THEORY
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % lemma 1 : |- ~p::l if p belongs l 
     
-    cut1_lemma1(lA): proof_step = (# sequent:= cons(lA, cons(f_not(lA), null)), rule:= ax, subs:= null #)
-    cut2_lemma1(lA): proof_step = (# sequent:= cons(f_not(lA), cons(f_not(f_not(lA)), null)), rule:= ax, subs:= null #)
-    concl_lemma1(lA, clAA): proof_step = (# sequent:= cons(f_not(lA), clAA) , rule:= cut(f_not(lA)), subs:= cons(0,cons(1,null)) #)
+    cut1_lemma1(A): proof_step = (# sequent:= cons(A, cons(f_not(A), null)), rule:= ax, subs:= null #)
+    cut2_lemma1(A): proof_step = (# sequent:= cons(f_not(A), cons(f_not(f_not(A)), null)), rule:= ax, subs:= null #)
+    concl_lemma1(A, AA): proof_step = (# sequent:= cons(f_not(A), AA) , rule:= cut(f_not(A)), subs:= cons(0,cons(1,null)) #)
 
-    RR_lemma1(lA, clAA): ne_proof_seq = 
+    RR_lemma1(A, AA): ne_proof_seq = 
     (# length:=3, 
        seq:= LAMBDA(j:below(3)):
 		COND
-        	  j = 0 -> cut1_lemma1(lA),
-		  j = 1 -> cut2_lemma1(lA),
-		  j = 2 -> concl_lemma1(lA, clAA) 
+        	  j = 0 -> cut1_lemma1(A),
+		  j = 1 -> cut2_lemma1(A),
+		  j = 2 -> concl_lemma1(A, AA) 
       		ENDCOND #)
 
-    lemma1: LEMMA member(lA, clAA)  
+    lemma1: LEMMA (member(A, AA) AND sentence?(A) AND sentence_list?(AA))
     	    	  =>
-      		  conclusion(RR_lemma1(lA, clAA))= cons(f_not(lA), clAA) AND checkProof(empty_seq)(RR_lemma1(lA, clAA))
+      		  conclusion(RR_lemma1(A, AA))= cons(f_not(A), AA) AND checkProof(empty_seq)(RR_lemma1(A, AA))
 
     % end lemma 1		  
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
