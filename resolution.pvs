@@ -110,6 +110,10 @@ resolution : THEORY
     not_or_reduction(nclAA): sequent = 
       cons(f_not(nclause2fmla(nclAA)), null) 
 
+    RR1, RR2: VAR ne_proof_seq
+
+    offset_proof_step(ps: proof_step, n: nat): proof_step = 
+     	  ps WITH [ subs:= map(LAMBDA(j: nat):j + n)(ps`subs)]
 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % lemma 1 : |- ~p::l if p belongs l 
@@ -143,8 +147,6 @@ resolution : THEORY
           (# sequent:= cons(f_not(f_or(A, nclause2fmla(AA))), BB) , 
     	     rule:= norr,
 	     subs:= cons(n - 1, cons(n + m - 1,null)) #)
-
-    RR1, RR2: VAR ne_proof_seq
 
     RR_lemma2(A, AA, BB, RR1, RR2): ne_proof_seq = 
     LET n = RR1`length IN
@@ -181,7 +183,39 @@ resolution : THEORY
       	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
 	 AND checkProof(empty_seq)(RR))
 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % lemma nor rule  |- ~(a \/ b)::k  if |- ~a::k and |- ~b::k
 
+    concl_norr(A, B, AA, (n, m: posnat)): proof_step = 
+          (# sequent:= cons(f_not(f_or(A, B)), AA) , 
+    	     rule:= norr,
+	     subs:= cons(n - 1, cons(n + m - 1,null)) #)
+
+    RR_norr(A, B, AA, RR1, RR2): ne_proof_seq = 
+    LET n = RR1`length IN
+    LET m = RR2`length IN
+    (# length := n + m + 1,
+       seq := LAMBDA(j: below(n + m + 1)):
+       	      	 COND
+		  j < n -> offset_proof_step(RR1`seq(j), 0),
+		  j < n + m -> offset_proof_step(RR2`seq(j - n), n), 
+		  j = n + m -> concl_norr(A, B, AA, n, m)
+		 ENDCOND #)   
+
+    lemma_norr: LEMMA (sentence?(A) AND
+    	    	   sentence_list?(AA) AND
+		   sentence_list?(BB) AND
+    	    	   conclusion(RR1) = cons(f_not(A), AA) AND
+		   conclusion(RR2) = cons(f_not(B), AA) AND
+		   checkProof(empty_seq)(RR1) AND
+		   checkProof(empty_seq)(RR2))
+		   =>
+		   conclusion(RR_norr(A, B, AA, RR1, RR2)) = cons(f_not(f_or(A, B)), AA) AND
+		   checkProof(empty_seq)(RR_norr(A, B, AA, RR1, RR2))
+		     
+
+    % end lemma nor rule
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 			       
  		
   END resolution
