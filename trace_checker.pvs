@@ -1,4 +1,4 @@
-trace_checker : THEORY
+trace_checker[m, n: nat, i : upto(n)] : THEORY
 
   BEGIN
 
@@ -7,9 +7,59 @@ trace_checker : THEORY
     IMPORTING rule
     IMPORTING proof
     IMPORTING trace2fmla
-  
+    IMPORTING resolution
+    IMPORTING trace_resolution[m, n, i]
 
+    p, q: VAR (ne_tr_clause?)
+    pivot: VAR (trace_resolution[m,n,i].tr_literal?)
+    RR : VAR ne_proof_seq
+
+    % p -> ~tr(p)
+    not_clause(p): sequent = not_or_reduction(translate_clause(p))
+    
+    % p, q -> tr(res(p, q))
+    res_clause(p, q): (clause?) = translate_clause(resolution(p, q))
 
     
+
+    % |- ~tr(p), ~tr(q), tr(res(p, q))
+    resolve_step: THEOREM 
+      EXISTS RR: 
+      	conclusion(RR)= 
+	 append( not_clause(p), 
+	  append( not_clause(q), 
+	   res_clause(p, q)))
+	 AND checkProof(empty_seq)(RR)
+
+    
+    clAA, clBB, clCC : VAR (clause?)
+    nclAA, nclBB : VAR (nclause?)
+    lA, lB, lC: VAR (literal?)
+
+    pivot?(lA, clAA, clBB):bool = member(lA, clAA) AND member(f_neg(lA), clBB)
+    prop_resolve(lA, clAA, clBB): bool = FORALL lB: member(lB, clAA) AND lB /= lA => member(lB, clBB)
+    
+    th2: THEOREM  
+ 
+      pivot?(lA, nclAA, nclBB) AND 
+      prop_resolve(lA, nclAA, clCC)AND
+      prop_resolve(f_neg(lA), nclBB, clCC)	
+        
+      => 
+      (EXISTS(RR: ne_proof_seq): 
+      	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
+	 AND checkProof(empty_seq)(RR))
+
+    l1: proof_seq = 
+      (# length := 1, 
+         seq := (LAMBDA (x: below[1]): proof_step : [#
+	     sequent := cons (f_or(gamma, delta), 
+	     	     	cons(f_not(f_or(p, gamma)), 
+			cons(f_not(f_or(f_not(p), delta)), null)))
+	     rule: ax
+	     subs:= null #])#)
+
+    l1: VAR finseq[proof_seq] = 
+      (# length := 1, seq := (LAMBDA (x: below[1]): )#)
 	
   END trace_checker

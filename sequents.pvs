@@ -26,14 +26,17 @@ sequents  : THEORY
     (cons?(G) AND
      member(f_not(car(G)), cdr(G)))
 
+  % H => G
   subset_rule?(H, G): bool =
     subset?(H, G)
      
+  % H => G = a\/b ... <- H => a, b, a\/b, ...
   or_rule?(H, G): bool =   %A or B, .. from A, B, ..
     (cons?(G) AND
      f_or?(car(G)) AND
      subset?(H, cons(arg1(car(G)), cons(arg2(car(G)),G))))
 
+  % H1 => ~A, G, H2 => ~B, G  ->  H1, H2 => G = ~(A\/B), ...
   nor_rule?(H1, H2, G): bool =  % -(A or B),.. from -A, .. and -B, ..
     (cons?(G) AND
      f_not?(car(G)) AND
@@ -41,83 +44,88 @@ sequents  : THEORY
      subset?(H1, cons(f_neg(arg1(arg(car(G)))), G)) AND
      subset?(H2, cons(f_neg(arg2(arg(car(G)))), G)))
 
+  % H => G = A, ... -> H => ~~A, ...
   neg_rule?(H, G): bool =     %--A, .. from A, ..
     (cons?(G) AND
      f_not?(car(G)) AND
      f_not?(arg(car(G))) AND
      subset?(H, cons(arg(arg(car(G))), G)))
 
-   cut_rule?(A, H1, H2, G): bool =   % G from A, G and -A, G
-     (sentence?(A) AND
-      subset?(H1, cons(A, G)) AND
-      subset?(H2, cons(f_not(A), G)))
+  % H1 => A, G,  H2 => ~A, G -> H1, H2 => G 
+  cut_rule?(A, H1, H2, G): bool =   % G from A, G and -A, G
+    (sentence?(A) AND
+     subset?(H1, cons(A, G)) AND
+     subset?(H2, cons(f_not(A), G)))
 
-   exists_rule?(s, H, G): bool =  %Ex x: A, .. from A[s/x], ..
-     (cons?(G) AND
-      f_exists?(car(G)) AND
-      null?(termvars(s)) AND
-      subset?(H, cons(subst(body(car(G)), bvar(car(G)), s),
-  	              G)))
+  % H => A[s/x],... -> H => Ex x: A,...
+  exists_rule?(s, H, G): bool =  %Ex x: A, .. from A[s/x], ..
+    (cons?(G) AND
+     f_exists?(car(G)) AND
+     null?(termvars(s)) AND
+     subset?(H, cons(subst(body(car(G)), bvar(car(G)), s),
+  	             G)))
 
-   forall_rule?(f: (ufun?), H, G): bool =   %-Ex x: A, .. from A[c/x], ..
-     (cons?(G) AND
-      f_not?(car(G)) AND
-      f_exists?(arg(car(G))) AND
-      NOT member(f, freesymbols(G)) AND
-      arity(f) = 0 AND
-      subset?(H, cons(f_neg(subst(body(arg(car(G))), bvar(arg(car(G))), apply(f, null))),
-                      G)))
+  % H => ~A[f/x],... -> H => ~Ex. x:A,...
+  forall_rule?(f: (ufun?), H, G): bool =   %-Ex x: A, .. from ~A[c/x], ..
+    (cons?(G) AND
+     f_not?(car(G)) AND
+     f_exists?(arg(car(G))) AND
+     NOT member(f, freesymbols(G)) AND
+     arity(f) = 0 AND
+     subset?(H, cons(f_neg(subst(body(arg(car(G))), bvar(arg(car(G))), apply(f, null))),
+                     G)))
 
-   fschema_rule?(u: (ufun?), vars: list[(var?)], s, H, G): bool =
-     (length(vars) = arity(u) AND         %A[lambda vars: s/f],.. from A, ..
-      subset?(termvars(s), vars) AND
-      subset?(map(LAMBDA A: fsubst(A, u, vars, s))(H), G))
+  % 
+  fschema_rule?(u: (ufun?), vars: list[(var?)], s, H, G): bool =
+    (length(vars) = arity(u) AND         %A[lambda vars: s/f],.. from A, ..
+     subset?(termvars(s), vars) AND
+     subset?(map(LAMBDA A: fsubst(A, u, vars, s))(H), G))
 
-   pschema_rule?(u: (upred?), vars: list[(var?)], A, H, G): bool =
-     (length(vars) = arity(u) AND        %A[lambda vars: B/p], .. from A,..
-      subset?(freevars(A), vars) AND
-      subset?(map(LAMBDA B: psubst(B, u, vars, A))(H), G))
+  pschema_rule?(u: (upred?), vars: list[(var?)], A, H, G): bool =
+    (length(vars) = arity(u) AND        %A[lambda vars: B/p], .. from A,..
+     subset?(freevars(A), vars) AND
+     subset?(map(LAMBDA B: psubst(B, u, vars, A))(H), G))
 
-    f_eq(s, t): fmla = atom(ipred(0, 2), (:s, t :))
+  f_eq(s, t): fmla = atom(ipred(0, 2), (:s, t :))
 
-    equality?(A): bool = (atom?(A) AND pred(A) = ipred(0, 2))
+  equality?(A): bool = (atom?(A) AND pred(A) = ipred(0, 2))
 
-    f_lhs(A: (equality?)): term =
-      car(args(A))
+  f_lhs(A: (equality?)): term =
+    car(args(A))
 
-    f_rhs(A: (equality?)): term =
-      car(cdr(args(A)))
+  f_rhs(A: (equality?)): term =
+    car(cdr(args(A)))
 
-   refl_equality?(A): bool = (equality?(A) AND
+  refl_equality?(A): bool = (equality?(A) AND
                               nth(args(A), 0) = nth(args(A), 1))
       
-   reflex_rule?(G): bool =    %s = s, ..
-     (cons?(G) AND
-      refl_equality?(car(G)))
+  reflex_rule?(G): bool =    %s = s, ..
+    (cons?(G) AND
+     refl_equality?(car(G)))
 
-   fcongruence_rule?(G): bool =   %f(a1..)=f(b1,..), -(a1=b1),..
-     (cons?(G) AND
-      equality?(car(G)) AND
-      (LET arg1 = car(args(car(G))),
-           arg2 = car(cdr(args(car(G))))
-       IN
-      apply?(arg1) AND
-      apply?(arg2) AND
-      fun(arg1) = fun(arg2) AND
-      reduce2(TRUE, (LAMBDA s, t, (b: bool): (s = t OR member(f_not(f_eq(s, t)), G)) AND b),
-              args(arg1), args(arg2))))
+  fcongruence_rule?(G): bool =   %f(a1..)=f(b1,..), -(a1=b1),..
+    (cons?(G) AND
+     equality?(car(G)) AND
+     (LET arg1 = car(args(car(G))),
+          arg2 = car(cdr(args(car(G))))
+      IN
+     apply?(arg1) AND
+     apply?(arg2) AND
+     fun(arg1) = fun(arg2) AND
+     reduce2(TRUE, (LAMBDA s, t, (b: bool): (s = t OR member(f_not(f_eq(s, t)), G)) AND b),
+             args(arg1), args(arg2))))
 
-    pcongruence_rule?(G): bool =     %p(a1,..), -p(b1,..), -a1=b1,...
-     (cons?(G) AND
-      cons?(cdr(G)) AND
-      (LET A1 = car(G),
-           A2 = car(cdr(G))
-	IN 
-        atom?(A1) AND 
-        f_not?(A2) AND
-        atom?(arg(A2)) AND 
-        pred(A1) = pred(arg(A2)) AND
-	reduce2(TRUE, (LAMBDA s, t, (b: bool): (s = t OR member(f_not(f_eq(s, t)), G)) AND b),
-              args(arg(A2)), args(A1))))
+  pcongruence_rule?(G): bool =     %p(a1,..), -p(b1,..), -a1=b1,...
+    (cons?(G) AND
+     cons?(cdr(G)) AND
+     (LET A1 = car(G),
+          A2 = car(cdr(G))
+	  IN 
+       atom?(A1) AND 
+       f_not?(A2) AND
+       atom?(arg(A2)) AND 
+       pred(A1) = pred(arg(A2)) AND
+       reduce2(TRUE, (LAMBDA s, t, (b: bool): (s = t OR member(f_not(f_eq(s, t)), G)) AND b),
+             args(arg(A2)), args(A1))))
 
   END sequents

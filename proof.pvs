@@ -16,6 +16,7 @@ proof	: THEORY
   rule: DATATYPE WITH SUBTYPES no_premise?, one_premise?, two_premise? 
   BEGIN
    ax: ax?	: no_premise?
+   subset: subsetr? : one_premise?
    orr: orr?	: one_premise?
    norr : norr?	: two_premise?
    neg : neg? 	: one_premise?
@@ -62,6 +63,7 @@ proof	: THEORY
 				car(cdr(R`subs)) < i )) AND
       (CASES R`rule OF
        ax : ax_rule?(R`sequent),
+       subset: subset_rule?(RR`seq(car(R`subs))`sequent ,R`sequent),
        %replaced R`sequence with RR.seq
        orr : or_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
        norr: nor_rule?(RR`seq(car(R`subs))`sequent,
@@ -89,7 +91,7 @@ proof	: THEORY
      END proof
   
 %Each proof_entry can be independently checked.  We can then
-%compose these into a proof where we associate proofs with
+%compose these into a proof whe0re we associate proofs with
 %the lemmas.  Since we are not actually interested in running
 %the proof checker, we can live with tree-like proofs.
 %The lemmas include function and predicate definitions.

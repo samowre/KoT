@@ -24,6 +24,9 @@ BEGIN
 
   ck, cl: VAR (tr_clause?)
 
+  %not empty trace clause
+  ne_tr_clause?(cl): bool = NOT null?(cl)
+
   cons_tr_clause: LEMMA (tr_clause?(ck) AND cons?(ck)) IMPLIES tr_clause?(cdr(ck))
 
 %  trace_entry: DATATYPE
