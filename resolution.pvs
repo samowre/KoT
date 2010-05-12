@@ -16,6 +16,7 @@ resolution : THEORY
     AA, BB, CC: VAR list[fmla]
     x, y, z: VAR (var?)
     xx, yy, zz: VAR list[(var?)]
+    RR1, RR2: VAR ne_proof_seq
 
     prop_atom?(A): bool = (atom?(A) AND 
     	      	           upred?(pred(A)) AND 
@@ -110,8 +111,6 @@ resolution : THEORY
     not_or_reduction(nclAA): sequent = 
       cons(f_not(nclause2fmla(nclAA)), null) 
 
-    RR1, RR2: VAR ne_proof_seq
-
     offset_proof_step(ps: proof_step, n: nat): proof_step = 
      	  ps WITH [ subs:= map(LAMBDA(j: nat):j + n)(ps`subs)]
 
@@ -133,56 +132,10 @@ resolution : THEORY
 
     lemma1: LEMMA (member(A, AA) AND sentence?(A) AND sentence_list?(AA))
     	    	  =>
-      		  conclusion(RR_lemma1(A, AA))= cons(f_not(A), AA) AND 
-		  checkProof(empty_seq)(RR_lemma1(A, AA))
+      		  (conclusion(RR_lemma1(A, AA))= cons(f_not(A), AA) AND 
+		   checkProof(empty_seq)(RR_lemma1(A, AA)))
 
     % end lemma 1		  
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % lemma 2  |- ~(a \/ l)::k  if |- ~a::k and |- ~l::k
-
-    offset_lemma2(ps: proof_step, n: nat): proof_step = 
-     	  ps WITH [ subs:= map(LAMBDA(j: nat):j + n)(ps`subs)]
-
-    concl_lemma2(A, AA, BB, (n, m: posnat)): proof_step = 
-          (# sequent:= cons(f_not(f_or(A, nclause2fmla(AA))), BB) , 
-    	     rule:= norr,
-	     subs:= cons(n - 1, cons(n + m - 1,null)) #)
-
-    RR_lemma2(A, AA, BB, RR1, RR2): ne_proof_seq = 
-    LET n = RR1`length IN
-    LET m = RR2`length IN
-    (# length := n + m + 1,
-       seq := LAMBDA(j: below(n + m + 1)):
-       	      	 COND
-		  j < n -> offset_lemma2(RR1`seq(j), 0),
-		  j < n + m -> offset_lemma2(RR2`seq(j - n), n), 
-		  j = n + m -> concl_lemma2(A, AA, BB, n, m)
-		 ENDCOND #)   
-
-    lemma2: LEMMA (sentence?(A) AND
-    	    	   sentence_list?(AA) AND
-		   sentence_list?(BB) AND
-    	    	   conclusion(RR1) = cons(f_not(A), BB) AND
-		   conclusion(RR2) = append(not_or_reduction(AA), BB) AND
-		   checkProof(empty_seq)(RR1) AND
-		   checkProof(empty_seq)(RR2))
-		   =>
-		   conclusion(RR_lemma2(A, AA, BB, RR1, RR2)) = cons(f_not(f_or(A, nclause2fmla(AA))), BB) AND
-		   checkProof(empty_seq)(RR_lemma2(A, AA, BB, RR1, RR2))
-		     
-
-    % end lemma 2
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-    % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
-    th1: THEOREM 
-      (include_clause(nclAA, clCC) AND 
-       include_clause(nclBB, clCC)) 
-      => 
-      (EXISTS(RR: ne_proof_seq): 
-      	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
-	 AND checkProof(empty_seq)(RR))
-
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % lemma nor rule  |- ~(a \/ b)::k  if |- ~a::k and |- ~b::k
 
@@ -197,25 +150,95 @@ resolution : THEORY
     (# length := n + m + 1,
        seq := LAMBDA(j: below(n + m + 1)):
        	      	 COND
-		  j < n -> offset_proof_step(RR1`seq(j), 0),
+		  j < n -> RR1`seq(j),
 		  j < n + m -> offset_proof_step(RR2`seq(j - n), n), 
 		  j = n + m -> concl_norr(A, B, AA, n, m)
 		 ENDCOND #)   
 
     lemma_norr: LEMMA (sentence?(A) AND
-    	    	   sentence_list?(AA) AND
-		   sentence_list?(BB) AND
-    	    	   conclusion(RR1) = cons(f_not(A), AA) AND
-		   conclusion(RR2) = cons(f_not(B), AA) AND
-		   checkProof(empty_seq)(RR1) AND
-		   checkProof(empty_seq)(RR2))
-		   =>
-		   conclusion(RR_norr(A, B, AA, RR1, RR2)) = cons(f_not(f_or(A, B)), AA) AND
-		   checkProof(empty_seq)(RR_norr(A, B, AA, RR1, RR2))
+    	    	       sentence?(B) AND
+		       sentence_list?(AA) AND
+    	    	       conclusion(RR1) = cons(f_not(A), AA) AND
+		       conclusion(RR2) = cons(f_not(B), AA) AND
+		       checkProof(empty_seq)(RR1) AND
+		       checkProof(empty_seq)(RR2))
+		      =>
+		      (conclusion(RR_norr(A, B, AA, RR1, RR2)) = cons(f_not(f_or(A, B)), AA) AND
+		       checkProof(empty_seq)(RR_norr(A, B, AA, RR1, RR2)))
 		     
 
     % end lemma nor rule
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % lemma or rule  |- (a \/ b)::k  if |- a::b::k
+
+    concl_orr(A, B, AA, (n : posnat)): proof_step = 
+          (# sequent:= cons(f_or(A, B), AA) , 
+    	     rule:= orr,
+	     subs:= cons(n - 1, null) #)
+
+    RR_orr(A, B, AA, RR1): ne_proof_seq = 
+    LET n = RR1`length IN
+    (# length := n + 1,
+       seq := LAMBDA(j: below(n + 1)):
+       	      	 COND
+		  j < n -> RR1`seq(j), 
+		  j = n -> concl_orr(A, B, AA, n)
+		 ENDCOND #)   
+
+    lemma_orr: LEMMA (sentence?(A) AND
+    	    	      sentence?(B) AND
+		      sentence_list?(AA) AND
+    	    	      conclusion(RR1) = cons(A, cons(B, AA)) AND
+		      checkProof(empty_seq)(RR1))
+		     =>
+		     (conclusion(RR_orr(A, B, AA, RR1)) = cons(f_or(A, B), AA) AND
+		      checkProof(empty_seq)(RR_orr(A, B, AA, RR1)))
+		     
+
+    % end lemma or rule
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % lemma subset rule  |- k  if |- l and l include in k
+
+    concl_subsetr(AA, (n : posnat)): proof_step = 
+          (# sequent:= AA, 
+    	     rule:= subset,
+	     subs:= cons(n - 1, null) #)
+
+    RR_subsetr(AA, BB, RR1): ne_proof_seq = 
+    LET n = RR1`length IN
+    (# length := n + 1,
+       seq := LAMBDA(j: below(n + 1)):
+       	      	 COND
+		  j < n -> RR1`seq(j), 
+		  j = n -> concl_subsetr(BB, n)
+		 ENDCOND #)   
+
+    lemma_subsetr: LEMMA (sentence_list?(AA) AND
+		      	  sentence_list?(BB) AND
+		      	  subset(AA, BB) AND
+    	    	          conclusion(RR1) = AA AND
+		      	  checkProof(empty_seq)(RR1))
+		     	 =>
+		     	 (conclusion(RR_subsetr(AA, BB, RR1)) = BB AND
+		      	  checkProof(empty_seq)(RR_subsetr(AA, BB, RR1)))
+		     
+
+    % end lemma subset rule
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
+    
+    concl_th2(nclAA, nclBB, clCC, (n, m: posnat)): proof_step = 
+          (# sequent:= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC)),
+    	     rule:= norr,
+	     subs:= cons(n - 1, cons(n + m - 1, null)) #)
+
+
+    th2: THEOREM 
+      (include_clause(nclAA, clCC) AND 
+       include_clause(nclBB, clCC)) 
+      => 
+      (conclusion(RR1)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC)) AND 
+       checkProof(empty_seq)(RR1))
 			       
  		
   END resolution
