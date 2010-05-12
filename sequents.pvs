@@ -41,8 +41,8 @@ sequents  : THEORY
     (cons?(G) AND
      f_not?(car(G)) AND
      f_or?(arg(car(G))) AND
-     subset?(H1, cons(f_neg(arg1(arg(car(G)))), G)) AND
-     subset?(H2, cons(f_neg(arg2(arg(car(G)))), G)))
+     subset?(H1, cons(f_not(arg1(arg(car(G)))), G)) AND
+     subset?(H2, cons(f_not(arg2(arg(car(G)))), G)))
 
   % H => G = A, ... -> H => ~~A, ...
   neg_rule?(H, G): bool =     %--A, .. from A, ..
