@@ -225,20 +225,21 @@ resolution : THEORY
 
     % end lemma subset rule
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % the sequent |- not(p1 or p2 or...pn), not(q1 or q2 or... qm), p1, ..., pn, q1, ..., qm, t, u, ... is provable in KoT
-    
-    concl_th2(nclAA, nclBB, clCC, (n, m: posnat)): proof_step = 
-          (# sequent:= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC)),
-    	     rule:= norr,
-	     subs:= cons(n - 1, cons(n + m - 1, null)) #)
+    % th1 the sequent |- not(p1 or p2 or...pn) , p1, ..., pn, ... is provable in KoT
 
+    RR_th1(nclAA, clCC): RECURSIVE ne_proof_seq =
+          LET lA = car(nclAA) IN
+	  LET clAA = cdr(nclAA) IN 
+          IF null?(clAA) THEN RR_lemma1(lA, clCC)
+	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th1(clAA, clCC))
+	  ENDIF
+	  MEASURE length(nclAA)
 
-    th2: THEOREM 
-      (include_clause(nclAA, clCC) AND 
-       include_clause(nclBB, clCC)) 
+    th1: THEOREM 
+      include_clause(nclAA, clBB)
       => 
-      (conclusion(RR1)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC)) AND 
-       checkProof(empty_seq)(RR1))
+      (conclusion(RR_th1(nclAA, clBB))= append(not_or_reduction(nclAA), clBB) AND 
+       checkProof(empty_seq)(RR_th1(nclAA, clBB)))
 			       
  		
   END resolution
