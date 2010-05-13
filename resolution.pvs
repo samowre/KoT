@@ -281,7 +281,8 @@ resolution : THEORY
 	  MEASURE length(nclAA)
  
     th1: THEOREM 
-      subset(nclAA, BB)
+      (sentence_list?(BB) AND
+       subset(nclAA, BB))
       => 
       (conclusion(RR_th1(nclAA, BB))= append(not_or_reduction(nclAA), BB) AND 
        checkProof(empty_seq)(RR_th1(nclAA, BB)))
