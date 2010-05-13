@@ -114,27 +114,35 @@ resolution : THEORY
     offset_proof_step(ps: proof_step, n: nat): proof_step = 
      	  ps WITH [ subs:= map(LAMBDA(j: nat):j + n)(ps`subs)]
 
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % lemma 1 : |- ~p::l if p belongs l 
-    
-    lemma1_pf(A): proof_step = (# sequent:= cons(A, cons(f_not(A), null)), rule:= ax, subs:= null #)
-    concl_lemma1(A, AA): proof_step = (# sequent:= cons(f_not(A), AA) , rule:= subset, subs:= cons(0, null) #)
+    %===================================================================================		  
+    % lemma axiom rule |- l if both A and ~A belong to l
 
-    RR_lemma1(A, AA): ne_proof_seq = 
-    (# length:=2,
-       seq:= LAMBDA(j:below(2)):
-		COND
-        	  j = 0 -> lemma1_pf(A),
-		  j = 1 -> concl_lemma1(A, AA) 
-      		ENDCOND #)
+    ax_proof_step(A): proof_step = (# sequent:= cons(A, cons(f_not(A), null)),
+    	      		     	      rule:= ax,
+			    	      subs:= null #)
 
-    lemma1: LEMMA (member(A, AA) AND sentence?(A) AND sentence_list?(AA))
-    	    	  =>
-      		  (conclusion(RR_lemma1(A, AA))= cons(f_not(A), AA) AND 
-		   checkProof(empty_seq)(RR_lemma1(A, AA)))
+    concl_ax(AA): proof_step = (# sequent:= AA, 
+    	     	      	       	  rule:= subset,
+	     			  subs:= cons(0, null) #)
 
-    % end lemma 1		  
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    RR_ax(A, AA): ne_proof_seq = 
+    (# length := 2,
+       seq := LAMBDA(j: below(2)):
+       	      	 COND
+		  j = 0 -> ax_proof_step(A), 
+		  j = 1 -> concl_ax(AA)
+		 ENDCOND #)   
+
+    lemma_ax: LEMMA (sentence_list?(AA) AND
+		     member(A, AA) AND
+    	    	     member(f_not(A), AA))
+	   	    =>
+		    (conclusion(RR_ax(A, AA)) = AA AND
+	      	     checkProof(empty_seq)(RR_ax(A, AA)))
+
+
+    % end lemma axiom rule
+    %===================================================================================
     % lemma nor rule  |- ~(a \/ b)::k  if |- ~a::k and |- ~b::k
 
     concl_norr(A, B, AA, (n, m: posnat)): proof_step = 
@@ -166,7 +174,7 @@ resolution : THEORY
 		     
 
     % end lemma nor rule
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %===================================================================================
     % lemma or rule  |- (a \/ b)::k  if |- a::b::k
 
     concl_orr(A, B, AA, (n : posnat)): proof_step = 
@@ -194,7 +202,7 @@ resolution : THEORY
 		     
 
     % end lemma or rule
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %===================================================================================
     % lemma subset rule  |- k  if |- l and l include in k
 
     concl_subsetr(AA, (n : posnat)): proof_step = 
@@ -222,8 +230,20 @@ resolution : THEORY
 		     
 
     % end lemma subset rule
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    % th1 the sequent |- not(p1 or p2 or...pn) , p1, ..., pn, ... is provable in KoT
+    %===================================================================================
+    %===================================================================================
+    % lemma 1 : |- ~p::l if p belongs l 
+    
+    RR_lemma1(A, AA): ne_proof_seq = RR_ax(A, cons(f_not(A), AA))
+ 
+    lemma1: LEMMA (member(A, AA) AND sentence?(A) AND sentence_list?(AA))
+    	    	  =>
+      		  (conclusion(RR_lemma1(A, AA))= cons(f_not(A), AA) AND 
+		   checkProof(empty_seq)(RR_lemma1(A, AA)))
+
+    % end lemma 1
+    %===================================================================================	
+    % th1 the sequent |- ~(p1 or p2 or...pn) , p1, ..., pn, ... is provable in KoT
 
     RR_th1(nclAA, clCC): RECURSIVE ne_proof_seq =
           LET lA = car(nclAA) IN
@@ -238,6 +258,25 @@ resolution : THEORY
       => 
       (conclusion(RR_th1(nclAA, clBB))= append(not_or_reduction(nclAA), clBB) AND 
        checkProof(empty_seq)(RR_th1(nclAA, clBB)))
+       
+    %===================================================================================
+    % th2 the sequent |- ~(p1 or ... pk or t or pk+1 ... or pn), ~(q1 or ...or ~t or ...qm), p1, ...pn, q1, ...qm
+
+%    RR_th2.1(lA, nclBB, clCC): RECURSIVE ne_proof_seq =
+%          LET lB = car(nclBB) IN
+%	  LET clBB = cdr(nclBB) IN 
+%          IF null?(clBB) THEN RR_ax(lA, clCC)
+%	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th2.1(lA, clAA, clCC))
+%	  ENDIF
+%	  MEASURE length(nclAA)
+
+%    RR_th2(nclAA, nclBB, clCC): RECURSIVE ne_proof_seq =
+%          LET lA = car(nclAA) IN
+%	  LET clAA = cdr(nclAA) IN 
+%          IF null?(clAA) THEN RR_lemma1(lA, clCC)
+%	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th2(clAA, clCC))
+%	  ENDIF
+%	  MEASURE length(nclAA)
 			       
  		
   END resolution
