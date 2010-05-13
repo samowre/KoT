@@ -272,19 +272,19 @@ resolution : THEORY
     %===================================================================================	
     % th1 the sequent |- ~(p1 or p2 or...pn) , p1, ..., pn, ... is provable in KoT
 
-    RR_th1(nclAA, clCC): RECURSIVE ne_proof_seq =
+    RR_th1(nclAA, BB): RECURSIVE ne_proof_seq =
           LET lA = car(nclAA) IN
 	  LET clAA = cdr(nclAA) IN 
-          IF null?(clAA) THEN RR_lemma1(lA, clCC)
-	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th1(clAA, clCC))
+          IF null?(clAA) THEN RR_lemma1(lA, BB)
+	     		 ELSE RR_norr(lA, nclause2fmla(clAA), BB, RR_lemma1(lA, BB), RR_th1(clAA, BB))
 	  ENDIF
 	  MEASURE length(nclAA)
  
     th1: THEOREM 
-      include_clause(nclAA, clBB)
+      subset(nclAA, BB)
       => 
-      (conclusion(RR_th1(nclAA, clBB))= append(not_or_reduction(nclAA), clBB) AND 
-       checkProof(empty_seq)(RR_th1(nclAA, clBB)))
+      (conclusion(RR_th1(nclAA, BB))= append(not_or_reduction(nclAA), BB) AND 
+       checkProof(empty_seq)(RR_th1(nclAA, BB)))
        
     %===================================================================================
     % th2 the sequent |- ~(p1 or ... pk or pivot or pk+1 ... or pn), ~(q1 or ...or f_neg(pivot) or ...qm), p1, ...pn, q1, ...qm
