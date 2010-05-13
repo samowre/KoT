@@ -154,25 +154,36 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
      % |- ~(p \/ gamma), ~(~p \/ delta), (gamma \/ delta)
      ss2
 
-   th0: THEOREM
-     FORALL (p, gamma, delta):
-     conclusion(build_proof_th0(p, gamma, delta)) = cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(f_or(gamma, delta), null)))
-       AND checkProof(empty_seq)(build_proof_th0(p, gamma, delta))
-    
-    th2: THEOREM  
- 
-      pivot?(lA, nclAA, nclBB) AND 
-      prop_resolve(lA, nclAA, clCC)AND
-      prop_resolve(f_neg(lA), nclBB, clCC)	
-        
-      => 
-      (EXISTS(RR: ne_proof_seq): 
-      	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
-	 AND checkProof(empty_seq)(RR))
+  th0: THEOREM
+    FORALL (p, gamma, delta):
+    conclusion(build_proof_th0(p, gamma, delta)) = cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(f_or(gamma, delta), null)))
+      AND checkProof(empty_seq)(build_proof_th0(p, gamma, delta))
+   
+  ntcA, ntcB: VAR (ne_tr_clause?)
+  k : VAR (tr_literal?)
+  cA, cB : VAR (clause?)
 
-    A, B: VAR (sentence?)
-    AA: VAR sequent
-    RR1: VAR ne_proof_seq
+  
+  proof_th(ntcA, ntcB): proof_seq = 
+    IF EXISTS k: member(k, ntcA) AND member(k, ntcB)
+    THEN RR_th2(
+		translate_clause(ntcA),
+		translate_clause(ntcB),
+		translate_clause(resolution(ntcA, ntcB)))
+		
+    ELSE RR_th1(
+		translate_clause(ntcA),
+		translate_clause(ntcB),
+		translate_clause(resolution(ntcA, ntcB)))
+    ENDIF
+    
+  th: THEOREM  
+      	conclusion(proof_th(ntcA, ntcB)) = 
+	 append(
+	  not_or_translate(translate_clause(ntcA)), 
+	   not_or_translate(translate_clause(ntcB)), 
+	    translate_clause(resolution(ntcA, ntcB)))
+	AND checkProof(empty_seq)(proof_th(ntcA, ntcB))
     
 	
   END trace_checker

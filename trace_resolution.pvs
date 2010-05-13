@@ -79,6 +79,10 @@ BEGIN
              ENDCASES
       	     MEASURE length(ck) + length(cl)
 
+  merge_includes1: LEMMA
+    sorted_include(ck, merge(ck, cl)) AND sorted_include(cl, merge(ck, cl))
+    
+
   resolution(ck, cl) : (tr_clause?) = delete_pivot(merge(ck, cl))
       
   %applies merge on a non-empty list of clauses
