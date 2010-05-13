@@ -231,13 +231,40 @@ resolution : THEORY
 
     % end lemma subset rule
     %===================================================================================
+    % lemma neg rule  |- ~~k, l  if |- k, l
+
+    concl_negr(A, AA, (n : posnat)): proof_step = 
+          (# sequent:= cons(f_not(f_not(A)), AA), 
+    	     rule:= neg,
+	     subs:= cons(n - 1, null) #)
+
+    RR_negr(A, AA, RR1): ne_proof_seq = 
+    LET n = RR1`length IN
+    (# length := n + 1,
+       seq := LAMBDA(j: below(n + 1)):
+       	      	 COND
+		  j < n -> RR1`seq(j), 
+		  j = n -> concl_negr(A, AA, n)
+		 ENDCOND #)   
+
+    lemma_negr: LEMMA (sentence?(A) AND
+		      	  sentence_list?(AA) AND
+    	    	          conclusion(RR1) = cons(A, AA) AND
+		      	  checkProof(empty_seq)(RR1))
+		     	 =>
+		     	 (conclusion(RR_negr(A, AA, RR1)) = cons(f_not(f_not(A)), AA) AND
+		      	  checkProof(empty_seq)(RR_negr(A, AA, RR1)))
+		     
+
+    % end lemma neg rule
+    %===================================================================================
     %===================================================================================
     % lemma 1 : |- ~p::l if p belongs l 
     
     RR_lemma1(A, AA): ne_proof_seq = RR_ax(A, cons(f_not(A), AA))
  
     lemma1: LEMMA (member(A, AA) AND sentence?(A) AND sentence_list?(AA))
-    	    	  =>
+    	    	  => 
       		  (conclusion(RR_lemma1(A, AA))= cons(f_not(A), AA) AND 
 		   checkProof(empty_seq)(RR_lemma1(A, AA)))
 
@@ -260,23 +287,52 @@ resolution : THEORY
        checkProof(empty_seq)(RR_th1(nclAA, clBB)))
        
     %===================================================================================
-    % th2 the sequent |- ~(p1 or ... pk or t or pk+1 ... or pn), ~(q1 or ...or ~t or ...qm), p1, ...pn, q1, ...qm
+    % th2 the sequent |- ~(p1 or ... pk or pivot or pk+1 ... or pn), ~(q1 or ...or f_neg(pivot) or ...qm), p1, ...pn, q1, ...qm
 
-%    RR_th2.1(lA, nclBB, clCC): RECURSIVE ne_proof_seq =
-%          LET lB = car(nclBB) IN
-%	  LET clBB = cdr(nclBB) IN 
-%          IF null?(clBB) THEN RR_ax(lA, clCC)
-%	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th2.1(lA, clAA, clCC))
-%	  ENDIF
-%	  MEASURE length(nclAA)
+    lpivot: VAR (literal?)
 
-%    RR_th2(nclAA, nclBB, clCC): RECURSIVE ne_proof_seq =
+    RR_th2_1(lpivot, nclBB, clCC): ne_proof_seq =
+          IF f_not?(lpivot)
+	  THEN 
+	    LET RR1 = RR_subsetr(append(not_or_reduction(nclBB), cons(arg(lpivot), clCC)),
+	       	       	 	 cons(arg(lpivot), append(not_or_reduction(nclBB), clCC)),
+				 RR_th1(nclBB, cons(arg(lpivot), clCC))) IN		
+	    RR_negr(arg(lpivot), append(not_or_reduction(nclBB), clCC), RR1)
+	  ELSE
+	    RR_subsetr(append(not_or_reduction(nclBB), cons(f_not(lpivot), clCC)),
+	       	       cons(f_not(lpivot), append(not_or_reduction(nclBB), clCC)),
+		       RR_th1(nclBB, cons(f_not(lpivot), clCC))) 
+	  ENDIF	    
+	    
+	 
+    RR_th2(lpivot, nclAA, nclBB, clCC): ne_proof_seq = empty_seq
 %          LET lA = car(nclAA) IN
-%	  LET clAA = cdr(nclAA) IN 
-%          IF null?(clAA) THEN RR_lemma1(lA, clCC)
+%	  LET clAA = cdr(nclAA) IN
+%	  LET lB = car(nclBB) IN
+%	  LET clBB = cdr(nclBB) IN 
+%          IF null?(clAA) % |- ~lA, ~nclBB, clCC 
+%	  THEN 
+%	    IF member(lA, clCC)
+%	     THEN RR_ax(lA, cons(f_not(lA), cons(not_or_reduction(nclBB), clCC)))
+%	     ELSE RR_th2.1(lA, nclBB, clCC)
+%	    ENDIF
+%	  ELSIF 
 %	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th2(clAA, clCC))
 %	  ENDIF
 %	  MEASURE length(nclAA)
+
+    th2_1: THEOREM 
+      include_clause(nclBB, cons(f_neg(lpivot), clCC))
+      => 
+      (conclusion(RR_th2_1(lpivot, nclBB, clCC))= cons(f_not(lpivot), append(not_or_reduction(nclBB), clCC)) AND 
+       checkProof(empty_seq)(RR_th2_1(lpivot, nclBB, clCC)))
+
+    th2: THEOREM 
+      (include_clause(nclAA, cons(lpivot, clCC)) AND
+       include_clause(nclBB, cons(f_neg(lpivot), clCC)))
+      => 
+      (conclusion(RR_th2(lpivot, nclAA, nclBB, clCC))= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC)) AND 
+       checkProof(empty_seq)(RR_th2(lpivot, nclAA, nclBB, clCC)))
 			       
  		
   END resolution
