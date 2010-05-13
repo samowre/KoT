@@ -154,35 +154,43 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
      % |- ~(p \/ gamma), ~(~p \/ delta), (gamma \/ delta)
      ss2
 
+  % |- ~(p \/ gamma), ~(~p \/ delta), (gamma \/ delta) 
+  % is provable in KoT (not used)
   th0: THEOREM
     FORALL (p, gamma, delta):
     conclusion(build_proof_th0(p, gamma, delta)) = cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(f_or(gamma, delta), null)))
       AND checkProof(empty_seq)(build_proof_th0(p, gamma, delta))
    
   ntcA, ntcB: VAR (ne_tr_clause?)
-  k : VAR (tr_literal?)
+ 
   cA, cB : VAR (clause?)
 
   
-  proof_th(ntcA, ntcB): proof_seq = 
-    IF EXISTS k: member(k, ntcA) AND member(k, ntcB)
+  proof_th(ntcA, ntcB): ne_proof_seq = 
+    LET res = resolution(ntcA, ntcB) IN
+    IF exist_pivot?(ntcA, ntcB) 
     THEN RR_th2(
+		translate_lit(find_pivot(ntcA, ntcB)),
 		translate_clause(ntcA),
 		translate_clause(ntcB),
-		translate_clause(resolution(ntcA, ntcB)))
+		translate_clause(res))
 		
     ELSE RR_th1(
 		translate_clause(ntcA),
-		translate_clause(ntcB),
-		translate_clause(resolution(ntcA, ntcB)))
+		append(
+		 translate_clause(ntcB),
+		 translate_clause(res)))
     ENDIF
     
+  % |- ~translate(ntcA), ~translate(ntcB), translate(resolution(ntcA, ntcB))
+  % is provable in KoT
   th: THEOREM  
       	conclusion(proof_th(ntcA, ntcB)) = 
 	 append(
-	  not_or_translate(translate_clause(ntcA)), 
-	   not_or_translate(translate_clause(ntcB)), 
-	    translate_clause(resolution(ntcA, ntcB)))
+	  not_or_reduction(translate_clause(ntcA)), 
+	  append(
+	   not_or_reduction(translate_clause(ntcB)), 
+	    translate_clause(resolution(ntcA, ntcB))))
 	AND checkProof(empty_seq)(proof_th(ntcA, ntcB))
     
 	
