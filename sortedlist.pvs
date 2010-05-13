@@ -43,9 +43,9 @@ sortedlist   [ T: TYPE, key: {k: [T-> real]| injective?(k)} ]
 
   remove(e, sAA) : RECURSIVE 
        {sBB | 
-         (FORALL f : 
-	   member(f, sAA) => (key(f) = key(e) 
-	     OR member(f, sBB)))} = 
+         FORALL f : 
+	   member(f, sBB) <=> (NOT key(f) = key(e)) 
+	     AND member(f, sAA)} = 
       CASES sAA OF
         null : sAA,
 	cons(f, r) : IF key(e) = key(f) 

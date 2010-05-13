@@ -1,7 +1,7 @@
 (trace_resolution
  (index_TCC1 0
   (index_TCC1-1 nil 3482675376 3482760987 ("" (subtype-tcc) nil nil)
-   proved
+   unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -40,7 +40,7 @@
    370 290 nil nil))
  (index_TCC2 0
   (index_TCC2-1 nil 3482675376 3482760987 ("" (subtype-tcc) nil nil)
-   proved
+   unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -72,7 +72,7 @@
    234 180 nil nil))
  (IMP_sortedlist_TCC1 0
   (IMP_sortedlist_TCC1-1 nil 3482675376 3482760988 ("" (grind) nil nil)
-   proved
+   unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -107,14 +107,13 @@
    649 430 t nil))
  (tr_clause_prop_TCC1 0
   (tr_clause_prop_TCC1-1 nil 3482675376 3482760988
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -131,14 +130,13 @@
    118 60 nil nil))
  (tr_clause_prop_TCC2 0
   (tr_clause_prop_TCC2-1 nil 3482675376 3482760988
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -153,9 +151,15 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
    123 90 nil nil))
+ (nne_tr_clause?_TCC1 0
+  (nne_tr_clause?_TCC1-1 nil 3482764464 nil ("" (subtype-tcc) nil nil)
+   nil nil nil nil nil nil))
+ (nne_tr_clause?_TCC2 0
+  (nne_tr_clause?_TCC2-1 nil 3482764464 nil ("" (subtype-tcc) nil nil)
+   nil nil nil nil nil nil))
  (delete_pivot_TCC1 0
   (delete_pivot_TCC1-1 nil 3482675376 3482760989
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((subset def-decl "bool" minlist nil)
     (sorted? def-decl "bool" sortedlist nil)
     (>= const-decl "bool" reals nil)
@@ -170,8 +174,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -244,7 +247,7 @@
         nil))
       nil))
     nil)
-   proved
+   unchecked
    ((tr_clause_prop formula-decl nil trace_resolution nil)
     (subset_is_partial_order name-judgement "(partial_order?[set[T]])"
      sets_lemmas nil)
@@ -285,8 +288,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -325,7 +327,7 @@
         nil))
       nil))
     nil)
-   proved
+   unchecked
    ((sorted? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
@@ -352,8 +354,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -361,53 +362,9 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
    231 200 t nil))
- (delete_pivot_TCC4 0
-  (delete_pivot_TCC4-1 nil 3482675376 3482760991
-   ("" (termination-tcc) nil nil) proved
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (/= const-decl "boolean" notequal nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nzint nonempty-type-eq-decl nil integers nil)
-    (tr_literal? const-decl "bool" trace_resolution nil)
-    (tr_clause? const-decl "bool" trace_resolution nil)
-    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
-         nil)
-    (index const-decl "posnat" trace_resolution nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (> const-decl "bool" reals nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (length def-decl "nat" list_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
-     real_defs nil)
-    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
-   318 280 nil nil))
- (delete_pivot_TCC5 0
-  (delete_pivot_TCC5-1 nil 3482675376 3482760992
-   ("" (subtype-tcc) nil nil) unfinished nil 1224 1100 nil nil))
  (exist_pivot?_TCC1 0
   (exist_pivot?_TCC1-1 nil 3482760987 3482761053
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
@@ -421,8 +378,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -446,14 +402,13 @@
    8289 790 t nil))
  (exist_pivot?_TCC2 0
   (exist_pivot?_TCC2-1 nil 3482760987 3482760993
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -485,16 +440,18 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
    359 320 nil nil))
+ (exist_lemma 0
+  (exist_lemma-1 nil 3482764467 3482764471 ("" (postpone) nil nil)
+   unfinished nil 4150 0 t shostak))
  (find_pivot_TCC1 0
   (find_pivot_TCC1-1 nil 3482760023 3482760993
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -522,14 +479,13 @@
         nil))
       nil))
     nil)
-   proved
+   unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -567,7 +523,7 @@
         nil))
       nil))
     nil)
-   proved
+   unchecked
    ((nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
      real_defs nil)
     (real_lt_is_strict_total_order name-judgement
@@ -591,8 +547,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -610,7 +565,7 @@
         nil))
       nil))
     nil)
-   proved
+   unchecked
    ((mult_divides2 application-judgement "(divides(m))" divides nil)
     (mult_divides1 application-judgement "(divides(n))" divides nil)
     (even_times_int_is_even application-judgement "even_int" integers
@@ -646,8 +601,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -657,7 +611,7 @@
    951 870 t nil))
  (find_pivot_TCC5 0
   (find_pivot_TCC5-1 nil 3482760023 3482761086
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (exist_pivot? def-decl "bool" trace_resolution nil)
@@ -673,8 +627,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -697,14 +650,13 @@
    6708 840 t nil))
  (find_pivot_TCC6 0
   (find_pivot_TCC6-1 nil 3482760023 3482760996
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -738,7 +690,7 @@
    1023 930 nil nil))
  (find_pivot_TCC7 0
   (find_pivot_TCC7-1 nil 3482760023 3482761107
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((exist_pivot? def-decl "bool" trace_resolution nil)
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil)
@@ -754,8 +706,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -786,7 +737,7 @@
    7838 1590 t nil))
  (find_pivot_TCC8 0
   (find_pivot_TCC8-1 nil 3482760987 3482761125
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((exist_pivot? def-decl "bool" trace_resolution nil)
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil)
@@ -802,8 +753,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -827,7 +777,7 @@
    7097 1260 t nil))
  (merge_TCC1 0
   (merge_TCC1-1 nil 3482675376 3482761138
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
@@ -841,8 +791,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -866,7 +815,7 @@
    5776 450 t nil))
  (merge_TCC2 0
   (merge_TCC2-1 nil 3482675376 3482761150
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
@@ -880,8 +829,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -905,7 +853,7 @@
    6308 660 t nil))
  (merge_TCC3 0
   (merge_TCC3-1 nil 3482675376 3482761163
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
@@ -919,8 +867,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -949,7 +896,7 @@
    6903 1300 t nil))
  (merge_TCC4 0
   (merge_TCC4-1 nil 3482675376 3482761177
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
@@ -963,8 +910,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -993,14 +939,13 @@
    7467 1280 t nil))
  (merge_TCC5 0
   (merge_TCC5-1 nil 3482675376 3482760999
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1061,10 +1006,10 @@
         nil))
       nil))
     nil)
-   unfinished nil 182978 5270 nil nil))
+   unchecked nil 182978 5270 nil nil))
  (merge_TCC7 0
   (merge_TCC7-1 nil 3482675376 3482761412
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
@@ -1078,8 +1023,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -1110,14 +1054,13 @@
    8256 2540 t nil))
  (merge_TCC8 0
   (merge_TCC8-1 nil 3482675376 3482761003
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1161,10 +1104,10 @@
    797 700 nil nil))
  (merge_TCC9 0
   (merge_TCC9-1 nil 3482675376 3482761005 ("" (subtype-tcc) nil nil)
-   unfinished nil 2109 1940 nil nil))
+   unchecked nil 2109 1940 nil nil))
  (merge_TCC10 0
   (merge_TCC10-1 nil 3482675376 3482761434
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (nzint nonempty-type-eq-decl nil integers nil)
@@ -1178,8 +1121,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -1210,14 +1152,13 @@
    8140 2470 t nil))
  (merge_TCC11 0
   (merge_TCC11-1 nil 3482675376 3482761006
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1261,17 +1202,16 @@
    796 700 nil nil))
  (merge_TCC12 0
   (merge_TCC12-1 nil 3482675376 3482761465 ("" (subtype-tcc) nil nil)
-   unfinished nil 21843 13790 nil nil))
+   unchecked nil 21843 13790 nil nil))
  (merge_includes1_TCC1 0
   (merge_includes1_TCC1-1 nil 3482760023 3482761008
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1292,14 +1232,13 @@
    ("" (subtype-tcc) nil nil) unfinished nil 175 130 nil nil))
  (merge_includes1_TCC3 0
   (merge_includes1_TCC3-1 nil 3482760023 3482761009
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1315,16 +1254,24 @@
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
    151 110 nil nil))
+ (resolution_TCC1 0
+  (resolution_TCC1-1 nil 3482764464 nil ("" (subtype-tcc) nil nil) nil
+   nil nil nil nil nil))
+ (resolution_TCC2 0
+  (resolution_TCC2-1 nil 3482764464 nil ("" (subtype-tcc) nil nil) nil
+   nil nil nil nil nil))
+ (resolution_TCC3 0
+  (resolution_TCC3-1 nil 3482764464 nil ("" (subtype-tcc) nil nil) nil
+   nil nil nil nil nil))
  (resolution_list_TCC1 0
   (resolution_list_TCC1-1 nil 3482675376 3482761009
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (list type-decl nil list_adt nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (PRED type-eq-decl nil defined_types nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1353,10 +1300,10 @@
    399 360 nil nil))
  (build_chain_list_TCC1 0
   (build_chain_list_TCC1-1 nil 3482675376 3482761009
-   ("" (subtype-tcc) nil nil) proved nil 42 40 nil nil))
+   ("" (subtype-tcc) nil nil) unchecked nil 42 40 nil nil))
  (build_chain_list_TCC2 0
   (build_chain_list_TCC2-1 nil 3482675376 3482761483
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((certificate type-eq-decl nil trace_resolution nil)
     (clause_chain type-eq-decl nil trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil)
@@ -1365,8 +1312,7 @@
     (/= const-decl "boolean" notequal nil)
     (chain type-eq-decl nil trace_resolution nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil)
     (below type-eq-decl nil naturalnumbers nil)
@@ -1389,16 +1335,16 @@
     (boolean nonempty-type-decl nil booleans nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil))
+    nil)
    7560 260 t nil))
  (resolve_rec_TCC1 0
   (resolve_rec_TCC1-1 nil 3482675376 3482761009
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unchecked
    ((minus_odd_is_odd application-judgement "odd_int" integers nil)) 39
    30 nil nil))
  (resolve_rec_TCC2 0
   (resolve_rec_TCC2-1 nil 3482675376 3482761009
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1424,7 +1370,7 @@
    60 50 nil nil))
  (resolve_rec_TCC3 0
   (resolve_rec_TCC3-1 nil 3482675376 3482761010
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1450,13 +1396,13 @@
    227 170 nil nil))
  (resolve_rec_TCC4 0
   (resolve_rec_TCC4-1 nil 3482675376 3482761010
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unchecked
    ((minus_odd_is_odd application-judgement "odd_int" integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil))
    66 60 nil nil))
  (resolve_rec_TCC5 0
   (resolve_rec_TCC5-1 nil 3482675376 3482761010
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1482,7 +1428,7 @@
    219 170 nil nil))
  (resolve_rec_TCC6 0
   (resolve_rec_TCC6-1 nil 3482675376 3482761010
-   ("" (subtype-tcc) nil nil) proved
+   ("" (subtype-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1506,13 +1452,13 @@
    133 110 nil nil))
  (resolve_rec_TCC7 0
   (resolve_rec_TCC7-1 nil 3482675376 3482761010
-   ("" (termination-tcc) nil nil) proved
+   ("" (termination-tcc) nil nil) unchecked
    ((minus_odd_is_odd application-judgement "odd_int" integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil))
    66 50 nil nil))
  (resolve_TCC1 0
   (resolve_TCC1-1 nil 3482107568 3482761010 ("" (subtype-tcc) nil nil)
-   proved
+   unchecked
    ((real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
    20 10 nil nil)))

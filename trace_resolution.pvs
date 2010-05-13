@@ -49,18 +49,14 @@ BEGIN
 
   cert : VAR certificate
 
-  % tr_clause is sorted by index => ~p, p are on consecutive positions.
-  % deletes the first pair (~p, p) encountered    
-  delete_pivot(ck) : RECURSIVE {cl | subset(cl, ck)} = 
-    CASES ck OF
-      null: ck,
-      cons(k, ckk): IF k<0 AND cons?(ckk) AND (car(ckk) + k = 0) 
-      	      	    THEN cdr(ckk)
-      	      	    ELSE cons(k, delete_pivot(ckk))
-		    ENDIF
-    ENDCASES
-  MEASURE length(ck)
 
+  % tr_clause is sorted by index => ~p, p are on consecutive positions.
+  % deletes the pair (~pivot, pivot)  
+  delete_pivot(ck, (pivot: {l| member(l, ck) AND member(-l, ck)}))
+   : {cl | FORALL l: member(l, cl) <=> member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)} = 
+    remove(-pivot, remove(pivot, ck))
+
+  % true if a pivot exists for ck and cl
   exist_pivot?(ck, cl) : RECURSIVE bool =
     CASES ck OF 
       null: FALSE,
@@ -71,6 +67,7 @@ BEGIN
   exist_lemma : LEMMA
     exist_pivot?(ck, cl) <=> EXISTS k: member(k, ck) AND member(-k, cl)
 
+  % returns a pivot of nck and ncl
   find_pivot(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : RECURSIVE {k | member(k, nck) AND member(-k, ncl)} =
     CASES cdr(nck) OF
       null: car(nck),
@@ -107,8 +104,20 @@ BEGIN
   merge_includes1: LEMMA
     sorted_include(ck, merge(ck, cl)) AND sorted_include(cl, merge(ck, cl))
     
+  % applies resolution to nck and ncl
+  resolution(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : (tr_clause?) = 
+    LET pivot= find_pivot(nck, ncl) IN 
+    delete_pivot(merge(nck, ncl), pivot) 
 
-  resolution(ck, cl) : (tr_clause?) = delete_pivot(merge(ck, cl))
+  % member(x, ck) => member(x, res) \/ x =  pivot
+  % member(x, cl) => member(x, res) \/ x = -pivot
+  resolution_lemma : LEMMA
+    exist_pivot?(nck, ncl) =>
+      LET pivot = find_pivot(nck, ncl) IN
+      LET res = resolution(nck, ncl) IN
+      (FORALL k: member(k, nck) => member(k, res) OR k=pivot
+       AND
+        FORALL l: member(l, ncl) => member(l, res) OR l= -pivot)
       
   %applies merge on a non-empty list of clauses
   resolution_list(lck: (cons?[(tr_clause?)])): RECURSIVE (tr_clause?) =
