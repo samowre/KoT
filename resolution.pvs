@@ -117,17 +117,15 @@ resolution : THEORY
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     % lemma 1 : |- ~p::l if p belongs l 
     
-    cut1_lemma1(A): proof_step = (# sequent:= cons(A, cons(f_not(A), null)), rule:= ax, subs:= null #)
-    cut2_lemma1(A): proof_step = (# sequent:= cons(f_not(A), cons(f_not(f_not(A)), null)), rule:= ax, subs:= null #)
-    concl_lemma1(A, AA): proof_step = (# sequent:= cons(f_not(A), AA) , rule:= cut(f_not(A)), subs:= cons(0,cons(1,null)) #)
+    lemma1_pf(A): proof_step = (# sequent:= cons(A, cons(f_not(A), null)), rule:= ax, subs:= null #)
+    concl_lemma1(A, AA): proof_step = (# sequent:= cons(f_not(A), AA) , rule:= subset, subs:= cons(0, null) #)
 
     RR_lemma1(A, AA): ne_proof_seq = 
-    (# length:=3, 
-       seq:= LAMBDA(j:below(3)):
+    (# length:=2,
+       seq:= LAMBDA(j:below(2)):
 		COND
-        	  j = 0 -> cut1_lemma1(A),
-		  j = 1 -> cut2_lemma1(A),
-		  j = 2 -> concl_lemma1(A, AA) 
+        	  j = 0 -> lemma1_pf(A),
+		  j = 1 -> concl_lemma1(A, AA) 
       		ENDCOND #)
 
     lemma1: LEMMA (member(A, AA) AND sentence?(A) AND sentence_list?(AA))
@@ -234,7 +232,7 @@ resolution : THEORY
 	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th1(clAA, clCC))
 	  ENDIF
 	  MEASURE length(nclAA)
-
+ 
     th1: THEOREM 
       include_clause(nclAA, clBB)
       => 
