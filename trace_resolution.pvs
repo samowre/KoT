@@ -22,10 +22,12 @@ BEGIN
 		        OR null?(cdr(ll)) 
 			OR (index(car(ll))<index(car(cdr(ll))) AND tr_clause?(cdr(ll))))
 
-  ck, cl: VAR (tr_clause?)
+  ck, cl, cm: VAR (tr_clause?)
 
   %not empty trace clause
   ne_tr_clause?(cl): bool = NOT null?(cl)
+ 
+  ncl, nck, ncm : VAR (ne_tr_clause?)
 
   cons_tr_clause: LEMMA (tr_clause?(ck) AND cons?(ck)) IMPLIES tr_clause?(cdr(ck))
 
@@ -58,6 +60,29 @@ BEGIN
 		    ENDIF
     ENDCASES
   MEASURE length(ck)
+
+  exist_pivot?(ck, cl) : RECURSIVE bool =
+    CASES ck OF 
+      null: FALSE,
+      cons(k, cm): member(-k, cl) OR exist_pivot?(cm, cl)
+    ENDCASES
+  MEASURE length(ck)
+
+  exist_lemma : LEMMA
+    exist_pivot?(ck, cl) <=> EXISTS k: member(k, ck) AND member(-k, cl)
+
+  find_pivot(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : RECURSIVE {k | member(k, nck) AND member(-k, ncl)} =
+    CASES cdr(nck) OF
+      null: car(nck),
+      cons(k, ck): 
+        IF member(-car(nck), ncl) 
+	THEN car(nck) 
+	ELSIF member(-k, ncl) 
+	THEN k 
+	ELSE find_pivot(cdr(nck), ncl) 
+	ENDIF
+    ENDCASES
+  MEASURE length(nck)
       
   %eliminates duplicates
   merge(ck, cl) : RECURSIVE 
