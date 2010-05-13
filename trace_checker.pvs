@@ -10,15 +10,15 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
     IMPORTING resolution
     IMPORTING trace_resolution[m, n, i]
 
-    p, q: VAR (ne_tr_clause?)
+    tp, tq: VAR (ne_tr_clause?)
     pivot: VAR (trace_resolution[m,n,i].tr_literal?)
     RR : VAR ne_proof_seq
 
     % p -> ~tr(p)
-    not_clause(p): sequent = not_or_reduction(translate_clause(p))
+    not_clause(tp): sequent = not_or_reduction(translate_clause(tp))
     
     % p, q -> tr(res(p, q))
-    res_clause(p, q): (clause?) = translate_clause(resolution(p, q))
+    res_clause(tp, tq): (clause?) = translate_clause(resolution(tp, tq))
 
     
 
@@ -26,9 +26,9 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
     resolve_step: THEOREM 
       EXISTS RR: 
       	conclusion(RR)= 
-	 append( not_clause(p), 
-	  append( not_clause(q), 
-	   res_clause(p, q)))
+	 append( not_clause(tp), 
+	  append( not_clause(tq), 
+	   res_clause(tp, tq)))
 	 AND checkProof(empty_seq)(RR)
 
     
@@ -36,8 +36,128 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
     nclAA, nclBB : VAR (nclause?)
     lA, lB, lC: VAR (literal?)
 
-    pivot?(lA, clAA, clBB):bool = member(lA, clAA) AND member(f_neg(lA), clBB)
-    prop_resolve(lA, clAA, clBB): bool = FORALL lB: member(lB, clAA) AND lB /= lA => member(lB, clBB)
+    pivot?(lA, clAA, clBB):bool = prop_atom?(lA) AND member(lA, clAA) AND member(f_not(lA), clBB)
+
+    prop_resolve(lA, clAA, clBB): bool = 
+      FORALL lB: 
+        member(lB, clAA) AND 
+	lB /= lA <=> member(lB, clBB)
+
+ %    cons(f_not(delta), cons(f_not(p), cons(gamma, cons(delta, null)))) %&
+ %    cons(f_not(f_not(p)), , cons(f_not(p), cons(gamma, cons(delta, null))))
+ %    cons(f_not(f_or(f_not(p), delta)), cons(f_not(p), cons(gamma, cons(delta, null)))) % subset
+ %   cons(f_not(p), cons(f_not(f_or(f_not(p), delta)), cons(gamma, cons(delta, null)))) & 
+ %    cons(f_not(gamma), cons(f_not(f_or(f_not(p), delta)), cons(gamma, cons(delta, null)))) % consider second done(ax) - nor
+ %    cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(gamma, cons(delta, null)))) % subset
+ %    cons(gamma, cons(delta, cons (f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), null)))) %or
+ %    cons(f_or(gamma, delta), cons (f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), null))) %subset
+ %    conclusion(RR)= cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(f_or(gamma, delta), null)))
+%	 AND checkProof(empty_seq)(RR))
+  
+   p, q, gamma, delta : VAR (sentence?)
+
+   build_proof_th0(p, gamma, delta): ne_proof_seq = 
+
+     LET ax3 = RR_lemma1(
+     	         delta, 
+		 cons(f_not(p), 
+		  cons(gamma, 
+		   cons(delta, 
+		    null)))) IN
+     % |- ~delta, ~p, gamma, delta
+
+     LET ax2 = RR_lemma1(
+     	         f_not(p), 
+		 cons(f_not(p), 
+		  cons(gamma, 
+		   cons(delta, 
+		    null)))) IN
+     % |- ~~p, ~p, gamma, delta
+
+     LET nor2 = RR_norr(
+     	      	  f_not(p), 
+		  delta,  
+		  cons(f_not(p), 
+		   cons(gamma, 
+		    cons(delta, 
+		     null))), 
+		  ax2, 
+		  ax3) IN
+     % |- ~(~p \/ delta), ~p, gamma, delta
+
+     LET ss3 = RR_subsetr(
+		 cons(f_not(f_or(f_not(p), delta)), 
+		  cons(f_not(p), 
+		   cons(gamma, 
+		    cons(delta, 
+		     null)))), 
+     	         cons(f_not(p), 
+		  cons(f_not(f_or(f_not(p), delta)), 
+		   cons(gamma, 
+		    cons(delta, 
+		     null)))), 
+		 nor2) IN
+     % |- ~p, ~(~p \/ delta), gamma, delta
+
+     LET ax1 = RR_lemma1(
+     	         gamma, 
+		 cons(f_not(f_or(f_not(p), delta)), 
+		  cons(gamma, 
+		   cons(delta, 
+		    null)))) IN
+     % |- ~gamma, ~(~p \/ delta), gamma, delta
+
+     LET nor1 = RR_norr(
+     	      	  p, 
+		  gamma, 
+		  cons(f_not(f_or(f_not(p), delta)), 
+		   cons(gamma, 
+		    cons(delta, 
+		     null))), 
+		  ss3, 
+		  ax1) IN
+     % |- ~(p \/ gamma), ~(~p \/ delta), gamma, delta
+
+     LET ss1 = RR_subsetr(
+     	         cons (f_not(f_or(p, gamma)), 
+		  cons(f_not(f_or(f_not(p), delta)),
+		   cons(gamma, 
+		    cons(delta, 
+		     null)))), 
+     	         cons(gamma, 
+		  cons(delta, 
+		   cons (f_not(f_or(p, gamma)), 
+		    cons(f_not(f_or(f_not(p), delta)), 
+		     null)))), 
+		 nor1) IN
+     % |- gamma, delta, ~(p \/ gamma), ~(~p \/ delta)
+
+     LET or1 = RR_orr(
+     	         gamma, 
+		 delta, 
+		 cons (f_not(f_or(p, gamma)), 
+		  cons(f_not(f_or(f_not(p), delta)), 
+		   null)), 
+		 ss1) IN
+     % |- (gamma \/ delta), ~(p \/ gamma), ~(~p \/ delta)
+
+     LET ss2 = RR_subsetr(
+     	         cons(f_or(gamma, delta), 
+		  cons (f_not(f_or(p, gamma)), 
+		   cons(f_not(f_or(f_not(p), delta)), 
+		    null))),  
+     	         cons(f_not(f_or(p, gamma)), 
+		  cons(f_not(f_or(f_not(p), delta)), 
+		   cons(f_or(gamma, delta), 
+		    null))), 
+		 or1) IN
+     % |- ~(p \/ gamma), ~(~p \/ delta), (gamma \/ delta)
+     ss2
+
+   th0: THEOREM
+     FORALL (p, gamma, delta):
+     conclusion(build_proof_th0(p, gamma, delta)) = cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(f_or(gamma, delta), null)))
+       AND checkProof(empty_seq)(build_proof_th0(p, gamma, delta))
     
     th2: THEOREM  
  
@@ -50,16 +170,9 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
       	conclusion(RR)= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC))
 	 AND checkProof(empty_seq)(RR))
 
-    l1: proof_seq = 
-      (# length := 1, 
-         seq := (LAMBDA (x: below[1]): proof_step : [#
-	     sequent := cons (f_or(gamma, delta), 
-	     	     	cons(f_not(f_or(p, gamma)), 
-			cons(f_not(f_or(f_not(p), delta)), null)))
-	     rule: ax
-	     subs:= null #])#)
-
-    l1: VAR finseq[proof_seq] = 
-      (# length := 1, seq := (LAMBDA (x: below[1]): )#)
+    A, B: VAR (sentence?)
+    AA: VAR sequent
+    RR1: VAR ne_proof_seq
+    
 	
   END trace_checker
