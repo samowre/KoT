@@ -37,6 +37,8 @@ resolution : THEORY
 
     member_lit_member_fmla: LEMMA member[fmla](lA, lAA) = member[(literal?)](lA, lAA)
 
+    subset_lit_subset_fmla: LEMMA subset[fmla](lAA, lBB) = subset[(literal?)](lAA, lBB)
+
     % (not 1) -> 1, (1) -> 2, (not 2) -> 3, (2) -> 4...
     index(lA) : posnat = 
     	  IF prop_atom?(lA) 
@@ -306,37 +308,39 @@ resolution : THEORY
 	  ENDIF	    
 	    
 	 
-    RR_th2(lpivot, nclAA, nclBB, CC): ne_proof_seq = empty_seq
-%          LET lA = car(nclAA) IN
-%	  LET clAA = cdr(nclAA) IN
-%	  LET lB = car(nclBB) IN
-%	  LET clBB = cdr(nclBB) IN 
-%          IF null?(clAA) % |- ~lA, ~nclBB, clCC 
-%	  THEN 
-%	    IF member(lA, clCC)
-%	     THEN RR_ax(lA, cons(f_not(lA), cons(not_or_reduction(nclBB), clCC)))
-%	     ELSE RR_th2.1(lA, nclBB, clCC)
-%	    ENDIF
-%	  ELSIF 
-%	     		 ELSE RR_norr(lA, nclause2fmla(clAA), clCC, RR_lemma1(lA, clCC), RR_th2(clAA, clCC))
-%	  ENDIF
-%	  MEASURE length(nclAA)
+    RR_th2(lpivot, nclAA, nclBB, CC): RECURSIVE ne_proof_seq = 
+          LET lA = car(nclAA) IN
+	  LET clAA = cdr(nclAA) IN
+	  LET lB = car(nclBB) IN
+	  LET clBB = cdr(nclBB) IN
+	  LET RR1 = IF member(lA, CC) % RR1 is a proof of |- ~lA, ~nclBB, CC 
+	      	     THEN RR_lemma1(lA, append(not_or_reduction(nclBB), CC))
+	     	     ELSE RR_th2_1(lA, nclBB, CC)
+	      	     ENDIF IN 
+          IF null?(clAA) 
+	  THEN 
+	    RR1
+	  ELSE
+	    RR_norr(lA, nclause2fmla(clAA), append(not_or_reduction(nclBB), CC), RR1, RR_th2(lpivot, clAA, nclBB, CC))
+	  ENDIF
+	  MEASURE length(nclAA)
 
     th2_1_1: LEMMA FORALL(f: (f_not?)): f = f_not(arg(f))
 
     th2_1: THEOREM 
       (sentence_list?(CC) AND
-       include_clause(nclBB, cons(f_neg(lpivot), CC)))
+       subset(nclBB, cons(f_neg(lpivot), CC)))
       => 
       (conclusion(RR_th2_1(lpivot, nclBB, CC))= cons(f_not(lpivot), append(not_or_reduction(nclBB), CC)) AND 
        checkProof(empty_seq)(RR_th2_1(lpivot, nclBB, CC)))
 
     th2: THEOREM 
       (sentence_list?(CC) AND
-       include_clause(nclAA, cons(lpivot, CC)) AND
-       include_clause(nclBB, cons(f_neg(lpivot), CC)))
+       subset(nclAA, cons(lpivot, CC)) AND
+       subset(nclBB, cons(f_neg(lpivot), CC)))
       => 
       (conclusion(RR_th2(lpivot, nclAA, nclBB, CC))= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), CC)) AND 
        checkProof(empty_seq)(RR_th2(lpivot, nclAA, nclBB, CC)))
  		
   END resolution
+ 
