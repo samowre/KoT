@@ -37,6 +37,9 @@ BEGIN
   translate_inclusion: LEMMA
     subset(lk, lc) = subset(translate_clause(lk), translate_clause(lc))
 
+  cons_inclusion:  LEMMA
+    subset(cl, cons(k, ck)) = subset(translate_clause(cl), cons(translate_lit(k), translate_clause(ck)))
+
 
 END trace2fmla
 

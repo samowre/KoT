@@ -780,7 +780,7 @@
    528 450 t nil))
  (translate_cons_TCC2 0
   (translate_cons_TCC2-1 nil 3482805344 nil ("" (subtype-tcc) nil nil)
-   nil nil nil nil nil nil))
+   unfinished nil nil nil nil nil))
  (translate_cons 0
   (translate_cons-1 nil 3482679632 3482805356
    ("" (skolem!)
@@ -789,14 +789,14 @@
         (("" (expand map) (("" (grind) nil nil)) nil)) nil))
       nil))
     nil)
-   proved
+   unchecked
    ((translate_clause const-decl "(clause?)" trace2fmla nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (translate_lit const-decl "(literal?)" trace2fmla nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil))
+    nil)
    4328 150 t shostak))
  (neg_translate_TCC1 0
   (neg_translate_TCC1-1 nil 3482804348 3482804393
@@ -851,5 +851,19 @@
        ("2" (postpone) nil nil))
       nil))
     nil)
-   unfinished nil 148719 870 t shostak)))
+   unfinished nil 148719 870 t shostak))
+ (cons_inclusion 0
+  (cons_inclusion-1 nil 3482846186 3482846324
+   ("" (skosimp)
+    (("" (generalize cl!1 "cl")
+      (("" (induct cl)
+        (("1" (delete 2) (("1" (grind) nil nil)) nil)
+         ("2" (flatten) (("2" (grind) nil nil)) nil)
+         ("3" (skosimp)
+          (("3" (expand subset +) (("3" (postpone) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unfinished nil 138733 400 t shostak)))
 
