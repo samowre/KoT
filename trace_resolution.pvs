@@ -27,6 +27,16 @@ BEGIN
   %not empty trace clause
   ne_tr_clause?(cl): bool = NOT null?(cl)
  
+  tr_clause_true?(cl): RECURSIVE bool = 
+    CASES cl OF
+      null: FALSE,
+      cons (l, ck): sorted_contains(-l, ck) OR tr_clause_true?(ck)
+    ENDCASES
+  MEASURE length(cl)
+
+  clause_true_lemma :  LEMMA
+  tr_clause_true?(cl) = EXISTS l: member(l, cl) and member(-l, cl)
+ 
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
   cons_tr_clause: LEMMA (tr_clause?(ck) AND cons?(ck)) IMPLIES tr_clause?(cdr(ck))
@@ -106,26 +116,45 @@ BEGIN
     
   % applies resolution to nck and ncl
   resolution(nck, ncl) : (tr_clause?) = 
-    LET merged = merge(nck, ncl) IN
-    IF exist_pivot?(nck, ncl) THEN
-      LET pivot= find_pivot(nck, ncl) IN 
-      delete_pivot(merged, pivot) 
+    IF tr_clause_true?(nck) THEN ncl
+    ELSIF tr_clause_true?(ncl) THEN nck
     ELSE
-      merged
+     LET merged = merge(nck, ncl) IN
+     IF exist_pivot?(nck, ncl) THEN
+       LET pivot= find_pivot(nck, ncl) IN 
+       delete_pivot(merged, pivot) 
+     ELSE
+       merged
+     ENDIF
     ENDIF
+
+  member_tr_lit_member_nzint: LEMMA member[nzint](k, ll) = member[(tr_literal?)](k, ll)
+
+  not_true_clauses(ck, cl): bool = NOT tr_clause_true?(ck) AND NOT tr_clause_true?(cl)
 
   % member(x, ck) => member(x, res) \/ x =  pivot
   % member(x, cl) => member(x, res) \/ x = -pivot
   resolution_lemma : LEMMA
+    not_true_clauses(nck, ncl) => 
     LET res = resolution(nck, ncl) IN
     IF exist_pivot?(nck, ncl) THEN
       LET pivot = find_pivot(nck, ncl) IN
-      (FORALL k: member(k, nck) => member(k, res) OR k=pivot
+      (FORALL k: member(k, nck) => member(k, res) OR k=pivot)
        AND
-        FORALL l: member(l, ncl) => member(l, res) OR l= -pivot)
+        FORALL l: member(l, ncl) => member(l, res) OR l= -pivot
     ELSE
       sorted_include(nck, res) AND sorted_include(ncl, res)
     ENDIF
+
+  include_res: LEMMA
+    not_true_clauses(nck, ncl) => 
+    LET res = resolution(nck, ncl) IN
+    exist_pivot?(nck, ncl) 
+     => 
+      LET pivot = find_pivot(nck, ncl) IN 
+      sorted_include(nck, cons(pivot, res))&
+      sorted_include(ncl, cons(pivot, res))
+    
       
   %applies merge on a non-empty list of clauses
   resolution_list(lck: (cons?[(tr_clause?)])): RECURSIVE (tr_clause?) =

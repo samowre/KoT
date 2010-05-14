@@ -168,17 +168,43 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
   
   proof_th(ntcA, ntcB): ne_proof_seq = 
     LET res = resolution(ntcA, ntcB) IN
-    IF exist_pivot?(ntcA, ntcB) 
-    THEN RR_th2(
-		translate_lit(find_pivot(ntcA, ntcB)),
+    IF not_true_clauses(ntcA, ntcB) THEN
+      IF exist_pivot?(ntcA, ntcB) 
+      THEN RR_th2(
+	 	translate_lit(find_pivot(ntcA, ntcB)),
 		translate_clause(ntcA),
 		translate_clause(ntcB),
 		translate_clause(res))
 		
-    ELSE RR_th1(
+      ELSE RR_th1(
 		translate_clause(ntcA),
 		append(
-		 translate_clause(ntcB),
+		 not_or_reduction(translate_clause(ntcB)),
+		 translate_clause(res)))
+      ENDIF
+    ELSIF tr_clause_true?(ntcA) THEN
+      LET pr1 = RR_th1(translate_clause(ntcB),
+		append(
+		 not_or_reduction(translate_clause(ntcA)),
+		 translate_clause(res))) IN
+
+      RR_subsetr(
+        append(
+	  not_or_reduction(translate_clause(ntcB)), 
+	  append(
+	    not_or_reduction(translate_clause(ntcA)), 
+	    translate_clause(res))), 
+        append(
+	  not_or_reduction(translate_clause(ntcA)), 
+	  append(
+	    not_or_reduction(translate_clause(ntcB)), 
+	    translate_clause(res))), 
+	pr1)
+    ELSE %tr_clause_true?(ntcB)
+      RR_th1(
+		translate_clause(ntcA),
+		append(
+		 not_or_reduction(translate_clause(ntcB)),
 		 translate_clause(res)))
     ENDIF
     
@@ -192,6 +218,10 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 	   not_or_reduction(translate_clause(ntcB)), 
 	    translate_clause(resolution(ntcA, ntcB))))
 	AND checkProof(empty_seq)(proof_th(ntcA, ntcB))
+
+  
+
+  
     
 	
   END trace_checker

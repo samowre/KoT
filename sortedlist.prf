@@ -1,30 +1,207 @@
 (sortedlist
  (sorted?_TCC1 0
-  (sorted?_TCC1-1 nil 3482515380 3482517431
+  (sorted?_TCC1-1 nil 3482515380 3482782187
    ("" (termination-tcc) nil nil) proved
    ((length def-decl "nat" list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   171 120 nil nil))
+   183 130 nil nil))
  (sorted_prop_TCC1 0
-  (sorted_prop_TCC1-1 nil 3482515380 3482517431
-   ("" (subtype-tcc) nil nil) proved nil 45 40 nil nil))
+  (sorted_prop_TCC1-1 nil 3482515380 3482782187
+   ("" (subtype-tcc) nil nil) proved nil 77 30 nil nil))
  (sorted_prop_TCC2 0
-  (sorted_prop_TCC2-1 nil 3482515380 3482517431
-   ("" (subtype-tcc) nil nil) proved nil 60 40 nil nil))
- (remove_TCC1 0
-  (remove_TCC1-1 nil 3482515380 3482517431 ("" (grind) nil nil) proved
+  (sorted_prop_TCC2-1 nil 3482515380 3482782187
+   ("" (subtype-tcc) nil nil) proved nil 58 50 nil nil))
+ (sorted_contains_TCC1 0
+  (sorted_contains_TCC1-1 nil 3482782183 3482782187
+   ("" (subtype-tcc) nil nil) unfinished nil 141 90 nil nil))
+ (sorted_contains_TCC2 0
+  (sorted_contains_TCC2-1 nil 3482782183 3482782187
+   ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil))
-   91 50 t nil))
+    (sorted? def-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (length def-decl "nat" list_props nil))
+   160 120 nil nil))
+ (contains_lemma 0
+  (contains_lemma-1 nil 3482782276 3482783181
+   ("" (skolem-typepred)
+    (("" (generalize sAA!1 "sA")
+      (("" (induct sA)
+        (("1" (assert) (("1" (flatten) (("1" (grind) nil nil)) nil))
+          nil)
+         ("2" (skolem-typepred)
+          (("2" (flatten)
+            (("2" (expand sorted? -2)
+              (("2" (lift-if)
+                (("2" (split)
+                  (("1" (split)
+                    (("1" (assert)
+                      (("1" (expand sorted_contains +)
+                        (("1" (expand member +)
+                          (("1" (lift-if)
+                            (("1" (split)
+                              (("1" (grind) nil nil)
+                               ("2"
+                                (flatten)
+                                (("2"
+                                  (split)
+                                  (("1"
+                                    (grind)
+                                    (("1"
+                                      (typepred "key(e!1)")
+                                      (("1"
+                                        (typepred key)
+                                        (("1"
+                                          (expand injective?)
+                                          (("1"
+                                            (inst
+                                             -1
+                                             "e!1"
+                                             "cons1_var!1")
+                                            (("1"
+                                              (replace -3 -1)
+                                              (("1" (propax) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2"
+                                    (flatten)
+                                    (("2" (grind) nil nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("2" (flatten)
+                      (("2" (expand sorted_contains +)
+                        (("2" (lift-if)
+                          (("2" (split)
+                            (("1" (flatten) (("1" (grind) nil nil))
+                              nil)
+                             ("2" (flatten)
+                              (("2"
+                                (split)
+                                (("1"
+                                  (flatten)
+                                  (("1"
+                                    (expand member +)
+                                    (("1"
+                                      (typepred key)
+                                      (("1"
+                                        (expand injective?)
+                                        (("1"
+                                          (inst -1 "e!1" "cons1_var!1")
+                                          (("1"
+                                            (replace -2 -1)
+                                            (("1" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2"
+                                  (flatten)
+                                  (("2"
+                                    (expand member +)
+                                    (("2"
+                                      (replace -3 2)
+                                      (("2"
+                                        (case "e!1=cons1_var!1")
+                                        (("1"
+                                          (replace -1 2)
+                                          (("1" (grind) nil nil))
+                                          nil)
+                                         ("2"
+                                          (replace 1 3)
+                                          (("2" (propax) nil nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil)
+                   ("2" (split)
+                    (("1" (expand sorted? -2)
+                      (("1" (lift-if)
+                        (("1" (split)
+                          (("1" (assert) (("1" (grind) nil nil)) nil)
+                           ("2" (flatten) nil nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("2" (flatten) nil nil))
+                    nil)
+                   ("3" (split)
+                    (("1" (ground) (("1" (grind) nil nil)) nil)
+                     ("2" (flatten) nil nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   proved
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (list_induction formula-decl nil list_adt nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (injective? const-decl "bool" functions nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (sorted_contains def-decl "bool" sortedlist nil)
+    (member def-decl "bool" list_props nil))
+   408860 650 t shostak))
+ (remove_TCC1 0
+  (remove_TCC1-1 nil 3482515380 3482782188 ("" (grind) nil nil) proved
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (member def-decl "bool" list_props nil))
+   116 70 t nil))
  (remove_TCC2 0
-  (Yes "" 3482515617 3482517712
+  (Yes "" 3482515617 3482782188
    ("" (skolem-typepred)
     (("" (flatten)
       (("" (split)
@@ -44,7 +221,7 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((member def-decl "bool" list_props nil)
     (sorted? def-decl "bool" sortedlist nil)
     (list type-decl nil list_adt nil)
@@ -52,22 +229,22 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   226323 240 t shostak)
+   186 160 t shostak)
   (remove_TCC2-1 nil 3482515380 3482515440 ("" (subtype-tcc) nil nil)
    unfinished nil 359 180 nil nil))
  (remove_TCC3 0
-  (remove_TCC3-1 nil 3482515380 3482517432 ("" (subtype-tcc) nil nil)
-   proved
+  (remove_TCC3-1 nil 3482515380 3482782188 ("" (subtype-tcc) nil nil)
+   unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
     (sorted? def-decl "bool" sortedlist nil))
-   75 60 nil nil))
+   170 130 nil nil))
  (remove_TCC4 0
-  (remove_TCC4-1 nil 3482515380 3482517432
-   ("" (termination-tcc) nil nil) proved
+  (remove_TCC4-1 nil 3482515380 3482782272
+   ("" (termination-tcc) nil nil) unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -76,80 +253,36 @@
     (sorted? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   145 110 nil nil))
- (remove_TCC5 0
-  (remove_TCC5-1 nil 3482515380 3482517432
-   ("" (skolem-typepred)
-    (("" (flatten) (("" (replace -2 3) (("" (grind) nil nil)) nil))
-      nil))
-    nil)
-   proved
-   ((length def-decl "nat" list_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (list type-decl nil list_adt nil)
-    (T formal-type-decl nil sortedlist nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   98 80 t nil))
- (remove_TCC6 0
-  (remove_TCC6-1 nil 3482516874 3482518292
-   ("" (skolem-typepred)
-    (("" (flatten)
-      (("" (split)
-        (("1" (typepred "v!1(e!1, r!1)")
-          (("1" (expand sorted? +)
-            (("1" (lift-if)
-              (("1" (split)
-                (("1" (propax) nil nil)
-                 ("2" (flatten)
-                  (("2" (replace -1 2)
-                    (("2" (expand sorted? -3)
-                      (("2" (lift-if)
-                        (("2" (split)
-                          (("1" (assert) nil nil)
-                           ("2" (flatten)
-                            (("2" (lift-if)
-                              (("2"
-                                (split)
-                                (("1"
-                                  (assert)
-                                  (("1"
-                                    (delete 1)
-                                    (("1" (postpone) nil nil))
-                                    nil))
-                                  nil)
-                                 ("2" (postpone) nil nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil)
-           ("2" (grind) nil nil))
-          nil)
-         ("2" (postpone) nil nil))
-        nil))
-      nil))
-    nil)
-   unfinished nil 65243 320 t nil))
+   84207 72790 nil nil))
  (cons_sorted 0
   (cons_sorted-1 nil 3482517322 3482517329 ("" (grind) nil nil)
-   unchecked
+   unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
     (sorted? def-decl "bool" sortedlist nil))
-   7246 100 t shostak)))
+   7246 100 t shostak))
+ (sorted_include_TCC1 0
+  (sorted_include_TCC1-1 nil 3482782183 nil ("" (subtype-tcc) nil nil)
+   nil nil nil nil nil nil))
+ (sorted_include_TCC2 0
+  (sorted_include_TCC2-1 nil 3482782183 nil ("" (subtype-tcc) nil nil)
+   nil nil nil nil nil nil))
+ (sorted_include_TCC3 0
+  (sorted_include_TCC3-1 nil 3482782183 nil
+   ("" (termination-tcc) nil nil) nil nil nil nil nil nil))
+ (sorted_include_TCC4 0
+  (sorted_include_TCC4-1 nil 3482782183 nil ("" (subtype-tcc) nil nil)
+   nil nil nil nil nil nil))
+ (sorted_include_TCC5 0
+  (sorted_include_TCC5-1 nil 3482782183 nil
+   ("" (termination-tcc) nil nil) nil nil nil nil nil nil))
+ (sorted_include_TCC6 0
+  (sorted_include_TCC6-1 nil 3482782183 nil
+   ("" (cond-disjoint-tcc) nil nil) nil nil nil nil nil nil))
+ (sorted_include_TCC7 0
+  (sorted_include_TCC7-1 nil 3482782183 nil
+   ("" (cond-coverage-tcc) nil nil) nil nil nil nil nil nil)))
 

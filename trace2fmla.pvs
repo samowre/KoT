@@ -1,11 +1,11 @@
 trace2fmla[m, n: nat, i : upto(n)]: THEORY
 BEGIN
 
-  IMPORTING trace_resolution[m, n, i]
+  IMPORTING trace_resolution[m,n,i]
   IMPORTING resolution
 
-  k: VAR (tr_literal?)
-  cl: VAR (tr_clause?)
+  k: VAR (trace_resolution[m,n,i].tr_literal?)
+  cl, ck: VAR (trace_resolution[m,n,i].tr_clause?)
 
   % transforms ( n:nzint ) -> fmla = (f_not)? (atom(upred...))
   translate_lit(k): (literal?) = IF k > 0 
@@ -26,8 +26,16 @@ BEGIN
   
   % translation preserves order
   translate_cons: LEMMA
-    cons?(cl) IMPLIES
-     translate_clause(cl) = cons(translate_lit(car(cl)), translate_clause(cdr(cl)))
+     cons?(ck) =>
+     translate_clause(cons(car(ck), cdr(ck))) = cons(translate_lit(car(ck)), translate_clause(cdr(ck)))
+
+  neg_translate:  LEMMA
+     f_neg(translate_lit(k)) = translate_lit(-k)
+
+  lc, lk: VAR list[(trace_resolution[m,n,i].tr_literal?)]
+
+  translate_inclusion: LEMMA
+    subset(lk, lc) = subset(translate_clause(lk), translate_clause(lc))
 
 
 END trace2fmla

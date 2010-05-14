@@ -36,6 +36,19 @@ sortedlist   [ T: TYPE, key: {k: [T-> real]| injective?(k)} ]
 	=> 
 	key(car(sAA)) < key(e))
 
+  sorted_contains(e, sAA): RECURSIVE bool = 
+    CASES sAA OF
+      null: FALSE,
+      cons(f, sBB): IF key(e)<key(f) THEN FALSE
+      	      	    ELSIF key(e) = key(f) THEN TRUE
+		    ELSE sorted_contains(e, sBB)
+		    ENDIF
+    ENDCASES
+  MEASURE length(sAA)
+    
+  contains_lemma:  LEMMA
+    sorted_contains(e, sAA) = member(e, sAA)
+
   no_duplicates?(lAA) : bool = setlist?(lAA)
 
   sorted_implies_no_duplicates: LEMMA
