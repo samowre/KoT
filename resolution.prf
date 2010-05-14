@@ -1,5 +1,5 @@
 (resolution (literal_sentence 0
-             (literal_sentence-1 nil 3482530864 3482531137
+             (literal_sentence-1 nil 3482530864 3482806286
               ("" (skolem!)
                (("" (expand sentence?)
                  (("" (typepred lA!1)
@@ -70,51 +70,55 @@
                    nil))
                  nil))
                nil)
-              unfinished
-              ((sentence? const-decl "bool" fmla nil)
-               (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla
-                nil)
-               (arg adt-accessor-decl "[(f_not?) -> fmla]" fmla nil)
-               (prop_atom? const-decl "bool" resolution nil)
-               (nnint_plus_posint_is_posint application-judgement
-                "posint" integers nil)
-               (number nonempty-type-decl nil numbers nil)
-               (= const-decl "[T, T -> boolean]" equalities nil)
-               (term type-decl nil fmla nil)
-               (list type-decl nil list_adt nil)
-               (number_field_pred const-decl "[number -> boolean]"
-                number_fields nil)
-               (number_field nonempty-type-from-decl nil number_fields
-                nil)
-               (real_pred const-decl "[number_field -> boolean]" reals
-                          nil)
-               (real nonempty-type-from-decl nil reals nil)
-               (rational_pred const-decl "[real -> boolean]" rationals
-                              nil)
-               (rational nonempty-type-from-decl nil rationals nil)
-               (integer_pred const-decl "[rational -> boolean]"
-                             integers nil)
-               (int nonempty-type-eq-decl nil integers nil)
-               (>= const-decl "bool" reals nil)
-               (nat nonempty-type-eq-decl nil naturalnumbers nil)
-               (length def-decl "nat" list_props nil)
-               (atom? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
-               (funpred type-decl nil funpred_adt nil)
-               (arity shared-adt-accessor-decl "[funpred -> nat]"
-                      funpred_adt nil)
-               (pred? adt-def-decl "boolean" funpred_adt nil)
-               (pred adt-accessor-decl "[(atom?) -> (pred?)]" fmla nil)
+              proved
+              ((literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (termvars def-decl "list[(var?)]" fmla nil)
                (args adt-accessor-decl
                      "[d: (atom?) -> {ss: list[term] | length(ss) = arity(pred(d))}]"
                      fmla nil)
-               (boolean nonempty-type-decl nil booleans nil)
-               (bool nonempty-type-eq-decl nil booleans nil)
-               (NOT const-decl "[bool -> bool]" booleans nil)
-               (fmla type-decl nil fmla nil)
-               (literal? const-decl "bool" resolution nil))
-              273311 280 t shostak))
+               (pred adt-accessor-decl "[(atom?) -> (pred?)]" fmla nil)
+               (pred? adt-def-decl "boolean" funpred_adt nil)
+               (arity shared-adt-accessor-decl "[funpred -> nat]"
+                      funpred_adt nil)
+               (funpred type-decl nil funpred_adt nil)
+               (atom? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+               (length def-decl "nat" list_props nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (list type-decl nil list_adt nil)
+               (term type-decl nil fmla nil)
+               (= const-decl "[T, T -> boolean]" equalities nil)
+               (number nonempty-type-decl nil numbers nil)
+               (nnint_plus_posint_is_posint application-judgement
+                "posint" integers nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (arg adt-accessor-decl "[(f_not?) -> fmla]" fmla nil)
+               (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla
+                nil)
+               (sentence? const-decl "bool" fmla nil))
+              311 190 t shostak))
             (literal_list_sentence_list 0
-             (literal_list_sentence_list-1 nil 3482531212 3482531407
+             (literal_list_sentence_list-1 nil 3482531212 3482806292
               ("" (induct lAA)
                (("1" (grind) nil nil)
                 ("2" (skolem-typepred)
@@ -134,68 +138,168 @@
                    nil))
                  nil))
                nil)
-              unfinished
-              ((NOT const-decl "[bool -> bool]" booleans nil)
-               (literal_sentence formula-decl nil resolution nil)
-               (sentence? const-decl "bool" fmla nil)
-               (prop_atom? const-decl "bool" resolution nil)
+              proved
+              ((list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (literal? const-decl "bool" resolution nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil)
+               (fmla type-decl nil fmla nil)
+               (list_induction formula-decl nil list_adt nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (append def-decl "list[T]" list_props nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (literal_sentence formula-decl nil resolution nil)
+               (NOT const-decl "[bool -> bool]" booleans nil))
+              123 60 t shostak))
+            (member_lit_member_fmla 0
+             (member_lit_member_fmla-1 nil 3482787456 3482806418
+              ("" (induct lAA)
+               (("1" (grind) nil nil)
+                ("2" (skolem-typepred)
+                 (("2" (flatten)
+                   (("2" (skolem-typepred)
+                     (("2" (expand member 1 1)
+                       (("2" (expand member 1 2)
+                         (("2" (inst -4 lA!1) (("2" (grind) nil nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((NOT const-decl "[bool -> bool]" booleans nil)
                (list_induction formula-decl nil list_adt nil)
                (fmla type-decl nil fmla nil)
                (boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (literal? const-decl "bool" resolution nil)
-               (sentence_list? const-decl "bool" fmla nil)
+               (member def-decl "bool" list_props nil)
+               (= const-decl "[T, T -> boolean]" equalities nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (PRED type-eq-decl nil defined_types nil)
                (list type-decl nil list_adt nil))
-              194303 80 t shostak))
-            (member_lit_member_fmla 0
-             (member_lit_member_fmla-1 nil 3482787456 3482787463
-              ("" (postpone) nil nil) unfinished nil 7122 0 t shostak))
+              121101 70 t shostak))
+            (subset_lit_subset_fmla 0
+             (subset_lit_subset_fmla-1 nil 3482806424 3482806542
+              ("" (induct lAA)
+               (("1" (grind) nil nil)
+                ("2" (skolem-typepred)
+                 (("2" (flatten)
+                   (("2" (skolem-typepred)
+                     (("2" (expand subset 1)
+                       (("2" (inst -4 lBB!1)
+                         (("2" (use member_lit_member_fmla)
+                           (("2" (replace -1 1)
+                             (("2" (replace -5 1)
+                               (("2" (propax) nil nil)) nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((NOT const-decl "[bool -> bool]" booleans nil)
+               (member_lit_member_fmla formula-decl nil resolution nil)
+               (list_induction formula-decl nil list_adt nil)
+               (fmla type-decl nil fmla nil)
+               (boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (literal? const-decl "bool" resolution nil)
+               (subset def-decl "bool" minlist nil)
+               (= const-decl "[T, T -> boolean]" equalities nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (list type-decl nil list_adt nil))
+              118721 60 t shostak))
             (index_TCC1 0
-             (index_TCC1-1 nil 3482010882 3482790277
-              ("" (subtype-tcc) nil nil) unchecked
+             (index_TCC1-1 nil 3482010882 3482805006
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (literal? const-decl "bool" resolution nil)
                (prop_atom? const-decl "bool" resolution nil))
-              14 20 nil nil))
+              24 30 nil nil))
             (index_TCC2 0
-             (index_TCC2-1 nil 3482010882 3482790277
-              ("" (subtype-tcc) nil nil) unfinished
+             (index_TCC2-1 nil 3482010882 3482805006
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (literal? const-decl "bool" resolution nil)
+               (mult_divides2 application-judgement "(divides(m))"
+                divides nil)
+               (mult_divides1 application-judgement "(divides(n))"
+                divides nil)
+               (even_times_int_is_even application-judgement "even_int"
+                integers nil)
+               (nnint_times_nnint_is_nnint application-judgement
+                "nonneg_int" integers nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (prop_atom? const-decl "bool" resolution nil))
-              79 60 nil nil))
+              75 50 nil nil))
             (index_TCC3 0
-             (index_TCC3-1 nil 3482010882 3482790277
-              ("" (subtype-tcc) nil nil) unchecked
+             (index_TCC3-1 nil 3482010882 3482805006
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (literal? const-decl "bool" resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (prop_atom? const-decl "bool" resolution nil))
-              39 20 nil nil))
+              25 30 nil nil))
             (index_TCC4 0
-             (index_TCC4-1 nil 3482191174 3482790278
-              ("" (subtype-tcc) nil nil) unchecked
+             (index_TCC4-1 nil 3482191174 3482805006
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (literal? const-decl "bool" resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (prop_atom? const-decl "bool" resolution nil))
-              39 20 nil nil))
+              41 30 nil nil))
             (index_TCC5 0
-             (index_TCC5-1 nil 3482191799 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 108 100 nil
-              nil))
+             (index_TCC5-1 nil 3482191799 3482805006
+              ("" (subtype-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (literal? const-decl "bool" resolution nil)
+               (even_minus_odd_is_odd application-judgement "odd_int"
+                integers nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (nnint_times_nnint_is_nnint application-judgement
+                "nonneg_int" integers nil)
+               (even_times_int_is_even application-judgement "even_int"
+                integers nil)
+               (mult_divides1 application-judgement "(divides(n))"
+                divides nil)
+               (mult_divides2 application-judgement "(divides(m))"
+                divides nil))
+              101 80 nil nil))
             (index_inj 0
              (index_inj-1 nil 3482502770 3482503311
               ("" (skolem-typepred)
@@ -233,31 +337,424 @@
                nil)
               unfinished nil 540960 1730 t shostak))
             (IMP_sortedlist_TCC1 0
-             (IMP_sortedlist_TCC1-1 nil 3482519649 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 228 190 nil
-              nil))
+             (IMP_sortedlist_TCC1-1 nil 3482519649 3482805008
+              ("" (grind)
+               (("1" (case "x1!1 = atom(pred(x1!1), null)")
+                 (("1" (case "x2!1 = atom(pred(x2!1), null)")
+                   (("1" (replace -1 -11)
+                     (("1" (assert)
+                       (("1"
+                         (case "pred(x1!1) = upred(index(pred(x1!1)),0)")
+                         (("1"
+                           (case "pred(x2!1) = upred(index(pred(x2!1)),0)")
+                           (("1" (replace -1 -13)
+                             (("1" (assert) nil nil)) nil)
+                            ("2" (replace -10 1 RL)
+                             (("2"
+                               (delete
+                                2
+                                -1
+                                -2
+                                -3
+                                -4
+                                -5
+                                -6
+                                -7
+                                -8
+                                -10
+                                -11
+                                -12)
+                               (("2"
+                                 (case
+                                  "FORALL(p: (upred?)): p = upred(index(p),arity(p))")
+                                 (("1" (inst -1 "pred(x2!1)") nil nil)
+                                  ("2"
+                                   (delete -1 2)
+                                   (("2"
+                                     (induct p)
+                                     (("1" (grind) nil nil)
+                                      ("2" (grind) nil nil)
+                                      ("3" (grind) nil nil)
+                                      ("4" (grind) nil nil)
+                                      ("5" (grind) nil nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil)
+                          ("2"
+                           (case "FORALL(p: (upred?)): p = upred(index(p),arity(p))")
+                           (("1" (inst -1 "pred(x1!1)")
+                             (("1" (replace -6)
+                               (("1" (propax) nil nil)) nil))
+                             nil)
+                            ("2" (delete - 2 3)
+                             (("2" (induct p)
+                               (("1" (grind) nil nil)
+                                ("2" (grind) nil nil)
+                                ("3" (grind) nil nil)
+                                ("4" (grind) nil nil)
+                                ("5" (grind) nil nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil)
+                    ("2" (delete -1 -2 -3 -4 -5 -10 2)
+                     (("2" (generalize x2!1 "x2")
+                       (("1" (induct x2)
+                         (("1" (grind) nil nil) ("2" (grind) nil nil)
+                          ("3" (grind) nil nil) ("4" (grind) nil nil)
+                          ("5" (grind) nil nil) ("6" (grind) nil nil))
+                         nil)
+                        ("2" (grind) nil nil))
+                       nil))
+                     nil)
+                    ("3" (grind) nil nil))
+                   nil)
+                  ("2" (delete -5 -6 -7 -8 -9 2)
+                   (("2" (generalize x1!1 "x1")
+                     (("1" (induct x1)
+                       (("1" (grind) nil nil) ("2" (grind) nil nil)
+                        ("3" (grind) nil nil) ("4" (grind) nil nil)
+                        ("5" (grind) nil nil) ("6" (grind) nil nil))
+                       nil)
+                      ("2" (grind) nil nil))
+                     nil))
+                   nil)
+                  ("3" (grind) nil nil))
+                 nil)
+                ("2" (grind)
+                 (("2"
+                   (case "FORALL(p: (upred?)): p = upred(index(p),arity(p))")
+                   (("1"
+                     (case "FORALL(p: (upred?)): p = upred(index(p),arity(p))")
+                     (("1" (inst -1 "pred(arg(x1!1))")
+                       (("1" (inst -2 "pred(arg(x2!1))")
+                         (("1" (replace -1 -13)
+                           (("1" (assert)
+                             (("1"
+                               (case
+                                "FORALL(f: (f_not?)): f = f_not(arg(f))")
+                               (("1"
+                                 (case
+                                  "FORALL(f: (f_not?)): f = f_not(arg(f))")
+                                 (("1"
+                                   (inst -1 x1!1)
+                                   (("1"
+                                     (inst -2 x2!1)
+                                     (("1"
+                                       (replace -1 1)
+                                       (("1"
+                                         (replace -2 1)
+                                         (("1"
+                                           (assert)
+                                           (("1"
+                                             (case
+                                              "FORALL(a: (atom?)): a = atom(pred(a), args(a))")
+                                             (("1"
+                                               (case
+                                                "FORALL(a: (atom?)): a = atom(pred(a), args(a))")
+                                               (("1"
+                                                 (inst -1 "arg(x1!1)")
+                                                 (("1"
+                                                   (inst
+                                                    -2
+                                                    "arg(x2!1)")
+                                                   (("1"
+                                                     (case
+                                                      "args(arg(x1!1)) = null")
+                                                     (("1"
+                                                       (case
+                                                        "args(arg(x2!1)) = null")
+                                                       (("1"
+                                                         (replace
+                                                          -1
+                                                          -4)
+                                                         (("1"
+                                                           (replace
+                                                            -2
+                                                            -3)
+                                                           (("1"
+                                                             (replace
+                                                              -3
+                                                              1)
+                                                             (("1"
+                                                               (replace
+                                                                -4
+                                                                1)
+                                                               (("1"
+                                                                 (replace
+                                                                  -7
+                                                                  1)
+                                                                 (("1"
+                                                                   (replace
+                                                                    -8
+                                                                    1)
+                                                                   (("1"
+                                                                     (replace
+                                                                      -12
+                                                                      1)
+                                                                     (("1"
+                                                                       (replace
+                                                                        -17
+                                                                        1)
+                                                                       (("1"
+                                                                         (delete
+                                                                          -1
+                                                                          -2
+                                                                          -3
+                                                                          -4
+                                                                          -5
+                                                                          -6
+                                                                          -7
+                                                                          -8
+                                                                          -9)
+                                                                         (("1"
+                                                                           (delete
+                                                                            -1
+                                                                            -2
+                                                                            -3
+                                                                            -4
+                                                                            -5
+                                                                            -6
+                                                                            -7
+                                                                            -8
+                                                                            -9)
+                                                                           (("1"
+                                                                             (grind)
+                                                                             nil
+                                                                             nil))
+                                                                           nil))
+                                                                         nil))
+                                                                       nil))
+                                                                     nil))
+                                                                   nil))
+                                                                 nil))
+                                                               nil))
+                                                             nil))
+                                                           nil))
+                                                         nil)
+                                                        ("2"
+                                                         (delete
+                                                          -1
+                                                          -2
+                                                          -3
+                                                          -4
+                                                          -5
+                                                          -6
+                                                          -7
+                                                          -8
+                                                          -9
+                                                          -10
+                                                          -11
+                                                          -12
+                                                          -13
+                                                          -14
+                                                          -15
+                                                          -17
+                                                          2)
+                                                         (("2"
+                                                           (delete -2)
+                                                           (("2"
+                                                             (typepred
+                                                              "args(arg(x2!1))")
+                                                             (("2"
+                                                               (grind)
+                                                               nil
+                                                               nil))
+                                                             nil))
+                                                           nil))
+                                                         nil))
+                                                       nil)
+                                                      ("2"
+                                                       (delete
+                                                        -1
+                                                        -2
+                                                        -3
+                                                        -4
+                                                        -5
+                                                        -6
+                                                        -7
+                                                        -8
+                                                        -9
+                                                        -11
+                                                        -12
+                                                        -13
+                                                        -14
+                                                        -15
+                                                        -16
+                                                        -17
+                                                        2)
+                                                       (("2"
+                                                         (grind)
+                                                         (("2"
+                                                           (typepred
+                                                            "args(arg(x1!1))")
+                                                           (("2"
+                                                             (grind)
+                                                             nil
+                                                             nil))
+                                                           nil))
+                                                         nil))
+                                                       nil))
+                                                     nil))
+                                                   nil))
+                                                 nil)
+                                                ("2" (propax) nil nil))
+                                               nil)
+                                              ("2"
+                                               (delete - 2)
+                                               (("2"
+                                                 (induct a)
+                                                 (("1" (grind) nil nil)
+                                                  ("2" (grind) nil nil)
+                                                  ("3" (grind) nil nil)
+                                                  ("4" (grind) nil nil)
+                                                  ("5"
+                                                   (grind)
+                                                   nil
+                                                   nil))
+                                                 nil))
+                                               nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil)
+                                  ("2" (propax) nil nil))
+                                 nil)
+                                ("2"
+                                 (delete - 2)
+                                 (("2"
+                                   (induct f)
+                                   (("1" (grind) nil nil)
+                                    ("2" (grind) nil nil)
+                                    ("3" (grind) nil nil)
+                                    ("4" (grind) nil nil)
+                                    ("5" (grind) nil nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil)
+                      ("2" (propax) nil nil))
+                     nil)
+                    ("2" (delete - 2)
+                     (("2" (induct p)
+                       (("1" (grind) nil nil) ("2" (grind) nil nil)
+                        ("3" (grind) nil nil) ("4" (grind) nil nil)
+                        ("5" (grind) nil nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((args adt-accessor-decl
+                     "[d: (atom?) -> {ss: list[term] | length(ss) = arity(pred(d))}]"
+                     fmla nil)
+               (f_not adt-constructor-decl "[fmla -> (f_not?)]" fmla
+                nil)
+               (null adt-constructor-decl "(null?)" list_adt nil)
+               (null? adt-recognizer-decl "[list -> boolean]" list_adt
+                nil)
+               (pred adt-accessor-decl "[(atom?) -> (pred?)]" fmla nil)
+               (atom adt-constructor-decl
+                     "[[pred: (pred?), {ss: list[term] | length(ss) = arity(pred)}] -> (atom?)]"
+                     fmla nil)
+               (atom? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+               (arity shared-adt-accessor-decl "[funpred -> nat]"
+                      funpred_adt nil)
+               (length def-decl "nat" list_props nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number nonempty-type-decl nil numbers nil)
+               (list type-decl nil list_adt nil)
+               (term type-decl nil fmla nil)
+               (pred? adt-def-decl "boolean" funpred_adt nil)
+               (funpred type-decl nil funpred_adt nil)
+               (= const-decl "[T, T -> boolean]" equalities nil)
+               (OR const-decl "[bool, bool -> bool]" booleans nil)
+               (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla
+                nil)
+               (arg adt-accessor-decl "[(f_not?) -> fmla]" fmla nil)
+               (fmla_induction formula-decl nil fmla nil)
+               (nnint_plus_posint_is_posint application-judgement
+                "posint" integers nil)
+               (> const-decl "bool" reals nil)
+               (AND const-decl "[bool, bool -> bool]" booleans nil)
+               (upred? adt-recognizer-decl "[funpred -> boolean]"
+                funpred_adt nil)
+               (upred adt-constructor-decl "[[nat, nat] -> (upred?)]"
+                funpred_adt nil)
+               (index shared-adt-accessor-decl "[funpred -> nat]"
+                      funpred_adt nil)
+               (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+               (funpred_induction formula-decl nil funpred_adt nil)
+               (even_minus_odd_is_odd application-judgement "odd_int"
+                integers nil)
+               (nnint_times_nnint_is_nnint application-judgement
+                "nonneg_int" integers nil)
+               (even_times_int_is_even application-judgement "even_int"
+                integers nil)
+               (mult_divides1 application-judgement "(divides(n))"
+                divides nil)
+               (mult_divides2 application-judgement "(divides(m))"
+                divides nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (literal? const-decl "bool" resolution nil)
+               (injective? const-decl "bool" functions nil)
+               (index const-decl "posnat" resolution nil)
+               (prop_atom? const-decl "bool" resolution nil))
+              1482 1130 t nil))
             (clause_prop_TCC1 0
-             (clause_prop_TCC1-1 nil 3482191799 3482790278
-              ("" (subtype-tcc) nil nil) unchecked
+             (clause_prop_TCC1-1 nil 3482191799 3482805008
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (literal? const-decl "bool" resolution nil))
-              12 10 nil nil))
+              26 10 nil nil))
             (clause_prop_TCC2 0
-             (clause_prop_TCC2-1 nil 3482191799 3482790278
-              ("" (subtype-tcc) nil nil) unchecked
+             (clause_prop_TCC2-1 nil 3482191799 3482805008
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (literal? const-decl "bool" resolution nil))
-              28 10 nil nil))
+              14 10 nil nil))
             (clause_prop 0
              (clause_prop-1 nil 3482192365 3482192814
               ("" (induct-and-simplify lAA)
@@ -329,54 +826,111 @@
                (list_induction formula-decl nil list_adt nil))
               449378 900 t shostak))
             (include_clause_TCC1 0
-             (include_clause_TCC1-1 nil 3482270929 3482790278
-              ("" (subtype-tcc) nil nil) unchecked
+             (include_clause_TCC1-1 nil 3482270929 3482805008
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (literal? const-decl "bool" resolution nil)
                (clause? const-decl "bool" resolution nil))
               26 20 nil nil))
             (include_clause_TCC2 0
-             (include_clause_TCC2-1 nil 3482270929 3482790278
-              ("" (subtype-tcc) nil nil) unchecked
+             (include_clause_TCC2-1 nil 3482270929 3482805008
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (literal? const-decl "bool" resolution nil)
                (clause? const-decl "bool" resolution nil))
-              26 10 nil nil))
+              26 20 nil nil))
             (nclause2fmla_TCC1 0
-             (nclause2fmla_TCC1-1 nil 3482270929 3482790278
-              ("" (subtype-tcc) nil nil) unchecked
+             (nclause2fmla_TCC1-1 nil 3482270929 3482805008
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (literal? const-decl "bool" resolution nil)
                (clause? const-decl "bool" resolution nil)
                (nclause? const-decl "bool" resolution nil))
-              12 20 nil nil))
+              12 10 nil nil))
             (nclause2fmla_TCC2 0
-             (nclause2fmla_TCC2-1 nil 3482270929 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 38 30 nil nil))
+             (nclause2fmla_TCC2-1 nil 3482270929 3482805008
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use clause_prop)
+                   (("" (replace -3)
+                     (("" (flatten)
+                       (("" (split -1)
+                         (("1" (grind) nil nil) ("2" (propax) nil nil)
+                          ("3" (flatten)
+                           (("3" (replace -2)
+                             (("3" (expand nclause? 2)
+                               (("3" (assert) nil nil)) nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((sorted? def-decl "bool" sortedlist nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (nonneg_int nonempty-type-eq-decl nil integers nil)
+               (> const-decl "bool" reals nil)
+               (posnat nonempty-type-eq-decl nil integers nil)
+               (index const-decl "posnat" resolution nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (clause_prop formula-decl nil resolution nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              89 80 t nil))
             (nclause2fmla_TCC3 0
-             (nclause2fmla_TCC3-1 nil 3482270929 3482790278
-              ("" (termination-tcc) nil nil) unchecked
+             (nclause2fmla_TCC3-1 nil 3482270929 3482805008
+              ("" (termination-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (literal? const-decl "bool" resolution nil)
                (clause? const-decl "bool" resolution nil)
                (nclause? const-decl "bool" resolution nil)
@@ -385,7 +939,7 @@
                 "posint" integers nil)
                (real_lt_is_strict_total_order name-judgement
                 "(strict_total_order?[real])" real_props nil))
-              54 30 nil nil))
+              56 40 nil nil))
             (nclause2fmla_sentence 0
              (nclause2fmla_sentence-1 nil 3482531702 3482532128
               ("" (induct nclAA)
@@ -518,45 +1072,221 @@
                 nil))
               44769 90 t shostak))
             (or_reduction_TCC1 0
-             (or_reduction_TCC1-1 nil 3482275916 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 21 20 nil nil))
+             (or_reduction_TCC1-1 nil 3482275916 3482805008
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((sentence_list? const-decl "bool" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              17 20 t nil))
             (or_reduction_TCC2 0
-             (or_reduction_TCC2-1 nil 3482275916 3482790278
-              ("" (subtype-tcc) nil nil) unchecked
+             (or_reduction_TCC2-1 nil 3482275916 3482805008
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (literal? const-decl "bool" resolution nil)
                (clause? const-decl "bool" resolution nil)
                (nclause? const-decl "bool" resolution nil))
               26 10 nil nil))
             (or_reduction_TCC3 0
-             (or_reduction_TCC3-1 nil 3482275916 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 37 20 nil nil))
+             (or_reduction_TCC3-1 nil 3482275916 3482805008
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use literal_list_sentence_list)
+                   (("" (use nclause2fmla_sentence)
+                     (("" (grind) nil nil)) nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((nclause2fmla_sentence formula-decl nil resolution nil)
+               (nclause? const-decl "bool" resolution nil)
+               (append def-decl "list[T]" list_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (literal_list_sentence_list formula-decl nil resolution
+                nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              121 110 t nil))
             (not_or_reduction_TCC1 0
-             (not_or_reduction_TCC1-1 nil 3482275916 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 23 20 nil nil))
+             (not_or_reduction_TCC1-1 nil 3482275916 3482805008
+              ("" (subtype-tcc)
+               (("" (use nclause2fmla_sentence) (("" (grind) nil nil))
+                 nil))
+               nil)
+              proved
+              ((nclause2fmla_sentence formula-decl nil resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (index const-decl "posnat" resolution nil)
+               (posnat nonempty-type-eq-decl nil integers nil)
+               (> const-decl "bool" reals nil)
+               (nonneg_int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number nonempty-type-decl nil numbers nil)
+               (sorted? def-decl "bool" sortedlist nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (literal? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (nclause? const-decl "bool" resolution nil)
+               (sentence_list? const-decl "bool" fmla nil))
+              112 90 t nil))
             (offset_proof_step_TCC1 0
-             (offset_proof_step_TCC1-1 nil 3482700134 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 69 30 nil nil))
+             (offset_proof_step_TCC1-1 nil 3482700134 3482805009
+              ("" (subtype-tcc)
+               (("" (grind)
+                 ((""
+                   (use every_forall
+                        ("P"
+                         "LAMBDA (x: numfield):real_pred(x) AND rational_pred(x) AND integer_pred(x) AND x >= 0"
+                         "l"
+                         "map[nat, numfield](LAMBDA (j: nat): j + n!1)(ps!1`subs)"))
+                   (("" (replace -1)
+                     (("" (hide -1)
+                       (("" (skolem-typepred)
+                         (("" (flatten)
+                           (("" (generalize "ps!1`subs" l)
+                             (("" (induct l)
+                               (("1" (grind) nil nil)
+                                ("2"
+                                 (skolem-typepred)
+                                 (("2"
+                                   (flatten)
+                                   (("2"
+                                     (expand map -5)
+                                     (("2"
+                                       (expand member -5)
+                                       (("2"
+                                         (split -5)
+                                         (("1" (assert) nil nil)
+                                          ("2" (assert) nil nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+               (member def-decl "bool" list_props nil)
+               (nnint_plus_nnint_is_nnint application-judgement
+                "nonneg_int" integers nil)
+               (list_induction formula-decl nil list_adt nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (proof_step type-eq-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rule type-decl nil proof nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (map adt-def-decl "list[T1]" list_adt_map nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (AND const-decl "[bool, bool -> bool]" booleans nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (every_forall formula-decl nil minlist nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (>= const-decl "bool" reals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil))
+              224 140 t nil))
             (ax_proof_step_TCC1 0
-             (ax_proof_step_TCC1-1 nil 3482715509 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 18 20 nil nil))
+             (ax_proof_step_TCC1-1 nil 3482715509 3482805009
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((sentence_list? const-decl "bool" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              15 10 t nil))
             (concl_ax_TCC1 0
-             (concl_ax_TCC1-1 nil 3482714865 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 28 10 nil nil))
-            (concl_ax_TCC2 0
-             (concl_ax_TCC2-1 nil 3482715509 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 7 0 nil nil))
+             (concl_ax_TCC1-1 nil 3482714865 3482805009
+              ("" (grind) nil nil) proved
+              ((every adt-def-decl "boolean" list_adt nil)) 10 10 t
+              nil))
             (RR_ax_TCC1 0
-             (RR_ax_TCC1-1 nil 3482715509 3482790278
-              ("" (cond-coverage-tcc) nil nil) unchecked
+             (RR_ax_TCC1-1 nil 3482715509 3482805009
+              ("" (cond-coverage-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -577,9 +1307,9 @@
                (below type-eq-decl nil naturalnumbers nil)
                (real_lt_is_strict_total_order name-judgement
                 "(strict_total_order?[real])" real_props nil))
-              11 10 nil nil))
+              32 20 nil nil))
             (lemma_ax 0
-             (lemma_ax-1 nil 3482714966 3482715249
+             (lemma_ax-1 nil 3482714966 3482802634
               ("" (skolem-typepred)
                (("" (flatten)
                  (("" (split)
@@ -616,28 +1346,87 @@
                  nil))
                nil)
               unfinished
-              ((checkProof const-decl "bool" proof nil)
-               (two_premise? adt-def-decl "boolean" proof nil)
+              ((ax_proof_step const-decl "proof_step" resolution nil)
+               (concl_ax const-decl "proof_step" resolution nil)
+               (RR_ax const-decl "ne_proof_seq" resolution nil)
+               (conclusion const-decl "sequent" proof nil)
+               (even_minus_odd_is_odd application-judgement "odd_int"
+                integers nil)
+               (boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (< const-decl "bool" reals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (fmla type-decl nil fmla nil)
+               (list type-decl nil list_adt nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (> const-decl "bool" reals nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (below type-eq-decl nil naturalnumbers nil)
+               (subset_rule? const-decl "bool" sequents nil)
+               (subset def-decl "bool" minlist nil)
+               (= const-decl "[T, T -> boolean]" equalities nil)
+               (ax_rule? const-decl "bool" sequents nil)
+               (member def-decl "bool" list_props nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (one_premise? adt-def-decl "boolean" proof nil)
                (real_lt_is_strict_total_order name-judgement
                 "(strict_total_order?[real])" real_props nil)
-               (one_premise? adt-def-decl "boolean" proof nil)
+               (two_premise? adt-def-decl "boolean" proof nil)
+               (checkProof const-decl "bool" proof nil))
+              1459 730 t shostak))
+            (concl_norr_TCC1 0
+             (concl_norr_TCC1-1 nil 3482700134 3482805009
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((append def-decl "list[T]" list_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
                (sentence_list? const-decl "bool" fmla nil)
-               (member def-decl "bool" list_props nil)
-               (ax_rule? const-decl "bool" sequents nil)
-               (= const-decl "[T, T -> boolean]" equalities nil)
-               (subset def-decl "bool" minlist nil)
-               (subset_rule? const-decl "bool" sequents nil)
-               (below type-eq-decl nil naturalnumbers nil)
-               (ne_proof_seq type-eq-decl nil proof nil)
-               (> const-decl "bool" reals nil)
-               (proof_seq type-eq-decl nil proof nil)
-               (proof_step type-eq-decl nil proof nil)
-               (sequent type-eq-decl nil sequents nil)
-               (rule type-decl nil proof nil)
-               (below type-eq-decl nil nat_types nil)
                (list type-decl nil list_adt nil)
+               (sentence? const-decl "bool" fmla nil)
                (fmla type-decl nil fmla nil)
-               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              34 20 t nil))
+            (concl_norr_TCC2 0
+             (concl_norr_TCC2-1 nil 3482700134 3482805009
+              ("" (subtype-tcc) nil nil) proved nil 5 10 nil nil))
+            (concl_norr_TCC3 0
+             (concl_norr_TCC3-1 nil 3482700134 3482805009
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((every adt-def-decl "boolean" list_adt nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (int_plus_int_is_int application-judgement "int"
+                integers nil)
+               (posint_plus_nnint_is_posint application-judgement
+                "posint" integers nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (posnat nonempty-type-eq-decl nil integers nil)
+               (nonneg_int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
                (int nonempty-type-eq-decl nil integers nil)
                (integer_pred const-decl "[rational -> boolean]"
@@ -645,7 +1434,7 @@
                (rational nonempty-type-from-decl nil rationals nil)
                (rational_pred const-decl "[real -> boolean]" rationals
                               nil)
-               (< const-decl "bool" reals nil)
+               (> const-decl "bool" reals nil)
                (real nonempty-type-from-decl nil reals nil)
                (real_pred const-decl "[number_field -> boolean]" reals
                           nil)
@@ -654,31 +1443,24 @@
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
                (number nonempty-type-decl nil numbers nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence? const-decl "bool" fmla nil)
+               (fmla type-decl nil fmla nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
-               (boolean nonempty-type-decl nil booleans nil)
-               (even_minus_odd_is_odd application-judgement "odd_int"
-                integers nil)
-               (conclusion const-decl "sequent" proof nil)
-               (RR_ax const-decl "ne_proof_seq" resolution nil)
-               (concl_ax const-decl "proof_step" resolution nil)
-               (ax_proof_step const-decl "proof_step" resolution nil))
-              283077 770 t shostak))
-            (concl_norr_TCC1 0
-             (concl_norr_TCC1-1 nil 3482700134 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 33 10 nil nil))
-            (concl_norr_TCC2 0
-             (concl_norr_TCC2-1 nil 3482700134 3482790278
-              ("" (subtype-tcc) nil nil) unchecked nil 3 0 nil nil))
-            (concl_norr_TCC3 0
-             (concl_norr_TCC3-1 nil 3482700134 3482790278
-              ("" (subtype-tcc) nil nil) unfinished nil 83 80 nil nil))
+               (boolean nonempty-type-decl nil booleans nil))
+              83 50 t nil))
             (RR_norr_TCC1 0
-             (RR_norr_TCC1-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_norr_TCC1-1 nil 3482700134 3482805009
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -699,7 +1481,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -712,13 +1493,17 @@
                 integers nil)
                (posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil))
-              85 60 nil nil))
+              92 70 nil nil))
             (RR_norr_TCC2 0
-             (RR_norr_TCC2-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_norr_TCC2-1 nil 3482700134 3482805009
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -739,7 +1524,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -764,13 +1548,17 @@
                 "posint" integers nil)
                (minus_odd_is_odd application-judgement "odd_int"
                 integers nil))
-              152 110 nil nil))
+              164 130 nil nil))
             (RR_norr_TCC3 0
-             (RR_norr_TCC3-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_norr_TCC3-1 nil 3482700134 3482805009
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -791,7 +1579,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -806,13 +1593,17 @@
                 integers nil)
                (posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil))
-              92 70 nil nil))
+              99 60 nil nil))
             (RR_norr_TCC4 0
-             (RR_norr_TCC4-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_norr_TCC4-1 nil 3482700134 3482805009
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -833,7 +1624,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -848,13 +1638,17 @@
                 integers nil)
                (posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil))
-              92 60 nil nil))
+              114 70 nil nil))
             (RR_norr_TCC5 0
-             (RR_norr_TCC5-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_norr_TCC5-1 nil 3482700134 3482805009
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -875,7 +1669,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -890,13 +1683,17 @@
                 integers nil)
                (posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil))
-              91 50 nil nil))
+              98 80 nil nil))
             (RR_norr_TCC6 0
-             (RR_norr_TCC6-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_norr_TCC6-1 nil 3482700134 3482805009
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -917,7 +1714,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -932,17 +1728,17 @@
                 integers nil)
                (posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil))
-              106 60 nil nil))
+              115 70 nil nil))
             (RR_norr_TCC7 0
-             (RR_norr_TCC7-1 nil 3482700134 3482790279
-              ("" (cond-disjoint-tcc) nil nil) unfinished nil 219 170
-              nil nil))
-            (RR_norr_TCC8 0
-             (RR_norr_TCC8-1 nil 3482700134 3482790279
-              ("" (cond-coverage-tcc) nil nil) unchecked
+             (RR_norr_TCC7-1 nil 3482700134 3482805010
+              ("" (cond-disjoint-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -963,7 +1759,59 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (below type-eq-decl nil naturalnumbers nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (< const-decl "bool" reals nil)
+               (nnint_plus_nnint_is_nnint application-judgement
+                "nonneg_int" integers nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (even_minus_odd_is_odd application-judgement "odd_int"
+                integers nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (posint_plus_nnint_is_posint application-judgement
+                "posint" integers nil))
+              235 160 nil nil))
+            (RR_norr_TCC8 0
+             (RR_norr_TCC8-1 nil 3482700134 3482805010
+              ("" (cond-coverage-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
                (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -986,15 +1834,15 @@
                 "nonneg_int" integers nil)
                (posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil))
-              128 90 nil nil))
+              154 120 nil nil))
             (RR_norr_TCC9 0
-             (RR_norr_TCC9-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_norr_TCC9-1 nil 3482700134 3482805010
+              ("" (subtype-tcc) nil nil) proved
               ((posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil))
-              40 20 nil nil))
+              28 30 nil nil))
             (lemma_norr 0
-             (lemma_norr-1 nil 3482705990 3482706457
+             (lemma_norr-1 nil 3482705990 3482804812
               ("" (skolem-typepred)
                (("" (flatten)
                  (("" (split)
@@ -1039,7 +1887,7 @@
                    nil))
                  nil))
                nil)
-              unfinished
+              unchecked
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1067,6 +1915,9 @@
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (posint_plus_nnint_is_posint application-judgement
                 "posint" integers nil)
                (nnint_plus_posint_is_posint application-judgement
@@ -1086,7 +1937,7 @@
                 nil)
                (+ const-decl "[numfield, numfield -> numfield]"
                   number_fields nil)
-               (AND const-decl "[bool, bool -> bool]" booleans nil)
+               (AND const-decl "[bool, bool -> bool]" booleans nil) nil
                (even_minus_odd_is_odd application-judgement "odd_int"
                 integers nil)
                (subset_is_partial_order name-judgement
@@ -1113,6 +1964,7 @@
                (reflex_rule? const-decl "bool" sequents nil)
                (finseq_appl const-decl "[below[length(fs)] -> T]"
                 finite_sequences nil)
+               nil nil
                (numfield nonempty-type-eq-decl nil number_fields nil)
                (- const-decl "[numfield, numfield -> numfield]"
                   number_fields nil)
@@ -1121,27 +1973,48 @@
                (two_premise? adt-def-decl "boolean" proof nil)
                (one_premise? adt-def-decl "boolean" proof nil)
                (empty_seq const-decl "finseq" finite_sequences nil)
-               (sentence_list? const-decl "bool" fmla nil)
-               (sentence? const-decl "bool" fmla nil)
                (real_gt_is_strict_total_order name-judgement
                 "(strict_total_order?[real])" real_props nil)
+               nil nil nil nil nil nil (< const-decl "bool" reals nil)
                (below type-eq-decl nil naturalnumbers nil)
-               (fmla type-decl nil fmla nil)
-               (< const-decl "bool" reals nil)
                (checkProof const-decl "bool" proof nil))
-              322377 15980 t shostak))
+              23540 16130 t shostak))
             (concl_orr_TCC1 0
-             (concl_orr_TCC1-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unfinished nil 31 10 nil nil))
+             (concl_orr_TCC1-1 nil 3482700134 3482805163
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((append def-decl "list[T]" list_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence? const-decl "bool" fmla nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              13918 30 t nil))
             (concl_orr_TCC2 0
-             (concl_orr_TCC2-1 nil 3482700134 3482790279
-              ("" (subtype-tcc) nil nil) unfinished nil 7 0 nil nil))
+             (concl_orr_TCC2-1 nil 3482700134 3482805181
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((every adt-def-decl "boolean" list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence? const-decl "bool" fmla nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              10400 50 t nil))
             (RR_orr_TCC1 0
-             (RR_orr_TCC1-1 nil 3482700134 3482790280
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_orr_TCC1-1 nil 3482700134 3482805010
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -1162,7 +2035,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -1173,13 +2045,17 @@
                (+ const-decl "[numfield, numfield -> numfield]"
                   number_fields nil)
                (below type-eq-decl nil naturalnumbers nil))
-              37 20 nil nil))
+              43 20 nil nil))
             (RR_orr_TCC2 0
-             (RR_orr_TCC2-1 nil 3482700134 3482790280
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_orr_TCC2-1 nil 3482700134 3482805010
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -1200,7 +2076,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -1211,13 +2086,17 @@
                (+ const-decl "[numfield, numfield -> numfield]"
                   number_fields nil)
                (below type-eq-decl nil naturalnumbers nil))
-              50 10 nil nil))
+              55 30 nil nil))
             (RR_orr_TCC3 0
-             (RR_orr_TCC3-1 nil 3482700134 3482790280
-              ("" (subtype-tcc) nil nil) unchecked
+             (RR_orr_TCC3-1 nil 3482700134 3482805010
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -1238,7 +2117,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -1249,13 +2127,17 @@
                (+ const-decl "[numfield, numfield -> numfield]"
                   number_fields nil)
                (below type-eq-decl nil naturalnumbers nil))
-              37 30 nil nil))
+              56 30 nil nil))
             (RR_orr_TCC4 0
-             (RR_orr_TCC4-1 nil 3482700134 3482790280
-              ("" (cond-disjoint-tcc) nil nil) unchecked
+             (RR_orr_TCC4-1 nil 3482700134 3482805010
+              ("" (cond-disjoint-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -1276,7 +2158,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -1295,13 +2176,17 @@
                (+ const-decl "[numfield, numfield -> numfield]"
                   number_fields nil)
                (below type-eq-decl nil naturalnumbers nil))
-              60 40 nil nil))
+              69 60 nil nil))
             (RR_orr_TCC5 0
-             (RR_orr_TCC5-1 nil 3482700134 3482790280
-              ("" (cond-coverage-tcc) nil nil) unchecked
+             (RR_orr_TCC5-1 nil 3482700134 3482805010
+              ("" (cond-coverage-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
@@ -1322,7 +2207,6 @@
                              integers nil)
                (int nonempty-type-eq-decl nil integers nil)
                (>= const-decl "bool" reals nil)
-               (list type-decl nil list_adt nil)
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
@@ -1341,12 +2225,12 @@
                (+ const-decl "[numfield, numfield -> numfield]"
                   number_fields nil)
                (below type-eq-decl nil naturalnumbers nil))
-              74 50 nil nil))
+              82 50 nil nil))
             (RR_orr_TCC6 0
-             (RR_orr_TCC6-1 nil 3482700134 3482790280
-              ("" (subtype-tcc) nil nil) unchecked nil 4 10 nil nil))
+             (RR_orr_TCC6-1 nil 3482700134 3482805010
+              ("" (subtype-tcc) nil nil) proved nil 5 10 nil nil))
             (lemma_orr 0
-             (lemma_orr-1 nil 3482704894 3482705960
+             (lemma_orr-1 nil 3482704894 3482804998
               ("" (skolem-typepred)
                (("" (flatten)
                  (("" (split)
@@ -1380,7 +2264,7 @@
                    nil))
                  nil))
                nil)
-              unfinished
+              proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1408,6 +2292,9 @@
                (proof_step type-eq-decl nil proof nil)
                (proof_seq type-eq-decl nil proof nil)
                (ne_proof_seq type-eq-decl nil proof nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (sentence_list? const-decl "bool" fmla nil)
                (nnint_plus_posint_is_posint application-judgement
                 "posint" integers nil)
                (real_lt_is_strict_total_order name-judgement
@@ -1420,7 +2307,6 @@
                (RR_orr const-decl "ne_proof_seq" resolution nil)
                (concl_orr const-decl "proof_step" resolution nil)
                (< const-decl "bool" reals nil)
-               (fmla type-decl nil fmla nil)
                (below type-eq-decl nil naturalnumbers nil)
                (real_gt_is_strict_total_order name-judgement
                 "(strict_total_order?[real])" real_props nil)
@@ -1446,8 +2332,6 @@
                (empty_seq const-decl "finseq" finite_sequences nil)
                (finseq_appl const-decl "[below[length(fs)] -> T]"
                 finite_sequences nil)
-               (sentence_list? const-decl "bool" fmla nil)
-               (sentence? const-decl "bool" fmla nil)
                (two_premise? adt-def-decl "boolean" proof nil)
                (one_premise? adt-def-decl "boolean" proof nil)
                (real_ge_is_total_order name-judgement
@@ -1459,9 +2343,242 @@
                 "(partial_order?[set[T]])" sets_lemmas nil)
                (= const-decl "[T, T -> boolean]" equalities nil)
                (checkProof const-decl "bool" proof nil))
-              5185 2930 t shostak))
+              4225 2850 t shostak))
+            (concl_subsetr_TCC1 0
+             (concl_subsetr_TCC1-1 nil 3482804991 3482805010
+              ("" (subtype-tcc) nil nil) proved nil 4 0 nil nil))
+            (concl_subsetr_TCC2 0
+             (concl_subsetr_TCC2-1 nil 3482804991 3482805206
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((every adt-def-decl "boolean" list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              7473 20 t nil))
+            (RR_subsetr_TCC1 0
+             (RR_subsetr_TCC1-1 nil 3482804991 3482805010
+              ("" (subtype-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              41 30 nil nil))
+            (RR_subsetr_TCC2 0
+             (RR_subsetr_TCC2-1 nil 3482804991 3482805010
+              ("" (subtype-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              53 40 nil nil))
+            (RR_subsetr_TCC3 0
+             (RR_subsetr_TCC3-1 nil 3482804991 3482805010
+              ("" (subtype-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              40 20 nil nil))
+            (RR_subsetr_TCC4 0
+             (RR_subsetr_TCC4-1 nil 3482804991 3482805010
+              ("" (cond-disjoint-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (posint_plus_nnint_is_posint application-judgement
+                "posint" integers nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              80 60 nil nil))
+            (RR_subsetr_TCC5 0
+             (RR_subsetr_TCC5-1 nil 3482804991 3482805011
+              ("" (cond-coverage-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (posint_plus_nnint_is_posint application-judgement
+                "posint" integers nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              67 60 nil nil))
+            (RR_subsetr_TCC6 0
+             (RR_subsetr_TCC6-1 nil 3482804991 3482805011
+              ("" (subtype-tcc) nil nil) proved nil 19 0 nil nil))
             (lemma_subsetr 0
-             (lemma_subsetr-1 nil 3482703868 3482705969
+             (lemma_subsetr-1 nil 3482703868 3482797617
               ("" (skolem-typepred)
                (("" (flatten)
                  (("" (split)
@@ -1585,12 +2702,247 @@
                (one_premise? adt-def-decl "boolean" proof nil)
                (= const-decl "[T, T -> boolean]" equalities nil)
                (checkProof const-decl "bool" proof nil))
-              3432 2550 t shostak))
+              4196 2590 t shostak))
             (concl_negr_TCC1 0
-             (concl_negr_TCC1-1 nil 3482764722 3482790280
-              ("" (subtype-tcc) nil nil) unfinished nil 31 10 nil nil))
+             (concl_negr_TCC1-1 nil 3482764722 3482805229
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence? const-decl "bool" fmla nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              6095 30 t nil))
+            (RR_negr_TCC1 0
+             (RR_negr_TCC1-1 nil 3482804991 3482805011
+              ("" (subtype-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              54 30 nil nil))
+            (RR_negr_TCC2 0
+             (RR_negr_TCC2-1 nil 3482804991 3482805011
+              ("" (subtype-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              40 30 nil nil))
+            (RR_negr_TCC3 0
+             (RR_negr_TCC3-1 nil 3482804991 3482805011
+              ("" (subtype-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              53 30 nil nil))
+            (RR_negr_TCC4 0
+             (RR_negr_TCC4-1 nil 3482804991 3482805011
+              ("" (cond-disjoint-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (posint_plus_nnint_is_posint application-judgement
+                "posint" integers nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              67 50 nil nil))
+            (RR_negr_TCC5 0
+             (RR_negr_TCC5-1 nil 3482804991 3482805011
+              ("" (cond-coverage-tcc) nil nil) proved
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (posint_plus_nnint_is_posint application-judgement
+                "posint" integers nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (< const-decl "bool" reals nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (+ const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (below type-eq-decl nil naturalnumbers nil))
+              81 50 nil nil))
+            (RR_negr_TCC6 0
+             (RR_negr_TCC6-1 nil 3482804991 3482805011
+              ("" (subtype-tcc) nil nil) proved nil 6 10 nil nil))
             (lemma_negr 0
-             (lemma_negr-1 nil 3482764774 3482764949
+             (lemma_negr-1 nil 3482764774 3482797627
               ("" (skolem-typepred)
                (("" (flatten)
                  (("" (split)
@@ -1615,87 +2967,101 @@
                  nil))
                nil)
               unfinished
-              ((checkProof const-decl "bool" proof nil)
-               (= const-decl "[T, T -> boolean]" equalities nil)
-               (subset_is_partial_order name-judgement
-                "(partial_order?[set[T]])" sets_lemmas nil)
-               (numfield nonempty-type-eq-decl nil number_fields nil)
-               (- const-decl "[numfield, numfield -> numfield]"
-                  number_fields nil)
-               (real_ge_is_total_order name-judgement
-                "(total_order?[real])" real_props nil)
-               (ax_rule? const-decl "bool" sequents nil)
-               (subset_rule? const-decl "bool" sequents nil)
-               (list2set def-decl "set[T]" list2set nil)
-               (member const-decl "bool" sets nil)
-               (add const-decl "(nonempty?)" sets nil)
-               (subset? const-decl "bool" sets nil)
-               (or_rule? const-decl "bool" sequents nil)
-               (nor_rule? const-decl "bool" sequents nil)
-               (neg_rule? const-decl "bool" sequents nil)
-               (cut_rule? const-decl "bool" sequents nil)
-               (exists_rule? const-decl "bool" sequents nil)
-               (f_neg const-decl "fmla" fmla nil)
-               (forall_rule? const-decl "bool" sequents nil)
-               (fschema_rule? const-decl "bool" sequents nil)
-               (pschema_rule? const-decl "bool" sequents nil)
-               (equality? const-decl "bool" sequents nil)
-               (nth def-decl "T" list_props nil)
-               (refl_equality? const-decl "bool" sequents nil)
-               (reflex_rule? const-decl "bool" sequents nil)
-               (empty_seq const-decl "finseq" finite_sequences nil)
-               (finseq_appl const-decl "[below[length(fs)] -> T]"
-                finite_sequences nil)
-               (sentence_list? const-decl "bool" fmla nil)
-               (sentence? const-decl "bool" fmla nil)
-               (real_gt_is_strict_total_order name-judgement
-                "(strict_total_order?[real])" real_props nil)
-               (two_premise? adt-def-decl "boolean" proof nil)
-               (one_premise? adt-def-decl "boolean" proof nil)
-               (below type-eq-decl nil naturalnumbers nil)
-               (fmla type-decl nil fmla nil)
-               (< const-decl "bool" reals nil)
-               (concl_negr const-decl "proof_step" resolution nil)
-               (RR_negr const-decl "ne_proof_seq" resolution nil)
-               (conclusion const-decl "sequent" proof nil)
-               (posint_plus_nnint_is_posint application-judgement
-                "posint" integers nil)
-               (int_minus_int_is_int application-judgement "int"
-                integers nil)
-               (real_lt_is_strict_total_order name-judgement
-                "(strict_total_order?[real])" real_props nil)
-               (nnint_plus_posint_is_posint application-judgement
-                "posint" integers nil)
-               (ne_proof_seq type-eq-decl nil proof nil)
-               (proof_seq type-eq-decl nil proof nil)
-               (proof_step type-eq-decl nil proof nil)
-               (list type-decl nil list_adt nil)
-               (>= const-decl "bool" reals nil)
-               (int nonempty-type-eq-decl nil integers nil)
-               (integer_pred const-decl "[rational -> boolean]"
-                             integers nil)
-               (rational nonempty-type-from-decl nil rationals nil)
-               (rational_pred const-decl "[real -> boolean]" rationals
-                              nil)
-               (sequent type-eq-decl nil sequents nil)
-               (rule type-decl nil proof nil)
-               (below type-eq-decl nil nat_types nil)
-               (nat nonempty-type-eq-decl nil naturalnumbers nil)
-               (> const-decl "bool" reals nil)
-               (real nonempty-type-from-decl nil reals nil)
-               (real_pred const-decl "[number_field -> boolean]" reals
-                          nil)
-               (number_field nonempty-type-from-decl nil number_fields
-                nil)
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (number nonempty-type-decl nil numbers nil)
                (number_field_pred const-decl "[number -> boolean]"
                 number_fields nil)
-               (number nonempty-type-decl nil numbers nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (> const-decl "bool" reals nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (below type-eq-decl nil nat_types nil)
+               (rule type-decl nil proof nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (list type-decl nil list_adt nil)
+               (proof_step type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (nnint_plus_posint_is_posint application-judgement
+                "posint" integers nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (int_minus_int_is_int application-judgement "int"
+                integers nil)
+               (posint_plus_nnint_is_posint application-judgement
+                "posint" integers nil)
+               (conclusion const-decl "sequent" proof nil)
+               (RR_negr const-decl "ne_proof_seq" resolution nil)
+               (concl_negr const-decl "proof_step" resolution nil)
+               (< const-decl "bool" reals nil)
+               (fmla type-decl nil fmla nil)
+               (below type-eq-decl nil naturalnumbers nil)
+               (one_premise? adt-def-decl "boolean" proof nil)
+               (two_premise? adt-def-decl "boolean" proof nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (sentence? const-decl "bool" fmla nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (finseq_appl const-decl "[below[length(fs)] -> T]"
+                finite_sequences nil)
+               (empty_seq const-decl "finseq" finite_sequences nil)
+               (reflex_rule? const-decl "bool" sequents nil)
+               (refl_equality? const-decl "bool" sequents nil)
+               (nth def-decl "T" list_props nil)
+               (equality? const-decl "bool" sequents nil)
+               (pschema_rule? const-decl "bool" sequents nil)
+               (fschema_rule? const-decl "bool" sequents nil)
+               (forall_rule? const-decl "bool" sequents nil)
+               (f_neg const-decl "fmla" fmla nil)
+               (exists_rule? const-decl "bool" sequents nil)
+               (cut_rule? const-decl "bool" sequents nil)
+               (neg_rule? const-decl "bool" sequents nil)
+               (nor_rule? const-decl "bool" sequents nil)
+               (or_rule? const-decl "bool" sequents nil)
+               (subset? const-decl "bool" sets nil)
+               (add const-decl "(nonempty?)" sets nil)
+               (member const-decl "bool" sets nil)
+               (list2set def-decl "set[T]" list2set nil)
+               (subset_rule? const-decl "bool" sequents nil)
+               (ax_rule? const-decl "bool" sequents nil)
+               (real_ge_is_total_order name-judgement
+                "(total_order?[real])" real_props nil)
+               (- const-decl "[numfield, numfield -> numfield]"
+                  number_fields nil)
+               (numfield nonempty-type-eq-decl nil number_fields nil)
+               (subset_is_partial_order name-judgement
+                "(partial_order?[set[T]])" sets_lemmas nil)
+               (= const-decl "[T, T -> boolean]" equalities nil)
+               (checkProof const-decl "bool" proof nil))
+              3402 2900 t shostak))
+            (RR_lemma1_TCC1 0
+             (RR_lemma1_TCC1-1 nil 3482803452 3482805393
+              ("" (skolem-typepred) (("" (grind) nil nil)) nil) proved
+              ((freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence? const-decl "bool" fmla nil)
+               (fmla type-decl nil fmla nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (boolean nonempty-type-decl nil booleans nil))
-              175853 2900 t shostak))
+              10496 30 t nil))
             (lemma1 0
-             (lemma1-1 nil 3482523174 3482715711
+             (lemma1-1 nil 3482523174 3482803464
               ("" (skolem-typepred)
                (("" (flatten)
                  (("" (split)
@@ -1706,26 +3072,106 @@
                          (("2" (use lemma_ax)
                            (("2" (expand member -1 2)
                              (("2" (expand member -1 1)
+                               (("2" (assert) nil nil)) nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              unfinished
+              ((boolean nonempty-type-decl nil booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (fmla type-decl nil fmla nil)
+               (sentence? const-decl "bool" fmla nil)
+               (list type-decl nil list_adt nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (even_minus_odd_is_odd application-judgement "odd_int"
+                integers nil)
+               (conclusion const-decl "sequent" proof nil)
+               (RR_lemma1 const-decl "ne_proof_seq" resolution nil)
+               (RR_ax const-decl "ne_proof_seq" resolution nil)
+               (concl_ax const-decl "proof_step" resolution nil)
+               (ax_proof_step const-decl "proof_step" resolution nil)
+               (f_not adt-constructor-decl "[fmla -> (f_not?)]" fmla
+                nil)
+               (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla
+                nil)
+               (cons adt-constructor-decl "[[T, list] -> (cons?)]"
+                     list_adt nil)
+               (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+                nil)
+               (member def-decl "bool" list_props nil)
+               (lemma_ax formula-decl nil resolution nil))
+              9897 80 t shostak))
+            (RR_th1_TCC1 0
+             (RR_th1_TCC1-1 nil 3482700134 3482805290
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten) (("" (use literal_sentence) nil nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((literal_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              23970 70 t nil))
+            (RR_th1_TCC2 0
+             (RR_th1_TCC2-1 nil 3482700134 3482805428
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten) (("" (use literal_sentence) nil nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((literal_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              22770 70 t nil))
+            (RR_th1_TCC3 0
+             (RR_th1_TCC3-1 nil 3482803452 3482805553
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten)
+                     (("" (use clause_prop)
+                       (("" (replace -4)
+                         (("" (assert)
+                           (("" (split -1)
+                             (("1" (grind) nil nil)
+                              ("2" (flatten)
                                (("2"
-                                 (replace -2)
+                                 (assert)
                                  (("2"
-                                   (expand sentence_list? -1)
-                                   (("2"
-                                     (expand sentence_list? -4)
-                                     (("2"
-                                       (expand sentence? -3)
-                                       (("2"
-                                         (expand freevars -1)
-                                         (("2"
-                                           (expand freevars -1 1)
-                                           (("2"
-                                             (assert)
-                                             (("2" (grind) nil nil))
-                                             nil))
-                                           nil))
-                                         nil))
-                                       nil))
-                                     nil))
+                                   (expand nclause? 2)
+                                   (("2" (propax) nil nil))
                                    nil))
                                  nil))
                                nil))
@@ -1737,56 +3183,97 @@
                    nil))
                  nil))
                nil)
-              unfinished
-              ((lemma_ax formula-decl nil resolution nil)
-               (list type-decl nil list_adt nil)
-               (fmla type-decl nil fmla nil)
-               (member def-decl "bool" list_props nil)
-               (append def-decl "list[T]" list_props nil)
-               (sentence? const-decl "bool" fmla nil)
+              proved
+              ((sorted? def-decl "bool" sortedlist nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (nonneg_int nonempty-type-eq-decl nil integers nil)
+               (> const-decl "bool" reals nil)
+               (posnat nonempty-type-eq-decl nil integers nil)
+               (index const-decl "posnat" resolution nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (clause_prop formula-decl nil resolution nil)
                (sentence_list? const-decl "bool" fmla nil)
-               (boolean nonempty-type-decl nil booleans nil)
-               (cons? adt-recognizer-decl "[list -> boolean]" list_adt
-                nil)
-               (cons adt-constructor-decl "[[T, list] -> (cons?)]"
-                     list_adt nil)
-               (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla
-                nil)
-               (f_not adt-constructor-decl "[fmla -> (f_not?)]" fmla
-                nil)
-               (even_minus_odd_is_odd application-judgement "odd_int"
-                integers nil)
-               (conclusion const-decl "sequent" proof nil)
-               (RR_lemma1 const-decl "ne_proof_seq" resolution nil)
-               (RR_ax const-decl "ne_proof_seq" resolution nil)
-               (concl_ax const-decl "proof_step" resolution nil)
-               (ax_proof_step const-decl "proof_step" resolution nil))
-              198265 130 t shostak))
-            (RR_th1_TCC1 0
-             (RR_th1_TCC1-1 nil 3482700134 3482790280
-              ("" (subtype-tcc) nil nil) unfinished nil 110 90 nil
-              nil))
-            (RR_th1_TCC2 0
-             (RR_th1_TCC2-1 nil 3482700134 3482790280
-              ("" (termination-tcc) nil nil) unchecked
-              ((boolean nonempty-type-decl nil booleans nil)
-               (bool nonempty-type-eq-decl nil booleans nil)
-               (NOT const-decl "[bool -> bool]" booleans nil)
-               (fmla type-decl nil fmla nil)
-               (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
-               (literal? const-decl "bool" resolution nil)
-               (clause? const-decl "bool" resolution nil)
                (nclause? const-decl "bool" resolution nil)
-               (prop_atom? const-decl "bool" resolution nil)
-               (length def-decl "nat" list_props nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              82604 130 t nil))
+            (RR_th1_TCC4 0
+             (RR_th1_TCC4-1 nil 3482803452 3482805587
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten)
+                     (("" (use nclause2fmla_sentence) nil nil)) nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((nclause2fmla_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              28363 60 t nil))
+            (RR_th1_TCC5 0
+             (RR_th1_TCC5-1 nil 3482803452 3482805611
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten) (("" (grind) nil nil)) nil)) nil))
+                 nil))
+               nil)
+              proved
+              ((real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (real_lt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (nnint_plus_posint_is_posint application-judgement
                 "posint" integers nil)
-               (real_lt_is_strict_total_order name-judgement
-                "(strict_total_order?[real])" real_props nil))
-              72 60 nil nil))
+               (length def-decl "nat" list_props nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (literal? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              18082 100 t nil))
             (th1 0
-             (th1-1 nil 3482276728 3482784190
+             (th1-1 nil 3482276728 3482803481
               ("" (induct nclAA)
                (("1" (grind) nil nil) ("2" (grind) nil nil)
                 ("3" (grind) nil nil)
@@ -1830,22 +3317,12 @@
                                      (("1"
                                        (replace -9)
                                        (("1"
-                                         (replace -8)
+                                         (case "literal?(cons1_var!1)")
                                          (("1"
-                                           (case
-                                            "literal?(cons1_var!1)")
-                                           (("1"
-                                             (use literal_sentence)
-                                             (("1"
-                                               (replace -1)
-                                               (("1"
-                                                 (flatten)
-                                                 nil
-                                                 nil))
-                                               nil))
-                                             nil)
-                                            ("2" (propax) nil nil))
-                                           nil))
+                                           (use literal_sentence)
+                                           (("1" (flatten) nil nil))
+                                           nil)
+                                          ("2" (propax) nil nil))
                                          nil))
                                        nil))
                                      nil))
@@ -1860,116 +3337,83 @@
                                    (("2"
                                      (flatten)
                                      (("2"
-                                       (replace -7)
-                                       (("2"
-                                         (case "literal?(cons1_var!1)")
+                                       (case "literal?(cons1_var!1)")
+                                       (("1"
+                                         (use literal_sentence)
                                          (("1"
-                                           (use literal_sentence)
+                                           (use nclause2fmla_sentence)
                                            (("1"
-                                             (replace -1)
+                                             (lemma clause_prop)
                                              (("1"
-                                               (use
-                                                nclause2fmla_sentence)
+                                               (inst
+                                                -1
+                                                "cons(cons1_var!1, cons2_var!1)")
                                                (("1"
-                                                 (replace -1)
+                                                 (flatten)
                                                  (("1"
-                                                   (lemma clause_prop)
+                                                   (replace -10)
                                                    (("1"
-                                                     (inst
-                                                      -1
-                                                      "cons(cons1_var!1, cons2_var!1)")
+                                                     (split -1)
                                                      (("1"
+                                                       (grind)
+                                                       nil
+                                                       nil)
+                                                      ("2"
+                                                       (assert -1)
+                                                       nil
+                                                       nil)
+                                                      ("3"
                                                        (flatten)
-                                                       (("1"
-                                                         (replace -10)
-                                                         (("1"
-                                                           (split -1)
-                                                           (("1"
-                                                             (grind)
-                                                             nil
-                                                             nil)
-                                                            ("2"
-                                                             (assert
-                                                              -1)
-                                                             nil
-                                                             nil)
-                                                            ("3"
-                                                             (flatten)
+                                                       (("3"
+                                                         (assert -2)
+                                                         (("3"
+                                                           (replace -2)
+                                                           (("3"
+                                                             (expand
+                                                              nclause?
+                                                              -9
+                                                              1)
                                                              (("3"
-                                                               (assert
-                                                                -2)
-                                                               (("3"
+                                                               (case
+                                                                "cons?(cons2_var!1)")
+                                                               (("1"
                                                                  (replace
-                                                                  -2)
-                                                                 (("3"
-                                                                   (expand
-                                                                    nclause?
-                                                                    -9
-                                                                    1)
-                                                                   (("3"
-                                                                     (case
-                                                                      "cons?(cons2_var!1)")
+                                                                  -1)
+                                                                 (("1"
+                                                                   (inst
+                                                                    -10
+                                                                    "BB!1")
+                                                                   (("1"
+                                                                     (assert)
                                                                      (("1"
-                                                                       (replace
-                                                                        -1)
+                                                                       (flatten)
                                                                        (("1"
-                                                                         (inst
-                                                                          -10
-                                                                          "BB!1")
+                                                                         (expand
+                                                                          not_or_reduction
+                                                                          -9)
                                                                          (("1"
-                                                                           (assert)
+                                                                           (expand
+                                                                            append
+                                                                            -9)
                                                                            (("1"
-                                                                             (flatten)
+                                                                             (expand
+                                                                              append
+                                                                              -9)
                                                                              (("1"
-                                                                               (expand
-                                                                                not_or_reduction
+                                                                               (replace
                                                                                 -9)
                                                                                (("1"
-                                                                                 (expand
-                                                                                  append
-                                                                                  -9)
+                                                                                 (replace
+                                                                                  -10)
                                                                                  (("1"
-                                                                                   (expand
-                                                                                    append
-                                                                                    -9)
+                                                                                   (use
+                                                                                    lemma1)
                                                                                    (("1"
                                                                                      (replace
-                                                                                      -9)
+                                                                                      -15)
                                                                                      (("1"
-                                                                                       (replace
-                                                                                        -10)
-                                                                                       (("1"
-                                                                                         (use
-                                                                                          lemma1)
-                                                                                         (("1"
-                                                                                           (replace
-                                                                                            -15)
-                                                                                           (("1"
-                                                                                             (replace
-                                                                                              -14)
-                                                                                             (("1"
-                                                                                               (case
-                                                                                                "literal?(cons1_var!1)")
-                                                                                               (("1"
-                                                                                                 (use
-                                                                                                  literal_sentence)
-                                                                                                 (("1"
-                                                                                                   (replace
-                                                                                                    -1)
-                                                                                                   (("1"
-                                                                                                     (propax)
-                                                                                                     nil
-                                                                                                     nil))
-                                                                                                   nil))
-                                                                                                 nil)
-                                                                                                ("2"
-                                                                                                 (propax)
-                                                                                                 nil
-                                                                                                 nil))
-                                                                                               nil))
-                                                                                             nil))
-                                                                                           nil))
-                                                                                         nil))
+                                                                                       (propax)
+                                                                                       nil
                                                                                        nil))
                                                                                      nil))
                                                                                    nil))
@@ -1978,13 +3422,13 @@
                                                                              nil))
                                                                            nil))
                                                                          nil))
-                                                                       nil)
-                                                                      ("2"
-                                                                       (assert)
-                                                                       nil
                                                                        nil))
                                                                      nil))
                                                                    nil))
+                                                                 nil)
+                                                                ("2"
+                                                                 (assert)
+                                                                 nil
                                                                  nil))
                                                                nil))
                                                              nil))
@@ -1996,9 +3440,9 @@
                                                  nil))
                                                nil))
                                              nil))
-                                           nil)
-                                          ("2" (propax) nil nil))
-                                         nil))
+                                           nil))
+                                         nil)
+                                        ("2" (propax) nil nil))
                                        nil))
                                      nil))
                                    nil))
@@ -2062,14 +3506,17 @@
                (nonneg_int nonempty-type-eq-decl nil integers nil)
                (sorted? def-decl "bool" sortedlist nil)
                (nclause2fmla_sentence formula-decl nil resolution nil)
-               (clause_prop formula-decl nil resolution nil)
-               (cons? adt-recognizer-decl "[list -> boolean]" list_adt
-                nil)
                (cons adt-constructor-decl "[[T, list] -> (cons?)]"
                      list_adt nil)
+               (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+                nil)
+               (clause_prop formula-decl nil resolution nil)
                (lemma_norr formula-decl nil resolution nil)
                (literal_sentence formula-decl nil resolution nil)
+               (sentence? const-decl "bool" fmla nil)
                (lemma1 formula-decl nil resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (int_minus_int_is_int application-judgement "int"
                 integers nil)
                (real_lt_is_strict_total_order name-judgement
@@ -2091,23 +3538,552 @@
                (even_minus_odd_is_odd application-judgement "odd_int"
                 integers nil)
                (NOT const-decl "[bool -> bool]" booleans nil))
-              2275 1160 t shostak))
+              9953 1230 t shostak))
+            (RR_th2_1_TCC1 0
+             (RR_th2_1_TCC1-1 nil 3482803452 3482805671
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use nclause2fmla_sentence)
+                   (("" (use literal_sentence) (("" (grind) nil nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((literal_sentence formula-decl nil resolution nil)
+               (index const-decl "posnat" resolution nil)
+               (posnat nonempty-type-eq-decl nil integers nil)
+               (> const-decl "bool" reals nil)
+               (nonneg_int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number nonempty-type-decl nil numbers nil)
+               (sorted? def-decl "bool" sortedlist nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (nclause2fmla_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              48240 210 t nil))
+            (RR_th2_1_TCC2 0
+             (RR_th2_1_TCC2-1 nil 3482803452 3482805706
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use nclause2fmla_sentence)
+                   (("" (use literal_sentence) (("" (grind) nil nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((literal_sentence formula-decl nil resolution nil)
+               (index const-decl "posnat" resolution nil)
+               (posnat nonempty-type-eq-decl nil integers nil)
+               (> const-decl "bool" reals nil)
+               (nonneg_int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number nonempty-type-decl nil numbers nil)
+               (sorted? def-decl "bool" sortedlist nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (nclause2fmla_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              28404 200 t nil))
+            (RR_th2_1_TCC3 0
+             (RR_th2_1_TCC3-1 nil 3482803452 3482805736
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use literal_sentence) (("" (grind) nil nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (sentence? const-decl "bool" fmla nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (sorted? def-decl "bool" sortedlist nil)
+               (number nonempty-type-decl nil numbers nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (>= const-decl "bool" reals nil)
+               (nonneg_int nonempty-type-eq-decl nil integers nil)
+               (> const-decl "bool" reals nil)
+               (posnat nonempty-type-eq-decl nil integers nil)
+               (index const-decl "posnat" resolution nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (literal_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              24891 160 t nil))
+            (RR_th2_1_TCC4 0
+             (RR_th2_1_TCC4-1 nil 3482803452 3482805778
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten)
+                     (("" (use literal_sentence) (("" (grind) nil nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((nnint_plus_posint_is_posint application-judgement
+                "posint" integers nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (sentence? const-decl "bool" fmla nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (append def-decl "list[T]" list_props nil)
+               (concl_subsetr const-decl "proof_step" resolution nil)
+               (RR_subsetr const-decl "ne_proof_seq" resolution nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (literal_sentence formula-decl nil resolution nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (proof_step type-eq-decl nil proof nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rule type-decl nil proof nil)
+               (below type-eq-decl nil nat_types nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (> const-decl "bool" reals nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number nonempty-type-decl nil numbers nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              36183 210 t nil))
+            (RR_th2_1_TCC5 0
+             (RR_th2_1_TCC5-1 nil 3482803452 3482805850
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten)
+                     (("" (use nclause2fmla_sentence)
+                       (("" (grind) nil nil)) nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((sentence? const-decl "bool" fmla nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (append def-decl "list[T]" list_props nil)
+               (concl_subsetr const-decl "proof_step" resolution nil)
+               (RR_subsetr const-decl "ne_proof_seq" resolution nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (nnint_plus_posint_is_posint application-judgement
+                "posint" integers nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (nclause2fmla_sentence formula-decl nil resolution nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (proof_step type-eq-decl nil proof nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rule type-decl nil proof nil)
+               (below type-eq-decl nil nat_types nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (> const-decl "bool" reals nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number nonempty-type-decl nil numbers nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              41659 180 t nil))
+            (RR_th2_1_TCC6 0
+             (RR_th2_1_TCC6-1 nil 3482803452 3482805885
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use nclause2fmla_sentence)
+                   (("" (use literal_sentence) (("" (grind) nil nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((literal_sentence formula-decl nil resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (nclause2fmla_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              29854 190 t nil))
+            (RR_th2_1_TCC7 0
+             (RR_th2_1_TCC7-1 nil 3482804347 3482805911
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use nclause2fmla_sentence)
+                   (("" (use literal_sentence) (("" (grind) nil nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((literal_sentence formula-decl nil resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (nclause2fmla_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              18811 190 t nil))
+            (RR_th2_1_TCC8 0
+             (RR_th2_1_TCC8-1 nil 3482804347 3482805986
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (use literal_sentence) (("" (grind) nil nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((sentence? const-decl "bool" fmla nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (literal_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              69125 90 t nil))
             (RR_th2_TCC1 0
-             (RR_th2_TCC1-1 nil 3482773560 3482790280
-              ("" (subtype-tcc) nil nil) unfinished
+             (RR_th2_TCC1-1 nil 3482773560 3482805440
+              ("" (subtype-tcc) nil nil) proved
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (literal? const-decl "bool" resolution nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
+               (every adt-def-decl "boolean" list_adt nil)
                (clause? const-decl "bool" resolution nil)
                (nclause? const-decl "bool" resolution nil)
-               (prop_atom? const-decl "bool" resolution nil))
-              71 50 nil nil))
+               (sentence_list? const-decl "bool" fmla nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil))
+              81 60 nil nil))
+            (RR_th2_TCC2 0
+             (RR_th2_TCC2-1 nil 3482803452 3482806024
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten)
+                     (("" (skolem-typepred)
+                       (("" (flatten)
+                         (("" (skolem-typepred)
+                           (("" (flatten)
+                             (("" (use literal_sentence) nil nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((literal_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              31152 100 t nil))
+            (RR_th2_TCC3 0
+             (RR_th2_TCC3-1 nil 3482803452 3482806115
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten)
+                     (("" (skolem-typepred)
+                       (("" (flatten)
+                         (("" (skolem-typepred)
+                           (("" (flatten)
+                             (("" (lemma nclause2fmla_sentence)
+                               ((""
+                                 (inst -1 nclBB!1)
+                                 (("" (grind) nil nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (nclause2fmla_sentence formula-decl nil resolution nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              77408 190 t nil))
+            (RR_th2_TCC4 0
+             (RR_th2_TCC4-1 nil 3482803452 3482806192
+              ("" (skolem-typepred)
+               (("" (flatten)
+                 (("" (skolem-typepred)
+                   (("" (flatten)
+                     (("" (skolem-typepred)
+                       (("" (flatten)
+                         (("" (skolem-typepred)
+                           (("" (flatten)
+                             (("" (skolem-typepred)
+                               ((""
+                                 (flatten)
+                                 ((""
+                                   (lemma nclause2fmla_sentence)
+                                   ((""
+                                     (inst -1 nclBB!1)
+                                     (("" (grind) nil nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil)
+              proved
+              ((real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (freevars def-decl "list[(var?)]" fmla nil)
+               (append def-decl "list[T]" list_props nil)
+               (not_or_reduction const-decl "sequent" resolution nil)
+               (prop_atom? const-decl "bool" resolution nil)
+               (sentence? const-decl "bool" fmla nil)
+               (nclause2fmla_sentence formula-decl nil resolution nil)
+               (ne_proof_seq type-eq-decl nil proof nil)
+               (proof_seq type-eq-decl nil proof nil)
+               (proof_step type-eq-decl nil proof nil)
+               (>= const-decl "bool" reals nil)
+               (int nonempty-type-eq-decl nil integers nil)
+               (integer_pred const-decl "[rational -> boolean]"
+                             integers nil)
+               (rational nonempty-type-from-decl nil rationals nil)
+               (rational_pred const-decl "[real -> boolean]" rationals
+                              nil)
+               (sequent type-eq-decl nil sequents nil)
+               (rule type-decl nil proof nil)
+               (below type-eq-decl nil nat_types nil)
+               (nat nonempty-type-eq-decl nil naturalnumbers nil)
+               (> const-decl "bool" reals nil)
+               (real nonempty-type-from-decl nil reals nil)
+               (real_pred const-decl "[number_field -> boolean]" reals
+                          nil)
+               (number_field nonempty-type-from-decl nil number_fields
+                nil)
+               (number_field_pred const-decl "[number -> boolean]"
+                number_fields nil)
+               (number nonempty-type-decl nil numbers nil)
+               (sentence_list? const-decl "bool" fmla nil)
+               (nclause? const-decl "bool" resolution nil)
+               (clause? const-decl "bool" resolution nil)
+               (every adt-def-decl "boolean" list_adt nil)
+               (list type-decl nil list_adt nil)
+               (PRED type-eq-decl nil defined_types nil)
+               (literal? const-decl "bool" resolution nil)
+               (fmla type-decl nil fmla nil)
+               (NOT const-decl "[bool -> bool]" booleans nil)
+               (bool nonempty-type-eq-decl nil booleans nil)
+               (boolean nonempty-type-decl nil booleans nil))
+              42031 110 t nil))
             (th2_1_1 0
-             (th2_1_1-1 nil 3482781522 3482791791
+             (th2_1_1-1 nil 3482781522 3482806274
               ("" (induct f)
                (("1" (grind) nil nil) ("2" (grind) nil nil)
                 ("3" (grind) nil nil) ("4" (grind) nil nil)
@@ -2125,9 +4101,9 @@
                 nil)
                (arg adt-accessor-decl "[(f_not?) -> fmla]" fmla nil)
                (fmla_induction formula-decl nil fmla nil))
-              163 40 t shostak))
+              168 40 t shostak))
             (th2_1 0
-             (th2_1-1 nil 3482773568 3482790352
+             (th2_1-1 nil 3482773568 3482800109
               ("" (skolem-typepred)
                (("" (flatten)
                  (("" (expand sentence_list? -5)
@@ -2448,22 +4424,24 @@
                    nil))
                  nil))
                nil)
-              unchecked
+              unfinished
               ((boolean nonempty-type-decl nil booleans nil)
                (bool nonempty-type-eq-decl nil booleans nil)
                (NOT const-decl "[bool -> bool]" booleans nil)
                (fmla type-decl nil fmla nil)
                (literal? const-decl "bool" resolution nil)
                (PRED type-eq-decl nil defined_types nil)
-               (list type-decl nil list_adt nil) nil
+               (list type-decl nil list_adt nil)
                (clause? const-decl "bool" resolution nil)
                (nclause? const-decl "bool" resolution nil)
                (sentence_list? const-decl "bool" fmla nil)
-               (sentence? const-decl "bool" fmla nil) nil nil
+               (sentence? const-decl "bool" fmla nil)
                (subset def-decl "bool" minlist nil)
                (member def-decl "bool" list_props nil)
                (f_neg const-decl "fmla" fmla nil)
                (prop_atom? const-decl "bool" resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (nclause2fmla def-decl "fmla" resolution nil)
                (f_not adt-constructor-decl "[fmla -> (f_not?)]" fmla
                 nil)
@@ -2531,9 +4509,9 @@
                (conclusion const-decl "sequent" proof nil)
                (nclause2fmla_sentence formula-decl nil resolution nil)
                (literal_sentence formula-decl nil resolution nil))
-              1936 1450 t shostak))
+              2189 1620 t shostak))
             (th2 0
-             (th2-1 nil 3482790356 3482796031
+             (th2-1 nil 3482790356 3482800119
               ("" (induct nclAA)
                (("1" (grind) nil nil) ("2" (grind) nil nil)
                 ("3" (grind) nil nil)
@@ -3411,10 +5389,9 @@
                    nil))
                  nil))
                nil)
-              proved
+              unfinished
               ((list type-decl nil list_adt nil)
                (PRED type-eq-decl nil defined_types nil)
-               (every adt-def-decl "boolean" list_adt nil)
                (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
                (AND const-decl "[bool, bool -> bool]" booleans nil)
                (clause? const-decl "bool" resolution nil)
@@ -3487,9 +5464,9 @@
                (th2_1 formula-decl nil resolution nil)
                (member def-decl "bool" list_props nil)
                (literal_sentence formula-decl nil resolution nil)
+               (real_gt_is_strict_total_order name-judgement
+                "(strict_total_order?[real])" real_props nil)
                (prop_atom? const-decl "bool" resolution nil)
-               (freevars def-decl "list[(var?)]" fmla nil)
-               (freevars def-decl "list[(var?)]" fmla nil)
                (sentence? const-decl "bool" fmla nil)
                (nclause2fmla_sentence formula-decl nil resolution nil)
                (lemma1 formula-decl nil resolution nil)
@@ -3507,5 +5484,5 @@
                (concl_subsetr const-decl "proof_step" resolution nil)
                (clause_prop formula-decl nil resolution nil)
                (NOT const-decl "[bool -> bool]" booleans nil))
-              702583 3550 t shostak)))
+              4490 3220 t shostak)))
 

@@ -20,7 +20,8 @@ resolution : THEORY
 
     prop_atom?(A): bool = (atom?(A) AND 
     	      	           upred?(pred(A)) AND 
-		           arity(pred(A)) = 0)
+		           arity(pred(A)) = 0 AND
+			   index(pred(A)) > 0)
 
     pA, pB, pC: VAR (prop_atom?)
 
@@ -116,146 +117,138 @@ resolution : THEORY
     offset_proof_step(ps: proof_step, n: nat): proof_step = 
      	  ps WITH [ subs:= map(LAMBDA(j: nat):j + n)(ps`subs)]
 
+    sA, sB, sC: VAR (sentence?)
+    sAA, sBB, sCC: VAR (sentence_list?)
+
     %===================================================================================		  
     % lemma axiom rule |- l if both A and ~A belong to l
 
-    ax_proof_step(A): proof_step = (# sequent:= cons(A, cons(f_not(A), null)),
-    	      		     	      rule:= ax,
-			    	      subs:= null #)
+    ax_proof_step(sA): proof_step = (# sequent:= cons(sA, cons(f_not(sA), null)),
+    	      		     	      	      	 rule:= ax,
+			    	      		 subs:= null #)
 
-    concl_ax(AA): proof_step = (# sequent:= AA, 
-    	     	      	       	  rule:= subset,
-	     			  subs:= cons(0, null) #)
+    concl_ax(sAA): proof_step = (# sequent:= sAA, 
+    	     	      	       	   rule:= subset,
+	     			   subs:= cons(0, null) #)
 
-    RR_ax(A, AA): ne_proof_seq = 
+    RR_ax(sA, sAA): ne_proof_seq = 
     (# length := 2,
        seq := LAMBDA(j: below(2)):
        	      	 COND
-		  j = 0 -> ax_proof_step(A), 
-		  j = 1 -> concl_ax(AA)
+		  j = 0 -> ax_proof_step(sA), 
+		  j = 1 -> concl_ax(sAA)
 		 ENDCOND #)   
 
-    lemma_ax: LEMMA (sentence_list?(AA) AND
-		     member(A, AA) AND
-    	    	     member(f_not(A), AA))
+    lemma_ax: LEMMA (member(sA, sAA) AND
+    	    	     member(f_not(sA), sAA))
 	   	    =>
-		    (conclusion(RR_ax(A, AA)) = AA AND
-	      	     checkProof(empty_seq)(RR_ax(A, AA)))
+		    (conclusion(RR_ax(sA, sAA)) = sAA AND
+	      	     checkProof(empty_seq)(RR_ax(sA, sAA)))
 
 
     % end lemma axiom rule
     %===================================================================================
     % lemma nor rule  |- ~(a \/ b)::k  if |- ~a::k and |- ~b::k
 
-    concl_norr(A, B, AA, (n, m: posnat)): proof_step = 
-          (# sequent:= cons(f_not(f_or(A, B)), AA) , 
+    concl_norr(sA, sB, sAA, (n, m: posnat)): proof_step = 
+          (# sequent:= cons(f_not(f_or(sA, sB)), sAA) , 
     	     rule:= norr,
 	     subs:= cons(n - 1, cons(n + m - 1,null)) #)
 
-    RR_norr(A, B, AA, RR1, RR2): ne_proof_seq = 
+    RR_norr(sA, sB, sAA, RR1, RR2): ne_proof_seq = 
     LET n = RR1`length IN
     LET m = RR2`length IN
     (# length := n + m + 1,
        seq := LAMBDA(j: below(n + m + 1)):
        	      	 COND
 		  j < n -> RR1`seq(j),
-		  j < n + m -> offset_proof_step(RR2`seq(j - n), n), 
-		  j = n + m -> concl_norr(A, B, AA, n, m)
+		  j >=n AND j < n + m -> offset_proof_step(RR2`seq(j - n), n), 
+		  j = n + m -> concl_norr(sA, sB, sAA, n, m)
 		 ENDCOND #)   
 
-    lemma_norr: LEMMA (sentence?(A) AND
-    	    	       sentence?(B) AND
-		       sentence_list?(AA) AND
-    	    	       conclusion(RR1) = cons(f_not(A), AA) AND
-		       conclusion(RR2) = cons(f_not(B), AA) AND
+    lemma_norr: LEMMA (conclusion(RR1) = cons(f_not(sA), sAA) AND
+		       conclusion(RR2) = cons(f_not(sB), sAA) AND
 		       checkProof(empty_seq)(RR1) AND
 		       checkProof(empty_seq)(RR2))
 		      =>
-		      (conclusion(RR_norr(A, B, AA, RR1, RR2)) = cons(f_not(f_or(A, B)), AA) AND
-		       checkProof(empty_seq)(RR_norr(A, B, AA, RR1, RR2)))
+		      (conclusion(RR_norr(sA, sB, sAA, RR1, RR2)) = cons(f_not(f_or(sA, sB)), sAA) AND
+		       checkProof(empty_seq)(RR_norr(sA, sB, sAA, RR1, RR2)))
 		     
 
     % end lemma nor rule
     %===================================================================================
     % lemma or rule  |- (a \/ b)::k  if |- a::b::k
 
-    concl_orr(A, B, AA, (n : posnat)): proof_step = 
-          (# sequent:= cons(f_or(A, B), AA) , 
+    concl_orr(sA, sB, sAA, (n : posnat)): proof_step = 
+          (# sequent:= cons(f_or(sA, sB), sAA) , 
     	     rule:= orr,
 	     subs:= cons(n - 1, null) #)
 
-    RR_orr(A, B, AA, RR1): ne_proof_seq = 
+    RR_orr(sA, sB, sAA, RR1): ne_proof_seq = 
     LET n = RR1`length IN
     (# length := n + 1,
        seq := LAMBDA(j: below(n + 1)):
        	      	 COND
 		  j < n -> RR1`seq(j), 
-		  j = n -> concl_orr(A, B, AA, n)
+		  j = n -> concl_orr(sA, sB, sAA, n)
 		 ENDCOND #)   
 
-    lemma_orr: LEMMA (sentence?(A) AND
-    	    	      sentence?(B) AND
-		      sentence_list?(AA) AND
-    	    	      conclusion(RR1) = cons(A, cons(B, AA)) AND
+    lemma_orr: LEMMA (conclusion(RR1) = cons(sA, cons(sB, sAA)) AND
 		      checkProof(empty_seq)(RR1))
 		     =>
-		     (conclusion(RR_orr(A, B, AA, RR1)) = cons(f_or(A, B), AA) AND
-		      checkProof(empty_seq)(RR_orr(A, B, AA, RR1)))
+		     (conclusion(RR_orr(sA, sB, sAA, RR1)) = cons(f_or(sA, sB), sAA) AND
+		      checkProof(empty_seq)(RR_orr(sA, sB, sAA, RR1)))
 		     
 
     % end lemma or rule
     %===================================================================================
     % lemma subset rule  |- k  if |- l and l include in k
 
-    concl_subsetr(AA, (n : posnat)): proof_step = 
-          (# sequent:= AA, 
+    concl_subsetr(sAA, (n : posnat)): proof_step = 
+          (# sequent:= sAA, 
     	     rule:= subset,
 	     subs:= cons(n - 1, null) #)
 
-    RR_subsetr(AA, BB, RR1): ne_proof_seq = 
+    RR_subsetr(sAA, sBB, RR1): ne_proof_seq = 
     LET n = RR1`length IN
     (# length := n + 1,
        seq := LAMBDA(j: below(n + 1)):
        	      	 COND
 		  j < n -> RR1`seq(j), 
-		  j = n -> concl_subsetr(BB, n)
+		  j = n -> concl_subsetr(sBB, n)
 		 ENDCOND #)   
 
-    lemma_subsetr: LEMMA (sentence_list?(AA) AND
-		      	  sentence_list?(BB) AND
-		      	  subset(AA, BB) AND
-    	    	          conclusion(RR1) = AA AND
+    lemma_subsetr: LEMMA (subset(sAA, sBB) AND
+    	    	          conclusion(RR1) = sAA AND
 		      	  checkProof(empty_seq)(RR1))
 		     	 =>
-		     	 (conclusion(RR_subsetr(AA, BB, RR1)) = BB AND
-		      	  checkProof(empty_seq)(RR_subsetr(AA, BB, RR1)))
+		     	 (conclusion(RR_subsetr(sAA, sBB, RR1)) = sBB AND
+		      	  checkProof(empty_seq)(RR_subsetr(sAA, sBB, RR1)))
 		     
 
     % end lemma subset rule
     %===================================================================================
     % lemma neg rule  |- ~~k, l  if |- k, l
 
-    concl_negr(A, AA, (n : posnat)): proof_step = 
-          (# sequent:= cons(f_not(f_not(A)), AA), 
+    concl_negr(sA, sAA, (n : posnat)): proof_step = 
+          (# sequent:= cons(f_not(f_not(sA)), sAA), 
     	     rule:= neg,
 	     subs:= cons(n - 1, null) #)
 
-    RR_negr(A, AA, RR1): ne_proof_seq = 
+    RR_negr(sA, sAA, RR1): ne_proof_seq = 
     LET n = RR1`length IN
     (# length := n + 1,
        seq := LAMBDA(j: below(n + 1)):
        	      	 COND
 		  j < n -> RR1`seq(j), 
-		  j = n -> concl_negr(A, AA, n)
+		  j = n -> concl_negr(sA, sAA, n)
 		 ENDCOND #)   
 
-    lemma_negr: LEMMA (sentence?(A) AND
-		      	  sentence_list?(AA) AND
-    	    	          conclusion(RR1) = cons(A, AA) AND
-		      	  checkProof(empty_seq)(RR1))
-		     	 =>
-		     	 (conclusion(RR_negr(A, AA, RR1)) = cons(f_not(f_not(A)), AA) AND
-		      	  checkProof(empty_seq)(RR_negr(A, AA, RR1)))
+    lemma_negr: LEMMA (conclusion(RR1) = cons(sA, sAA) AND
+		       checkProof(empty_seq)(RR1))
+		      =>
+		      (conclusion(RR_negr(sA, sAA, RR1)) = cons(f_not(f_not(sA)), sAA) AND
+		       checkProof(empty_seq)(RR_negr(sA, sAA, RR1)))
 		     
 
     % end lemma neg rule
@@ -263,84 +256,81 @@ resolution : THEORY
     %===================================================================================
     % lemma 1 : |- ~p::l if p belongs l 
     
-    RR_lemma1(A, AA): ne_proof_seq = RR_ax(A, cons(f_not(A), AA))
+    RR_lemma1(sA, sAA): ne_proof_seq = RR_ax(sA, cons(f_not(sA), sAA))
  
-    lemma1: LEMMA (member(A, AA) AND sentence?(A) AND sentence_list?(AA))
+    lemma1: LEMMA member(sA, sAA)
     	    	  => 
-      		  (conclusion(RR_lemma1(A, AA))= cons(f_not(A), AA) AND 
-		   checkProof(empty_seq)(RR_lemma1(A, AA)))
+      		  (conclusion(RR_lemma1(sA, sAA))= cons(f_not(sA), sAA) AND 
+		   checkProof(empty_seq)(RR_lemma1(sA, sAA)))
 
     % end lemma 1
     %===================================================================================	
     % th1 the sequent |- ~(p1 or p2 or...pn) , p1, ..., pn, ... is provable in KoT
 
-    RR_th1(nclAA, BB): RECURSIVE ne_proof_seq =
+    RR_th1(nclAA, sBB): RECURSIVE ne_proof_seq =
           LET lA = car(nclAA) IN
 	  LET clAA = cdr(nclAA) IN 
-          IF null?(clAA) THEN RR_lemma1(lA, BB)
-	     		 ELSE RR_norr(lA, nclause2fmla(clAA), BB, RR_lemma1(lA, BB), RR_th1(clAA, BB))
+          IF null?(clAA) THEN RR_lemma1(lA, sBB)
+	     		 ELSE RR_norr(lA, nclause2fmla(clAA), sBB, RR_lemma1(lA, sBB), RR_th1(clAA, sBB))
 	  ENDIF
 	  MEASURE length(nclAA)
  
     th1: THEOREM 
-      (sentence_list?(BB) AND
-       subset(nclAA, BB))
+      (subset(nclAA, sBB))
       => 
-      (conclusion(RR_th1(nclAA, BB))= append(not_or_reduction(nclAA), BB) AND 
-       checkProof(empty_seq)(RR_th1(nclAA, BB)))
+      (conclusion(RR_th1(nclAA, sBB))= append(not_or_reduction(nclAA), sBB) AND 
+       checkProof(empty_seq)(RR_th1(nclAA, sBB)))
        
     %===================================================================================
     % th2 the sequent |- ~(p1 or ... pk or pivot or pk+1 ... or pn), ~(q1 or ...or f_neg(pivot) or ...qm), p1, ...pn, q1, ...qm
 
     lpivot: VAR (literal?)
 
-    RR_th2_1(lpivot, nclBB, CC): ne_proof_seq =
+    RR_th2_1(lpivot, nclBB, sCC): ne_proof_seq =
           IF f_not?(lpivot)
 	  THEN 
-	    LET RR1 = RR_subsetr(append(not_or_reduction(nclBB), cons(arg(lpivot), CC)),
-	       	       	 	 cons(arg(lpivot), append(not_or_reduction(nclBB), CC)),
-				 RR_th1(nclBB, cons(arg(lpivot), CC))) IN		
-	    RR_negr(arg(lpivot), append(not_or_reduction(nclBB), CC), RR1)
+	    LET RR1 = RR_subsetr(append(not_or_reduction(nclBB), cons(arg(lpivot), sCC)),
+	       	       	 	 cons(arg(lpivot), append(not_or_reduction(nclBB), sCC)),
+				 RR_th1(nclBB, cons(arg(lpivot), sCC))) IN		
+	    RR_negr(arg(lpivot), append(not_or_reduction(nclBB), sCC), RR1)
 	  ELSE
-	    RR_subsetr(append(not_or_reduction(nclBB), cons(f_not(lpivot), CC)),
-	       	       cons(f_not(lpivot), append(not_or_reduction(nclBB), CC)),
-		       RR_th1(nclBB, cons(f_not(lpivot), CC))) 
+	    RR_subsetr(append(not_or_reduction(nclBB), cons(f_not(lpivot), sCC)),
+	       	       cons(f_not(lpivot), append(not_or_reduction(nclBB), sCC)),
+		       RR_th1(nclBB, cons(f_not(lpivot), sCC))) 
 	  ENDIF	    
 	    
 	 
-    RR_th2(lpivot, nclAA, nclBB, CC): RECURSIVE ne_proof_seq = 
+    RR_th2(lpivot, nclAA, nclBB, sCC): RECURSIVE ne_proof_seq = 
           LET lA = car(nclAA) IN
 	  LET clAA = cdr(nclAA) IN
 	  LET lB = car(nclBB) IN
 	  LET clBB = cdr(nclBB) IN
-	  LET RR1 = IF member(lA, CC) % RR1 is a proof of |- ~lA, ~nclBB, CC 
-	      	     THEN RR_lemma1(lA, append(not_or_reduction(nclBB), CC))
-	     	     ELSE RR_th2_1(lA, nclBB, CC)
+	  LET RR1 = IF member(lA, sCC) % RR1 is a proof of |- ~lA, ~nclBB, sCC 
+	      	     THEN RR_lemma1(lA, append(not_or_reduction(nclBB), sCC))
+	     	     ELSE RR_th2_1(lA, nclBB, sCC)
 	      	     ENDIF IN 
           IF null?(clAA) 
 	  THEN 
 	    RR1
 	  ELSE
-	    RR_norr(lA, nclause2fmla(clAA), append(not_or_reduction(nclBB), CC), RR1, RR_th2(lpivot, clAA, nclBB, CC))
+	    RR_norr(lA, nclause2fmla(clAA), append(not_or_reduction(nclBB), sCC), RR1, RR_th2(lpivot, clAA, nclBB, sCC))
 	  ENDIF
 	  MEASURE length(nclAA)
 
     th2_1_1: LEMMA FORALL(f: (f_not?)): f = f_not(arg(f))
 
     th2_1: THEOREM 
-      (sentence_list?(CC) AND
-       subset(nclBB, cons(f_neg(lpivot), CC)))
+      subset(nclBB, cons(f_neg(lpivot), sCC))
       => 
-      (conclusion(RR_th2_1(lpivot, nclBB, CC))= cons(f_not(lpivot), append(not_or_reduction(nclBB), CC)) AND 
-       checkProof(empty_seq)(RR_th2_1(lpivot, nclBB, CC)))
+      (conclusion(RR_th2_1(lpivot, nclBB, sCC))= cons(f_not(lpivot), append(not_or_reduction(nclBB), sCC)) AND 
+       checkProof(empty_seq)(RR_th2_1(lpivot, nclBB, sCC)))
 
     th2: THEOREM 
-      (sentence_list?(CC) AND
-       subset(nclAA, cons(lpivot, CC)) AND
-       subset(nclBB, cons(f_neg(lpivot), CC)))
+      (subset(nclAA, cons(lpivot, sCC)) AND
+       subset(nclBB, cons(f_neg(lpivot), sCC)))
       => 
-      (conclusion(RR_th2(lpivot, nclAA, nclBB, CC))= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), CC)) AND 
-       checkProof(empty_seq)(RR_th2(lpivot, nclAA, nclBB, CC)))
+      (conclusion(RR_th2(lpivot, nclAA, nclBB, sCC))= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), sCC)) AND 
+       checkProof(empty_seq)(RR_th2(lpivot, nclAA, nclBB, sCC)))
  		
   END resolution
  
