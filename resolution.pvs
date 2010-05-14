@@ -292,21 +292,21 @@ resolution : THEORY
 
     lpivot: VAR (literal?)
 
-    RR_th2_1(lpivot, nclBB, clCC): ne_proof_seq =
+    RR_th2_1(lpivot, nclBB, CC): ne_proof_seq =
           IF f_not?(lpivot)
 	  THEN 
-	    LET RR1 = RR_subsetr(append(not_or_reduction(nclBB), cons(arg(lpivot), clCC)),
-	       	       	 	 cons(arg(lpivot), append(not_or_reduction(nclBB), clCC)),
-				 RR_th1(nclBB, cons(arg(lpivot), clCC))) IN		
-	    RR_negr(arg(lpivot), append(not_or_reduction(nclBB), clCC), RR1)
+	    LET RR1 = RR_subsetr(append(not_or_reduction(nclBB), cons(arg(lpivot), CC)),
+	       	       	 	 cons(arg(lpivot), append(not_or_reduction(nclBB), CC)),
+				 RR_th1(nclBB, cons(arg(lpivot), CC))) IN		
+	    RR_negr(arg(lpivot), append(not_or_reduction(nclBB), CC), RR1)
 	  ELSE
-	    RR_subsetr(append(not_or_reduction(nclBB), cons(f_not(lpivot), clCC)),
-	       	       cons(f_not(lpivot), append(not_or_reduction(nclBB), clCC)),
-		       RR_th1(nclBB, cons(f_not(lpivot), clCC))) 
+	    RR_subsetr(append(not_or_reduction(nclBB), cons(f_not(lpivot), CC)),
+	       	       cons(f_not(lpivot), append(not_or_reduction(nclBB), CC)),
+		       RR_th1(nclBB, cons(f_not(lpivot), CC))) 
 	  ENDIF	    
 	    
 	 
-    RR_th2(lpivot, nclAA, nclBB, clCC): ne_proof_seq = empty_seq
+    RR_th2(lpivot, nclAA, nclBB, CC): ne_proof_seq = empty_seq
 %          LET lA = car(nclAA) IN
 %	  LET clAA = cdr(nclAA) IN
 %	  LET lB = car(nclBB) IN
@@ -322,18 +322,21 @@ resolution : THEORY
 %	  ENDIF
 %	  MEASURE length(nclAA)
 
+    th2_1_1: LEMMA FORALL(f: (f_not?)): f = f_not(arg(f))
+
     th2_1: THEOREM 
-      include_clause(nclBB, cons(f_neg(lpivot), clCC))
+      (sentence_list?(CC) AND
+       include_clause(nclBB, cons(f_neg(lpivot), CC)))
       => 
-      (conclusion(RR_th2_1(lpivot, nclBB, clCC))= cons(f_not(lpivot), append(not_or_reduction(nclBB), clCC)) AND 
-       checkProof(empty_seq)(RR_th2_1(lpivot, nclBB, clCC)))
+      (conclusion(RR_th2_1(lpivot, nclBB, CC))= cons(f_not(lpivot), append(not_or_reduction(nclBB), CC)) AND 
+       checkProof(empty_seq)(RR_th2_1(lpivot, nclBB, CC)))
 
     th2: THEOREM 
-      (include_clause(nclAA, cons(lpivot, clCC)) AND
-       include_clause(nclBB, cons(f_neg(lpivot), clCC)))
+      (sentence_list?(CC) AND
+       include_clause(nclAA, cons(lpivot, CC)) AND
+       include_clause(nclBB, cons(f_neg(lpivot), CC)))
       => 
-      (conclusion(RR_th2(lpivot, nclAA, nclBB, clCC))= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), clCC)) AND 
-       checkProof(empty_seq)(RR_th2(lpivot, nclAA, nclBB, clCC)))
-			       
+      (conclusion(RR_th2(lpivot, nclAA, nclBB, CC))= append(not_or_reduction(nclAA), append(not_or_reduction(nclBB), CC)) AND 
+       checkProof(empty_seq)(RR_th2(lpivot, nclAA, nclBB, CC)))
  		
   END resolution

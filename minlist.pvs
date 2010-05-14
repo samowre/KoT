@@ -212,6 +212,8 @@ minlist   [T : TYPE ]
 
      subset_member: LEMMA subset(k, l) = subset?(k, l)
 
+     every_member_subset: LEMMA subset(k, l) <=> (FORALL a: member(a, k) => member(a, l))
+
      setify(l): RECURSIVE {k | setlist?(k) AND subset(k, l) AND subset(l, k)} =
      CASES l OF
        null: null,
