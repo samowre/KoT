@@ -152,8 +152,8 @@ BEGIN
     exist_pivot?(nck, ncl) 
      => 
       LET pivot = find_pivot(nck, ncl) IN 
-      sorted_include(nck, cons(pivot, res))&
-      sorted_include(ncl, cons(pivot, res))
+      subset(nck, cons(pivot, res))&
+      subset(ncl, cons(-pivot, res))
     
       
   %applies merge on a non-empty list of clauses

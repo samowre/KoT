@@ -434,12 +434,553 @@
   (proof_th_TCC4-1 nil 3482800740 nil ("" (subtype-tcc) nil nil)
    unchecked nil nil nil nil nil))
  (th 0
-  (th-1 nil 3482775473 3482806399
-   ("" (skosimp)
-    (("" (split)
-      (("1" (expand proof_th)
-        (("1" (lift-if)
-          (("1" (split)
+  (th-1 nil 3482775473 3483105915
+   ("" (skolem-typepred)
+    (("" (hide -1 -4)
+      (("" (split)
+        (("1" (expand proof_th)
+          (("1" (lift-if)
+            (("1" (split)
+              (("1" (flatten)
+                (("1" (split)
+                  (("1" (flatten)
+                    (("1" (lemma th2)
+                      (("1"
+                        (inst -1
+                         "translate_clause(resolution(ntcA!1, ntcB!1))"
+                         "translate_lit(find_pivot(ntcA!1, ntcB!1))"
+                         "translate_clause(ntcA!1)"
+                         "translate_clause(ntcB!1)")
+                        (("1" (assert)
+                          (("1" (delete 2)
+                            (("1" (split)
+                              (("1"
+                                (use literal_list_sentence_list)
+                                nil
+                                nil)
+                               ("2"
+                                (lemma
+                                 translate_include_res
+                                 (nck "ntcA!1" ncl "ntcB!1"))
+                                (("2" (assert) nil nil))
+                                nil)
+                               ("3"
+                                (lemma
+                                 translate_include_res2
+                                 (nck "ntcA!1" ncl "ntcB!1"))
+                                (("3"
+                                  (assert)
+                                  (("3"
+                                    (lemma
+                                     neg_translate
+                                     (k "find_pivot(ntcA!1, ntcB!1)"))
+                                    (("3"
+                                      (replace -1 1)
+                                      (("3" (propax) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil)
+                   ("2" (flatten)
+                    (("2" (lemma th1)
+                      (("2"
+                        (inst -1
+                         "append(not_or_reduction(translate_clause(ntcB!1)),
+                               translate_clause(resolution
+                                                (ntcA!1, ntcB!1)))"
+                         "translate_clause(ntcA!1)")
+                        (("2" (assert)
+                          (("2" (delete 3)
+                            (("2" (split)
+                              (("1"
+                                (expand not_or_reduction 1)
+                                (("1"
+                                  (expand append 1)
+                                  (("1"
+                                    (expand append 1)
+                                    (("1"
+                                      (use nclause2fmla_sentence)
+                                      (("1"
+                                        (lemma
+                                         literal_list_sentence_list)
+                                        (("1"
+                                          (inst
+                                           -1
+                                           "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                          (("1" (grind) nil nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (lemma
+                                 append_inclusion
+                                 (cl
+                                  "ntcA!1"
+                                  cm
+                                  "resolution(ntcA!1, ntcB!1)"
+                                  sq
+                                  "not_or_reduction(translate_clause(ntcB!1))"))
+                                (("2"
+                                  (assert)
+                                  (("2"
+                                    (delete 2)
+                                    (("2"
+                                      (expand resolution +)
+                                      (("2"
+                                        (expand not_true_clauses -1)
+                                        (("2"
+                                          (flatten)
+                                          (("2"
+                                            (replace 3 1)
+                                            (("2"
+                                              (replace 4 1)
+                                              (("2"
+                                                (lemma merge_includes1)
+                                                (("2"
+                                                  (inst
+                                                   -1
+                                                   "ntcA!1"
+                                                   "ntcB!1")
+                                                  (("2"
+                                                    (flatten)
+                                                    (("2"
+                                                      (lemma
+                                                       subset_include
+                                                       (sAA
+                                                        "ntcA!1"
+                                                        sBB
+                                                        "merge(ntcA!1, ntcB!1)"))
+                                                      (("2"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (flatten)
+                (("2" (split)
+                  (("1" (flatten)
+                    (("1" (lemma lemma_subsetr)
+                      (("1"
+                        (inst -1
+                         "append(not_or_reduction(translate_clause
+                                                    (ntcB!1)),
+                                   append(not_or_reduction
+                                          (translate_clause(ntcA!1)),
+                                          translate_clause
+                                          (resolution(ntcA!1, ntcB!1))))"
+                         "append(not_or_reduction(translate_clause
+                                                    (ntcA!1)),
+                                   append(not_or_reduction
+                                          (translate_clause(ntcB!1)),
+                                          translate_clause
+                                          (resolution(ntcA!1, ntcB!1))))"
+                         "RR_th1(translate_clause(ntcB!1),
+                                   append(not_or_reduction
+                                          (translate_clause(ntcA!1)),
+                                          translate_clause
+                                          (resolution(ntcA!1, ntcB!1))))")
+                        (("1" (assert)
+                          (("1" (delete 2)
+                            (("1" (split)
+                              (("1"
+                                (expand not_or_reduction)
+                                (("1"
+                                  (expand append)
+                                  (("1"
+                                    (expand append)
+                                    (("1"
+                                      (lemma nclause2fmla_sentence)
+                                      (("1"
+                                        (inst-cp
+                                         -1
+                                         "translate_clause(ntcB!1)")
+                                        (("1"
+                                          (inst
+                                           -1
+                                           "translate_clause(ntcA!1)")
+                                          (("1"
+                                            (lemma
+                                             literal_list_sentence_list)
+                                            (("1"
+                                              (inst
+                                               -1
+                                               "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                              (("1" (grind) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (expand not_or_reduction)
+                                (("2"
+                                  (expand append)
+                                  (("2"
+                                    (expand append)
+                                    (("2"
+                                      (lemma nclause2fmla_sentence)
+                                      (("2"
+                                        (inst-cp
+                                         -1
+                                         "translate_clause(ntcB!1)")
+                                        (("2"
+                                          (inst
+                                           -1
+                                           "translate_clause(ntcA!1)")
+                                          (("2"
+                                            (lemma
+                                             literal_list_sentence_list)
+                                            (("2"
+                                              (inst
+                                               -1
+                                               "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                              (("2" (grind) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("3"
+                                (expand not_or_reduction)
+                                (("3"
+                                  (expand append)
+                                  (("3"
+                                    (expand append)
+                                    (("3"
+                                      (expand subset)
+                                      (("3"
+                                        (split)
+                                        (("1" (grind) nil nil)
+                                         ("2"
+                                          (expand subset)
+                                          (("2"
+                                            (split)
+                                            (("1" (grind) nil nil)
+                                             ("2"
+                                              (lemma
+                                               every_member_subset
+                                               (k
+                                                "translate_clause(resolution(ntcA!1, ntcB!1))"
+                                                l
+                                                "cons(f_not(nclause2fmla(translate_clause(ntcA!1))),
+                  cons(f_not(nclause2fmla(translate_clause(ntcB!1))),
+                       translate_clause(resolution(ntcA!1, ntcB!1))))"))
+                                              (("2"
+                                                (replace -1 1)
+                                                (("2"
+                                                  (skosimp)
+                                                  (("2"
+                                                    (grind)
+                                                    nil
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("4"
+                                (lemma th1)
+                                (("4"
+                                  (inst
+                                   -1
+                                   "append(not_or_reduction(translate_clause(ntcA!1)),
+                               translate_clause(resolution
+                                                (ntcA!1, ntcB!1)))"
+                                   "translate_clause(ntcB!1)")
+                                  (("4"
+                                    (assert)
+                                    (("4"
+                                      (delete 2)
+                                      (("4"
+                                        (split)
+                                        (("1"
+                                          (expand not_or_reduction)
+                                          (("1"
+                                            (expand append)
+                                            (("1"
+                                              (expand append)
+                                              (("1"
+                                                (lemma
+                                                 nclause2fmla_sentence)
+                                                (("1"
+                                                  (inst
+                                                   -1
+                                                   "translate_clause(ntcA!1)")
+                                                  (("1"
+                                                    (lemma
+                                                     literal_list_sentence_list)
+                                                    (("1"
+                                                      (inst
+                                                       -1
+                                                       "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                                      (("1"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil)
+                                         ("2"
+                                          (expand resolution)
+                                          (("2"
+                                            (expand not_or_reduction)
+                                            (("2"
+                                              (expand append)
+                                              (("2"
+                                                (expand append)
+                                                (("2"
+                                                  (lemma
+                                                   every_member_subset
+                                                   (k
+                                                    "translate_clause(ntcB!1)"
+                                                    l
+                                                    "cons(f_not(nclause2fmla(translate_clause(ntcA!1))),
+                  translate_clause(ntcB!1))"))
+                                                  (("2"
+                                                    (replace -1 1)
+                                                    (("2"
+                                                      (skosimp)
+                                                      (("2"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("5"
+                                (lemma th1)
+                                (("5"
+                                  (inst
+                                   -1
+                                   "append(not_or_reduction(translate_clause(ntcA!1)),
+                               translate_clause(resolution
+                                                (ntcA!1, ntcB!1)))"
+                                   "translate_clause(ntcB!1)")
+                                  (("5"
+                                    (assert)
+                                    (("5"
+                                      (delete 2)
+                                      (("5"
+                                        (split)
+                                        (("1"
+                                          (expand not_or_reduction)
+                                          (("1"
+                                            (expand append)
+                                            (("1"
+                                              (expand append)
+                                              (("1"
+                                                (lemma
+                                                 nclause2fmla_sentence)
+                                                (("1"
+                                                  (inst
+                                                   -1
+                                                   "translate_clause(ntcA!1)")
+                                                  (("1"
+                                                    (lemma
+                                                     literal_list_sentence_list)
+                                                    (("1"
+                                                      (inst
+                                                       -1
+                                                       "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                                      (("1"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil)
+                                         ("2"
+                                          (expand not_or_reduction)
+                                          (("2"
+                                            (expand append)
+                                            (("2"
+                                              (expand append)
+                                              (("2"
+                                                (expand resolution)
+                                                (("2"
+                                                  (lemma
+                                                   every_member_subset
+                                                   (k
+                                                    "translate_clause(ntcB!1)"
+                                                    l
+                                                    "cons(f_not(nclause2fmla(translate_clause(ntcA!1))),
+                  translate_clause(ntcB!1))"))
+                                                  (("2"
+                                                    (replace -1 1)
+                                                    (("2"
+                                                      (skosimp)
+                                                      (("2"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil)
+                   ("2" (flatten)
+                    (("2" (lemma th1)
+                      (("2"
+                        (inst -1
+                         "append(not_or_reduction(translate_clause(ntcB!1)),
+                               translate_clause(resolution
+                                                (ntcA!1, ntcB!1)))"
+                         "translate_clause(ntcA!1)")
+                        (("2" (assert)
+                          (("2" (delete 3)
+                            (("2" (split)
+                              (("1"
+                                (expand not_or_reduction)
+                                (("1"
+                                  (expand append)
+                                  (("1"
+                                    (expand append)
+                                    (("1"
+                                      (lemma nclause2fmla_sentence)
+                                      (("1"
+                                        (inst
+                                         -1
+                                         "translate_clause(ntcB!1)")
+                                        (("1"
+                                          (lemma
+                                           literal_list_sentence_list)
+                                          (("1"
+                                            (inst
+                                             -1
+                                             "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                            (("1" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (expand not_or_reduction)
+                                (("2"
+                                  (expand append)
+                                  (("2"
+                                    (expand append)
+                                    (("2"
+                                      (expand resolution)
+                                      (("2"
+                                        (expand not_true_clauses 3)
+                                        (("2"
+                                          (lift-if)
+                                          (("2"
+                                            (split)
+                                            (("1"
+                                              (flatten)
+                                              (("1"
+                                                (lemma
+                                                 every_member_subset
+                                                 (k
+                                                  "translate_clause(ntcA!1)"
+                                                  l
+                                                  "cons(f_not(nclause2fmla(translate_clause(ntcB!1))),
+                  translate_clause(ntcA!1))"))
+                                                (("1"
+                                                  (replace -1 1)
+                                                  (("1"
+                                                    (skosimp)
+                                                    (("1"
+                                                      (grind)
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2" (flatten) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil)
+         ("2" (expand proof_th)
+          (("2" (split)
             (("1" (flatten)
               (("1" (split)
                 (("1" (flatten)
@@ -453,7 +994,7 @@
                       (("1" (assert)
                         (("1" (delete 2)
                           (("1" (split)
-                            (("1" (lemma clause_sentence_list)
+                            (("1" (lemma literal_list_sentence_list)
                               (("1"
                                 (inst
                                  -1
@@ -461,55 +1002,31 @@
                                 nil
                                 nil))
                               nil)
-                             ("2" (generalize "ntcA!1" ntcA)
+                             ("2"
+                              (lemma translate_include_res
+                               (nck "ntcA!1" ncl "ntcB!1"))
                               (("2"
-                                (induct ntcA)
-                                (("1"
-                                  (typepred ntcA!2)
-                                  (("1" (propax) nil nil))
-                                  nil)
-                                 ("2"
-                                  (typepred ntcA!2)
-                                  (("2" (propax) nil nil))
-                                  nil)
-                                 ("3"
-                                  (flatten)
-                                  (("3" (grind) nil nil))
-                                  nil)
-                                 ("4"
-                                  (skolem-typepred)
-                                  (("4"
-                                    (flatten)
-                                    (("4"
-                                      (hide -2)
-                                      (("4"
-                                        (expand tr_clause? -3)
-                                        (("4"
-                                          (expand sorted? -3)
-                                          (("4"
-                                            (lift-if -3)
-                                            (("4"
-                                              (split -3)
-                                              (("1" (postpone) nil nil)
-                                               ("2"
-                                                (postpone)
-                                                nil
-                                                nil))
-                                              nil))
-                                            nil))
-                                          nil))
-                                        nil))
-                                      nil))
-                                    nil))
+                                (replace -3 -1)
+                                (("2"
+                                  (replace -2 -1)
+                                  (("2" (assert) nil nil))
                                   nil))
                                 nil))
                               nil)
                              ("3"
-                              (lemma neg_translate
-                               (k "find_pivot(ntcA!1, ntcB!1)"))
+                              (lemma translate_include_res2
+                               (nck "ntcA!1" ncl "ntcB!1"))
                               (("3"
-                                (replace -1 1)
-                                (("3" (postpone) nil nil))
+                                (assert)
+                                (("3"
+                                  (lemma
+                                   neg_translate
+                                   (k "find_pivot(ntcA!1, ntcB!1)"))
+                                  (("3"
+                                    (replace -1 1)
+                                    (("3" (propax) nil nil))
+                                    nil))
+                                  nil))
                                 nil))
                               nil))
                             nil))
@@ -529,40 +1046,91 @@
                       (("2" (assert)
                         (("2" (delete 3)
                           (("2" (split)
-                            (("1" (lemma clause_sentence_list)
+                            (("1" (expand not_or_reduction)
                               (("1"
-                                (inst
-                                 -1
-                                 "append(not_or_reduction(translate_clause(ntcB!1)),
-                            translate_clause(resolution(ntcA!1, ntcB!1)))")
-                                (("1" (grind) nil nil)
-                                 ("2"
-                                  (lemma literal_list_sentence_list)
-                                  (("2"
-                                    (inst
-                                     -1
-                                     "append(not_or_reduction(translate_clause(ntcB!1)),
-                            translate_clause(resolution(ntcA!1, ntcB!1)))")
-                                    (("2"
-                                      (assert)
-                                      (("2" (grind) nil nil))
-                                      nil))
-                                    nil))
-                                  nil)
-                                 ("3"
-                                  (use literal_list_sentence_list)
-                                  (("3"
-                                    (use literal_list_sentence_list)
-                                    (("3"
+                                (expand append)
+                                (("1"
+                                  (expand append)
+                                  (("1"
+                                    (lemma nclause2fmla_sentence)
+                                    (("1"
                                       (lemma
                                        literal_list_sentence_list)
-                                      (("3" (postpone) nil nil))
+                                      (("1"
+                                        (inst
+                                         -1
+                                         "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                        (("1"
+                                          (inst
+                                           -2
+                                           "translate_clause(ntcB!1)")
+                                          (("1" (grind) nil nil))
+                                          nil))
+                                        nil))
                                       nil))
                                     nil))
                                   nil))
                                 nil))
                               nil)
-                             ("2" (postpone) nil nil))
+                             ("2" (expand not_or_reduction)
+                              (("2"
+                                (expand append)
+                                (("2"
+                                  (expand append)
+                                  (("2"
+                                    (expand resolution)
+                                    (("2"
+                                      (expand not_true_clauses -1)
+                                      (("2"
+                                        (flatten)
+                                        (("2"
+                                          (replace 3 1)
+                                          (("2"
+                                            (replace 4 1)
+                                            (("2"
+                                              (lemma
+                                               cons_cdr_inclusion
+                                               (f
+                                                "f_not(nclause2fmla(translate_clause(ntcB!1)))"
+                                                ck
+                                                "merge(ntcA!1, ntcB!1)"
+                                                cl
+                                                "ntcA!1"))
+                                              (("2"
+                                                (assert)
+                                                (("2"
+                                                  (lemma
+                                                   merge_includes1
+                                                   (ck
+                                                    "ntcA!1"
+                                                    cl
+                                                    "ntcB!1"))
+                                                  (("2"
+                                                    (flatten)
+                                                    (("2"
+                                                      (lemma
+                                                       subset_include
+                                                       (sAA
+                                                        "ntcA!1"
+                                                        sBB
+                                                        "merge(ntcA!1, ntcB!1)"))
+                                                      (("2"
+                                                        (assert)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
                             nil))
                           nil))
                         nil))
@@ -596,38 +1164,590 @@
                       (("1" (assert)
                         (("1" (delete 2)
                           (("1" (split)
-                            (("1" (lemma literal_list_sentence_list)
+                            (("1" (expand not_or_reduction)
                               (("1"
-                                (inst
-                                 -1
-                                 "append(not_or_reduction(translate_clause(ntcB!1)),
-                            append(not_or_reduction(translate_clause
-                                                    (ntcA!1)),
-                                   translate_clause(resolution
-                                                    (ntcA!1, ntcB!1))))")
-                                (("1" (grind) nil nil)
-                                 ("2" (postpone) nil nil)
-                                 ("3" (postpone) nil nil))
+                                (expand append)
+                                (("1"
+                                  (expand append)
+                                  (("1"
+                                    (lemma nclause2fmla_sentence)
+                                    (("1"
+                                      (inst-cp
+                                       -1
+                                       "translate_clause(ntcB!1)")
+                                      (("1"
+                                        (inst
+                                         -1
+                                         "translate_clause(ntcA!1)")
+                                        (("1"
+                                          (lemma
+                                           literal_list_sentence_list)
+                                          (("1"
+                                            (inst
+                                             -1
+                                             "translate_clause(resolution
+                                                (ntcA!1, ntcB!1))")
+                                            (("1" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
                                 nil))
                               nil)
-                             ("2" (postpone) nil nil)
-                             ("3" (postpone) nil nil)
-                             ("4" (postpone) nil nil)
-                             ("5" (postpone) nil nil))
+                             ("2" (expand not_or_reduction)
+                              (("2"
+                                (expand append)
+                                (("2"
+                                  (expand append)
+                                  (("2"
+                                    (lemma nclause2fmla_sentence)
+                                    (("2"
+                                      (inst-cp
+                                       -1
+                                       "translate_clause(ntcB!1)")
+                                      (("2"
+                                        (inst-cp
+                                         -1
+                                         "translate_clause(ntcA!1)")
+                                        (("2"
+                                          (lemma
+                                           literal_list_sentence_list)
+                                          (("2"
+                                            (inst
+                                             -1
+                                             "translate_clause(resolution
+                                                (ntcA!1, ntcB!1))")
+                                            (("2" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("3" (expand not_or_reduction)
+                              (("3"
+                                (expand append)
+                                (("3"
+                                  (expand append)
+                                  (("3"
+                                    (expand subset)
+                                    (("3"
+                                      (split)
+                                      (("1"
+                                        (expand member)
+                                        (("1"
+                                          (assert)
+                                          (("1"
+                                            (flatten)
+                                            (("1"
+                                              (delete 1)
+                                              (("1" (grind) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (expand subset)
+                                        (("2"
+                                          (split)
+                                          (("1" (grind) nil nil)
+                                           ("2"
+                                            (lemma
+                                             every_member_subset
+                                             (k
+                                              "translate_clause(resolution(ntcA!1, ntcB!1))"
+                                              l
+                                              "cons(f_not(nclause2fmla(translate_clause(ntcA!1))),
+                  cons(f_not(nclause2fmla(translate_clause(ntcB!1))),
+                       translate_clause(resolution(ntcA!1, ntcB!1))))"))
+                                            (("2"
+                                              (replace -1 1)
+                                              (("2"
+                                                (skosimp)
+                                                (("2" (grind) nil nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("4" (lemma th1)
+                              (("4"
+                                (expand not_or_reduction)
+                                (("4"
+                                  (expand append)
+                                  (("4"
+                                    (expand append)
+                                    (("4"
+                                      (inst
+                                       -1
+                                       "cons(f_not(nclause2fmla(translate_clause(ntcA!1))),
+                             translate_clause(resolution
+                                              (ntcA!1, ntcB!1)))"
+                                       "translate_clause(ntcB!1)")
+                                      (("4"
+                                        (assert)
+                                        (("4"
+                                          (delete 2)
+                                          (("4"
+                                            (split)
+                                            (("1"
+                                              (lemma
+                                               nclause2fmla_sentence)
+                                              (("1"
+                                                (inst
+                                                 -1
+                                                 "translate_clause(ntcA!1)")
+                                                (("1"
+                                                  (lemma
+                                                   literal_list_sentence_list)
+                                                  (("1"
+                                                    (inst
+                                                     -1
+                                                     "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                                    (("1"
+                                                      (grind)
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (expand resolution +)
+                                              (("2"
+                                                (lemma
+                                                 cons_cdr_inclusion
+                                                 (f
+                                                  "f_not(nclause2fmla(translate_clause(ntcA!1)))"
+                                                  cl
+                                                  "ntcB!1"
+                                                  ck
+                                                  "ntcB!1"))
+                                                (("2"
+                                                  (assert)
+                                                  (("2"
+                                                    (delete 2)
+                                                    (("2"
+                                                      (lemma
+                                                       subset_lit_subset_fmla)
+                                                      (("2"
+                                                        (lemma
+                                                         every_member_subset
+                                                         (k
+                                                          "ntcB!1"
+                                                          l
+                                                          "ntcB!1"))
+                                                        (("2"
+                                                          (replace
+                                                           -1
+                                                           1)
+                                                          (("2"
+                                                            (grind)
+                                                            nil
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("5" (lemma th1)
+                              (("5"
+                                (inst
+                                 -1
+                                 "append(not_or_reduction(translate_clause(ntcA!1)),
+                               translate_clause(resolution
+                                                (ntcA!1, ntcB!1)))"
+                                 "translate_clause(ntcB!1)")
+                                (("5"
+                                  (assert)
+                                  (("5"
+                                    (delete 2)
+                                    (("5"
+                                      (split)
+                                      (("1"
+                                        (expand not_or_reduction)
+                                        (("1"
+                                          (expand append)
+                                          (("1"
+                                            (expand append)
+                                            (("1"
+                                              (expand resolution +)
+                                              (("1"
+                                                (lemma
+                                                 nclause2fmla_sentence)
+                                                (("1"
+                                                  (inst
+                                                   -1
+                                                   "translate_clause(ntcA!1)")
+                                                  (("1"
+                                                    (lemma
+                                                     literal_list_sentence_list)
+                                                    (("1"
+                                                      (inst
+                                                       -1
+                                                       "translate_clause(ntcB!1)")
+                                                      (("1"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (expand resolution +)
+                                        (("2"
+                                          (lemma
+                                           cons_cdr_inclusion
+                                           (f
+                                            "f_not(nclause2fmla(translate_clause(ntcA!1)))"
+                                            cl
+                                            "ntcB!1"
+                                            ck
+                                            "ntcB!1"))
+                                          (("2"
+                                            (assert)
+                                            (("2"
+                                              (lemma
+                                               append_inclusion
+                                               (cl
+                                                "ntcB!1"
+                                                cm
+                                                "ntcB!1"
+                                                sq
+                                                "not_or_reduction(translate_clause(ntcA!1))"))
+                                              (("2"
+                                                (assert)
+                                                (("2"
+                                                  (delete 2)
+                                                  (("2"
+                                                    (lemma
+                                                     every_member_subset
+                                                     (k
+                                                      "ntcB!1"
+                                                      l
+                                                      "ntcB!1"))
+                                                    (("2"
+                                                      (replace -1 1)
+                                                      (("2"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
                             nil))
                           nil))
                         nil))
                       nil))
                     nil))
                   nil)
-                 ("2" (postpone) nil nil))
+                 ("2" (flatten)
+                  (("2" (lemma th1)
+                    (("2"
+                      (inst -1
+                       "append(not_or_reduction(translate_clause(ntcB!1)),
+                               translate_clause(resolution
+                                                (ntcA!1, ntcB!1)))"
+                       "translate_clause(ntcA!1)")
+                      (("2" (assert)
+                        (("2" (delete 3)
+                          (("2" (split)
+                            (("1" (expand not_or_reduction)
+                              (("1"
+                                (expand append)
+                                (("1"
+                                  (expand append)
+                                  (("1"
+                                    (lemma nclause2fmla_sentence)
+                                    (("1"
+                                      (inst
+                                       -1
+                                       "translate_clause(ntcB!1)")
+                                      (("1"
+                                        (lemma
+                                         literal_list_sentence_list)
+                                        (("1"
+                                          (inst
+                                           -1
+                                           "translate_clause(resolution(ntcA!1, ntcB!1))")
+                                          (("1" (grind) nil nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("2" (expand not_or_reduction)
+                              (("2"
+                                (expand append)
+                                (("2"
+                                  (expand append)
+                                  (("2"
+                                    (expand resolution +)
+                                    (("2"
+                                      (lift-if)
+                                      (("2"
+                                        (split)
+                                        (("1"
+                                          (flatten)
+                                          (("1"
+                                            (lemma
+                                             cons_cdr_inclusion
+                                             (f
+                                              "f_not(nclause2fmla(translate_clause(ntcB!1)))"
+                                              cl
+                                              "ntcA!1"
+                                              ck
+                                              "ntcA!1"))
+                                            (("1"
+                                              (assert)
+                                              (("1"
+                                                (delete 2)
+                                                (("1"
+                                                  (lemma
+                                                   every_member_subset
+                                                   (k
+                                                    "ntcA!1"
+                                                    l
+                                                    "ntcA!1"))
+                                                  (("1"
+                                                    (replace -1 1)
+                                                    (("1"
+                                                      (grind)
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil)
+                                         ("2"
+                                          (flatten)
+                                          (("2"
+                                            (split)
+                                            (("1"
+                                              (flatten)
+                                              (("1"
+                                                (lemma
+                                                 translate_include_res
+                                                 (nck
+                                                  "ntcA!1"
+                                                  ncl
+                                                  "ntcB!1"))
+                                                (("1"
+                                                  (replace 4 -1)
+                                                  (("1"
+                                                    (expand
+                                                     not_true_clauses
+                                                     +)
+                                                    (("1"
+                                                      (propax)
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (flatten)
+                                              (("2"
+                                                (lemma
+                                                 cons_cdr_inclusion
+                                                 (f
+                                                  "f_not(nclause2fmla(translate_clause(ntcB!1)))"
+                                                  cl
+                                                  "ntcA!1"
+                                                  ck
+                                                  "merge(ntcA!1, ntcB!1)"))
+                                                (("2"
+                                                  (assert)
+                                                  (("2"
+                                                    (delete 3)
+                                                    (("2"
+                                                      (lemma
+                                                       merge_includes1)
+                                                      (("2"
+                                                        (inst
+                                                         -1
+                                                         "ntcA!1"
+                                                         "ntcB!1")
+                                                        (("2"
+                                                          (flatten)
+                                                          (("2"
+                                                            (lemma
+                                                             subset_include
+                                                             (sAA
+                                                              "ntcA!1"
+                                                              sBB
+                                                              "merge(ntcA!1, ntcB!1)"))
+                                                            (("2"
+                                                              (assert)
+                                                              nil
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
                 nil))
               nil))
             nil))
           nil))
-        nil)
-       ("2" (postpone) nil nil))
+        nil))
       nil))
     nil)
-   unfinished nil 1017036 5600 t shostak)))
+   proved
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (<= const-decl "bool" reals nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (delete_pivot const-decl "{cl |
+         FORALL l:
+           member(l, cl) <=>
+            member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)}"
+     trace_resolution nil)
+    (below type-eq-decl nil nat_types nil)
+    (rule type-decl nil proof nil)
+    (proof_step type-eq-decl nil proof nil)
+    (proof_seq type-eq-decl nil proof nil)
+    (ne_proof_seq type-eq-decl nil proof nil)
+    (RR_th1 def-decl "ne_proof_seq" resolution nil)
+    (nclause2fmla def-decl "fmla" resolution nil)
+    (f_not adt-constructor-decl "[fmla -> (f_not?)]" fmla nil)
+    (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (every_member_subset formula-decl nil minlist nil)
+    (subset def-decl "bool" minlist nil)
+    (lemma_subsetr formula-decl nil resolution nil)
+    (append def-decl "list[T]" list_props nil)
+    (sentence_list? const-decl "bool" fmla nil)
+    (sequent type-eq-decl nil sequents nil)
+    (not_or_reduction const-decl "sequent" resolution nil)
+    (append_inclusion formula-decl nil trace2fmla nil)
+    (merge_includes1 formula-decl nil trace_resolution nil)
+    (index const-decl "posnat" trace_resolution nil)
+    (posnat nonempty-type-eq-decl nil integers nil)
+    (> const-decl "bool" reals nil)
+    (nonneg_int nonempty-type-eq-decl nil integers nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (subset_include formula-decl nil sortedlist nil)
+    (sentence? const-decl "bool" fmla nil)
+    (freevars def-decl "list[(var?)]" fmla nil)
+    (freevars def-decl "list[(var?)]" fmla nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (merge def-decl "{cla: (tr_clause?) |
+         FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
+           trace_resolution nil)
+    (termvars def-decl "list[(var?)]" fmla nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (nclause2fmla_sentence formula-decl nil resolution nil)
+    (th1 formula-decl nil resolution nil) (fmla type-decl nil fmla nil)
+    (literal? const-decl "bool" resolution nil)
+    (clause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (exist_pivot? def-decl "bool" trace_resolution nil)
+    (member def-decl "bool" list_props nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (- const-decl "[numfield -> numfield]" number_fields nil)
+    (find_pivot def-decl "{k | member(k, nck) AND member(-k, ncl)}"
+     trace_resolution nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_include_res2 formula-decl nil trace2fmla nil)
+    (neg_translate formula-decl nil trace2fmla nil)
+    (translate_include_res formula-decl nil trace2fmla nil)
+    (literal_list_sentence_list formula-decl nil resolution nil)
+    (th2 formula-decl nil resolution nil)
+    (proof_th const-decl "ne_proof_seq" trace_checker nil)
+    (cons_cdr_inclusion formula-decl nil trace2fmla nil)
+    (subset_lit_subset_fmla formula-decl nil resolution nil))
+   771999 16680 t shostak)))
 

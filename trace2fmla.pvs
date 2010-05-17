@@ -4,8 +4,8 @@ BEGIN
   IMPORTING trace_resolution[m,n,i]
   IMPORTING resolution
 
-  k: VAR (trace_resolution[m,n,i].tr_literal?)
-  cl, ck: VAR (trace_resolution[m,n,i].tr_clause?)
+  k: VAR (tr_literal?)
+  cl, ck, cm: VAR (tr_clause?)
 
   % transforms ( n:nzint ) -> fmla = (f_not)? (atom(upred...))
   translate_lit(k): (literal?) = IF k > 0 
@@ -32,14 +32,50 @@ BEGIN
   neg_translate:  LEMMA
      f_neg(translate_lit(k)) = translate_lit(-k)
 
-  lc, lk: VAR list[(trace_resolution[m,n,i].tr_literal?)]
-
-  translate_inclusion: LEMMA
-    subset(lk, lc) = subset(translate_clause(lk), translate_clause(lc))
-
   cons_inclusion:  LEMMA
-    subset(cl, cons(k, ck)) = subset(translate_clause(cl), cons(translate_lit(k), translate_clause(ck)))
+    subset(cl, cons(k, ck)) = 
+    subset[fmla](translate_clause(cl), cons[fmla](translate_lit(k), translate_clause(ck)))
 
+
+  cons_cdr_inclusion:  LEMMA
+    FORALL (f: fmla, cl, ck):
+    subset(cl,  ck) =>
+    subset[fmla](translate_clause(cl), cons[fmla](f, translate_clause(ck)))
+
+  sq: VAR sequent
+
+  append_inclusion:  LEMMA
+    FORALL (cl, cm, sq):
+    subset(cl, cm) => 
+    subset[fmla](translate_clause(cl), append(sq, translate_clause(cm)))
+
+  
+
+  slA, slB: VAR (sentence_list?)
+
+  append_sentence:  LEMMA
+    FORALL (slA, slB): sentence_list?(append(slA, slB))
+
+  fmla_inclusion:  LEMMA
+    subset(cl, cons(k, ck)) => 
+    subset[fmla](translate_clause(cl), cons(translate_lit(k), translate_clause(ck)))
+
+  ncl, nck, ncm : VAR (ne_tr_clause?)
+
+
+  translate_include_res :  LEMMA
+    not_true_clauses(nck, ncl) AND exist_pivot?(nck, ncl) => 
+    LET res = resolution(nck, ncl) IN 
+    subset[fmla](translate_clause(nck),
+             cons(translate_lit(find_pivot(nck, ncl)),
+                  translate_clause(resolution(nck, ncl))))
+
+  translate_include_res2 :  LEMMA
+    not_true_clauses(nck, ncl) AND exist_pivot?(nck, ncl) => 
+    LET res = resolution(nck, ncl) IN 
+    subset[fmla](translate_clause(ncl),
+             cons[fmla](translate_lit(-find_pivot(nck, ncl)),
+                  translate_clause(resolution(nck, ncl))))
 
 END trace2fmla
 
