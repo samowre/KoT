@@ -13,24 +13,6 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
     tp, tq: VAR (ne_tr_clause?)
     pivot: VAR (trace_resolution[m,n,i].tr_literal?)
     RR : VAR ne_proof_seq
-
-    % p -> ~tr(p)
-    not_clause(tp): sequent = not_or_reduction(translate_clause(tp))
-    
-    % p, q -> tr(res(p, q))
-    res_clause(tp, tq): (clause?) = translate_clause(resolution(tp, tq))
-
-    
-
-    % |- ~tr(p), ~tr(q), tr(res(p, q))
-    resolve_step: THEOREM 
-      EXISTS RR: 
-      	conclusion(RR)= 
-	 append( not_clause(tp), 
-	  append( not_clause(tq), 
-	   res_clause(tp, tq)))
-	 AND checkProof(empty_seq)(RR)
-
     
     clAA, clBB, clCC : VAR (clause?)
     nclAA, nclBB : VAR (nclause?)

@@ -1,46 +1,4 @@
 (trace_checker
- (not_clause_TCC1 0
-  (not_clause_TCC1-1 nil 3482702866 3482772795
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
-   ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
-         nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (translate_lit const-decl "(literal?)" trace2fmla nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (/= const-decl "boolean" notequal nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nzint nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (m formal-const-decl "nat" trace_checker nil)
-    (n formal-const-decl "nat" trace_checker nil)
-    (<= const-decl "bool" reals nil)
-    (upto nonempty-type-eq-decl nil naturalnumbers nil)
-    (i formal-const-decl "upto(n)" trace_checker nil)
-    (tr_literal? const-decl "bool" trace_resolution nil)
-    (tr_clause? const-decl "bool" trace_resolution nil)
-    (ne_tr_clause? const-decl "bool" trace_resolution nil)
-    (nclause? const-decl "bool" resolution nil)
-    (translate_clause const-decl "(clause?)" trace2fmla nil))
-   383 320 t nil))
  (th0 0
   (th0-1 nil 3482703236 3482707989
    ("" (skolem-typepred)
@@ -303,7 +261,7 @@
         nil))
       nil))
     nil)
-   unfinished
+   untried
    ((RR_lemma1 const-decl "ne_proof_seq" resolution nil)
     (offset_proof_step const-decl "proof_step" resolution nil)
     (concl_norr const-decl "proof_step" resolution nil)
@@ -369,7 +327,7 @@
     (boolean nonempty-type-decl nil booleans nil))
    788108 13850 t shostak))
  (proof_th_TCC1 0
-  (proof_th_TCC1-1 nil 3482772790 3482772850
+  (proof_th_TCC1-1 nil 3482772790 3483106585
    ("" (skolem-typepred)
     (("" (hide -1 -4 -7) (("" (flatten) (("" (grind) nil nil)) nil))
       nil))
@@ -377,6 +335,8 @@
    unchecked
    ((member def-decl "bool" list_props nil)
     (exist_pivot? def-decl "bool" trace_resolution nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
     (merge def-decl "{cla: (tr_clause?) |
          FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
            trace_resolution nil)
@@ -389,7 +349,7 @@
             member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)}"
      trace_resolution nil)
     (resolution const-decl "(tr_clause?)" trace_resolution nil)
-    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil) nil
     (translate_clause const-decl "(clause?)" trace2fmla nil)
     (nclause? const-decl "bool" resolution nil)
     (real_gt_is_strict_total_order name-judgement
@@ -416,25 +376,425 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   33121 1410 t nil))
+   1950 1620 t nil))
  (proof_th_TCC2 0
-  (proof_th_TCC2-1 nil 3482800740 nil ("" (subtype-tcc) nil nil)
-   unchecked nil nil nil nil nil))
+  (proof_th_TCC2-1 nil 3482800740 3483106729
+   ("" (skosimp)
+    (("" (typepred ntcB!1)
+      (("" (expand nclause?)
+        (("" (expand translate_clause)
+          (("" (expand ne_tr_clause?) (("" (grind) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unchecked
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil) nil
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (nclause? const-decl "bool" resolution nil))
+   102372 1330 t nil))
  (proof_th_TCC3 0
-  (proof_th_TCC3-1 nil 3482800740 nil ("" (subtype-tcc) nil nil)
-   unchecked nil nil nil nil nil))
+  (proof_th_TCC3-1 nil 3482800740 3483107358
+   ("" (skosimp) (("" (typepred ntcA!1) (("" (grind) nil nil)) nil))
+    nil)
+   proved
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (delete_pivot const-decl "{cl |
+         FORALL l:
+           member(l, cl) <=>
+            member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)}"
+     trace_resolution nil)
+    (merge def-decl "{cla: (tr_clause?) |
+         FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
+           trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (exist_pivot? def-decl "bool" trace_resolution nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   27264 1360 t nil))
  (proof_th_TCC4 0
-  (proof_th_TCC4-1 nil 3482800740 nil ("" (subtype-tcc) nil nil)
-   unchecked nil nil nil nil nil))
+  (proof_th_TCC4-1 nil 3482800740 3483107381
+   ("" (skosimp) (("" (typepred ntcB!1) (("" (grind) nil nil)) nil))
+    nil)
+   proved
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   15135 1070 t nil))
+ (proof_th_TCC5 0
+  (proof_th_TCC5-1 nil 3483107273 3483107407
+   ("" (skosimp) (("" (typepred ntcB!1) (("" (grind) nil nil)) nil))
+    nil)
+   proved
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   17608 1010 t nil))
+ (proof_th_TCC6 0
+  (proof_th_TCC6-1 nil 3483107273 3483107443
+   ("" (skosimp) (("" (typepred ntcA!1) (("" (grind) nil nil)) nil))
+    nil)
+   proved
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (delete_pivot const-decl "{cl |
+         FORALL l:
+           member(l, cl) <=>
+            member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)}"
+     trace_resolution nil)
+    (exist_pivot? def-decl "bool" trace_resolution nil)
+    (merge def-decl "{cla: (tr_clause?) |
+         FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
+           trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   18620 1600 t nil))
+ (proof_th_TCC7 0
+  (proof_th_TCC7-1 nil 3483107273 3483107471
+   ("" (skosimp) (("" (typepred ntcA!1) (("" (grind) nil nil)) nil))
+    nil)
+   proved
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (delete_pivot const-decl "{cl |
+         FORALL l:
+           member(l, cl) <=>
+            member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)}"
+     trace_resolution nil)
+    (exist_pivot? def-decl "bool" trace_resolution nil)
+    (merge def-decl "{cla: (tr_clause?) |
+         FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
+           trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   21379 1170 t nil))
+ (proof_th_TCC8 0
+  (proof_th_TCC8-1 nil 3483107273 3483107500
+   ("" (skosimp) (("" (typepred ntcB!1) (("" (grind) nil nil)) nil))
+    nil)
+   proved
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (delete_pivot const-decl "{cl |
+         FORALL l:
+           member(l, cl) <=>
+            member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)}"
+     trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   22902 1510 t nil))
+ (th_TCC1 0
+  (th_TCC1-1 nil 3483107273 3483107526
+   ("" (skosimp) (("" (typepred ntcA!1) (("" (grind) nil nil)) nil))
+    nil)
+   proved
+   ((ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace_checker nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace_checker nil)
+    (m formal-const-decl "nat" trace_checker nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nclause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   16229 240 t nil))
  (th 0
-  (th-1 nil 3482775473 3483105915
+  (th-1 nil 3482775473 3483106441
    ("" (skolem-typepred)
     (("" (hide -1 -4)
       (("" (split)
@@ -1649,14 +2009,13 @@
         nil))
       nil))
     nil)
-   proved
+   untried
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1711,17 +2070,13 @@
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (subset_include formula-decl nil sortedlist nil)
-    (sentence? const-decl "bool" fmla nil)
-    (freevars def-decl "list[(var?)]" fmla nil)
-    (freevars def-decl "list[(var?)]" fmla nil)
+    (sentence? const-decl "bool" fmla nil) nil nil
     (not_true_clauses const-decl "bool" trace_resolution nil)
     (merge def-decl "{cla: (tr_clause?) |
          FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
            trace_resolution nil)
-    (termvars def-decl "list[(var?)]" fmla nil)
-    (tr_clause_true? def-decl "bool" trace_resolution nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil)
+    nil (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (sorted? def-decl "bool" sortedlist nil) nil
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
     (real_gt_is_strict_total_order name-judgement
@@ -1749,5 +2104,5 @@
     (proof_th const-decl "ne_proof_seq" trace_checker nil)
     (cons_cdr_inclusion formula-decl nil trace2fmla nil)
     (subset_lit_subset_fmla formula-decl nil resolution nil))
-   771999 16680 t shostak)))
+   33121 16650 t shostak)))
 
