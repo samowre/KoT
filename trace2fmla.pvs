@@ -29,14 +29,11 @@ BEGIN
      cons?(ck) =>
      translate_clause(cons(car(ck), cdr(ck))) = cons(translate_lit(car(ck)), translate_clause(cdr(ck)))
 
+  % translation of f_neg
   neg_translate:  LEMMA
      f_neg(translate_lit(k)) = translate_lit(-k)
 
-  cons_inclusion:  LEMMA
-    subset(cl, cons(k, ck)) = 
-    subset[fmla](translate_clause(cl), cons[fmla](translate_lit(k), translate_clause(ck)))
-
-
+  % it is possible to add an element to the greater list
   cons_cdr_inclusion:  LEMMA
     FORALL (f: fmla, cl, ck):
     subset(cl,  ck) =>
@@ -44,6 +41,7 @@ BEGIN
 
   sq: VAR sequent
 
+  % it is possible to add a list to the greater list
   append_inclusion:  LEMMA
     FORALL (cl, cm, sq):
     subset(cl, cm) => 
@@ -53,23 +51,18 @@ BEGIN
 
   slA, slB: VAR (sentence_list?)
 
-  append_sentence:  LEMMA
-    FORALL (slA, slB): sentence_list?(append(slA, slB))
-
-  fmla_inclusion:  LEMMA
-    subset(cl, cons(k, ck)) => 
-    subset[fmla](translate_clause(cl), cons(translate_lit(k), translate_clause(ck)))
 
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
-
+  % nck included in cons(pivot, resolution(nck, ncl)
   translate_include_res :  LEMMA
     not_true_clauses(nck, ncl) AND exist_pivot?(nck, ncl) => 
     LET res = resolution(nck, ncl) IN 
     subset[fmla](translate_clause(nck),
              cons(translate_lit(find_pivot(nck, ncl)),
                   translate_clause(resolution(nck, ncl))))
-
+  
+  % ncl included in cons(pivot, resolution(nck, ncl)
   translate_include_res2 :  LEMMA
     not_true_clauses(nck, ncl) AND exist_pivot?(nck, ncl) => 
     LET res = resolution(nck, ncl) IN 

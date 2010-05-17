@@ -143,6 +143,11 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
     conclusion(build_proof_th0(p, gamma, delta)) = cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(f_or(gamma, delta), null)))
       AND checkProof(empty_seq)(build_proof_th0(p, gamma, delta))
    
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % proof for one step resolution %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
   ntcA, ntcB: VAR (ne_tr_clause?)
  
   cA, cB : VAR (clause?)
@@ -201,9 +206,16 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 	    translate_clause(resolution(ntcA, ntcB))))
 	AND checkProof(empty_seq)(proof_th(ntcA, ntcB))
 
-  
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % proof for chain resolution %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+ % chA, chAA: VAR (cons?[(tr_clause?)])
   
+ % proof_th_list(chA): ne_proof_seq 
+
+ % th_list:  THEOREM
+        
     
 	
   END trace_checker
