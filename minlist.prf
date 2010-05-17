@@ -1,6 +1,6 @@
 (minlist
  (minlistx_TCC1 0
-  (minlistx_TCC1-1 nil 3368668190 3482786262 ("" (subtype-tcc) nil nil)
+  (minlistx_TCC1-1 nil 3368668190 3482859670 ("" (subtype-tcc) nil nil)
    proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -13,9 +13,9 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (real_pred const-decl "[number_field -> boolean]" reals nil)
     (real nonempty-type-from-decl nil reals nil))
-   82 10 nil nil))
+   134 50 nil nil))
  (minlistx_TCC2 0
-  (minlistx_TCC2-1 nil 3368668190 3482786262
+  (minlistx_TCC2-1 nil 3368668190 3482859670
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -33,9 +33,9 @@
      integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   88 20 nil nil))
+   113 40 nil nil))
  (minlistx_TCC3 0
-  (minlistx_TCC3-1 nil 3368668190 3482786262
+  (minlistx_TCC3-1 nil 3368668190 3482859671
    ("" (skosimp* :preds? T)
     (("" (typepred "v!1(l1!1, key!1, c!1, k!1)")
       (("1" (replace -5 -1 :dir rl)
@@ -90,9 +90,9 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (real_pred const-decl "[number_field -> boolean]" reals nil)
     (real nonempty-type-from-decl nil reals nil))
-   210 120 t nil))
+   255 140 t nil))
  (minlistx_TCC4 0
-  (minlistx_TCC4-1 nil 3368668190 3482786262
+  (minlistx_TCC4-1 nil 3368668190 3482859671
    ("" (grind :if-match nil)
     (("1" (typepred "v!1(l1!1, key!1, c!1, key!1(c!1))")
       (("1" (grind) nil nil)) nil)
@@ -128,9 +128,9 @@
      integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   79 40 t nil))
+   96 40 t nil))
  (minlistx_TCC5 0
-  (minlistx_TCC5-2 nil 3394225773 3482786262
+  (minlistx_TCC5-2 nil 3394225773 3482859671
    ("" (skosimp* :preds? T)
     (("" (typepred "v!1(l1!1, key!1, a!1, m!1)")
       (("1" (rewrite "member" 2)
@@ -210,7 +210,7 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (real_pred const-decl "[number_field -> boolean]" reals nil)
     (real nonempty-type-from-decl nil reals nil))
-   290 170 t nil)
+   299 140 t nil)
   (minlistx_TCC5-1 nil 3368668190 3394224945 ("" (grind) nil nil)
    unfinished
    ((boolean nonempty-type-decl nil booleans nil)
@@ -229,7 +229,7 @@
     (member def-decl "bool" list_props nil))
    525 400 t nil))
  (minlistx_TCC6 0
-  (minlistx_TCC6-1 nil 3383533874 3482786262 ("" (grind) nil nil)
+  (minlistx_TCC6-1 nil 3383533874 3482859671 ("" (grind) nil nil)
    proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -247,7 +247,7 @@
     (member def-decl "bool" list_props nil))
    50 20 t nil))
  (minlist_TCC1 0
-  (minlist_TCC1-1 nil 3368652894 3482786262
+  (minlist_TCC1-1 nil 3368652894 3482859671
    ("" (grind)
     (("1"
       (typepred
@@ -289,34 +289,35 @@
     (list type-decl nil list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (member def-decl "bool" list_props nil))
-   187 140 t nil))
+   193 140 t nil))
  (every_and 0
-  (every_and-1 nil 3378237551 3445017193
-   ("" (induct-and-simplify "l") nil nil) unfinished
+  (every_and-1 nil 3378237551 3482862073
+   ("" (induct-and-simplify "l") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (PRED type-eq-decl nil defined_types nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
+    (every adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   229 190 t shostak))
+   118 80 t shostak))
  (every_suffix?_TCC1 0
-  (every_suffix?_TCC1-1 nil 3378248877 3482786263
+  (every_suffix?_TCC1-1 nil 3378248877 3482859671
    ("" (subtype-tcc) nil nil) proved nil 25 20 nil nil))
  (every_suffix?_TCC2 0
-  (every_suffix?_TCC2-1 nil 3378248877 3482786263
+  (every_suffix?_TCC2-1 nil 3378248877 3482859671
    ("" (termination-tcc) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   54 20 nil nil))
+   52 30 nil nil))
  (every_suffix_impl 0
-  (every_suffix_impl-1 nil 3378248878 3445017195
-   ("" (induct-and-simplify "l") nil nil) unfinished
+  (every_suffix_impl-1 nil 3378248878 3482862073
+   ("" (induct-and-simplify "l") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
@@ -327,9 +328,9 @@
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil))
-   175 160 t shostak))
+   83 50 t shostak))
  (member_nth 0
-  (member_nth-1 nil 3378609591 3445017196
+  (member_nth-1 nil 3378609591 3482862073
    ("" (induct "l")
     (("1" (grind) nil nil)
      ("2" (grind :if-match nil)
@@ -337,7 +338,7 @@
         (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
@@ -380,9 +381,9 @@
     (number nonempty-type-decl nil numbers nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   494 410 t shostak))
+   198 120 t shostak))
  (nthcdr_TCC1 0
-  (nthcdr_TCC1-1 nil 3378610515 3482786263 ("" (grind) nil nil) proved
+  (nthcdr_TCC1-1 nil 3378610515 3482859672 ("" (grind) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -405,9 +406,9 @@
     (below type-eq-decl nil nat_types nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   34 10 t nil))
+   33 20 t nil))
  (nthcdr_TCC2 0
-  (nthcdr_TCC2-1 nil 3378610515 3482786263
+  (nthcdr_TCC2-1 nil 3378610515 3482859672
    ("" (grind)
     (("" (expand "length" -)
       (("" (lift-if) (("" (ground) nil nil)) nil)) nil))
@@ -435,9 +436,9 @@
     (below type-eq-decl nil nat_types nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   33 20 t nil))
+   35 20 t nil))
  (nthcdr_TCC3 0
-  (nthcdr_TCC3-1 nil 3378610515 3482786263
+  (nthcdr_TCC3-1 nil 3378610515 3482859672
    ("" (grind) (("" (expand "length" -) (("" (grind) nil nil)) nil))
     nil)
    proved
@@ -466,9 +467,9 @@
     (list type-decl nil list_adt nil)
     (length def-decl "nat" list_props nil)
     (below type-eq-decl nil nat_types nil))
-   77 60 t nil))
+   77 50 t nil))
  (nthcdr_TCC4 0
-  (nthcdr_TCC4-1 nil 3379624375 3482786263
+  (nthcdr_TCC4-1 nil 3379624375 3482859672
    ("" (grind)
     (("" (expand "length" -)
       (("" (lift-if) (("" (ground) nil nil)) nil)) nil))
@@ -498,9 +499,9 @@
     (list type-decl nil list_adt nil)
     (length def-decl "nat" list_props nil)
     (below type-eq-decl nil nat_types nil))
-   72 40 t nil))
+   55 30 t nil))
  (length_nthcdr 0
-  (length_nthcdr-1 nil 3378611490 3445017197
+  (length_nthcdr-1 nil 3378611490 3482862073
    ("" (induct "l")
     (("1" (grind) nil nil)
      ("2" (skosimp*)
@@ -508,7 +509,7 @@
         (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
@@ -552,12 +553,12 @@
     (number nonempty-type-decl nil numbers nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   477 400 t shostak))
+   178 120 t shostak))
  (nth_nthcdr_TCC1 0
-  (nth_nthcdr_TCC1-1 nil 3378610515 3482786263
-   ("" (subtype-tcc) nil nil) proved nil 4 0 nil nil))
+  (nth_nthcdr_TCC1-1 nil 3378610515 3482859672
+   ("" (subtype-tcc) nil nil) proved nil 5 10 nil nil))
  (nth_nthcdr_TCC2 0
-  (nth_nthcdr_TCC2-1 nil 3378610515 3482786263
+  (nth_nthcdr_TCC2-1 nil 3378610515 3482859672
    ("" (skosimp*)
     (("" (rewrite "length_nthcdr") (("" (grind) nil nil)) nil)) nil)
    proved
@@ -585,9 +586,9 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (minus_odd_is_odd application-judgement "odd_int" integers nil))
-   38 20 t nil))
+   52 20 t nil))
  (nth_nthcdr 0
-  (nth_nthcdr-1 nil 3378610516 3445017198
+  (nth_nthcdr-1 nil 3378610516 3482862073
    ("" (induct "l")
     (("1" (grind) nil nil)
      ("2" (skosimp* :preds? T)
@@ -598,7 +599,7 @@
       (("3" (rewrite "length_nthcdr") (("3" (grind) nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((length_nthcdr formula-decl nil minlist nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (int_plus_int_is_int application-judgement "int" integers nil)
@@ -648,9 +649,9 @@
     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (minus_odd_is_odd application-judgement "odd_int" integers nil))
-   997 860 t shostak))
+   403 270 t shostak))
  (nthcdr_nthcdr 0
-  (nthcdr_nthcdr-1 nil 3380171282 3445017200
+  (nthcdr_nthcdr-1 nil 3380171282 3482862074
    ("" (induct "l")
     (("1" (grind) nil nil)
      ("2" (grind :if-match nil)
@@ -660,7 +661,7 @@
         (("3" (rewrite "length_nthcdr") nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((length_nthcdr formula-decl nil minlist nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
@@ -669,6 +670,10 @@
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (int_plus_int_is_int application-judgement "int" integers nil)
+    (i!1 skolem-const-decl
+     "below(length(cons(cons1_var!1, cons2_var!1)))" minlist nil)
+    (cons2_var!1 skolem-const-decl "list[T]" minlist nil)
+    (cons1_var!1 skolem-const-decl "T" minlist nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_lt_is_strict_total_order name-judgement
@@ -706,9 +711,9 @@
     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (minus_odd_is_odd application-judgement "odd_int" integers nil))
-   2137 1790 t shostak))
+   778 560 t shostak))
  (nthcdr_every_suffix 0
-  (nthcdr_every_suffix-1 nil 3380168015 3445017201
+  (nthcdr_every_suffix-1 nil 3380168015 3482862075
    ("" (induct "l")
     (("1" (grind) nil nil)
      ("2" (grind :if-match nil)
@@ -716,7 +721,7 @@
        ("2" (expand "nthcdr" +) (("2" (grind) nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
@@ -757,16 +762,16 @@
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   755 660 t shostak))
+   1027 220 t shostak))
  (every_suffix_nthcdr 0
-  (every_suffix_nthcdr-1 nil 3378952516 3445017202
+  (every_suffix_nthcdr-1 nil 3378952516 3482862075
    ("" (induct-and-simplify "l" :if-match nil)
     (("1" (typepred "i!1") (("1" (grind) nil nil)) nil)
      ("2" (typepred "i!1") (("2" (grind) nil nil)) nil)
      ("3" (case "i!1>0") (("1" (grind) nil nil) ("2" (grind) nil nil))
       nil))
     nil)
-   unfinished
+   proved
    ((> const-decl "bool" reals nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
@@ -806,9 +811,9 @@
     (nthcdr def-decl "(cons?[T])" minlist nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   498 410 t shostak))
+   184 110 t shostak))
  (nthcar_cdr 0
-  (nthcar_cdr-1 nil 3379459200 3445017202
+  (nthcar_cdr-1 nil 3379459200 3482862076
    ("" (induct-and-simplify "l" :if-match nil)
     (("1" (typepred "i!1") (("1" (grind) nil nil)) nil)
      ("2" (typepred "i!1")
@@ -816,7 +821,7 @@
         (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
@@ -861,9 +866,9 @@
     (nthcdr def-decl "(cons?[T])" minlist nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   622 380 t shostak))
+   186 110 t shostak))
  (car_nthcar_TCC1 0
-  (car_nthcar_TCC1-1 nil 3380173641 3482786263 ("" (grind) nil nil)
+  (car_nthcar_TCC1-1 nil 3380173641 3482859672 ("" (grind) nil nil)
    proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -894,10 +899,9 @@
      integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   49 30 t nil))
+   47 30 t nil))
  (car_nthcar 0
-  (car_nthcar-1 nil 3380173642 3445017203 ("" (grind) nil nil)
-   unfinished
+  (car_nthcar-1 nil 3380173642 3482862076 ("" (grind) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -927,15 +931,15 @@
      integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   175 130 t shostak))
+   46 40 t shostak))
  (car_nthcdr 0
-  (car_nthcdr-1 nil 3380215949 3445017203
+  (car_nthcdr-1 nil 3380215949 3482862076
    ("" (induct-and-simplify "l" :if-match nil)
     (("1" (expand "nthcdr" +)
       (("1" (grind :if-match nil) (("1" (grind) nil nil)) nil)) nil)
      ("2" (typepred "i!1") (("2" (grind) nil nil)) nil))
     nil)
-   unfinished
+   proved
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
@@ -974,9 +978,9 @@
     (nth def-decl "T" list_props nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   461 410 t shostak))
+   178 130 t shostak))
  (length_nthcar 0
-  (length_nthcar-1 nil 3382829940 3445017204
+  (length_nthcar-1 nil 3382829940 3482862076
    ("" (induct "l")
     (("1" (assert) nil nil) ("2" (grind) nil nil)
      ("3" (grind :if-match nil)
@@ -984,7 +988,7 @@
         (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (real_lt_is_strict_total_order name-judgement
@@ -1023,9 +1027,9 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   552 480 t shostak))
+   211 170 t shostak))
  (nthcdr_append_TCC1 0
-  (nthcdr_append_TCC1-1 nil 3383533874 3482786263
+  (nthcdr_append_TCC1-1 nil 3383533874 3482859672
    ("" (skosimp*)
     (("" (rewrite "length_append")
       (("" (typepred "i!1") (("" (assert) nil nil)) nil)) nil))
@@ -1057,9 +1061,9 @@
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (length def-decl "nat" list_props nil)
     (below type-eq-decl nil naturalnumbers nil))
-   74 40 t nil))
+   57 30 t nil))
  (nthcdr_append 0
-  (nthcdr_append-1 nil 3383533875 3445017204
+  (nthcdr_append-1 nil 3383533875 3482862076
    ("" (induct "l")
     (("1" (grind) nil nil) ("2" (grind) nil nil)
      ("3" (skosimp*)
@@ -1072,7 +1076,7 @@
      ("4" (hide 2) (("4" (grind :rewrites "length_append") nil nil))
       nil))
     nil)
-   unfinished
+   proved
    ((length_append formula-decl nil list_props nil)
     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
@@ -1115,24 +1119,24 @@
     (length def-decl "nat" list_props nil)
     (below type-eq-decl nil naturalnumbers nil)
     (append def-decl "list[T]" list_props nil))
-   646 550 t shostak))
+   262 190 t shostak))
  (delete_TCC1 0
-  (delete_TCC1-1 nil 3388327376 3482786263
+  (delete_TCC1-1 nil 3388327376 3482859672
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((member def-decl "bool" list_props nil)
     (/= const-decl "boolean" notequal nil))
-   54 20 t nil))
+   55 40 t nil))
  (delete_TCC2 0
-  (delete_TCC2-1 nil 3388327376 3482786263
+  (delete_TCC2-1 nil 3388327376 3482859672
    ("" (termination-tcc) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   39 30 nil nil))
+   54 30 nil nil))
  (delete_TCC3 0
-  (delete_TCC3-1 nil 3388327376 3482786263
+  (delete_TCC3-1 nil 3388327376 3482859672
    ("" (grind)
     (("1" (typepred "v!1(b!1, k!1)") (("1" (grind) nil nil)) nil)
      ("2" (typepred "v!1(b!1, k!1)") (("2" (grind) nil nil)) nil)
@@ -1162,17 +1166,17 @@
     (boolean nonempty-type-decl nil booleans nil)
     (member def-decl "bool" list_props nil)
     (/= const-decl "boolean" notequal nil))
-   167 100 t nil))
+   151 110 t nil))
  (delete_TCC4 0
-  (delete_TCC4-1 nil 3388327376 3482786263 ("" (grind) nil nil) proved
+  (delete_TCC4-1 nil 3388327376 3482859672 ("" (grind) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   39 30 t nil))
+   51 30 t nil))
  (delete_TCC5 0
-  (delete_TCC5-1 nil 3388330770 3482786263
+  (delete_TCC5-1 nil 3388330770 3482859672
    ("" (grind :if-match nil)
     (("1" (typepred "v!1(a!1, k!1)")
       (("1" (inst?) (("1" (ground) nil nil)) nil)) nil)
@@ -1205,10 +1209,10 @@
     (boolean nonempty-type-decl nil booleans nil)
     (/= const-decl "boolean" notequal nil)
     (member def-decl "bool" list_props nil))
-   125 70 t nil))
+   104 70 t nil))
  (member_append 0
-  (member_append-1 nil 3388330174 3445017208
-   ("" (induct-and-simplify "k") nil nil) unfinished
+  (member_append-1 nil 3388330174 3482862076
+   ("" (induct-and-simplify "k") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1218,27 +1222,27 @@
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   215 190 t shostak))
+   100 40 t shostak))
  (subset_TCC1 0
-  (subset_TCC1-1 nil 3392062366 3482786263
+  (subset_TCC1-1 nil 3392062366 3482859672
    ("" (termination-tcc) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   57 30 nil nil))
+   53 30 nil nil))
  (suffix?_TCC1 0
-  (suffix?_TCC1-1 nil 3392062366 3482786263
+  (suffix?_TCC1-1 nil 3392062366 3482859672
    ("" (termination-tcc) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   40 30 nil nil))
+   51 20 nil nil))
  (suffix_transitivity 0
-  (suffix_transitivity-1 nil 3392062366 3445017209
+  (suffix_transitivity-1 nil 3392062366 3482862077
    ("" (induct "l")
     (("1" (grind) nil nil)
      ("2" (skosimp*)
@@ -1251,7 +1255,7 @@
         nil))
       nil))
     nil)
-   unfinished
+   proved
    ((cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (list_induction formula-decl nil list_adt nil)
@@ -1262,16 +1266,16 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   190 150 t shostak))
+   89 50 t shostak))
  (suffix_transitivity_induction 0
-  (suffix_transitivity_induction-1 nil 3392062675 3445017209
-   ("" (grind) nil nil) unfinished
-   ((suffix? def-decl "bool" minlist nil)) 74 70 t shostak))
+  (suffix_transitivity_induction-1 nil 3392062675 3482862077
+   ("" (grind) nil nil) proved ((suffix? def-decl "bool" minlist nil))
+   22 10 t shostak))
  (suffix_null 0
-  (suffix_null-1 nil 3393859835 3445017209
+  (suffix_null-1 nil 3393859835 3482862077
    ("" (skolem 1 ("l1!1" "_"))
     (("" (induct-and-simplify "l2") nil nil)) nil)
-   unfinished
+   proved
    ((list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil minlist nil)
     (suffix? def-decl "bool" minlist nil)
@@ -1280,14 +1284,14 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   155 80 t shostak))
+   28 20 t shostak))
  (suffix_length 0
-  (suffix_length-1 nil 3393877033 3445017209
+  (suffix_length-1 nil 3393877033 3482862077
    ("" (skolem 1 ("l1!1" "_"))
     (("" (induct-and-simplify "l2")
       (("" (replace -1) (("" (assert) nil nil)) nil)) nil))
     nil)
-   unfinished
+   proved
    ((list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil minlist nil)
     (length def-decl "nat" list_props nil)
@@ -1315,17 +1319,79 @@
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil))
-   431 270 t shostak))
+   109 70 t shostak))
  (suffix_cons 0
-  (suffix_cons-1 nil 3475792895 3475793063
-   ("" (induct "l1")
+  (suffix_cons-1 nil 3475792895 3482863295
+   ("" (induct l1)
     (("1" (grind) nil nil)
-     ("2" (grind :if-match nil)
-      (("1" (postpone) nil nil) ("2" (postpone) nil nil)) nil))
+     ("2" (skolem-typepred)
+      (("2" (flatten)
+        (("2" (skolem-typepred)
+          (("2" (flatten)
+            (("2" (expand suffix? 1)
+              (("2" (flatten)
+                (("2" (expand suffix? -2)
+                  (("2" (split -2)
+                    (("1" (grind)
+                      (("1" (case "l2!1 = cons2_var!1")
+                        (("1" (grind)
+                          (("1" (expand suffix? 3)
+                            (("1" (lift-if 3) (("1" (grind) nil nil))
+                              nil))
+                            nil))
+                          nil)
+                         ("2" (grind)
+                          (("2" (delete 2 3 4)
+                            (("2" (case "l2!1 = cdr(cons(a!1, l2!1))")
+                              (("1"
+                                (case
+                                 "cons2_var!1 = cdr(cons(cons1_var!1, cons2_var!1))")
+                                (("1"
+                                  (replace -1 1)
+                                  (("1"
+                                    (replace -2 1)
+                                    (("1"
+                                      (replace -3 1)
+                                      (("1" (propax) nil nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2" (grind) nil nil))
+                                nil)
+                               ("2" (assert) nil nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("2" (inst -2 a!1 l2!1)
+                      (("2" (replace -1 -2) (("2" (propax) nil nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
     nil)
-   unfinished nil 168034 520 t shostak))
+   proved
+   ((cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil minlist nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (suffix? def-decl "bool" minlist nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   754499 190 t shostak))
  (suffix_member 0
-  (suffix_member-1 nil 3394227109 3445017210
+  (suffix_member-1 nil 3394227109 3482862077
    ("" (skolem 1 ("l1!1" "_"))
     (("" (induct "l2")
       (("1" (grind) nil nil)
@@ -1339,7 +1405,7 @@
         nil))
       nil))
     nil)
-   unfinished
+   proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1352,23 +1418,24 @@
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil))
-   195 130 t shostak))
+   68 30 t shostak))
  (some_member 0
-  (some_member-1 nil 3475793779 3475793785
-   ("" (induct-and-simplify "l") nil nil) unfinished
+  (some_member-1 nil 3475793779 3482862077
+   ("" (induct-and-simplify "l") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (PRED type-eq-decl nil defined_types nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
+    (some adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   5791 330 t shostak))
+   146 110 t shostak))
  (presuffix_nil 0
-  (presuffix_nil-1 nil 3394227287 3445017210
-   ("" (induct-and-simplify "l") nil nil) unfinished
+  (presuffix_nil-1 nil 3394227287 3482862077
+   ("" (induct-and-simplify "l") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
@@ -1377,9 +1444,9 @@
     (null adt-constructor-decl "(null?)" list_adt nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   122 90 t shostak))
+   26 20 t shostak))
  (some_nth 0
-  (some_nth-1 nil 3462932621 3462933162
+  (some_nth-1 nil 3462932621 3482862077
    ("" (induct "l")
     (("1" (grind) nil nil)
      ("2" (skosimp*)
@@ -1423,19 +1490,25 @@
         nil))
       nil))
     nil)
-   unfinished
+   proved
    ((nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (cons2_var!1 skolem-const-decl "list[T]" minlist nil)
+    (i!1 skolem-const-decl "below(length(cons2_var!1))" minlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons1_var!1 skolem-const-decl "T" minlist nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
+    (i!1 skolem-const-decl "below(length(cons2_var!1))" minlist nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (i!1 skolem-const-decl
+     "below(length(cons(cons1_var!1, cons2_var!1)))" minlist nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_lt_is_strict_total_order name-judgement
@@ -1462,14 +1535,15 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number nonempty-type-decl nil numbers nil)
+    (some adt-def-decl "boolean" list_adt nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (PRED type-eq-decl nil defined_types nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   540867 620 t shostak))
+   328 220 t shostak))
  (find_TCC1 0
-  (find_TCC1-1 nil 3463936152 3482786264 ("" (subtype-tcc) nil nil)
+  (find_TCC1-1 nil 3463936152 3482859672 ("" (subtype-tcc) nil nil)
    proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1498,12 +1572,12 @@
      "(strict_total_order?[real])" real_props nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
-   31 20 nil nil))
+   30 20 nil nil))
  (find_TCC2 0
-  (find_TCC2-1 nil 3463936152 3482786264 ("" (subtype-tcc) nil nil)
-   proved nil 5 10 nil nil))
+  (find_TCC2-1 nil 3463936152 3482859672 ("" (subtype-tcc) nil nil)
+   proved nil 5 0 nil nil))
  (find_TCC3 0
-  (find_TCC3-1 nil 3463936152 3482786264
+  (find_TCC3-1 nil 3463936152 3482859672
    ("" (skosimp*) (("" (ground) (("" (grind) nil nil)) nil)) nil)
    proved
    ((real_le_is_total_order name-judgement "(total_order?[real])"
@@ -1513,27 +1587,27 @@
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (some adt-def-decl "boolean" list_adt nil))
-   33 20 t nil))
+   20 20 t nil))
  (find_TCC4 0
-  (find_TCC4-1 nil 3463936152 3482786264 ("" (grind) nil nil) proved
+  (find_TCC4-1 nil 3463936152 3482859672 ("" (grind) nil nil) proved
    ((real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil)
     (nth def-decl "T" list_props nil))
-   82 60 t nil))
+   84 60 t nil))
  (find_TCC5 0
-  (find_TCC5-1 nil 3463936152 3482786264 ("" (termination-tcc) nil nil)
+  (find_TCC5-1 nil 3463936152 3482859673 ("" (termination-tcc) nil nil)
    proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   54 40 nil nil))
+   53 30 nil nil))
  (find_TCC6 0
-  (find_TCC6-1 nil 3463936152 3482786264
+  (find_TCC6-1 nil 3463936152 3482859673
    ("" (skosimp* :preds? t)
     (("" (grind)
       (("" (typepred "v!1(P!1, k!1)") (("" (ground) nil nil)) nil))
@@ -1577,9 +1651,9 @@
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (below type-eq-decl nil naturalnumbers nil)
     (= const-decl "[T, T -> boolean]" equalities nil))
-   102 60 t nil))
+   99 70 t nil))
  (find_TCC7 0
-  (find_TCC7-1 nil 3463937007 3482786264
+  (find_TCC7-1 nil 3463937007 3482859673
    ("" (skosimp* :preds? t)
     (("" (typepred "v!1(P!1, k!1)")
       (("" (ground)
@@ -1648,21 +1722,23 @@
      integers nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
-   571 420 t nil))
+   557 430 t nil))
  (some_every 0
-  (some_every-1 nil 3463942791 3463942804
-   ("" (induct-and-simplify "l") nil nil) unfinished
+  (some_every-1 nil 3463942791 3482862077
+   ("" (induct-and-simplify "l") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (PRED type-eq-decl nil defined_types nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (some adt-def-decl "boolean" list_adt nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   13609 70 t shostak))
+   92 40 t shostak))
  (find_zero 0
-  (find_zero-1 nil 3463942652 3463942996
+  (find_zero-1 nil 3463942652 3482862078
    ("" (skosimp*)
     (("" (typepred "find(P!1, l!1)")
       (("" (use "some_nth")
@@ -1673,13 +1749,14 @@
         nil))
       nil))
     nil)
-   unfinished
+   proved
    ((find def-decl "{i: upto(length(l)) |
          (i > 0 =>
            (P(nth(l, i - 1)) &
              (FORALL (j: below(i - 1)): NOT P(nth(l, j)))))
           & (i = 0 => NOT some(P)(l))}"
       minlist nil)
+    (some adt-def-decl "boolean" list_adt nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (below type-eq-decl nil naturalnumbers nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
@@ -1719,18 +1796,18 @@
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (some_nth formula-decl nil minlist nil))
-   183388 270 t shostak))
+   98 80 t shostak))
  (find_nonzero_TCC1 0
-  (find_nonzero_TCC1-1 nil 3463943932 3482786264
+  (find_nonzero_TCC1-1 nil 3463943932 3482859673
    ("" (subtype-tcc) nil nil) proved
    ((int_minus_int_is_int application-judgement "int" integers nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   61 20 nil nil))
+   58 30 nil nil))
  (find_nonzero_TCC2 0
-  (find_nonzero_TCC2-1 nil 3463943932 3482786264
+  (find_nonzero_TCC2-1 nil 3463943932 3482859673
    ("" (subtype-tcc) nil nil) proved
    ((real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
@@ -1774,18 +1851,19 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   74 40 nil nil))
+   57 40 nil nil))
  (find_nonzero 0
-  (find_nonzero-1 nil 3463943933 3463943946
+  (find_nonzero-1 nil 3463943933 3482862078
    ("" (skosimp*)
     (("" (typepred "find(P!1, l!1)") (("" (grind) nil nil)) nil)) nil)
-   unfinished
+   proved
    ((find def-decl "{i: upto(length(l)) |
          (i > 0 =>
            (P(nth(l, i - 1)) &
              (FORALL (j: below(i - 1)): NOT P(nth(l, j)))))
           & (i = 0 => NOT some(P)(l))}"
       minlist nil)
+    (some adt-def-decl "boolean" list_adt nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (below type-eq-decl nil naturalnumbers nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
@@ -1816,28 +1894,28 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   13010 40 t shostak))
+   37 20 t shostak))
  (rassoc2_TCC1 0
-  (rassoc2_TCC1-1 nil 3475041293 3482786265
+  (rassoc2_TCC1-1 nil 3475041293 3482859673
    ("" (termination-tcc) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   59 30 nil nil))
+   54 30 nil nil))
  (setlist?_TCC1 0
-  (setlist?_TCC1-1 nil 3475041293 3482786265
+  (setlist?_TCC1-1 nil 3475041293 3482859673
    ("" (termination-tcc) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   43 20 nil nil))
+   54 20 nil nil))
  (list2set_member 0
-  (list2set_member-1 nil 3475074977 3475074987
-   ("" (induct-and-simplify "k") nil nil) unfinished
+  (list2set_member-1 nil 3475074977 3482862078
+   ("" (induct-and-simplify "k") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1851,9 +1929,9 @@
     (finite_emptyset name-judgement "finite_set" finite_sets nil)
     (member const-decl "bool" sets nil)
     (add const-decl "(nonempty?)" sets nil))
-   10051 340 t shostak))
+   103 70 t shostak))
  (subset_member 0
-  (subset_member-1 nil 3475074742 3475075803
+  (subset_member-1 nil 3475074742 3482862078
    ("" (induct "k")
     (("1" (grind) nil nil)
      ("2" (grind :if-match nil)
@@ -1877,7 +1955,7 @@
         (("4" (grind :rewrites "list2set_member") nil nil)) nil))
       nil))
     nil)
-   unfinished
+   proved
    ((add const-decl "(nonempty?)" sets nil)
     (list2set_member formula-decl nil minlist nil)
     (emptyset const-decl "set" sets nil)
@@ -1892,9 +1970,9 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   811490 1530 t shostak))
+   199 120 t shostak))
  (every_member_subset 0
-  (every_member_subset-1 nil 3482786280 3482787022
+  (every_member_subset-1 nil 3482786280 3482862078
    ("" (induct k)
     (("1" (grind) nil nil)
      ("2" (skosimp)
@@ -1957,23 +2035,23 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (list type-decl nil list_adt nil))
-   741902 250 t shostak))
+   95 50 t shostak))
  (setify_TCC1 0
-  (setify_TCC1-1 nil 3475041293 3482786265 ("" (grind) nil nil) proved
+  (setify_TCC1-1 nil 3475041293 3482859673 ("" (grind) nil nil) proved
    ((setlist? def-decl "bool" minlist nil)
     (subset def-decl "bool" minlist nil))
-   25 20 t nil))
+   10 10 t nil))
  (setify_TCC2 0
-  (setify_TCC2-1 nil 3475041293 3482786265
+  (setify_TCC2-1 nil 3475041293 3482859673
    ("" (termination-tcc) nil nil) proved
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (length def-decl "nat" list_props nil))
-   43 30 nil nil))
+   53 30 nil nil))
  (setify_TCC3 0
-  (setify_TCC3-1 nil 3475041293 3482786265
+  (setify_TCC3-1 nil 3475041293 3482859674
    ("" (skosimp* :preds? t)
     (("" (typepred "v!1(k!1)")
       (("1" (grind)
@@ -2036,9 +2114,9 @@
     (subset? const-decl "bool" sets nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil))
-   288 180 t nil))
+   292 200 t nil))
  (setify_TCC4 0
-  (setify_TCC4-1 nil 3475074741 3482786265
+  (setify_TCC4-1 nil 3475074741 3482859674
    ("" (skosimp* :preds? t)
     (("" (typepred "v!1(k!1)")
       (("1" (grind :rewrites ("subset_member" "list2set_member"))
@@ -2097,10 +2175,10 @@
     (member def-decl "bool" list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil))
-   324 200 t nil))
+   302 190 t nil))
  (setify_null 0
-  (setify_null-1 nil 3475127571 3475127578
-   ("" (induct-and-simplify "l") nil nil) unfinished
+  (setify_null-1 nil 3475127571 3482862078
+   ("" (induct-and-simplify "l") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
@@ -2114,10 +2192,10 @@
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil)
     (member def-decl "bool" list_props nil))
-   6867 220 t shostak))
+   55 30 t shostak))
  (delete_append 0
-  (delete_append-1 nil 3475777254 3475777262
-   ("" (induct-and-simplify "k") nil nil) unfinished
+  (delete_append-1 nil 3475777254 3482862078
+   ("" (induct-and-simplify "k") nil nil) proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
@@ -2131,9 +2209,9 @@
     (append def-decl "list[T]" list_props nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   7517 360 t shostak))
+   106 50 t shostak))
  (every_forall 0
-  (every_forall-1 nil 3479851588 3479852144
+  (every_forall-1 nil 3479851588 3482862078
    ("" (induct-and-simplify "l" :if-match nil)
     (("1" (inst?)
       (("1" (rewrite -1)
@@ -2143,43 +2221,45 @@
       (("2" (hide -1) (("2" (grind :polarity? t) nil nil)) nil)) nil)
      ("3" (grind :polarity? t) nil nil))
     nil)
-   unfinished
+   proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (PRED type-eq-decl nil defined_types nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
+    (every adt-def-decl "boolean" list_adt nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   556112 1220 t shostak))
+   135 90 t shostak))
  (some_exists 0
-  (some_exists-1 nil 3479852153 3479852206
+  (some_exists-1 nil 3479852153 3482862078
    ("" (induct-and-simplify "l" :if-match nil)
     (("1" (grind :polarity? t) nil nil)
      ("2" (rewrite -1) (("2" (grind :polarity? t) nil nil)) nil)
      ("3" (rewrite -1) (("3" (grind :polarity? t) nil nil)) nil))
     nil)
-   unfinished
+   proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (PRED type-eq-decl nil defined_types nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
+    (some adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   53102 530 t shostak))
+   149 90 t shostak))
  (member_suffix 0
-  (member_suffix-1 nil 3479852581 3479852783
+  (member_suffix-1 nil 3479852581 3482862079
    ("" (induct-and-simplify "l1" :if-match nil)
     (("1" (replace -2) (("1" (assert) nil nil)) nil)
      ("2" (replace -2) (("2" (assert) nil nil)) nil)
      ("3" (grind :polarity? t) nil nil))
     nil)
-   unfinished
+   proved
    ((list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -2189,5 +2269,5 @@
     (member def-decl "bool" list_props nil)
     (T formal-type-decl nil minlist nil)
     (list_induction formula-decl nil list_adt nil))
-   116192 700 t shostak)))
+   122 70 t shostak)))
 
