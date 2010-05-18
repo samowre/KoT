@@ -210,12 +210,22 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
   % proof for chain resolution %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
- % chA, chAA: VAR (cons?[(tr_clause?)])
+  build_hyp(ntcA): ne_sequent = 
+    CASES cdr(ntcA) OF
+      null: not_or_reduction(car(ntcA)),
+      cons(e, ntcAA): append(not_or_reduction(car(ntcA)), build_hyp(cdr(ntcA)))
+    ENDCASES
   
- % proof_th_list(chA): ne_proof_seq 
+  proof_th_list(ntcA): ne_proof_seq = proof_th(ntcAA, ntcAA)
 
- % th_list:  THEOREM
-        
+  th_list:  THEOREM
+        conclusion(proof_th_list(ntcA)) = 
+	 append(
+	  not_or_reduction(translate_clause(ntcA)), 
+	  append(
+	   not_or_reduction(translate_clause(ntcB)), 
+	    translate_clause(resolution_list(ntcA))))
+	AND checkProof(empty_seq)(proof_th_list(ntcA))
     
 	
   END trace_checker
