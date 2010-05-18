@@ -1,4 +1,30 @@
 (trace_resolution
+ (tr_neg_TCC1 0
+  (tr_neg_TCC1-1 nil 3483207953 3483208119 ("" (grind) nil nil) proved
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (/= const-decl "boolean" notequal nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
+     real_defs nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil))
+   8201 60 t nil))
  (member_tr_lit_member_nzint 0
   (member_tr_lit_member_nzint-1 nil 3483143848 3483145898
    ("" (induct ll)
@@ -16,7 +42,7 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (list_induction formula-decl nil list_adt nil)
     (number nonempty-type-decl nil numbers nil)
@@ -37,7 +63,6 @@
     (member def-decl "bool" list_props nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil))
    70 40 t shostak))
@@ -68,7 +93,7 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil)
@@ -98,12 +123,11 @@
     (subset def-decl "bool" minlist nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil))
    204 150 t shostak))
  (index_TCC1 0
-  (index_TCC1-1 nil 3482675376 3483145822 ("" (subtype-tcc) nil nil)
+  (index_TCC1-1 nil 3482675376 3483207957 ("" (subtype-tcc) nil nil)
    proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -140,9 +164,9 @@
      nil)
     (mult_divides1 application-judgement "(divides(n))" divides nil)
     (mult_divides2 application-judgement "(divides(m))" divides nil))
-   89 90 nil nil))
+   114 70 nil nil))
  (index_TCC2 0
-  (index_TCC2-1 nil 3482675376 3483145822 ("" (subtype-tcc) nil nil)
+  (index_TCC2-1 nil 3482675376 3483207957 ("" (subtype-tcc) nil nil)
    proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -172,9 +196,10 @@
      real_defs nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   76 40 nil nil))
+   67 50 nil nil))
  (index_inj 0
-  (index_inj-1 nil 3483128522 3483145898 ("" (grind) nil nil) proved
+  (index_inj-1 nil 3483128522 3483145898 ("" (grind) nil nil)
+   unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -208,7 +233,7 @@
     (minus_nzint_is_nzint application-judgement "nzint" integers nil))
    135 110 t shostak))
  (IMP_sortedlist_TCC1 0
-  (IMP_sortedlist_TCC1-1 nil 3482675376 3483145822 ("" (grind) nil nil)
+  (IMP_sortedlist_TCC1-1 nil 3482675376 3483207957 ("" (grind) nil nil)
    proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -241,9 +266,9 @@
     (index const-decl "posnat" trace_resolution nil)
     (injective? const-decl "bool" functions nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil))
-   144 120 t nil))
+   148 100 t nil))
  (tr_clause_prop_TCC1 0
-  (tr_clause_prop_TCC1-1 nil 3482675376 3483145822
+  (tr_clause_prop_TCC1-1 nil 3482675376 3483207957
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -265,9 +290,9 @@
     (int nonempty-type-eq-decl nil integers nil)
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
-   17 10 nil nil))
+   31 10 nil nil))
  (tr_clause_prop_TCC2 0
-  (tr_clause_prop_TCC2-1 nil 3482675376 3483145822
+  (tr_clause_prop_TCC2-1 nil 3482675376 3483207957
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -289,13 +314,13 @@
     (int nonempty-type-eq-decl nil integers nil)
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
-   48 30 nil nil))
+   20 20 nil nil))
  (tr_clause_prop 0
   (tr_clause_prop-1 nil 3483144141 3483145898
    ("" (skolem-typepred)
     (("" (expand tr_clause?) (("" (use sorted_prop) nil nil)) nil))
     nil)
-   proved
+   unfinished
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (index const-decl "posnat" trace_resolution nil)
     (posnat nonempty-type-eq-decl nil integers nil)
@@ -316,7 +341,6 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -333,14 +357,13 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -368,12 +391,12 @@
     (tr_clause_prop formula-decl nil trace_resolution nil))
    215 80 t shostak))
  (tr_clause_true?_TCC1 0
-  (tr_clause_true?_TCC1-1 nil 3482783478 3483145822
+  (tr_clause_true?_TCC1-1 nil 3482783478 3483207957
    ("" (skolem-typepred)
     (("" (flatten)
       (("" (delete -1 -2 -4 -5) (("" (grind) nil nil)) nil)) nil))
     nil)
-   proved
+   unfinished
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
      real_defs nil)
@@ -394,17 +417,16 @@
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   81 70 t nil))
+   77 50 t nil))
  (tr_clause_true?_TCC2 0
-  (tr_clause_true?_TCC2-1 nil 3482783478 3483145822
+  (tr_clause_true?_TCC2-1 nil 3482783478 3483207958
    ("" (skolem-typepred)
     (("" (flatten)
       (("" (hide -1 -4)
@@ -427,7 +449,8 @@
       nil))
     nil)
    proved
-   ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+   ((sorted_contains def-decl "bool" sortedlist nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
     (sorted? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
@@ -462,9 +485,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   158 140 t nil))
+   203 150 t nil))
  (tr_clause_true?_TCC3 0
-  (tr_clause_true?_TCC3-1 nil 3482783478 3483145822
+  (tr_clause_true?_TCC3-1 nil 3482783478 3483207958
    ("" (skolem!)
     (("" (flatten)
       (("" (typepred cl!1)
@@ -482,7 +505,12 @@
    proved
    ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
     (sorted? def-decl "bool" sortedlist nil)
+    (length def-decl "nat" list_props nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
@@ -513,48 +541,7 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   165 160 t nil))
- (tr_clause_true?_TCC4 0
-  (tr_clause_true?_TCC4-1 nil 3482783478 3483145823
-   ("" (termination-tcc) nil nil) proved
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (/= const-decl "boolean" notequal nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nzint nonempty-type-eq-decl nil integers nil)
-    (tr_literal? const-decl "bool" trace_resolution nil)
-    (tr_clause? const-decl "bool" trace_resolution nil)
-    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
-         nil)
-    (index const-decl "posnat" trace_resolution nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (> const-decl "bool" reals nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (length def-decl "nat" list_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
-     real_defs nil)
-    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
-   86 70 nil nil))
+   218 170 t nil))
  (clause_true_lemma 0
   (clause_true_lemma-1 nil 3483144275 3483145799
    ("" (induct cl)
@@ -718,11 +705,10 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (tr_clause? const-decl "bool" trace_resolution nil)
@@ -755,10 +741,6 @@
     (sorted? def-decl "bool" sortedlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cons1_var!1 skolem-const-decl "((tr_literal?))" trace_resolution
-     nil)
-    (cons2_var!1 skolem-const-decl "list[(tr_literal?)]"
-     trace_resolution nil)
     (contains_lemma formula-decl nil sortedlist nil)
     (member_tr_lit_member_nzint formula-decl nil trace_resolution nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
@@ -771,7 +753,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil))
    1321853 1140 t shostak))
  (delete_pivot_TCC1 0
-  (delete_pivot_TCC1-1 nil 3482675376 3483145823
+  (delete_pivot_TCC1-1 nil 3482675376 3483207958
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
@@ -804,9 +786,9 @@
     (- const-decl "[numfield -> numfield]" number_fields nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
-   117 110 t nil))
+   143 110 t nil))
  (delete_pivot_TCC2 0
-  (delete_pivot_TCC2-1 nil 3482675376 3483145823
+  (delete_pivot_TCC2-1 nil 3482675376 3483207958
    ("" (subtype-tcc)
     (("1" (hide -1 -4)
       (("1"
@@ -892,9 +874,9 @@
      real_defs nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   54 30 t nil))
+   51 30 t nil))
  (delete_pivot_TCC3 0
-  (delete_pivot_TCC3-1 nil 3482675376 3483145823
+  (delete_pivot_TCC3-1 nil 3482675376 3483207958
    ("" (skolem-typepred)
     (("" (hide -1)
       (("" (split 1)
@@ -1034,9 +1016,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   131 120 t nil))
+   170 110 t nil))
  (exist_pivot?_TCC1 0
-  (exist_pivot?_TCC1-1 nil 3482760987 3483145823
+  (exist_pivot?_TCC1-1 nil 3482760987 3483207958
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
@@ -1073,9 +1055,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   210 190 t nil))
+   251 170 t nil))
  (exist_pivot?_TCC2 0
-  (exist_pivot?_TCC2-1 nil 3482760987 3483145823
+  (exist_pivot?_TCC2-1 nil 3482760987 3483207959
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1114,7 +1096,7 @@
     (minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   95 70 nil nil))
+   108 70 nil nil))
  (exist_lemma 0
   (exist_lemma-1 nil 3482764467 3483146497
    ("" (induct ck)
@@ -1196,7 +1178,7 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (cons_tr_clause formula-decl nil trace_resolution nil)
     (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
@@ -1207,10 +1189,6 @@
          nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cons1_var!1 skolem-const-decl "((tr_literal?))" trace_resolution
-     nil)
-    (cons2_var!1 skolem-const-decl "list[(tr_literal?)]"
-     trace_resolution nil)
     (sorted? def-decl "bool" sortedlist nil)
     (>= const-decl "bool" reals nil)
     (nonneg_int nonempty-type-eq-decl nil integers nil)
@@ -1241,13 +1219,12 @@
     (tr_clause? const-decl "bool" trace_resolution nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil))
    478092 310 t shostak))
  (find_pivot_TCC1 0
-  (find_pivot_TCC1-1 nil 3482760023 3483145823
+  (find_pivot_TCC1-1 nil 3482760023 3483207959
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1272,9 +1249,9 @@
     (tr_clause? const-decl "bool" trace_resolution nil)
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (exist_pivot? def-decl "bool" trace_resolution nil))
-   29 30 nil nil))
+   57 30 nil nil))
  (find_pivot_TCC2 0
-  (find_pivot_TCC2-1 nil 3482760023 3483145823
+  (find_pivot_TCC2-1 nil 3482760023 3483207959
    ("" (skolem-typepred)
     (("" (hide -1 -4)
       (("" (flatten)
@@ -1315,9 +1292,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   74 50 t nil))
+   73 60 t nil))
  (find_pivot_TCC3 0
-  (find_pivot_TCC3-1 nil 3482760023 3483145823
+  (find_pivot_TCC3-1 nil 3482760023 3483207959
    ("" (skolem-typepred)
     (("" (hide -1 -4 -10)
       (("" (flatten)
@@ -1360,9 +1337,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   81 60 t nil))
+   92 60 t nil))
  (find_pivot_TCC4 0
-  (find_pivot_TCC4-1 nil 3482760023 3483145824
+  (find_pivot_TCC4-1 nil 3482760023 3483207959
    ("" (skolem-typepred)
     (("" (hide -1 -4 -10)
       (("" (flatten)
@@ -1415,9 +1392,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   234 230 t nil))
+   292 200 t nil))
  (find_pivot_TCC5 0
-  (find_pivot_TCC5-1 nil 3482760023 3483145824
+  (find_pivot_TCC5-1 nil 3482760023 3483207959
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
@@ -1455,9 +1432,9 @@
     (exist_pivot? def-decl "bool" trace_resolution nil)
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   230 190 t nil))
+   262 190 t nil))
  (find_pivot_TCC6 0
-  (find_pivot_TCC6-1 nil 3482760023 3483145824
+  (find_pivot_TCC6-1 nil 3482760023 3483207960
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1496,9 +1473,9 @@
      "(strict_total_order?[real])" real_props nil)
     (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
      real_defs nil))
-   265 240 nil nil))
+   306 250 nil nil))
  (find_pivot_TCC7 0
-  (find_pivot_TCC7-1 nil 3482760023 3483145824
+  (find_pivot_TCC7-1 nil 3482760023 3483207960
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
@@ -1544,9 +1521,9 @@
     (tr_clause? const-decl "bool" trace_resolution nil)
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (exist_pivot? def-decl "bool" trace_resolution nil))
-   407 380 t nil))
+   465 380 t nil))
  (find_pivot_TCC8 0
-  (find_pivot_TCC8-1 nil 3482760987 3483145825
+  (find_pivot_TCC8-1 nil 3482760987 3483207960
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
@@ -1585,9 +1562,9 @@
     (tr_clause? const-decl "bool" trace_resolution nil)
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (exist_pivot? def-decl "bool" trace_resolution nil))
-   341 300 t nil))
+   381 310 t nil))
  (merge_TCC1 0
-  (merge_TCC1-1 nil 3482675376 3483145825
+  (merge_TCC1-1 nil 3482675376 3483207961
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (member def-decl "bool" list_props nil)
@@ -1624,9 +1601,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   114 100 t nil))
+   142 90 t nil))
  (merge_TCC2 0
-  (merge_TCC2-1 nil 3482675376 3483145825
+  (merge_TCC2-1 nil 3482675376 3483207961
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (member def-decl "bool" list_props nil)
@@ -1663,9 +1640,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   180 160 t nil))
+   206 150 t nil))
  (merge_TCC3 0
-  (merge_TCC3-1 nil 3482675376 3483145825
+  (merge_TCC3-1 nil 3482675376 3483207961
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
@@ -1707,9 +1684,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   329 300 t nil))
+   399 300 t nil))
  (merge_TCC4 0
-  (merge_TCC4-1 nil 3482675376 3483145826
+  (merge_TCC4-1 nil 3482675376 3483207962
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
@@ -1751,9 +1728,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   345 290 t nil))
+   387 310 t nil))
  (merge_TCC5 0
-  (merge_TCC5-1 nil 3482675376 3483145826
+  (merge_TCC5-1 nil 3482675376 3483207962
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -1796,9 +1773,9 @@
      real_defs nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   176 140 nil nil))
+   202 160 nil nil))
  (merge_TCC6 0
-  (merge_TCC6-1 nil 3482675376 3483145833
+  (merge_TCC6-1 nil 3482675376 3483207969
    ("" (skolem-typepred)
     (("" (flatten)
       (("" (skolem-typepred)
@@ -2235,9 +2212,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   6885 5240 t nil))
+   7315 5190 t nil))
  (merge_TCC7 0
-  (merge_TCC7-1 nil 3482675376 3483145834
+  (merge_TCC7-1 nil 3482675376 3483207970
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
@@ -2281,9 +2258,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   719 620 t nil))
+   778 600 t nil))
  (merge_TCC8 0
-  (merge_TCC8-1 nil 3482675376 3483145834
+  (merge_TCC8-1 nil 3482675376 3483207970
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -2332,9 +2309,9 @@
          nil)
     (index const-decl "posnat" trace_resolution nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil))
-   215 190 nil nil))
+   237 180 nil nil))
  (merge_TCC9 0
-  (merge_TCC9-1 nil 3482675376 3483145836
+  (merge_TCC9-1 nil 3482675376 3483207973
    ("" (skolem-typepred)
     (("" (hide -1 -3 -7)
       (("" (flatten)
@@ -2598,9 +2575,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   2274 2000 t nil))
+   2565 2090 t nil))
  (merge_TCC10 0
-  (merge_TCC10-1 nil 3482675376 3483145837
+  (merge_TCC10-1 nil 3482675376 3483207973
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
@@ -2644,9 +2621,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   683 600 t nil))
+   751 620 t nil))
  (merge_TCC11 0
-  (merge_TCC11-1 nil 3482675376 3483145837
+  (merge_TCC11-1 nil 3482675376 3483207974
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -2695,9 +2672,9 @@
          nil)
     (index const-decl "posnat" trace_resolution nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil))
-   215 170 nil nil))
+   238 190 nil nil))
  (merge_TCC12 0
-  (merge_TCC12-1 nil 3482675376 3483145838
+  (merge_TCC12-1 nil 3482675376 3483207975
    ("" (skolem-typepred)
     (("" (flatten)
       (("" (skolem-typepred)
@@ -3052,9 +3029,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   1226 1080 t nil))
+   1315 1030 t nil))
  (merge_includes1_TCC1 0
-  (merge_includes1_TCC1-1 nil 3482760023 3483145838
+  (merge_includes1_TCC1-1 nil 3482760023 3483207975
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -3077,9 +3054,9 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   16 20 nil nil))
+   29 20 nil nil))
  (merge_includes1_TCC2 0
-  (merge_includes1_TCC2-1 nil 3482760023 3483145838
+  (merge_includes1_TCC2-1 nil 3482760023 3483207975
    ("" (skolem-typepred)
     (("" (typepred "merge(ck!1, cl!1)")
       (("" (expand tr_clause? -2) (("" (propax) nil nil)) nil)) nil))
@@ -3112,9 +3089,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   8 0 t nil))
+   21 10 t nil))
  (merge_includes1_TCC3 0
-  (merge_includes1_TCC3-1 nil 3482760023 3483145838
+  (merge_includes1_TCC3-1 nil 3482760023 3483207975
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -3137,7 +3114,7 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   44 30 nil nil))
+   40 20 nil nil))
  (merge_includes1 0
   (merge_includes1-1 nil 3483146677 3483147116
    ("" (skolem-typepred)
@@ -3193,10 +3170,8 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((sorted? def-decl "bool" sortedlist nil)
-    (ck!1 skolem-const-decl "(tr_clause?)" trace_resolution nil)
-    (cl!1 skolem-const-decl "(tr_clause?)" trace_resolution nil)
     (index const-decl "posnat" trace_resolution nil)
     (posnat nonempty-type-eq-decl nil integers nil)
     (> const-decl "bool" reals nil)
@@ -3224,7 +3199,6 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -3233,7 +3207,7 @@
     (boolean nonempty-type-decl nil booleans nil))
    355720 140 t shostak))
  (resolution_TCC1 0
-  (resolution_TCC1-1 nil 3482764464 3483145838
+  (resolution_TCC1-1 nil 3482764464 3483207975
    ("" (skolem-typepred)
     (("" (flatten)
       (("" (skolem-typepred)
@@ -3311,9 +3285,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
-   142 100 t nil))
+   160 100 t nil))
  (resolution_lemma_TCC1 0
-  (resolution_lemma_TCC1-1 nil 3482776948 3483145838
+  (resolution_lemma_TCC1-1 nil 3482776948 3483207975
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -3339,9 +3313,9 @@
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (resolution const-decl "(tr_clause?)" trace_resolution nil)
     (not_true_clauses const-decl "bool" trace_resolution nil))
-   69 50 nil nil))
+   78 60 nil nil))
  (resolution_lemma_TCC2 0
-  (resolution_lemma_TCC2-1 nil 3482776948 3483145839
+  (resolution_lemma_TCC2-1 nil 3482776948 3483207975
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -3367,9 +3341,9 @@
     (ne_tr_clause? const-decl "bool" trace_resolution nil)
     (resolution const-decl "(tr_clause?)" trace_resolution nil)
     (not_true_clauses const-decl "bool" trace_resolution nil))
-   61 60 nil nil))
+   86 70 nil nil))
  (resolution_lemma 0
-  (resolution_lemma-1 nil 3482783534 3483145899
+  (resolution_lemma-1 nil 3482783534 3483205560
    ("" (skosimp)
     (("" (assert)
       (("" (split)
@@ -3728,198 +3702,151 @@
         nil))
       nil))
     nil)
-   proved
-   ((merge_includes1 formula-decl nil trace_resolution nil)
-    (not_true_clauses const-decl "bool" trace_resolution nil)
-    (clause_true_lemma formula-decl nil trace_resolution nil)
-    (member_tr_lit_member_nzint formula-decl nil trace_resolution nil)
-    (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
-     real_defs nil)
-    (index const-decl "posnat" trace_resolution nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (> const-decl "bool" reals nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
-         nil)
-    (remove def-decl "{sBB |
-         FORALL f:
-           member(f, sBB) <=> (NOT key(f) = key(e)) AND member(f, sAA)}"
-      sortedlist nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
-    (tr_clause_true? def-decl "bool" trace_resolution nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (/= const-decl "boolean" notequal nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nzint nonempty-type-eq-decl nil integers nil)
-    (tr_literal? const-decl "bool" trace_resolution nil)
-    (tr_clause? const-decl "bool" trace_resolution nil)
-    (member def-decl "bool" list_props nil)
-    (numfield nonempty-type-eq-decl nil number_fields nil)
-    (- const-decl "[numfield -> numfield]" number_fields nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
+   unchecked
+   ((resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (find_pivot def-decl "{k | member(k, nck) AND member(-k, ncl)}"
+     trace_resolution nil)
+    (exist_pivot? def-decl "bool" trace_resolution nil)
+    (ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (merge def-decl "{cla: (tr_clause?) |
+         FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
+           trace_resolution nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (delete_pivot const-decl "{cl |
          FORALL l:
            member(l, cl) <=>
             member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)}"
      trace_resolution nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (merge def-decl "{cla: (tr_clause?) |
-         FORALL k: member(k, cla) IFF (member(k, ck) OR member(k, cl))}"
-           trace_resolution nil)
-    (ne_tr_clause? const-decl "bool" trace_resolution nil)
-    (exist_pivot? def-decl "bool" trace_resolution nil)
-    (find_pivot def-decl "{k | member(k, nck) AND member(-k, ncl)}"
-     trace_resolution nil)
-    (resolution const-decl "(tr_clause?)" trace_resolution nil))
-   632 510 t shostak))
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (- const-decl "[numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (member def-decl "bool" list_props nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (tr_clause_true? def-decl "bool" trace_resolution nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (remove def-decl "{sBB |
+         FORALL f:
+           member(f, sBB) <=> (NOT key(f) = key(e)) AND member(f, sAA)}"
+      sortedlist nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (>= const-decl "bool" reals nil)
+    (nonneg_int nonempty-type-eq-decl nil integers nil)
+    (> const-decl "bool" reals nil)
+    (posnat nonempty-type-eq-decl nil integers nil)
+    (index const-decl "posnat" trace_resolution nil)
+    (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
+     real_defs nil)
+    (member_tr_lit_member_nzint formula-decl nil trace_resolution nil)
+    (clause_true_lemma formula-decl nil trace_resolution nil)
+    (not_true_clauses const-decl "bool" trace_resolution nil)
+    (merge_includes1 formula-decl nil trace_resolution nil))
+   1382 580 t shostak))
  (include_res 0
-  (include_res-1 nil 3482776952 3483145955
+  (include_res-1 nil 3482776952 3483207807
    ("" (skolem-typepred)
-    (("" (assert)
-      (("" (flatten)
-        (("" (split)
-          (("1" (hide -1 -4)
-            (("1" (lemma subset_include)
-              (("1"
-                (inst -1 "nck!1" "cons(find_pivot(nck!1, ncl!1),
-                          resolution(nck!1, ncl!1))")
-                (("1" (replace -1 1)
-                  (("1" (lemma resolution_lemma)
-                    (("1" (hide -2)
-                      (("1" (inst -1 "nck!1" "ncl!1")
-                        (("1" (assert)
-                          (("1" (replace -6 -1)
-                            (("1" (generalize nck!1 "nck")
+    (("" (flatten)
+      (("" (assert)
+        (("" (flatten)
+          (("" (use resolution_lemma)
+            (("" (assert)
+              (("" (flatten)
+                (("" (split 1)
+                  (("1"
+                    (lemma every_member_subset
+                     (k nck!1 l
+                      "cons(find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))"))
+                    (("1" (assert)
+                      (("1" (skolem-typepred)
+                        (("1" (flatten)
+                          (("1" (inst -3 a!1)
+                            (("1" (assert)
                               (("1"
-                                (induct nck)
+                                (split -3)
                                 (("1" (grind) nil nil)
-                                 ("2"
-                                  (skolem-typepred)
+                                 ("2" (grind) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil)
+                   ("2" (use subset_numpred_nzint)
+                    (("2" (replace -1)
+                      (("2"
+                        (use every_member_subset
+                             (k ncl!1 l
+                              "cons(-find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))"))
+                        (("2" (assert)
+                          (("2" (skolem-typepred)
+                            (("2" (flatten)
+                              (("2"
+                                (expand member 2)
+                                (("2"
+                                  (flatten)
                                   (("2"
-                                    (flatten)
+                                    (delete -3)
                                     (("2"
-                                      (hide -2)
-                                      (("2"
-                                        (expand subset +)
-                                        (("2"
-                                          (expand tr_clause? -3)
-                                          (("2"
-                                            (expand sorted? -3)
-                                            (("2"
-                                              (lift-if -3)
-                                              (("2"
-                                                (split -3)
-                                                (("1" (grind) nil nil)
-                                                 ("2"
-                                                  (flatten)
-                                                  (("2"
-                                                    (expand
-                                                     tr_clause?
-                                                     -4
-                                                     1)
-                                                    (("2"
-                                                      (replace -2 -4)
-                                                      (("2"
-                                                        (case
-                                                         "null?(cons2_var!1)")
-                                                        (("1"
-                                                          (propax)
-                                                          nil
-                                                          nil)
-                                                         ("2"
-                                                          (expand
-                                                           ne_tr_clause?
-                                                           -4)
-                                                          (("2"
-                                                            (replace
-                                                             1
-                                                             -4)
-                                                            (("2"
-                                                              (split 4)
-                                                              (("1"
-                                                                (grind)
-                                                                nil
-                                                                nil)
-                                                               ("2"
-                                                                (assert)
-                                                                (("2"
-                                                                  (postpone)
-                                                                  nil
-                                                                  nil))
-                                                                nil))
-                                                              nil))
-                                                            nil))
-                                                          nil))
-                                                        nil))
-                                                      nil))
-                                                    nil))
+                                      (inst -3 a!1)
+                                      (("1"
+                                        (case
+                                         "list_props[(tr_literal?)].member(a!1, ncl!1)")
+                                        (("1"
+                                          (replace -1)
+                                          (("1"
+                                            (split -4)
+                                            (("1"
+                                              (lemma
+                                               member_tr_lit_member_nzint)
+                                              (("1"
+                                                (inst
+                                                 -1
+                                                 a!1
+                                                 "resolution(nck!1, ncl!1)")
+                                                (("1"
+                                                  (assert)
+                                                  nil
                                                   nil))
                                                 nil))
-                                              nil))
+                                              nil)
+                                             ("2" (propax) nil nil))
                                             nil))
-                                          nil))
-                                        nil))
-                                      nil))
-                                    nil))
-                                  nil)
-                                 ("3"
-                                  (skolem-typepred)
-                                  (("3"
-                                    (flatten)
-                                    (("3"
-                                      (skolem-typepred)
-                                      (("3"
-                                        (flatten)
-                                        (("3"
-                                          (skolem-typepred)
-                                          (("3"
-                                            (flatten)
-                                            (("3" (postpone) nil nil))
-                                            nil))
-                                          nil))
-                                        nil))
-                                      nil))
-                                    nil))
-                                  nil)
-                                 ("4"
-                                  (skolem-typepred)
-                                  (("4"
-                                    (flatten)
-                                    (("4"
-                                      (skolem-typepred)
-                                      (("4"
-                                        (flatten)
-                                        (("4"
-                                          (hide -2)
-                                          (("4" (postpone) nil nil))
-                                          nil))
-                                        nil))
+                                          nil)
+                                         ("2"
+                                          (typepred a!1)
+                                          (("2" (postpone) nil nil))
+                                          nil)
+                                         ("3" (postpone) nil nil))
+                                        nil)
+                                       ("2" (postpone) nil nil))
                                       nil))
                                     nil))
                                   nil))
-                                nil)
-                               ("2" (postpone) nil nil)
-                               ("3" (postpone) nil nil))
+                                nil))
                               nil))
                             nil))
                           nil))
@@ -3929,15 +3856,14 @@
                   nil))
                 nil))
               nil))
-            nil)
-           ("2" (postpone) nil nil))
+            nil))
           nil))
         nil))
       nil))
     nil)
-   unfinished nil 56660 36530 t shostak))
+   unfinished nil 456136 490 t shostak))
  (resolution_list_TCC1 0
-  (resolution_list_TCC1-1 nil 3482675376 3483145839
+  (resolution_list_TCC1-1 nil 3482675376 3483207976
    ("" (grind) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -3977,9 +3903,9 @@
      trace_resolution nil)
     (resolution const-decl "(tr_clause?)" trace_resolution nil)
     (length def-decl "nat" list_props nil))
-   186 160 t nil))
+   198 160 t nil))
  (resolution_list_TCC2 0
-  (resolution_list_TCC2-1 nil 3482776948 3483145839
+  (resolution_list_TCC2-1 nil 3482776948 3483207976
    ("" (grind) nil nil) proved
    ((ne_tr_clause? const-decl "bool" trace_resolution nil)
     (index const-decl "posnat" trace_resolution nil)
@@ -4004,12 +3930,12 @@
     (number nonempty-type-decl nil numbers nil)
     (sorted? def-decl "bool" sortedlist nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   15 10 t nil))
+   14 10 t nil))
  (build_chain_list_TCC1 0
-  (build_chain_list_TCC1-1 nil 3482675376 3483145839
+  (build_chain_list_TCC1-1 nil 3482675376 3483207976
    ("" (subtype-tcc) nil nil) proved nil 9 10 nil nil))
  (build_chain_list_TCC2 0
-  (build_chain_list_TCC2-1 nil 3482675376 3483145839
+  (build_chain_list_TCC2-1 nil 3482675376 3483207976
    ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
    ((map adt-def-decl "list[T1]" list_adt_map nil)
     (real_lt_is_strict_total_order name-judgement
@@ -4044,14 +3970,14 @@
     (tr_clause? const-decl "bool" trace_resolution nil)
     (clause_chain type-eq-decl nil trace_resolution nil)
     (certificate type-eq-decl nil trace_resolution nil))
-   78 70 t nil))
+   86 60 t nil))
  (resolve_rec_TCC1 0
-  (resolve_rec_TCC1-1 nil 3482675376 3483145839
+  (resolve_rec_TCC1-1 nil 3482675376 3483207976
    ("" (subtype-tcc) nil nil) proved
-   ((minus_odd_is_odd application-judgement "odd_int" integers nil)) 9
-   10 nil nil))
+   ((minus_odd_is_odd application-judgement "odd_int" integers nil)) 8
+   0 nil nil))
  (resolve_rec_TCC2 0
-  (resolve_rec_TCC2-1 nil 3482675376 3483145839
+  (resolve_rec_TCC2-1 nil 3482675376 3483207976
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -4075,9 +4001,9 @@
      "(strict_total_order?[real])" real_props nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
-   13 10 nil nil))
+   25 20 nil nil))
  (resolve_rec_TCC3 0
-  (resolve_rec_TCC3-1 nil 3482675376 3483145839
+  (resolve_rec_TCC3-1 nil 3482675376 3483207976
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -4101,15 +4027,15 @@
      integers nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
-   63 50 nil nil))
+   73 50 nil nil))
  (resolve_rec_TCC4 0
-  (resolve_rec_TCC4-1 nil 3482675376 3483145839
+  (resolve_rec_TCC4-1 nil 3482675376 3483207976
    ("" (termination-tcc) nil nil) proved
    ((minus_odd_is_odd application-judgement "odd_int" integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil))
-   15 10 nil nil))
+   15 20 nil nil))
  (resolve_rec_TCC5 0
-  (resolve_rec_TCC5-1 nil 3482675376 3483145839
+  (resolve_rec_TCC5-1 nil 3482675376 3483207976
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -4133,9 +4059,9 @@
      integers nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
-   47 50 nil nil))
+   59 40 nil nil))
  (resolve_rec_TCC6 0
-  (resolve_rec_TCC6-1 nil 3482675376 3483145839
+  (resolve_rec_TCC6-1 nil 3482675376 3483207976
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -4157,17 +4083,17 @@
     (upto nonempty-type-eq-decl nil naturalnumbers nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
-   39 20 nil nil))
+   36 20 nil nil))
  (resolve_rec_TCC7 0
-  (resolve_rec_TCC7-1 nil 3482675376 3483145839
+  (resolve_rec_TCC7-1 nil 3482675376 3483207976
    ("" (termination-tcc) nil nil) proved
    ((minus_odd_is_odd application-judgement "odd_int" integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil))
-   15 10 nil nil))
+   28 20 nil nil))
  (resolve_TCC1 0
-  (resolve_TCC1-1 nil 3482107568 3483145839 ("" (subtype-tcc) nil nil)
+  (resolve_TCC1-1 nil 3482107568 3483207976 ("" (subtype-tcc) nil nil)
    proved
    ((real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
-   4 10 nil nil)))
+   3 10 nil nil)))
 

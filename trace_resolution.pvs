@@ -3,10 +3,17 @@ BEGIN
 
   IMPORTING minlist
 
+
   tr_literal?(k: nzint): bool = (abs(k) < m)
+
+  member_numpred_nzint :  LEMMA FORALL(k: nzint, kk: list[nzint]): member[numfield](k, kk) = member[nzint](k, kk)
+
+  subset_numpred_nzint :  LEMMA FORALL(kk: list[nzint], ll: list[nzint]): subset[numfield](kk, ll) = subset[nzint](kk, ll)
 
   k, l: VAR (tr_literal?)
   kk, ll: VAR list[(tr_literal?)]
+
+  tr_neg(k): (tr_literal?) = -k
 
   member_tr_lit_member_nzint: LEMMA member[nzint](k, ll) = member[(tr_literal?)](k, ll)
   subset_tr_lit_subset_nzint: LEMMA subset[nzint](kk, ll) = subset[(tr_literal?)](kk, ll)

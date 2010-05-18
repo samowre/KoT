@@ -7,6 +7,8 @@ BEGIN
   k, l: VAR (tr_literal?)
   cl, ck, cm: VAR (tr_clause?)
 
+  listA, listB: VAR list[(tr_literal?)]
+
   % transforms ( n:nzint ) -> fmla = (f_not)? (atom(upred...))
   translate_lit(k): (literal?) = IF k > 0 
   		    	       	 THEN atom(upred(k, 0), null)
@@ -33,7 +35,7 @@ BEGIN
      cons?(ck) =>
      translate_clause(cons(car(ck), cdr(ck))) = cons(translate_lit(car(ck)), translate_clause(cdr(ck)))
 
-  listA, listB: VAR list[(tr_literal?)]
+
 
   % translation for all tr_literal lists
    translate_list: LEMMA
@@ -79,11 +81,7 @@ BEGIN
              cons(translate_lit(find_pivot(nck, ncl)),
                   translate_clause(resolution(nck, ncl))))
 
-  member_numpred_nzint :  LEMMA
-    member[numfield](k, listB) = member[nzint](k, listB)
 
-  subset_numpred_nzint :  LEMMA
-    subset[numfield](listA, listB) = subset[nzint](listA, listB)
   
   % ncl included in cons(pivot, resolution(nck, ncl)
   translate_include_res2 :  LEMMA
