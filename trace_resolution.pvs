@@ -29,6 +29,8 @@ BEGIN
 
   ck, cl, cm: VAR (tr_clause?)
 
+  cons_tr_clause: LEMMA (tr_clause?(ck) AND cons?(ck)) IMPLIES tr_clause?(cdr(ck))
+
   %not empty trace clause
   ne_tr_clause?(cl): bool = NOT null?(cl)
  
@@ -40,20 +42,11 @@ BEGIN
   MEASURE length(cl)
 
   clause_true_lemma :  LEMMA
-  tr_clause_true?(cl) = EXISTS l: member(l, cl) and member(-l, cl)
+        tr_clause_true?(cl) = EXISTS l: member(l, cl) and member(-l, cl)
  
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
-  cons_tr_clause: LEMMA (tr_clause?(ck) AND cons?(ck)) IMPLIES tr_clause?(cdr(ck))
-
-%  trace_entry: DATATYPE
-%    BEGIN
-%     tr_clause(clause:(clause?)): tr_clause?
-%     tr_merg(merg_list: (cons?[below(n)])) : tr_merg?
-%    END trace_entry
-
-
-  %list of integers smaller than i
+   %list of integers smaller than i
   chain(index : below(n)) : TYPE = list[below(index)]
   
   %record with fields clause and chain(i)
@@ -63,7 +56,6 @@ BEGIN
   certificate: TYPE = ARRAY[index: below(n) -> clause_chain(index)]
 
   cert : VAR certificate
-
 
   % tr_clause is sorted by index => ~p, p are on consecutive positions.
   % deletes the pair (~pivot, pivot)  
@@ -135,6 +127,7 @@ BEGIN
 
   not_true_clauses(ck, cl): bool = NOT tr_clause_true?(ck) AND NOT tr_clause_true?(cl)
 
+  % member
   % member(x, ck) => member(x, res) \/ x =  pivot
   % member(x, cl) => member(x, res) \/ x = -pivot
   resolution_lemma : LEMMA
@@ -160,11 +153,14 @@ BEGIN
     
       
   %applies merge on a non-empty list of clauses
-  resolution_list(lck: (cons?[(tr_clause?)])): RECURSIVE (tr_clause?) =
+  resolution_list(lck: (cons?[(tr_clause?)])): RECURSIVE(tr_clause?) =
      CASES cdr(lck) OF
-       null : car(lck),
-       cons(ck, lcl) : resolution_list(cons(resolution(car(lck), ck), lcl))
-     ENDCASES
+       null: car(lck),
+       cons(ck, lcl) : IF ne_tr_clause?(car(lck)) AND ne_tr_clause?(ck) 
+       		        THEN resolution_list(cons(resolution(car(lck), ck), lcl))
+			ELSE null
+			ENDIF
+     ENDCASES 
      MEASURE length(lck)
 
   % creates the list of clauses corresponding to the chain values
@@ -172,10 +168,10 @@ BEGIN
       map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)
   		    
   % applies resolution_list on all chains starting from j  
-  resolve_rec ( j: upto(n), cert ): RECURSIVE certificate = 
+  resolve_rec(j: upto(n), cert): RECURSIVE certificate = 
     IF j=n 
     THEN cert
-    ELSIF null?( cert(j)`chn )
+    ELSIF null?(cert(j)`chn)
     THEN resolve_rec(j+1, cert)
     ELSE resolve_rec(j+1, cert WITH [(j)`cl := resolution_list(build_chain_list(j, cert))])
     ENDIF 
