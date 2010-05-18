@@ -1,7 +1,7 @@
 (trace2fmla
  (translate_lit_TCC1 0
-  (translate_lit_TCC1-1 nil 3482187575 3483109741
-   ("" (subtype-tcc) nil nil) proved
+  (translate_lit_TCC1-1 nil 3482187575 3483130106
+   ("" (subtype-tcc) nil nil) unchecked
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -33,10 +33,10 @@
      real_defs nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   109 100 nil nil))
+   143 90 nil nil))
  (translate_lit_TCC2 0
-  (translate_lit_TCC2-1 nil 3482187575 3483109742
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+  (translate_lit_TCC2-1 nil 3482187575 3483130106
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((pred? adt-def-decl "boolean" funpred_adt nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
@@ -69,10 +69,10 @@
     (upto nonempty-type-eq-decl nil naturalnumbers nil)
     (i formal-const-decl "upto(n)" trace2fmla nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
-   203 170 t nil))
+   208 160 t nil))
  (translate_lit_TCC3 0
-  (translate_lit_TCC3-1 nil 3482187575 3483109742
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+  (translate_lit_TCC3-1 nil 3482187575 3483130106
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((length def-decl "nat" list_props nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
@@ -105,16 +105,39 @@
     (upto nonempty-type-eq-decl nil naturalnumbers nil)
     (i formal-const-decl "upto(n)" trace2fmla nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
-   217 160 t nil))
+   205 160 t nil))
  (translate_lit_TCC4 0
-  (translate_lit_TCC4-1 nil 3482187575 3483109742
-   ("" (subtype-tcc) nil nil) proved
-   ((prop_atom? const-decl "bool" resolution nil)
+  (translate_lit_TCC4-1 nil 3482187575 3483130106
+   ("" (subtype-tcc) nil nil) unchecked
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (/= const-decl "boolean" notequal nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (<= const-decl "bool" reals nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (prop_atom? const-decl "bool" resolution nil)
     (literal? const-decl "bool" resolution nil))
-   93 60 nil nil))
+   123 80 nil nil))
  (translate_lit_TCC5 0
-  (translate_lit_TCC5-1 nil 3482187575 3483109742
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+  (translate_lit_TCC5-1 nil 3482187575 3483130107
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((pred? adt-def-decl "boolean" funpred_adt nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (real_gt_is_strict_total_order name-judgement
@@ -148,10 +171,10 @@
     (upto nonempty-type-eq-decl nil naturalnumbers nil)
     (i formal-const-decl "upto(n)" trace2fmla nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
-   225 160 t nil))
+   210 170 t nil))
  (translate_lit_TCC6 0
-  (translate_lit_TCC6-1 nil 3482187575 3483109742
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+  (translate_lit_TCC6-1 nil 3482187575 3483130107
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((length def-decl "nat" list_props nil)
     (minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
@@ -185,17 +208,48 @@
     (upto nonempty-type-eq-decl nil naturalnumbers nil)
     (i formal-const-decl "upto(n)" trace2fmla nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
-   226 180 t nil))
+   206 160 t nil))
  (translate_lit_TCC7 0
-  (translate_lit_TCC7-1 nil 3482187575 3483109743 ("" (grind) nil nil)
-   proved
-   ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+  (translate_lit_TCC7-1 nil 3482187575 3483130107 ("" (grind) nil nil)
+   unchecked
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (/= const-decl "boolean" notequal nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (<= const-decl "bool" reals nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
+     real_defs nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
     (prop_atom? const-decl "bool" resolution nil)
     (literal? const-decl "bool" resolution nil))
-   72 60 t nil))
+   201 150 t nil))
  (index_index 0
-  (index_index-1 nil 3482187759 3483109851 ("" (grind) nil nil) proved
+  (index_index-1 nil 3482187759 3483109851 ("" (grind) nil nil)
+   unfinished
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (index const-decl "posnat" trace_resolution nil)
     (number nonempty-type-decl nil numbers nil)
@@ -239,8 +293,133 @@
     (nzint nonempty-type-eq-decl nil integers nil)
     (tr_literal? const-decl "bool" trace_resolution nil))
    533 300 t shostak))
+ (translate_lit_equiv 0
+  (translate_lit_equiv-1 nil 3483132565 3483134519
+   ("" (skosimp)
+    (("" (split)
+      (("1" (flatten)
+        (("1" (expand translate_lit)
+          (("1" (lift-if)
+            (("1" (split)
+              (("1" (lift-if)
+                (("1" (split)
+                  (("1" (flatten)
+                    (("1"
+                      (case "FORALL (k, l: (atom?)): k = l => index(pred(k)) = index(pred(l)) ")
+                      (("1"
+                        (inst -1 "atom(upred(k!1, 0), null)"
+                         "atom(upred(l!1, 0), null)")
+                        (("1" (grind) nil nil) ("2" (grind) nil nil)
+                         ("3" (grind) nil nil))
+                        nil)
+                       ("2" (grind) nil nil))
+                      nil))
+                    nil)
+                   ("2" (flatten) (("2" (grind) nil nil)) nil))
+                  nil))
+                nil)
+               ("2" (flatten)
+                (("2" (lift-if)
+                  (("2" (split)
+                    (("1" (flatten) (("1" (grind) nil nil)) nil)
+                     ("2" (grind)
+                      (("2"
+                        (case "FORALL (k, l: (atom?)): f_not(k) = f_not(l) => index(pred(k)) = index(pred(l)) ")
+                        (("1"
+                          (inst -1 "atom(upred(-k!1, 0), null)"
+                           "atom(upred(-l!1, 0), null)")
+                          (("1" (grind) nil nil)) nil)
+                         ("2" (grind)
+                          (("2" (grind)
+                            (("2"
+                              (case "FORALL (k, l: (f_not?)): atom?(arg(k)) AND atom?(arg(l)) AND k = l => index(pred(arg(k))) = index(pred(arg(l)))")
+                              (("1"
+                                (inst -1 "f_not(k!2)" "f_not(l!2)")
+                                (("1" (grind) nil nil))
+                                nil)
+                               ("2"
+                                (skosimp)
+                                (("2" (grind) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("2" (grind) nil nil))
+      nil))
+    nil)
+   unchecked
+   ((translate_lit const-decl "(literal?)" trace2fmla nil)
+    (pred adt-accessor-decl "[(atom?) -> (pred?)]" fmla nil)
+    (pred? adt-def-decl "boolean" funpred_adt nil)
+    (index shared-adt-accessor-decl "[funpred -> nat]" funpred_adt nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (funpred type-decl nil funpred_adt nil)
+    (number nonempty-type-decl nil numbers nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (atom? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (fmla type-decl nil fmla nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (upred adt-constructor-decl "[[nat, nat] -> (upred?)]" funpred_adt
+     nil)
+    (upred? adt-recognizer-decl "[funpred -> boolean]" funpred_adt nil)
+    (atom adt-constructor-decl
+          "[[pred: (pred?), {ss: list[term] | length(ss) = arity(pred)}] -> (atom?)]"
+          fmla nil)
+    (arity shared-adt-accessor-decl "[funpred -> nat]" funpred_adt nil)
+    (length def-decl "nat" list_props nil)
+    (list type-decl nil list_adt nil) (term type-decl nil fmla nil)
+    (/= const-decl "boolean" notequal nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (<= const-decl "bool" reals nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
+     real_defs nil)
+    (arg adt-accessor-decl "[(f_not?) -> fmla]" fmla nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (- const-decl "[numfield -> numfield]" number_fields nil)
+    (f_not? adt-recognizer-decl "[fmla -> boolean]" fmla nil)
+    (f_not adt-constructor-decl "[fmla -> (f_not?)]" fmla nil))
+   1954671 2680 t shostak))
  (translate_clause_TCC1 0
-  (translate_clause_TCC1-1 nil 3482245688 3483109744
+  (translate_clause_TCC1-1 nil 3482245688 3483130108
    ("" (induct cl)
     (("1" (grind) nil nil) ("2" (grind) nil nil)
      ("3" (skolem-typepred)
@@ -323,7 +502,7 @@
         nil))
       nil))
     nil)
-   proved
+   unchecked
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (tr_clause_prop formula-decl nil trace_resolution nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
@@ -370,17 +549,15 @@
     (i formal-const-decl "upto(n)" trace2fmla nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (translate_lit const-decl "(literal?)" trace2fmla nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil)
     (clause? const-decl "bool" resolution nil)
     (literal? const-decl "bool" resolution nil)
     (fmla type-decl nil fmla nil)
     (tr_clause? const-decl "bool" trace_resolution nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil))
-   1300 820 t nil))
+   1049 830 t nil))
  (clause_clause 0
   (clause_clause-1 nil 3482677228 3483109909
    ("" (induct cl)
@@ -644,10 +821,9 @@
         nil))
       nil))
     nil)
-   proved
+   unfinished
    ((list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (tr_clause? const-decl "bool" trace_resolution nil)
@@ -688,7 +864,6 @@
     (sorted? def-decl "bool" sortedlist nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (tr_clause_prop formula-decl nil trace_resolution nil)
@@ -727,12 +902,12 @@
     (NOT const-decl "[bool -> bool]" booleans nil))
    5722 2260 t shostak))
  (translate_cons_TCC1 0
-  (translate_cons_TCC1-1 nil 3482245688 3483109744
+  (translate_cons_TCC1-1 nil 3482245688 3483130108
    ("" (skosimp)
     (("" (assert) (("" (typepred ck!1) (("" (grind) nil nil)) nil))
       nil))
     nil)
-   proved
+   unchecked
    ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
     (index const-decl "posnat" trace_resolution nil)
@@ -748,7 +923,6 @@
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -770,9 +944,9 @@
     (i formal-const-decl "upto(n)" trace2fmla nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (tr_clause? const-decl "bool" trace_resolution nil))
-   220 160 t nil))
+   212 160 t nil))
  (translate_cons_TCC2 0
-  (translate_cons_TCC2-1 nil 3482805344 3483109744
+  (translate_cons_TCC2-1 nil 3482805344 3483130109
    ("" (skosimp)
     (("" (typepred ck!1)
       (("" (expand tr_clause? -2)
@@ -797,7 +971,7 @@
         nil))
       nil))
     nil)
-   proved
+   unchecked
    ((tr_clause? const-decl "bool" trace_resolution nil)
     (tr_literal? const-decl "bool" trace_resolution nil)
     (i formal-const-decl "upto(n)" trace2fmla nil)
@@ -819,7 +993,6 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
     (number nonempty-type-decl nil numbers nil)
@@ -835,7 +1008,7 @@
     (nonneg_int nonempty-type-eq-decl nil integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
-   225 190 t nil))
+   259 200 t nil))
  (translate_cons 0
   (translate_cons-1 nil 3482679632 3483109923
    ("" (skolem!)
@@ -844,18 +1017,244 @@
         (("" (expand map) (("" (grind) nil nil)) nil)) nil))
       nil))
     nil)
-   proved
+   unfinished
    ((translate_clause const-decl "(clause?)" trace2fmla nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (translate_lit const-decl "(literal?)" trace2fmla nil)
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
-         nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil))
+         nil))
    339 140 t shostak))
+ (translate_list 0
+  (translate_list-1 nil 3483130122 3483134566 ("" (grind) nil nil)
+   unchecked
+   ((translate_lit const-decl "(literal?)" trace2fmla nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil))
+   274 70 t shostak))
+ (member_list 0
+  (member_list-1 nil 3483131339 3483136392
+   ("" (skosimp)
+    (("" (generalize listA!1 listA)
+      (("" (induct listA)
+        (("1" (grind) nil nil) ("2" (grind) nil nil)
+         ("3" (skosimp)
+          (("3" (split 1)
+            (("1" (flatten)
+              (("1" (expand member 1)
+                (("1" (lift-if)
+                  (("1" (split)
+                    (("1" (grind) nil nil)
+                     ("2" (flatten)
+                      (("2" (lemma translate_list)
+                        (("2"
+                          (inst -1 "cons(cons1_var!1, cons2_var!1)")
+                          (("2" (assert)
+                            (("2" (replace -1 2)
+                              (("2"
+                                (assert)
+                                (("2"
+                                  (replace -1 3)
+                                  (("2"
+                                    (assert)
+                                    (("2"
+                                      (delete -3)
+                                      (("2"
+                                        (expand member -2)
+                                        (("2" (propax) nil nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("2" (flatten)
+              (("2" (expand member 1)
+                (("2" (flatten)
+                  (("2" (lemma translate_list)
+                    (("2" (inst -1 "cons(cons1_var!1, cons2_var!1)")
+                      (("2" (assert)
+                        (("2" (replace -1 -2)
+                          (("2" (expand member -2)
+                            (("2" (lemma translate_lit_equiv)
+                              (("2"
+                                (inst -1 "k!1" "cons1_var!1")
+                                (("2" (grind) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unchecked
+   ((list_induction formula-decl nil list_adt nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (translate_list formula-decl nil trace2fmla nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (translate_lit_equiv formula-decl nil trace2fmla nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (literal? const-decl "bool" resolution nil)
+    (fmla type-decl nil fmla nil)
+    (member def-decl "bool" list_props nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil))
+   1559 550 t shostak))
+ (translate_cons_list 0
+  (translate_cons_list-1 nil 3483130857 3483136542
+   ("" (skosimp)
+    (("" (generalize listA!1 "listA")
+      (("" (induct listA)
+        (("1" (grind) nil nil)
+         ("2" (skosimp)
+          (("2" (expand subset + 1)
+            (("2" (expand subset + 2)
+              (("2" (lift-if)
+                (("2" (split)
+                  (("1" (grind) nil nil)
+                   ("2" (flatten)
+                    (("2" (lemma translate_list)
+                      (("2" (inst -1 "cons(cons1_var!1, cons2_var!1)")
+                        (("2" (assert)
+                          (("2" (replace -1 2)
+                            (("2" (assert)
+                              (("2"
+                                (case "member(cons1_var!1, listB!1)")
+                                (("1"
+                                  (replace -1 2)
+                                  (("1"
+                                    (replace -3 2)
+                                    (("1"
+                                      (lemma member_list)
+                                      (("1"
+                                        (inst
+                                         -1
+                                         "cons1_var!1"
+                                         "listB!1")
+                                        (("1"
+                                          (replace -1 2 RL)
+                                          (("1"
+                                            (replace -2 2)
+                                            (("1" (propax) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2"
+                                  (lemma member_list)
+                                  (("2"
+                                    (inst -1 "cons1_var!1" "listB!1")
+                                    (("2"
+                                      (replace 1 -1)
+                                      (("2" (assert) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unchecked
+   ((list_induction formula-decl nil list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (member_list formula-decl nil trace2fmla nil)
+    (translate_list formula-decl nil trace2fmla nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
+         nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (literal? const-decl "bool" resolution nil)
+    (fmla type-decl nil fmla nil) (subset def-decl "bool" minlist nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil))
+   145271 460 t shostak))
  (neg_translate_TCC1 0
-  (neg_translate_TCC1-1 nil 3482804348 3483109745
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil) proved
+  (neg_translate_TCC1-1 nil 3482804348 3483130109
+   ("" (subtype-tcc) (("" (grind) nil nil)) nil) unchecked
    ((abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil)
     (nzint_abs_is_pos application-judgement "{j: posint | j >= i}"
@@ -886,10 +1285,10 @@
     (<= const-decl "bool" reals nil)
     (upto nonempty-type-eq-decl nil naturalnumbers nil)
     (i formal-const-decl "upto(n)" trace2fmla nil))
-   344 240 t nil))
+   301 230 t nil))
  (neg_translate 0
   (neg_translate-1 nil 3483109938 3483109947
-   ("" (skosimp) (("" (grind) nil nil)) nil) proved
+   ("" (skosimp) (("" (grind) nil nil)) nil) unfinished
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
@@ -898,23 +1297,780 @@
     (abs const-decl "{n: nonneg_real | n >= m AND n >= -m}" real_defs
          nil))
    8917 110 t shostak))
- (cons_inclusion 0
-  (cons_inclusion-1 nil 3482846186 3483110572
-   ("" (skosimp) (("" (postpone) nil nil)) nil) unfinished nil 231782
-   20 t shostak))
+ (cons_cdr_inclusion 0
+  (cons_cdr_inclusion-1 nil 3483119898 3483127713
+   ("" (skosimp)
+    (("" (generalize cl!1 "cl")
+      (("" (induct cl)
+        (("1" (delete 2)
+          (("1" (typepred cl!2) (("1" (propax) nil nil)) nil)) nil)
+         ("2" (flatten) (("2" (grind) nil nil)) nil)
+         ("3" (skosimp)
+          (("3" (expand tr_clause? -2)
+            (("3" (expand sorted? -2)
+              (("3" (lift-if -2)
+                (("3" (split -2)
+                  (("1" (expand subset -3)
+                    (("1" (flatten)
+                      (("1" (replace -4 -2)
+                        (("1" (expand tr_clause? -2)
+                          (("1" (expand sorted? -2)
+                            (("1" (lift-if -2)
+                              (("1"
+                                (replace -1 -2)
+                                (("1"
+                                  (expand subset 1)
+                                  (("1"
+                                    (lift-if)
+                                    (("1"
+                                      (split)
+                                      (("1" (propax) nil nil)
+                                       ("2"
+                                        (flatten)
+                                        (("2"
+                                          (lemma translate_cons)
+                                          (("2"
+                                            (inst
+                                             -1
+                                             "cons(cons1_var!1, cons2_var!1)")
+                                            (("2"
+                                              (assert)
+                                              (("2"
+                                                (replace -1 2)
+                                                (("2"
+                                                  (assert)
+                                                  (("2"
+                                                    (hide 1)
+                                                    (("2"
+                                                      (expand member +)
+                                                      (("2"
+                                                        (flatten)
+                                                        (("2"
+                                                          (delete 1)
+                                                          (("2"
+                                                            (lemma
+                                                             clause_clause)
+                                                            (("2"
+                                                              (inst
+                                                               -1
+                                                               "ck!1"
+                                                               "cons1_var!1")
+                                                              (("2"
+                                                                (replace
+                                                                 -5
+                                                                 -1)
+                                                                (("2"
+                                                                  (lemma
+                                                                   member_lit_member_fmla)
+                                                                  (("2"
+                                                                    (flatten)
+                                                                    (("2"
+                                                                      (inst
+                                                                       -1
+                                                                       "translate_lit(cons1_var!1)"
+                                                                       "translate_clause(ck!1)")
+                                                                      (("2"
+                                                                        (grind)
+                                                                        nil
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil)
+                   ("2" (flatten)
+                    (("2" (expand tr_clause? -3)
+                      (("2" (replace -2 -3)
+                        (("2" (expand subset -4)
+                          (("2" (flatten)
+                            (("2" (replace -5 -3)
+                              (("2"
+                                (expand subset 2)
+                                (("2"
+                                  (lift-if 2)
+                                  (("2"
+                                    (split)
+                                    (("1" (propax) nil nil)
+                                     ("2"
+                                      (flatten)
+                                      (("2"
+                                        (split)
+                                        (("1"
+                                          (assert)
+                                          (("1"
+                                            (lemma translate_cons)
+                                            (("1"
+                                              (inst
+                                               -1
+                                               "cons(cons1_var!1, cons2_var!1)")
+                                              (("1"
+                                                (assert)
+                                                (("1"
+                                                  (replace -1 1)
+                                                  (("1"
+                                                    (assert)
+                                                    (("1"
+                                                      (expand member 1)
+                                                      (("1"
+                                                        (flatten)
+                                                        (("1"
+                                                          (delete 1)
+                                                          (("1"
+                                                            (lemma
+                                                             clause_clause)
+                                                            (("1"
+                                                              (inst
+                                                               -1
+                                                               "ck!1"
+                                                               "cons1_var!1")
+                                                              (("1"
+                                                                (replace
+                                                                 -6
+                                                                 -1)
+                                                                (("1"
+                                                                  (assert)
+                                                                  (("1"
+                                                                    (lemma
+                                                                     member_lit_member_fmla)
+                                                                    (("1"
+                                                                      (inst
+                                                                       -1
+                                                                       "translate_lit(cons1_var!1)"
+                                                                       "translate_clause(ck!1)")
+                                                                      (("1"
+                                                                        (grind)
+                                                                        nil
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil)
+                                         ("2"
+                                          (lemma translate_cons)
+                                          (("2"
+                                            (inst
+                                             -1
+                                             "cons(cons1_var!1, cons2_var!1)")
+                                            (("2"
+                                              (assert)
+                                              (("2"
+                                                (replace -1 1)
+                                                (("2"
+                                                  (assert)
+                                                  nil
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unchecked
+   ((cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (clause? const-decl "bool" resolution nil)
+    (literal? const-decl "bool" resolution nil)
+    (fmla type-decl nil fmla nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (subset def-decl "bool" minlist nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (translate_cons formula-decl nil trace2fmla nil)
+    (member def-decl "bool" list_props nil)
+    (member_lit_member_fmla formula-decl nil resolution nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (clause_clause formula-decl nil trace2fmla nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (nonneg_int nonempty-type-eq-decl nil integers nil)
+    (> const-decl "bool" reals nil)
+    (posnat nonempty-type-eq-decl nil integers nil)
+    (index const-decl "posnat" trace_resolution nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (list_induction formula-decl nil list_adt nil))
+   7814849 1690 t shostak))
  (append_inclusion 0
-  (append_inclusion-1 nil 3482848762 3482848910
-   ("" (skosimp) (("" (postpone) nil nil)) nil) untried nil 148505 30 t
-   shostak))
+  (append_inclusion-1 nil 3482848762 3483128918
+   ("" (skosimp)
+    (("" (generalize cl!1 cl)
+      (("" (induct cl)
+        (("1" (delete 2)
+          (("1" (typepred cl!2) (("1" (propax) nil nil)) nil)) nil)
+         ("2" (flatten) (("2" (grind) nil nil)) nil)
+         ("3" (skosimp)
+          (("3" (expand tr_clause? -2)
+            (("3" (expand sorted? -2)
+              (("3" (lift-if -2)
+                (("3" (split -2)
+                  (("1" (expand tr_clause? -2)
+                    (("1" (expand sorted? -2)
+                      (("1" (lift-if -2)
+                        (("1" (split)
+                          (("1" (replace -2 -1)
+                            (("1" (expand subset -3)
+                              (("1"
+                                (flatten)
+                                (("1"
+                                  (replace -4 -1)
+                                  (("1"
+                                    (lemma translate_cons)
+                                    (("1"
+                                      (inst
+                                       -1
+                                       "cons(cons1_var!1, cons2_var!1)")
+                                      (("1"
+                                        (assert)
+                                        (("1"
+                                          (replace -1 1)
+                                          (("1"
+                                            (expand subset +)
+                                            (("1"
+                                              (lemma
+                                               member_append
+                                               (a
+                                                "translate_lit(cons1_var!1)"
+                                                k
+                                                "sq!1"
+                                                l
+                                                "translate_clause(cm!1)"))
+                                              (("1"
+                                                (replace -1 1)
+                                                (("1"
+                                                  (flatten)
+                                                  (("1"
+                                                    (delete 1)
+                                                    (("1"
+                                                      (lemma
+                                                       clause_clause)
+                                                      (("1"
+                                                        (inst
+                                                         -1
+                                                         "cm!1"
+                                                         "cons1_var!1")
+                                                        (("1"
+                                                          (replace
+                                                           -6
+                                                           -1)
+                                                          (("1"
+                                                            (assert)
+                                                            (("1"
+                                                              (lemma
+                                                               member_lit_member_fmla)
+                                                              (("1"
+                                                                (inst
+                                                                 -1
+                                                                 "translate_lit(cons1_var!1)"
+                                                                 "translate_clause(cm!1)")
+                                                                (("1"
+                                                                  (grind)
+                                                                  nil
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil)
+                           ("2" (flatten) nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil)
+                   ("2" (flatten)
+                    (("2" (expand tr_clause? -3)
+                      (("2" (replace -2 -3)
+                        (("2" (expand subset -4)
+                          (("2" (flatten)
+                            (("2" (replace -5 -3)
+                              (("2"
+                                (lemma translate_cons)
+                                (("2"
+                                  (inst
+                                   -1
+                                   "cons(cons1_var!1, cons2_var!1)")
+                                  (("2"
+                                    (assert)
+                                    (("2"
+                                      (replace -1 2)
+                                      (("2"
+                                        (expand subset 2)
+                                        (("2"
+                                          (lemma
+                                           member_append
+                                           (a
+                                            "translate_lit(cons1_var!1)"
+                                            k
+                                            "sq!1"
+                                            l
+                                            "translate_clause(cm!1)"))
+                                          (("2"
+                                            (replace -1 2)
+                                            (("2"
+                                              (flatten)
+                                              (("2"
+                                                (delete 2)
+                                                (("2"
+                                                  (lemma clause_clause)
+                                                  (("2"
+                                                    (inst
+                                                     -1
+                                                     "cm!1"
+                                                     "cons1_var!1")
+                                                    (("2"
+                                                      (replace -7 -1)
+                                                      (("2"
+                                                        (lemma
+                                                         member_lit_member_fmla)
+                                                        (("2"
+                                                          (inst
+                                                           -1
+                                                           "translate_lit(cons1_var!1)"
+                                                           "translate_clause(cm!1)")
+                                                          (("2"
+                                                            (grind)
+                                                            nil
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unchecked
+   ((list_induction formula-decl nil list_adt nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (index const-decl "posnat" trace_resolution nil)
+    (posnat nonempty-type-eq-decl nil integers nil)
+    (> const-decl "bool" reals nil)
+    (nonneg_int nonempty-type-eq-decl nil integers nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (translate_cons formula-decl nil trace2fmla nil)
+    (member_lit_member_fmla formula-decl nil resolution nil)
+    (clause_clause formula-decl nil trace2fmla nil)
+    (member_append formula-decl nil minlist nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (<= const-decl "bool" reals nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (subset def-decl "bool" minlist nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (fmla type-decl nil fmla nil)
+    (literal? const-decl "bool" resolution nil)
+    (clause? const-decl "bool" resolution nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (append def-decl "list[T]" list_props nil)
+    (sentence_list? const-decl "bool" fmla nil)
+    (sequent type-eq-decl nil sequents nil))
+   1177100 910 t shostak))
+ (translate_include_res 0
+  (translate_include_res-1 nil 3483128926 3483137002
+   ("" (skosimp)
+    (("" (assert)
+      (("" (lemma translate_list)
+        ((""
+          (inst -1
+           "cons(find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))")
+          (("" (assert)
+            (("" (expand translate_clause 1)
+              (("" (replace -1 1 RL)
+                (("" (lemma translate_cons_list)
+                  ((""
+                    (inst -1 "nck!1"
+                     "cons(find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))")
+                    (("" (assert)
+                      (("" (lemma subset_lit_subset_fmla)
+                        ((""
+                          (inst -1 "map(translate_lit)(nck!1)"
+                           "map(translate_lit)
+                 (cons(find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1)))")
+                          (("" (replace -1 1)
+                            (("" (replace -2 1 RL)
+                              ((""
+                                (lemma include_res)
+                                ((""
+                                  (inst -1 "nck!1" "ncl!1")
+                                  ((""
+                                    (replace -5 -1)
+                                    ((""
+                                      (assert)
+                                      (("" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unchecked
+   ((translate_list formula-decl nil trace2fmla nil)
+    (subset_lit_subset_fmla formula-decl nil resolution nil)
+    (include_res formula-decl nil trace_resolution nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (literal? const-decl "bool" resolution nil)
+    (fmla type-decl nil fmla nil)
+    (translate_cons_list formula-decl nil trace2fmla nil)
+    (translate_clause const-decl "(clause?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (find_pivot def-decl "{k | member(k, nck) AND member(-k, ncl)}"
+     trace_resolution nil)
+    (- const-decl "[numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (member def-decl "bool" list_props nil)
+    (exist_pivot? def-decl "bool" trace_resolution nil)
+    (ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil))
+   2048 1240 t shostak))
+ (member_numpred_nzint 0
+  (member_numpred_nzint-1 nil 3483141541 3483141814
+   ("" (skosimp)
+    (("" (generalize listB!1 listB)
+      (("" (induct listB)
+        (("1" (grind) nil nil)
+         ("2" (skosimp)
+          (("2" (expand member)
+            (("2" (lift-if)
+              (("2" (split)
+                (("1" (expand member)
+                  (("1" (lift-if)
+                    (("1" (replace -1 1) (("1" (propax) nil nil)) nil))
+                    nil))
+                  nil)
+                 ("2" (flatten)
+                  (("2" (case "k!1 = car(cons2_var!1)")
+                    (("1" (expand member +)
+                      (("1" (lift-if)
+                        (("1" (replace 1 2)
+                          (("1" (replace -1 2) (("1" (propax) nil nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("2" (replace 1 -1)
+                      (("2" (expand member +)
+                        (("2" (lift-if)
+                          (("2" (replace 2 3)
+                            (("2" (replace 1 3)
+                              (("2"
+                                (replace -1 3)
+                                (("2" (propax) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("3" (grind) nil nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   proved
+   ((number nonempty-type-decl nil numbers nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (<= const-decl "bool" reals nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (member def-decl "bool" list_props nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (list_induction formula-decl nil list_adt nil))
+   273356 330 t shostak))
+ (subset_numpred_nzint 0
+  (subset_numpred_nzint-1 nil 3483141381 3483142016
+   ("" (skosimp)
+    (("" (grind)
+      (("1" (generalize listA!1 listA)
+        (("1" (induct listA)
+          (("1" (grind) nil nil)
+           ("2" (skosimp)
+            (("2" (expand subset 1)
+              (("2" (expand subset -2)
+                (("2" (flatten)
+                  (("2" (replace -3 -1)
+                    (("2" (replace -1 1)
+                      (("2" (grind)
+                        (("2" (lemma member_numpred_nzint)
+                          (("2" (inst -1 "cons1_var!1" "listB!1")
+                            (("2" (grind) nil nil)) nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("2" (generalize listA!1 listA)
+        (("2" (induct listA)
+          (("1" (grind) nil nil)
+           ("2" (skosimp)
+            (("2" (expand subset -2)
+              (("2" (flatten)
+                (("2" (replace -3 -1)
+                  (("2" (expand subset 1)
+                    (("2" (replace -1 1)
+                      (("2" (lemma member_numpred_nzint)
+                        (("2" (inst -1 "cons1_var!1" "listB!1")
+                          (("2" (grind) nil nil)) nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   proved
+   ((tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (subset def-decl "bool" minlist nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (member_numpred_nzint formula-decl nil trace2fmla nil)
+    (list_induction formula-decl nil list_adt nil))
+   194311 510 t shostak))
  (translate_include_res2_TCC1 0
-  (translate_include_res2_TCC1-1 nil 3483103764 3483109821
+  (translate_include_res2_TCC1-1 nil 3483103764 3483130111
    ("" (skosimp)
     (("" (skosimp)
       (("" (typepred "find_pivot[m, n, i](nck!1, ncl!1)")
         (("" (expand tr_literal?) (("" (grind) nil nil)) nil)) nil))
       nil))
     nil)
-   proved
+   unchecked
    ((minus_nzint_is_nzint application-judgement "nzint" integers nil)
     (resolution const-decl "(tr_clause?)" trace_resolution nil)
     (delete_pivot const-decl "{cl |
@@ -936,7 +2092,6 @@
     (/= const-decl "boolean" notequal nil)
     (list type-decl nil list_adt nil)
     (PRED type-eq-decl nil defined_types nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -964,5 +2119,133 @@
     (- const-decl "[numfield -> numfield]" number_fields nil)
     (find_pivot def-decl "{k | member(k, nck) AND member(-k, ncl)}"
      trace_resolution nil))
-   53051 1470 t nil)))
+   1728 1460 t nil))
+ (translate_include_res2 0
+  (translate_include_res2-1 nil 3483137007 3483141377
+   ("" (skosimp)
+    (("" (assert)
+      (("" (expand translate_clause)
+        (("" (lemma translate_cons_list)
+          (("" (lemma translate_list)
+            ((""
+              (inst -1
+               "cons(-find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))")
+              (("" (assert)
+                (("" (replace -1 1 RL)
+                  (("" (hide -1)
+                    ((""
+                      (inst -1 "ncl!1"
+                       "cons(-find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))")
+                      (("" (lemma subset_lit_subset_fmla)
+                        ((""
+                          (inst -1 "map(translate_lit)(ncl!1)"
+                           "map(translate_lit)
+              ((cons(-find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))))")
+                          (("" (replace -1 1)
+                            (("" (replace -2 1 RL)
+                              ((""
+                                (lemma include_res)
+                                ((""
+                                  (hide -2 -3)
+                                  ((""
+                                    (inst -1 "nck!1" "ncl!1")
+                                    ((""
+                                      (assert)
+                                      ((""
+                                        (flatten)
+                                        ((""
+                                          (hide -1 -3 -4)
+                                          ((""
+                                            (lemma
+                                             subset_numpred_nzint)
+                                            ((""
+                                              (inst
+                                               -1
+                                               "ncl!1"
+                                               "cons(-find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))")
+                                              ((""
+                                                (lemma
+                                                 subset_tr_lit_subset_nzint)
+                                                ((""
+                                                  (inst
+                                                   -1
+                                                   "ncl!1"
+                                                   "cons(-find_pivot(nck!1, ncl!1), resolution(nck!1, ncl!1))")
+                                                  ((""
+                                                    (grind)
+                                                    nil
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unchecked
+   ((translate_clause const-decl "(clause?)" trace2fmla nil)
+    (translate_list formula-decl nil trace2fmla nil)
+    (subset_lit_subset_fmla formula-decl nil resolution nil)
+    (include_res formula-decl nil trace_resolution nil)
+    (subset_numpred_nzint formula-decl nil trace2fmla nil)
+    (subset_tr_lit_subset_nzint formula-decl nil trace_resolution nil)
+    (fmla type-decl nil fmla nil)
+    (literal? const-decl "bool" resolution nil) nil
+    (translate_lit const-decl "(literal?)" trace2fmla nil)
+    (resolution const-decl "(tr_clause?)" trace_resolution nil)
+    (find_pivot def-decl "{k | member(k, nck) AND member(-k, ncl)}"
+     trace_resolution nil)
+    (member def-decl "bool" list_props nil)
+    (exist_pivot? def-decl "bool" trace_resolution nil)
+    (ne_tr_clause? const-decl "bool" trace_resolution nil)
+    (tr_clause? const-decl "bool" trace_resolution nil)
+    (- const-decl "[numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (tr_literal? const-decl "bool" trace_resolution nil)
+    (i formal-const-decl "upto(n)" trace2fmla nil)
+    (upto nonempty-type-eq-decl nil naturalnumbers nil)
+    (<= const-decl "bool" reals nil)
+    (n formal-const-decl "nat" trace2fmla nil)
+    (m formal-const-decl "nat" trace2fmla nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (nzint nonempty-type-eq-decl nil integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (/= const-decl "boolean" notequal nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (PRED type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil)
+    (translate_cons_list formula-decl nil trace2fmla nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil))
+   134339 1980 t shostak)))
 

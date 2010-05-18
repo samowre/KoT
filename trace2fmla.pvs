@@ -3,8 +3,8 @@ BEGIN
 
   IMPORTING trace_resolution[m,n,i]
   IMPORTING resolution
-
-  k: VAR (tr_literal?)
+ 
+  k, l: VAR (tr_literal?)
   cl, ck, cm: VAR (tr_clause?)
 
   % transforms ( n:nzint ) -> fmla = (f_not)? (atom(upred...))
@@ -17,10 +17,14 @@ BEGIN
   index_index: LEMMA 
     index(translate_lit(k)) = index(k)
 
+  %translate_lit equivalence
+  translate_lit_equiv:  LEMMA
+    translate_lit(k) = translate_lit(l) <=> k = l
+
   % maps list(nzint) -> list(fmla)-
   translate_clause(cl): (clause?) = map(translate_lit)(cl)
 
-  % translation equivalence
+  % member equivalence
   clause_clause: LEMMA
     member(k, cl) IFF member(translate_lit(k), translate_clause(cl))
   
@@ -28,6 +32,22 @@ BEGIN
   translate_cons: LEMMA
      cons?(ck) =>
      translate_clause(cons(car(ck), cdr(ck))) = cons(translate_lit(car(ck)), translate_clause(cdr(ck)))
+
+  listA, listB: VAR list[(tr_literal?)]
+
+  % translation for all tr_literal lists
+   translate_list: LEMMA
+     cons?(listA) =>
+     map(translate_lit)((cons(car(listA), cdr(listA)))) = cons(translate_lit(car(listA)), map(translate_lit)(cdr(listA)))
+
+  % member equivalence for lists
+  member_list: LEMMA
+    member(k, listA) IFF member(translate_lit(k), map(translate_lit)(listA))
+
+  % subset equivalence for all tr_literal lists
+  translate_cons_list: LEMMA
+     subset(listA, listB) = subset(map(translate_lit)(listA), map(translate_lit)(listB))
+
 
   % translation of f_neg
   neg_translate:  LEMMA
@@ -46,11 +66,8 @@ BEGIN
     FORALL (cl, cm, sq):
     subset(cl, cm) => 
     subset[fmla](translate_clause(cl), append(sq, translate_clause(cm)))
-
   
-
   slA, slB: VAR (sentence_list?)
-
 
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
@@ -61,6 +78,12 @@ BEGIN
     subset[fmla](translate_clause(nck),
              cons(translate_lit(find_pivot(nck, ncl)),
                   translate_clause(resolution(nck, ncl))))
+
+  member_numpred_nzint :  LEMMA
+    member[numfield](k, listB) = member[nzint](k, listB)
+
+  subset_numpred_nzint :  LEMMA
+    subset[numfield](listA, listB) = subset[nzint](listA, listB)
   
   % ncl included in cons(pivot, resolution(nck, ncl)
   translate_include_res2 :  LEMMA
