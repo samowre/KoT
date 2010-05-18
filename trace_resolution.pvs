@@ -6,10 +6,15 @@ BEGIN
   tr_literal?(k: nzint): bool = (abs(k) < m)
 
   k, l: VAR (tr_literal?)
-  ll: VAR list[(tr_literal?)]
+  kk, ll: VAR list[(tr_literal?)]
+
+  member_tr_lit_member_nzint: LEMMA member[nzint](k, ll) = member[(tr_literal?)](k, ll)
+  subset_tr_lit_subset_nzint: LEMMA subset[nzint](kk, ll) = subset[(tr_literal?)](kk, ll)
 
   % (-1) -> 1, (1) -> 2, (-2) -> 3, (2) -> 4 ...
   index(k): posnat = IF (k<0) THEN 2*abs(k)-1 ELSE 2*k ENDIF
+
+  index_inj: LEMMA injective?(index)
 
   %index must be injective?
   IMPORTING sortedlist[(tr_literal?), index]
@@ -127,8 +132,6 @@ BEGIN
        merged
      ENDIF
     ENDIF
-
-  member_tr_lit_member_nzint: LEMMA member[nzint](k, ll) = member[(tr_literal?)](k, ll)
 
   not_true_clauses(ck, cl): bool = NOT tr_clause_true?(ck) AND NOT tr_clause_true?(cl)
 
