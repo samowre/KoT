@@ -299,11 +299,11 @@ resolution : THEORY
 	   THEN RR1
 	   ELSE
 	    LET RR2 = RR_lemma2(append(sAA, cons(car(clBB), null)), cdr(clBB), RR1) IN
-	    LET RR3 = RR_subsetr(cons(car(clBB), cons(nclause2fmla(cdr(clBB)), sAA)), 
-	    	       		 append(append(sAA, cons(car(clBB), null)), or_reduction(cdr(clBB))),
+	    LET RR3 = RR_subsetr(append(append(sAA, cons(car(clBB), null)), or_reduction(cdr(clBB))), 
+				 cons(car(clBB), cons(nclause2fmla(cdr(clBB)), sAA)),
 		        	 RR2) IN
 	    LET RR4 = RR_orr(car(clBB), nclause2fmla(cdr(clBB)), sAA, RR3) IN
-	    RR_subsetr(append(sAA, or_reduction(clBB)), cons(nclause2fmla(clBB), sAA), RR4)    
+	    RR_subsetr(cons(nclause2fmla(clBB), sAA),append(sAA, or_reduction(clBB)),  RR4)    
 	  ENDIF
 	  MEASURE length(clBB)    		    
  
