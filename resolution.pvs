@@ -252,6 +252,34 @@ resolution : THEORY
 
     % end lemma neg rule
     %===================================================================================
+    % lemma cut rule  |- l  if |- k, l and |- ~k, l
+
+    concl_cutr(sA, sAA, (n, m: posnat)): proof_step = 
+          (# sequent:= sAA, 
+    	     rule:= cut(sA),
+	     subs:= cons(n - 1, cons(n + m - 1,null)) #)
+
+    RR_cutr(sA, sAA, RR1, RR2): ne_proof_seq = 
+    LET n = RR1`length IN
+    LET m = RR2`length IN
+    (# length := n + m + 1,
+       seq := LAMBDA(j: below(n + m + 1)):
+       	      	 COND
+		  j < n -> RR1`seq(j),
+		  j >=n AND j < n + m -> offset_proof_step(RR2`seq(j - n), n), 
+		  j = n + m -> concl_cutr(sA, sAA, n, m)
+		 ENDCOND #)   
+
+    lemma_cutr: LEMMA (conclusion(RR1) = cons(f_not(sA), sAA) AND
+		       conclusion(RR2) = cons(sA, sAA) AND
+		       checkProof(empty_seq)(RR1) AND
+		       checkProof(empty_seq)(RR2))
+		      =>
+		      (conclusion(RR_cutr(sA, sAA, RR1, RR2)) = sAA AND
+		       checkProof(empty_seq)(RR_cutr(sA, sAA, RR1, RR2)))	     
+
+    % end lemma cut rule
+    %===================================================================================
     %===================================================================================
     % lemma 1 : |- ~p::l if p belongs l 
     
@@ -264,22 +292,26 @@ resolution : THEORY
 
     % end lemma 1
     %===================================================================================	
-    % lemma 2 : |- or_reduction(l)::q if |- l::q
+    % lemma 2 : |- k::or_reduction(l) if |- k::l
     
-    RR_lemma2(clAA, sBB, RR1): RECURSIVE ne_proof_seq = 
-    	  IF null?(clAA) OR null?(cdr(clAA))
+    RR_lemma2(sAA, clBB, RR1): RECURSIVE ne_proof_seq = 
+    	  IF null?(clBB) OR null?(cdr(clBB))
 	   THEN RR1
 	   ELSE
-	    LET RR = RR_lemma2(cdr(clAA), cons(car(clAA), sBB), RR1) IN
-	    RR_orr(car(clAA), nclause2fmla(cdr(clAA)), sBB, RR)
+	    LET RR2 = RR_lemma2(append(sAA, cons(car(clBB), null)), cdr(clBB), RR1) IN
+	    LET RR3 = RR_subsetr(cons(car(clBB), cons(nclause2fmla(cdr(clBB)), sAA)), 
+	    	       		 append(append(sAA, cons(car(clBB), null)), or_reduction(cdr(clBB))),
+		        	 RR2) IN
+	    LET RR4 = RR_orr(car(clBB), nclause2fmla(cdr(clBB)), sAA, RR3) IN
+	    RR_subsetr(append(sAA, or_reduction(clBB)), cons(nclause2fmla(clBB), sAA), RR4)    
 	  ENDIF
-	  MEASURE length(clAA)    		    
+	  MEASURE length(clBB)    		    
  
-    lemma2: LEMMA (subset(conclusion(RR1), append(clAA, sBB)) AND
+    lemma2: LEMMA (conclusion(RR1) =  append(sAA, clBB) AND
     	    	   checkProof(empty_seq)(RR1))
     	    	  => 
-      		  (conclusion(RR_lemma2(clAA, sBB, RR1))= append(or_reduction(clAA), sBB) AND 
-		   checkProof(empty_seq)(RR_lemma2(clAA, sBB, RR1)))
+      		  (conclusion(RR_lemma2(sAA, clBB, RR1))= append(sAA, or_reduction(clBB)) AND 
+		   checkProof(empty_seq)(RR_lemma2(sAA, clBB, RR1)))
 
     % end lemma 2
     %===================================================================================	
