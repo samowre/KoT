@@ -202,7 +202,7 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 	 append(
 	  not_or_reduction(translate_clause(ntcA)), 
 	  append(
-	   not_or_reduction(translate_clause(ntcB)), 
+	  	   not_or_reduction(translate_clause(ntcB)), 
 	    translate_clause(resolution(ntcA, ntcB))))
 	AND checkProof(empty_seq)(proof_th(ntcA, ntcB))
 
@@ -210,22 +210,42 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
   % proof for chain resolution %
   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%  build_hyp(ntcA): ne_sequent = 
-%    CASES cdr(ntcA) OF
-%      null: not_or_reduction(car(ntcA)),
-%      cons(e, ntcAA): append(not_or_reduction(car(ntcA)), build_hyp(cdr(ntcA)))
-%    ENDCASES
-  
-%  proof_th_list(ntcA): ne_proof_seq = proof_th(ntcAA, ntcAA)
+  lntcA, lntcAA : VAR (cons?[(ne_tr_clause?)])
 
-%  th_list:  THEOREM
-%        conclusion(proof_th_list(ntcA)) = 
-%	 append(
-%	  not_or_reduction(translate_clause(ntcA)), 
-%	  append(
-%	   not_or_reduction(translate_clause(ntcB)), 
-%	    translate_clause(resolution_list(ntcA))))
-%	AND checkProof(empty_seq)(proof_th_list(ntcA))
+  not_or_map(lntcA): sequent = 
+    map(f_not(nclause2fmla))(lntcA)
+
+
+  proof_th_list(lntcA) : RECURSIVE ne_proof_seq = 
+    IF null?(cdr(lntcA)) 
+    THEN 
+      % |- ~a, a
+      LET tc = translate_clause(car(lntcA)) IN
+      RR_th1(tc, tc)
+    ELSE
+      % res(p1, p2) 
+      LET cut_lit = nclause2fmla(resolution(car(lntcA), car(cdr(lntcA)))) IN
+      % recursive proof for |- ~res(p1, p2), ~p3 .., res(res(p1, p2), p3 ...)
+      LET pr_rec = proof_th_list( cons(cut_tr_lit, cdr(cdr(lntcA))) ) IN
+      % proof for |- ~p1, ~p2, res(p1, p2)
+      LET pr_step = RR_lemma2( append(not_or_reduction(car(lntcA)), not_or_reduction(car(cdr(lntcA)))), 
+      	  	    	       tr_clause(resolution(car(lntcA), car(cdr(lntcA)))), 
+			       proof_th(car(lntcA), car(cdr(lntcA)))) IN
+
+        RR_cut(append(
+	  	         not_or_map(lntcA), 
+	   		  translate_clause(resolution_list(lntcA))), 
+		       cut_lit, pr_rec, pr_step)  
+    ENDIF
+  MEASURE length(lntcA)
+
+
+  th_list:  THEOREM
+        conclusion(proof_th_list(lntcA)) = 
+	 append(
+	  not_or_map(lntcA), 
+	   translate_clause(resolution_list(lntcA)))
+	AND checkProof(empty_seq)(proof_th_list(lntcA))
     
 	
   END trace_checker
