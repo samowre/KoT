@@ -91,7 +91,6 @@ resolution : THEORY
     include_clause(clAA, clBB): bool = sorted_include(clAA, clBB)
 
     % transform p1::p2::...pn into p1 or (p2 or ...(pn-1 or pn))...)
-    % obs: add stronger type to fmla ?
     nclause2fmla(nclAA): RECURSIVE fmla= 
       IF null?(cdr(nclAA)) 
       THEN car(nclAA)
@@ -264,6 +263,25 @@ resolution : THEORY
 		   checkProof(empty_seq)(RR_lemma1(sA, sAA)))
 
     % end lemma 1
+    %===================================================================================	
+    % lemma 2 : |- or_reduction(l)::q if |- l::q
+    
+    RR_lemma2(clAA, sBB, RR1): RECURSIVE ne_proof_seq = 
+    	  IF null?(clAA) OR null?(cdr(clAA))
+	   THEN RR1
+	   ELSE
+	    LET RR = RR_lemma2(cdr(clAA), cons(car(clAA), sBB), RR1) IN
+	    RR_orr(car(clAA), nclause2fmla(cdr(clAA)), sBB, RR)
+	  ENDIF
+	  MEASURE length(clAA)    		    
+ 
+    lemma2: LEMMA (subset(conclusion(RR1), append(clAA, sBB)) AND
+    	    	   checkProof(empty_seq)(RR1))
+    	    	  => 
+      		  (conclusion(RR_lemma2(clAA, sBB, RR1))= append(or_reduction(clAA), sBB) AND 
+		   checkProof(empty_seq)(RR_lemma2(clAA, sBB, RR1)))
+
+    % end lemma 2
     %===================================================================================	
     % th1 the sequent |- ~(p1 or p2 or...pn) , p1, ..., pn, ... is provable in KoT
 

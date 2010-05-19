@@ -66,29 +66,29 @@ BEGIN
 
   % tr_clause is sorted by index => ~p, p are on consecutive positions.
   % deletes the pair (~pivot, pivot)  
-  delete_pivot(ck, (pivot: {l| member(l, ck) AND member(-l, ck)}))
-   : {cl | FORALL l: member(l, cl) <=> member(l, ck) AND (NOT l = pivot) AND (NOT l = -pivot)} = 
-    remove(-pivot, remove(pivot, ck))
+  delete_pivot(ck, (pivot: {l| member(l, ck) AND member(tr_neg(l), ck)}))
+   : {cl | FORALL l: member(l, cl) <=> member(l, ck) AND (NOT l = pivot) AND (NOT l = tr_neg(pivot))} = 
+    remove(tr_neg(pivot), remove(pivot, ck))
 
   % true if a pivot exists for ck and cl
   exist_pivot?(ck, cl) : RECURSIVE bool =
     CASES ck OF 
       null: FALSE,
-      cons(k, cm): member(-k, cl) OR exist_pivot?(cm, cl)
+      cons(k, cm): member(tr_neg(k), cl) OR exist_pivot?(cm, cl)
     ENDCASES
   MEASURE length(ck)
 
   exist_lemma : LEMMA
-    exist_pivot?(ck, cl) <=> EXISTS k: member(k, ck) AND member(-k, cl)
+    exist_pivot?(ck, cl) <=> EXISTS k: member(k, ck) AND member(tr_neg(k), cl)
 
   % returns a pivot of nck and ncl
-  find_pivot(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : RECURSIVE {k | member(k, nck) AND member(-k, ncl)} =
+  find_pivot(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : RECURSIVE {k | member(k, nck) AND member(tr_neg(k), ncl)} =
     CASES cdr(nck) OF
       null: car(nck),
       cons(k, ck): 
-        IF member(-car(nck), ncl) 
+        IF member(tr_neg(car(nck)), ncl) 
 	THEN car(nck) 
-	ELSIF member(-k, ncl) 
+	ELSIF member(tr_neg(k), ncl) 
 	THEN k 
 	ELSE find_pivot(cdr(nck), ncl) 
 	ENDIF
@@ -144,7 +144,7 @@ BEGIN
       LET pivot = find_pivot(nck, ncl) IN
       (FORALL k: member(k, nck) => member(k, res) OR k=pivot)
        AND
-        FORALL l: member(l, ncl) => member(l, res) OR l= -pivot
+        FORALL l: member(l, ncl) => member(l, res) OR l= tr_neg(pivot)
     ELSE
       sorted_include(nck, res) AND sorted_include(ncl, res)
     ENDIF
@@ -156,7 +156,7 @@ BEGIN
      => 
       LET pivot = find_pivot(nck, ncl) IN 
       subset(nck, cons(pivot, res))&
-      subset(ncl, cons(-pivot, res))
+      subset(ncl, cons(tr_neg(pivot), res))
     
       
   %applies merge on a non-empty list of clauses
