@@ -44,12 +44,12 @@ BEGIN
   tr_clause_true?(cl): RECURSIVE bool = 
     CASES cl OF
       null: FALSE,
-      cons (l, ck): sorted_contains(-l, ck) OR tr_clause_true?(ck)
+      cons (l, ck): sorted_contains(tr_neg(l), ck) OR tr_clause_true?(ck)
     ENDCASES
   MEASURE length(cl)
 
   clause_true_lemma :  LEMMA
-        tr_clause_true?(cl) = EXISTS l: member(l, cl) and member(-l, cl)
+        tr_clause_true?(cl) = EXISTS l: member(l, cl) and member(tr_neg(l), cl)
  
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
@@ -190,19 +190,19 @@ BEGIN
   resolve(cert): certificate = resolve_rec(0, cert)
 
   % true if the certificate contains at least an empty clause 
-  null_resolution?(j:below(n), cert): RECURSIVE bool =   
-      (null?(cert(j)`cl) 
-        OR ((j/=n-1) AND null_resolution?(j+1, cert)))  
-  MEASURE n-j
+%  null_resolution?(j:below(n), cert): RECURSIVE bool =   
+%      (null?(cert(j)`cl) 
+%        OR ((j/=n-1) AND null_resolution?(j+1, cert)))  
+%  MEASURE n-j
   
-  exist_null: LEMMA
-    FORALL (j:below(n)):  
-    null_resolution?(j, cert) =
-     EXISTS (i: below(n)): i>=j AND null?(cert(i)`cl)
+%  exist_null: LEMMA
+%    FORALL (j:below(n)):  
+%    null_resolution?(j, cert) =
+%     EXISTS (i: below(n)): i>=j AND null?(cert(i)`cl)
     
   % executes chain resolutions and checks for null clauses
-  correct_cert?(cert) : bool = 
-    null_resolution?(0, resolve(cert))
+%  correct_cert?(cert) : bool = 
+%    null_resolution?(0, resolve(cert))
  
 END trace_resolution
 
