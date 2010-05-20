@@ -231,7 +231,8 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 		     proof_th(car(lntcA), car(cdr(lntcA))))
       ELSE
 	LET cut_lit = nclause2fmla(translate_clause(res)) IN
-      	LET pr_rec = proof_th_list( cons(res, cdr(cdr(lntcA)))) IN
+        LET rec_arg : (cons?[(ne_tr_clause?)]) = cons(res,  cdr(cdr(lntcA))) IN 
+      	LET pr_rec:ne_proof_seq =  proof_th_list(rec_arg) IN
       	% proof for |- ~p1, ~p2, res(p1, p2)
       	LET pr_step = RR_lemma2( append(not_or_reduction(translate_clause(car(lntcA))), not_or_reduction(translate_clause(car(cdr(lntcA))))), 
       	  	    	       translate_clause(res), 
@@ -242,8 +243,8 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 	  	    not_or_map(lntcA), 
 	   	     translate_clause(resolution_list(lntcA))), 
 		      % recursive proof for |- ~res(p1, p2), ~p3 .., res(res(p1, p2), p3 ...)
-		      pr_step, 
-		       pr_rec )
+	          pr_step, 
+		  pr_rec)
       ENDIF 
     ENDIF
   MEASURE length(lntcA)
