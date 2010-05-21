@@ -25,17 +25,6 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
         member(lB, clAA) AND 
 	lB /= lA <=> member(lB, clBB)
 
- %    cons(f_not(delta), cons(f_not(p), cons(gamma, cons(delta, null)))) %&
- %    cons(f_not(f_not(p)), , cons(f_not(p), cons(gamma, cons(delta, null))))
- %    cons(f_not(f_or(f_not(p), delta)), cons(f_not(p), cons(gamma, cons(delta, null)))) % subset
- %   cons(f_not(p), cons(f_not(f_or(f_not(p), delta)), cons(gamma, cons(delta, null)))) & 
- %    cons(f_not(gamma), cons(f_not(f_or(f_not(p), delta)), cons(gamma, cons(delta, null)))) % consider second done(ax) - nor
- %    cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(gamma, cons(delta, null)))) % subset
- %    cons(gamma, cons(delta, cons (f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), null)))) %or
- %    cons(f_or(gamma, delta), cons (f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), null))) %subset
- %    conclusion(RR)= cons(f_not(f_or(p, gamma)), cons(f_not(f_or(f_not(p), delta)), cons(f_or(gamma, delta), null)))
-%	 AND checkProof(empty_seq)(RR))
-  
    p, q, gamma, delta : VAR (sentence?)
 
    build_proof_th0(p, gamma, delta): ne_proof_seq = 
@@ -212,8 +201,14 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 
   lntcA, lntcAA : VAR (cons?[(ne_tr_clause?)])
 
+  map_trans_clause(lntcA): (cons?[(nclause?)]) = map (translate_clause) (lntcA)
+
+  map_ncl2fmla(l : (cons?[(nclause?)])): (sentence_list?) = map (nclause2fmla) (l)
+
+  map_fnot(l : (sentence_list?)): (sentence_list?) = map (f_not) (l)
+
   not_or_map(lntcA): sequent = 
-    map(f_not) (map (nclause2fmla) (map (translate_clause)(lntcA)))
+    map_fnot(map_ncl2fmla(map_trans_clause(lntcA)))
 
   % test
   g(n:list[nat]): list[nat] = n
@@ -223,8 +218,6 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
     ELSE g( f(cdr(n)) )
     ENDIF
   MEASURE length(n)
-  
-
 
   proof_th_list(lntcA) : RECURSIVE ne_proof_seq = 
     IF null?(cdr(lntcA)) 
