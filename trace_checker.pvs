@@ -230,36 +230,70 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
       LET res = resolution(car(lntcA), car(cdr(lntcA))) IN
       IF null?(res) 
       % when resolution_step = null
-      THEN RR_subsetr(append(not_or_reduction(translate_clause(car(lntcA))), not_or_reduction(translate_clause(car(cdr(lntcA))))),
+      THEN RR_subsetr(
+		     append(
+			not_or_reduction(translate_clause(car(lntcA))), 
+			not_or_reduction(translate_clause(car(cdr(lntcA))))),
       	   	     not_or_map(lntcA), 
 		     proof_th(car(lntcA), car(cdr(lntcA))))
       ELSE
-	LET cut_lit = nclause2fmla(translate_clause(res)) IN
-        LET rec_arg = cons[(ne_tr_clause?)](res,  cdr(cdr(lntcA))) IN 
-      	LET pr_rec:ne_proof_seq =  proof_th_list(rec_arg) IN
-      	% proof for |- ~p1, ~p2, res(p1, p2)
-      	LET pr_step = RR_lemma2( append(
-	    	      		   not_or_reduction(translate_clause(car(lntcA))), 
-				   not_or_reduction(translate_clause(car(cdr(lntcA))))), 
-      	  	    	       translate_clause(res), 
-			       proof_th(car(lntcA), car(cdr(lntcA)))) IN
+	LET cut_lit = 
+	  nclause2fmla(translate_clause(res)) IN
 
+        LET rec_arg = 
+	  cons[(ne_tr_clause?)](res,  cdr(cdr(lntcA))) IN 
+
+      	LET pr_rec: ne_proof_seq =  
+	  proof_th_list(rec_arg) IN
+ 
+	LET res_list: (tr_clause?) = 
+	  resolution_list(lntcA) IN
+
+	LET l1: (clause?) = 
+	  translate_clause(car(lntcA)) IN
+	  			       
+	LET l2: (clause?) =
+	  translate_clause(car(cdr(lntcA))) IN
+
+      	% proof for |- ~p1, ~p2, res(p1, p2)
+      	LET pr_step = 
+	  RR_subsetr(
+		     append(
+			  append(
+				not_or_reduction(l1), 
+			 	not_or_reduction(l2)), 
+      	  	          cons(cut_lit, null)),
+		     cons(cut_lit, 
+		          append(  
+			        not_or_map(lntcA), 
+	   	     		translate_clause(res_list))),
+	  	     RR_lemma2( 
+	    	     	  append(
+				not_or_reduction(l1), 
+		       		not_or_reduction(l2)), 
+      	  	    	  translate_clause(res), 
+	                  proof_th(car(lntcA), car(cdr(lntcA))))) IN
+	  % |- ~_or(l), tr_cl(res_l) 
+	  % from |- res_step, ~_or(l), tr_cl(res_l) 
+	  % and |- ~res_step, ~_or(l), tr_cl(res_l)
           RR_cutr(cut_lit, 
 	   	  append(
 	  	    not_or_map(lntcA), 
-	   	     translate_clause(resolution_list(lntcA))), 
+	   	    translate_clause(res_list)), 
 	          pr_step, 
 		  pr_rec)
       ENDIF 
     ENDIF
   MEASURE length(lntcA)
 
-
   th_list:  THEOREM
+  	LET result: (tr_clause?) = 
+	  resolution_list(lntcA) IN
+
         conclusion(proof_th_list(lntcA)) = 
 	 append(
-	  not_or_map(lntcA), 
-	   translate_clause(resolution_list(lntcA)))
+	   not_or_map(lntcA), 
+	   translate_clause(resolution_list(lntcA)::(tr_clause?)))
 	AND checkProof(empty_seq)(proof_th_list(lntcA))
 
 	
