@@ -240,14 +240,34 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 	LET cut_lit = 
 	  nclause2fmla(translate_clause(res)) IN
 
-        LET rec_arg = 
-	  cons[(ne_tr_clause?)](res,  cdr(cdr(lntcA))) IN 
+  	LET tail: list[(ne_tr_clause?)] = cdr(cdr(lntcA)) IN
 
-      	LET pr_rec: ne_proof_seq =  
-	  proof_th_list(rec_arg) IN
- 
-	LET res_list: (tr_clause?) = 
+        LET rec_arg : (cons?[(ne_tr_clause?)]) = 
+	  cons[(ne_tr_clause?)](res,  tail) IN 
+
+	LET res_tail_list : (tr_clause?) = 
+	  resolution_list(rec_arg) IN
+
+        LET res_list: (tr_clause?) = 
 	  resolution_list(lntcA) IN
+
+        LET s_list: (sentence_list?) = 
+	  append( not_or_map(lntcA), 
+	    translate_clause(res_list)) IN
+
+      	LET pr_rec_fix: ne_proof_seq =  
+	  RR_subsetr( 
+	  	append(
+		  not_or_map(
+		    rec_arg),
+              	  translate_clause(
+		    res_tail_list)),
+		cons(
+		  f_not(
+		    nclause2fmla(
+		      translate_clause(res))),
+              	  s_list),				   
+		proof_th_list(rec_arg)) IN
 
 	LET l1: (clause?) = 
 	  translate_clause(car(lntcA)) IN
@@ -264,9 +284,7 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 			 	not_or_reduction(l2)), 
       	  	          cons(cut_lit, null)),
 		     cons(cut_lit, 
-		          append(  
-			        not_or_map(lntcA), 
-	   	     		translate_clause(res_list))),
+		          s_list),
 	  	     RR_lemma2( 
 	    	     	  append(
 				not_or_reduction(l1), 
@@ -277,14 +295,16 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
 	  % from |- res_step, ~_or(l), tr_cl(res_l) 
 	  % and |- ~res_step, ~_or(l), tr_cl(res_l)
           RR_cutr(cut_lit, 
-	   	  append(
-	  	    not_or_map(lntcA), 
-	   	    translate_clause(res_list)), 
+	   	  s_list, 
 	          pr_step, 
-		  pr_rec)
+		  pr_rec_fix)
       ENDIF 
     ENDIF
   MEASURE length(lntcA)
+
+  subset_cons:  LEMMA
+    FORALL ((AA, BB: list[fmla]), B:fmla): 
+      subset (AA, BB) => subset (AA, cons(B, BB))
 
   th_list:  THEOREM
   	LET result: (tr_clause?) = 
@@ -293,7 +313,7 @@ trace_checker[m, n: nat, i : upto(n)] : THEORY
         conclusion(proof_th_list(lntcA)) = 
 	 append(
 	   not_or_map(lntcA), 
-	   translate_clause(resolution_list(lntcA)::(tr_clause?)))
+	   translate_clause(result))
 	AND checkProof(empty_seq)(proof_th_list(lntcA))
 
 	

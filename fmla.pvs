@@ -310,6 +310,19 @@ freesymbols(AA): RECURSIVE list[(usymb?)] =
 f_neg(A): fmla =
   (IF f_not?(A) THEN arg(A) ELSE f_not(A) ENDIF)
 
+  sentence_list_cons:  LEMMA
+    FORALL (A, AA):
+    sentence?(A) & sentence_list?(AA) <=> sentence_list?(cons(A, AA))
+
+  sentence_list_append:  LEMMA
+    FORALL (AA, BB):
+    sentence_list?(AA) & sentence_list?(BB) <=>sentence_list?(append(AA, BB))
+
+  freevars_append:  LEMMA
+    FORALL (AA, BB):
+    append(freevars(AA), freevars(BB)) = freevars(append(AA, BB))
+
+
    END fmla
 
   
