@@ -9,9 +9,41 @@ parse_cert % parse a text file containing a certificate
   IMPORTING PVSio@stdio
 
   f(t: Tokenizer):int = 5
+
+  get_file_name : string = 
+    query_line("PicoSAT proof file name: ")
+  
+  read_file_name : void = 
+    LET file_name: string = get_file_name IN
+    IF NOT fexists(file_name) THEN
+    print("no such file")
+    ELSE 
+    LET tok = file2tokenizer(file_name) IN
+    IF error?(tok) OR eot?(tok)
+    THEN print("empty tokenizer")
+    ELSE print(next_token(tok))
+    ENDIF
+    ENDIF
+
+  %read_line(f: IStream): 
+
+  how_many_n(f: IStream): string = 
+    LET result = 
+      ref[string]("") IN
+    LET b = 
+      while(not eof?(f),set(result,fread_line(f)))  IN 
+    next_token(str2tokenizer(val(result)))
+
+  open_input_file : IStream =
+    LET s = get_file_name IN
+      fopenin(s)
+
+  read_rec(f: IStream) : void = 
+    while(not eof?(f),println(fread_line(f))) &
+    fclose(f)
   
 
-
+  test_read: void = print(how_many_n(open_input_file))
   
 
   END parse_cert
