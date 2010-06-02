@@ -41,9 +41,12 @@ parse_cert % parse a text file containing a certificate
   read_rec(f: IStream) : void = 
     while(not eof?(f),println(fread_line(f))) &
     fclose(f)
-  
 
-  test_read: void = print(how_many_n(open_input_file))
+  test_tokenize: string = 
+    LET s = file2tokenizer(get_file_name) IN
+    "ok"
+
+  test_read: void = print(test_tokenize)
   
 
   END parse_cert
