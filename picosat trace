@@ -1,0 +1,15 @@
+(README.tracecheck)
+
+- the trace generation is simplified if the chains are not sorted => the preprocessor must sort the chains
+- intermediate resolvents can be omitted
+  
+   <trace>       = { <clause> }
+   <clause>      = <pos> <literals> <antecedents>
+   <literals>    = "*" | { <lit> } "0"
+   <antecedents> = { <pos> } "0"
+   <lit>         = <pos> | <neg>
+   <pos>         =  "1" |  "2" | .... | <2^28 - 1>
+   <neg>         = "-"<pos>
+
+
+
