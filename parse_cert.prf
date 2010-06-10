@@ -1,6 +1,6 @@
 (parse_cert
  (read_file_name_TCC1 0
-  (read_file_name_TCC1-1 nil 3483989769 3485181081
+  (read_file_name_TCC1-1 nil 3483989769 3485186362
    ("" (skosimp)
     (("" (skosimp) (("" (expand eot?) (("" (assert) nil nil)) nil))
       nil))
@@ -12,9 +12,9 @@
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (eot? const-decl "bool" stdtokenizer "PVSio/"))
-   222 100 t nil))
+   291 80 t nil))
  (read_clause_TCC1 0
-  (read_clause_TCC1-1 nil 3485180700 3485182075
+  (read_clause_TCC1-1 nil 3485180700 3485186363
    ("" (skosimp)
     (("" (skosimp)
       (("" (skosimp)
@@ -64,37 +64,37 @@
       nil))
     nil)
    proved
-   ((reverse def-decl "list[T]" list_props nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (null adt-constructor-decl "(null?)" list_adt nil)
-    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" list_adt nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (list type-decl nil list_adt nil)
-    (length_append formula-decl nil list_props nil)
-    (length_reverse formula-decl nil list_props nil)
+   ((length def-decl "nat" list_props nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (length def-decl "nat" list_props nil))
-   732593 580 t nil))
+    (length_reverse formula-decl nil list_props nil)
+    (length_append formula-decl nil list_props nil)
+    (list type-decl nil list_adt nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (reverse def-decl "list[T]" list_props nil))
+   841 300 t nil))
  (print_list_TCC1 0
-  (print_list_TCC1-1 nil 3485180700 3485181083
+  (print_list_TCC1-1 nil 3485180700 3485186363
    ("" (subtype-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -113,9 +113,9 @@
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil))
-   120 50 nil nil))
+   107 50 nil nil))
  (print_list_TCC2 0
-  (print_list_TCC2-1 nil 3485180700 3485181084
+  (print_list_TCC2-1 nil 3485180700 3485186363
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -143,9 +143,9 @@
     (skip const-decl "void" stdlang "PVSio/")
     (printstr const-decl "void" stdio "PVSio/")
     (emptystr const-decl "string" stdstr "PVSio/"))
-   606 240 nil nil))
+   565 210 nil nil))
  (print_cert_aux_TCC1 0
-  (print_cert_aux_TCC1-1 nil 3485180700 3485181085
+  (print_cert_aux_TCC1-1 nil 3485180700 3485186364
    ("" (termination-tcc) nil nil) proved
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -176,5 +176,120 @@
          nil)
     (minus_odd_is_odd application-judgement "odd_int" integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil))
-   712 310 nil nil)))
+   734 320 nil nil))
+ (read_rec_TCC1 0
+  (read_rec_TCC1-1 nil 3485186359 3485186367 ("" (subtype-tcc) nil nil)
+   proved
+   ((IStream nonempty-type-from-decl nil stdio "PVSio/")
+    (IStream_pred const-decl "[Stream -> boolean]" stdio "PVSio/")
+    (Stream nonempty-type-decl nil stdio "PVSio/")
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (list2finseq const-decl "finseq[T]" list2finseq nil)
+    (get_file_name const-decl "string" parse_cert nil)
+    (fopenin const-decl "IStream" stdio "PVSio/")
+    (integer? const-decl "bool" integers nil)
+    (emptystr const-decl "string" stdstr "PVSio/")
+    (ClosedStream const-decl "ExceptionTag[string]" stdio "PVSio/")
+    (make_exc const-decl "Exception" stdexc "PVSio/")
+    (EndOfFile const-decl "ExceptionTag[string]" stdio "PVSio/")
+    (fcheck const-decl "bool" stdio "PVSio/")
+    (prog const-decl
+          "T"
+     stdprog "PVSio/")
+    (fread_token const-decl "string" stdio "PVSio/")
+    (skip const-decl "void" stdlang "PVSio/")
+    (set const-decl "void" stdprog "PVSio/")
+    (fread_int const-decl "int" stdio "PVSio/")
+    (/= const-decl "boolean" notequal nil)
+    (fail const-decl "void" stdlang "PVSio/")
+    (return const-decl "void" stdprog "PVSio/")
+    (read_until_zero const-decl "list[int]" parse_cert nil)
+    (printstr const-decl "void" stdio "PVSio/")
+    (fclose const-decl "void" stdio "PVSio/"))
+   2940 1380 nil nil))
+ (read_rec_TCC2 0
+  (read_rec_TCC2-1 nil 3485186359 3485186370 ("" (subtype-tcc) nil nil)
+   proved
+   ((IStream nonempty-type-from-decl nil stdio "PVSio/")
+    (IStream_pred const-decl "[Stream -> boolean]" stdio "PVSio/")
+    (Stream nonempty-type-decl nil stdio "PVSio/")
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (>= const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (list2finseq const-decl "finseq[T]" list2finseq nil)
+    (get_file_name const-decl "string" parse_cert nil)
+    (fopenin const-decl "IStream" stdio "PVSio/")
+    (emptystr const-decl "string" stdstr "PVSio/")
+    (ClosedStream const-decl "ExceptionTag[string]" stdio "PVSio/")
+    (make_exc const-decl "Exception" stdexc "PVSio/")
+    (EndOfFile const-decl "ExceptionTag[string]" stdio "PVSio/")
+    (fcheck const-decl "bool" stdio "PVSio/")
+    (prog const-decl
+          "T"
+     stdprog "PVSio/")
+    (fread_token const-decl "string" stdio "PVSio/")
+    (skip const-decl "void" stdlang "PVSio/")
+    (set const-decl "void" stdprog "PVSio/")
+    (integer? const-decl "bool" integers nil)
+    (fread_int const-decl "int" stdio "PVSio/")
+    (/= const-decl "boolean" notequal nil)
+    (fail const-decl "void" stdlang "PVSio/")
+    (return const-decl "void" stdprog "PVSio/")
+    (read_until_zero const-decl "list[int]" parse_cert nil)
+    (printstr const-decl "void" stdio "PVSio/")
+    (fclose const-decl "void" stdio "PVSio/"))
+   3149 1450 nil nil))
+ (read_rec_TCC3 0
+  (read_rec_TCC3-1 nil 3485186359 3485186884
+   ("" (skosimp)
+    (("" (skosimp)
+      (("" (skosimp)
+        (("" (skosimp)
+          (("" (skosimp)
+            (("" (skosimp)
+              (("" (skosimp)
+                (("" (skosimp)
+                  (("" (skosimp)
+                    (("" (skosimp)
+                      (("" (hide -8)
+                        ((""
+                          (typepred "val[list[list[int]]](clause!1)")
+                          (("" (postpone) nil nil)) nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   unfinished nil 103410 210 t nil))
+ (read_rec_TCC4 0
+  (read_rec_TCC4-1 nil 3485186359 3485186657 ("" (subtype-tcc) nil nil)
+   unfinished nil 147418 68340 nil nil)))
 

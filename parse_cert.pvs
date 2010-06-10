@@ -3,12 +3,9 @@ parse_cert % parse a text file containing a certificate
 
   BEGIN
 
-  IMPORTING trace_resolution
-
+  
   IMPORTING PVSio@stdtokenizer
   IMPORTING PVSio@stdio
-
-  f(t: Tokenizer):int = 5
 
   get_file_name : string = 
     query_line("PicoSAT proof file name: ")
@@ -29,17 +26,32 @@ parse_cert % parse a text file containing a certificate
     LET s = get_file_name IN
       fopenin(s)
 
+  % reads ints from stream until 0 found
+  % returns the list of read ints in reverse order
   read_until_zero(f: IStream) : list[int] =		
     let w = ref(fread_int(f)) in
     let aux = ref(null[int]) in 
     let b2 = 
       while(val(w) /= 0, 
         set(aux, cons[int](val(w), aux)) & 
-	print(val(w)) &
 	set(w, fread_int(f))) in
     aux
 
-  read_clause(f:IStream, max: Mutable[real]): list[int] = 
+  read_nat_until_zero(f: IStream) : list[nat] = 
+    let w = ref(fread_int(f)) in
+    let aux = ref(null[nat]) in 
+    let b2 = 
+      while(val(w) /= 0, 
+        if val(w) > 0 
+	then
+          set(aux, cons[nat](val(w), aux)) & 
+	  set(w, fread_int(f)) 
+	else skip 
+	endif ) 
+	in
+    aux
+
+  read_clause(f:IStream, maxv: Mutable[real]): list[int] = 
     let w = fread_word(f) in
     if w = "*" 
     then 
@@ -48,14 +60,14 @@ parse_cert % parse a text file containing a certificate
       let r = read_until_zero(f) in
       let rr = reverse(r) in
       let wi =  str2int(w) in
-      let compare = abs(if cons?(r) then max(abs(car(r)), abs(car(rr))) else wi endif) in
+      let tmp = abs(if cons?(r) then max(abs(car(r)), abs(car(rr))) else wi endif) in
       let b = 
-      if compare > val(max) then
-        
-	  set(max, compare)
-	
+      if tmp > val(maxv) 
+      then
+	set(maxv, tmp)
       else skip
-      endif in
+      endif 
+      in
       cons(wi, rr) 
     endif
 
@@ -69,61 +81,43 @@ parse_cert % parse a text file containing a certificate
       print_list(cdr(l))
     endif
     measure length(l)
-    
-  pre_cert: TYPE = ARRAY[nat -> list[int]]
+  
+  pico_data: TYPE = [# max_lit: nat, nr_clauses: nat, r_clause_list: list[list[int]], r_antec_list: list[list[nat]] #] 
 
-  empty_cert : pre_cert = lambda(n:nat): null[int]
-
-  print_cert_aux( c: pre_cert, aux: nat, n: nat): recursive void =
-  if aux < n
-  then 
-    print(aux) &
-    print_list(c(aux)) & 
-    print("list finished") &
-    print_cert_aux(c, aux + 1, n) 
-  else skip 		  
-  endif
-  measure abs(n-aux)
-
-  print_cert(c: pre_cert, n: nat): void =  print_cert_aux(c, 1, n)  
-
-  read_rec : void = 
+  read_rec : pico_data = 
   let f = fopenin(get_file_name) in
   let c = ref(1) in
   let max = ref(0) in
   let mode = ref(0) in
   let clause = ref(null[list[int]]) in	
-  let antec = ref(null[list[int]]) in
+  let antec = ref(null[list[nat]]) in
   let w = ref("") in
+  let b = 
     while(not eof?(f), 
       if val(mode) = 0 
       then  
         %read line number
         set(w, fread_word(f)) & 
-	print(w) &
 	set(mode, 1)
       elsif val(mode) = 1 
       then
         %read clause
-	if integer?(val(c)) and val(c) >= 0 then
-	% update
-	let cl = read_clause(f, max) in
-        set(clause, cons(cl, val(clause) )) & 
-	print(val(c)) 
-	else skip endif &
+	if integer?(val(c)) and val(c) >= 0 
+	then
+	% add new close
+	  let cl = read_clause(f, max) in
+          set(clause, cons(cl, val(clause) ))
+	else skip 
+	endif &
 	set(mode, 2) 
       else 
         %read antecedents
-        set(antec, cons(read_until_zero(f), val(antec))) & 
-	%print("antec: ") &
-	
+        set(antec, cons(read_nat_until_zero(f), val(antec))) & 
 	set(c, val(c)+1) & 
 	set(mode, 0)
-
       endif) & 
     print(val(c)) & 
-    %print_list(antec) & 
-    print("printing cert") &
+    print(val(max)) &
     if cons?[list[number]](val(clause)) 
     then
       print(val(c)+1) & 
@@ -131,22 +125,88 @@ parse_cert % parse a text file containing a certificate
     else 
       skip 
     endif &
-    fclose(f) 
+    fclose(f) in
+    let maxi:nat = if integer?(val(max)) and val(max) > 0 then val(max) else 0 endif in
+    let nci:nat = if integer?(val(c)) and val(c) > 0 then val(c) else 0 endif in
+    let rcl:list[list[int]] = val(clause) in
+    let ral:list[list[nat]] = val(antec) in
+    (# max_lit:= maxi, nr_clauses:= nci, r_clause_list:= rcl, r_antec_list := ral #)
+
+  %read the file
+  fdata: pico_data = read_rec
+
+  m: nat = fdata`max_lit
+  n: nat = fdata`nr_clauses
+  rcl: list[list[int]] = fdata`r_clause_list
+  ral: list[list[nat]] = fdata`r_antec_list
 
 
- testare: void =
- let f = fopenin(get_file_name) in
- let r = ref(0) in
- let b = set(r, fread_int(f)) in
- let w2 = ref(fread_int(f)) in
- let w3 = fread_int(f) in
- print(1000)
- 
 
-  WOOW(x:int) : void =
-  let gvar = ref(0) in
-    set(gvar,x) &
-    println("The value of gvar is: "+val(gvar))
+  IMPORTING trace_resolution[m, n, n]
 
+  %verify if l is a list of tr_literal
+  lit_list?(l: list[int]): recursive bool = 
+  if null?(l) then true
+  else tr_literal?(car(l)) and lit_list?(cdr(l))
+  endif
+  measure length(l)
+
+  valid_clauses?(ll: list[list[int]]): recursive bool = 
+  if null?(ll) then true
+  else lit_list?(car(ll)) and sorted?(car(ll)) and valid_clauses?(cdr(ll))
+  endif
+  measure length(ll)
+
+  %verify if l has type chain(nc)
+  chain?(l:list[nat], nc: nat): recursive bool = 
+  if null?(l) then true
+  else car(l)<nc and chain?(cdr(l), nc)
+  endif
+  measure length(l)
+
+  valid_chains?(ll: list[list[nat]], nc: nat): recursive bool = 
+  if null?(ll) then true	     
+  else chain?(car(ll), nc) and valid_chains?(cdr(ll), nc-1)
+  endif
+  measure length(ll)
+
+  % build a certificate
+  build_cert(max_lit:nat, nc:nat, rcl: list[list[int]], ral: list[list[nat]], aux: certificate): recursive certificate = 
+  if nc = 0 then aux
+  elsif lit_list?(car(rcl)) and sorted?(car(rcl)) and chain?(car(ral), nc) then 
+    build_cert(max_lit, nc-1, cdr(rcl), cdr(ral), aux with [(nc):= (# cl:= car(rcl), chn := car(ral) #)])	
+  else aux
+  endif
+  measure nc
+
+  %lit_list(m,n, l:list[int]): recursive bool = 
+  %if null?(l) then true	      
+  %else tr_lit?[m, n, n](car(l)) and lit_list(m, n, cdr(l))
+  %endif
+  %measure length(l)
+
+  %clause_list(m, n, ll: list[list[int]]): recursive bool = 
+  %if null?(ll) then true
+  %else 
+  %  lit_list(m,n,car(ll)) and 
+
+  
+
+  %check_cert: bool = 
+  %let fdata = read_rec in
+  %let max = fdata`max_lit in 
+  %let nc = fdata`nr_clauses in
+  %let rcl = fdata`r_clause_list in
+  %let ral = fdata`r_antec_list in 
+  %if fdata`max_lit = 0 or fdata`nr_clauses = 0 or (not sorted_lists(rcl)) or (not antec_lists(ral, nc)) 
+  %then 
+  %  false 
+ % else 
+  %  check(resolve(build_cert(fdata)))
+    % check sorted clause
+    % check antec smaller than current line
+    % create certificate
+    % apply resolution
+  %endif
 
   END parse_cert
