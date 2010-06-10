@@ -25,28 +25,128 @@ parse_cert % parse a text file containing a certificate
     ENDIF
     ENDIF
 
-  %read_line(f: IStream): 
-
-  how_many_n(f: IStream): string = 
-    LET result = 
-      ref[string]("") IN
-    LET b = 
-      while(not eof?(f),set(result,fread_line(f)))  IN 
-    next_token(str2tokenizer(val(result)))
-
   open_input_file : IStream =
     LET s = get_file_name IN
       fopenin(s)
 
-  read_rec(f: IStream) : void = 
-    while(not eof?(f),println(fread_line(f))) &
-    fclose(f)
+  read_until_zero(f: IStream) : list[int] =		
+    let w = ref(fread_int(f)) in
+    let aux = ref(null[int]) in 
+    let b2 = 
+      while(val(w) /= 0, 
+        set(aux, cons[int](val(w), aux)) & 
+	print(val(w)) &
+	set(w, fread_int(f))) in
+    aux
 
-  test_tokenize: string = 
-    LET s = file2tokenizer(get_file_name) IN
-    "ok"
+  read_clause(f:IStream, max: Mutable[real]): list[int] = 
+    let w = fread_word(f) in
+    if w = "*" 
+    then 
+      null 
+    else 
+      let r = read_until_zero(f) in
+      let rr = reverse(r) in
+      let wi =  str2int(w) in
+      let compare = abs(if cons?(r) then max(abs(car(r)), abs(car(rr))) else wi endif) in
+      let b = 
+      if compare > val(max) then
+        
+	  set(max, compare)
+	
+      else skip
+      endif in
+      cons(wi, rr) 
+    endif
 
-  test_read: void = print(test_tokenize)
-  
+  print_list(l: list[int]): recursive void = 
+    if null?(l) 
+    then 
+      print("~%")
+    else 
+      print(car(l)) & 
+      print(" ") & 
+      print_list(cdr(l))
+    endif
+    measure length(l)
+    
+  pre_cert: TYPE = ARRAY[nat -> list[int]]
+
+  empty_cert : pre_cert = lambda(n:nat): null[int]
+
+  print_cert_aux( c: pre_cert, aux: nat, n: nat): recursive void =
+  if aux < n
+  then 
+    print(aux) &
+    print_list(c(aux)) & 
+    print("list finished") &
+    print_cert_aux(c, aux + 1, n) 
+  else skip 		  
+  endif
+  measure abs(n-aux)
+
+  print_cert(c: pre_cert, n: nat): void =  print_cert_aux(c, 1, n)  
+
+  read_rec : void = 
+  let f = fopenin(get_file_name) in
+  let c = ref(1) in
+  let max = ref(0) in
+  let mode = ref(0) in
+  let clause = ref(null[list[int]]) in	
+  let antec = ref(null[list[int]]) in
+  let w = ref("") in
+    while(not eof?(f), 
+      if val(mode) = 0 
+      then  
+        %read line number
+        set(w, fread_word(f)) & 
+	print(w) &
+	set(mode, 1)
+      elsif val(mode) = 1 
+      then
+        %read clause
+	if integer?(val(c)) and val(c) >= 0 then
+	% update
+	let cl = read_clause(f, max) in
+        set(clause, cons(cl, val(clause) )) & 
+	print(val(c)) 
+	else skip endif &
+	set(mode, 2) 
+      else 
+        %read antecedents
+        set(antec, cons(read_until_zero(f), val(antec))) & 
+	%print("antec: ") &
+	
+	set(c, val(c)+1) & 
+	set(mode, 0)
+
+      endif) & 
+    print(val(c)) & 
+    %print_list(antec) & 
+    print("printing cert") &
+    if cons?[list[number]](val(clause)) 
+    then
+      print(val(c)+1) & 
+      print_list( car(val(clause)) ) 
+    else 
+      skip 
+    endif &
+    fclose(f) 
+
+
+ testare: void =
+ let f = fopenin(get_file_name) in
+ let r = ref(0) in
+ let b = set(r, fread_int(f)) in
+ let w2 = ref(fread_int(f)) in
+ let w3 = fread_int(f) in
+ print(1000)
+ 
+
+  WOOW(x:int) : void =
+  let gvar = ref(0) in
+    set(gvar,x) &
+    println("The value of gvar is: "+val(gvar))
+
 
   END parse_cert
