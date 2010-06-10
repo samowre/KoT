@@ -1,0 +1,27 @@
+FF : THEORY
+BEGIN
+
+  factorial(n:nat) : RECURSIVE nat =
+    if n = 0 then 1
+    else n*factorial(n-1)
+    endif
+  MEASURE n
+
+  fibonacci(i,j:nat)(n:nat) : RECURSIVE nat =
+    if n = 0 then i
+    elsif n = 1 then j
+    else fibonacci(j,i+j)(n-1)
+    endif
+  MEASURE n
+
+  sum(n:nat,f:[nat->nat]): RECURSIVE nat =
+    if n = 0 then 0
+    else f(n-1) + sum(n-1,f)
+    endif
+  MEASURE n
+
+  sum_fibo(n:nat) : nat = sum(n,fibonacci(1,1))
+
+  sum_fact(n:nat) : nat = sum(n,factorial)
+ 
+END FF

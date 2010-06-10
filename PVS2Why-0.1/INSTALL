@@ -1,0 +1,102 @@
+INSTALLATION 
+============
+
+Release: PVS2Why-0.1 (11/10/07) 
+By Cesar Munoz 
+http://research.nianet.org/~munoz/PVS2Why
+
+Requirements
+------------
+- PVS 4.0 or higher, available from http://pvs.csl.sri.com.
+- PVS package ProofLite, available from 
+  http://research.nianet.org/~munoz/ProofLite
+
+General instructions
+--------------------
+Copy the tarball file PVS2Why-0.1.tgz to the directory where you are
+planning to put PVS packages, e.g., <packages>. An appropriate
+location is <packages> = <pvs-dir>/lib. Note that you will need write
+permissions on <packages> and <pvs-dir> in order to install this
+package.
+
+Unpack the file: 
+
+  $ tar xfz <packages>/PVS2Why-0.1.tgz
+
+The directory <packages>/PVS2Why-0.1 contains:
+ 
+   README     : PVS2Why in a nutshell
+   INSTALL    : This file
+   Makefile   : Make file
+   lib/       : Library 
+   java/      : Java library for PVS2Why
+   src/       : Sources 	  
+   examples/  : Examples
+   doc/       : Documentation
+
+Installation
+------------
+Type
+
+  $ make PVS_DIR=<pvs-dir>
+
+Alternatively, make a symbolic link <packages>/PVS2Why to 
+<packages>/PVS2Why-0.1/lib, copy the script src/pvs2why.sh 
+to <pvs-dir>/pvs2why, and configure it to your installation.
+
+Setting PVS_LIBRARY_PATH
+------------------------
+If you have chosen <packages> = <pvs-dir>/lib, you don't need to set
+the environment variable PVS_LIBRARY_PATH. Otherwise, set this
+variable such that it includes the directory <packages>. The easiest
+way to do this is by defining a global variable PVS_LIBRARY_PATH in
+the start-up file of your login shell.  In bash, add the line
+
+  export PVS_LIBRARY_PATH=$PVS_LIBRARY_PATH:<packages>
+
+to the .bash_profile file. In csh, add the line
+
+  setenv PVS_LIBRARY_PATH  $PVS_LIBRARY_PATH:<packages>
+
+to the .cshrc file.
+
+Checking the installation
+-------------------------
+Run PVS2Why on some example to verify that the package was
+installed correctly. For example, type  
+
+  $ make test PVS_DIR=<pvs-dir>
+
+Using pvs2why
+-------------
+For usage type:
+
+  $<pvs-dir>/pvs2why --help
+
+In most cases,
+
+  $<pvs-dir>/pvs2why --xml --java <mypvsfile> 
+
+is all you need.
+
+Troubleshooting
+---------------
+0. How to remove an old installation of PVS2Why ?
+
+   An old installation of PVS2Why is usually not a problem as 
+   the makefile tries to make obsolete a previous installation of the package. 
+   Sometimes, it does not manage to do that. In this case, the main point 
+   is that there must be only ONE symbolic link called PVS2Why located 
+   in PVS_LIBRARY_PATH, and this link must point to the lib directory of the
+   most recent installation.
+  
+   Once the new release is installed, you can remove the distribution 
+   directory of the previous release. The makefile doesn't do that for you.
+
+1. I want to turn off all the checks performed by the Makefile.
+
+   If you know what you are doing, type 
+
+   $ make PVS_DIR=<pvs-dir> FORCE=yes
+
+

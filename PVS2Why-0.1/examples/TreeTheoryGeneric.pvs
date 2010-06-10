@@ -1,0 +1,31 @@
+TreeTheoryGeneric[T:TYPE] : THEORY
+BEGIN
+  Tree : DATATYPE 
+  BEGIN
+    leaf(l:T) : isleaf
+    branch(left:Tree,right:Tree) : iscons   
+  END Tree
+
+  count(t:Tree) : RECURSIVE nat =
+  CASES t OF
+   leaf(l): 1,
+   branch(l,r): count(l) + count(r)
+  ENDCASES
+  MEASURE ord(t)  
+
+
+  Index : TYPE = below(8)
+
+  init : Tree
+
+  Trees : TYPE = ARRAY[Index->Tree]
+
+  aaaaaa : Trees = LAMBDA(i:Index):init
+
+  % bool[] aaaaa = ....
+
+  % blah<T>[] aaaa = new Arrayblah<T> ....  
+
+
+  
+END TreeTheoryGeneric

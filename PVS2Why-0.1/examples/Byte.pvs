@@ -1,0 +1,18 @@
+Byte : THEORY
+BEGIN
+  % Bound : posnat = 8
+
+  Index : TYPE = below(8)
+
+  BYTE : TYPE = ARRAY[Index->bool]
+
+  Zero : BYTE = LAMBDA(i:Index) : false
+
+  complement(b:BYTE) : BYTE =
+    LAMBDA (i:Index): not b(i)
+
+  isZero(b:BYTE) : bool =
+    FORALL (i:Index): not b(i)
+
+
+END Byte

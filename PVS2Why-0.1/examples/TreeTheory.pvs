@@ -1,0 +1,22 @@
+TreeTheory : THEORY
+BEGIN
+
+  OnOff : TYPE = {On,Off}
+
+  Tree : DATATYPE 
+  BEGIN
+    leaf(l:nat) : leaf?
+    branch(left:Tree,right:Tree) : branch? 
+  END Tree
+
+  initTree : Tree =
+    branch(leaf(1),branch(leaf(100),leaf(2)))
+
+  sum(t:Tree) : RECURSIVE nat =
+   CASES t OF
+     leaf(l): l,
+     branch(l,r): sum(l) + sum(r)
+   ENDCASES
+   MEASURE ord(t)  
+
+END TreeTheory

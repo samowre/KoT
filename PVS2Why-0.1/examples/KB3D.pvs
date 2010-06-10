@@ -1,0 +1,122 @@
+%% KB3D a 3D Conflict Detection and Resolution (CD&R) algorithm
+KB3D[D,H,T:posreal] : THEORY
+BEGIN
+
+%% Parameters 
+%  D : Diameter of relative protected zone
+%  H : Height of relative protected zone
+%  T : Lookahead time
+
+%% Types
+  Vector3D : TYPE = [#
+    x,y,z : real
+  #]
+
+  Sign : TYPE = {x:int | x = 1 OR x = -1}
+
+%% Variables
+  s,                    %% Relative position
+  v,                    %% Relative velocity
+  vo,vi : VAR Vector3D  %% Absolute velocities  
+  sx,sy          : VAR real
+  e              : VAR Sign
+
+%% Abstract function
+  sqrt(x:nnreal): nnreal
+
+
+%% Functions
+  sq(x:real) : nnreal = x*x
+
+  sq_dist2D(v) : nnreal = 
+    sq(x(v))+sq(y(v))
+
+  sign(x:real):Sign =
+    IF x = 0 THEN 0 
+    ELSIF x > 0 THEN 1
+    ELSE -1
+    ENDIF
+
+  detection(s,v) : bool =
+    IF  x(v)=0 AND y(v)=0 AND 
+        sq_dist2D(s) < sq(D) THEN %% No horizontal movement
+      (-H < z(s) AND z(s) < H) OR %% Already in conflict
+      (z(v) > 0 AND z(s) < 0 AND 
+       -H < T*z(v) + z(s)) OR     %% Vertical conflict in the future
+      (z(v) < 0 AND z(s) > 0 AND  H > T*z(v) + z(s))                         
+    ELSE
+      LET d = 2*x(s)*x(v)*y(s)*y(v) + sq(D)*(sq_dist2D(v)) -  
+              (sq(x(s))*sq(y(v)) + sq(y(s))*sq(x(v))) IN
+      IF d > 0 THEN
+        LET a = sq(x(v)) + sq(y(v)) IN
+        LET b = x(s)*x(v) + y(s)*y(v) IN
+        %% theta1 = (-b - sqrt(d))/a, first intersection with D
+        %% theta2 = (-b + sqrt(d))/a, second intersection with D 
+	IF z(v) = 0 THEN  %% Horizontal movement only
+          -H < z(s) AND z(s) < H AND 
+          (sq(D) > sq_dist2D(s) OR b <= 0) AND   %% theta2 > 0
+          (d > sq(a*T+b) OR a*T+b >= 0)          %% theta1 < T
+        ELSE  %% General case 
+          LET t1 = (-sign(z(v))*H-z(s))/z(v) IN
+          LET t2 = (sign(z(v))*H-z(s))/z(v) IN
+          %% t1 < t2
+          (d > sq(a*t2+b) OR a*t2+b >= 0) AND %% theta1 < t2 
+          (d > sq(a*t1+b) OR a*t1+b <= 0) AND %% t1 < theta2
+          %% max(theta1,t1) < min(theta2,t2) 
+          (sq(D) > sq_dist2D(s) OR b <= 0)  AND %% theta2 > 0 
+          t2 > 0                            AND        
+          %% min(theta2,t2) > 0
+          (d > sq(a*T+b)  OR a*T+b >= 0)    AND %% theta1 < T
+          t1 < T   
+          %% max(theta1,t1) < T
+        ENDIF
+      ELSE FALSE
+      ENDIF
+    ENDIF
+
+  alpha(sx,(sy|sq(sx)+sq(sy)>0)) : real = 
+    sq(D)/(sq(sx)+sq(sy))
+
+  beta(sx,(sy|sq(sx)+sq(sy)>= sq(D))) : real = 
+    D*sqrt(sq(sx)+sq(sy)-sq(D))/(sq(sx)+sq(sy))
+
+  Q(sx,(sy|sq(sx)+sq(sy)>=sq(D)),e):real = alpha(sx,sy)*sx+e*beta(sx,sy)*sy
+
+  contact_time(sx,sy,qx,qy,vx,vy:real) : real =
+    let d = vx*(qx-sx) + vy*(qy-sy) in 
+    if d /= 0  then
+      (sq(qx-sx) + sq(qy-sy)) / d
+    elsif (qx=sx AND qy=sy) then 0
+    else -1
+    endif
+
+  Error : Vector3D = (#
+    x := 0,
+    z := 0,
+    y := 0
+  #)
+
+  % Optimal ground speed resolution
+  resolution(s,vo,vi,e) : Vector3D = 
+    if sq_dist2D(s) < D then
+	Error
+    else
+      let vx  = x(vo)-x(vi) in    
+      let vy  = y(vo)-y(vi) in
+      let qpx = Q(x(s),y(s),e) in
+      let qpy = Q(y(s),x(s),-e) in
+      let tpq = contact_time(x(s),y(s),qpx,qpy,vx,vy) in
+      if tpq > 0 then
+        (# x := (qpx-x(s))/tpq+x(vi) , 
+	   y := (qpy-y(s))/tpq+y(vi),
+           z := 0 #)
+      elsif tpq = 0 then 
+        (# x := (x(s)*vy-vx*y(s))*(-y(s))+x(vi),
+           y := (x(s)*vy-vx*y(s))*x(s)+y(vi),
+           z := 0 #) 
+      else
+	Error  
+      endif
+    endif
+
+END KB3D
