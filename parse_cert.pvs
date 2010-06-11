@@ -6,6 +6,7 @@ parse_cert % parse a text file containing a certificate
   
   IMPORTING PVSio@stdtokenizer
   IMPORTING PVSio@stdio
+  IMPORTING PVSio@stdglobal
 
   get_file_name : string = 
     query_line("PicoSAT proof file name: ")
@@ -86,7 +87,15 @@ parse_cert % parse a text file containing a certificate
   
   pico_data: TYPE = [# max_lit: nat, nr_clauses: nat, r_clause_list: list[list[int]], r_antec_list: list[list[nat]] #] 
 
-  read_rec : pico_data = 
+  aux_fdata: Global[pico_data, (#max_lit:= 0, nr_clauses:= 0, r_clause_list:= null[list[int]], r_antec_list:= null[list[nat]]#)]
+  aux_bool: Global[bool, false]
+
+  read_rec : pico_data =
+  %if bool set
+  if val(aux_bool) 
+  %return existing data
+  then val(aux_fdata)
+  else 
   let f = fopenin(get_file_name) in
   let c = ref(1) in
   let max = ref(0) in
@@ -127,25 +136,32 @@ parse_cert % parse a text file containing a certificate
     else 
       skip 
     endif &
-    fclose(f) in
+    fclose(f) & 
+    %set bool to true
+    set(aux_bool, true) &
+    print(val(aux_bool)) in
     let maxi:nat = if integer?(val(max)) and val(max) > 0 then val(max) else 0 endif in
     let nci:nat = if integer?(val(c)) and val(c) > 0 then val(c) else 0 endif in
     let rcl:list[list[int]] = val(clause) in
     let ral:list[list[nat]] = val(antec) in
-     
-    (# max_lit:= maxi, nr_clauses:= nci, r_clause_list:= rcl, r_antec_list := ral #)
+    let result = 
+    (# max_lit:= maxi, nr_clauses:= nci, r_clause_list:= rcl, r_antec_list := ral #) in
+    % set result
+    let s = set(aux_fdata, result) in
+    %return result
+    result
 
+    endif
   %read the file
 
   %b: void = set(mfdata, read_rec)
   fdata: pico_data =  read_rec
-  mfdata: Mutable[pico_data] = ref(fdata)
   %fdata: pico_data = def(new, read_rec)
 
-  m: nat = val(mfdata)`max_lit
-  n: nat = val(mfdata)`nr_clauses
-  rcl: list[list[int]] = val(mfdata)`r_clause_list
-  ral: list[list[nat]] = val(mfdata)`r_antec_list
+  m: nat = fdata`max_lit
+  n: nat = fdata`nr_clauses
+  rcl: list[list[int]] = fdata`r_clause_list
+  ral: list[list[nat]] = fdata`r_antec_list
 
 
 
@@ -205,7 +221,7 @@ parse_cert % parse a text file containing a certificate
   error_cert: certificate = empty_cert with [(n)`cl := cons(1, null)]
 
   verify: bool = 
-  let cert = build_cert(m, n, rcl, ral, empty_cert) in
+  let cert = build_cert(m, n, rcl, ral, error_cert) in
   null?(cert(n)`cl)
 
   %lit_list(m,n, l:list[int]): recursive bool = 
