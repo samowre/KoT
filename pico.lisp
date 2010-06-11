@@ -1,4 +1,8 @@
-(defun read-pico-proof (infile outfile)
+					; reads infile,
+					; sorts lines by increasing line number
+					; eliminates gaps
+					; sorts the clause part of each line
+(defun transform-pico-proof (infile outfile)
   (with-open-file (in infile :direction :input)
     (with-open-file (out outfile :direction :output
 			 :if-exists :supersede)
@@ -7,7 +11,8 @@
 
 (defun f (s) (string-to-number (subseq s 0 (position #\Space s))))
 
-					; reads all the lines, sorts them and then eliminates gaps
+					; reads all the lines,
+					; sorts them and then eliminates gaps
 (defun read-pico-proof* (stream &optional (result nil))
 					; line from the file
   (let ((line (read-line stream nil 'eof)))

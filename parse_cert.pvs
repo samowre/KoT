@@ -87,9 +87,12 @@ parse_cert % parse a text file containing a certificate
   
   pico_data: TYPE = [# max_lit: nat, nr_clauses: nat, r_clause_list: list[list[int]], r_antec_list: list[list[nat]] #] 
 
+  % stores the value returned by read_rec
   aux_fdata: Global[pico_data, (#max_lit:= 0, nr_clauses:= 0, r_clause_list:= null[list[int]], r_antec_list:= null[list[nat]]#)]
+  % true if read_rec has been called once
   aux_bool: Global[bool, false]
 
+  % reads a file once and stores the result in aux_fdata
   read_rec : pico_data =
   %if bool set
   if val(aux_bool) 
@@ -220,6 +223,7 @@ parse_cert % parse a text file containing a certificate
   
   error_cert: certificate = empty_cert with [(n)`cl := cons(1, null)]
 
+  % true if the last resolution chain produces an empty clause
   verify: bool = 
   let cert = build_cert(m, n, rcl, ral, error_cert) in
   null?(cert(n)`cl)
