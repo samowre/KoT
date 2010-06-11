@@ -132,6 +132,7 @@ parse_cert % parse a text file containing a certificate
     let nci:nat = if integer?(val(c)) and val(c) > 0 then val(c) else 0 endif in
     let rcl:list[list[int]] = val(clause) in
     let ral:list[list[nat]] = val(antec) in
+     
     (# max_lit:= maxi, nr_clauses:= nci, r_clause_list:= rcl, r_antec_list := ral #)
 
   %read the file
@@ -195,7 +196,9 @@ parse_cert % parse a text file containing a certificate
   endif
   measure pnc
 
-  empty_cert: certificate = lambda (i:nat): (#cl:=null, chn:= null #)
+  empty_cert: certificate = lambda (i:below(n)): (#cl := null, chn:= null #)
+  
+  error_cert: certificate = empty_cert with [(n)`cl := cons(1, null)]
 
   verify: bool = 
   let cert = build_cert(m, n, rcl, ral, empty_cert) in
