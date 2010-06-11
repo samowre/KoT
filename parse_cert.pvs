@@ -51,6 +51,8 @@ parse_cert % parse a text file containing a certificate
 	in
     aux
 
+  % reads clause from stream, 
+  % updates maxv if elements of clause are higher than the actual val
   read_clause(f:IStream, maxv: Mutable[real]): list[int] = 
     let w = fread_word(f) in
     if w = "*" 
@@ -147,7 +149,7 @@ parse_cert % parse a text file containing a certificate
   %verify if l is a list of tr_literal
   lit_list?(l: list[int]): recursive bool = 
   if null?(l) then true
-  else tr_literal?(car(l)) and lit_list?(cdr(l))
+  else car(l) /=0 and tr_literal?(car(l)) and lit_list?(cdr(l))
   endif
   measure length(l)
 
@@ -165,19 +167,32 @@ parse_cert % parse a text file containing a certificate
   measure length(l)
 
   valid_chains?(ll: list[list[nat]], nc: nat): recursive bool = 
-  if null?(ll) then true	     
+  if nc = 0 then null?(ll)
+  elsif null?(ll) then true	     
   else chain?(car(ll), nc) and valid_chains?(cdr(ll), nc-1)
   endif
   measure length(ll)
 
   % build a certificate
-  build_cert(max_lit:nat, nc:nat, rcl: list[list[int]], ral: list[list[nat]], aux: certificate): recursive certificate = 
-  if nc = 0 then aux
-  elsif lit_list?(car(rcl)) and sorted?(car(rcl)) and chain?(car(ral), nc) then 
-    build_cert(max_lit, nc-1, cdr(rcl), cdr(ral), aux with [(nc):= (# cl:= car(rcl), chn := car(ral) #)])	
+  build_cert(
+    pmax_lit:nat, 
+    pnc:nat, 
+    prcl: list[list[int]], 
+    pral: list[list[nat]], 
+    aux: certificate): recursive certificate = 
+  if pnc = 0 or null?(prcl) or null?(pral)
+  then aux
+  elsif lit_list?(car(prcl)) and sorted?(car(prcl)) and chain?(car(pral), pnc) 
+  then 
+    build_cert(
+      pmax_lit, 
+      pnc-1, 
+      cdr(prcl), 
+      cdr(pral), 
+      aux with [(pnc) := (# cl:= car(prcl), chn := car(pral) #) ])	
   else aux
   endif
-  measure nc
+  measure pnc
 
   %lit_list(m,n, l:list[int]): recursive bool = 
   %if null?(l) then true	      
