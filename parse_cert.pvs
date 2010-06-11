@@ -136,12 +136,16 @@ parse_cert % parse a text file containing a certificate
     (# max_lit:= maxi, nr_clauses:= nci, r_clause_list:= rcl, r_antec_list := ral #)
 
   %read the file
-  fdata: pico_data = read_rec
 
-  m: nat = fdata`max_lit
-  n: nat = fdata`nr_clauses
-  rcl: list[list[int]] = fdata`r_clause_list
-  ral: list[list[nat]] = fdata`r_antec_list
+  %b: void = set(mfdata, read_rec)
+  fdata: pico_data =  read_rec
+  mfdata: Mutable[pico_data] = ref(fdata)
+  %fdata: pico_data = def(new, read_rec)
+
+  m: nat = val(mfdata)`max_lit
+  n: nat = val(mfdata)`nr_clauses
+  rcl: list[list[int]] = val(mfdata)`r_clause_list
+  ral: list[list[nat]] = val(mfdata)`r_antec_list
 
 
 
