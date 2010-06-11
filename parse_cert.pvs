@@ -153,11 +153,11 @@ parse_cert % parse a text file containing a certificate
   endif
   measure length(l)
 
-  valid_clauses?(ll: list[list[int]]): recursive bool = 
-  if null?(ll) then true
-  else lit_list?(car(ll)) and sorted?(car(ll)) and valid_clauses?(cdr(ll))
-  endif
-  measure length(ll)
+%  valid_clauses?(ll: list[list[int]]): recursive bool = 
+%  if null?(ll) then true
+%  else lit_list?(car(ll)) and sorted?(car(ll)) and valid_clauses?(cdr(ll))
+%  endif
+%  measure length(ll)
 
   %verify if l has type chain(nc)
   chain?(l:list[nat], nc: nat): recursive bool = 
@@ -166,17 +166,17 @@ parse_cert % parse a text file containing a certificate
   endif
   measure length(l)
 
-  valid_chains?(ll: list[list[nat]], nc: nat): recursive bool = 
-  if nc = 0 then null?(ll)
-  elsif null?(ll) then true	     
-  else chain?(car(ll), nc) and valid_chains?(cdr(ll), nc-1)
-  endif
-  measure length(ll)
+%  valid_chains?(ll: list[list[nat]], nc: nat): recursive bool = 
+%  if nc = 0 then null?(ll)
+%  elsif null?(ll) then true	     
+%  else chain?(car(ll), nc) and valid_chains?(cdr(ll), nc-1)
+%  endif
+%  measure length(ll)
 
   % build a certificate
   build_cert(
     pmax_lit:nat, 
-    pnc:nat, 
+    pnc:{i:nat|i<n}, 
     prcl: list[list[int]], 
     pral: list[list[nat]], 
     aux: certificate): recursive certificate = 
@@ -184,15 +184,22 @@ parse_cert % parse a text file containing a certificate
   then aux
   elsif lit_list?(car(prcl)) and sorted?(car(prcl)) and chain?(car(pral), pnc) 
   then 
+    let ch_pnc: chain(pnc) = car(pral) in
     build_cert(
       pmax_lit, 
       pnc-1, 
       cdr(prcl), 
       cdr(pral), 
-      aux with [(pnc) := (# cl:= car(prcl), chn := car(pral) #) ])	
+      aux with [(pnc) := (# cl:= car(prcl), chn := ch_pnc #) ])	
   else aux
   endif
   measure pnc
+
+  empty_cert: certificate = lambda (i:nat): (#cl:=null, chn:= null #)
+
+  verify: bool = 
+  let cert = build_cert(m, n, rcl, ral, empty_cert) in
+  null?(cert(n)`cl)
 
   %lit_list(m,n, l:list[int]): recursive bool = 
   %if null?(l) then true	      
