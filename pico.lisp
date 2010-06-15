@@ -38,6 +38,7 @@
 			 new-previous-line-number))
     (nreverse result)))
 
+
 (defun process-line (line offsets-list previous-line-number)
 					;read line number
   (multiple-value-bind (line-number npos)
@@ -53,6 +54,8 @@
 	       (rewrite-line* line npos new-offsets-list))
 	 new-offsets-list
 	 line-number)))))
+
+(defun index_m (n) (if (< n 0) (- (* 2 (abs n)) 1) (* 2 (abs n)))) 
 
 					;sort clause and update antecedents
 (defun rewrite-line* (line pos
@@ -71,7 +74,7 @@
 	      (rewrite-line* line
 			     npos
 			     offsets-list
-			     (cons word (sort result #'>))
+			     (cons (if (eq word 0) "s" "*") (sort result #'> :key 'index_m))
 			     1)
 					;continue to read the clause
 	    (rewrite-line* line
@@ -84,7 +87,7 @@
 		       offsets-list
 		       (cons
 			(if (eq word 0)
-			    word
+			    "s"
 			  (number-update word offsets-list))
 			result)
 		       mode)))))
@@ -96,9 +99,9 @@
 (defun offset* (line-number offsets-list)
   (if offsets-list 
       (if (>=  line-number (caar offsets-list))
-	  (cadar offsets-list)
+	  (+ 1 (cadar offsets-list))
 	  (offset* line-number (cdr offsets-list)))
-    0))
+    1))
 
 					; takes an index, an offset and the list of gaps
 					; adds the pair (line#, offset) to the list of gaps
