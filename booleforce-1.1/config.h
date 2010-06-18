@@ -6,6 +6,7 @@
 #define BOOLEFORCE_CCVERSION "4.4.1"
 #define BOOLEFORCE_CFLAGS "-Wall -W -Werror -O3 -fomit-frame-pointer -march=i686"
 #define NDEBUG
+#define BOOLEFORCE_TRACE
 typedef long long int64;
 #define INT64FMT "lld"
 #endif

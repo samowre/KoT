@@ -10,17 +10,24 @@ BEGIN
 
   tr_literal?(k: nzint): bool = (abs(k) < m)
 
-  member_numpred_nzint :  LEMMA FORALL(k: nzint, kk: list[nzint]): member[numfield](k, kk) = member[nzint](k, kk)
+  member_numpred_nzint :  LEMMA 
+    FORALL(k: nzint, kk: list[nzint]): 
+      member[numfield](k, kk) = member[nzint](k, kk)
 
-  subset_numpred_nzint :  LEMMA FORALL(kk: list[nzint], ll: list[nzint]): subset[numfield](kk, ll) = subset[nzint](kk, ll)
+  subset_numpred_nzint :  LEMMA 
+    FORALL(kk: list[nzint], ll: list[nzint]): 
+      subset[numfield](kk, ll) = subset[nzint](kk, ll)
 
   k, l: VAR (tr_literal?)
   kk, ll: VAR list[(tr_literal?)]
 
   tr_neg(k): (tr_literal?) = -k
 
-  member_tr_lit_member_nzint: LEMMA member[nzint](k, ll) = member[(tr_literal?)](k, ll)
-  subset_tr_lit_subset_nzint: LEMMA subset[nzint](kk, ll) = subset[(tr_literal?)](kk, ll)
+  member_tr_lit_member_nzint: LEMMA 
+    member[nzint](k, ll) = member[(tr_literal?)](k, ll)
+  
+  subset_tr_lit_subset_nzint: LEMMA 
+    subset[nzint](kk, ll) = subset[(tr_literal?)](kk, ll)
 
   % (-1) -> 1, (1) -> 2, (-2) -> 3, (2) -> 4 ...
   index(k): posnat = IF (k<0) THEN 2*abs(k)-1 ELSE 2*k ENDIF
@@ -36,11 +43,14 @@ BEGIN
   tr_clause_prop: LEMMA tr_clause?(ll) IFF 
     		       (null?(ll) 
 		        OR null?(cdr(ll)) 
-			OR (index(car(ll))<index(car(cdr(ll))) AND tr_clause?(cdr(ll))))
+			OR (index(car(ll))<index(car(cdr(ll))) 
+			AND tr_clause?(cdr(ll))))
 
   ck, cl, cm: VAR (tr_clause?)
 
-  cons_tr_clause: LEMMA (tr_clause?(ck) AND cons?(ck)) IMPLIES tr_clause?(cdr(ck))
+  cons_tr_clause: LEMMA 
+    (tr_clause?(ck) AND cons?(ck)) 
+    IMPLIES tr_clause?(cdr(ck))
 
   %not empty trace clause
   ne_tr_clause?(cl): bool = NOT null?(cl)
@@ -53,7 +63,8 @@ BEGIN
   MEASURE length(cl)
 
   clause_true_lemma :  LEMMA
-        tr_clause_true?(cl) = EXISTS l: member(l, cl) and member(tr_neg(l), cl)
+        tr_clause_true?(cl) = 
+	EXISTS l: member(l, cl) and member(tr_neg(l), cl)
  
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
@@ -71,7 +82,11 @@ BEGIN
   % tr_clause is sorted by index => ~p, p are on consecutive positions.
   % deletes the pair (~pivot, pivot)  
   delete_pivot(ck, (pivot: {l| member(l, ck) AND member(tr_neg(l), ck)}))
-   : {cl | FORALL l: member(l, cl) <=> member(l, ck) AND (NOT l = pivot) AND (NOT l = tr_neg(pivot))} = 
+   : {cl | FORALL l: 
+     	   member(l, cl) <=> 
+	   member(l, ck) 
+	     AND (NOT l = pivot) 
+	     AND (NOT l = tr_neg(pivot))} = 
     remove(tr_neg(pivot), remove(pivot, ck))
 
   % true if a pivot exists for ck and cl
@@ -86,7 +101,8 @@ BEGIN
     exist_pivot?(ck, cl) <=> EXISTS k: member(k, ck) AND member(tr_neg(k), cl)
 
   % returns a pivot of nck and ncl
-  find_pivot(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : RECURSIVE {k | member(k, nck) AND member(tr_neg(k), ncl)} =
+  find_pivot(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : 
+   RECURSIVE {k | member(k, nck) AND member(tr_neg(k), ncl)} =
     CASES cdr(nck) OF
       null: car(nck),
       cons(k, ck): 
@@ -136,7 +152,9 @@ BEGIN
      ENDIF
     ENDIF
 
-  not_true_clauses(ck, cl): bool = NOT tr_clause_true?(ck) AND NOT tr_clause_true?(cl)
+  not_true_clauses(ck, cl): bool = 
+    NOT tr_clause_true?(ck) 
+    AND NOT tr_clause_true?(cl)
 
   % member
   % member(x, ck) => member(x, res) \/ x =  pivot
@@ -168,14 +186,18 @@ BEGIN
      CASES cdr(lck) OF
        null: car(lck),
        cons(ck, lcl) : IF ne_tr_clause?(car(lck)) AND ne_tr_clause?(ck) 
-       		        THEN resolution_list(cons(resolution(car(lck), ck), lcl))
+       		        THEN resolution_list(
+			       cons(resolution(car(lck), ck), 
+			       lcl))
 			ELSE null
 			ENDIF
      ENDCASES 
      MEASURE length(lck)
 
   % creates the list of clauses corresponding to the chain values
-  build_chain_list(j: below(n), cert : {c : certificate|cons?(c(j)`chn)}): (cons?[(tr_clause?)]) = 
+  build_chain_list( j: below(n), 
+  		    cert : {c : certificate|cons?(c(j)`chn)}): 
+	(cons?[(tr_clause?)]) = 
       map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)
   		    
   % applies resolution_list on all chains starting from j  
@@ -187,26 +209,13 @@ BEGIN
     % no chain resolution needed
     THEN resolve_rec(j+1, cert)
     % applies chain resolution
-    ELSE resolve_rec(j+1, cert WITH [(j)`cl := resolution_list(build_chain_list(j, cert))])
+    ELSE resolve_rec( j+1, 
+    	 	      cert WITH [(j)`cl := 
+		        resolution_list(build_chain_list(j, cert))])
     ENDIF 
   MEASURE n-j
 
   resolve(cert): certificate = resolve_rec(0, cert)
-
-  % true if the certificate contains at least an empty clause 
-%  null_resolution?(j:below(n), cert): RECURSIVE bool =   
-%      (null?(cert(j)`cl) 
-%        OR ((j/=n-1) AND null_resolution?(j+1, cert)))  
-%  MEASURE n-j
-  
-%  exist_null: LEMMA
-%    FORALL (j:below(n)):  
-%    null_resolution?(j, cert) =
-%     EXISTS (i: below(n)): i>=j AND null?(cert(i)`cl)
-    
-  % executes chain resolutions and checks for null clauses
-%  correct_cert?(cert) : bool = 
-%    null_resolution?(0, resolve(cert))
  
 END trace_resolution
 

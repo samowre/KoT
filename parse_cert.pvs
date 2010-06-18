@@ -1,31 +1,17 @@
 parse_cert % parse a text file containing a certificate
 		: THEORY
-
   BEGIN
-
   
   IMPORTING PVSio@stdtokenizer
   IMPORTING PVSio@stdio
   IMPORTING PVSio@stdglobal
 
   get_file_name : string = 
-    query_line("PicoSAT proof file name: ")
-  
-  read_file_name : void = 
-    LET file_name: string = get_file_name IN
-    IF NOT fexists(file_name) THEN
-    print("no such file")
-    ELSE 
-    LET tok = file2tokenizer(file_name) IN
-    IF error?(tok) OR eot?(tok)
-    THEN print("empty tokenizer")
-    ELSE print(next_token(tok))
-    ENDIF
-    ENDIF
-
-  open_input_file : IStream =
-    LET s = get_file_name IN
-      fopenin(s)
+  let file_name: string = query_line("PicoSAT proof file name: ") in
+  if not fexists(file_name) then
+    throw ("e")
+  else file_name
+  endif
 
   % reads ints from stream until 0 found
   % returns the list of read ints in reverse order
@@ -38,6 +24,7 @@ parse_cert % parse a text file containing a certificate
 	set(w, fread_word(f))) in
     aux
 
+  % similar to the previous function, returns nat list
   read_nat_until_stop(f: IStream) : list[nat] = 
     let w = ref(fread_word(f)) in
     let aux = ref(null[nat]) in 
@@ -48,7 +35,7 @@ parse_cert % parse a text file containing a certificate
 	then
           set(aux, cons[nat](wi, aux)) & 
 	  set(w, fread_word(f)) 
-	else skip 
+	else throw("e")
 	endif ) 
 	in
     reverse(aux)
@@ -59,12 +46,22 @@ parse_cert % parse a text file containing a certificate
     let w = fread_word(f) in
     if w = "*" 
     then 
+    % no clause
       null 
     else 
+    % w = first literal of the clause
+    %r = clause\w in reversed order
       let r = read_until_stop(f) in
+    %rr = clause\w in normal order
       let rr = reverse(r) in
+      % wi = int value of w
       let wi =  str2int(w) in
-      let tmp = abs(if cons?(r) then max(abs(car(r)), abs(car(rr))) else wi endif) in
+      %small error? tmp not compared with wi?
+      let tmp = abs(
+		    if cons?(r) 
+		    then max(abs(car(r)), abs(car(rr))) 
+		    else wi 
+		    endif) in
       let b = 
       if tmp > val(maxv) 
       then
@@ -86,10 +83,17 @@ parse_cert % parse a text file containing a certificate
     endif
     measure length(l)
   
-  pico_data: TYPE = [# max_lit: nat, nr_clauses: nat, r_clause_list: list[list[int]], r_antec_list: list[list[nat]] #] 
+  pico_data: TYPE = [# max_lit: nat, 
+   	       	       nr_clauses: nat, 
+		       r_clause_list: list[list[int]], 
+		       r_antec_list: list[list[nat]] #] 
 
   % stores the value returned by read_rec
-  aux_fdata: Global[pico_data, (#max_lit:= 0, nr_clauses:= 0, r_clause_list:= null[list[int]], r_antec_list:= null[list[nat]]#)]
+  aux_fdata: Global[ pico_data, 
+  	     	     (#max_lit:= 0, 
+		      nr_clauses:= 0, 
+		      r_clause_list:= null[list[int]], 
+		      r_antec_list:= null[list[nat]]#)]
   % true if read_rec has been called once
   aux_bool: Global[bool, false]
 
@@ -118,7 +122,6 @@ parse_cert % parse a text file containing a certificate
         then  
           %read line number
           set(w, fread_word(f)) & 
-	  print(w) &
 	  set(mode, 1)
         elsif val(mode) = 1 
         then
@@ -138,30 +141,28 @@ parse_cert % parse a text file containing a certificate
 	  set(c, val(c)+1) & 
 	  set(mode, 0)
         endif) & 
-    %print(val(c)) & 
-    %print(val(max)) &
-    %if cons?[list[number]](val(clause)) 
-    %then
-    %  print_list( car(val(clause)) ) 
-    %else 
-    %  skip 
-    %endif &
     fclose(f) & 
+    print("finished reading") &
     %set bool to true
     set(aux_bool, true) 
-    % & print(val(aux_bool)) 
     in
-    if integer?(val(max)) and val(max) > 0 and integer?(val(c)) and val(c) > 0 
+    if integer?(val(max)) 
+       and val(max) > 0 
+       and integer?(val(c)) 
+       and val(c) > 0 
     then
       let maxi:nat =  val(max) + 1 in
       let nci:nat = val(c) in
       let rcl:list[list[int]] = val(clause) in
       let ral:list[list[nat]] = val(antec) in
       let result = 
-      (# max_lit:= maxi, nr_clauses:= nci, r_clause_list:= rcl, r_antec_list := ral #) in
+      (# max_lit:= maxi, 
+       nr_clauses:= nci, 
+       r_clause_list:= rcl, 
+       r_antec_list := ral #) in
       % set result
       let s = set(aux_fdata, result) in
-      %return result
+      % return result
       result
     else throw("e")
     endif
@@ -180,23 +181,27 @@ parse_cert % parse a text file containing a certificate
 
   %verify if l is a list of tr_literal
   lit_list?(l: list[int]): recursive bool = 
-  if null?(l) then true
-  else car(l) /=0 and tr_literal?(car(l)) and lit_list?(cdr(l))
-  endif
+    if null?(l) 
+    then 
+      true
+    else 
+      car(l) /=0 and tr_literal?(car(l)) and lit_list?(cdr(l))
+    endif
   measure length(l)
 
 
   %verify if l has type chain(nc)
   chain?(l:list[nat], nc: nat): recursive bool = 
-  if null?(l) 
-  then 
-    true
-  else 
-    car(l) < nc and chain?(cdr(l), nc)
-  endif
+    if null?(l) 
+    then 
+      true
+    else 
+      car(l) < nc and chain?(cdr(l), nc)
+    endif
   measure length(l)
 
-  empty_cert: certificate = lambda (i:below(n)): (#cl := null, chn:= null #)
+  empty_cert: certificate = 
+  	      lambda (i:below(n)): (#cl := null, chn:= null #)
 
   % build a certificate
   build_cert( 
@@ -210,14 +215,17 @@ parse_cert % parse a text file containing a certificate
       throw("e")  
     else aux 
     endif
-  elsif lit_list?(car(prcl)) and sorted?(car(prcl)) and chain?(car(pral), pnc-1) 
+  elsif lit_list?(car(prcl)) 
+  	and sorted?(car(prcl)) 
+	and chain?(car(pral), pnc-1) 
   then 
     let ch_pnc: chain(pnc-1) = car(pral) in
     build_cert( 
       pnc-1, 
       cdr(prcl), 
       cdr(pral), 
-      aux with [(pnc-1) := (# cl:= car(prcl), chn := ch_pnc #) ])	
+      aux with [(pnc-1) := (# cl:= car(prcl), 
+      	       		      chn := ch_pnc #) ])	
   else throw("e")
   endif
   measure pnc
@@ -225,7 +233,14 @@ parse_cert % parse a text file containing a certificate
   % true if the last resolution chain produces an empty clause
   verify: bool = 
   catch("e", 
-  let cert = resolve(build_cert(n, rcl, ral, empty_cert)) in
-  set(aux_bool, false) & null?(cert(n-1)`cl), LAMBDA(e:Exception[string]):println(tag(e)+" exception: "+val(e)))
+        let cert = resolve(build_cert(n, rcl, ral, empty_cert)) in
+          set(aux_bool, false) & 
+          null?(cert(n-1)`cl), 
+        lambda ( e:Exception[string]): 
+	       println(
+			tag(e)
+			+ " exception: " 
+			+ val(e) 
+			+ " INVALID CERTIFICATE"))
 
   END parse_cert
