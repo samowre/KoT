@@ -475,11 +475,8 @@
       (mk-why-constant (id op-decl) (pvs2why-type (declared-type op-decl)) (id (module op-decl)))
     (if (or (formal-const-decl? op-decl) (adt-constructor-decl? op-decl)) ; ugly hack
     (mk-why-constant (id op-decl) (pvs2why-type (declared-type op-decl)))
-    (let ((nd-hashentry (gethash op-decl *why-destructive-hash*))
-;(d-hashentry (gethash op-decl *clean-destructive-hash*))
-;enough to check one hash-table. 
-	)
-    (if (null nd-hashentry)
+    (let ((d-hashentry (gethash op-decl *why-destructive-hash*)))
+    (if (null d-hashentry)
 	(let ((op-id (gentemp (format nil "~a" (id op-decl))))
 	      (op-d-id (if *pvs2why-unique-names*
 			   (gentemp (format nil "d_~a" (id op-decl)))
@@ -500,15 +497,9 @@
 				 (range (type op-decl)) 
 			       (type op-decl))))
 	    (if (and (arraytype? (type op-decl)) (null (formals op-decl)))
-		(pvs2why-resolution-destructive 
-		 op-decl module-formals 
-		 (definition op-decl) 
-		 (type op-decl))
-	      (pvs2why-resolution-destructive 
-	       op-decl 
-	       (append module-formals def-formals) 
-	       def-body range-type))))
-      (mk-why-constant (why-info-id nd-hashentry) (pvs2why-type (declared-type op-decl))))))))
+		(pvs2why-resolution-destructive op-decl module-formals (definition op-decl) (type op-decl))
+	      (pvs2why-resolution-destructive op-decl (append module-formals def-formals) def-body range-type))))
+      (mk-why-constant (why-info-id d-hashentry) (pvs2why-type (declared-type op-decl))))))))
 
 ;;
 ;(defmethod pvs2why* ((expr lambda-expr) bindings livevars)
@@ -531,6 +522,7 @@
 ;;
 ;; This is the actual construction of the why function 
 ;; 
+;; For now never called
 (defun pvs2why-resolution-nondestructive (op-decl formals body range-type)
   (when *pvs2why-trace*
     (format t "Function: pvs2why-resolution-nondestructive ~a ~a ~a ~a ~%" op-decl formals body range-type))
@@ -585,7 +577,6 @@
 	 (*output-vars* nil)
 	 (bind-ids (pvs2why-make-bindings formals nil))
 	 (declared-type range-type)
-;	 (dummy (format t "### Startnig with body"))
 	 (cl-type ;(pvs2why-type (type op-decl)))
 	  (let ((domain 
 		 (loop for var in formals
@@ -1056,7 +1047,7 @@
 ;; 
 (defmethod pvs2why* ((expr update-expr) bindings livevars declared-type)
   (when *pvs2why-trace*
-    (format t "Function: pvs2why-update-expr ~a ~a ~%" expr declared-type))
+    (format t "Function: pvs2why*-update-expr ~a ~a ~%" expr declared-type))
   (if (why-updateable? (type (expression expr)))
 ;      (if (and *destructive?*
 ;	       (not (some #'maplet? (assignments expr))))
@@ -1286,7 +1277,7 @@
 	    (mk-why-record-type (id decl) (id (module decl)))
 	  (mk-why-record-type (id decl)))))))
 
-;(d;efmethod pvs2why-type ((type adt-type-name)) ; what if we haven parametrized ADT's?
+;(defmethod pvs2why-type ((type adt-type-name)) ; what if we haven parametrized ADT's?
 ;  (when *pvs2why-trace*
 ;    (format t "Function: pvs2why-type-adt-name: ~a~%" type))
 ;  (if (actuals type)
@@ -1640,8 +1631,7 @@
 ;			       (mk-why-declaration-adt (id decl)))
 			      ((const-decl? decl)
 			       (unless (or (eval-info decl)
-					   (generated-by decl))
-;			       (pvs2why-declaration decl)))
+					   (generated-by decl))  
 				 (pvs2why-declaration decl)))
 			      (t nil))))))
 		    (mk-why-module theoryname bindings decls imports type-variables)))))
