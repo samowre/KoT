@@ -3,11 +3,21 @@
 (defattach parse_file (infile)
   (with-open-file (in infile
 		      :direction :input)
-		  (parse_line* in)))
+		  (array_form in)))
+
+(defun array_form (stream)
+  (multiple-value-bind (max_lit nc lc la)
+      (parse_line* stream)
+    (let ((rv (make-array 4)))
+      (setf (aref rv 0) max_lit)
+      (setf (aref rv 1) nc)
+      (setf (aref rv 2) lc)
+      (setf (aref rv 3) la))))
+      
 
 ;;; returns max_literal, nb of clauses,
 ;;; the list of clauses and the list of antecedents
-(defattach parse_line*
+(defun parse_line*
   (stream
    &optional (max 0) (nl 0) (clauses nil) (antecs nil))
   (let ((line
@@ -26,7 +36,7 @@
 		     (cons new_clause clauses)
 		     (cons new_antec antecs))))))
 
-(defattach read_clause* (line pos &optional (acc null) (max_aux 0))
+(defun read_clause* (line pos &optional (acc nil) (max_aux 0))
   (multiple-value-bind (word npos)
       (read-from-string line nil 'eol :start pos)
     (if (eq word 's)
@@ -38,14 +48,14 @@
 		    (cons word acc)
 		    (max max_aux word)))))
 
-(defattach read_antec* (line pos &optional (acc null))
+(defun read_antec* (line pos &optional (acc nil))
   (multiple-value-bind (word npos)
       (read-from-string line nil 'eol :start pos)
     (if (eq word 's)
 	(nreverse acc)
       (read_antec* line npos (cons word acc)))))
 
-(defattach create_lists (line)
+(defun create_lists (line)
   ;;read line number
   (multiple-value-bind (line_number pos)
       (read-from-string line nil 'eol :start 0)

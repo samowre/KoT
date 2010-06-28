@@ -42,6 +42,8 @@ parse_cert2 % parse a text file containing a certificate
     endif
   measure t`length - t`pos
 
+  
+
   % reads clause from stream, 
   % updates maxv if elements of the clause are higher than the current val
   read_clause(t: Tokenizer, maxv: Mutable[nat]): list[int] = 
@@ -115,6 +117,8 @@ parse_cert2 % parse a text file containing a certificate
     	       	     			  null[nat]), 
     	             val(antec)))
 
+  parse_file(s:string):pico_data
+
   % reads a file once and stores the result in aux_fdata
   read_rec : pico_data =
   %if bool set
@@ -122,41 +126,41 @@ parse_cert2 % parse a text file containing a certificate
   %return existing data
   then val(aux_fdata)
   else 
-    let f = fopenin(get_file_name) in
+ %   let f = fopenin(get_file_name) in
     % number of lines
-    let c = ref[nat](0) in
+ %   let c = ref[nat](0) in
     % meximum literal
-    let max = ref[nat](0) in
+ %   let max = ref[nat](0) in
     % 0 = line#, 1 = clause, 2 = antecedents
-    let clause = ref(null[list[int]]) in	
+ %   let clause = ref(null[list[int]]) in	
     % antecedents
-    let antec = ref(null[list[nat]]) in
-    let b = 
-      while(not eof?(f), 
-	parse_line(fread_line(f), max, clause, antec) & set(c, val(c)+1)
-        ) & 
-    fclose(f) & 
-    print("finished reading") &
+ %   let antec = ref(null[list[nat]]) in
+ %   let b = 
+ %     while(not eof?(f), 
+%	parse_line(fread_line(f), max, clause, antec) & set(c, val(c)+1)
+ %       ) & 
+ %   fclose(f) & 
+ %   print("finished reading") &
     %set bool to true
-    set(aux_bool, true) 
-    in
-      let maxi:nat =  val(max) + 1 in
-      let nci:nat = val(c) in
-      let rcl:list[list[int]] = val(clause) in
-      let ral:list[list[nat]] = val(antec) in
-      let result = 
-      (# max_lit:= maxi, 
-       nr_clauses:= nci, 
-       r_clause_list:= rcl, 
-       r_antec_list := ral #) in
+ 
+ %   in
+ %     let maxi:nat =  val(max) + 1 in
+ %     let nci:nat = val(c) in
+ %     let rcl:list[list[int]] = val(clause) in
+ %     let ral:list[list[nat]] = val(antec) in
+      let result = parse_file(get_file_name) in
+ %     (# max_lit:= maxi, 
+ %      nr_clauses:= nci, 
+ %      r_clause_list:= rcl, 
+ %      r_antec_list := ral #) in
       % set result
-      let s = set(aux_fdata, result) in
+      let s = set(aux_fdata, result) & set(aux_bool, true) in
       % return result
       result
   endif
 
   %read the file
-  fdata: pico_data =  read_rec
+  fdata: pico_data = read_rec
 
   m: nat = fdata`max_lit
   n: nat = fdata`nr_clauses
