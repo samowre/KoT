@@ -1,0 +1,66 @@
+(attachments parse_cert2
+;;; opens input file and starts the parse
+(defattach parse_file (infile)
+  (with-open-file (in infile
+		      :direction :input)
+		  (parse_line* in)))
+
+;;; returns max_literal, nb of clauses,
+;;; the list of clauses and the list of antecedents
+(defattach parse_line*
+  (stream
+   &optional (max 0) (nl 0) (clauses nil) (antecs nil))
+  (let ((line
+	 (read-line stream nil 'eof)))
+    (if	(eq line 'eof)
+	(values max
+		nl
+		(nreverse clauses)
+		(nreverse antecs))
+      (multiple-value-bind
+	  (new_clause local_max new_antec)
+	  (create_lists line)
+	(parse_line* stream
+		     (max local_max max)
+		     (+ nl 1)
+		     (cons new_clause clauses)
+		     (cons new_antec antecs))))))
+
+(defattach read_clause* (line pos &optional (acc null) (max_aux 0))
+  (multiple-value-bind (word npos)
+      (read-from-string line nil 'eol :start pos)
+    (if (eq word 's)
+	(values
+	 npos
+	 (nreverse acc)
+	 max_aux)
+      (read_clause* line npos
+		    (cons word acc)
+		    (max max_aux word)))))
+
+(defattach read_antec* (line pos &optional (acc null))
+  (multiple-value-bind (word npos)
+      (read-from-string line nil 'eol :start pos)
+    (if (eq word 's)
+	(nreverse acc)
+      (read_antec* line npos (cons word acc)))))
+
+(defattach create_lists (line)
+  ;;read line number
+  (multiple-value-bind (line_number pos)
+      (read-from-string line nil 'eol :start 0)
+    ;;read first literal or *
+    (multiple-value-bind (first_lit npos)
+	(read-from-string line nil 'eol :start pos)
+      (multiple-value-bind (nnpos clause max_clause)
+	  (if (eq first_lit '*)
+	      ;; if empty clause
+	      (values npos nil 0)
+	    ;; return pos in string, clause and its max
+	    (read_clause* line pos))
+	;; returns the clause, clause_max and antecedents list
+	(values
+	 clause
+	 max_clause
+	 (read_antec* line nnpos)))))))
+

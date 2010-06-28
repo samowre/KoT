@@ -1,4 +1,5 @@
-parse_cert % parse a text file containing a certificate
+
+parse_cert2 % parse a text file containing a certificate
 		: THEORY
   BEGIN
   
@@ -13,45 +14,46 @@ parse_cert % parse a text file containing a certificate
   else file_name
   endif
 
-  % reads ints from stream until 0 found
+  % reads ints from stream until s found
   % returns the list of read ints in reverse order
-  read_until_stop(f: IStream) : list[int] =		
-    let w = ref(fread_word(f)) in
-    let aux = ref(null[int]) in 
-    let b2 = 
-      while(val(w) /= "s", 
-        set(aux, cons[int](str2int(val(w)), aux)) & 
-	set(w, fread_word(f))) in
-    aux
+  read_until_stop( t: Tokenizer, 
+  		   acc: list[int]) : recursive list[int] =		
+    let w:string = next_token(t) in
+    if not int?(w) then 
+      acc
+    else 
+      read_until_stop(go_next(t), cons(str2int(w), acc))
+    endif 
+  measure t`length - t`pos
 
   % similar to the previous function, returns nat list
-  read_nat_until_stop(f: IStream) : list[nat] = 
-    let w = ref(fread_word(f)) in
-    let aux = ref(null[nat]) in 
-    let b2 = 
-      while(val(w) /= "s",
-        let wi = str2int(val(w)) in 
-        if wi >= 0 
-	then
-          set(aux, cons[nat](wi, aux)) & 
-	  set(w, fread_word(f)) 
-	else throw("e")
-	endif ) 
-	in
-    reverse(aux)
+  read_nat_until_stop( t: Tokenizer, 
+  		       acc: list[nat]) : RECURSIVE list[nat] = 
+    let w = next_token(t) in
+    if not int?(w) then 
+      reverse(acc)
+    else 
+      let wi = str2int(w) in
+      if wi >= 0 
+      then
+        read_nat_until_stop(go_next(t), cons(wi, acc)) 
+      else throw("e")
+      endif 
+    endif
+  measure t`length - t`pos
 
   % reads clause from stream, 
-  % updates maxv if elements of clause are higher than the actual val
-  read_clause(f:IStream, maxv: Mutable[real]): list[int] = 
-    let w = fread_word(f) in
+  % updates maxv if elements of the clause are higher than the current val
+  read_clause(t: Tokenizer, maxv: Mutable[nat]): list[int] = 
+    let w = next_token(t) in
     if w = "*" 
     then 
     % no clause
       null 
     else 
     % w = first literal of the clause
-    %r = clause\w in reversed order
-      let r = read_until_stop(f) in
+    % r = clause\w in reversed order
+      let r = read_until_stop(go_next(t), null[nat]) in
     %rr = clause\w in normal order
       let rr = reverse(r) in
       % wi = int value of w
@@ -97,6 +99,22 @@ parse_cert % parse a text file containing a certificate
   % true if read_rec has been called once
   aux_bool: Global[bool, false]
 
+  parse_line( line: string, 
+  	      max: Mutable[nat], 
+	      clause: Mutable[list[list[int]]],
+	      antec: Mutable[list[list[nat]]] ): void =
+    let t:Tokenizer = str2tokenizer(line) in 
+    % read line number
+    let skip1 = go_next(t) in
+    % read clause
+    % add new clause
+    let cl = read_clause(skip1, max) in
+    set(clause, cons(cl, val(clause) )) &
+    %read antecedents
+    set(antec, cons( read_nat_until_stop( consume(skip1, length(cl)), 
+    	       	     			  null[nat]), 
+    	             val(antec)))
+
   % reads a file once and stores the result in aux_fdata
   read_rec : pico_data =
   %if bool set
@@ -106,51 +124,22 @@ parse_cert % parse a text file containing a certificate
   else 
     let f = fopenin(get_file_name) in
     % number of lines
-    let c = ref(0) in
+    let c = ref[nat](0) in
     % meximum literal
-    let max = ref(0) in
+    let max = ref[nat](0) in
     % 0 = line#, 1 = clause, 2 = antecedents
-    let mode = ref(0) in
     let clause = ref(null[list[int]]) in	
     % antecedents
     let antec = ref(null[list[nat]]) in
-  
-    let w = ref("") in
     let b = 
       while(not eof?(f), 
-        if val(mode) = 0 
-        then  
-          %read line number
-          set(w, fread_word(f)) & 
-	  set(mode, 1)
-        elsif val(mode) = 1 
-        then
-          %read clause
-	  if integer?(val(c)) and val(c) >= 0 
-	  then
-	  % add new close
-	    let cl = read_clause(f, max) in
-            set(clause, cons(cl, val(clause) ))
-	  else throw("e")
-	  endif &
-	  set(mode, 2) 
-        else 
-          %read antecedents
-          set(antec, cons(read_nat_until_stop(f), val(antec))) & 
-	  % increase number of clauses
-	  set(c, val(c)+1) & 
-	  set(mode, 0)
-        endif) & 
+	parse_line(fread_line(f), max, clause, antec) & set(c, val(c)+1)
+        ) & 
     fclose(f) & 
     print("finished reading") &
     %set bool to true
     set(aux_bool, true) 
     in
-    if integer?(val(max)) 
-       and val(max) > 0 
-       and integer?(val(c)) 
-       and val(c) > 0 
-    then
       let maxi:nat =  val(max) + 1 in
       let nci:nat = val(c) in
       let rcl:list[list[int]] = val(clause) in
@@ -164,8 +153,6 @@ parse_cert % parse a text file containing a certificate
       let s = set(aux_fdata, result) in
       % return result
       result
-    else throw("e")
-    endif
   endif
 
   %read the file
@@ -177,7 +164,7 @@ parse_cert % parse a text file containing a certificate
   ral: list[list[nat]] = fdata`r_antec_list
 
 
-  IMPORTING trace_resolution[m, n, n]
+  IMPORTING trace_resolution2[m, n, n]
 
   %verify if l is a list of tr_literal
   lit_list?(l: list[int]): recursive bool = 
@@ -213,9 +200,7 @@ parse_cert % parse a text file containing a certificate
     if pnc /= 0 or not null?(prcl) or not null?(pral) 
     then
       throw("e")  
-    else 
-      let p = print("finished build_cert") in 
-      aux 
+    else let p = print("build_cert done") in aux 
     endif
   elsif lit_list?(car(prcl)) 
   	and sorted?(car(prcl)) 
@@ -228,7 +213,8 @@ parse_cert % parse a text file containing a certificate
       cdr(pral), 
       aux with [(pnc-1) := (# cl:= car(prcl), 
       	       		      chn := ch_pnc #) ])	
-  else throw("e")
+  else 
+    throw("e")
   endif
   measure pnc
 
@@ -245,4 +231,4 @@ parse_cert % parse a text file containing a certificate
 			+ val(e) 
 			+ " INVALID CERTIFICATE"))
 
-  END parse_cert
+  END parse_cert2
