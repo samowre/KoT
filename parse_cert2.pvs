@@ -163,6 +163,9 @@ parse_cert2 % parse a text file containing a certificate
   %read the file
   fdata: pico_data = read_rec
 
+  print_pico_data(p:pico_data) : void= 
+    print(p`max_lit + " " + p`nr_clauses) 
+
   m: nat = fdata`max_lit
   n: nat = fdata`nr_clauses
   rcl: list[list[int]] = fdata`r_clause_list
@@ -201,7 +204,7 @@ parse_cert2 % parse a text file containing a certificate
     prcl: list[list[int]], 
     pral: list[list[nat]], 
     aux: certificate): recursive certificate = 
-    let dbg = print("m= "+m) in
+    let dbg = print_pico_data(fdata) in
 %    let dbg = print("n= "+n) in
   if pnc = 0 or null?(prcl) or null?(pral)then 
     if pnc /= 0 or not null?(prcl) or not null?(pral) 
