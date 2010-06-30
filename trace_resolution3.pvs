@@ -2,7 +2,7 @@
 % n = number of lines in the certificate
 % i = number of initial clauses
 
-trace_resolution2[m, n: nat, i : upto(n)]: THEORY
+trace_resolution3[m, n: nat, i : upto(n)]: THEORY
 BEGIN
 
   IMPORTING minlist
@@ -68,16 +68,25 @@ BEGIN
  
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
-   %list of integers smaller than i
-  chain(index : below(n)) : TYPE = list[below(index)]
+  %list of integers smaller than order
+  chain?(order:upto(n))( l:list[below(n)]) : recursive bool = 
+    if null?(l) then true
+    else car(l) < order and
+    	 chain?(order)(cdr(l))	
+    endif
+  measure length(l)
+
+  list_of_chains_offset?(order: upto(n))( l: list[list[below(n)]]): recursive boolean =
+    if null?(l) then true
+    else chain?(order)( car(l) ) and 
+         list_of_chains_offset?(order+1)( cdr(l) )
+    endif
+  measure length(l)
   
-  %record with fields clause and chain(i)
-  clause_chain(j : below(n)) : TYPE = [# cl: (tr_clause?), chn: chain(j) #]
+  list_of_chains?(l: list[list[below(n)]]): boolean = 
+    list_of_chains_offset?(0)(l) and length(l) = n
 
-  %array of records
-  certificate: TYPE = ARRAY[index: below(n) -> clause_chain(index)]
-
-  cert : VAR certificate
+  array_of_clauses :TYPE = ARRAY[below(n) -> (tr_clause?)]
 
   % tr_clause is sorted by index => ~p, p are on consecutive positions.
   % deletes the pair (~pivot, pivot)  
@@ -196,50 +205,47 @@ BEGIN
 
   % applies resolution step on acc and first element of l
   new_resolution_list_rec( acc: (tr_clause?), 
-  			   c: certificate, 
+  			   cl_array: array_of_clauses, 
 			   j: below(n), 
-			   l: chain(j)): recursive (tr_clause?) = 
-    if null?(l)
+			   ch: (chain?(j))): recursive (tr_clause?) = 
+    if null?(ch)
     then
       acc
     else 
-      new_resolution_list_rec(resolution(acc, c(car(l))`cl), c, j, cdr(l))
+      new_resolution_list_rec( resolution(acc, cl_array(car(ch))), cl_array, j, cdr(ch))
     endif
-  measure length(l)
+  measure length(ch)
 
   % returns the clause obtained by chain resolution on c(j)`chn
-  new_resolution_list( c: certificate, j: {m:below(n)|cons?(c(m)`chn)}): (tr_clause?) = 
-    if null?(cdr(c(j)`chn)) 
+  new_resolution_list( cl_array:array_of_clauses, j: below(n), ch: {c: (chain?(j))| cons?(c)} ): (tr_clause?) =	
+    let acc= cl_array( car(ch) ) in 
+    if null?(cdr(ch)) 
     then
-      c( car(c(j)`chn) )`cl
+      acc
     else
-      new_resolution_list_rec(c(car(c(j)`chn))`cl, c, j, cdr(c(j)`chn))
+      new_resolution_list_rec(acc, cl_array, j, cdr(ch))
     endif
 
-  build_chain_list( j: below(n), 
-  		    cert : {c : certificate|cons?(c(j)`chn)}): 
-	(cons?[(tr_clause?)]) = 
-      map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)
-
   
-  resolution_list_equiv: LEMMA
-    FORALL (c:certificate, j:below(n)): 
-    new_resolution_list(c, j) = resolution_list(build_chain_list(j, c))
   		    
   % applies resolution_list on all chains starting from j  
-  resolve_rec( j: upto(n), cert): RECURSIVE certificate = 
+  resolve_rec( j: upto(n), 
+  	       chain_list:(list_of_chains_offset?(j)),
+  	       clause_array: array_of_clauses): RECURSIVE array_of_clauses = 
     IF j=n 
     % finished all the steps
-    THEN cert
-    ELSIF null?(cert(j)`chn)
+    THEN clause_array
+    ELSIF null?(car(chain_list))
     % no chain resolution needed
-    THEN resolve_rec(j+1,cert)
+    THEN resolve_rec(j+1, cdr(chain_list), clause_array)
     % applies chain resolution
-    ELSE resolve_rec( j+1, cert WITH [(j) := cert(j) WITH [(chn) :=
-		        new_resolution_list(cert, j) ]])
+    ELSE resolve_rec( j+1, cdr(chain_list), 
+    	 	      clause_array WITH [(j) := 
+		        new_resolution_list(clause_array, j, car(chain_list))])
     ENDIF 
   MEASURE n-j
 
-  resolve(cert): certificate = resolve_rec( 0, cert)
+  resolve(ch_list : (list_of_chains?), cl_array: array_of_clauses): array_of_clauses = 
+    resolve_rec(0, ch_list, cl_array)
  
-END trace_resolution2
+END trace_resolution3

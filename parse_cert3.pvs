@@ -1,5 +1,5 @@
 
-parse_cert2 % parse a text file containing a certificate
+parse_cert3 % parse a text file containing a certificate
 		: THEORY
   BEGIN
   
@@ -56,7 +56,7 @@ parse_cert2 % parse a text file containing a certificate
   ral: list[list[nat]] = fdata`r_antec_list
   qv: nat = 0
 
-  IMPORTING trace_resolution2[m, n, n]
+  IMPORTING trace_resolution3[m, n, n]
 
   %verify if l is a list of tr_literal
   lit_list?(l: list[int]): recursive bool = 
@@ -69,58 +69,32 @@ parse_cert2 % parse a text file containing a certificate
   measure length(l)
 
 
-  %verify if l has type chain(nc)
-  chain?(l:list[nat], nc: nat): recursive bool = 
-    if null?(l) 
+  build_clause_array(j: below(n), prcl: list[list[int]], acc: array_of_clauses): recursive array_of_clauses =
+    if null?(prcl) then acc
+    elsif  lit_list?(car(prcl)) 
+  	   and sorted?(car(prcl)) 
     then 
-      true
-    else 
-      car(l) < nc and chain?(cdr(l), nc)
+	build_clause_array(j-1, cdr(prcl), acc with [(j):= car(prcl)])
+    else throw("e")
     endif
-  measure length(l)
+  measure length(prcl)
 
-  % build a certificate
-  build_cert( 
-    pnc:{i:nat|i <= n}, 
-    prcl: list[list[int]], 
-    pral: list[list[nat]], 
-    aux: certificate): recursive certificate = 
-
-  if pnc = 0 or null?(prcl) or null?(pral) then 
-    if pnc /= 0 or not null?(prcl) or not null?(pral) 
-    then
-      let dbg = print("aici") in 
-      throw("e")  
-    else let dbg = print("build_cert done") in aux 
+  build_chain_list(j: below(n), pral: list[list[int]], acc: (list_of_chains_offset?(j))): recursive (list_of_chains_offset?(j)) = 
+    if null?(pral) then acc
+    elsif chain?(j)(car(pral)) then build_chain_list(j-1, cdr(pral), cons(car(pral), acc))
+    else throw("e")
     endif
-  elsif lit_list?(car(prcl)) 
-  	and sorted?(car(prcl)) 
-	and chain?(car(pral), pnc-1) 
-  then 
-    let ch_pnc: chain(pnc-1) = car(pral) in
-    build_cert( 
-      pnc-1, 
-      cdr(prcl), 
-      cdr(pral), 
-      aux with [(pnc-1) := (# cl:= car(prcl), 
-      	       		      chn := ch_pnc #) ])	
-  else 
-    let dbg = print(lit_list?(car(prcl))+""+	
-    	      	sorted?(car(prcl))+""+
-		chain?(car(pral), pnc-1)+""+
-		pnc) in 
-    throw("e")
-  endif
-  measure pnc
+  measure length(pral)
+
 
   % true if the last resolution chain produces an empty clause
   verify: bool = 
   catch("e", 
-  	let ini_cert:certificate = build_cert(n, rcl, ral, 
-      		       	   lambda (i:below(n)): (#cl := null, chn:= null #)) in
-        let cert = resolve(ini_cert) in
+  	let ini_cl_array: array_of_clauses = build_clause_array(n-1, rcl, lambda (i:below(n)): null) in
+	let ini_ch_list: (list_of_chains?) = build_chain_list(n-1, ral, null) in
+        let cl_array = resolve( ini_ch_list, ini_cl_array ) in
           set(aux_bool, false) & 
-          null?(cert(n-1)`cl), 
+          null?(cl_array(n-1)), 
         lambda ( e:Exception[string]): 
 	       print(
 			tag(e)
@@ -128,4 +102,4 @@ parse_cert2 % parse a text file containing a certificate
 			+ val(e) 
 			+ " INVALID CERTIFICATE"))
 
-  END parse_cert2
+  END parse_cert3
