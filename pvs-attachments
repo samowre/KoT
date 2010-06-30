@@ -8,8 +8,8 @@
 (defun array_form (stream)
   (multiple-value-bind (max_lit nc lc la)
       (parse_line* stream)
-    (cl2pvs (vector max_lit nc la lc)
-	    (pc-typecheck (pc-parse "pico_data" 'type-expr)))))
+     (vector max_lit nc la lc)))
+	    ;(pc-typecheck (pc-parse "pico_data" 'type-expr)))))
 
 ;;; returns max_literal, nb of clauses,
 ;;; the list of clauses and the list of antecedents
@@ -21,8 +21,8 @@
     (if	(eq line 'eof)
 	(values max
 		nl
-		(nreverse clauses)
-		(nreverse antecs))
+		clauses
+		antecs)
       (multiple-value-bind
 	  (new_clause local_max new_antec)
 	  (create_lists line)
