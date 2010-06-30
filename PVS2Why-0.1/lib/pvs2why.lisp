@@ -184,9 +184,9 @@
     (format t "Function: pvs2why*-record-expr: ~a  ~{ ~{ ~a ~a ~} ~} ~a ~%" 
 	    expr bindings declared-type))
   (let* ((*why-renamings* nil) ; list of pairs (id,type) 
-	 (decl-type-assignments (reverse (fields (find-supertype declared-type))))
-	 (sorted-assignments (reverse (sort-assignments (assignments expr))))
-	 (zipped-assignments (reverse (pairlis decl-type-assignments sorted-assignments))) ; pairlis reverses the assignments again
+	 (decl-type-assignments (fields (find-supertype declared-type))) ; was reverse
+	 (sorted-assignments (sort-assignments (assignments expr))) ; was reverse
+	 (zipped-assignments (pairlis decl-type-assignments sorted-assignments)) ; pairlis reverses the assignments
 	 (assignments 
 	  (reverse
 	   (loop for entry in zipped-assignments collect
@@ -1066,7 +1066,7 @@
 ;		   (when (and *eval-verbose* (not *livevars-table*))
 ;		     (format t "~%Update ~s translated nondestructively. Live variables ~s present" expr livevars))
       (pvs2why-update expr bindings livevars declared-type)     ;(type (expression expr)))
-      (pvs2why* (translate-update-to-if! expr)	; Can we use this elsewhere?
+      (pvs2why* (translate-update-to-if! expr)	; Can we use this elsewhere? ;!!!!
 		  bindings livevars declared-type)))
 
 (defun pvs2why-update (expr bindings livevars declared-type)
@@ -1078,23 +1078,23 @@
 ;					 assignments)
 					;;assign-args can be ignored
 ;					livevars)))
-	   (dummy (format t "#HERE?"))
+;	   (dummy (format t "#HERE? ~%"))
 ;	   (why-type (pvs2why-type type)) ; u
 	   (type-expr (type expression)) ; use the updated expression for type determination
 	   (coerced-type-expr (pvs2why-coerce-types type-expr declared-type))
-	   (dummy (format t "#LOOK# : ~a" coerced-type-expr))
 	   (isVariable (typep why-expr 'why-name)) ;?
 	   (exprvar (if (not isVariable) ; Should become a real variable
                         (gentemp "E")
 			(identifier why-expr)))
+;	   (dummy (format t "#LOOK# : ~a ~%" coerced-type-expr))
 	   (why-update (pvs2why-update* (type expression)
 					expression
 					assignments
 					bindings
 					(append (updateable-vars expression) livevars)
 					coerced-type-expr
-					))
-	   (dummy (format t "#THERE")))
+					)))
+;	   (dummy (format t "#THERE ~%")))
 ; Only if why-expr is  a variable we can directly update the variable,
 ; otherwise we have to create a variable (let exprvar = why-expr in assignm
 ; let exprvar = why-expr in (exprvar[index1 = newexpr1, index2 = newexpr2,  ..])
@@ -1124,18 +1124,32 @@
 ;					    livevars))))))
 
 ;;
+;; assignments: a sorted list of assignments, for instance ((t):= 1 (y):= 7)
+;; types: a sorted list of types which contains at least each elements of assignemts, for instance (t:real x: nat y:upto(x))
+;; pairlis_update-type-assignments removes the useless type declarations in types and do a pairlis
+;; in our instance, pairlis will return ((t:real.(t):=1)(y:upto(x).(y):= 7))
+(defun pairlis_update-types-assignments (types assignments) 
+  (if assignments  
+      (if (equalp (id (caar (arguments (car assignments)))) (id (car types))) 
+	  (cons (cons (car types) (car assignments)) (pairlis_update-types-assignments (cdr types) (cdr assignments)))
+	  (pairlis_update-types-assignments (cdr types) assignments))
+      nil))
+
 ;; Different one for records?
 ;; type should be type declaration, not type name!!
 (defmethod pvs2why-update* ((type recordtype) exprvar assignments bindings livevars declared-type)
   (when *pvs2why-trace*
     (format t "Function: pvs2why-record-update* ~a ~a ~{ ~a ~} ~a ~%" type exprvar assignments declared-type))
   (setq *why-renamings* '0)
-  (let* ((decl-type-assignments (reverse (fields (find-supertype declared-type))))
-	 (sorted-assignments (reverse (sort-assignments assignments)))
-	 (zipped-assignments (reverse (pairlis decl-type-assignments sorted-assignments)))
-	 (assignments (reverse (loop for entry in zipped-assignments collect
-			 (let* ((assign-expr (expression (cdr entry)))
-				(assign-arg  (caar (arguments (cdr entry))))
+  (let* ((decl-type-assignments (fields (find-supertype declared-type)))
+	 (sorted-assignments (sort-assignments assignments))
+;	 (dummy (format t "#ICI# ~%"))
+;	 (dummy (format t "#decl-type-assignments: ~{ ~a ~} ~%" decl-type-assignments))
+;	 (dummy (format t "#sorted-assignments: ~{ ~a ~} ~%" sorted-assignments))
+	 (zipped-assignments (pairlis_update-types-assignments decl-type-assignments sorted-assignments)) ;see pairlis_update... def above
+	 (assignments (reverse (loop for entry in zipped-assignments collect ; entry = (x:nat.(x):=1)
+			 (let* ((assign-expr (expression (cdr entry))) ; assign-expr = 1
+				(assign-arg  (caar (arguments (cdr entry)))) ; assign-arg = x
 				(upd-vars (mapcar #'declaration (updateable-vars assign-expr)))
 ; (updateable-vars assign-expr) returns a list of name-exprs.
 				(why-assign-expr (pvs2why* assign-expr
