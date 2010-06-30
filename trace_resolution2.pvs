@@ -194,6 +194,7 @@ BEGIN
      ENDCASES 
      MEASURE length(lck)
 
+  % applies resolution step on acc and first element of l
   new_resolution_list_rec( acc: (tr_clause?), 
   			   c: certificate, 
 			   j: below(n), 
@@ -206,6 +207,7 @@ BEGIN
     endif
   measure length(l)
 
+  % returns the clause obtained by chain resolution on c(j)`chn
   new_resolution_list( c: certificate, j: {m:below(n)|cons?(c(m)`chn)}): (tr_clause?) = 
     if null?(cdr(c(j)`chn)) 
     then
@@ -219,7 +221,7 @@ BEGIN
 	(cons?[(tr_clause?)]) = 
       map(LAMBDA (a : below(j)) : cert(a)`cl)(cert(j)`chn)
 
-
+  
   resolution_list_equiv: LEMMA
     FORALL (c:certificate, j:below(n)): 
     new_resolution_list(c, j) = resolution_list(build_chain_list(j, c))
