@@ -747,7 +747,7 @@
 	 (why-expr (pvs2why* (expression expr) 
 			     (append (pairlis (bindings expr) bind-ids) 
 				     bindings) nil coerced-range-type));  ;(range declared-type)))
-	 (dummy (format t "??????? ~%"))
+	 (dummy (format t "???????"))
 	 (why-type (pvs2why-type coerced-type)) ;declared-type)) ; type
 	 (why-lambda (mk-why-lambda-abstraction why-bindings why-expr why-type)))
 
@@ -1048,7 +1048,7 @@
 (defmethod pvs2why* ((expr update-expr) bindings livevars declared-type)
   (when *pvs2why-trace*
     (format t "Function: pvs2why*-update-expr ~a ~a ~%" expr declared-type))
-  (if (why-updateable? type (expression expr)))
+  (if (why-updateable? (type (expression expr)))
 ;      (if (and *destructive?*
 ;	       (not (some #'maplet? (assignments expr))))
 ;	  (let* ((expression (expression expr))
@@ -1066,7 +1066,7 @@
 ;		   (when (and *eval-verbose* (not *livevars-table*))
 ;		     (format t "~%Update ~s translated nondestructively. Live variables ~s present" expr livevars))
       (pvs2why-update expr bindings livevars declared-type)     ;(type (expression expr)))
-      (pvs2why* (translate-update-to-if! expr)	; Can we use this elsewhere? 
+      (pvs2why* (translate-update-to-if! expr)	; Can we use this elsewhere? ;!!!!
 		  bindings livevars declared-type)))
 
 (defun pvs2why-update (expr bindings livevars declared-type)
@@ -1088,7 +1088,7 @@
 			(identifier why-expr)))
 ;	   (dummy (format t "#LOOK# : ~a ~%" coerced-type-expr))
 	   (why-update (pvs2why-update* (type expression)
-					expression
+					expression ;should become like exprvar############################
 					assignments
 					bindings
 					(append (updateable-vars expression) livevars)
@@ -1123,6 +1123,7 @@
 ;					     (expression (car assignments)))
 ;					    livevars))))))
 
+;;
 ;; assignments: a sorted list of assignments, for instance ((t):= 1 (y):= 7)
 ;; types: a sorted list of types which contains at least each elements of assignemts, for instance (t:real x: nat y:upto(x))
 ;; pairlis_update-type-assignments removes the useless type declarations in types and do a pairlis
@@ -1134,15 +1135,12 @@
 	  (pairlis_update-types-assignments (cdr types) assignments))
       nil))
 
-;; Different one for records?
-;; type should be type declaration, not type name!!
 (defmethod pvs2why-update* ((type recordtype) exprvar assignments bindings livevars declared-type)
   (when *pvs2why-trace*
     (format t "Function: pvs2why-record-update* ~a ~a ~{ ~a ~} ~a ~%" type exprvar assignments declared-type))
   (setq *why-renamings* '0)
   (let* ((decl-type-assignments (fields (find-supertype declared-type)))
 	 (sorted-assignments (sort-assignments assignments))
-;	 (dummy (format t "#ICI# ~%"))
 ;	 (dummy (format t "#decl-type-assignments: ~{ ~a ~} ~%" decl-type-assignments))
 ;	 (dummy (format t "#sorted-assignments: ~{ ~a ~} ~%" sorted-assignments))
 	 (zipped-assignments (pairlis_update-types-assignments decl-type-assignments sorted-assignments)) ;see pairlis_update... def above
@@ -1156,6 +1154,9 @@
 					   		   (append (updateable-vars assign-expr) livevars) (type (car entry))))
 				(why-assign-var (id assign-arg)))
 			       (setq *why-renamings* (if (member (declaration exprvar) upd-vars) (+ *why-renamings* 1) *why-renamings*))
+			       ;; for a case like x WITH[(a):= x`b, (b):= x`a]
+			       (format t "###WHY-RENAMING: ~a in (~{ ~a ~})? ~%" (declaration exprvar) upd-vars)
+			       (format t "*why-renamings* = ~a ~%" *why-renamings*)
 			       (mk-why-assignment why-assign-var why-assign-expr)))))
 ;	 (lookup-typedef (assoc type *why-record-defns* :test 'compatible?)) ; Use compatible? Instead of strict-compatible.
 ;	 (lookup-type (mk-why-record-type (identifier (cdr lookup-typedef))))
