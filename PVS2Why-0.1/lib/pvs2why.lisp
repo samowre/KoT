@@ -747,7 +747,7 @@
 	 (why-expr (pvs2why* (expression expr) 
 			     (append (pairlis (bindings expr) bind-ids) 
 				     bindings) nil coerced-range-type));  ;(range declared-type)))
-	 (dummy (format t "???????"))
+	 (dummy (format t "??????? ~%"))
 	 (why-type (pvs2why-type coerced-type)) ;declared-type)) ; type
 	 (why-lambda (mk-why-lambda-abstraction why-bindings why-expr why-type)))
 
@@ -1048,7 +1048,7 @@
 (defmethod pvs2why* ((expr update-expr) bindings livevars declared-type)
   (when *pvs2why-trace*
     (format t "Function: pvs2why*-update-expr ~a ~a ~%" expr declared-type))
-  (if (why-updateable? (type (expression expr)))
+  (if (why-updateable? type (expression expr)))
 ;      (if (and *destructive?*
 ;	       (not (some #'maplet? (assignments expr))))
 ;	  (let* ((expression (expression expr))
@@ -1066,7 +1066,7 @@
 ;		   (when (and *eval-verbose* (not *livevars-table*))
 ;		     (format t "~%Update ~s translated nondestructively. Live variables ~s present" expr livevars))
       (pvs2why-update expr bindings livevars declared-type)     ;(type (expression expr)))
-      (pvs2why* (translate-update-to-if! expr)	; Can we use this elsewhere? ;!!!!
+      (pvs2why* (translate-update-to-if! expr)	; Can we use this elsewhere? 
 		  bindings livevars declared-type)))
 
 (defun pvs2why-update (expr bindings livevars declared-type)
@@ -1123,7 +1123,6 @@
 ;					     (expression (car assignments)))
 ;					    livevars))))))
 
-;;
 ;; assignments: a sorted list of assignments, for instance ((t):= 1 (y):= 7)
 ;; types: a sorted list of types which contains at least each elements of assignemts, for instance (t:real x: nat y:upto(x))
 ;; pairlis_update-type-assignments removes the useless type declarations in types and do a pairlis
