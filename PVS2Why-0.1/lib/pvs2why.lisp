@@ -1084,6 +1084,7 @@
 	   (coerced-type-expr (pvs2why-coerce-types type-expr declared-type))
 	   (isVariable (and (why-function-application? why-expr) (why-name? (operator why-expr)))) 
 	   ;a variable in PVS is translated to a function with no arguments in why returning a why-name obj
+	   (dummy (format t "***************** isVariable: ~a ~%" isVariable))
 	   (exprvar (if (not isVariable) ; Should become a real variable
                         (gentemp "E")
 			(identifier (operator why-expr))))
