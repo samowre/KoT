@@ -1082,8 +1082,8 @@
 ;	   (why-type (pvs2why-type type)) ; u
 	   (type-expr (type expression)) ; use the updated expression for type determination
 	   (coerced-type-expr (pvs2why-coerce-types type-expr declared-type))
-	   (isVariable (and (why-function-application? why-expr) (why-name? (operator why-expr)))) 
-	   ;a variable in PVS is translated to a function with no arguments in why returning a why-name obj
+	   (isVariable (name-expr? expression)) 
+;	   (isVariable (and (why-function-application? why-expr) (why-name? (operator why-expr)))) 
 	   (dummy (format t "***************** isVariable: ~a ~%" isVariable))
 	   (why-type (pvs2why-type coerced-type-expr))
 ;*****************************************
@@ -1093,7 +1093,9 @@
 ;*****************************************
 	   (exprvar (if (not isVariable) ; is a why-name obj
                         (mk-why-variable (gentemp "E") why-type)
-			(operator why-expr)))
+		        (if (why-name? why-expr)
+			    why-expr
+			    (operator why-expr))))
 ;	   (dummy (format t "#LOOK# : ~a ~%" coerced-type-expr))
 	   (why-update (pvs2why-update* (type expression)
 					exprvar ; why-name  
@@ -1109,7 +1111,7 @@
 ; let exprvar = why-expr in (exprvar[index1 = newexpr1, index2 = newexpr2,  ..])
 	(if (not isVariable)
 	    (mk-why-let (identifier exprvar) why-expr why-update why-type)
-	    (progn (push (cons (identifier (operator why-expr)) (find-supertype type)) *why-renamings*)
+	    (progn (push (cons (identifier exprvar) (find-supertype type)) *why-renamings*)
 	           why-update))
     )
   )
