@@ -1082,13 +1082,14 @@
 ;	   (why-type (pvs2why-type type)) ; u
 	   (type-expr (type expression)) ; use the updated expression for type determination
 	   (coerced-type-expr (pvs2why-coerce-types type-expr declared-type))
-	   (isVariable (typep why-expr 'why-name)) ;?
+	   (isVariable (and (why-function-application? why-expr) (why-name? (operator why-expr)))) 
+	   ;a variable in PVS is translated to a function with no arguments in why returning a why-name obj
 	   (exprvar (if (not isVariable) ; Should become a real variable
                         (gentemp "E")
-			(identifier why-expr)))
+			(identifier (operator why-expr))))
 ;	   (dummy (format t "#LOOK# : ~a ~%" coerced-type-expr))
 	   (why-update (pvs2why-update* (type expression)
-					expression ;should become like exprvar############################
+					expression
 					assignments
 					bindings
 					(append (updateable-vars expression) livevars)
@@ -1100,7 +1101,7 @@
 ; let exprvar = why-expr in (exprvar[index1 = newexpr1, index2 = newexpr2,  ..])
 	(if (not isVariable)
 	    (mk-why-let exprvar why-expr why-update (pvs2why-type coerced-type-expr))
-	    (progn (push (cons (identifier why-expr) (find-supertype type)) *why-renamings*)
+	    (progn (push (cons (identifier (operator why-expr)) (find-supertype type)) *why-renamings*)
 	           why-update))
     )
   )
@@ -1135,6 +1136,8 @@
 	  (pairlis_update-types-assignments (cdr types) assignments))
       nil))
 
+;; Different one for records?
+;; type should be type declaration, not type name!!
 (defmethod pvs2why-update* ((type recordtype) exprvar assignments bindings livevars declared-type)
   (when *pvs2why-trace*
     (format t "Function: pvs2why-record-update* ~a ~a ~{ ~a ~} ~a ~%" type exprvar assignments declared-type))
@@ -1154,9 +1157,6 @@
 					   		   (append (updateable-vars assign-expr) livevars) (type (car entry))))
 				(why-assign-var (id assign-arg)))
 			       (setq *why-renamings* (if (member (declaration exprvar) upd-vars) (+ *why-renamings* 1) *why-renamings*))
-			       ;; for a case like x WITH[(a):= x`b, (b):= x`a]
-			       (format t "###WHY-RENAMING: ~a in (~{ ~a ~})? ~%" (declaration exprvar) upd-vars)
-			       (format t "*why-renamings* = ~a ~%" *why-renamings*)
 			       (mk-why-assignment why-assign-var why-assign-expr)))))
 ;	 (lookup-typedef (assoc type *why-record-defns* :test 'compatible?)) ; Use compatible? Instead of strict-compatible.
 ;	 (lookup-type (mk-why-record-type (identifier (cdr lookup-typedef))))
