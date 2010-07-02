@@ -1165,8 +1165,8 @@
 					   		   (append (updateable-vars assign-expr) livevars) (type (car entry))))
 				(why-assign-var (id assign-arg)))
 			       (setq *why-renamings* (if (and 
-							    () 
-							    (member (declaration expression)) upd-vars) 
+							    (name-expr? expression) 
+							    (member (declaration expression) upd-vars)) 
 							 (+ *why-renamings* 1) 
 						         *why-renamings*))
 			       (mk-why-assignment why-assign-var why-assign-expr)))))
