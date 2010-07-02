@@ -96,7 +96,7 @@
 (defparameter *pvs2why-primitives-map*
   (pairlis *pvs2cl-primitives* *why-primitives*))
 
-;; search the associative list of lisp to clean primitives under the
+;; search the associative list of lisp to why primitives under the
 ;; test of same-primitive?(name) = key. if the result (entry) is not nil
 ;; return the associated primitive
 (defun pvs2why-primitive-op (name type)
@@ -1085,12 +1085,19 @@
 	   (isVariable (and (why-function-application? why-expr) (why-name? (operator why-expr)))) 
 	   ;a variable in PVS is translated to a function with no arguments in why returning a why-name obj
 	   (dummy (format t "***************** isVariable: ~a ~%" isVariable))
-	   (exprvar (if (not isVariable) ; Should become a real variable
-                        (gentemp "E")
-			(identifier (operator why-expr))))
+	   (why-type (pvs2why-type coerced-type-expr))
+;*****************************************
+;	   (exprvar (if (not isVariable) ; Should become a real variable
+;                        (gentemp "E")
+;			(identifier (operator why-expr))))
+;*****************************************
+	   (exprvar (if (not isVariable) ; is a why-name obj
+                        (mk-why-variable (gentemp "E") why-type)
+			(operator why-expr)))
 ;	   (dummy (format t "#LOOK# : ~a ~%" coerced-type-expr))
 	   (why-update (pvs2why-update* (type expression)
-					expression
+					exprvar ; why-name  
+					expression ; name-expr
 					assignments
 					bindings
 					(append (updateable-vars expression) livevars)
@@ -1101,7 +1108,7 @@
 ; otherwise we have to create a variable (let exprvar = why-expr in assignm
 ; let exprvar = why-expr in (exprvar[index1 = newexpr1, index2 = newexpr2,  ..])
 	(if (not isVariable)
-	    (mk-why-let exprvar why-expr why-update (pvs2why-type coerced-type-expr))
+	    (mk-why-let (identifier exprvar) why-expr why-update why-type)
 	    (progn (push (cons (identifier (operator why-expr)) (find-supertype type)) *why-renamings*)
 	           why-update))
     )
@@ -1139,41 +1146,45 @@
 
 ;; Different one for records?
 ;; type should be type declaration, not type name!!
-(defmethod pvs2why-update* ((type recordtype) exprvar assignments bindings livevars declared-type)
+(defmethod pvs2why-update* ((type recordtype) exprvar expression assignments bindings livevars declared-type)
   (when *pvs2why-trace*
-    (format t "Function: pvs2why-record-update* ~a ~a ~{ ~a ~} ~a ~%" type exprvar assignments declared-type))
+    (format t "Function: pvs2why-record-update* ~a ~a ~{ ~a ~} ~a ~%" type (identifier exprvar) assignments declared-type))
   (setq *why-renamings* '0)
   (let* ((decl-type-assignments (fields (find-supertype declared-type)))
 	 (sorted-assignments (sort-assignments assignments))
 ;	 (dummy (format t "#decl-type-assignments: ~{ ~a ~} ~%" decl-type-assignments))
 ;	 (dummy (format t "#sorted-assignments: ~{ ~a ~} ~%" sorted-assignments))
 	 (zipped-assignments (pairlis_update-types-assignments decl-type-assignments sorted-assignments)) ;see pairlis_update... def above
-	 (assignments (reverse (loop for entry in zipped-assignments collect ; entry = (x:nat.(x):=1)
-			 (let* ((assign-expr (expression (cdr entry))) ; assign-expr = 1
-				(assign-arg  (caar (arguments (cdr entry)))) ; assign-arg = x
+	 (assignments (reverse (loop for entry in zipped-assignments collect         ; entry = (x:nat.(x):=1)
+			 (let* ((assign-expr (expression (cdr entry)))               ; assign-expr = 1
+				(assign-arg  (caar (arguments (cdr entry))))         ; assign-arg = x
 				(upd-vars (mapcar #'declaration (updateable-vars assign-expr)))
 ; (updateable-vars assign-expr) returns a list of name-exprs.
 				(why-assign-expr (pvs2why* assign-expr
 					   		   bindings
 					   		   (append (updateable-vars assign-expr) livevars) (type (car entry))))
 				(why-assign-var (id assign-arg)))
-			       (setq *why-renamings* (if (member (declaration exprvar) upd-vars) (+ *why-renamings* 1) *why-renamings*))
+			       (setq *why-renamings* (if (and 
+							    () 
+							    (member (declaration expression)) upd-vars) 
+							 (+ *why-renamings* 1) 
+						         *why-renamings*))
 			       (mk-why-assignment why-assign-var why-assign-expr)))))
 ;	 (lookup-typedef (assoc type *why-record-defns* :test 'compatible?)) ; Use compatible? Instead of strict-compatible.
 ;	 (lookup-type (mk-why-record-type (identifier (cdr lookup-typedef))))
 	 
-	 (record-assign (mk-why-record-assignment (id exprvar) assignments
+	 (record-assign (mk-why-record-assignment (identifier exprvar) assignments
 						  (pvs2why-type (find-supertype declared-type))))) ; find-supertype not necessary
 ;    record-assign))
 	(if (> *why-renamings* 1) ; what if we have nested updates? or a renamings from a literal?
-	    (rename-expr record-assign (list (cons exprvar declared-type)))
+	    (rename-expr record-assign (list (cons expression declared-type)))
 	    record-assign)))
 
 
 (defmethod pvs2why-update* ((type funtype) 
-			    exprvar assignments bindings livevars declared-type)
+			    exprvar expression assignments bindings livevars declared-type)
   (when *pvs2why-trace*
-    (format t "Function: pvs2why-array-update* ~a ~a ~{ ~a ~} ~%" type exprvar assignments))
+    (format t "Function: pvs2why-array-update* ~a ~a ~{ ~a ~} ~%" type (identifier exprvar) assignments))
   (let* ((seq (loop for entry in assignments collect
 			 (let* ((*lhs-args* nil)
 				(assign-expr (expression entry))
@@ -1189,13 +1200,13 @@
 ;				  	 		     (append ;(updateable-vars (cdr assignments))
 					  		       livevars declared-type))
 				)
-			       (mk-why-array-assignment exprvar why-assign-var why-assign-expr (pvs2why-type type))))))
+			       (mk-why-array-assignment (identifier exprvar) why-assign-var why-assign-expr (pvs2why-type type))))))
         (if (> (length assignments) 1)
 	    (mk-why-sequential-composition seq)
 	    (car seq))))
 
-(defmethod pvs2why-update* ((type subtype) exprvar assignments bindings livevars declared-type)
-  (pvs2why-update* (find-supertype type) exprvar assignments bindings livevars declared-type)
+(defmethod pvs2why-update* ((type subtype) exprvar expression assignments bindings livevars declared-type)
+  (pvs2why-update* (find-supertype type) exprvar expression assignments bindings livevars declared-type)
 )
 
 
