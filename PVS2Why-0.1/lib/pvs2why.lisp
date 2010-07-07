@@ -1082,14 +1082,14 @@
 ;	   (why-type (pvs2why-type type)) ; u
 	   (type-expr (type expression)) ; use the updated expression for type determination
 	   (coerced-type-expr (pvs2why-coerce-types type-expr declared-type))
-	   (isVariable (name-expr? expression)) 
+	   (isVariable (name-expr? expression)) ;;NSH: it could be a constant
 ;	   (dummy (format t "#isVariable: ~a ~%" isVariable))
 	   (why-type (pvs2why-type coerced-type-expr))
 	   (exprvar (if (not isVariable) ; is a why-name obj
                         (mk-why-variable (gentemp "E") why-type)
 		        (if (why-name? why-expr)
 			    why-expr
-			    (operator why-expr))))
+			    (operator why-expr)))) ;;NSH: when do we get a function of no args?
 ;	   (dummy (format t "#LOOK# : ~a ~%" coerced-type-expr))
 	   (why-update (pvs2why-update* (type expression)
 					exprvar ; why-name  
@@ -1159,6 +1159,7 @@
 				(why-assign-expr (pvs2why* assign-expr
 					   		   bindings
 					   		   (append (updateable-vars assign-expr) livevars) (type (car entry))))
+				;;NSH: The added live variables should be from the remaining zipped-assignments
 				(why-assign-var (id assign-arg)))
 			       (setq *why-renamings* (if (and 
 							    (name-expr? expression) 
@@ -1195,7 +1196,7 @@
 ;			  				  (append ;(updateable-vars assign-arg)
 ;				  	 		     (append ;(updateable-vars (cdr assignments))
 					  		       livevars declared-type))
-				)
+				);;NSH: is why-assign-var always a variable? 
 			       (mk-why-array-assignment (identifier exprvar) why-assign-var why-assign-expr (pvs2why-type type))))))
         (if (> (length assignments) 1)
 	    (mk-why-sequential-composition seq)
