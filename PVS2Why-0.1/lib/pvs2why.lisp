@@ -1083,14 +1083,8 @@
 	   (type-expr (type expression)) ; use the updated expression for type determination
 	   (coerced-type-expr (pvs2why-coerce-types type-expr declared-type))
 	   (isVariable (name-expr? expression)) 
-;	   (isVariable (and (why-function-application? why-expr) (why-name? (operator why-expr)))) 
-	   (dummy (format t "***************** isVariable: ~a ~%" isVariable))
+;	   (dummy (format t "#isVariable: ~a ~%" isVariable))
 	   (why-type (pvs2why-type coerced-type-expr))
-;*****************************************
-;	   (exprvar (if (not isVariable) ; Should become a real variable
-;                        (gentemp "E")
-;			(identifier (operator why-expr))))
-;*****************************************
 	   (exprvar (if (not isVariable) ; is a why-name obj
                         (mk-why-variable (gentemp "E") why-type)
 		        (if (why-name? why-expr)

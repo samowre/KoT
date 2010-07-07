@@ -122,6 +122,7 @@
 		      i))
       (objs2params file (cdr params) (+ i 1)))))
 
+; '("foo1" "foo2") ----> "foo1, foo2" 
 (defun comma-list (lst)
     (format nil "~{~A~#[~:;, ~]~}" lst))
 
