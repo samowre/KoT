@@ -69,7 +69,7 @@ BEGIN
   ncl, nck, ncm : VAR (ne_tr_clause?)
 
   %list of integers smaller than order
-  chain?(order:upto(n))( l:list[below(n)]) : recursive bool = 
+  chain?(order:upto(n))( l:list[nat]) : recursive bool = 
     if null?(l) then true
     else car(l) < order and
     	 chain?(order)(cdr(l))	
@@ -107,7 +107,8 @@ BEGIN
   MEASURE length(ck)
 
   exist_lemma : LEMMA
-    exist_pivot?(ck, cl) <=> EXISTS k: member(k, ck) AND member(tr_neg(k), cl)
+    exist_pivot?(ck, cl) <=> 
+    EXISTS k: member(k, ck) AND member(tr_neg(k), cl)
 
   % returns a pivot of nck and ncl
   find_pivot(nck, (ncl:{ncm | exist_pivot?(nck, ncm)})) : 
@@ -212,26 +213,28 @@ BEGIN
     then
       acc
     else 
-      new_resolution_list_rec( resolution(acc, cl_array(car(ch))), cl_array, j, cdr(ch))
+      new_resolution_list_rec( resolution(acc, cl_array(car(ch))), 
+      			       cl_array, j, cdr(ch) )
     endif
   measure length(ch)
 
   % returns the clause obtained by chain resolution on c(j)`chn
-  new_resolution_list( cl_array:array_of_clauses, j: below(n), ch: {c: (chain?(j))| cons?(c)} ): (tr_clause?) =	
+  new_resolution_list( cl_array:array_of_clauses, 
+  		       j: below(n), 
+		       ch: {c: (chain?(j))| cons?(c)} )
+		       : (tr_clause?) =	
     let acc= cl_array( car(ch) ) in 
     if null?(cdr(ch)) 
-    then
-      acc
+    then acc
     else
       new_resolution_list_rec(acc, cl_array, j, cdr(ch))
     endif
-
-  
   		    
   % applies resolution_list on all chains starting from j  
   resolve_rec( j: upto(n), 
   	       chain_list:(list_of_chains_offset?(j)),
-  	       clause_array: array_of_clauses): RECURSIVE array_of_clauses = 
+  	       clause_array: array_of_clauses)
+	       : RECURSIVE array_of_clauses = 
     IF j=n 
     % finished all the steps
     THEN clause_array
@@ -241,11 +244,14 @@ BEGIN
     % applies chain resolution
     ELSE resolve_rec( j+1, cdr(chain_list), 
     	 	      clause_array WITH [(j) := 
-		        new_resolution_list(clause_array, j, car(chain_list))])
+		        new_resolution_list( clause_array, j, 
+					     car(chain_list))])
     ENDIF 
   MEASURE n-j
 
-  resolve(ch_list : (list_of_chains?), cl_array: array_of_clauses): array_of_clauses = 
+  resolve( ch_list : (list_of_chains?), 
+  	   cl_array: array_of_clauses )
+	   : array_of_clauses = 
     resolve_rec(0, ch_list, cl_array)
  
 END trace_resolution3

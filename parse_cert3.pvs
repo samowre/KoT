@@ -7,6 +7,7 @@ parse_cert3 % parse a text file containing a certificate
   IMPORTING PVSio@stdio
   IMPORTING PVSio@stdglobal
 
+  % asks the user to provide the input file name
   get_file_name : string = 
   let file_name: string = query_line("PicoSAT proof file name: ") in
   if not fexists(file_name) then
@@ -15,50 +16,61 @@ parse_cert3 % parse a text file containing a certificate
   else file_name
   endif
   
+  % data extracted from a proof trace
   pico_data: TYPE = [# max_lit: nat, 
    	       	       nr_clauses: nat, 
 		       r_clause_list: list[list[int]], 
 		       r_antec_list: list[list[nat]] #] 
 
-  % stores the value returned by read_rec
+  % store the value returned by read_rec
   aux_fdata: Global[ pico_data, 
   	     	     (#max_lit:= 0, 
 		      nr_clauses:= 0, 
 		      r_clause_list:= null[list[int]], 
 		      r_antec_list:= null[list[nat]]#)]
 
-  % true if read_rec has been called once
+  % true if read_rec has been already called
   aux_bool: Global[bool, false]
 
+  % function defined in the pvs-attachments
   parse_file(s:string): pico_data
 
   % reads a file once and stores the result in aux_fdata
   read_rec : pico_data =
-    %if bool set
+  % if bool set
   if val(aux_bool) 
-    %return existing data
+    % return existing data
   then val(aux_fdata)
   else 
     let result = parse_file(get_file_name) in
-    let s = set(aux_fdata, result) & set(aux_bool, true) in
+    % read the file and set the flag true
+    let s = set(aux_fdata, result) & 
+    	    set(aux_bool, true) in
     result
   endif
 
-  %read the file
+  % data from the file
   fdata: pico_data = read_rec
 
-  print_pico_data(p:pico_data) : void= 
-    print(p`max_lit + " " + p`nr_clauses) 
-
+  % lub for the literals
   m: nat = fdata`max_lit + 1
+
+  % number of clauses
   n: nat = fdata`nr_clauses
+
+  % clause list in reversed order
   rcl: list[list[int]] = fdata`r_clause_list
+
+  % antecedents list in reversed order
   ral: list[list[nat]] = fdata`r_antec_list
+
   qv: nat = 0
+
+
 
   IMPORTING trace_resolution3[m, n, n]
 
-  %verify if l is a list of tr_literal
+  %verify if l is a list of tr_literals
   lit_list?(l: list[int]): recursive bool = 
     if null?(l) 
     then 
@@ -68,20 +80,28 @@ parse_cert3 % parse a text file containing a certificate
     endif
   measure length(l)
 
-
-  build_clause_array(j: below(n), prcl: list[list[int]], acc: array_of_clauses): recursive array_of_clauses =
+  % returns an array of clauses from a reversed list of lists of naturals
+  build_clause_array( prcl: {l : list[list[int]] | length(l) <= n}, 
+  		      acc: array_of_clauses )
+		      : recursive array_of_clauses =
     if null?(prcl) then acc
     elsif  lit_list?(car(prcl)) 
   	   and sorted?(car(prcl)) 
     then 
-	build_clause_array(j-1, cdr(prcl), acc with [(j):= car(prcl)])
+	build_clause_array( cdr(prcl), 
+			    acc with [(length(prcl)-1):= car(prcl)])
     else throw("e")
     endif
   measure length(prcl)
 
-  build_chain_list(j: below(n), pral: list[list[int]], acc: (list_of_chains_offset?(j))): recursive (list_of_chains_offset?(j)) = 
-    if null?(pral) then acc
-    elsif chain?(j)(car(pral)) then build_chain_list(j-1, cdr(pral), cons(car(pral), acc))
+  % 
+  build_chain_list( pral: { l : list[list[nat]] | length(l) <= n}, 
+		    acc: (list_of_chains_offset?(length(pral))))
+		    : recursive (list_of_chains_offset?(max(0, length(pral) - 1))) = 
+    if null?(pral) 
+    then acc
+    elsif chain?(length(pral) - 1)( car(pral) ) 
+    then build_chain_list(cdr(pral), cons(car(pral), acc))
     else throw("e")
     endif
   measure length(pral)
@@ -89,14 +109,25 @@ parse_cert3 % parse a text file containing a certificate
   % true if the last resolution chain produces an empty clause
   verify: bool = 
   catch("e", 
-  	let ini_cl_array: array_of_clauses = build_clause_array(n-1, rcl, lambda (i:below(n)): null) in
-	let ini_ch_list: (list_of_chains?) = build_chain_list(n-1, ral, null) in
-        let cl_array = resolve( ini_ch_list, ini_cl_array ) in
-          set(aux_bool, false) & 
-          null?(cl_array(n-1)), 
-        lambda ( e:Exception[string]): 
-	       print(
-			tag(e)
+  	if length(rcl) = length(ral) and
+	   length(rcl) = n 
+	then 
+	 if n = 0 then true
+	 else 
+  	   let ini_cl_array: array_of_clauses = 
+	      build_clause_array(rcl, lambda (i:below(n)): null) in
+	   let ini_ch_list: (list_of_chains?) = 
+	      build_chain_list(ral, null) in
+           let cl_array: array_of_clauses = 
+	      resolve( ini_ch_list, ini_cl_array ) in
+           set(aux_bool, false) & 
+           null?(cl_array(max(0, n-1)))
+	 endif
+       else throw("e") 
+       endif, 
+
+        lambda(e:Exception[string]): 
+	         print( tag(e)
 			+ " exception: " 
 			+ val(e) 
 			+ " INVALID CERTIFICATE"))
