@@ -1,0 +1,113 @@
+<!-- File: Byte.xml 
+           Automatically generated from PVS theory Byte (Byte.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:2:34 7/9/2010 -->
+
+<module identifier="Byte">
+  <parameters/>
+  <definitions>
+    <function identifier="Zero">
+      <returnType>
+        <arrayType>
+          <primitiveType identifier="bool"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <arrayLiteral lowerBound="#<why-literal>" upperBound="#<why-function-application>">
+          <elementType>
+            <primitiveType identifier="bool"/>
+          </elementType>
+          <inititalization>
+            <lambda>
+              <parameters>
+                <parameter identifier="i">
+                  <primitiveType identifier="int"/>
+                </parameter>
+              </parameters>
+              <name identifier="false" kind="constant"/>
+            </lambda>
+          </inititalization>
+        </arrayLiteral>
+      </body>
+    </function>
+    <function identifier="complement">
+      <returnType>
+        <arrayType>
+          <primitiveType identifier="bool"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="b">
+          <arrayType>
+            <primitiveType identifier="bool"/>
+          </arrayType>
+        </parameter>
+      </parameters>
+      <body>
+        <arrayLiteral lowerBound="#<why-literal>" upperBound="#<why-function-application>">
+          <elementType>
+            <primitiveType identifier="bool"/>
+          </elementType>
+          <inititalization>
+            <lambda>
+              <parameters>
+                <parameter identifier="i">
+                  <primitiveType identifier="int"/>
+                </parameter>
+              </parameters>
+              <application>
+                <operator builtin="!"/>
+                <arguments>
+                  <arraySubscription identifier="#<why-name>">
+                    <name identifier="i" kind="formal"/>
+                  </arraySubscription>
+                </arguments>
+              </application>
+            </lambda>
+          </inititalization>
+        </arrayLiteral>
+      </body>
+    </function>
+    <function identifier="isZero">
+      <returnType>
+        <primitiveType identifier="bool"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="b">
+          <arrayType>
+            <primitiveType identifier="bool"/>
+          </arrayType>
+        </parameter>
+      </parameters>
+      <body>
+        <forall lowerBound="#<why-literal>" upperBound="#<why-function-application>">
+          <lambda>
+            <parameters>
+              <parameter identifier="i">
+                <primitiveType identifier="int"/>
+              </parameter>
+            </parameters>
+            <application>
+              <operator builtin="!"/>
+              <arguments>
+                <arraySubscription identifier="#<why-name>">
+                  <name identifier="i" kind="formal"/>
+                </arraySubscription>
+              </arguments>
+            </application>
+          </lambda>
+        </forall>
+      </body>
+    </function>
+  </definitions>
+</module>

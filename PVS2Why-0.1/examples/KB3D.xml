@@ -1,0 +1,1659 @@
+<!-- File: KB3D.xml 
+           Automatically generated from PVS theory KB3D (KB3D.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:2:32 7/9/2010 -->
+
+<module identifier="KB3D">
+  <parameters>
+    <parameter identifier="D">
+      <primitiveType identifier="real"/>
+    </parameter>
+    <parameter identifier="H">
+      <primitiveType identifier="real"/>
+    </parameter>
+    <parameter identifier="T">
+      <primitiveType identifier="real"/>
+    </parameter>
+  </parameters>
+  <definitions>
+    <record identifier="Vector3D">
+      <field identifier="x">
+        <primitiveType identifier="real"/>
+      </field>
+      <field identifier="y">
+        <primitiveType identifier="real"/>
+      </field>
+      <field identifier="z">
+        <primitiveType identifier="real"/>
+      </field>
+    </record>
+    <function identifier="sqrt" abstract="true">
+      <returnType>
+        <primitiveType identifier="real"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="x">
+          <primitiveType identifier="real"/>
+        </parameter>
+      </parameters>
+    </function>
+    <function identifier="sq">
+      <returnType>
+        <primitiveType identifier="real"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="x">
+          <primitiveType identifier="real"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator builtin="*"/>
+          <arguments>
+            <name identifier="x" kind="formal"/>
+            <name identifier="x" kind="formal"/>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="sq_dist2D">
+      <returnType>
+        <primitiveType identifier="real"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="v">
+          <recordType identifier="Vector3D"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator builtin="+"/>
+          <arguments>
+            <application>
+              <operator>
+                <name identifier="sq" kind="constant"/>
+              </operator>
+              <arguments>
+                <recordSelection identifier="#<why-name>" field="x"/>
+              </arguments>
+            </application>
+            <application>
+              <operator>
+                <name identifier="sq" kind="constant"/>
+              </operator>
+              <arguments>
+                <recordSelection identifier="#<why-name>" field="y"/>
+              </arguments>
+            </application>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="sign">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="x">
+          <primitiveType identifier="real"/>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator builtin="=="/>
+              <arguments>
+                <name identifier="x" kind="formal"/>
+                <numberLiteral value="0"/>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <numberLiteral value="0"/>
+          </then>
+          <else>
+            <if>
+              <condition>
+                <application>
+                  <operator builtin=">"/>
+                  <arguments>
+                    <name identifier="x" kind="formal"/>
+                    <numberLiteral value="0"/>
+                  </arguments>
+                </application>
+              </condition>
+              <then>
+                <numberLiteral value="1"/>
+              </then>
+              <else>
+                <application>
+                  <operator builtin="-"/>
+                  <arguments>
+                    <numberLiteral value="1"/>
+                  </arguments>
+                </application>
+              </else>
+            </if>
+          </else>
+        </if>
+      </body>
+    </function>
+    <function identifier="detection">
+      <returnType>
+        <primitiveType identifier="bool"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="s">
+          <recordType identifier="Vector3D"/>
+        </parameter>
+        <parameter identifier="v">
+          <recordType identifier="Vector3D"/>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator builtin="&&"/>
+              <arguments>
+                <application>
+                  <operator builtin="=="/>
+                  <arguments>
+                    <recordSelection identifier="#<why-name>" field="x"/>
+                    <numberLiteral value="0"/>
+                  </arguments>
+                </application>
+                <application>
+                  <operator builtin="&&"/>
+                  <arguments>
+                    <application>
+                      <operator builtin="=="/>
+                      <arguments>
+                        <recordSelection identifier="#<why-name>" field="y"/>
+                        <numberLiteral value="0"/>
+                      </arguments>
+                    </application>
+                    <application>
+                      <operator builtin="<"/>
+                      <arguments>
+                        <application>
+                          <operator>
+                            <name identifier="sq_dist2D" kind="constant"/>
+                          </operator>
+                          <arguments>
+                            <name identifier="s" kind="formal"/>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator>
+                            <name identifier="sq" kind="constant"/>
+                          </operator>
+                          <arguments>
+                            <name identifier="D" kind="parameter"/>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <application>
+              <operator builtin="||"/>
+              <arguments>
+                <application>
+                  <operator builtin="&&"/>
+                  <arguments>
+                    <application>
+                      <operator builtin="<"/>
+                      <arguments>
+                        <application>
+                          <operator builtin="-"/>
+                          <arguments>
+                            <name identifier="H" kind="parameter"/>
+                          </arguments>
+                        </application>
+                        <recordSelection identifier="#<why-name>" field="z"/>
+                      </arguments>
+                    </application>
+                    <application>
+                      <operator builtin="<"/>
+                      <arguments>
+                        <recordSelection identifier="#<why-name>" field="z"/>
+                        <name identifier="H" kind="parameter"/>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+                <application>
+                  <operator builtin="||"/>
+                  <arguments>
+                    <application>
+                      <operator builtin="&&"/>
+                      <arguments>
+                        <application>
+                          <operator builtin=">"/>
+                          <arguments>
+                            <recordSelection identifier="#<why-name>" field="z"/>
+                            <numberLiteral value="0"/>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator builtin="&&"/>
+                          <arguments>
+                            <application>
+                              <operator builtin="<"/>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="z"/>
+                                <numberLiteral value="0"/>
+                              </arguments>
+                            </application>
+                            <application>
+                              <operator builtin="<"/>
+                              <arguments>
+                                <application>
+                                  <operator builtin="-"/>
+                                  <arguments>
+                                    <name identifier="H" kind="parameter"/>
+                                  </arguments>
+                                </application>
+                                <application>
+                                  <operator builtin="+"/>
+                                  <arguments>
+                                    <application>
+                                      <operator builtin="*"/>
+                                      <arguments>
+                                        <name identifier="T" kind="parameter"/>
+                                        <recordSelection identifier="#<why-name>" field="z"/>
+                                      </arguments>
+                                    </application>
+                                    <recordSelection identifier="#<why-name>" field="z"/>
+                                  </arguments>
+                                </application>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                    <application>
+                      <operator builtin="&&"/>
+                      <arguments>
+                        <application>
+                          <operator builtin="<"/>
+                          <arguments>
+                            <recordSelection identifier="#<why-name>" field="z"/>
+                            <numberLiteral value="0"/>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator builtin="&&"/>
+                          <arguments>
+                            <application>
+                              <operator builtin=">"/>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="z"/>
+                                <numberLiteral value="0"/>
+                              </arguments>
+                            </application>
+                            <application>
+                              <operator builtin=">"/>
+                              <arguments>
+                                <name identifier="H" kind="parameter"/>
+                                <application>
+                                  <operator builtin="+"/>
+                                  <arguments>
+                                    <application>
+                                      <operator builtin="*"/>
+                                      <arguments>
+                                        <name identifier="T" kind="parameter"/>
+                                        <recordSelection identifier="#<why-name>" field="z"/>
+                                      </arguments>
+                                    </application>
+                                    <recordSelection identifier="#<why-name>" field="z"/>
+                                  </arguments>
+                                </application>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </then>
+          <else>
+            <let identifier="#<why-binding>">
+              <type>
+                <primitiveType identifier="real"/>
+              </type>
+              <expression>
+                <application>
+                  <operator builtin="-"/>
+                  <arguments>
+                    <application>
+                      <operator builtin="+"/>
+                      <arguments>
+                        <application>
+                          <operator builtin="*"/>
+                          <arguments>
+                            <application>
+                              <operator builtin="*"/>
+                              <arguments>
+                                <application>
+                                  <operator builtin="*"/>
+                                  <arguments>
+                                    <application>
+                                      <operator builtin="*"/>
+                                      <arguments>
+                                        <numberLiteral value="2"/>
+                                        <recordSelection identifier="#<why-name>" field="x"/>
+                                      </arguments>
+                                    </application>
+                                    <recordSelection identifier="#<why-name>" field="x"/>
+                                  </arguments>
+                                </application>
+                                <recordSelection identifier="#<why-name>" field="y"/>
+                              </arguments>
+                            </application>
+                            <recordSelection identifier="#<why-name>" field="y"/>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator builtin="*"/>
+                          <arguments>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <name identifier="D" kind="parameter"/>
+                              </arguments>
+                            </application>
+                            <application>
+                              <operator>
+                                <name identifier="sq_dist2D" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <name identifier="v" kind="formal"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                    <application>
+                      <operator builtin="+"/>
+                      <arguments>
+                        <application>
+                          <operator builtin="*"/>
+                          <arguments>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="x"/>
+                              </arguments>
+                            </application>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="y"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator builtin="*"/>
+                          <arguments>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="y"/>
+                              </arguments>
+                            </application>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="x"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+              </expression>
+              <in>
+                <if>
+                  <condition>
+                    <application>
+                      <operator builtin=">"/>
+                      <arguments>
+                        <name identifier="d" kind="formal"/>
+                        <numberLiteral value="0"/>
+                      </arguments>
+                    </application>
+                  </condition>
+                  <then>
+                    <let identifier="#<why-binding>">
+                      <type>
+                        <primitiveType identifier="real"/>
+                      </type>
+                      <expression>
+                        <application>
+                          <operator builtin="+"/>
+                          <arguments>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="x"/>
+                              </arguments>
+                            </application>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="y"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                      </expression>
+                      <in>
+                        <let identifier="#<why-binding>">
+                          <type>
+                            <primitiveType identifier="real"/>
+                          </type>
+                          <expression>
+                            <application>
+                              <operator builtin="+"/>
+                              <arguments>
+                                <application>
+                                  <operator builtin="*"/>
+                                  <arguments>
+                                    <recordSelection identifier="#<why-name>" field="x"/>
+                                    <recordSelection identifier="#<why-name>" field="x"/>
+                                  </arguments>
+                                </application>
+                                <application>
+                                  <operator builtin="*"/>
+                                  <arguments>
+                                    <recordSelection identifier="#<why-name>" field="y"/>
+                                    <recordSelection identifier="#<why-name>" field="y"/>
+                                  </arguments>
+                                </application>
+                              </arguments>
+                            </application>
+                          </expression>
+                          <in>
+                            <if>
+                              <condition>
+                                <application>
+                                  <operator builtin="=="/>
+                                  <arguments>
+                                    <recordSelection identifier="#<why-name>" field="z"/>
+                                    <numberLiteral value="0"/>
+                                  </arguments>
+                                </application>
+                              </condition>
+                              <then>
+                                <application>
+                                  <operator builtin="&&"/>
+                                  <arguments>
+                                    <application>
+                                      <operator builtin="<"/>
+                                      <arguments>
+                                        <application>
+                                          <operator builtin="-"/>
+                                          <arguments>
+                                            <name identifier="H" kind="parameter"/>
+                                          </arguments>
+                                        </application>
+                                        <recordSelection identifier="#<why-name>" field="z"/>
+                                      </arguments>
+                                    </application>
+                                    <application>
+                                      <operator builtin="&&"/>
+                                      <arguments>
+                                        <application>
+                                          <operator builtin="<"/>
+                                          <arguments>
+                                            <recordSelection identifier="#<why-name>" field="z"/>
+                                            <name identifier="H" kind="parameter"/>
+                                          </arguments>
+                                        </application>
+                                        <application>
+                                          <operator builtin="&&"/>
+                                          <arguments>
+                                            <application>
+                                              <operator builtin="||"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin=">"/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator>
+                                                        <name identifier="sq" kind="constant"/>
+                                                      </operator>
+                                                      <arguments>
+                                                        <name identifier="D" kind="parameter"/>
+                                                      </arguments>
+                                                    </application>
+                                                    <application>
+                                                      <operator>
+                                                        <name identifier="sq_dist2D" kind="constant"/>
+                                                      </operator>
+                                                      <arguments>
+                                                        <name identifier="s" kind="formal"/>
+                                                      </arguments>
+                                                    </application>
+                                                  </arguments>
+                                                </application>
+                                                <application>
+                                                  <operator builtin="<="/>
+                                                  <arguments>
+                                                    <name identifier="b" kind="formal"/>
+                                                    <numberLiteral value="0"/>
+                                                  </arguments>
+                                                </application>
+                                              </arguments>
+                                            </application>
+                                            <application>
+                                              <operator builtin="||"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin=">"/>
+                                                  <arguments>
+                                                    <name identifier="d" kind="formal"/>
+                                                    <application>
+                                                      <operator>
+                                                        <name identifier="sq" kind="constant"/>
+                                                      </operator>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin="+"/>
+                                                          <arguments>
+                                                            <application>
+                                                              <operator builtin="*"/>
+                                                              <arguments>
+                                                                <name identifier="a" kind="formal"/>
+                                                                <name identifier="T" kind="parameter"/>
+                                                              </arguments>
+                                                            </application>
+                                                            <name identifier="b" kind="formal"/>
+                                                          </arguments>
+                                                        </application>
+                                                      </arguments>
+                                                    </application>
+                                                  </arguments>
+                                                </application>
+                                                <application>
+                                                  <operator builtin=">="/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator builtin="+"/>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin="*"/>
+                                                          <arguments>
+                                                            <name identifier="a" kind="formal"/>
+                                                            <name identifier="T" kind="parameter"/>
+                                                          </arguments>
+                                                        </application>
+                                                        <name identifier="b" kind="formal"/>
+                                                      </arguments>
+                                                    </application>
+                                                    <numberLiteral value="0"/>
+                                                  </arguments>
+                                                </application>
+                                              </arguments>
+                                            </application>
+                                          </arguments>
+                                        </application>
+                                      </arguments>
+                                    </application>
+                                  </arguments>
+                                </application>
+                              </then>
+                              <else>
+                                <let identifier="#<why-binding>">
+                                  <type>
+                                    <primitiveType identifier="real"/>
+                                  </type>
+                                  <expression>
+                                    <application>
+                                      <operator builtin="/"/>
+                                      <arguments>
+                                        <application>
+                                          <operator builtin="-"/>
+                                          <arguments>
+                                            <application>
+                                              <operator builtin="*"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin="-"/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator>
+                                                        <name identifier="sign" kind="constant"/>
+                                                      </operator>
+                                                      <arguments>
+                                                        <recordSelection identifier="#<why-name>" field="z"/>
+                                                      </arguments>
+                                                    </application>
+                                                  </arguments>
+                                                </application>
+                                                <name identifier="H" kind="parameter"/>
+                                              </arguments>
+                                            </application>
+                                            <recordSelection identifier="#<why-name>" field="z"/>
+                                          </arguments>
+                                        </application>
+                                        <recordSelection identifier="#<why-name>" field="z"/>
+                                      </arguments>
+                                    </application>
+                                  </expression>
+                                  <in>
+                                    <let identifier="#<why-binding>">
+                                      <type>
+                                        <primitiveType identifier="real"/>
+                                      </type>
+                                      <expression>
+                                        <application>
+                                          <operator builtin="/"/>
+                                          <arguments>
+                                            <application>
+                                              <operator builtin="-"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin="*"/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator>
+                                                        <name identifier="sign" kind="constant"/>
+                                                      </operator>
+                                                      <arguments>
+                                                        <recordSelection identifier="#<why-name>" field="z"/>
+                                                      </arguments>
+                                                    </application>
+                                                    <name identifier="H" kind="parameter"/>
+                                                  </arguments>
+                                                </application>
+                                                <recordSelection identifier="#<why-name>" field="z"/>
+                                              </arguments>
+                                            </application>
+                                            <recordSelection identifier="#<why-name>" field="z"/>
+                                          </arguments>
+                                        </application>
+                                      </expression>
+                                      <in>
+                                        <application>
+                                          <operator builtin="&&"/>
+                                          <arguments>
+                                            <application>
+                                              <operator builtin="||"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin=">"/>
+                                                  <arguments>
+                                                    <name identifier="d" kind="formal"/>
+                                                    <application>
+                                                      <operator>
+                                                        <name identifier="sq" kind="constant"/>
+                                                      </operator>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin="+"/>
+                                                          <arguments>
+                                                            <application>
+                                                              <operator builtin="*"/>
+                                                              <arguments>
+                                                                <name identifier="a" kind="formal"/>
+                                                                <name identifier="t2" kind="formal"/>
+                                                              </arguments>
+                                                            </application>
+                                                            <name identifier="b" kind="formal"/>
+                                                          </arguments>
+                                                        </application>
+                                                      </arguments>
+                                                    </application>
+                                                  </arguments>
+                                                </application>
+                                                <application>
+                                                  <operator builtin=">="/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator builtin="+"/>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin="*"/>
+                                                          <arguments>
+                                                            <name identifier="a" kind="formal"/>
+                                                            <name identifier="t2" kind="formal"/>
+                                                          </arguments>
+                                                        </application>
+                                                        <name identifier="b" kind="formal"/>
+                                                      </arguments>
+                                                    </application>
+                                                    <numberLiteral value="0"/>
+                                                  </arguments>
+                                                </application>
+                                              </arguments>
+                                            </application>
+                                            <application>
+                                              <operator builtin="&&"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin="||"/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator builtin=">"/>
+                                                      <arguments>
+                                                        <name identifier="d" kind="formal"/>
+                                                        <application>
+                                                          <operator>
+                                                            <name identifier="sq" kind="constant"/>
+                                                          </operator>
+                                                          <arguments>
+                                                            <application>
+                                                              <operator builtin="+"/>
+                                                              <arguments>
+                                                                <application>
+                                                                  <operator builtin="*"/>
+                                                                  <arguments>
+                                                                    <name identifier="a" kind="formal"/>
+                                                                    <name identifier="t1" kind="formal"/>
+                                                                  </arguments>
+                                                                </application>
+                                                                <name identifier="b" kind="formal"/>
+                                                              </arguments>
+                                                            </application>
+                                                          </arguments>
+                                                        </application>
+                                                      </arguments>
+                                                    </application>
+                                                    <application>
+                                                      <operator builtin="<="/>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin="+"/>
+                                                          <arguments>
+                                                            <application>
+                                                              <operator builtin="*"/>
+                                                              <arguments>
+                                                                <name identifier="a" kind="formal"/>
+                                                                <name identifier="t1" kind="formal"/>
+                                                              </arguments>
+                                                            </application>
+                                                            <name identifier="b" kind="formal"/>
+                                                          </arguments>
+                                                        </application>
+                                                        <numberLiteral value="0"/>
+                                                      </arguments>
+                                                    </application>
+                                                  </arguments>
+                                                </application>
+                                                <application>
+                                                  <operator builtin="&&"/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator builtin="||"/>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin=">"/>
+                                                          <arguments>
+                                                            <application>
+                                                              <operator>
+                                                                <name identifier="sq" kind="constant"/>
+                                                              </operator>
+                                                              <arguments>
+                                                                <name identifier="D" kind="parameter"/>
+                                                              </arguments>
+                                                            </application>
+                                                            <application>
+                                                              <operator>
+                                                                <name identifier="sq_dist2D" kind="constant"/>
+                                                              </operator>
+                                                              <arguments>
+                                                                <name identifier="s" kind="formal"/>
+                                                              </arguments>
+                                                            </application>
+                                                          </arguments>
+                                                        </application>
+                                                        <application>
+                                                          <operator builtin="<="/>
+                                                          <arguments>
+                                                            <name identifier="b" kind="formal"/>
+                                                            <numberLiteral value="0"/>
+                                                          </arguments>
+                                                        </application>
+                                                      </arguments>
+                                                    </application>
+                                                    <application>
+                                                      <operator builtin="&&"/>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin=">"/>
+                                                          <arguments>
+                                                            <name identifier="t2" kind="formal"/>
+                                                            <numberLiteral value="0"/>
+                                                          </arguments>
+                                                        </application>
+                                                        <application>
+                                                          <operator builtin="&&"/>
+                                                          <arguments>
+                                                            <application>
+                                                              <operator builtin="||"/>
+                                                              <arguments>
+                                                                <application>
+                                                                  <operator builtin=">"/>
+                                                                  <arguments>
+                                                                    <name identifier="d" kind="formal"/>
+                                                                    <application>
+                                                                      <operator>
+                                                                        <name identifier="sq" kind="constant"/>
+                                                                      </operator>
+                                                                      <arguments>
+                                                                        <application>
+                                                                          <operator builtin="+"/>
+                                                                          <arguments>
+                                                                            <application>
+                                                                              <operator builtin="*"/>
+                                                                              <arguments>
+                                                                                <name identifier="a" kind="formal"/>
+                                                                                <name identifier="T" kind="parameter"/>
+                                                                              </arguments>
+                                                                            </application>
+                                                                            <name identifier="b" kind="formal"/>
+                                                                          </arguments>
+                                                                        </application>
+                                                                      </arguments>
+                                                                    </application>
+                                                                  </arguments>
+                                                                </application>
+                                                                <application>
+                                                                  <operator builtin=">="/>
+                                                                  <arguments>
+                                                                    <application>
+                                                                      <operator builtin="+"/>
+                                                                      <arguments>
+                                                                        <application>
+                                                                          <operator builtin="*"/>
+                                                                          <arguments>
+                                                                            <name identifier="a" kind="formal"/>
+                                                                            <name identifier="T" kind="parameter"/>
+                                                                          </arguments>
+                                                                        </application>
+                                                                        <name identifier="b" kind="formal"/>
+                                                                      </arguments>
+                                                                    </application>
+                                                                    <numberLiteral value="0"/>
+                                                                  </arguments>
+                                                                </application>
+                                                              </arguments>
+                                                            </application>
+                                                            <application>
+                                                              <operator builtin="<"/>
+                                                              <arguments>
+                                                                <name identifier="t1" kind="formal"/>
+                                                                <name identifier="T" kind="parameter"/>
+                                                              </arguments>
+                                                            </application>
+                                                          </arguments>
+                                                        </application>
+                                                      </arguments>
+                                                    </application>
+                                                  </arguments>
+                                                </application>
+                                              </arguments>
+                                            </application>
+                                          </arguments>
+                                        </application>
+                                      </in>
+                                    </let>
+                                  </in>
+                                </let>
+                              </else>
+                            </if>
+                          </in>
+                        </let>
+                      </in>
+                    </let>
+                  </then>
+                  <else>
+                    <name identifier="false" kind="constant"/>
+                  </else>
+                </if>
+              </in>
+            </let>
+          </else>
+        </if>
+      </body>
+    </function>
+    <function identifier="alpha">
+      <returnType>
+        <primitiveType identifier="real"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="sx">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="sy">
+          <primitiveType identifier="real"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator builtin="/"/>
+          <arguments>
+            <application>
+              <operator>
+                <name identifier="sq" kind="constant"/>
+              </operator>
+              <arguments>
+                <name identifier="D" kind="parameter"/>
+              </arguments>
+            </application>
+            <application>
+              <operator builtin="+"/>
+              <arguments>
+                <application>
+                  <operator>
+                    <name identifier="sq" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="sx" kind="formal"/>
+                  </arguments>
+                </application>
+                <application>
+                  <operator>
+                    <name identifier="sq" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="sy" kind="formal"/>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="beta">
+      <returnType>
+        <primitiveType identifier="real"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="sx">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="sy">
+          <primitiveType identifier="real"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator builtin="/"/>
+          <arguments>
+            <application>
+              <operator builtin="*"/>
+              <arguments>
+                <name identifier="D" kind="parameter"/>
+                <application>
+                  <operator>
+                    <name identifier="sqrt" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <application>
+                          <operator builtin="+"/>
+                          <arguments>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <name identifier="sx" kind="formal"/>
+                              </arguments>
+                            </application>
+                            <application>
+                              <operator>
+                                <name identifier="sq" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <name identifier="sy" kind="formal"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator>
+                            <name identifier="sq" kind="constant"/>
+                          </operator>
+                          <arguments>
+                            <name identifier="D" kind="parameter"/>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+            <application>
+              <operator builtin="+"/>
+              <arguments>
+                <application>
+                  <operator>
+                    <name identifier="sq" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="sx" kind="formal"/>
+                  </arguments>
+                </application>
+                <application>
+                  <operator>
+                    <name identifier="sq" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="sy" kind="formal"/>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="Q">
+      <returnType>
+        <primitiveType identifier="real"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="sx">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="sy">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="e">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator builtin="+"/>
+          <arguments>
+            <application>
+              <operator builtin="*"/>
+              <arguments>
+                <application>
+                  <operator>
+                    <name identifier="alpha" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="sx" kind="formal"/>
+                    <name identifier="sy" kind="formal"/>
+                  </arguments>
+                </application>
+                <name identifier="sx" kind="formal"/>
+              </arguments>
+            </application>
+            <application>
+              <operator builtin="*"/>
+              <arguments>
+                <application>
+                  <operator builtin="*"/>
+                  <arguments>
+                    <name identifier="e" kind="formal"/>
+                    <application>
+                      <operator>
+                        <name identifier="beta" kind="constant"/>
+                      </operator>
+                      <arguments>
+                        <name identifier="sx" kind="formal"/>
+                        <name identifier="sy" kind="formal"/>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+                <name identifier="sy" kind="formal"/>
+              </arguments>
+            </application>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="contact_time">
+      <returnType>
+        <primitiveType identifier="real"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="sx">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="sy">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="qx">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="qy">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="vx">
+          <primitiveType identifier="real"/>
+        </parameter>
+        <parameter identifier="vy">
+          <primitiveType identifier="real"/>
+        </parameter>
+      </parameters>
+      <body>
+        <let identifier="#<why-binding>">
+          <type>
+            <primitiveType identifier="real"/>
+          </type>
+          <expression>
+            <application>
+              <operator builtin="+"/>
+              <arguments>
+                <application>
+                  <operator builtin="*"/>
+                  <arguments>
+                    <name identifier="vx" kind="formal"/>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <name identifier="qx" kind="formal"/>
+                        <name identifier="sx" kind="formal"/>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+                <application>
+                  <operator builtin="*"/>
+                  <arguments>
+                    <name identifier="vy" kind="formal"/>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <name identifier="qy" kind="formal"/>
+                        <name identifier="sy" kind="formal"/>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </expression>
+          <in>
+            <if>
+              <condition>
+                <application>
+                  <operator builtin="!="/>
+                  <arguments>
+                    <name identifier="d" kind="formal"/>
+                    <numberLiteral value="0"/>
+                  </arguments>
+                </application>
+              </condition>
+              <then>
+                <application>
+                  <operator builtin="/"/>
+                  <arguments>
+                    <application>
+                      <operator builtin="+"/>
+                      <arguments>
+                        <application>
+                          <operator>
+                            <name identifier="sq" kind="constant"/>
+                          </operator>
+                          <arguments>
+                            <application>
+                              <operator builtin="-"/>
+                              <arguments>
+                                <name identifier="qx" kind="formal"/>
+                                <name identifier="sx" kind="formal"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator>
+                            <name identifier="sq" kind="constant"/>
+                          </operator>
+                          <arguments>
+                            <application>
+                              <operator builtin="-"/>
+                              <arguments>
+                                <name identifier="qy" kind="formal"/>
+                                <name identifier="sy" kind="formal"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                    <name identifier="d" kind="formal"/>
+                  </arguments>
+                </application>
+              </then>
+              <else>
+                <if>
+                  <condition>
+                    <application>
+                      <operator builtin="&&"/>
+                      <arguments>
+                        <application>
+                          <operator builtin="=="/>
+                          <arguments>
+                            <name identifier="qx" kind="formal"/>
+                            <name identifier="sx" kind="formal"/>
+                          </arguments>
+                        </application>
+                        <application>
+                          <operator builtin="=="/>
+                          <arguments>
+                            <name identifier="qy" kind="formal"/>
+                            <name identifier="sy" kind="formal"/>
+                          </arguments>
+                        </application>
+                      </arguments>
+                    </application>
+                  </condition>
+                  <then>
+                    <numberLiteral value="0"/>
+                  </then>
+                  <else>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <numberLiteral value="1"/>
+                      </arguments>
+                    </application>
+                  </else>
+                </if>
+              </else>
+            </if>
+          </in>
+        </let>
+      </body>
+    </function>
+    <function identifier="Error">
+      <returnType>
+        <recordType identifier="Vector3D"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <recordLiteral>
+          <assignment identifier="x">
+            <numberLiteral value="0"/>
+          </assignment>
+          <assignment identifier="y">
+            <numberLiteral value="0"/>
+          </assignment>
+          <assignment identifier="z">
+            <numberLiteral value="0"/>
+          </assignment>
+        </recordLiteral>
+      </body>
+    </function>
+    <function identifier="resolution">
+      <returnType>
+        <recordType identifier="Vector3D"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="s">
+          <recordType identifier="Vector3D"/>
+        </parameter>
+        <parameter identifier="vo">
+          <recordType identifier="Vector3D"/>
+        </parameter>
+        <parameter identifier="vi">
+          <recordType identifier="Vector3D"/>
+        </parameter>
+        <parameter identifier="e">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator builtin="<"/>
+              <arguments>
+                <application>
+                  <operator>
+                    <name identifier="sq_dist2D" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="s" kind="formal"/>
+                  </arguments>
+                </application>
+                <name identifier="D" kind="parameter"/>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <application>
+              <operator>
+                <name identifier="Error" kind="constant"/>
+              </operator>
+              <arguments/>
+            </application>
+          </then>
+          <else>
+            <let identifier="#<why-binding>">
+              <type>
+                <primitiveType identifier="real"/>
+              </type>
+              <expression>
+                <application>
+                  <operator builtin="-"/>
+                  <arguments>
+                    <recordSelection identifier="#<why-name>" field="x"/>
+                    <recordSelection identifier="#<why-name>" field="x"/>
+                  </arguments>
+                </application>
+              </expression>
+              <in>
+                <let identifier="#<why-binding>">
+                  <type>
+                    <primitiveType identifier="real"/>
+                  </type>
+                  <expression>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <recordSelection identifier="#<why-name>" field="y"/>
+                        <recordSelection identifier="#<why-name>" field="y"/>
+                      </arguments>
+                    </application>
+                  </expression>
+                  <in>
+                    <let identifier="#<why-binding>">
+                      <type>
+                        <primitiveType identifier="real"/>
+                      </type>
+                      <expression>
+                        <application>
+                          <operator>
+                            <name identifier="Q" kind="constant"/>
+                          </operator>
+                          <arguments>
+                            <recordSelection identifier="#<why-name>" field="x"/>
+                            <recordSelection identifier="#<why-name>" field="y"/>
+                            <name identifier="e" kind="formal"/>
+                          </arguments>
+                        </application>
+                      </expression>
+                      <in>
+                        <let identifier="#<why-binding>">
+                          <type>
+                            <primitiveType identifier="real"/>
+                          </type>
+                          <expression>
+                            <application>
+                              <operator>
+                                <name identifier="Q" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <recordSelection identifier="#<why-name>" field="y"/>
+                                <recordSelection identifier="#<why-name>" field="x"/>
+                                <application>
+                                  <operator builtin="-"/>
+                                  <arguments>
+                                    <name identifier="e" kind="formal"/>
+                                  </arguments>
+                                </application>
+                              </arguments>
+                            </application>
+                          </expression>
+                          <in>
+                            <let identifier="#<why-binding>">
+                              <type>
+                                <primitiveType identifier="real"/>
+                              </type>
+                              <expression>
+                                <application>
+                                  <operator>
+                                    <name identifier="contact_time" kind="constant"/>
+                                  </operator>
+                                  <arguments>
+                                    <recordSelection identifier="#<why-name>" field="x"/>
+                                    <recordSelection identifier="#<why-name>" field="y"/>
+                                    <name identifier="qpx" kind="formal"/>
+                                    <name identifier="qpy" kind="formal"/>
+                                    <name identifier="vx" kind="formal"/>
+                                    <name identifier="vy" kind="formal"/>
+                                  </arguments>
+                                </application>
+                              </expression>
+                              <in>
+                                <if>
+                                  <condition>
+                                    <application>
+                                      <operator builtin=">"/>
+                                      <arguments>
+                                        <name identifier="tpq" kind="formal"/>
+                                        <numberLiteral value="0"/>
+                                      </arguments>
+                                    </application>
+                                  </condition>
+                                  <then>
+                                    <recordLiteral>
+                                      <assignment identifier="x">
+                                        <application>
+                                          <operator builtin="+"/>
+                                          <arguments>
+                                            <application>
+                                              <operator builtin="/"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin="-"/>
+                                                  <arguments>
+                                                    <name identifier="qpx" kind="formal"/>
+                                                    <recordSelection identifier="#<why-name>" field="x"/>
+                                                  </arguments>
+                                                </application>
+                                                <name identifier="tpq" kind="formal"/>
+                                              </arguments>
+                                            </application>
+                                            <recordSelection identifier="#<why-name>" field="x"/>
+                                          </arguments>
+                                        </application>
+                                      </assignment>
+                                      <assignment identifier="y">
+                                        <application>
+                                          <operator builtin="+"/>
+                                          <arguments>
+                                            <application>
+                                              <operator builtin="/"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin="-"/>
+                                                  <arguments>
+                                                    <name identifier="qpy" kind="formal"/>
+                                                    <recordSelection identifier="#<why-name>" field="y"/>
+                                                  </arguments>
+                                                </application>
+                                                <name identifier="tpq" kind="formal"/>
+                                              </arguments>
+                                            </application>
+                                            <recordSelection identifier="#<why-name>" field="y"/>
+                                          </arguments>
+                                        </application>
+                                      </assignment>
+                                      <assignment identifier="z">
+                                        <numberLiteral value="0"/>
+                                      </assignment>
+                                    </recordLiteral>
+                                  </then>
+                                  <else>
+                                    <if>
+                                      <condition>
+                                        <application>
+                                          <operator builtin="=="/>
+                                          <arguments>
+                                            <name identifier="tpq" kind="formal"/>
+                                            <numberLiteral value="0"/>
+                                          </arguments>
+                                        </application>
+                                      </condition>
+                                      <then>
+                                        <recordLiteral>
+                                          <assignment identifier="x">
+                                            <application>
+                                              <operator builtin="+"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin="*"/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator builtin="-"/>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin="*"/>
+                                                          <arguments>
+                                                            <recordSelection identifier="#<why-name>" field="x"/>
+                                                            <name identifier="vy" kind="formal"/>
+                                                          </arguments>
+                                                        </application>
+                                                        <application>
+                                                          <operator builtin="*"/>
+                                                          <arguments>
+                                                            <name identifier="vx" kind="formal"/>
+                                                            <recordSelection identifier="#<why-name>" field="y"/>
+                                                          </arguments>
+                                                        </application>
+                                                      </arguments>
+                                                    </application>
+                                                    <application>
+                                                      <operator builtin="-"/>
+                                                      <arguments>
+                                                        <recordSelection identifier="#<why-name>" field="y"/>
+                                                      </arguments>
+                                                    </application>
+                                                  </arguments>
+                                                </application>
+                                                <recordSelection identifier="#<why-name>" field="x"/>
+                                              </arguments>
+                                            </application>
+                                          </assignment>
+                                          <assignment identifier="y">
+                                            <application>
+                                              <operator builtin="+"/>
+                                              <arguments>
+                                                <application>
+                                                  <operator builtin="*"/>
+                                                  <arguments>
+                                                    <application>
+                                                      <operator builtin="-"/>
+                                                      <arguments>
+                                                        <application>
+                                                          <operator builtin="*"/>
+                                                          <arguments>
+                                                            <recordSelection identifier="#<why-name>" field="x"/>
+                                                            <name identifier="vy" kind="formal"/>
+                                                          </arguments>
+                                                        </application>
+                                                        <application>
+                                                          <operator builtin="*"/>
+                                                          <arguments>
+                                                            <name identifier="vx" kind="formal"/>
+                                                            <recordSelection identifier="#<why-name>" field="y"/>
+                                                          </arguments>
+                                                        </application>
+                                                      </arguments>
+                                                    </application>
+                                                    <recordSelection identifier="#<why-name>" field="x"/>
+                                                  </arguments>
+                                                </application>
+                                                <recordSelection identifier="#<why-name>" field="y"/>
+                                              </arguments>
+                                            </application>
+                                          </assignment>
+                                          <assignment identifier="z">
+                                            <numberLiteral value="0"/>
+                                          </assignment>
+                                        </recordLiteral>
+                                      </then>
+                                      <else>
+                                        <application>
+                                          <operator>
+                                            <name identifier="Error" kind="constant"/>
+                                          </operator>
+                                          <arguments/>
+                                        </application>
+                                      </else>
+                                    </if>
+                                  </else>
+                                </if>
+                              </in>
+                            </let>
+                          </in>
+                        </let>
+                      </in>
+                    </let>
+                  </in>
+                </let>
+              </in>
+            </let>
+          </else>
+        </if>
+      </body>
+    </function>
+  </definitions>
+</module>

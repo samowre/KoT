@@ -1,0 +1,284 @@
+<!-- File: FF.xml 
+           Automatically generated from PVS theory FF (FF.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:2:30 7/9/2010 -->
+
+<module identifier="FF">
+  <parameters/>
+  <definitions>
+    <function identifier="factorial">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="n">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator builtin="=="/>
+              <arguments>
+                <name identifier="n" kind="formal"/>
+                <numberLiteral value="0"/>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <numberLiteral value="1"/>
+          </then>
+          <else>
+            <application>
+              <operator builtin="*"/>
+              <arguments>
+                <name identifier="n" kind="formal"/>
+                <application>
+                  <operator>
+                    <name identifier="factorial" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <name identifier="n" kind="formal"/>
+                        <numberLiteral value="1"/>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </else>
+        </if>
+      </body>
+    </function>
+    <function identifier="fibonacci">
+      <returnType>
+        <functionType>
+          <domain>
+            <primitiveType identifier="int"/>
+          </domain>
+          <range>
+            <primitiveType identifier="int"/>
+          </range>
+        </functionType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="i">
+          <primitiveType identifier="int"/>
+        </parameter>
+        <parameter identifier="j">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <lambda>
+          <parameters>
+            <parameter identifier="n">
+              <primitiveType identifier="int"/>
+            </parameter>
+          </parameters>
+          <if>
+            <condition>
+              <application>
+                <operator builtin="=="/>
+                <arguments>
+                  <name identifier="n" kind="formal"/>
+                  <numberLiteral value="0"/>
+                </arguments>
+              </application>
+            </condition>
+            <then>
+              <name identifier="i" kind="formal"/>
+            </then>
+            <else>
+              <if>
+                <condition>
+                  <application>
+                    <operator builtin="=="/>
+                    <arguments>
+                      <name identifier="n" kind="formal"/>
+                      <numberLiteral value="1"/>
+                    </arguments>
+                  </application>
+                </condition>
+                <then>
+                  <name identifier="j" kind="formal"/>
+                </then>
+                <else>
+                  <application>
+                    <operator>
+                      <application>
+                        <operator>
+                          <name identifier="fibonacci" kind="constant"/>
+                        </operator>
+                        <arguments>
+                          <name identifier="j" kind="formal"/>
+                          <application>
+                            <operator builtin="+"/>
+                            <arguments>
+                              <name identifier="i" kind="formal"/>
+                              <name identifier="j" kind="formal"/>
+                            </arguments>
+                          </application>
+                        </arguments>
+                      </application>
+                    </operator>
+                    <arguments>
+                      <application>
+                        <operator builtin="-"/>
+                        <arguments>
+                          <name identifier="n" kind="formal"/>
+                          <numberLiteral value="1"/>
+                        </arguments>
+                      </application>
+                    </arguments>
+                  </application>
+                </else>
+              </if>
+            </else>
+          </if>
+        </lambda>
+      </body>
+    </function>
+    <function identifier="sum">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="n">
+          <primitiveType identifier="int"/>
+        </parameter>
+        <parameter identifier="f">
+          <functionType>
+            <domain>
+              <primitiveType identifier="int"/>
+            </domain>
+            <range>
+              <primitiveType identifier="int"/>
+            </range>
+          </functionType>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator builtin="=="/>
+              <arguments>
+                <name identifier="n" kind="formal"/>
+                <numberLiteral value="0"/>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <numberLiteral value="0"/>
+          </then>
+          <else>
+            <application>
+              <operator builtin="+"/>
+              <arguments>
+                <application>
+                  <operator>
+                    <name identifier="f" kind="formal"/>
+                  </operator>
+                  <arguments>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <name identifier="n" kind="formal"/>
+                        <numberLiteral value="1"/>
+                      </arguments>
+                    </application>
+                  </arguments>
+                </application>
+                <application>
+                  <operator>
+                    <name identifier="sum" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <application>
+                      <operator builtin="-"/>
+                      <arguments>
+                        <name identifier="n" kind="formal"/>
+                        <numberLiteral value="1"/>
+                      </arguments>
+                    </application>
+                    <name identifier="f" kind="formal"/>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </else>
+        </if>
+      </body>
+    </function>
+    <function identifier="sum_fibo">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="n">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator>
+            <name identifier="sum" kind="constant"/>
+          </operator>
+          <arguments>
+            <name identifier="n" kind="variable"/>
+            <application>
+              <operator>
+                <name identifier="fibonacci" kind="constant"/>
+              </operator>
+              <arguments>
+                <numberLiteral value="1"/>
+                <numberLiteral value="1"/>
+              </arguments>
+            </application>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="sum_fact">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="n">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator>
+            <name identifier="sum" kind="constant"/>
+          </operator>
+          <arguments>
+            <name identifier="n" kind="variable"/>
+            <name identifier="factorial" kind="constant"/>
+          </arguments>
+        </application>
+      </body>
+    </function>
+  </definitions>
+</module>
