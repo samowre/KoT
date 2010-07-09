@@ -1,0 +1,83 @@
+<!-- File: function_update.xml 
+           Automatically generated from PVS theory function_update (function_update.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:22:46 7/9/2010 -->
+
+<module identifier="function_update">
+  <parameters/>
+  <definitions>
+    <function identifier="f">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="x">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <application>
+          <operator builtin="-"/>
+          <arguments>
+            <application>
+              <operator builtin="*"/>
+              <arguments>
+                <name identifier="x" kind="formal"/>
+                <name identifier="x" kind="formal"/>
+              </arguments>
+            </application>
+            <numberLiteral value="4"/>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="g">
+      <returnType>
+        <arrayType>
+          <primitiveType identifier="int"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <let identifier="E45">
+          <type>
+            <arrayType>
+              <primitiveType identifier="int"/>
+            </arrayType>
+          </type>
+          <expression>
+            <arrayAssignment identifier="f">
+              <index>
+                <numberLiteral value="0"/>
+              </index>
+              <rhs>
+                <numberLiteral value="0"/>
+              </rhs>
+            </arrayAssignment>
+          </expression>
+          <in>
+            <arrayAssignment identifier="E45">
+              <index>
+                <numberLiteral value="2"/>
+              </index>
+              <rhs>
+                <application>
+                  <operator builtin="-"/>
+                  <arguments>
+                    <numberLiteral value="4"/>
+                  </arguments>
+                </application>
+              </rhs>
+            </arrayAssignment>
+          </in>
+        </let>
+      </body>
+    </function>
+  </definitions>
+</module>

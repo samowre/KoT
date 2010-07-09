@@ -1,0 +1,74 @@
+<!-- File: nested_updates.xml 
+           Automatically generated from PVS theory nested_updates (nested_updates.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:22:47 7/9/2010 -->
+
+<module identifier="nested_updates">
+  <parameters/>
+  <definitions>
+    <record identifier="R">
+      <field identifier="x">
+        <primitiveType identifier="int"/>
+      </field>
+      <field identifier="y">
+        <primitiveType identifier="int"/>
+      </field>
+    </record>
+    <function identifier="f">
+      <returnType>
+        <recordType identifier="R"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="i">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <recordLiteral>
+          <assignment identifier="x">
+            <application>
+              <operator builtin="+"/>
+              <arguments>
+                <name identifier="i" kind="formal"/>
+                <numberLiteral value="1"/>
+              </arguments>
+            </application>
+          </assignment>
+          <assignment identifier="y">
+            <application>
+              <operator builtin="*"/>
+              <arguments>
+                <name identifier="i" kind="formal"/>
+                <name identifier="i" kind="formal"/>
+              </arguments>
+            </application>
+          </assignment>
+        </recordLiteral>
+      </body>
+    </function>
+    <function identifier="g">
+      <returnType>
+        <arrayType>
+          <recordType identifier="R"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <arrayAssignment identifier="f">
+          <index>
+            <numberLiteral value="0"/>
+          </index>
+          <rhs>
+            <numberLiteral value="0"/>
+          </rhs>
+        </arrayAssignment>
+      </body>
+    </function>
+  </definitions>
+</module>

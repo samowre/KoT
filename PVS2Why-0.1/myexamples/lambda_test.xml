@@ -1,0 +1,207 @@
+<!-- File: lambda_test.xml 
+           Automatically generated from PVS theory lambda_test (lambda.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:22:46 7/9/2010 -->
+
+<module identifier="lambda_test">
+  <parameters/>
+  <definitions>
+    <function identifier="t1">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="i">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <name identifier="i" kind="variable"/>
+      </body>
+    </function>
+    <function identifier="t2">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="i">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <name identifier="i" kind="variable"/>
+      </body>
+    </function>
+    <function identifier="plus1">
+      <returnType>
+        <arrayType>
+          <primitiveType identifier="int"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="u">
+          <arrayType>
+            <primitiveType identifier="int"/>
+          </arrayType>
+        </parameter>
+        <parameter identifier="v">
+          <arrayType>
+            <primitiveType identifier="int"/>
+          </arrayType>
+        </parameter>
+      </parameters>
+      <body>
+        <arrayLiteral lowerBound="#<why-literal>" upperBound="#<why-function-application>">
+          <elementType>
+            <primitiveType identifier="int"/>
+          </elementType>
+          <inititalization>
+            <lambda>
+              <parameters>
+                <parameter identifier="i">
+                  <primitiveType identifier="int"/>
+                </parameter>
+              </parameters>
+              <application>
+                <operator builtin="+"/>
+                <arguments>
+                  <arraySubscription identifier="#<why-name>">
+                    <name identifier="i" kind="formal"/>
+                  </arraySubscription>
+                  <arraySubscription identifier="#<why-name>">
+                    <name identifier="i" kind="formal"/>
+                  </arraySubscription>
+                </arguments>
+              </application>
+            </lambda>
+          </inititalization>
+        </arrayLiteral>
+      </body>
+    </function>
+    <function identifier="plus2">
+      <returnType>
+        <arrayType>
+          <primitiveType identifier="int"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="u">
+          <arrayType>
+            <primitiveType identifier="int"/>
+          </arrayType>
+        </parameter>
+        <parameter identifier="v">
+          <arrayType>
+            <primitiveType identifier="int"/>
+          </arrayType>
+        </parameter>
+      </parameters>
+      <body>
+        <arrayLiteral lowerBound="#<why-literal>" upperBound="#<why-function-application>">
+          <elementType>
+            <primitiveType identifier="int"/>
+          </elementType>
+          <inititalization>
+            <lambda>
+              <parameters>
+                <parameter identifier="i">
+                  <primitiveType identifier="int"/>
+                </parameter>
+              </parameters>
+              <application>
+                <operator builtin="+"/>
+                <arguments>
+                  <arraySubscription identifier="#<why-name>">
+                    <name identifier="i" kind="formal"/>
+                  </arraySubscription>
+                  <arraySubscription identifier="#<why-name>">
+                    <name identifier="i" kind="formal"/>
+                  </arraySubscription>
+                </arguments>
+              </application>
+            </lambda>
+          </inititalization>
+        </arrayLiteral>
+      </body>
+    </function>
+    <function identifier="plus">
+      <returnType>
+        <functionType>
+          <domain>
+            <primitiveType identifier="int"/>
+          </domain>
+          <range>
+            <primitiveType identifier="int"/>
+          </range>
+        </functionType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="f">
+          <functionType>
+            <domain>
+              <primitiveType identifier="int"/>
+            </domain>
+            <range>
+              <primitiveType identifier="int"/>
+            </range>
+          </functionType>
+        </parameter>
+        <parameter identifier="g">
+          <functionType>
+            <domain>
+              <primitiveType identifier="int"/>
+            </domain>
+            <range>
+              <primitiveType identifier="int"/>
+            </range>
+          </functionType>
+        </parameter>
+      </parameters>
+      <body>
+        <lambda>
+          <parameters>
+            <parameter identifier="j">
+              <primitiveType identifier="int"/>
+            </parameter>
+          </parameters>
+          <application>
+            <operator builtin="+"/>
+            <arguments>
+              <application>
+                <operator>
+                  <name identifier="f" kind="formal"/>
+                </operator>
+                <arguments>
+                  <name identifier="j" kind="formal"/>
+                </arguments>
+              </application>
+              <application>
+                <operator>
+                  <name identifier="g" kind="formal"/>
+                </operator>
+                <arguments>
+                  <name identifier="j" kind="formal"/>
+                </arguments>
+              </application>
+            </arguments>
+          </application>
+        </lambda>
+      </body>
+    </function>
+  </definitions>
+</module>

@@ -1,0 +1,340 @@
+<!-- File: test_aliasing.xml 
+           Automatically generated from PVS theory test_aliasing (test_aliasing.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:22:49 7/9/2010 -->
+
+<module identifier="test_aliasing">
+  <parameters/>
+  <definitions>
+    <function identifier="tab">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="i">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator builtin="=="/>
+              <arguments>
+                <name identifier="i" kind="formal"/>
+                <numberLiteral value="0"/>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <numberLiteral value="3"/>
+          </then>
+          <else>
+            <if>
+              <condition>
+                <application>
+                  <operator builtin="=="/>
+                  <arguments>
+                    <name identifier="i" kind="formal"/>
+                    <numberLiteral value="1"/>
+                  </arguments>
+                </application>
+              </condition>
+              <then>
+                <numberLiteral value="42"/>
+              </then>
+              <else>
+                <if>
+                  <condition>
+                    <application>
+                      <operator builtin="=="/>
+                      <arguments>
+                        <name identifier="i" kind="formal"/>
+                        <numberLiteral value="2"/>
+                      </arguments>
+                    </application>
+                  </condition>
+                  <then>
+                    <numberLiteral value="7"/>
+                  </then>
+                  <else>
+                    <numberLiteral value="7"/>
+                  </else>
+                </if>
+              </else>
+            </if>
+          </else>
+        </if>
+      </body>
+    </function>
+    <function identifier="plus">
+      <returnType>
+        <arrayType>
+          <primitiveType identifier="int"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="tab1">
+          <arrayType>
+            <primitiveType identifier="int"/>
+          </arrayType>
+        </parameter>
+        <parameter identifier="tab2">
+          <arrayType>
+            <primitiveType identifier="int"/>
+          </arrayType>
+        </parameter>
+      </parameters>
+      <body>
+        <arrayLiteral lowerBound="#<why-literal>" upperBound="#<why-function-application>">
+          <elementType>
+            <primitiveType identifier="int"/>
+          </elementType>
+          <inititalization>
+            <lambda>
+              <parameters>
+                <parameter identifier="i">
+                  <primitiveType identifier="int"/>
+                </parameter>
+              </parameters>
+              <application>
+                <operator builtin="+"/>
+                <arguments>
+                  <arraySubscription identifier="#<why-name>">
+                    <name identifier="i" kind="formal"/>
+                  </arraySubscription>
+                  <arraySubscription identifier="#<why-name>">
+                    <name identifier="i" kind="formal"/>
+                  </arraySubscription>
+                </arguments>
+              </application>
+            </lambda>
+          </inititalization>
+        </arrayLiteral>
+      </body>
+    </function>
+    <function identifier="f">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="i">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <name identifier="i" kind="variable"/>
+      </body>
+    </function>
+    <function identifier="g">
+      <returnType>
+        <arrayType>
+          <primitiveType identifier="int"/>
+        </arrayType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <application>
+          <operator>
+            <name identifier="plus" kind="constant"/>
+          </operator>
+          <arguments>
+            <application>
+              <operator builtin="pvsrestrict"/>
+              <arguments>
+                <name identifier="f" kind="constant"/>
+              </arguments>
+            </application>
+            <name identifier="tab" kind="constant"/>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="h">
+      <returnType>
+        <functionType>
+          <domain>
+            <primitiveType identifier="int"/>
+          </domain>
+          <range>
+            <primitiveType identifier="int"/>
+          </range>
+        </functionType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="i">
+          <primitiveType identifier="int"/>
+        </parameter>
+      </parameters>
+      <body>
+        <lambda>
+          <parameters>
+            <parameter identifier="j">
+              <primitiveType identifier="int"/>
+            </parameter>
+          </parameters>
+          <application>
+            <operator builtin="+"/>
+            <arguments>
+              <name identifier="i" kind="formal"/>
+              <name identifier="j" kind="formal"/>
+            </arguments>
+          </application>
+        </lambda>
+      </body>
+    </function>
+    <function identifier="hbis">
+      <returnType>
+        <functionType>
+          <domain>
+            <primitiveType identifier="int"/>
+          </domain>
+          <range>
+            <functionType>
+              <domain>
+                <primitiveType identifier="int"/>
+              </domain>
+              <range>
+                <primitiveType identifier="int"/>
+              </range>
+            </functionType>
+          </range>
+        </functionType>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <lambda>
+          <parameters>
+            <parameter identifier="x">
+              <primitiveType identifier="int"/>
+            </parameter>
+          </parameters>
+          <if>
+            <condition>
+              <application>
+                <operator builtin="=="/>
+                <arguments>
+                  <name identifier="x" kind="formal"/>
+                  <numberLiteral value="0"/>
+                </arguments>
+              </application>
+            </condition>
+            <then>
+              <lambda>
+                <parameters>
+                  <parameter identifier="x1">
+                    <primitiveType identifier="int"/>
+                  </parameter>
+                </parameters>
+                <if>
+                  <condition>
+                    <application>
+                      <operator builtin="=="/>
+                      <arguments>
+                        <name identifier="x1" kind="formal"/>
+                        <numberLiteral value="0"/>
+                      </arguments>
+                    </application>
+                  </condition>
+                  <then>
+                    <numberLiteral value="1"/>
+                  </then>
+                  <else>
+                    <application>
+                      <operator>
+                        <application>
+                          <operator>
+                            <name identifier="h" kind="constant"/>
+                          </operator>
+                          <arguments>
+                            <name identifier="x" kind="formal"/>
+                          </arguments>
+                        </application>
+                      </operator>
+                      <arguments>
+                        <name identifier="x1" kind="formal"/>
+                      </arguments>
+                    </application>
+                  </else>
+                </if>
+              </lambda>
+            </then>
+            <else>
+              <application>
+                <operator>
+                  <name identifier="h" kind="constant"/>
+                </operator>
+                <arguments>
+                  <name identifier="x" kind="formal"/>
+                </arguments>
+              </application>
+            </else>
+          </if>
+        </lambda>
+      </body>
+    </function>
+    <record identifier="test">
+      <field identifier="f">
+        <arrayType>
+          <primitiveType identifier="int"/>
+        </arrayType>
+      </field>
+      <field identifier="x">
+        <primitiveType identifier="int"/>
+      </field>
+    </record>
+    <function identifier="hj">
+      <returnType>
+        <recordType identifier="test"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <recordLiteral>
+          <assignment identifier="f">
+            <name identifier="g" kind="constant"/>
+          </assignment>
+          <assignment identifier="x">
+            <numberLiteral value="0"/>
+          </assignment>
+        </recordLiteral>
+      </body>
+    </function>
+    <function identifier="hk">
+      <returnType>
+        <recordType identifier="test"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <recordAssignment identifier="hj">
+          <assignment identifier="x">
+            <numberLiteral value="1"/>
+          </assignment>
+        </recordAssignment>
+      </body>
+    </function>
+  </definitions>
+</module>

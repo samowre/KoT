@@ -1,0 +1,40 @@
+test_aliasing: THEORY
+BEGIN
+
+  T: TYPE = [below(3) -> nat]
+
+%  tab: T = LAMBDA(i: below(100)): i
+
+%  inc_r(tab: T, i: below(101)): RECURSIVE T = 
+%    IF i=0 
+%    THEN tab
+%    ELSE inc_r(tab WITH [(i-1):= tab(i-1) + 1], i-1) 
+%    ENDIF
+%    MEASURE i
+
+%  inc(tab: T):T = inc_r(tab, 100)
+
+   tab(i: below(3)): nat = COND 
+   	  i = 0 -> 3,
+	  i = 1 -> 42,
+	  i = 2 -> 7
+	  ENDCOND
+
+   plus(tab1: T, tab2: T)(i: below(3)): nat = tab1(i) + tab2(i)
+
+%   res: T = plus(tab WITH[(0):= 2], tab)
+
+   f(i: nat): nat = i
+   
+   g: T = plus(f, tab)
+
+   h(i: nat)(j: nat): nat = i + j
+
+   hbis : [nat -> [nat -> nat]] = h WITH[(0)(0):= 1]
+
+   test: TYPE = [# x: nat, f: T #]
+
+   hj: test = (# x:= 0, f:= g #)
+   hk: test = hj WITH[(x):= 1]
+  
+END test_aliasing

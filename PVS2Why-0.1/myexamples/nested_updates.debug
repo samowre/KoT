@@ -1,0 +1,321 @@
+
+Context file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why-0.1/myexamples/.pvscontext written
+Context changed to ~/Documents/STAGE/pvs4.2/lib/PVS2Why-0.1/myexamples/
+Loading prelude library context from /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/...
+/home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/.pvscontext is empty
+  no PVS files loaded
+;;; Compiling file pvs-lib.lisp
+;;; Writing fasl file pvs-lib.lfasl
+;;; Fasl write complete
+
+Loading pvs-lib.lfasl...
+;   Fast loading
+;      /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/pvs-lib.lfasl
+
+Loading prelude library context from /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/...
+/home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/.pvscontext is empty
+  no PVS files loaded
+;;; Compiling file pvs-lib.lisp
+;;; Writing fasl file pvs-lib.lfasl
+;;; Fasl write complete
+
+Loading pvs-lib.lfasl...
+;     Fast loading
+;        /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/pvs-lib.lfasl
+
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/pregexp.lfasl
+;       Fast loading
+;          /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/pregexp.lfasl
+
+pregexp.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/prooflite.lfasl
+;       Fast loading
+;          /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/prooflite.lfasl
+
+prooflite.lfasl loaded
+pvs-lib.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/util.lfasl
+util.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/why.lfasl
+Warning: Ignoring declaration of unrecognized ftype: (FUNCTION (T) WHY-GENERIC-TYPE)
+Warning: The type subform of the FTYPE declaration must be a subtype of FUNCTION: (FTYPE (FUNCTION (T) WHY-GENERIC-TYPE) PARAMETERS)
+
+why.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/pvs2why.lfasl
+pvs2why.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/why2xml.lfasl
+why2xml.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/why2java.lfasl
+why2java.lfasl loaded
+pvs-lib.lfasl loaded
+Parsing nested_updates
+nested_updates parsed in 0.00 seconds
+Typechecking nested_updates
+nested_updates typechecked in 0.11s: No TCCs generated
+***
+*** Processing ./nested_updates.pvs via PVS2Why-0.1 (11/10/07)
+***
+Function: pvs2why-theory: nested_updates 
+Function: pvs2why-one-theory: nested_updates 
+Function: pvs2why-type-parameters:  
+Result: nil 
+here1Function: pvs2why-imports:  
+Function:pvs2why-record-definition: R 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-binding y #<why-primitive-type> 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-binding x #<why-primitive-type> 
+mk-why-record R (#<why-binding> #<why-binding>)
+Function: pvs2why-declaration: #<const-decl nested_updates.f>
+Function: pvs2why-resolution-destructive #<const-decl nested_updates.f>  i:
+                                                                           below(10)  R
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-record-type>
+Function: pvs2why*-record-expr: (# x := i + 1, y := i * i #)    i: below(10) . i  R 
+Function: pvs2why*-application: i * i nat 
+decl-type numfield 
+Function: pvs2why-primitive-app:  i  i    numfield  numfield  nat 
+Function: pvs2why*-list:  i  i   numfield  numfield  
+Function: pvs2why*-name-expr: i   i: below(10) . i   numfield 
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+mk-why-name i formal #<why-primitive-type>
+Function: pvs2why*-list:  i   numfield  
+Function: pvs2why*-name-expr: i   i: below(10) . i   numfield 
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+mk-why-name i formal #<why-primitive-type>
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name * constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name> #<why-name>) # t nil #<why-primitive-type>  
+mk-why-assignment y #<why-function-application> 
+Function: pvs2why*-application: i + 1 nat 
+decl-type numfield 
+Function: pvs2why-primitive-app:  i  1    numfield  numfield  nat 
+Function: pvs2why*-list:  i  1   numfield  numfield  
+Function: pvs2why*-name-expr: i   i: below(10) . i   numfield 
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+mk-why-name i formal #<why-primitive-type>
+Function: pvs2why*-list:  1   numfield  
+Function: pvs2why*-number-expr: 1 numfield 
+mk-why-literal 1 number
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name + constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name> #<why-literal>) # t nil #<why-primitive-type>  
+mk-why-assignment x #<why-function-application> 
+## R ##Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-record-literal  #<why-assignment>  #<why-assignment>  #<why-record-type>
+mk-why-function f (i) #<why-record-literal> #<why-function-type>
+mk-why-binding i #<why-primitive-type> 
+Function: pvs2why-declaration: #<const-decl nested_updates.g>
+Function: pvs2why-resolution-destructive #<const-decl nested_updates.g>  T
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+mk-why-function-type: domain nil range #<why-array-type>
+Function: pvs2why*-update-expr f WITH [(0)(x) := 0] T 
+Function: pvs2why-update f WITH [(0)(x) := 0] T 
+Function: pvs2why*-name-expr: f   T 
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+mk-why-name f constant #<why-array-type>
+Recordtype? t1 t2 T T 
+Function: pvs2why-coerce-types T T 
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+Function: pvs2why-array-update* T f  (0)(x) := 0  
+Function: pvs2why*-number-expr: 0 T 
+mk-why-literal 0 number
+Function: pvs2why*-number-expr: 0 T 
+mk-why-literal 0 number
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+mk-why-array-assignment f #<why-literal> #<why-literal> #<why-array-type>
+mk-why-function g nil #<why-array-assignment> #<why-function-type>
+mk-why-module nested_updates nil (#<why-record> #<why-function> #<why-function>) nil nil 
+*** nested_updates (./nested_updates.pvs) --> ./nested_updates.xml
+Function: pvs2why-theory: nested_updates 
+Function: pvs2why-one-theory: nested_updates 
+Function: pvs2why-type-parameters:  
+Result: nil 
+here1Function: pvs2why-imports:  
+Function:pvs2why-record-definition: R 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-binding y #<why-primitive-type> 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-binding x #<why-primitive-type> 
+mk-why-record R (#<why-binding> #<why-binding>)
+Function: pvs2why-declaration: #<const-decl nested_updates.f>
+Function: pvs2why-resolution-destructive #<const-decl nested_updates.f>  i:
+                                                                           below(10)  R
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-record-type>
+Function: pvs2why*-record-expr: (# x := i + 1, y := i * i #)    i: below(10) . i  R 
+Function: pvs2why*-application: i * i nat 
+decl-type numfield 
+Function: pvs2why-primitive-app:  i  i    numfield  numfield  nat 
+Function: pvs2why*-list:  i  i   numfield  numfield  
+Function: pvs2why*-name-expr: i   i: below(10) . i   numfield 
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+mk-why-name i formal #<why-primitive-type>
+Function: pvs2why*-list:  i   numfield  
+Function: pvs2why*-name-expr: i   i: below(10) . i   numfield 
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+mk-why-name i formal #<why-primitive-type>
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name * constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name> #<why-name>) # t nil #<why-primitive-type>  
+mk-why-assignment y #<why-function-application> 
+Function: pvs2why*-application: i + 1 nat 
+decl-type numfield 
+Function: pvs2why-primitive-app:  i  1    numfield  numfield  nat 
+Function: pvs2why*-list:  i  1   numfield  numfield  
+Function: pvs2why*-name-expr: i   i: below(10) . i   numfield 
+Function: pvs2why-type-subtype: below(10)
+mk-why-primitive-type: int nil nil 
+mk-why-name i formal #<why-primitive-type>
+Function: pvs2why*-list:  1   numfield  
+Function: pvs2why*-number-expr: 1 numfield 
+mk-why-literal 1 number
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name + constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name> #<why-literal>) # t nil #<why-primitive-type>  
+mk-why-assignment x #<why-function-application> 
+## R ##Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-record-literal  #<why-assignment>  #<why-assignment>  #<why-record-type>
+mk-why-function f (i) #<why-record-literal> #<why-function-type>
+mk-why-binding i #<why-primitive-type> 
+Function: pvs2why-declaration: #<const-decl nested_updates.g>
+Function: pvs2why-resolution-destructive #<const-decl nested_updates.g>  T
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+mk-why-function-type: domain nil range #<why-array-type>
+Function: pvs2why*-update-expr f WITH [(0)(x) := 0] T 
+Function: pvs2why-update f WITH [(0)(x) := 0] T 
+Function: pvs2why*-name-expr: f   T 
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+mk-why-name f constant #<why-array-type>
+Recordtype? t1 t2 T T 
+Function: pvs2why-coerce-types T T 
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+Function: pvs2why-array-update* T f  (0)(x) := 0  
+Function: pvs2why*-number-expr: 0 T 
+mk-why-literal 0 number
+Function: pvs2why*-number-expr: 0 T 
+mk-why-literal 0 number
+Function: pvs2why-type-funtype T
+mk-why-literal 0 int
+mk-why-literal 0 int
+Function: pvs2why-type-record: R 
+mk-why-record-type: R nil 
+mk-why-array-type: #<why-literal> #<why-literal> #<why-record-type>
+mk-why-array-assignment f #<why-literal> #<why-literal> #<why-array-type>
+mk-why-function g nil #<why-array-assignment> #<why-function-type>
+mk-why-module nested_updates nil (#<why-record> #<why-function> #<why-function>) nil nil 
+Enter lifted expr: new R(i+1,i*i)
+lift-let*-why-record-literal: #<why-record-literal> 
+lift-let*-list: (#<why-assignment> #<why-assignment>) 
+lift-let*-why-assignment: #<why-assignment> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-name> #<why-literal>) 
+lift-let*-default: #<why-name> 
+lift-let*-default: #<why-literal> 
+lift-let*-why-assignment: #<why-assignment> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-name> #<why-name>) 
+lift-let*-default: #<why-name> 
+lift-let*-default: #<why-name> 
+Leave lifted-expr : (#<why-record-literal>)
+Translated lifted-expr: new R(i+1,i*i)
+Prefix: nil
+*** nested_updates (./nested_updates.pvs) --> ./nested_updates.java

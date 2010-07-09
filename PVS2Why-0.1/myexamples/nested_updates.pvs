@@ -1,0 +1,12 @@
+nested_updates: THEORY
+BEGIN
+
+  R: TYPE = [# x, y: nat #]
+
+  T: TYPE = [below(10) -> R]
+
+  f: T = LAMBDA(i: below(10)): (# x:= i + 1, y:= i * i #)
+
+  g: T = f WITH [(0)(x):= 0]
+
+END nested_updates

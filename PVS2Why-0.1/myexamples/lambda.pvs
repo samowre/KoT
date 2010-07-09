@@ -1,0 +1,21 @@
+lambda_test: THEORY
+BEGIN
+
+	i: VAR below(3) 
+
+	T: TYPE = [below(3) -> nat]
+	u, v: VAR T
+
+	t1: T = LAMBDA(i): i
+
+	t2(i): nat = i 
+
+	plus1(u, v)(i): nat = u(i) + v(i)
+
+	plus2(u, v): T = LAMBDA(i): u(i)+v(i)
+
+	f, g: VAR [nat -> nat]
+	j: VAR nat
+	plus(f, g)(j):nat = f(j)+g(j)
+
+END lambda_test

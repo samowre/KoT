@@ -1,0 +1,12 @@
+function_update: THEORY
+BEGIN
+
+  T: TYPE = [below(42) -> nat]
+
+  f: T = LAMBDA(x: below(42)): x*x - 4
+
+%  trans(ff: T): T = LAMBDA(x:below(42)): ff(x)+1
+
+  g: T = (f WITH[(0):= 0]) WITH [(2):= -4]
+
+END function_update 

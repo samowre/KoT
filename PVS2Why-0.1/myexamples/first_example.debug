@@ -1,0 +1,911 @@
+
+Context file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why-0.1/myexamples/.pvscontext written
+Context changed to ~/Documents/STAGE/pvs4.2/lib/PVS2Why-0.1/myexamples/
+Loading prelude library context from /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/...
+/home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/.pvscontext is empty
+  no PVS files loaded
+;;; Compiling file pvs-lib.lisp
+;;; Writing fasl file pvs-lib.lfasl
+;;; Fasl write complete
+
+Loading pvs-lib.lfasl...
+;   Fast loading
+;      /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/pvs-lib.lfasl
+
+Loading prelude library context from /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/...
+/home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/.pvscontext is empty
+  no PVS files loaded
+;;; Compiling file pvs-lib.lisp
+;;; Writing fasl file pvs-lib.lfasl
+;;; Fasl write complete
+
+Loading pvs-lib.lfasl...
+;     Fast loading
+;        /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/pvs-lib.lfasl
+
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/pregexp.lfasl
+;       Fast loading
+;          /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/pregexp.lfasl
+
+pregexp.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/prooflite.lfasl
+;       Fast loading
+;          /home/toubhans/Documents/STAGE/pvs4.2/lib/ProofLite/prooflite.lfasl
+
+prooflite.lfasl loaded
+pvs-lib.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/util.lfasl
+util.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/why.lfasl
+Warning: Ignoring declaration of unrecognized ftype: (FUNCTION (T) WHY-GENERIC-TYPE)
+Warning: The type subform of the FTYPE declaration must be a subtype of FUNCTION: (FTYPE (FUNCTION (T) WHY-GENERIC-TYPE) PARAMETERS)
+
+why.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/pvs2why.lfasl
+pvs2why.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/why2xml.lfasl
+why2xml.lfasl loaded
+Loading file /home/toubhans/Documents/STAGE/pvs4.2/lib/PVS2Why/why2java.lfasl
+why2java.lfasl loaded
+pvs-lib.lfasl loaded
+Parsing first_example
+first_example parsed in 0.01 seconds
+Typechecking first_example
+type_test typechecked in 0.24s: 4 TCCs, 0 proved, 0 subsumed, 4 unproved
+***
+*** Processing ./first_example.pvs via PVS2Why-0.1 (11/10/07)
+***
+Function: pvs2why-theory: type_test 
+Function: pvs2why-one-theory: type_test 
+Function: pvs2why-type-parameters:  
+Result: nil 
+here1Function: pvs2why-imports:  
+Function: pvs2why-constructors: my_list :  nil: nil?  con(hd: int, tl: my_list)
+                                                         : con?  
+tmk-why-constructor: nil? nil nil 
+tFunction: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-binding hd #<why-primitive-type> 
+mk-why-binding tl #<why-primitive-type> 
+mk-why-constructor: con? con (#<why-binding> #<why-binding>) 
+mk-why-adt-def: my_list (#<why-constructor> #<why-constructor>) 
+Function: pvs2why-declaration: #<def-decl type_test.length>
+Function: pvs2why-resolution-destructive #<def-decl type_test.length>  l:
+                                                                         my_list  int
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+Function: pvs2why*-cases-expr: CASES l OF nil: 0, con(hd, tl): length(tl) + 1
+                                 ENDCASES int 
+Function: pvs2why*-name-expr: l   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name l formal #<why-primitive-type>
+Function: pvs2why-cases: #<why-name>  nil: 0  con(hd, tl): length(tl) + 1  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name nilQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-number-expr: 0 int 
+mk-why-literal 0 number
+Function: pvs2why-type-subtype: real
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases: #<why-name>  con(hd, tl): length(tl) + 1  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name conQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-application: length(tl) + 1 int 
+decl-type numfield 
+Function: pvs2why-primitive-app:  length(tl)  1    numfield  numfield  int 
+Function: pvs2why*-list:  length(tl)  1   numfield  numfield  
+Function: pvs2why*-application: length(tl) numfield 
+decl-type int 
+Function: pvs2why-defn-application: length(tl) numfield 
+Declared type: [my_list -> int] 
+Domain type:  my_list  
+Function: pvs2why*-list:  tl   my_list  
+Function: pvs2why*-name-expr: tl   tl: my_list . tl   hd: int . hd   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl formal #<why-primitive-type>
+Function: pvs2why*-list:   
+Function: pvs2why*-name-expr: length   tl: my_list . tl   hd: int . hd   l:
+                                                                           my_list . l   int 
+Function: pvs2why-type-funtype [my_list -> int]
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name length constant #<why-function-type>
+Before Declared type: numfield 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Why Declared type: #<why-primitive-type> 
+mk-why-function-application #<why-name> (#<why-name>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:  1   numfield  
+Function: pvs2why*-number-expr: 1 numfield 
+mk-why-literal 1 number
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name + constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-function-application> #<why-literal>) # t nil #<why-primitive-type>  
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases-let #<why-name>  hd: int  tl: my_list   hd  tl  #<why-function-application> con 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-name hd constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-binding hd #<why-primitive-type> 
+Function: pvs2why-cases-let #<why-name>  tl: my_list   tl  #<why-function-application> con 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-binding tl #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-function-application> #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-let> #<why-primitive-type> 
+mk-why-conditional #<why-function-application> #<why-let> nil 
+mk-why-conditional #<why-function-application> #<why-literal> #<why-conditional> 
+mk-why-function length (l) #<why-conditional> #<why-function-type>
+mk-why-binding l #<why-primitive-type> 
+Function: pvs2why-declaration: #<def-decl type_test.sum>
+Function: pvs2why-resolution-destructive #<def-decl type_test.sum>  l: my_list  nat
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+Function: pvs2why*-cases-expr: CASES l OF nil: 0, con(hd, tl): hd + sum(tl)
+                                 ENDCASES nat 
+Function: pvs2why*-name-expr: l   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name l formal #<why-primitive-type>
+Function: pvs2why-cases: #<why-name>  nil: 0  con(hd, tl): hd + sum(tl)  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name nilQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-number-expr: 0 nat 
+mk-why-literal 0 number
+Function: pvs2why-type-subtype: real
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases: #<why-name>  con(hd, tl): hd + sum(tl)  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name conQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-application: hd + sum(tl) nat 
+decl-type numfield 
+Function: pvs2why-primitive-app:  hd  sum(tl)    numfield  numfield  nat 
+Function: pvs2why*-list:  hd  sum(tl)   numfield  numfield  
+Function: pvs2why*-name-expr: hd   tl: my_list . tl   hd: int . hd   l: my_list . l   numfield 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-name hd formal #<why-primitive-type>
+Function: pvs2why*-list:  sum(tl)   numfield  
+Function: pvs2why*-application: sum(tl) numfield 
+decl-type nat 
+Function: pvs2why-defn-application: sum(tl) numfield 
+Declared type: [my_list -> nat] 
+Domain type:  my_list  
+Function: pvs2why*-list:  tl   my_list  
+Function: pvs2why*-name-expr: tl   tl: my_list . tl   hd: int . hd   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl formal #<why-primitive-type>
+Function: pvs2why*-list:   
+Function: pvs2why*-name-expr: sum   tl: my_list . tl   hd: int . hd   l: my_list . l   nat 
+Function: pvs2why-type-funtype [my_list -> nat]
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name sum constant #<why-function-type>
+Before Declared type: numfield 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Why Declared type: #<why-primitive-type> 
+mk-why-function-application #<why-name> (#<why-name>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name + constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name> #<why-function-application>) # t nil #<why-primitive-type>  
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases-let #<why-name>  hd: int  tl: my_list   hd  tl  #<why-function-application> con 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-name hd constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-binding hd #<why-primitive-type> 
+Function: pvs2why-cases-let #<why-name>  tl: my_list   tl  #<why-function-application> con 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-binding tl #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-function-application> #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-let> #<why-primitive-type> 
+mk-why-conditional #<why-function-application> #<why-let> nil 
+mk-why-conditional #<why-function-application> #<why-literal> #<why-conditional> 
+mk-why-function sum (l) #<why-conditional> #<why-function-type>
+mk-why-binding l #<why-primitive-type> 
+Function: pvs2why-declaration: #<const-decl type_test.ni>
+Function: pvs2why-resolution-destructive #<const-decl type_test.ni>  my_list
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain nil range #<why-primitive-type>
+Function: pvs2why*-name-expr: nil   my_list 
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-constant: nil #<adt-constructor-decl type_test.nil>
+Function: pvs2why-resolution: nil
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.nil>
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name nil constant #<why-primitive-type>
+mk-why-function-application #<why-name> nil # nil nil nil  
+mk-why-function ni nil #<why-function-application> #<why-function-type>
+Function: pvs2why-declaration: #<const-decl type_test.l>
+Function: pvs2why-resolution-destructive #<const-decl type_test.l>  my_list
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain nil range #<why-primitive-type>
+Function: pvs2why*-application: con(0, con(1, con(2, nil))) my_list 
+decl-type (con?) 
+Function: pvs2why*-list:  0  con(1, con(2, nil))   int  my_list  
+Function: pvs2why*-number-expr: 0 int 
+mk-why-literal 0 number
+Function: pvs2why*-list:  con(1, con(2, nil))   my_list  
+Function: pvs2why*-application: con(1, con(2, nil)) my_list 
+decl-type (con?) 
+Function: pvs2why*-list:  1  con(2, nil)   int  my_list  
+Function: pvs2why*-number-expr: 1 int 
+mk-why-literal 1 number
+Function: pvs2why*-list:  con(2, nil)   my_list  
+Function: pvs2why*-application: con(2, nil) my_list 
+decl-type (con?) 
+Function: pvs2why*-list:  2  nil   int  my_list  
+Function: pvs2why*-number-expr: 2 int 
+mk-why-literal 2 number
+Function: pvs2why*-list:  nil   my_list  
+Function: pvs2why*-name-expr: nil   my_list 
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-constant: nil #<adt-constructor-decl type_test.nil>
+Function: pvs2why-resolution: nil
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.nil>
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name nil constant #<why-primitive-type>
+mk-why-function-application #<why-name> nil # nil nil nil  
+Function: pvs2why*-list:   
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-resolution: con
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.con>
+Function: pvs2why-type-funtype [[int, my_list] -> (con?)]
+Function: pvs2why-type-tuple: [int, my_list]
+Function: pvs2why-type-name: int
+Function: pvs2why-type-eq-decl: #<nonempty-type-eq-decl integers.int>
+Function: pvs2why-type-name: integer
+Function: pvs2why-type-decl: #<nonempty-type-from-decl integers.integer> 
+mk-why-primitive-type: integer t nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: (con?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name con constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-literal> #<why-function-application>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:   
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-resolution: con
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.con>
+Function: pvs2why-type-funtype [[int, my_list] -> (con?)]
+Function: pvs2why-type-tuple: [int, my_list]
+Function: pvs2why-type-name: int
+Function: pvs2why-type-eq-decl: #<nonempty-type-eq-decl integers.int>
+Function: pvs2why-type-name: integer
+Function: pvs2why-type-decl: #<nonempty-type-from-decl integers.integer> 
+mk-why-primitive-type: integer t nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: (con?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name con constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-literal> #<why-function-application>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:   
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-resolution: con
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.con>
+Function: pvs2why-type-funtype [[int, my_list] -> (con?)]
+Function: pvs2why-type-tuple: [int, my_list]
+Function: pvs2why-type-name: int
+Function: pvs2why-type-eq-decl: #<nonempty-type-eq-decl integers.int>
+Function: pvs2why-type-name: integer
+Function: pvs2why-type-decl: #<nonempty-type-from-decl integers.integer> 
+mk-why-primitive-type: integer t nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: (con?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name con constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-literal> #<why-function-application>) # nil nil #<why-primitive-type>  
+mk-why-function l nil #<why-function-application> #<why-function-type>
+Function: pvs2why-declaration: #<const-decl type_test.n>
+Function: pvs2why-resolution-destructive #<const-decl type_test.n>  int
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain nil range #<why-primitive-type>
+Function: pvs2why*-application: sum(l) int 
+decl-type nat 
+Function: pvs2why-defn-application: sum(l) int 
+Declared type: [my_list -> nat] 
+Domain type:  my_list  
+Function: pvs2why*-list:  l   my_list  
+Function: pvs2why*-name-expr: l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-constant: l #<const-decl type_test.l>
+Function: pvs2why-resolution: l
+Function: pvs2why-declaration: #<const-decl type_test.l>
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name l constant #<why-primitive-type>
+mk-why-function-application #<why-name> nil # nil nil nil  
+Function: pvs2why*-list:   
+Function: pvs2why*-name-expr: sum   nat 
+Function: pvs2why-type-funtype [my_list -> nat]
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name sum constant #<why-function-type>
+Before Declared type: int 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+Why Declared type: #<why-primitive-type> 
+mk-why-function-application #<why-name> (#<why-function-application>) # nil nil #<why-primitive-type>  
+mk-why-function n nil #<why-function-application> #<why-function-type>
+mk-why-module type_test nil (#<why-adt-def> #<why-function> #<why-function> #<why-function> #<why-function> #<why-function>) nil nil 
+*** type_test (./first_example.pvs) --> ./type_test.xml
+Function: pvs2why-theory: type_test 
+Function: pvs2why-one-theory: type_test 
+Function: pvs2why-type-parameters:  
+Result: nil 
+here1Function: pvs2why-imports:  
+Function: pvs2why-constructors: my_list :  nil: nil?  con(hd: int, tl: my_list)
+                                                         : con?  
+tmk-why-constructor: nil? nil nil 
+tFunction: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-binding hd #<why-primitive-type> 
+mk-why-binding tl #<why-primitive-type> 
+mk-why-constructor: con? con (#<why-binding> #<why-binding>) 
+mk-why-adt-def: my_list (#<why-constructor> #<why-constructor>) 
+Function: pvs2why-declaration: #<def-decl type_test.length>
+Function: pvs2why-resolution-destructive #<def-decl type_test.length>  l:
+                                                                         my_list  int
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+Function: pvs2why*-cases-expr: CASES l OF nil: 0, con(hd, tl): length(tl) + 1
+                                 ENDCASES int 
+Function: pvs2why*-name-expr: l   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name l formal #<why-primitive-type>
+Function: pvs2why-cases: #<why-name>  nil: 0  con(hd, tl): length(tl) + 1  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name nilQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-number-expr: 0 int 
+mk-why-literal 0 number
+Function: pvs2why-type-subtype: real
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases: #<why-name>  con(hd, tl): length(tl) + 1  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name conQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-application: length(tl) + 1 int 
+decl-type numfield 
+Function: pvs2why-primitive-app:  length(tl)  1    numfield  numfield  int 
+Function: pvs2why*-list:  length(tl)  1   numfield  numfield  
+Function: pvs2why*-application: length(tl) numfield 
+decl-type int 
+Function: pvs2why-defn-application: length(tl) numfield 
+Declared type: [my_list -> int] 
+Domain type:  my_list  
+Function: pvs2why*-list:  tl   my_list  
+Function: pvs2why*-name-expr: tl   tl: my_list . tl   hd: int . hd   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl formal #<why-primitive-type>
+Function: pvs2why*-list:   
+Function: pvs2why*-name-expr: length   tl: my_list . tl   hd: int . hd   l:
+                                                                           my_list . l   int 
+Function: pvs2why-type-funtype [my_list -> int]
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name length constant #<why-function-type>
+Before Declared type: numfield 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Why Declared type: #<why-primitive-type> 
+mk-why-function-application #<why-name> (#<why-name>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:  1   numfield  
+Function: pvs2why*-number-expr: 1 numfield 
+mk-why-literal 1 number
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name + constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-function-application> #<why-literal>) # t nil #<why-primitive-type>  
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases-let #<why-name>  hd: int  tl: my_list   hd  tl  #<why-function-application> con 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-name hd constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-binding hd #<why-primitive-type> 
+Function: pvs2why-cases-let #<why-name>  tl: my_list   tl  #<why-function-application> con 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-binding tl #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-function-application> #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-let> #<why-primitive-type> 
+mk-why-conditional #<why-function-application> #<why-let> nil 
+mk-why-conditional #<why-function-application> #<why-literal> #<why-conditional> 
+mk-why-function length (l) #<why-conditional> #<why-function-type>
+mk-why-binding l #<why-primitive-type> 
+Function: pvs2why-declaration: #<def-decl type_test.sum>
+Function: pvs2why-resolution-destructive #<def-decl type_test.sum>  l: my_list  nat
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+Function: pvs2why*-cases-expr: CASES l OF nil: 0, con(hd, tl): hd + sum(tl)
+                                 ENDCASES nat 
+Function: pvs2why*-name-expr: l   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name l formal #<why-primitive-type>
+Function: pvs2why-cases: #<why-name>  nil: 0  con(hd, tl): hd + sum(tl)  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name nilQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-number-expr: 0 nat 
+mk-why-literal 0 number
+Function: pvs2why-type-subtype: real
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases: #<why-name>  con(hd, tl): hd + sum(tl)  nil 
+Type #<why-primitive-type>, Module nil 
+mk-why-primitive-type: boolean nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name conQuestionmark constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name>) # nil nil nil  
+Function: pvs2why*-application: hd + sum(tl) nat 
+decl-type numfield 
+Function: pvs2why-primitive-app:  hd  sum(tl)    numfield  numfield  nat 
+Function: pvs2why*-list:  hd  sum(tl)   numfield  numfield  
+Function: pvs2why*-name-expr: hd   tl: my_list . tl   hd: int . hd   l: my_list . l   numfield 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-name hd formal #<why-primitive-type>
+Function: pvs2why*-list:  sum(tl)   numfield  
+Function: pvs2why*-application: sum(tl) numfield 
+decl-type nat 
+Function: pvs2why-defn-application: sum(tl) numfield 
+Declared type: [my_list -> nat] 
+Domain type:  my_list  
+Function: pvs2why*-list:  tl   my_list  
+Function: pvs2why*-name-expr: tl   tl: my_list . tl   hd: int . hd   l: my_list . l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl formal #<why-primitive-type>
+Function: pvs2why*-list:   
+Function: pvs2why*-name-expr: sum   tl: my_list . tl   hd: int . hd   l: my_list . l   nat 
+Function: pvs2why-type-funtype [my_list -> nat]
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name sum constant #<why-function-type>
+Before Declared type: numfield 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Why Declared type: #<why-primitive-type> 
+mk-why-function-application #<why-name> (#<why-name>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:   
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+Function: pvs2why-type-funtype [[numfield, numfield] -> numfield]
+Function: pvs2why-type-tuple: [numfield, numfield]
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name + constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-name> #<why-function-application>) # t nil #<why-primitive-type>  
+Function: pvs2why-type-subtype: numfield
+mk-why-primitive-type: real nil nil 
+Function: pvs2why-cases-let #<why-name>  hd: int  tl: my_list   hd  tl  #<why-function-application> con 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-name hd constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-binding hd #<why-primitive-type> 
+Function: pvs2why-cases-let #<why-name>  tl: my_list   tl  #<why-function-application> con 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name tl constant #<why-primitive-type>
+mk-why-primitive-type: con t nil 
+mk-why-cast: #<why-primitive-type> #<why-name> 
+mk-why-function-application #<why-name> (#<why-cast>) # #<why-primitive-type> nil nil  
+Type why-expr: #<why-primitive-type>
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-binding tl #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-function-application> #<why-primitive-type> 
+mk-why-let #<why-binding> #<why-function-application> #<why-let> #<why-primitive-type> 
+mk-why-conditional #<why-function-application> #<why-let> nil 
+mk-why-conditional #<why-function-application> #<why-literal> #<why-conditional> 
+mk-why-function sum (l) #<why-conditional> #<why-function-type>
+mk-why-binding l #<why-primitive-type> 
+Function: pvs2why-declaration: #<const-decl type_test.ni>
+Function: pvs2why-resolution-destructive #<const-decl type_test.ni>  my_list
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain nil range #<why-primitive-type>
+Function: pvs2why*-name-expr: nil   my_list 
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-constant: nil #<adt-constructor-decl type_test.nil>
+Function: pvs2why-resolution: nil
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.nil>
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name nil constant #<why-primitive-type>
+mk-why-function-application #<why-name> nil # nil nil nil  
+mk-why-function ni nil #<why-function-application> #<why-function-type>
+Function: pvs2why-declaration: #<const-decl type_test.l>
+Function: pvs2why-resolution-destructive #<const-decl type_test.l>  my_list
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain nil range #<why-primitive-type>
+Function: pvs2why*-application: con(0, con(1, con(2, nil))) my_list 
+decl-type (con?) 
+Function: pvs2why*-list:  0  con(1, con(2, nil))   int  my_list  
+Function: pvs2why*-number-expr: 0 int 
+mk-why-literal 0 number
+Function: pvs2why*-list:  con(1, con(2, nil))   my_list  
+Function: pvs2why*-application: con(1, con(2, nil)) my_list 
+decl-type (con?) 
+Function: pvs2why*-list:  1  con(2, nil)   int  my_list  
+Function: pvs2why*-number-expr: 1 int 
+mk-why-literal 1 number
+Function: pvs2why*-list:  con(2, nil)   my_list  
+Function: pvs2why*-application: con(2, nil) my_list 
+decl-type (con?) 
+Function: pvs2why*-list:  2  nil   int  my_list  
+Function: pvs2why*-number-expr: 2 int 
+mk-why-literal 2 number
+Function: pvs2why*-list:  nil   my_list  
+Function: pvs2why*-name-expr: nil   my_list 
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-constant: nil #<adt-constructor-decl type_test.nil>
+Function: pvs2why-resolution: nil
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.nil>
+Function: pvs2why-type-subtype: (nil?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name nil constant #<why-primitive-type>
+mk-why-function-application #<why-name> nil # nil nil nil  
+Function: pvs2why*-list:   
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-resolution: con
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.con>
+Function: pvs2why-type-funtype [[int, my_list] -> (con?)]
+Function: pvs2why-type-tuple: [int, my_list]
+Function: pvs2why-type-name: int
+Function: pvs2why-type-eq-decl: #<nonempty-type-eq-decl integers.int>
+Function: pvs2why-type-name: integer
+Function: pvs2why-type-decl: #<nonempty-type-from-decl integers.integer> 
+mk-why-primitive-type: integer t nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: (con?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name con constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-literal> #<why-function-application>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:   
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-resolution: con
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.con>
+Function: pvs2why-type-funtype [[int, my_list] -> (con?)]
+Function: pvs2why-type-tuple: [int, my_list]
+Function: pvs2why-type-name: int
+Function: pvs2why-type-eq-decl: #<nonempty-type-eq-decl integers.int>
+Function: pvs2why-type-name: integer
+Function: pvs2why-type-decl: #<nonempty-type-from-decl integers.integer> 
+mk-why-primitive-type: integer t nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: (con?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name con constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-literal> #<why-function-application>) # nil nil #<why-primitive-type>  
+Function: pvs2why*-list:   
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-resolution: con
+Function: pvs2why-declaration: #<adt-constructor-decl type_test.con>
+Function: pvs2why-type-funtype [[int, my_list] -> (con?)]
+Function: pvs2why-type-tuple: [int, my_list]
+Function: pvs2why-type-name: int
+Function: pvs2why-type-eq-decl: #<nonempty-type-eq-decl integers.int>
+Function: pvs2why-type-name: integer
+Function: pvs2why-type-decl: #<nonempty-type-from-decl integers.integer> 
+mk-why-primitive-type: integer t nil 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: (con?)
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-function-type: domain (#<why-primitive-type> #<why-primitive-type>) range #<why-primitive-type>
+mk-why-name con constant #<why-function-type>
+mk-why-function-application #<why-name> (#<why-literal> #<why-function-application>) # nil nil #<why-primitive-type>  
+mk-why-function l nil #<why-function-application> #<why-function-type>
+Function: pvs2why-declaration: #<const-decl type_test.n>
+Function: pvs2why-resolution-destructive #<const-decl type_test.n>  int
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain nil range #<why-primitive-type>
+Function: pvs2why*-application: sum(l) int 
+decl-type nat 
+Function: pvs2why-defn-application: sum(l) int 
+Declared type: [my_list -> nat] 
+Domain type:  my_list  
+Function: pvs2why*-list:  l   my_list  
+Function: pvs2why*-name-expr: l   my_list 
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-constant: l #<const-decl type_test.l>
+Function: pvs2why-resolution: l
+Function: pvs2why-declaration: #<const-decl type_test.l>
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+mk-why-name l constant #<why-primitive-type>
+mk-why-function-application #<why-name> nil # nil nil nil  
+Function: pvs2why*-list:   
+Function: pvs2why*-name-expr: sum   nat 
+Function: pvs2why-type-funtype [my_list -> nat]
+Function: pvs2why-type-adt-name: my_list
+mk-why-primitive-type: my_list t nil 
+Function: pvs2why-type-subtype: nat
+mk-why-primitive-type: int nil nil 
+mk-why-function-type: domain (#<why-primitive-type>) range #<why-primitive-type>
+mk-why-name sum constant #<why-function-type>
+Before Declared type: int 
+Function: pvs2why-type-subtype: int
+mk-why-primitive-type: int nil nil 
+Why Declared type: #<why-primitive-type> 
+mk-why-function-application #<why-name> (#<why-function-application>) # nil nil #<why-primitive-type>  
+mk-why-function n nil #<why-function-application> #<why-function-type>
+mk-why-module type_test nil (#<why-adt-def> #<why-function> #<why-function> #<why-function> #<why-function> #<why-function>) nil nil 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-name>) 
+lift-let*-default: #<why-name> 
+Enter lifted expr: 0
+lift-let*-default: #<why-literal> 
+Leave lifted-expr : (#<why-literal>)
+Translated lifted-expr: 0
+Prefix: nil
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-cast>) 
+lift-let*-default: #<why-cast> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-cast>) 
+lift-let*-default: #<why-cast> 
+Enter lifted expr: length(tl)+1
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-function-application> #<why-literal>) 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-name>) 
+lift-let*-default: #<why-name> 
+lift-let*-default: #<why-literal> 
+Leave lifted-expr : (#<why-function-application>)
+Translated lifted-expr: length(tl)+1
+Prefix: nil
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-name>) 
+lift-let*-default: #<why-name> 
+Enter lifted expr: 0
+lift-let*-default: #<why-literal> 
+Leave lifted-expr : (#<why-literal>)
+Translated lifted-expr: 0
+Prefix: nil
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-cast>) 
+lift-let*-default: #<why-cast> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-cast>) 
+lift-let*-default: #<why-cast> 
+Enter lifted expr: hd+sum(tl)
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-name> #<why-function-application>) 
+lift-let*-default: #<why-name> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-name>) 
+lift-let*-default: #<why-name> 
+Leave lifted-expr : (#<why-function-application>)
+Translated lifted-expr: hd+sum(tl)
+Prefix: nil
+Enter lifted expr: nil()
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: nil 
+Leave lifted-expr : (#<why-function-application>)
+Translated lifted-expr: nil()
+Prefix: nil
+Enter lifted expr: new con(0,new con(1,new con(2,nil())))
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-literal> #<why-function-application>) 
+lift-let*-default: #<why-literal> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-literal> #<why-function-application>) 
+lift-let*-default: #<why-literal> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-literal> #<why-function-application>) 
+lift-let*-default: #<why-literal> 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: nil 
+Leave lifted-expr : (#<why-function-application>)
+Translated lifted-expr: new con(0,new con(1,new con(2,nil())))
+Prefix: nil
+Enter lifted expr: sum(l())
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: (#<why-function-application>) 
+lift-let*-why-function-application: #<why-function-application> 
+lift-let*-default: #<why-name> 
+lift-let*-list: nil 
+Leave lifted-expr : (#<why-function-application>)
+Translated lifted-expr: sum(l())
+Prefix: nil
+*** type_test (./first_example.pvs) --> ./type_test.java

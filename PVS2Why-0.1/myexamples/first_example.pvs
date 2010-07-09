@@ -1,0 +1,37 @@
+type_test: THEORY
+BEGIN
+
+  my_list: DATATYPE
+  BEGIN
+    nil: nil?
+    con(hd: int, tl: my_list): con?
+  END my_list
+
+ length(l: my_list): RECURSIVE int = 
+     CASES l OF 
+       nil: 0,
+       con(hd, tl): length(tl) + 1
+     ENDCASES
+     MEASURE ord(l)
+
+  sum(l: my_list): RECURSIVE nat = 
+      CASES l OF
+        nil: 0,
+	con(hd, tl): hd + sum(tl)
+      ENDCASES
+      MEASURE length(l)
+
+%  plus_one(l: my_list): RECURSIVE my_list = 
+%      CASES l OF
+%        nil: nil,
+%	con(hd, tl): con(hd + 1, plus_one(tl))
+%      ENDCASES
+%      MEASURE length(l)
+
+  ni: my_list = nil
+
+  l: my_list = con(0, con(1, con(2, nil)))
+
+  n: int = sum(l)
+
+END type_test

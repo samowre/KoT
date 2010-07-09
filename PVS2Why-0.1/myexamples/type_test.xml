@@ -1,0 +1,279 @@
+<!-- File: type_test.xml 
+           Automatically generated from PVS theory type_test (first_example.pvs)
+           By: PVS2Why-0.1 (11/10/07)
+           Date: 4:22:45 7/9/2010 -->
+
+<module identifier="type_test">
+  <parameters/>
+  <definitions>
+<!-- #<why-adt-def> -->
+    <function identifier="length">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="l">
+          <primitiveType identifier="my_list"/>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator>
+                <name identifier="nilQuestionmark" kind="constant"/>
+              </operator>
+              <arguments>
+                <name identifier="l" kind="formal"/>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <numberLiteral value="0"/>
+          </then>
+          <else>
+            <if>
+              <condition>
+                <application>
+                  <operator>
+                    <name identifier="conQuestionmark" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="l" kind="formal"/>
+                  </arguments>
+                </application>
+              </condition>
+              <then>
+                <let identifier="#<why-binding>">
+                  <type>
+                    <primitiveType identifier="int"/>
+                  </type>
+                  <expression>
+                    <application>
+                      <operator builtin="hd"/>
+                      <arguments>
+<!-- #<why-cast> -->
+                      </arguments>
+                    </application>
+                  </expression>
+                  <in>
+                    <let identifier="#<why-binding>">
+                      <type>
+                        <primitiveType identifier="int"/>
+                      </type>
+                      <expression>
+                        <application>
+                          <operator builtin="tl"/>
+                          <arguments>
+<!-- #<why-cast> -->
+                          </arguments>
+                        </application>
+                      </expression>
+                      <in>
+                        <application>
+                          <operator builtin="+"/>
+                          <arguments>
+                            <application>
+                              <operator>
+                                <name identifier="length" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <name identifier="tl" kind="formal"/>
+                              </arguments>
+                            </application>
+                            <numberLiteral value="1"/>
+                          </arguments>
+                        </application>
+                      </in>
+                    </let>
+                  </in>
+                </let>
+              </then>
+              <else>
+<!-- nil -->
+              </else>
+            </if>
+          </else>
+        </if>
+      </body>
+    </function>
+    <function identifier="sum">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters>
+        <parameter identifier="l">
+          <primitiveType identifier="my_list"/>
+        </parameter>
+      </parameters>
+      <body>
+        <if>
+          <condition>
+            <application>
+              <operator>
+                <name identifier="nilQuestionmark" kind="constant"/>
+              </operator>
+              <arguments>
+                <name identifier="l" kind="formal"/>
+              </arguments>
+            </application>
+          </condition>
+          <then>
+            <numberLiteral value="0"/>
+          </then>
+          <else>
+            <if>
+              <condition>
+                <application>
+                  <operator>
+                    <name identifier="conQuestionmark" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <name identifier="l" kind="formal"/>
+                  </arguments>
+                </application>
+              </condition>
+              <then>
+                <let identifier="#<why-binding>">
+                  <type>
+                    <primitiveType identifier="int"/>
+                  </type>
+                  <expression>
+                    <application>
+                      <operator builtin="hd"/>
+                      <arguments>
+<!-- #<why-cast> -->
+                      </arguments>
+                    </application>
+                  </expression>
+                  <in>
+                    <let identifier="#<why-binding>">
+                      <type>
+                        <primitiveType identifier="int"/>
+                      </type>
+                      <expression>
+                        <application>
+                          <operator builtin="tl"/>
+                          <arguments>
+<!-- #<why-cast> -->
+                          </arguments>
+                        </application>
+                      </expression>
+                      <in>
+                        <application>
+                          <operator builtin="+"/>
+                          <arguments>
+                            <name identifier="hd" kind="formal"/>
+                            <application>
+                              <operator>
+                                <name identifier="sum" kind="constant"/>
+                              </operator>
+                              <arguments>
+                                <name identifier="tl" kind="formal"/>
+                              </arguments>
+                            </application>
+                          </arguments>
+                        </application>
+                      </in>
+                    </let>
+                  </in>
+                </let>
+              </then>
+              <else>
+<!-- nil -->
+              </else>
+            </if>
+          </else>
+        </if>
+      </body>
+    </function>
+    <function identifier="ni">
+      <returnType>
+        <primitiveType identifier="my_list"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <application>
+          <operator>
+            <name identifier="nil" kind="constant"/>
+          </operator>
+          <arguments/>
+        </application>
+      </body>
+    </function>
+    <function identifier="l">
+      <returnType>
+        <primitiveType identifier="my_list"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <application>
+          <operator>
+            <name identifier="con" kind="constant"/>
+          </operator>
+          <arguments>
+            <numberLiteral value="0"/>
+            <application>
+              <operator>
+                <name identifier="con" kind="constant"/>
+              </operator>
+              <arguments>
+                <numberLiteral value="1"/>
+                <application>
+                  <operator>
+                    <name identifier="con" kind="constant"/>
+                  </operator>
+                  <arguments>
+                    <numberLiteral value="2"/>
+                    <application>
+                      <operator>
+                        <name identifier="nil" kind="constant"/>
+                      </operator>
+                      <arguments/>
+                    </application>
+                  </arguments>
+                </application>
+              </arguments>
+            </application>
+          </arguments>
+        </application>
+      </body>
+    </function>
+    <function identifier="n">
+      <returnType>
+        <primitiveType identifier="int"/>
+      </returnType>
+      <precondition>
+<!-- nil -->
+      </precondition>
+      <parameters/>
+      <body>
+        <application>
+          <operator>
+            <name identifier="sum" kind="constant"/>
+          </operator>
+          <arguments>
+            <application>
+              <operator>
+                <name identifier="l" kind="constant"/>
+              </operator>
+              <arguments/>
+            </application>
+          </arguments>
+        </application>
+      </body>
+    </function>
+  </definitions>
+</module>
