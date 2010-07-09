@@ -80,6 +80,8 @@
     (why2java* file module)))
 
 (defmethod why2java* ((file stream) (def why-module) &optional noreturn )
+  (when *pvs2why-trace* 
+    (format t "Function: why2java*-why-module: ~a ~%" def))
   (setq *generic-module* (consp (type-parameters def)))
   (indent file (format nil "import PVS2Java.*;~2%"))
   (when *generic-module*
@@ -656,6 +658,7 @@
 	  (why2java-string* (index expr))
 	  (why2java-string* (expr expr))))
 
+; this is not correct
 (defmethod why2java-string* ((expr why-record-assignment)  
 			     &optional mop lr type)
   (format nil "~a.update(~a)"
