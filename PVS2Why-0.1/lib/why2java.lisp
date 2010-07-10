@@ -80,7 +80,7 @@
     (why2java* file module)))
 
 (defmethod why2java* ((file stream) (def why-module) &optional noreturn )
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-module: ~a ~%" (identifier def)))
   (setq *generic-module* (consp (type-parameters def)))
   (indent file (format nil "import PVS2Java.*;~2%"))
@@ -223,7 +223,7 @@
 	  (t (format file ");~%")))))
 
 (defmethod why2java* ((file stream) (def why-function) &optional noreturn )
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-function: ~a ~%" (identifier def)))
   (write-java-function file def)
   (when (and (parameters def)
@@ -236,7 +236,7 @@
 ; mk-why-function turns a list of variable names in why-binders. Since they are already why-binders
 ; in the predicate we strip them first and then feed them to mk-why-function.
 (defmethod why2java* ((file stream) (def why-logic-predicate) &optional noreturn )
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-logic-predicate: ~a ~%" (identifier def)))
   (let* ((stripped-binders (loop for var in (binders def) collect (identifier var)))
  	 (function (mk-why-function (identifier def) stripped-binders (predicate def) (type def) nil nil)))
@@ -376,7 +376,7 @@
 	    (format nil "return array~a;~%" identifier))))
 
 (defmethod why2java* ((file stream) (def why-record) &optional noreturn)
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-record: ~a ~%" (identifier def)))
   (if *generic-module*
       (progn
@@ -425,7 +425,7 @@
 ;;
 
 (defmethod why2java* ((file stream) (expr why-binding) &optional noreturn )
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-binding: ~a ~%" (identifier def)))
   (format file "final ~a ~a" 
 	  (why2java-type* (type expr))
@@ -452,7 +452,7 @@
 
 
 (defmethod why2java* ((file stream) (expr why-conditional) &optional noreturn)
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-conditional: ~a ~%" (identifier def)))
   (if (false-branch expr)
       (let* ((lifted-if (lift-let* (branch-condition expr)))
@@ -497,7 +497,7 @@
 
 ; This is not good! Should set the field expr to be the "seq; lexpr". Otherwise seq "disappears".
 (defmethod why2java* ((file stream) (expr why-let) &optional noreturn)
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-let: ~a ~%" (identifier def)))
   (let* ((lifted (lift-let* (expr expr)))
 	 (lexpr (car lifted))
@@ -518,7 +518,7 @@
       (why2java* file (in_expr expr) noreturn))))
 
 (defmethod why2java* ((file stream) (expr why-sequential-composition) &optional noreturn)
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-sequential-composition: ~a ~%" (identifier def)))
   (dolist (e (exprs expr))
     (why2java* file e noreturn)))
@@ -528,7 +528,7 @@
   (format nil "~{ ~a;~% ~}" (exprs expr)))
 
 (defmethod why2java* ((file stream) (def why-adt-def) &optional noreturn)
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-adt-def: ~a ~%" (identifier def)))
   (indent
    file
@@ -660,7 +660,7 @@
 
 
 (defmethod why2java* ((file stream) (expr why-array-assignment) &optional noreturn)
-  (when *pvs2why-trace* 
+  (when *why2java-trace* 
     (format t "Function: why2java*-why-array-assignment: ~a ~%" (identifier def)))
   (indent
    file

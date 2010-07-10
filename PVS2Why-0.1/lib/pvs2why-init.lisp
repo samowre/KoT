@@ -20,6 +20,7 @@
 (defvar *why-decls-trace* nil)
 (defvar *why-types-trace* nil)
 (defvar *pvs2why-trace* nil)
+(defvar *why2java-trace* nil)
 (defvar *pvs2why-unique-names* nil)
 
 (let* ((filename   (environment-variable "PVS2WHYFILENAME"))
@@ -33,6 +34,7 @@
        (*pvs2why-trace* debug)
        (*why-decls-trace* debug)
        (*why-types-trace* debug)
+       (*why2java-trace* debug)
        (*noninteractive* t)
        (current-prefix-arg t))
   (multiple-value-bind 
