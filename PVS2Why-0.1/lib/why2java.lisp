@@ -426,7 +426,7 @@
 
 (defmethod why2java* ((file stream) (expr why-binding) &optional noreturn )
   (when *why2java-trace* 
-    (format t "Function: why2java*-why-binding: ~a ~%" (identifier def)))
+    (format t "Function: why2java*-why-binding: ~a ~%" (identifier expr)))
   (format file "final ~a ~a" 
 	  (why2java-type* (type expr))
 	  (identifier expr)))
@@ -453,7 +453,7 @@
 
 (defmethod why2java* ((file stream) (expr why-conditional) &optional noreturn)
   (when *why2java-trace* 
-    (format t "Function: why2java*-why-conditional: ~a ~%" (identifier def)))
+    (format t "Function: why2java*-why-conditional: ~a ~%" (identifier expr)))
   (if (false-branch expr)
       (let* ((lifted-if (lift-let* (branch-condition expr)))
 	     (lexpr-if (car lifted-if))
@@ -498,7 +498,7 @@
 ; This is not good! Should set the field expr to be the "seq; lexpr". Otherwise seq "disappears".
 (defmethod why2java* ((file stream) (expr why-let) &optional noreturn)
   (when *why2java-trace* 
-    (format t "Function: why2java*-why-let: ~a ~%" (identifier def)))
+    (format t "Function: why2java*-why-let: ~a ~%" (identifier expr)))
   (let* ((lifted (lift-let* (expr expr)))
 	 (lexpr (car lifted))
 	 (seq (if (cdr lifted)
@@ -519,7 +519,7 @@
 
 (defmethod why2java* ((file stream) (expr why-sequential-composition) &optional noreturn)
   (when *why2java-trace* 
-    (format t "Function: why2java*-why-sequential-composition: ~a ~%" (identifier def)))
+    (format t "Function: why2java*-why-sequential-composition: ~a ~%" (identifier expr)))
   (dolist (e (exprs expr))
     (why2java* file e noreturn)))
 
@@ -661,7 +661,7 @@
 
 (defmethod why2java* ((file stream) (expr why-array-assignment) &optional noreturn)
   (when *why2java-trace* 
-    (format t "Function: why2java*-why-array-assignment: ~a ~%" (identifier def)))
+    (format t "Function: why2java*-why-array-assignment: ~a ~%" (identifier expr)))
   (indent
    file
    (format nil "~a[~a] = ~a;~%"
