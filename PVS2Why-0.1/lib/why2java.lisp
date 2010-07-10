@@ -29,7 +29,7 @@
 	   theory theory pvsfile version (now-today))
    (let ((translated-why-theory (pvs2why-theory theory)))
      (when *why2java-trace* 
-       (format t "========== Processing tranlation from why to java ========== ~%"))
+       (format t "~%========== Processing tranlation from why to java ========== ~2%"))
      (why2java-modules file translated-why-theory))))
 
 ;;
