@@ -27,7 +27,10 @@
 *  Date: ~a 
 */~2%"
 	   theory theory pvsfile version (now-today))
-   (why2java-modules file (pvs2why-theory theory))))
+   (let ((translated-why-theory (pvs2why-theory theory)))
+     (when *why2java-trace* 
+       (format t "========== Processing tranlation from why to java ========== ~%"))
+     (why2java-modules file translated-why-theory))))
 
 ;;
 ;; Keep a global variable to denote a generic class
