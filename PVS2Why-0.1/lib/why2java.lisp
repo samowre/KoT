@@ -669,7 +669,8 @@
    file
    (format nil "~a[~a] = ~a;~%"
 	   (identifier expr)
-	   (why2java-string* (index expr)) (expr expr))))
+	   (why2java-string* (index expr)) 
+	   (why2java-string* (expr expr)))))
 
  (defmethod why2java-string* ((expr why-array-assignment)  
 			     &optional mop lr type)
