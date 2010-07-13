@@ -515,8 +515,8 @@
       (indent 
        file
        (format nil "final ~a ~a = ~a;~%" 
-	       (why2java-type* (type (identifier expr))) ; note identifier is a why-binding!
-	       (identifier (identifier expr)) ; confusing, I know
+	       (why2java-type* (type expr)) 
+	       (identifier expr) 
 	       (why2java-string* lexpr)))
       (why2java* file (in_expr expr) noreturn))))
 

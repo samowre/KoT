@@ -993,7 +993,7 @@
 	 (why-declared-type (pvs2why-type declared-type))
 	 (why-expr (pvs2why* (expression operator) (append (pairlis bind-decls bind-ids) bindings) livevars declared-type))) ; append (bindings operator)
 ;        (mk-why-let why-var why-argument why-expr why-type))	;? should have 2 types!!
-        (mk-why-let why-id why-argument why-expr why-type))
+        (mk-why-let why-id why-argument why-expr why-type)) ; mk-why-let take an ID as first argument, and not a why-binding
 )
 
 
@@ -1039,12 +1039,14 @@
 								   var))
 						(type why-expr)))
 	 (dummy (format t "Type why-expr: ~a~%" (type why-expr)))
-	 (why-var (mk-why-binding (id (car bindings)) (pvs2why-type (type (car bindings)))))
+;	 (why-var (mk-why-binding (id (car bindings)) (pvs2why-type (type (car bindings)))))
+	 (why-id (id (car bindings)))
+	 (why-type (pvs2why-type (type (car bindings))))
 	 (expression (if (eq (length bindings) 1)
 			 why-expr
 		         (pvs2why-cases-let var (cdr bindings) (cdr accessors) why-expr why-type declared-type constructor module))))
-	(mk-why-let why-var accessor expression (type expression)))) ; This should be the subtype!
-
+;	(mk-why-let why-var accessor expression (type expression)))) ; This should be the subtype!
+       (mk-why-let why-id accessor expression why-type)))
 ;;
 ;; Update expression
 ;; 
