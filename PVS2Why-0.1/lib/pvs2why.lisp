@@ -1483,7 +1483,7 @@
   (or (simple-below? (domain texpr))(simple-upto? (domain texpr))) ; for subrange we need a phase difference
 )
 
-;;this is the only case where clean-updateable? can be false, because
+;;this is the only case where why-updateable? can be false, because
 ;;the given function type is not an array.  
 (defmethod why-updateable? ((texpr funtype)) ;;add enum types, subrange.
   (or (simple-below? (domain texpr))(simple-upto? (domain texpr)))
