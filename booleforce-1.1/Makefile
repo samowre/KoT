@@ -5,7 +5,7 @@
 	$(CC) $(CFLAGS) -c $*.c
 
 CC=gcc
-CFLAGS=-Wall -W -Werror -O3 -fomit-frame-pointer -march=i686
+CFLAGS=-Wall -W -Werror -O2
 AR=ar
 RANLIB=ranlib
 
