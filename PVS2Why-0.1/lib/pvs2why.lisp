@@ -555,6 +555,14 @@
     )
 )
 
+; construct a new id which doesn't already exist
+(defun pvs2why-newid (id bindings)
+  (loop for i from 0
+	thereis
+	(let ((tmp
+	       (makesym "~a~a" id i)))
+	  (and (null (rassoc tmp bindings))
+	       tmp))))
 ;
 ; Construct a list of bind variables out of the PVS bind declarations. If a variable
 ; already exists in the bindings list, generate a new variable for it.
@@ -565,7 +573,7 @@
 	     (id (id bb))                                                     
 	     (newid (if (null (rassoc id bindings))                          
 			id
-       		      (pvs2cl-newid (id bb) bindings))))
+       		      (pvs2why-newid id bindings)))) 
 	(cons newid (pvs2why-make-bindings (cdr bind-decls) bindings)))    
     nil))  
   
