@@ -75,16 +75,18 @@ sequents  : THEORY
      subset?(H, cons(f_neg(subst(body(arg(car(G))), bvar(arg(car(G))), apply(f, null))),
                      G)))
 
-  % 
+  %  
   fschema_rule?(u: (ufun?), vars: list[(var?)], s, H, G): bool =
     (length(vars) = arity(u) AND         %A[lambda vars: s/f],.. from A, ..
      subset?(termvars(s), vars) AND
      subset?(map(LAMBDA A: fsubst(A, u, vars, s))(H), G))
 
+
   pschema_rule?(u: (upred?), vars: list[(var?)], A, H, G): bool =
     (length(vars) = arity(u) AND        %A[lambda vars: B/p], .. from A,..
      subset?(freevars(A), vars) AND
      subset?(map(LAMBDA B: psubst(B, u, vars, A))(H), G))
+
 
   f_eq(s, t): fmla = atom(ipred(0, 2), (:s, t :))
 

@@ -76,10 +76,12 @@ BEGIN
     endif
   measure length(l)
 
-  list_of_chains_offset?(order: upto(n))( l: list[list[below(n)]]): recursive boolean =
+  list_of_chains_offset? (order: upto(n))
+  			 (l: list[list[below(n)]])
+			 : recursive boolean =
     if null?(l) then true
     else chain?(order)( car(l) ) and 
-         list_of_chains_offset?(order+1)( cdr(l) )
+         list_of_chains_offset?(order + 1)( cdr(l) )
     endif
   measure length(l)
   

@@ -81,7 +81,7 @@ termvars(s): RECURSIVE list[(var?)] =
    length(tt))
 
 
-%substitute t for x in s
+% substitute term t for variable x in term s
 subst(s, x, t): RECURSIVE term =
   CASES s OF
     v(i): (IF x = s THEN t ELSE s ENDIF),
@@ -162,7 +162,7 @@ subst(A, x, (t | freefor(A, termvars(t)))): RECURSIVE fmla =
     f_not(B): f_not(subst(B, x, t)),
     f_or(B, C): f_or(subst(B, x, t), subst(C, x, t)), 
     f_exists(y, B): (IF x = y THEN A
-                     ELSE f_exists(y, subst(B, x, t))
+                     ELSE f_existss(y, subst(B, x, t))
 		     ENDIF)
   ENDCASES
   MEASURE A BY <<

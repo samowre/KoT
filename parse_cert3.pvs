@@ -106,6 +106,18 @@ parse_cert3 % parse a text file containing a certificate
     endif
   measure length(pral)
 
+  b_c_length :  LEMMA
+    FORALL (l: list[list[nat]]): 
+    length(l) <= n =>
+    let r = build_chain_list(l, null) in
+    length(r) = length(l)
+
+  build_chain :  LEMMA
+    FORALL (l: list[list[nat]]): 
+    length(l) <= n =>
+    let r = build_chain_list(l, null) in list_of_chains_offset?(n-length(l))(r)
+    
+
   % true if the last resolution chain produces an empty clause
   verify: bool = 
   catch("e", 
