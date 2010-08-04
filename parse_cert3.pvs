@@ -125,18 +125,18 @@ parse_cert3 % parse a text file containing a certificate
 	   length(rcl) = n 
 	then 
 	 if n = 0 then true
-	 else 
-  	   let ini_cl_array: array_of_clauses = 
+	 else
+  	   let ini_cl_array: array_of_clauses =
 	      build_clause_array(rcl, lambda (i:below(n)): null) in
-	   let ini_ch_list: (list_of_chains?) = 
+	   let ini_ch_list: (list_of_chains?) =
 	      build_chain_list(ral, null) in
-           let cl_array: array_of_clauses = 
+           let cl_array: array_of_clauses =
 	      resolve( ini_ch_list, ini_cl_array ) in
-           set(aux_bool, false) & 
+           set(aux_bool, false) &
            null?(cl_array(max(0, n-1)))
 	 endif
-       else throw("e") 
-       endif, 
+       else throw("e")
+       endif,
 
         lambda(e:Exception[string]): 
 	         print( tag(e)

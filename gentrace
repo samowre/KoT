@@ -1,0 +1,22 @@
+#!/bin/sh
+
+picosat="picosat-913/picosat"
+tracecheck="booleforce-1.1/tracecheck"
+lispscript="lisp"
+
+if [ $# -lt 2 ]; then 
+   echo usage: gentrace input_file output_file
+   exit 1
+fi
+
+if [ ! -e $1 ]; then 
+   echo $1 file not found
+   exit 1
+fi   
+$picosat $1 -t ${1}.tmp
+
+$tracecheck ${1}.tmp > ${1}.tmp2
+rm ${1}.tmp
+
+./${lispscript} $1.tmp2 $2
+rm ${1}.tmp2
