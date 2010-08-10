@@ -1,7 +1,7 @@
-/* File: FF.java
+/* File: FF.java 
 *  Automatically generated from PVS theory FF (FF.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 4:2:30 7/9/2010 
+*  Date: 19:56:25 8/5/2010 
 */
 
 import PVS2Java.*;

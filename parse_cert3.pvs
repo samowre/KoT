@@ -67,7 +67,6 @@ parse_cert3 % parse a text file containing a certificate
   qv: nat = 0
 
 
-
   IMPORTING trace_resolution3[m, n, n]
 
   %verify if l is a list of tr_literals
@@ -132,14 +131,14 @@ parse_cert3 % parse a text file containing a certificate
 	      build_chain_list(ral, null) in
            let cl_array: array_of_clauses =
 	      resolve( ini_ch_list, ini_cl_array ) in
-           set(aux_bool, false) &
-           null?(cl_array(max(0, n-1)))
+           
+           null?(cl_array(max(0, n-1))) & set(aux_bool, false)
 	 endif
        else throw("e")
        endif,
 
         lambda(e:Exception[string]): 
-	         print( tag(e)
+	         set(aux_bool, false) & print( tag(e)
 			+ " exception: " 
 			+ val(e) 
 			+ " INVALID CERTIFICATE"))

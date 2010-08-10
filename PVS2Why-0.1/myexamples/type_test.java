@@ -1,7 +1,7 @@
-/* File: type_test.java
+/* File: type_test.java 
 *  Automatically generated from PVS theory type_test (first_example.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 4:22:45 7/9/2010 
+*  Date: 18:1:42 8/5/2010 
 */
 
 import PVS2Java.*;

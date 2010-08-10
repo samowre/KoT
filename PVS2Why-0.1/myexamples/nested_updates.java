@@ -1,7 +1,7 @@
-/* File: nested_updates.java
+/* File: nested_updates.java 
 *  Automatically generated from PVS theory nested_updates (nested_updates.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 4:38:29 7/9/2010 
+*  Date: 17:30:9 8/5/2010 
 */
 
 import PVS2Java.*;
@@ -52,12 +52,9 @@ public class nested_updates {
   }
 ;
 
-  public R[] g() {
-    f[0] = #<why-literal>;
-  }
-
   public R[] h() {
-    f[0] = #<why-let>;
+    final E45 = f(0) ;
+    return  Prelude.update(f,0,E45.update(0)) ;
   }
 
 }

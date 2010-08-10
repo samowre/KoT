@@ -7,7 +7,7 @@
     (with-open-file (out outfile :direction :output
 			 :if-exists :supersede)
       (dolist (clause (read-pico-proof* in))
-	(format out "~%~{~a~^ ~}" clause)))))
+	(format out "~{~a~^ ~}~%" clause)))))
 
 (defun f (s) (parse-integer (subseq s 0 (position #\Space s))))
 

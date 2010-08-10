@@ -1,7 +1,7 @@
-/* File: lambda_test.java
+/* File: lambda_test.java 
 *  Automatically generated from PVS theory lambda_test (lambda.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 4:22:47 7/9/2010 
+*  Date: 17:32:29 8/5/2010 
 */
 
 import PVS2Java.*;
