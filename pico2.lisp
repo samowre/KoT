@@ -18,7 +18,7 @@
   (let ((line (read-line stream nil 'eof)))
     (if	(eq line 'eof)
 	;; end of file: sort the lines in result
-	(eliminate-gaps (sort result #'< :key #'f))
+	(eliminate-gaps (nreverse result));; (sort result #'< :key #'f))
       (read-pico-proof* stream
 			  (cons line result)))))
 
