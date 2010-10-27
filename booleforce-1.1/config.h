@@ -6,7 +6,6 @@
 #define BOOLEFORCE_CCVERSION "4.0.1"
 #define BOOLEFORCE_CFLAGS "-Wall -W -Werror -O2"
 #define NDEBUG
-#define BOOLEFORCE_TRACE
 typedef long long int64;
 #define INT64FMT "lld"
 #endif

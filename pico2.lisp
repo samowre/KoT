@@ -98,3 +98,14 @@
 ;;returns the new value of a line number
 (defun number-update (line-number offsets-hash)
   (gethash line-number offsets-hash))
+
+(defun run-picosat (filename)
+  (let ((tmp1 (format nil "~a.tmp1" filename))
+	(tmp2 (format nil "~a.tmp2" filename))
+	(out (format nil "~a.out" filename)))
+  (run-shell-command (format nil "/Users/shankar/projects/KoT/svn/KoT/picosat-913/picosat ~a -t ~a"
+			     filename tmp1) nil)
+  (run-shell-command (format nil "/Users/shankar/projects/KoT/svn/KoT/booleforce-1.1/tracecheck ~a > ~a" tmp1 tmp2) nil)
+  (delete-file tmp1)
+  (transform-pico-proof tmp2 out)
+  (delete-file tmp2)))

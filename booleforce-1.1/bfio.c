@@ -203,7 +203,7 @@ booleforce_open_file_for_writing (const char * name)
   if (has_gz_suffix (name))
     res = popen_gzipped_file_for_writing (name);
   else
-    res = fopen64 (name, "w");
+    res = fopen (name, "w");
 
   if (res)
     new_file (name, res);
