@@ -1,0 +1,172 @@
+% We represent clauses as sorted lists of integers (sorted according to absolute value)
+
+clauses  : THEORY
+BEGIN
+
+IMPORTING lists
+
+ltlit(x,y:int) : bool = abs(x) < abs(y)
+
+% clauses are lists of integers sorted according to ltlit
+% a duplicate is (i,j) where NOT(ltlit(i,j) OR ltlit(j,i)), i.e. i=j or i=-j
+% clauses are not supposed to contain duplicates
+% clauses are also not supposed to contain 0
+
+% type of clauses (or rather pre-clauses see below)
+clause : TYPE = list[int]
+
+% Interestingly, we never need to check that clauses are really ordered. 
+% "Clause-hood" is, however, an invariant of "resolve" defined below.
+
+resolve_aux(cl1, cl2, acc:clause, flag:bool): RECURSIVE lift[clause] = 
+  IF null?(cl1) THEN up(rev_append(acc,cl2)) 
+  ELSIF null?(cl2) THEN up(rev_append(acc,cl1))
+  ELSE LET h1 = car(cl1) IN LET h2 = car(cl2) IN 
+    IF ltlit(h1,h2) THEN resolve_aux(cdr(cl1), cl2, cons(h1,acc),flag) 
+    ELSIF h1=h2 THEN resolve_aux(cdr(cl1),cdr(cl2),cons(h1,acc),flag) 
+    ELSIF h1=-h2 AND flag THEN resolve_aux(cdr(cl1),cdr(cl2),acc,false)
+    ELSIF h1=-h2 AND NOT flag then bottom 
+    ELSE resolve_aux(cl1,cdr(cl2),cons(h2,acc),flag) % ltlit(h2,h1)
+  ENDIF ENDIF
+  MEASURE length(cl1) + length(cl2)
+
+resolve(cl1,cl2:clause) : lift[clause] = resolve_aux(cl1,cl2,null,true)
+
+env : TYPE = [posnat->bool]
+
+lookup(n:posnat,e:env) : bool = e(n)
+
+satisfies(e:env, l:int) : bool = 
+ IF l > 0 THEN lookup(l,e) ELSE NOT lookup(-l,e) ENDIF
+
+satisfies(e:env,cl:list[int]) : bool = 
+  some(LAMBDA(l:int):satisfies(e,l))(cl)
+
+satisfies(e:env, cls : list[list[int]]) : bool = 
+  every(LAMBDA(cl:list[int]):satisfies(e,cl))(cls)
+
+FV(cl:clause) : RECURSIVE set[nat] = 
+     CASES cl OF  null: emptyset, cons(l,cl):  union(singleton(abs(l)),FV(cl)) ENDCASES
+  MEASURE length
+
+FV(cls:list[list[int]]) : RECURSIVE set[nat] = 
+     CASES cls OF null: emptyset, cons(cl,cls): union(FV(cl),FV(cls)) ENDCASES 
+  MEASURE length
+
+eqval(e1,e2:env,X:set[nat]) : bool = FORALL(i:posnat):
+   member(i,X) IMPLIES e1(i)=e2(i)
+
+eqval_clause : LEMMA 
+   FORALL(cl:list[int]):FORALL(e1,e2:env):
+           eqval(e1,e2,FV(cl)) IMPLIES satisfies(e1,cl)=satisfies(e2,cl)
+
+eqval_clauses : LEMMA 
+   FORALL(cls:list[list[int]]):FORALL(e1,e2:env):
+           eqval(e1,e2,FV(cls)) IMPLIES satisfies(e1,cls)=satisfies(e2,cls)
+    
+sat_append : LEMMA 
+FORALL(cl1,cl2:clause):FORALL(e:env):
+    satisfies(e,cl1) OR satisfies(e,cl2) IMPLIES satisfies(e,append(cl1,cl2))
+
+sat_reverse : LEMMA 
+FORALL (cl:clause):FORALL(e:env):
+    satisfies(e,cl) IMPLIES satisfies(e,reverse(cl))
+
+sat_rev_append : LEMMA 
+FORALL (cl1,cl2:clause):FORALL(e:env):
+    satisfies(e,cl1) OR satisfies(e,cl2) IMPLIES satisfies(e,rev_append(cl1,cl2))
+
+sat_cons : LEMMA 
+ FORALL(e:env,h:int,c:clause):
+      satisfies(e,h) OR satisfies(e,c) IMPLIES satisfies(e,cons(h,c))
+
+sat_cons_inv : LEMMA 
+ FORALL(e:env,h:int,c:clause):
+       satisfies(e,cons(h,c)) IMPLIES satisfies(e,h) OR satisfies(e,c) 
+
+res_lemma : LEMMA
+ FORALL(e:env,h:int,c1,c2:clause):
+satisfies(e,cons(h,c1)) AND satisfies(e,cons(-h,c2)) AND NOT h=0 IMPLIES 
+satisfies(e,c1) OR satisfies(e,c2)
+
+resolve_aux_cond(e:env, flag:bool, acc, cl1, cl2:clause):bool = 
+         (satisfies(e,acc) OR 
+         (NOT flag AND (satisfies(e,cl1) OR satisfies(e,cl2))) OR 
+         (flag AND satisfies(e,cl1) AND satisfies(e,cl2)))
+
+
+resolve_aux : THEOREM 
+   FORALL(cl1,cl2,acc:clause): FORALL(e:env): FORALL(flag:bool):
+        resolve_aux_cond(e, flag, acc, cl1, cl2)
+        AND up?(resolve_aux(cl1,cl2,acc,flag))
+                IMPLIES satisfies(e,down(resolve_aux(cl1,cl2,acc,flag)))
+
+
+resolve_char : THEOREM 
+    FORALL(cl1,cl2:clause):FORALL(e:env):
+        satisfies(e,cl1) AND satisfies(e,cl2) AND up?(resolve(cl1,cl2))
+            IMPLIES satisfies(e,down(resolve(cl1,cl2)))
+
+% We don't bother with runtime checks here. Assume that argument to mkclause
+% does not contain duplicates
+
+insert(x:int,cl:clause): RECURSIVE clause = 
+  IF null?(cl) THEN cons(x,null)
+  ELSIF ltlit(x,car(cl)) THEN cons(x,cl)
+  ELSE cons(car(cl), insert(x,cdr(cl)))
+  ENDIF 
+MEASURE length(cl)
+
+insert:THEOREM
+FORALL(x:int,cl:clause,e:env): 
+ satisfies(e,x) OR satisfies(e,cl) IMPLIES satisfies(e,insert(x,cl))
+
+mkclause(l:clause):RECURSIVE clause = 
+   IF null?(l) THEN null ELSE insert(car(l),mkclause(cdr(l))) ENDIF
+MEASURE length(l)
+
+mkclause:THEOREM
+FORALL(cl:clause,e:env): 
+ satisfies(e,cl) IMPLIES satisfies(e,mkclause(cl))
+
+
+
+
+
+
+
+
+itresolve_aux(cls:list[clause],acc:clause) : RECURSIVE lift[clause] = 
+      IF null?(cls) THEN up(acc) ELSE 
+      LET res = resolve(acc,car(cls)) IN 
+      IF up?(res) THEN itresolve_aux(cdr(cls),down(res)) ELSE bottom
+      ENDIF ENDIF
+MEASURE length(cls)
+
+itresolve_aux : THEOREM 
+   FORALL (e:env,cls:list[clause], acc:clause): 
+        every(LAMBDA(c:clause):satisfies(e,c),cls) AND 
+        satisfies(e,acc) AND up?(itresolve_aux(cls,acc)) IMPLIES 
+           satisfies(e,down(itresolve_aux(cls,acc)))
+
+
+itresolve(cls:(cons?[clause])) : lift[clause] = 
+    itresolve_aux(cdr(cls),car(cls))
+
+itresolve : THEOREM 
+   FORALL (e:env,cls:(cons?[clause])): 
+        every(LAMBDA(c:clause):satisfies(e,c),cls) AND
+        up?(itresolve(cls)) IMPLIES 
+           satisfies(e,down(itresolve(cls)))
+
+END clauses
+   
+% certificate
+
+
+% precondition for resolve_aux
+% pre_resolve_aux(cl1,cl2,acc:clause) : bool = 
+%    is_clause(rev_append(acc,null),0) AND 
+%    LET i = IF null?(acc) THEN 0 ELSE car(acc) ENDIF IN 
+%    is_clause(cl1,i) AND is_clause(cl2,i)
+

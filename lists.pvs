@@ -1,0 +1,18 @@
+lists[T:TYPE] : THEORY 
+BEGIN 
+
+importing list[T]
+
+l,l1,l2,l3 : VAR list[T]
+
+% computes append(rev(l1), l2)
+rev_append(l1,l2) : RECURSIVE list[T] = 
+   IF null?(l1) THEN l2
+   ELSE rev_append(cdr(l1),cons(car(l1),l2)) ENDIF
+   MEASURE length(l1)
+
+rev_append_char : LEMMA 
+    FORALL (l1,l2) : 
+       rev_append(l1,l2) = append(reverse(l1),l2)
+
+END lists

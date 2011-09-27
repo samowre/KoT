@@ -1,0 +1,77 @@
+certificates[noclauses:posnat, width:posnat] : THEORY
+BEGIN
+
+IMPORTING clauses
+
+% Array holding the initially given CNF. The clauses are not necessarily sorted at this point. We therefore do not use the type "clause". 
+cnf : TYPE = ARRAY [below(noclauses) -> list[int]]
+
+% Array storing the temporary clauses generated during the proof. They are sorted, thus we use the type "clause"
+clauses : TYPE = ARRAY[below(width) -> clause]
+
+
+% The type of basic commands in a certificate
+command : DATATYPE
+   BEGIN
+      load(to:below(width),frm:below(noclauses)) : load?
+      res(to:below(width),args:(cons?[below(width)])) : res?
+   END command
+
+% unproved TCC that map of a cons is a cons
+run_command(c:command,goal:cnf,state:clauses):lift[clauses] = 
+      CASES c OF 
+         load(to,frm): up(state WITH [to := mkclause(goal(frm))]), 
+         res(to,args): LET x = itresolve(map(LAMBDA(i:below(width)):state(i))(args)) IN 
+                          IF up?(x) THEN up(state WITH [to := down(x)]) ELSE bottom ENDIF
+     ENDCASES
+
+satisfies(e:env,state:clauses):bool = 
+   FORALL(i:below(width)):satisfies(e,state(i))
+
+satisfies(e:env,goal:cnf):bool = 
+    FORALL(i:below(noclauses)):satisfies(e,goal(i))
+
+satisfies_with : LEMMA 
+  FORALL (state:clauses, i:below(width), cl:clause, e:env): 
+          satisfies(e,state) AND satisfies(e,cl) IMPLIES 
+                 satisfies(e, state WITH [i:=cl])
+
+satisfies_map : LEMMA 
+  FORALL (state:clauses, args:list[below(width)], e:env):
+        satisfies(e,state) IMPLIES 
+               every(LAMBDA(c:clause):satisfies(e,c),
+          map(LAMBDA(i:below(width)):state(i))(args))
+
+run_command : THEOREM 
+ FORALL (cmd:command, e:env, goal:cnf, state:clauses) : 
+     satisfies(e,state) AND satisfies(e,goal) AND 
+         up?(run_command(cmd,goal,state)) IMPLIES 
+     satisfies(e,down(run_command(cmd,goal,state)))
+
+run_commands(cmds:list[command], goal:cnf, state:clauses) : 
+     RECURSIVE lift[clauses] = 
+IF null?(cmds) THEN up(state) ELSE 
+ LET res = run_command(car(cmds),goal, state) IN 
+  IF up?(res) THEN run_commands(cdr(cmds), goal, down(res)) ELSE 
+     bottom ENDIF ENDIF 
+MEASURE length(cmds)
+
+run_commands : THEOREM 
+ FORALL (cmds:list[command], e:env, goal:cnf, state:clauses) : 
+     satisfies(e,state) AND satisfies(e,goal) AND 
+         up?(run_commands(cmds,goal,state)) IMPLIES 
+     satisfies(e,down(run_commands(cmds,goal,state)))
+
+certifies(goal:cnf, cmds:list[command]) : bool=
+ LET initcl = mkclause(goal(0)) IN  
+ LET initst = LAMBDA(i:below(width)):initcl IN
+ LET res = run_commands(cmds,goal,initst) IN 
+ IF up?(res) THEN down(res)(0)=null % want to see the empty clause
+ ELSE FALSE
+ ENDIF 
+
+certificates : THEOREM 
+FORALL(goal:cnf, cmds:list[command], e:env): 
+   certifies(goal,cmds) IMPLIES  NOT satisfies(e,goal) 
+
+END certificates
