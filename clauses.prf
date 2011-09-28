@@ -38,6 +38,47 @@
   (FV_TCC3-1 nil 3526059822 ("" (subtype-tcc) nil nil) nil nil))
  (FV_TCC4 0
   (FV_TCC4-1 nil 3526059822 ("" (termination-tcc) nil nil) nil nil))
+ (FV_append 0
+  (FV_append-1 nil 3526157446
+   ("" (induct-and-simplify "cls1")
+    (("1" (grind)
+      (("1" (rewrite "union_commutative")
+        (("1" (rewrite "union_empty") nil nil)) nil))
+      nil)
+     ("2" (grind) (("2" (rewrite "union_associative") nil nil)) nil))
+    nil)
+   ((FV def-decl "set[nat]" clauses nil)
+    (clause type-eq-decl nil clauses nil)
+    (union_associative formula-decl nil sets_lemmas nil)
+    (union_empty formula-decl nil sets_lemmas nil)
+    (union_commutative formula-decl nil sets_lemmas nil)
+    (emptyset const-decl "set" sets nil)
+    (finite_emptyset name-judgement "finite_set" finite_sets nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (set type-eq-decl nil sets nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (FV def-decl "set[nat]" clauses nil)
+    (append def-decl "list[T]" list_props nil)
+    (union const-decl "set" sets nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil)
+    (list_induction formula-decl nil list_adt nil))
+   shostak))
  (eqval_clause 0
   (eqval_clause-1 nil 3526062469
    ("" (induct "cl")
@@ -70,7 +111,7 @@
     nil)
    ((list type-decl nil list_adt nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (PRED type-eq-decl nil defined_types nil) nil
+    (PRED type-eq-decl nil defined_types nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (>= const-decl "bool" reals nil)
     (nonneg_int nonempty-type-eq-decl nil integers nil)
@@ -81,8 +122,8 @@
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (set type-eq-decl nil sets nil)
     (eqval const-decl "bool" clauses nil)
-    (clause type-eq-decl nil clauses nil) nil
-    (= const-decl "[T, T -> boolean]" equalities nil) nil
+    (clause type-eq-decl nil clauses nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (int nonempty-type-eq-decl nil integers nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (rational nonempty-type-from-decl nil rationals nil)
@@ -95,10 +136,10 @@
     (boolean nonempty-type-decl nil booleans nil)
     (number nonempty-type-decl nil numbers nil)
     (list_induction formula-decl nil list_adt nil)
-    (minus_int_is_int application-judgement "int" integers nil) nil nil
+    (minus_int_is_int application-judgement "int" integers nil)
     (lookup const-decl "bool" clauses nil)
     (member const-decl "bool" sets nil)
-    (emptyset const-decl "set" sets nil) nil
+    (emptyset const-decl "set" sets nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (- const-decl "[numfield -> numfield]" number_fields nil)
@@ -173,9 +214,7 @@
     (union const-decl "set" sets nil)
     (emptyset const-decl "set" sets nil)
     (member const-decl "bool" sets nil)
-    (lookup const-decl "bool" clauses nil)
-    (satisfies const-decl "bool" clauses nil)
-    (satisfies const-decl "bool" clauses nil)
+    (lookup const-decl "bool" clauses nil) nil nil
     (minus_int_is_int application-judgement "int" integers nil)
     (finite_emptyset name-judgement "finite_set" finite_sets nil)
     (list_induction formula-decl nil list_adt nil)
@@ -183,8 +222,7 @@
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (PRED type-eq-decl nil defined_types nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -194,10 +232,8 @@
     (rational_pred const-decl "[real -> boolean]" rationals nil)
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (satisfies const-decl "bool" clauses nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (FV def-decl "set[nat]" clauses nil)
+    (int nonempty-type-eq-decl nil integers nil) nil
+    (= const-decl "[T, T -> boolean]" equalities nil) nil
     (eqval const-decl "bool" clauses nil)
     (set type-eq-decl nil sets nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)

@@ -1,0 +1,42 @@
+tseitin : THEORY 
+BEGIN
+IMPORTING formulas[posnat], clauses
+
+form2cnf_aux(form:propform,n:posnat) : RECURSIVE 
+          [posnat,posnat,list[list[int]]] = CASES form OF
+	  vbl(v) : (n, v, null),
+nand(left,right) : LET (n,il,lcls) = form2cnf_aux(left,n) IN 
+	           LET (n,ir,rcls) = form2cnf_aux(right,n) IN 
+                      (n+1,n,append[list[int]](cons(cons(n,cons(il,null)),cons(
+                                        cons(n,cons(ir,null)),cons(
+                                        cons(-il,cons(-ir,cons(-n,null))),null))), 
+					append[list[int]](lcls,rcls)))
+       ENDCASES
+MEASURE form BY <<
+
+
+% could allow form2cnf_aux only for propform[posnat] and thus cut out the rho-mapping. 
+% consider optimizations such as omission of certain clauses given polarity information. 
+% could even consider a certification version of CNF translation. But the certificate format is 
+%  perhaps a bit unclear.
+
+
+form2aux_char : THEOREM 
+FORALL (form:propform):FORALL(e0:env):FORALL(n:posnat):
+LET (n1,i,cls) = form2cnf_aux(form,n) IN 
+(FORALL (v:posnat):member(v,FV(form)) IMPLIES v<n)
+ IMPLIES 
+EXISTS (e1:env): eqval(e0,e1,(LAMBDA (i:posnat):i<n)) AND
+satisfies(e1,cls) AND e1(i) = meaning(form,e0) AND
+i < n1 AND n <= n1 AND
+FORALL (i:posnat):member(i,FV(cls)) IMPLIES i < n1 
+
+
+%          form2cnf_aux(form,n)=(n',i,cls) IMPLIES            
+%                  (FORALL(v:vars):env(v)<n) AND 
+%                     IMPLIES
+%              (FORALL(v:vars):env(v)<n') AND
+% 	     (FORALL(v:vars):env(v)>0 IMPLIES env(v)=env'(v)) AND 
+% 	     (satisfies(eta,cls) AND 
+               
+END tseitin

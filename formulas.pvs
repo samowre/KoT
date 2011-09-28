@@ -9,33 +9,22 @@ n: VAR posnat
 propform : DATATYPE 
    BEGIN 
       vbl(v:vars) : vbl? 
-      land(left,right:propform) : land?
-      lor(left,right:propform) : lor?
-      limp(left,right:propform) : limp?
-      lneg(form:propform) : lneg?
+      nand(left,right:propform) : land?
    END propform
-size(form:propform):nat = reduce_nat(LAMBDA(x:vars):0,LAMBDA i,j:1+i+j, LAMBDA i,j:1+i+j, LAMBDA i,j:1+i+j,LAMBDA i:1+i)(form) 
-
 
 meaning(form:propform,val:[vars->bool]) : RECURSIVE bool = 
    CASES form OF 
       vbl(v) : val(v), 
-      land(left,right) : meaning(left,val) AND meaning(right,val),
-      lor(left,right) : meaning(left,val) OR meaning(right,val),
-      limp(left,right) : meaning(left,val) IMPLIES meaning(right,val),
-      lneg(form) : NOT meaning(form,val)
+      nand(left,right) : NOT(meaning(left,val) AND meaning(right,val)) 
    ENDCASES
-MEASURE size(form)
+MEASURE form BY <<
 
 FV(form:propform) : RECURSIVE set[vars] = 
    CASES form OF 
       vbl(v) : singleton(v), 
-      land(left,right) : union(FV(left), FV(right)), 
-      lor(left,right) : union(FV(left), FV(right)), 
-      limp(left,right) : union(FV(left), FV(right)), 
-      lneg(form) : FV(form)
+      nand(left,right) : union(FV(left), FV(right))
    ENDCASES 
-MEASURE size(form)
+MEASURE form BY <<
 
 eqval(eta1,eta2:[vars->bool],X:set[vars]) : bool = FORALL(v:vars):
    member(v,X) IMPLIES eta1(v)=eta2(v)
@@ -43,56 +32,4 @@ eqval(eta1,eta2:[vars->bool],X:set[vars]) : bool = FORALL(v:vars):
 eqval_char : LEMMA 
    FORALL (phi:propform): FORALL(eta1,eta2:[vars->bool]): 
        eqval(eta1,eta2,FV(phi)) IMPLIES meaning(phi,eta1)=meaning(phi,eta2)
-
-MV(rho:[vars->posnat],n:posnat) : bool = FORALL (v:vars):rho(v)<n
-
-goodmap(phi:propform, rho:[vars->posnat]) : bool = 
-    FORALL (v1,v2:vars):member(v1,FV(phi)) AND member(v2,FV(phi)) IMPLIES NOT rho(v1) = rho(v2)
-
-form2cnf_aux(form:propform,rho:[vars->posnat],n:posnat) : RECURSIVE 
-          [posnat,posnat,list[list[int]]] = CASES form OF
-	  vbl(v) : (n, rho(v), null),
-         land(left,right) : LET (n,il,lcls) = form2cnf_aux(left,rho,n) IN 
-	 		    LET (n,ir,rcls) = form2cnf_aux(right,rho,n) IN 
-                            (n+1,n,append(cons(cons(-n,cons(il,null)),cons(
-                                        cons(-n,cons(ir,null)),cons(
-                                        cons(-il,cons(-ir,cons(n,null))),null))), 
-					append(lcls,rcls))), 
-         lor (left,right) : LET (n,il,lcls) = form2cnf_aux(left,rho,n) IN 
-                            LET (n,ir,rcls) = form2cnf_aux(right,rho,n) IN 
-                            (n+1,n,append(cons(cons(n,cons(-il,null)),cons(
-                                            cons(n,cons(-ir,null)),cons(
-                                            cons(il,cons(ir,cons(-n,null))),null))), 
-                                   append(lcls,rcls))), 
-         limp(left,right) : LET (n,il,lcls) = form2cnf_aux(left,rho,n) IN 
-                            LET (n,ir,rcls) = form2cnf_aux(right,rho,n) IN 
-                            (n+1,n,append(cons(cons(n,cons(il,null)),cons(
-                                            cons(n,cons(-ir,null)),cons(
-                                            cons(-il,cons(ir,cons(-n,null))),null))),
-				   append(lcls,rcls))),
-    	 lneg(form) :       LET (n,i,lcls) = form2cnf_aux(form,rho,n) IN 
-	                    (n+1,n,append(cons(cons(n,cons(-i,null)),cons(
-                                            cons(i,cons(-n,null)),null)),lcls))
-       ENDCASES
-MEASURE size(form)
-
-
-
- form2aux_char : THEOREM 
-FORALL (form:propform):FORALL(eta:[vars->bool]): FORALL (rho:[vars->posnat]):FORALL(n:posnat):
-LET (n1,i,cls) = form2cnf_aux(form,rho,n) IN 
- goodmap(form,rho) AND MV(rho,n)
- IMPLIES 
-EXISTS (env:[posnat->bool]): (FORALL(v:vars):member(v,FV(form)) IMPLIES env(rho(v))=eta(v)) AND
-satisfies(env,cls) AND env(i) = meaning(form,eta) AND
-FORALL (i:posnat):member(i,FV(cls)) IMPLIES n <= i AND i < n1 OR EXISTS (v:vars):member(v,FV(form)) AND rho(v)=i
-
-
-%          form2cnf_aux(form,n)=(n',i,cls) IMPLIES            
-%                  (FORALL(v:vars):env(v)<n) AND 
-%                     IMPLIES
-%              (FORALL(v:vars):env(v)<n') AND
-% 	     (FORALL(v:vars):env(v)>0 IMPLIES env(v)=env'(v)) AND 
-% 	     (satisfies(eta,cls) AND 
-               
-END formulas
+END formulas 

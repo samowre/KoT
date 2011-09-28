@@ -53,6 +53,9 @@ FV(cls:list[list[int]]) : RECURSIVE set[nat] =
      CASES cls OF null: emptyset, cons(cl,cls): union(FV(cl),FV(cls)) ENDCASES 
   MEASURE length
 
+FV_append : LEMMA 
+     FORALL(cls1,cls2:list[list[int]]):FV(append(cls1,cls2)) = union(FV(cls1),FV(cls2))
+
 eqval(e1,e2:env,X:set[nat]) : bool = FORALL(i:posnat):
    member(i,X) IMPLIES e1(i)=e2(i)
 
