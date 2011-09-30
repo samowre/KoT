@@ -132,13 +132,6 @@ mkclause:THEOREM
 FORALL(cl:clause,e:env): 
  satisfies(e,cl) IMPLIES satisfies(e,mkclause(cl))
 
-
-
-
-
-
-
-
 itresolve_aux(cls:list[clause],acc:clause) : RECURSIVE lift[clause] = 
       IF null?(cls) THEN up(acc) ELSE 
       LET res = resolve(acc,car(cls)) IN 
@@ -162,14 +155,6 @@ itresolve : THEOREM
         up?(itresolve(cls)) IMPLIES 
            satisfies(e,down(itresolve(cls)))
 
+
+
 END clauses
-   
-% certificate
-
-
-% precondition for resolve_aux
-% pre_resolve_aux(cl1,cl2,acc:clause) : bool = 
-%    is_clause(rev_append(acc,null),0) AND 
-%    LET i = IF null?(acc) THEN 0 ELSE car(acc) ENDIF IN 
-%    is_clause(cl1,i) AND is_clause(cl2,i)
-

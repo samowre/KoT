@@ -1,6 +1,6 @@
 tseitin : THEORY 
 BEGIN
-IMPORTING formulas[posnat], clauses
+IMPORTING formulas, clauses, certificates
 
 form2cnf_aux(form:propform,n:posnat) : RECURSIVE 
           [posnat,posnat,list[list[int]]] = CASES form OF
@@ -10,7 +10,15 @@ nand(left,right) : LET (n,il,lcls) = form2cnf_aux(left,n) IN
                       (n+1,n,append[list[int]](cons(cons(n,cons(il,null)),cons(
                                         cons(n,cons(ir,null)),cons(
                                         cons(-il,cons(-ir,cons(-n,null))),null))), 
-					append[list[int]](lcls,rcls)))
+					append[list[int]](lcls,rcls))), 
+	  piff(left,right) : LET (n,i1,cls1) = form2cnf_aux(left,n) IN 
+LET (n,i2,cls2) = form2cnf_aux(right,n) IN 
+                         (n+1,n,append[list[int]](cons(
+                               cons(-n,cons(-i1,cons(i2,null))),cons(
+                               cons(-n,cons(-i2,cons(i1,null))),cons(
+                               cons(-i1,cons(-i2,cons(n,null))),cons(
+                               cons(i1,cons(i2,cons(n,null))),null)))),append(cls1,cls2)))
+	  ,ftrue : (n+1,n,cons(cons(n,null),null))
        ENDCASES
 MEASURE form BY <<
 
@@ -22,8 +30,7 @@ MEASURE form BY <<
 
 
 form2aux_char : THEOREM 
-FORALL (form:propform):FORALL(e0:env):FORALL(n:posnat):
-LET (n1,i,cls) = form2cnf_aux(form,n) IN 
+FORALL (form:propform):FORALL(e0:env):FORALL(n:posnat):	LET (n1,i,cls) = form2cnf_aux(form,n) IN 
 (FORALL (v:posnat):member(v,FV(form)) IMPLIES v<n)
  IMPLIES 
 EXISTS (e1:env): eqval(e0,e1,(LAMBDA (i:posnat):i<n)) AND
@@ -38,5 +45,48 @@ FORALL (i:posnat):member(i,FV(cls)) IMPLIES i < n1
 %              (FORALL(v:vars):env(v)<n') AND
 % 	     (FORALL(v:vars):env(v)>0 IMPLIES env(v)=env'(v)) AND 
 % 	     (satisfies(eta,cls) AND 
-               
+
+form2cnf(form:propform) : [posnat,list[list[int]]] = 
+   LET n = maxvar(form) IN 
+   LET (n1,i,cls) = form2cnf_aux(form,n) IN 
+   (n1,cons(cons(-i,null),cls))
+
+extform2cnf(form:extform) : [posnat,list[list[int]]] = 
+     form2cnf(extform2propform(form))
+
+form2cnf_maxvar : THEOREM 
+   FORALL (form:propform): 
+     FORALL(i:posnat):member(i,FV(form2cnf(form)`2)) IMPLIES i < form2cnf(form)`1
+extform2cnf_maxvar : THEOREM 
+   FORALL (form:extform): 
+     FORALL(i:posnat):member(i,FV(extform2cnf(form)`2)) IMPLIES i < extform2cnf(form)`1
+
+form2cnf_char : THEOREM 
+   FORALL (form:propform):
+      (FORALL (e:[posnat->bool]):NOT satisfies(e,form2cnf(form)`2)) IMPLIES FORALL(e:[posnat->bool]):meaning(form,e)
+
+
+
+extform2cnf_char : THEOREM 
+   FORALL (form:extform):
+      (FORALL (e:[posnat->bool]):NOT satisfies(e,extform2cnf(form)`2)) IMPLIES FORALL(e:[posnat->bool]):meaning(form,e)
+
+mkgoal_aux(n:nat,cls:list[list[int]]) : RECURSIVE ARRAY [below(n)->list[int]] = 
+     CASES cls OF 
+     null : LAMBDA (i:below(n)):null,
+     cons(cl,cls) : mkgoal_aux(n,cls) WITH [(length(cls)):=cl]
+     ENDCASES
+MEASURE length(cls)
+
+mkgoal_aux_char : LEMMA 
+FORALL (n:nat):FORALL(cls:list[list[int]]):FORALL(e:[posnat->bool]):
+    satisfies(e,cls) IMPLIES FORALL(i:below(n)):(i<length(cls)) IMPLIES satisfies(e,mkgoal_aux(n,cls)(i))
+
+mkgoal(cls:list[list[int]]) : ARRAY [below(length(cls))->list[int]] = mkgoal_aux(length(cls),cls)
+
+mkgoal_char : LEMMA 
+FORALL(cls:list[list[int]]):FORALL(e:[posnat->bool]):
+   satisfies(e,cls) IMPLIES FORALL(i:below(length(cls))):satisfies(e,mkgoal(cls)(i))
 END tseitin
+
+

@@ -1,0 +1,14 @@
+toplevelsat : THEORY
+BEGIN 
+IMPORTING formulas, clauses, certificates, tseitin
+
+toplevelsat : THEOREM 
+FORALL(form:extform): 
+LET (width,cls) = extform2cnf(form) IN 
+LET noclauses = length(cls) IN 
+FORALL(cmds:list[command[width,noclauses]]):
+certifies[width,noclauses](mkgoal(cls),cmds) IMPLIES 
+FORALL(e:[posnat->bool]):
+meaning(form,e)
+
+END toplevelsat

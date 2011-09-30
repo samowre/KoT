@@ -1,35 +1,107 @@
-formulas[vars:TYPE]  : THEORY
+formulas  : THEORY
 BEGIN
 
-IMPORTING lists, clauses, certificates
+IMPORTING lists, clauses
 
 i,j:VAR posnat
 n: VAR posnat
 
 propform : DATATYPE 
-   BEGIN 
-      vbl(v:vars) : vbl? 
-      nand(left,right:propform) : land?
+   BEGIN
+      vbl(v:posnat) : vbl? 
+      nand(left,right:propform) : nand?
+      piff(left,right:propform) : piff?
+      ftrue : ftrue? 
    END propform
 
-meaning(form:propform,val:[vars->bool]) : RECURSIVE bool = 
+propneg(form:propform):propform = nand(form,ftrue)
+propand(left,right:propform):propform = propneg(nand(left,right))
+propor(left,right:propform):propform = nand(propneg(left),propneg(right))
+propimp(left,right:propform):propform = nand(left,propneg(right))
+
+
+meaning(form:propform,val:[posnat->bool]) : RECURSIVE bool = 
    CASES form OF 
       vbl(v) : val(v), 
-      nand(left,right) : NOT(meaning(left,val) AND meaning(right,val)) 
+      nand(left,right) : NOT(meaning(left,val) AND meaning(right,val)), 
+      piff(left,right) : meaning(left,val) IFF meaning(right,val),
+      ftrue : TRUE
    ENDCASES
 MEASURE form BY <<
 
-FV(form:propform) : RECURSIVE set[vars] = 
+FV(form:propform) : RECURSIVE set[posnat] = 
    CASES form OF 
       vbl(v) : singleton(v), 
-      nand(left,right) : union(FV(left), FV(right))
+      nand(left,right) : union(FV(left), FV(right)), 
+      piff(left,right) : union(FV(left),FV(right)),
+       ftrue : emptyset
    ENDCASES 
 MEASURE form BY <<
 
-eqval(eta1,eta2:[vars->bool],X:set[vars]) : bool = FORALL(v:vars):
+eqval(eta1,eta2:[posnat->bool],X:set[posnat]) : bool = FORALL(v:posnat):
    member(v,X) IMPLIES eta1(v)=eta2(v)
 
 eqval_char : LEMMA 
-   FORALL (phi:propform): FORALL(eta1,eta2:[vars->bool]): 
+   FORALL (phi:propform): FORALL(eta1,eta2:[posnat->bool]): 
        eqval(eta1,eta2,FV(phi)) IMPLIES meaning(phi,eta1)=meaning(phi,eta2)
+
+% computes n so that i:FV(form) implies i<n
+maxvar(form:propform) : RECURSIVE posnat = CASES form OF
+   vbl(v): v+1,
+nand(phi1,phi2): max(maxvar(phi1),maxvar(phi2)), 
+piff(phi1,phi2):max(maxvar(phi1),maxvar(phi2)),
+ ftrue:1
+ENDCASES MEASURE form BY <<
+
+maxvar_char: LEMMA
+FORALL(form:propform):FORALL(i:posnat):member(i,FV(form)) IMPLIES i < maxvar(form)
+
+extform : DATATYPE
+   BEGIN 
+      lvbl(v:posnat) : lvbl? 
+      lneg(form:extform) : lneg?
+      land(left,right:extform) : land?
+      lor(left,right:extform) : lor?
+      limp(left,right:extform) : limp?
+      liff(left,right:extform) : liff?
+   END extform
+
+meaning(form:extform,val:[posnat->bool]) : RECURSIVE bool = 
+   CASES form OF 
+      lvbl(v) : val(v), 
+      lneg(form) : NOT(meaning(form,val)), 
+      land(left,right) : meaning(left,val) AND meaning(right,val),
+      lor(left,right) : meaning(left,val) OR meaning(right,val),
+      limp(left,right) : meaning(left,val) IMPLIES meaning(right,val),
+      liff(left,right) : meaning(left,val) IFF meaning(right,val)
+   ENDCASES
+MEASURE form BY <<
+
+FV(form:extform) : RECURSIVE set[posnat] = 
+   CASES form OF 
+      lvbl(v) : singleton(v), 
+      lneg(form) : FV(form),
+      land(left,right) : union(FV(left), FV(right)), 
+      lor(left,right) : union(FV(left), FV(right)), 
+      limp(left,right) : union(FV(left), FV(right)), 
+      liff(left,right) : union(FV(left), FV(right))
+   ENDCASES 
+MEASURE form BY <<
+
+ extform2propform(form:extform): RECURSIVE propform = 
+   CASES form OF 
+       lvbl(v) : vbl(v),
+       lneg(form) : propneg(extform2propform(form)),
+       land(left,right) : propand(extform2propform(left),extform2propform(right)),
+       lor(left,right) : propor(extform2propform(left),extform2propform(right)),
+       limp(left,right) : propimp(extform2propform(left),extform2propform(right)),
+       liff(left,right) : piff(extform2propform(left),extform2propform(right))
+       ENDCASES
+ MEASURE form by <<
+
+extform2propform_char : 
+THEOREM FORALL (e:[posnat->bool]): FORALL(form:extform):
+meaning(form,e) = meaning(extform2propform(form),e)
+
 END formulas 
+
