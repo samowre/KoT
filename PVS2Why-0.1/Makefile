@@ -18,7 +18,7 @@ packstamp=$(shell head -n 1 lib/version)
 fullpack=$(shell pwd)
 libpath=$(subst $(COLON), ,$(PVS_LIBRARY_PATH):$(PVS_DIR)/lib)
 listreq=$(if $(require),$(subst $(COMMA), -or -name ,-name $(require)),)
-precond=$(shell find $(libpath) -follow $(listreq) 2>/dev/null)
+#precond=$(shell find $(libpath) -follow $(listreq) 2>/dev/null)
 pvscond=$(shell test -f $(PVS_DIR)/$(PVS) && echo OK)
 proveit=$(shell find $(PVS_DIR) -name proveit -print 2>/dev/null)
 pvspack=$(shell cd ..;pwd)
@@ -45,16 +45,16 @@ ifeq (,$(pvscond))
 ERRMSG=PVS [= $(PVS)] not found in PVS_DIR [= $(PVS_DIR)]. Check definition of PVS_DIR or call make PVS=<pvs>
 else
 PVS_VER=$(shell $(PVS_DIR)/$(PVS) -version)
-ifeq (,$(precond))
-ERRMSG=Required package(s) in $(require) does (do) not seem to be installed
-else
+#ifeq (,$(precond))
+#ERRMSG=Required package(s) in $(require) does (do) not seem to be installed
+#else
 ifeq (,$(libpack))
 WRNMSG= "** Warning ** Make sure that PVS_LIBRARY_PATH includes $(pvspack) before using PVS2Why!"
 endif
 endif
 endif
 endif
-endif
+#endif
 ifdef ERRMSG
 $(error Error: $(ERRMSG))
 endif

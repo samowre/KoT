@@ -19,7 +19,7 @@
 (defvar *pvs2why-version* "")
 (defvar *why-decls-trace* nil)
 (defvar *why-types-trace* nil)
-(defvar *pvs2why-trace* nil)
+(defvar *pvs2why-trace* t)
 (defvar *why2java-trace* nil)
 (defvar *pvs2why-unique-names* nil)
 

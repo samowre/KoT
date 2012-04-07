@@ -106,7 +106,7 @@
 ;; Here primitive operations are bound to their why equivalents
 ;; convert the operator and the arguments.
 (defun pvs2why-primitive-app (expr bindings livevars declared-type-args declared-type)
-  (when *pvs2why-trace*
+  (when t;*pvs2why-trace*
     (format t "Function: pvs2why-primitive-app: ~{ ~a ~} ~{ ~a ~} ~{ ~a ~} ~a ~%" (arguments expr) livevars declared-type-args declared-type))
   (let ((args (pvs2why* (arguments expr) bindings livevars declared-type-args))
 	(why-type (pvs2why-type declared-type)) ; (pvs2why-type (type expr))) ; otherwise 1 + 1 -> real
@@ -331,7 +331,7 @@
       nil))
 
 (defmethod pvs2why* ((expr application) bindings livevars declared-type)
-  (when *pvs2why-trace*
+  (when t;*pvs2why-trace*
     (format t "Function: pvs2why*-application: ~a ~a ~%" expr declared-type))
   (with-slots 
    (operator argument) expr
@@ -385,7 +385,7 @@
 
 
 (defun constant-formals (module)
-  (when *pvs2why-trace*
+  (when t;*pvs2why-trace*
     (format t "Function: constant-formals~%"))
 ;  (loop for x in (formals module)
 ;			 when (formal-const-decl? x)
@@ -630,7 +630,7 @@
 ;
 ; named expressions can have resolutions, or _do_ have resolutions?
 (defmethod pvs2why* ((expr name-expr) bindings livevars declared-type)
-  (when *pvs2why-trace*
+  (when t;*pvs2why-trace*
     (format t "Function: pvs2why*-name-expr: ~a ~{ ~{ ~a ~a ~} ~}  ~a ~%" expr bindings declared-type))
   (let* ((decl (declaration expr))
 	 (module (module decl))
@@ -683,7 +683,8 @@
 	 (why-actuals nil))
     (if (and (eq nil why-actuals) (pvs2cl-primitive? expr)) 	; FALSE and TRUE
 	why-expr ; we won't find curried functions here, will we?
-      (mk-why-function-application why-expr why-actuals))))
+      (let ((is-why-constructor (constructor-name-expr? expr)))
+	(mk-why-function-application why-expr why-actuals nil nil nil is-why-constructor)))))
 
 
 

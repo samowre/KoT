@@ -1,7 +1,7 @@
-/* File: record.java
+/* File: record.java 
 *  Automatically generated from PVS theory record (record.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 4:22:48 7/9/2010 
+*  Date: 19:17:42 4/6/2012 
 */
 
 import PVS2Java.*;

@@ -20,7 +20,7 @@
 (load-prelude-library "ProofLite")
 
 (let* ((package-files '("util" "why" "pvs2why" "why2xml" "why2java"))
-       (*load-verbose* nil)
+       (*load-verbose* t)
        (*compile-verbose* nil)
        (lisp-files (loop for f in package-files
                          collect (format nil "~a.lisp" f)))

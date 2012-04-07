@@ -860,7 +860,11 @@
 			     &optional mop lr type)
   (let ((parentheses (need-parentheses? expr mop lr))
 	(op (operator expr)))
-    (cond ((unary-expression? expr)
+    (cond ((constructor expr)
+	   (format nil "new ~a(~a)"
+		   (why2java-string* op)
+		   (why2java-list (arguments expr))))	  
+	  ((unary-expression? expr)
 	   (if (why-function-application? (car (arguments expr)))
 	       (format nil "~a(~a)"
 		   (why2java-string* op)
@@ -879,10 +883,6 @@
 		   (why2java-string* (cadr (arguments expr)) 
 				     (identifier op) 'r)
 		   parentheses))
-	  ((constructor expr)
-	   (format nil "new ~a(~a)"
-		   (why2java-string* op)
-		   (why2java-list (arguments expr))))
 	  (t 
 	   (format nil "~a(~a)" 
 		   (cond ((and (why-name? op)

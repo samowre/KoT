@@ -1,7 +1,7 @@
-/* File: Byte.java
+/* File: Byte.java 
 *  Automatically generated from PVS theory Byte (Byte.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 4:2:34 7/9/2010 
+*  Date: 18:31:56 4/6/2012 
 */
 
 import PVS2Java.*;

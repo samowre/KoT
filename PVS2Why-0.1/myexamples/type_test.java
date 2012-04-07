@@ -1,7 +1,7 @@
 /* File: type_test.java 
 *  Automatically generated from PVS theory type_test (first_example.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 18:1:42 8/5/2010 
+*  Date: 19:26:37 4/6/2012 
 */
 
 import PVS2Java.*;
@@ -93,11 +93,11 @@ public class type_test {
 ;
 
   public my_list ni() {
-    return nil();
+    return new nil();
   }
 
   public my_list l() {
-    return new con(0,new con(1,new con(2,nil())));
+    return new con(0,new con(1,new con(2,new nil())));
   }
 
   public int n() {

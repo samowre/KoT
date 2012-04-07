@@ -1,7 +1,7 @@
-/* File: KB3D.java
+/* File: KB3D.java 
 *  Automatically generated from PVS theory KB3D (KB3D.pvs) 
 *  By: PVS2Why-0.1 (11/10/07) 
-*  Date: 4:2:32 7/9/2010 
+*  Date: 18:31:52 4/6/2012 
 */
 
 import PVS2Java.*;
