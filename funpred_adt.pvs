@@ -23,6 +23,10 @@ funpred_adt: THEORY
 
   JUDGEMENT (ufun?) SUBTYPE_OF fun?
 
+  index: [funpred -> nat]
+
+  arity: [funpred -> nat]
+
   ipred: [[nat, nat] -> (ipred?)]
 
   upred: [[nat, nat] -> (upred?)]
@@ -30,10 +34,6 @@ funpred_adt: THEORY
   ifun: [[nat, nat] -> (ifun?)]
 
   ufun: [[nat, nat] -> (ufun?)]
-
-  index: [funpred -> nat]
-
-  arity: [funpred -> nat]
 
   funpred_ord: [funpred -> upto(3)]
 
@@ -49,7 +49,7 @@ funpred_adt: THEORY
        (FORALL (index: nat, arity: nat):
           funpred_ord(ufun(index, arity)) = 3);
 
-  ord(x: funpred): upto(3) =
+  ord(x: funpred): [funpred -> upto(3)] =
       CASES x
         OF ipred(ipred1_var, ipred2_var): 0,
            upred(upred1_var, upred2_var): 1,
@@ -151,9 +151,9 @@ funpred_adt: THEORY
 
   subterm(x: funpred, y: funpred):  boolean = x = y;
 
-  <<:  (well_founded?[funpred]) = LAMBDA (x, y: funpred): FALSE;
+  <<:  (strict_well_founded?[funpred]) = LAMBDA (x, y: funpred): FALSE;
 
-  funpred_well_founded: AXIOM well_founded?[funpred](<<);
+  funpred_well_founded: AXIOM strict_well_founded?[funpred](<<);
 
   reduce_nat(ipred?_fun: [[nat, nat] -> nat],
              upred?_fun: [[nat, nat] -> nat],

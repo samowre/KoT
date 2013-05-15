@@ -1,18 +1,121 @@
-lists[T:TYPE] : THEORY 
-BEGIN 
+lists[T:TYPE]: THEORY 
+ BEGIN
 
-importing list[T]
+  IMPORTING adt_props
+  IMPORTING list_adt_props
 
-l,l1,l2,l3 : VAR list[T]
+  l, m, l1, l2: VAR list[T]
+  p: VAR pred[T]
+  P: VAR pred[list[T]]
+  a, b, c: VAR T
+  x, y, z: VAR T
 
-% computes append(rev(l1), l2)
-rev_append(l1,l2) : RECURSIVE list[T] = 
-   IF null?(l1) THEN l2
-   ELSE rev_append(cdr(l1),cons(car(l1),l2)) ENDIF
-   MEASURE length(l1)
+%  % More efficient way to compute append(reverse(l1), l2)
+%  rev_append(l1, l2): RECURSIVE list[T] =
+%    CASES l1 OF
+%      null: l2,
+%      cons(x, t1): rev_append(t1, cons(x, l2))
+%    ENDCASES
+%  MEASURE length(l1)
+%
+%  % Characterisation of rev_append
+%  rev_append_char: LEMMA rev_append(l1, l2) = append(reverse(l1), l2)
 
-rev_append_char : LEMMA 
-    FORALL (l1,l2) : 
-       rev_append(l1,l2) = append(reverse(l1),l2)
+  filter_filters: JUDGEMENT
+    filter(l, p) HAS_TYPE { m | FORALL c: member(c, m) = (p(c) AND member(c, l)) }
 
-END lists
+  % delete(a, l) is l without the elements equal to a
+  delete(a, l): { m | FORALL c: member(c, m) = (c /= a AND member(c, l)) } =
+    filter(l, LAMBDA x: x /= a)
+
+  %% Suffixes  
+  % Recursively computes the suffixes of a list
+  suffixes(l): RECURSIVE list[list[T]] =
+    CASES l OF
+      null: (: null :),
+      cons(h, t): cons(l, suffixes(t))
+    ENDCASES
+  MEASURE length(l)
+
+  % Checks that some suffix satisfy a property
+  some_suffix(P, l): bool = some(P)(suffixes(l))
+  some_suffix(P)(l): bool = some(P)(suffixes(l))
+
+  % Checks that every suffix satisfy a property
+  every_suffix(P, l): bool = every(P)(suffixes(l))
+  every_suffix(P)(l): bool = every(P)(suffixes(l))
+  
+  % suffix?(m, l) is TRUE if m is a suffix of l
+  suffix?(m, l): RECURSIVE bool =
+    CASES l OF
+      null: null?(m),
+      cons(h, t): l = m OR suffix?(m, t)
+    ENDCASES
+  MEASURE length(l)
+
+  % Currified version
+  % WARNING: Arguments order is reverted w.r.t suffix?/2
+  suffix?(l)(m): bool = suffix?(m, l)
+
+  % Properties on suffixes
+  suffix_length: LEMMA suffix?(m, l) IMPLIES length(m) <= length(l)
+  suffix_partial_order: THEOREM partial_order?(suffix?)
+  suffix_cons: LEMMA suffix?(l, cons(x, l))
+  suffix_member: LEMMA suffix?(m, l) AND member(x, m) IMPLIES member(x, l)
+
+  % Suffixes is really the list of suffixes
+  suffix?_suffixes: THEOREM suffix?(m, l) => member(m, suffixes(l))
+  suffixes_suffix?: THEOREM member(m, suffixes(l)) => suffix?(m, l)
+
+  %% Find
+  find(p, l): RECURSIVE lift[T]=
+    CASES l OF
+      null: bottom,
+      cons(h, t): IF p(h) THEN up(h) ELSE find(p, t) ENDIF
+    ENDCASES
+  MEASURE length(l)
+
+  find_char: THEOREM
+    CASES find(p, l) OF
+      bottom: NOT some(p, l),
+      up(r): p(r) AND member(r, l)
+    ENDCASES
+
+  %% List as sets
+
+  subset?(l, m): bool = every(member(m))(l)
+  member_subset: THEOREM subset?(l, m) IFF (FORALL x: member(x, l) IMPLIES member(x, m))
+  subset_order: THEOREM preorder?(subset?)
+  
+  equal?(l, m): bool = subset?(l, m) AND subset?(m, l)
+  member_equal: THEOREM equal?(l, m) IFF (FORALL x: member(x, l) IFF member(x, m))
+  equal_equiv: THEOREM equivalence?(equal?)
+
+  uniques?(l): RECURSIVE bool =
+    CASES l OF
+      null: TRUE,
+      cons(h, t): NOT member(h, t) AND uniques?(t)
+    ENDCASES
+  MEASURE length(l)
+
+  cons_equal: THEOREM member(x, l) IMPLIES equal?(l, cons(x, l))
+
+  uniques(l): RECURSIVE { m | uniques?(m) AND equal?(m, l) } =
+    CASES l OF
+      null: null,
+      cons(h, t):
+        IF member(h, t)
+	  THEN uniques(t)
+	  ELSE cons(h, uniques(t))
+	ENDIF
+    ENDCASES
+  MEASURE length(l)
+
+  %% Theorems on lists
+%  delete_reduce: LEMMA
+%    delete(a, reduce(null, LAMBDA x, A: append(f(x), A))(kk)) =
+%    reduce(null, LAMBDA x, A: append(delete(a, f(x)), A))(kk)
+
+  % Uncurrified version
+%  every_suffix(p: pred[list[T]], l): bool = every_suffix(p)(l)
+ END lists

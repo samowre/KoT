@@ -28,23 +28,7 @@ minlist   [T : TYPE ]
 
   P, Q: VAR PRED[T]
 
-  every_and: LEMMA
-       every(LAMBDA a: P(a) AND Q(a))(l) =
-         (every(P)(l) AND every(Q)(l))
-
   pp, qq: VAR [(cons?[T])-> bool]
-
-  every_suffix?(pp)(l): RECURSIVE bool =
-   CASES l OF
-    null: TRUE,
-    cons(e, k): pp(l) AND every_suffix?(pp)(k)
-   ENDCASES
-    MEASURE length(l)
-
-  every_suffix_impl: LEMMA
-     (FORALL (k: (cons?[T])): pp(k) IMPLIES qq(k)) AND
-      every_suffix?(pp)(l)
-  IMPLIES every_suffix?(qq)(l)
 
   member_nth: LEMMA
     (FORALL (n: below(length(l))): 
@@ -102,20 +86,6 @@ minlist   [T : TYPE ]
      FORALL (l: (cons?[T])), (i: below(length(l))):
       nthcdr(append(l, k), i) = append(nthcdr(l, i), k)
 
-   delete(a, l): RECURSIVE
-      {l1 | (FORALL c: member(c, l1) = (c /= a AND member(c, l)))} = 
-    CASES l OF
-     null: null,
-     cons(b, k): IF a = b
-                  THEN delete(a, k)
-                 ELSE cons(b, delete(a, k))
-              ENDIF
-    ENDCASES
-    MEASURE length(l)
-
-   member_append: LEMMA
-    member(a, append(k, l)) = (member(a, k) OR member(a, l))
-
    subset(k, l): RECURSIVE bool =
     (CASES k OF
      null: TRUE,
@@ -123,45 +93,8 @@ minlist   [T : TYPE ]
      ENDCASES)
     MEASURE length(k)
 
-   suffix?(l2)(l1): RECURSIVE bool =
-    (CASES l2 OF
-      null: null?(l1),
-      cons(a, k): l1 = l2 OR suffix?(k)(l1)
-     ENDCASES)
-   MEASURE length(l2)
-
-   suffix_transitivity: LEMMA suffix?(l)(l1) AND suffix?(l1)(l2) 
-     IMPLIES suffix?(l)(l2)
-
-   suffix_transitivity_induction: LEMMA 
-     suffix?(l2)(l1) IMPLIES suffix?(cons(a,l2))(l1)
-
-   suffix_null: LEMMA null?(l1) IMPLIES suffix?(l2)(l1)
-
-   suffix_length: LEMMA suffix?(l2)(l1) IMPLIES length(l1) <=  length(l2)
-
-   suffix_cons: LEMMA
-     suffix?(l1)(cons(a, l2)) => suffix?(l1)(l2)
-
-   presuffix(l1, l2): RECURSIVE list[T] =
-    (CASES l2 OF
-      null: null,
-      cons(a, k): IF l1 = l2 THEN null
-                   ELSE cons(a, presuffix(l1, k))
-                 ENDIF
-     ENDCASES)
-    MEASURE length(l2)
+IMPORTING lists
      
-   suffix_member: LEMMA suffix?(l2)(l1) AND cons?(l1) IMPLIES member(car(l1), l2)
-
-   some_member: LEMMA some(P)(l) = (EXISTS a: member(a, l) AND P(a))
-
-    presuffix_nil: LEMMA presuffix(null, l) = l    
-
-    some_nth: LEMMA
-       some(P)(l) IFF (EXISTS (i : below(length(l))): P(nth(l, i)))
-
-
     find(P, l): RECURSIVE {i : upto(length(l)) |
                              (i > 0 => (P(nth(l, i-1)) &
                                         (FORALL (j: below(i-1)):
@@ -174,9 +107,6 @@ minlist   [T : TYPE ]
        MEASURE length(l)
 
      CONVERSION+ K_conversion
-
-     some_every: LEMMA
-       some(P)(l) IFF NOT every(NOT P)(l)
 
      find_zero: LEMMA
        find(P, l) = 0 IFF every(NOT P)(l);
@@ -201,42 +131,16 @@ minlist   [T : TYPE ]
      maxlist((l | cons?(l)), (key : [T -> real])): T =
        minlist(l, (LAMBDA a: -key(a)))
 
-     setlist?(l): RECURSIVE bool =
-     CASES l OF
-      null: TRUE,
-      cons(a, k): NOT member(a, k) AND setlist?(k)
-     ENDCASES
-     MEASURE length(l)
-
      list2set_member: LEMMA list2set(k)(a) = member(a, k)
 
      subset_member: LEMMA subset(k, l) = subset?(k, l)
 
      every_member_subset: LEMMA subset(k, l) <=> (FORALL a: member(a, k) => member(a, l))
 
-     setify(l): RECURSIVE {k | setlist?(k) AND subset(k, l) AND subset(l, k)} =
-     CASES l OF
-       null: null,
-       cons(a, k): IF member(a, k)
-                    THEN setify(k)
-		    ELSE cons(a, setify(k))
-		   ENDIF
-     ENDCASES
-     MEASURE length(l)
-
      setify_null: LEMMA
        null?(setify(l)) = null?(l)
 
      delete_append: LEMMA
        delete(a, append(k, l)) = append(delete(a, k), delete(a, l))
-
-     every_forall: LEMMA
-       every(P)(l) = (FORALL a: member(a, l) => P(a))
-
-     some_exists: LEMMA
-       some(P)(l) = (EXISTS a: member(a, l) AND P(a))
-
-     member_suffix: LEMMA
-       suffix?(l1)(l2) AND member(a, l2) => member(a, l1)
 
   END minlist

@@ -13,7 +13,7 @@ BEGIN
 %funpred is a combined datatype for interpreted/uninterpreted function and
 %predicate symbols. 
 
-  IMPORTING funpred, minlist
+  IMPORTING funpred, minlist, lists
 
 %term is the pre-term datatype with variables and compound terms  
 term  : DATATYPE 
@@ -104,7 +104,7 @@ subst(ss, x, t): RECURSIVE list[term] =
      ENDCASES
   MEASURE ss BY <<
 
- IMPORTING map2, map3
+ IMPORTING map2
       
 term_equal(s, t, (s_vars, t_vars: list[(var?)])): RECURSIVE bool =
   CASES s OF
@@ -114,7 +114,7 @@ term_equal(s, t, (s_vars, t_vars: list[(var?)])): RECURSIVE bool =
 		   % modif
 		   % default value is TRUE, not FALSE.
 		   % We can prove that length(ssp)==length(args(t))
-                   reduce3(TRUE ,
+                   reduce2(TRUE ,
 		           (LAMBDA ((s1 : term | s1 << s),
 			            t1 : term,
 				    b: bool):

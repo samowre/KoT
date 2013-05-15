@@ -5,7 +5,9 @@ BEGIN
 
 IMPORTING lists
 
-ltlit(x,y:int) : bool = abs(x) < abs(y)
+lit: TYPE = nzint
+
+ltlit(x,y:lit) : bool = abs(x) < abs(y)
 
 % clauses are lists of integers sorted according to ltlit
 % a duplicate is (i,j) where NOT(ltlit(i,j) OR ltlit(j,i)), i.e. i=j or i=-j
@@ -13,7 +15,10 @@ ltlit(x,y:int) : bool = abs(x) < abs(y)
 % clauses are also not supposed to contain 0
 
 % type of clauses (or rather pre-clauses see below)
-clause : TYPE = list[int]
+clause : TYPE = list[lit]
+
+% Formula in Conjunctive Normal Form
+cnf: TYPE = list[clause]
 
 % Interestingly, we never need to check that clauses are really ordered. 
 % "Clause-hood" is, however, an invariant of "resolve" defined below.
@@ -36,35 +41,35 @@ env : TYPE = [posnat->bool]
 
 lookup(n:posnat,e:env) : bool = e(n)
 
-satisfies(e:env, l:int) : bool = 
+satisfies(e:env, l:lit) : bool = 
  IF l > 0 THEN lookup(l,e) ELSE NOT lookup(-l,e) ENDIF
 
-satisfies(e:env,cl:list[int]) : bool = 
-  some(LAMBDA(l:int):satisfies(e,l))(cl)
+satisfies(e:env,cl:list[lit]) : bool = 
+  some(LAMBDA(l:lit): satisfies(e,l))(cl)
 
-satisfies(e:env, cls : list[list[int]]) : bool = 
-  every(LAMBDA(cl:list[int]):satisfies(e,cl))(cls)
+satisfies(e:env, cls : list[list[lit]]) : bool = 
+  every(LAMBDA(cl:list[lit]):satisfies(e,cl))(cls)
 
 FV(cl:clause) : RECURSIVE set[nat] = 
      CASES cl OF  null: emptyset, cons(l,cl):  union(singleton(abs(l)),FV(cl)) ENDCASES
   MEASURE length
 
-FV(cls:list[list[int]]) : RECURSIVE set[nat] = 
+FV(cls:list[list[lit]]) : RECURSIVE set[nat] = 
      CASES cls OF null: emptyset, cons(cl,cls): union(FV(cl),FV(cls)) ENDCASES 
   MEASURE length
 
 FV_append : LEMMA 
-     FORALL(cls1,cls2:list[list[int]]):FV(append(cls1,cls2)) = union(FV(cls1),FV(cls2))
+     FORALL(cls1,cls2:list[list[lit]]):FV(append(cls1,cls2)) = union(FV(cls1),FV(cls2))
 
 eqval(e1,e2:env,X:set[nat]) : bool = FORALL(i:posnat):
    member(i,X) IMPLIES e1(i)=e2(i)
 
 eqval_clause : LEMMA 
-   FORALL(cl:list[int]):FORALL(e1,e2:env):
+   FORALL(cl:list[lit]):FORALL(e1,e2:env):
            eqval(e1,e2,FV(cl)) IMPLIES satisfies(e1,cl)=satisfies(e2,cl)
 
 eqval_clauses : LEMMA 
-   FORALL(cls:list[list[int]]):FORALL(e1,e2:env):
+   FORALL(cls:list[list[lit]]):FORALL(e1,e2:env):
            eqval(e1,e2,FV(cls)) IMPLIES satisfies(e1,cls)=satisfies(e2,cls)
     
 sat_append : LEMMA 
@@ -80,15 +85,15 @@ FORALL (cl1,cl2:clause):FORALL(e:env):
     satisfies(e,cl1) OR satisfies(e,cl2) IMPLIES satisfies(e,rev_append(cl1,cl2))
 
 sat_cons : LEMMA 
- FORALL(e:env,h:int,c:clause):
+ FORALL(e:env,h:lit,c:clause):
       satisfies(e,h) OR satisfies(e,c) IMPLIES satisfies(e,cons(h,c))
 
 sat_cons_inv : LEMMA 
- FORALL(e:env,h:int,c:clause):
+ FORALL(e:env,h:lit,c:clause):
        satisfies(e,cons(h,c)) IMPLIES satisfies(e,h) OR satisfies(e,c) 
 
 res_lemma : LEMMA
- FORALL(e:env,h:int,c1,c2:clause):
+ FORALL(e:env,h:lit,c1,c2:clause):
 satisfies(e,cons(h,c1)) AND satisfies(e,cons(-h,c2)) AND NOT h=0 IMPLIES 
 satisfies(e,c1) OR satisfies(e,c2)
 
@@ -113,7 +118,7 @@ resolve_char : THEOREM
 % We don't bother with runtime checks here. Assume that argument to mkclause
 % does not contain duplicates
 
-insert(x:int,cl:clause): RECURSIVE clause = 
+insert(x:lit,cl:clause): RECURSIVE clause = 
   IF null?(cl) THEN cons(x,null)
   ELSIF ltlit(x,car(cl)) THEN cons(x,cl)
   ELSE cons(car(cl), insert(x,cdr(cl)))
@@ -121,7 +126,7 @@ insert(x:int,cl:clause): RECURSIVE clause =
 MEASURE length(cl)
 
 insert:THEOREM
-FORALL(x:int,cl:clause,e:env): 
+FORALL(x:lit,cl:clause,e:env): 
  satisfies(e,x) OR satisfies(e,cl) IMPLIES satisfies(e,insert(x,cl))
 
 mkclause(l:clause):RECURSIVE clause = 
