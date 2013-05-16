@@ -1,0 +1,34 @@
+adt_props[T: TYPE]: THEORY
+BEGIN
+  x: VAR T
+  l: VAR list[T]
+  p, q: VAR pred[T]
+
+  CONVERSION+ K_conversion
+  
+  every_neg: THEOREM
+    every(NOT p)(l) IFF NOT some(p)(l)
+
+  every_conjuct: THEOREM
+    every(p AND q)(l) IFF every(p)(l) AND every(q)(l)
+
+  every_disjunct: THEOREM
+    every(p)(l) OR every(q)(l) IMPLIES every(p OR q)(l)
+
+  every_imp: THEOREM
+    (FORALL x: p(x) => q(x)) AND every(p)(l) IMPLIES every(q)(l)
+
+  some_neg: THEOREM
+    some(NOT p)(l) IFF NOT every(p)(l)
+    
+  some_conjuct: THEOREM
+    some(p AND q)(l) IMPLIES some(p)(l) AND some(q)(l)
+
+  some_disjunct: THEOREM
+    some(p OR q)(l) IFF some(p)(l) OR some(q)(l)
+
+  some_imp: THEOREM
+    (FORALL x: p(x) => q(x)) AND some(p)(l) IMPLIES some(q)(l)
+
+  CONVERSION- K_conversion
+END adt_props
