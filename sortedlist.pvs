@@ -1,96 +1,165 @@
-sortedlist   [ T: TYPE, key: {k: [T-> real]| injective?(k)} ]
+sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
 		: THEORY
 
   BEGIN
 
-  IMPORTING minlist, lists
+  IMPORTING more_list_props
 
-  lAA, lBB : VAR list[T]
-  e, f: VAR T
+  l, m, l1, l2 : VAR list[T]
+  a,b,c: VAR T
+  x,y,z: VAR T
+  i,j: VAR nat
+  p: VAR PRED[T]
 
-  sorted?(lAA): RECURSIVE bool =
-      CASES lAA OF
+% The key function is injective. This requirement has been thought for a long time.
+% If you think this requirement is senseless, we can modify that.
+% A list is sorted if the element are ordered by key, and contains no dupplicate.
+  sorted?(l): RECURSIVE bool =
+      CASES l OF
         null: TRUE,
-     	cons(k, lBB): 
-	  CASES lBB OF
+     	cons(h, lt): 
+	  CASES lt OF
 	    null: TRUE,
-	    cons(l, lCC): key(k) < key(l) AND sorted?(lBB)
+	    cons(th, ltt): key(h) < key(th) AND sorted?(lt)
 	  ENDCASES
       ENDCASES
-     MEASURE length(lAA)
+     MEASURE length(l)
 
-  sAA, sBB, sAAA, sBBB : VAR (sorted?)
+  sl, sl1, sl2 : VAR (sorted?)
 
-  sorted_prop: LEMMA 
-      sorted?(lAA) 
-      <=> 
-      (null?(lAA) 
-	OR null?(cdr(lAA)) 
-	OR (key(car(lAA)) < key(car(cdr (lAA) ))) AND 
-	    sorted?(cdr(lAA)))
 
-  sorted_clause: LEMMA
-      cons?(sAA)
-      => 
-      (member(e, cdr(sAA))
-	=> 
-	key(car(sAA)) < key(e))
+  cons_sorted: LEMMA cons?(sl) => sorted?(cdr(sl))
+  car_sorted:  LEMMA cons?(sl) AND member(a, cdr(sl)) IMPLIES key(car(sl)) < key(a)
 
-  sorted_contains(e, sAA): RECURSIVE bool = 
-    CASES sAA OF
+
+% More efficient version of member in the case of a sorted list
+  s_member(a, sl): RECURSIVE bool = 
+    CASES sl OF
       null: FALSE,
-      cons(f, sBB): IF key(e)<key(f) THEN FALSE
-      	      	    ELSIF key(e) = key(f) THEN TRUE
-		    ELSE sorted_contains(e, sBB)
+      cons(h, slt): IF key(a)<key(h) THEN FALSE
+      	      	    ELSIF key(a) = key(h) THEN TRUE
+		    ELSE s_member(a, slt)
 		    ENDIF
     ENDCASES
-  MEASURE length(sAA)
-    
-  contains_lemma:  LEMMA
-    sorted_contains(e, sAA) = member(e, sAA)
+  MEASURE length(sl)
 
-  no_duplicates?(lAA) : bool = setlist?(lAA)
 
-  sorted_implies_no_duplicates: LEMMA
-      no_duplicates?(sAA)
-
-  remove(e, sAA) : RECURSIVE 
-       {sBB | 
-         FORALL f : 
-	   member(f, sBB) <=> (NOT key(f) = key(e)) 
-	     AND member(f, sAA)} = 
-      CASES sAA OF
-        null : sAA,
-	cons(f, r) : IF key(e) = key(f) 
-		      THEN r
-		      ELSIF key(e) < key(f)
-		      % lA not in the list
-		      THEN sAA
-		      ELSE cons(f, remove(e, r))
-		      ENDIF
+% More efficient version of remove in the case of a sorted list   
+  s_remove(a,sl): RECURSIVE { s:(sorted?)  | FORALL x: member(x,s) IFF 
+       	 	      	      NOT key(x) = key(a) AND member(x,sl)} = 
+      CASES sl OF
+        null : sl,
+	cons(h, slt) : IF key(a) = key(h) THEN slt
+		    ELSIF key(a) < key(h) THEN sl % a not in the list
+		      	  	   	  ELSE cons(h, s_remove(a, slt))
+		    ENDIF
       ENDCASES
-      MEASURE length(sAA)
+      MEASURE length(sl)
 
-  cons_sorted: LEMMA 
-    cons?(sAA) => sorted?(cdr(sAA))
+% /!\ Semantic of insert : if the element is already in, just return the list
+  s_insert(a,sl): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF key(x) = key(a) OR member(x,sl) } =
+	CASES sl OF
+	null: cons(a,null),
+  	cons(h,slt): IF key(a) < key(h) THEN cons(a,sl)
+		  ELSIF key(a) = key(h) THEN sl
+		    	       	 	ELSE cons(h,s_insert(a,slt))
+  		  ENDIF 
+  	ENDCASES
+MEASURE length(sl)
 
-  sorted_include(sAA, sBB): RECURSIVE bool = 
-    	 CASES sAA OF
+% Sort a list, and remove dupplicates
+sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
+   	      CASES l OF
+	      	  null: null,
+		  cons(h,lt): s_insert(h,sort(lt))
+	      ENDCASES
+MEASURE length(l)
+
+
+% s_member and s_remove are indeed the same as member and remove
+s_member_member: LEMMA s_member(a, sl) IFF member(a, sl)
+s_remove_remove: LEMMA s_remove(a, sl) = remove(a,sl)
+
+insert_remove: 	 LEMMA s_insert(a,s_remove(a,sl))=s_insert(a,sl)
+remove_insert: 	 LEMMA s_remove(a,s_insert(a,sl))=s_remove(a,sl)
+insert_no_change: LEMMA s_insert(a,sl)=sl IFF member(a,sl)
+remove_no_change: LEMMA s_remove(a,sl)=sl IFF NOT member(a,sl)
+
+
+
+% Sorted Lists as Sets
+% More efficient version of subset
+  s_subset?(sl1, sl2): RECURSIVE bool = 
+    	 CASES sl1 OF
 	   null: true,
-	   cons(e, sAAA): 
-	     CASES sBB OF
+	   cons(h1, t1): 
+	     CASES sl2 OF
 	       null: false,
-	       cons(f, sBBB): 
+	       cons(h2, t2): 
 	         COND
-		   key(e) < key(f) -> false, 
-		   key(e) = key(f) -> sorted_include(sAAA, sBBB),
-		   key(e) > key(f) -> sorted_include(sAA, sBBB)
+		   key(h1) < key(h2) -> false, 
+		   key(h1) = key(h2) -> s_subset?(t1, t2),
+		   key(h1) > key(h2) -> s_subset?(sl1, t2)
 		 ENDCOND
 	     ENDCASES
    	 ENDCASES
-    MEASURE length(sBB)
+    MEASURE length(sl2)
 
-  subset_include: LEMMA 
-    sorted_include(sAA, sBB) = subset(sAA, sBB)
+s_equal?(sl1,sl2): bool = s_subset?(sl1,sl2) AND s_subset?(sl2,sl1)
 
+ sorted_uniques:  LEMMA uniques?(sl)
+ s_subset_subset: LEMMA s_subset?(sl1, sl2) IFF subset?(sl1, sl2)
+ s_equal_equal:   LEMMA  s_equal?(sl1,sl2)  IFF  equal?(sl1,sl2) ;
+
+
+
+% Specification of comon list functions with sorted?
+
+% Append
+
+  % Need some order on list first
+<: [[(sorted?),(sorted?)] -> bool] = LAMBDA (sl1,sl2): 
+   			  (null?(sl2) AND null?(sl1)) OR 
+		   	  (cons?(sl2) AND FORALL x: s_member(x,sl1) IMPLIES 
+			  	      	  	 key(x) < key(car(sl2)))
+
+strict_order: LEMMA strict_order?(<::[[(sorted?),(sorted?)] -> bool])
+
+append_sorted: LEMMA sl1 < sl2 IFF sorted?(append(sl1,sl2))
+
+
+
+
+
+% Reverse
+
+ rev_sorted?(l): RECURSIVE bool =
+      CASES l OF
+        null: TRUE,
+     	cons(h, lt): 
+	  CASES lt OF
+	    null: TRUE,
+	    cons(th, ltt): key(h) > key(th) AND rev_sorted?(lt)
+	  ENDCASES
+      ENDCASES
+     MEASURE length(l)
+
+rev_sorted: THEOREM rev_sorted?(reverse(sl))
+
+
+% Less useful maybe, nth
+
+nth_sorted: LEMMA FORALL l: sorted?(l) IFF (FORALL i,j: i < j IFF key(nth(sl,i)) < key(nth(sl,j)))
+
+% Filter
+
+filter_sorted: JUDGEMENT filter(sl,p) HAS_TYPE (sorted?)
+
+% min/max
+
+% min_sorted: LEMMA cons?(sl) IMPLIES minlist(sl) = car(sl)
+
+	
   END sortedlist
+
+

@@ -15,7 +15,7 @@ BEGIN
   member(l)(x): bool = member(x, l)
 
   % Remove (all instances of) an element from a list
-  delete(a, l): { m | FORALL x: member(x, m) IFF (x /= a AND member(x, l)) } =
+  remove(a, l): { m | FORALL x: member(x, m) IFF (x /= a AND member(x, l)) } =
     filter(l, LAMBDA x: x /= a)
 
   % Flattens a list of lists
@@ -157,6 +157,8 @@ BEGIN
     suffix?(l1, l2) AND suffix?(l2, l1) IMPLIES l1 = l2
   suffix_partial_order: THEOREM partial_order?(suffix?)
   suffix_subset: LEMMA suffix?(m, l) IMPLIES subset?(m, l)
+
+%suffix_append: LEMMA suffix?(l2,l) IMPLIES EXISTS l1: l=append(l1,l2) 
 
   % Suffixes is really the list of suffixes
   suffix?_suffixes: THEOREM suffix?(m, l) => member(m, suffixes(l))
