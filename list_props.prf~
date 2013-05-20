@@ -687,14 +687,6 @@
     (list_induction formula-decl nil list_adt nil))
    shostak)))
 (concat_map
- (concat_map_TCC1 0
-  (concat_map_TCC1-1 nil 3577732876 ("" (termination-tcc) nil nil)
-   ((real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (length def-decl "nat" list_props nil))
-   nil))
  (concat_map_flatten 0
   (concat_map_flatten-1 nil 3577731396
    ("" (induct-and-simplify l) nil nil)
@@ -702,7 +694,7 @@
     (boolean nonempty-type-decl nil booleans nil)
     (S formal-type-decl nil concat_map nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
-    (concat_map def-decl "list[S]" concat_map nil)
+    (concat_map const-decl "list[S]" concat_map nil)
     (flatten const-decl "list[T]" more_list_props nil)
     (map adt-def-decl "list[T1]" list_adt_map nil)
     (T formal-type-decl nil concat_map nil)
@@ -715,12 +707,12 @@
     (grind :rewrites (concat_map_flatten member_map flatten_member)
      :if-match all)
     nil nil)
-   ((flatten_member formula-decl nil more_list_props nil)
-    (concat_map_flatten formula-decl nil concat_map nil)
-    (S formal-type-decl nil concat_map nil)
-    (list type-decl nil list_adt nil)
+   ((member_map formula-decl nil list_map_props nil)
     (T formal-type-decl nil concat_map nil)
-    (member_map formula-decl nil list_map_props nil))
+    (list type-decl nil list_adt nil)
+    (S formal-type-decl nil concat_map nil)
+    (concat_map_flatten formula-decl nil concat_map nil)
+    (flatten_member formula-decl nil more_list_props nil))
    shostak))
  (concat_map_member 0
   (concat_map_member-1 nil 3577731568
