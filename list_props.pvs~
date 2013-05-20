@@ -3,7 +3,6 @@ BEGIN
   IMPORTING adt_props
   
   l, m, l1, l2: VAR list[T]
-  ll: VAR list[list[T]]
   p: VAR pred[T]
   P: VAR pred[list[T]]
   a, b, c: VAR T
@@ -18,6 +17,10 @@ BEGIN
   % Remove (all instances of) an element from a list
   delete(a, l): { m | FORALL x: member(x, m) IFF (x /= a AND member(x, l)) } =
     filter(l, LAMBDA x: x /= a)
+
+  % Flattens a list of lists
+  flatten(ll: list[list[T]]): list[T] =
+    reduce(null, (LAMBDA l, m: append(l, m)))(ll)
 
   % Useful conversion between every/some and forall/exists
   every_forall: THEOREM
@@ -50,20 +53,6 @@ BEGIN
   member_nth: THEOREM
     member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
 
-  % Flattens a list of lists
-  flatten(ll: list[list[T]]): list[T] =
-    reduce(null, (LAMBDA l, m: append(l, m)))(ll)
-
-  flatten_null: THEOREM
-    flatten(null) = null
-    
-  flatten_cons: THEOREM
-    flatten(cons(l, ll)) = append(l, flatten(ll))
-
-  flatten_member: THEOREM
-    FORALL (ll: list[list[T]]):
-      member(x, flatten(ll)) IFF (EXISTS l: member(x, l) AND member(l, ll))
-      
   % Lists without duplication
   uniques?(l): RECURSIVE bool =
     CASES l OF
@@ -189,45 +178,13 @@ END list_filter_props
 
 list_map_props[S: TYPE, T: TYPE]: THEORY
 BEGIN
-  IMPORTING more_list_props
-  
   f: VAR [T -> S]
-  F: VAR [T -> list[S]]
   l: VAR list[T]
-  m: VAR list[S]
-  x: VAR T
-  s: VAR S
+  x, y: VAR T
 
   member_map: THEOREM
-    member(x, l) IMPLIES member(f(x), map(f, l))
+    member(x, l) IMPLIES member(f(x), map(f)(l))
 
   map_member: THEOREM
-    member(s, map(f, l)) IMPLIES (EXISTS x: f(x) = s AND member(x, l))
+    member(f(x), map(f)(l)) IMPLIES (EXISTS y: f(x) = f(y) AND member(y, l))
 END list_map_props
-
-concat_map[S: TYPE, T: TYPE]: THEORY
-BEGIN
-  IMPORTING more_list_props
-  IMPORTING list_map_props[list[S], T]
-
-  f: VAR [T -> list[S]]
-  x: VAR T
-  s: VAR S
-  l: VAR list[T]
-  m: VAR list[S]
-
-  concat_map(l, f): RECURSIVE list[S] =
-    CASES l OF
-      null: null,
-      cons(h, t): append(f(h), concat_map(t, f))
-    ENDCASES
-  MEASURE length(l)
-
-  concat_map_flatten: THEOREM concat_map(l, f) = flatten(map(f, l))
-
-  member_concat_map: THEOREM
-    member(s, f(x)) AND member(x, l) IMPLIES member(s, concat_map(l, f))
-
-  concat_map_member: THEOREM
-    member(s, concat_map(l, f)) IMPLIES (EXISTS x: member(s, f(x)) AND member(x, l))
-END concat_map
