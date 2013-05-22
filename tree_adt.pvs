@@ -1,0 +1,196 @@
+%%% ADT file generated from fmla
+
+tree_adt[T: TYPE]: THEORY
+ BEGIN
+
+  tree: TYPE
+
+  leaf?, node?: [tree -> boolean]
+
+  val: [(leaf?) -> T]
+
+  children: [(node?) -> list[tree]]
+
+  leaf: [T -> (leaf?)]
+
+  node: [list[tree] -> (node?)]
+
+  tree_ord: [tree -> upto(1)]
+
+  tree_ord_defaxiom: AXIOM
+    (FORALL (val: T): tree_ord(leaf(val)) = 0) AND
+     (FORALL (children: list[tree]): tree_ord(node(children)) = 1);
+
+  ord(x: tree): [tree -> upto(1)] =
+      CASES x OF leaf(leaf1_var): 0, node(node1_var): 1 ENDCASES
+
+  tree_leaf_extensionality: AXIOM
+    FORALL (leaf?_var: (leaf?), leaf?_var2: (leaf?)):
+      val(leaf?_var) = val(leaf?_var2) IMPLIES leaf?_var = leaf?_var2;
+
+  tree_leaf_eta: AXIOM
+    FORALL (leaf?_var: (leaf?)): leaf(val(leaf?_var)) = leaf?_var;
+
+  tree_node_extensionality: AXIOM
+    FORALL (node?_var: (node?), node?_var2: (node?)):
+      children(node?_var) = children(node?_var2) IMPLIES
+       node?_var = node?_var2;
+
+  tree_node_eta: AXIOM
+    FORALL (node?_var: (node?)): node(children(node?_var)) = node?_var;
+
+  tree_val_leaf: AXIOM
+    FORALL (leaf1_var: T): val(leaf(leaf1_var)) = leaf1_var;
+
+  tree_children_node: AXIOM
+    FORALL (node1_var: list[tree]): children(node(node1_var)) = node1_var;
+
+  tree_inclusive: AXIOM
+    FORALL (tree_var: tree): leaf?(tree_var) OR node?(tree_var);
+
+  tree_induction: AXIOM
+    FORALL (p: [tree -> boolean]):
+      ((FORALL (leaf1_var: T): p(leaf(leaf1_var))) AND
+        (FORALL (node1_var: list[tree]):
+           every(p)(node1_var) IMPLIES p(node(node1_var))))
+       IMPLIES (FORALL (tree_var: tree): p(tree_var));
+
+  every(p: PRED[T])(a: tree):  boolean =
+      CASES a
+        OF leaf(leaf1_var): p(leaf1_var),
+           node(node1_var): every[tree](every(p))(node1_var)
+        ENDCASES;
+
+  every(p: PRED[T], a: tree):  boolean =
+      CASES a
+        OF leaf(leaf1_var): p(leaf1_var),
+           node(node1_var): every[tree](every(p), node1_var)
+        ENDCASES;
+
+  some(p: PRED[T])(a: tree):  boolean =
+      CASES a
+        OF leaf(leaf1_var): p(leaf1_var),
+           node(node1_var): some[tree](some(p))(node1_var)
+        ENDCASES;
+
+  some(p: PRED[T], a: tree):  boolean =
+      CASES a
+        OF leaf(leaf1_var): p(leaf1_var),
+           node(node1_var): some[tree](some(p), node1_var)
+        ENDCASES;
+
+  subterm(x: tree, y: tree):  boolean =
+      x = y OR
+       CASES y
+         OF leaf(leaf1_var): FALSE,
+            node(node1_var):
+              some[tree]((LAMBDA (z: tree): subterm(x, z)))(node1_var)
+         ENDCASES;
+
+  <<:  (strict_well_founded?[tree]) =
+      LAMBDA (x, y: tree):
+        CASES y
+          OF leaf(leaf1_var): FALSE,
+             node(node1_var):
+               some[tree](LAMBDA (z: tree): x = z OR x << z)(node1_var)
+          ENDCASES;
+
+  tree_well_founded: AXIOM strict_well_founded?[tree](<<);
+
+  reduce_nat(leaf?_fun: [T -> nat], node?_fun: [list[nat] -> nat]):
+        [tree -> nat] =
+      LAMBDA (tree_adtvar: tree):
+        LET red: [tree -> nat] = reduce_nat(leaf?_fun, node?_fun) IN
+          CASES tree_adtvar
+            OF leaf(leaf1_var): leaf?_fun(leaf1_var),
+               node(node1_var): node?_fun(map[tree, nat](red)(node1_var))
+            ENDCASES;
+
+  REDUCE_nat(leaf?_fun: [[T, tree] -> nat],
+             node?_fun: [[list[nat], tree] -> nat]):
+        [tree -> nat] =
+      LAMBDA (tree_adtvar: tree):
+        LET red: [tree -> nat] = REDUCE_nat(leaf?_fun, node?_fun) IN
+          CASES tree_adtvar
+            OF leaf(leaf1_var): leaf?_fun(leaf1_var, tree_adtvar),
+               node(node1_var):
+                 node?_fun(map[tree, nat](red)(node1_var), tree_adtvar)
+            ENDCASES;
+
+  reduce_ordinal(leaf?_fun: [T -> ordinal],
+                 node?_fun: [list[ordinal] -> ordinal]):
+        [tree -> ordinal] =
+      LAMBDA (tree_adtvar: tree):
+        LET red: [tree -> ordinal] = reduce_ordinal(leaf?_fun, node?_fun)
+          IN
+          CASES tree_adtvar
+            OF leaf(leaf1_var): leaf?_fun(leaf1_var),
+               node(node1_var):
+                 node?_fun(map[tree, ordinal](red)(node1_var))
+            ENDCASES;
+
+  REDUCE_ordinal(leaf?_fun: [[T, tree] -> ordinal],
+                 node?_fun: [[list[ordinal], tree] -> ordinal]):
+        [tree -> ordinal] =
+      LAMBDA (tree_adtvar: tree):
+        LET red: [tree -> ordinal] = REDUCE_ordinal(leaf?_fun, node?_fun)
+          IN
+          CASES tree_adtvar
+            OF leaf(leaf1_var): leaf?_fun(leaf1_var, tree_adtvar),
+               node(node1_var):
+                 node?_fun(map[tree, ordinal](red)(node1_var), tree_adtvar)
+            ENDCASES;
+ END tree_adt
+
+tree_adt_map[T: TYPE, T1: TYPE]: THEORY
+ BEGIN
+
+  IMPORTING tree_adt
+
+  map(f: [T -> T1])(a: tree[T]):  tree[T1] =
+      CASES a
+        OF leaf(leaf1_var): leaf(f(leaf1_var)),
+           node(node1_var): node(map[tree[T], tree[T1]](map(f))(node1_var))
+        ENDCASES;
+
+  map(f: [T -> T1], a: tree[T]):  tree[T1] =
+      CASES a
+        OF leaf(leaf1_var): leaf(f(leaf1_var)),
+           node(node1_var): node(map[tree[T], tree[T1]](map(f), node1_var))
+        ENDCASES;
+
+  every(R: [[T, T1] -> boolean])(x: tree[T], y: tree[T1]):  boolean =
+      leaf?(x) AND leaf?(y) AND R(val(x), val(y)) OR
+       node?(x) AND
+        node?(y) AND
+         every(LAMBDA (u: tree[T], v: tree[T1]): every(R)(u, v))
+              (children(x), children(y));
+ END tree_adt_map
+
+tree_adt_reduce[T: TYPE, range: TYPE]: THEORY
+ BEGIN
+
+  IMPORTING tree_adt[T]
+
+  reduce(leaf?_fun: [T -> range], node?_fun: [list[range] -> range]):
+        [tree[T] -> range] =
+      LAMBDA (tree_adtvar: tree[T]):
+        LET red: [tree[T] -> range] = reduce(leaf?_fun, node?_fun) IN
+          CASES tree_adtvar
+            OF leaf(leaf1_var): leaf?_fun(leaf1_var),
+               node(node1_var):
+                 node?_fun(map[tree[T], range](red)(node1_var))
+            ENDCASES;
+
+  REDUCE(leaf?_fun: [[T, tree[T]] -> range],
+         node?_fun: [[list[range], tree[T]] -> range]):
+        [tree[T] -> range] =
+      LAMBDA (tree_adtvar: tree[T]):
+        LET red: [tree[T] -> range] = REDUCE(leaf?_fun, node?_fun) IN
+          CASES tree_adtvar
+            OF leaf(leaf1_var): leaf?_fun(leaf1_var, tree_adtvar),
+               node(node1_var):
+                 node?_fun(map[tree[T], range](red)(node1_var),
+                           tree_adtvar)
+            ENDCASES;
+ END tree_adt_reduce

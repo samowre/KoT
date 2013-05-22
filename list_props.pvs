@@ -9,11 +9,16 @@ BEGIN
   a, b, c: VAR T
   x, y, z: VAR T
 
-  of_length(n: nat): TYPE = { l | length(l) = n }
-
   %% Characterization of lists as the set of its elements
   % Currified version of member
-  member(l)(x): bool = member(x, l)
+  member(l)(x): MACRO bool = member(x, l)
+
+  % Filter a list, more properties
+  filter_member: JUDGEMENT
+    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
+
+  filter_append: LEMMA
+    filter(append(l, m), p) = append(filter(l, p), filter(m, p))
 
   % Remove (all instances of) an element from a list
   remove(a, l): { m | FORALL x: member(x, m) IFF (x /= a AND member(x, l)) } =
@@ -53,27 +58,26 @@ BEGIN
   member_nth: THEOREM
     member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
 
-  % Specifications of comon list functions with nth
-  nth_append: THEOREM FORALL (i:below(length(l)+length(m))): 
-    nth(append(l,m),i)= 
-    	IF i<length(l) THEN nth(l,i)
-    		       ELSE nth(m,i-length(l))
-	ENDIF
-  nth_reverse: THEOREM FORALL (i:below(length(l))):
-    nth(reverse(l),i) = nth(l,length(l)-1-i)
+  nth_cons: LEMMA
+    FORALL (i: below(1 + length(l))):
+      nth(cons(x, l), i) = IF i = 0 THEN x ELSE nth(l, i - 1) ENDIF
+
+  % More precise specifications with nth
+  nth_append: THEOREM
+    FORALL (i: below(length(l) + length(m))):
+      nth(append(l, m), i) = IF i < length(l)
+                               THEN nth(l, i)
+			       ELSE nth(m, i - length(l))
+			     ENDIF
+  nth_reverse: THEOREM
+    FORALL (i: below(length(l))):
+      nth(reverse(l), i) = nth(l, length(l) - i - 1)
 
   % Flattens a list of lists
-  flatten(ll: list[list[T]]): list[T] =
-    reduce(null, (LAMBDA l, m: append(l, m)))(ll)
-
-  flatten_null: THEOREM
-    flatten(null) = null
-    
-  flatten_cons: THEOREM
-    flatten(cons(l, ll)) = append(l, flatten(ll))
-
+  flatten(ll: list[list[T]]): list[T] = reduce(null, (LAMBDA l, m: append(l, m)))(ll)
+  flatten_null: THEOREM flatten(null) = null
+  flatten_cons: THEOREM flatten(cons(l, ll)) = append(l, flatten(ll))
   flatten_member: THEOREM
-    FORALL (ll: list[list[T]]):
       member(x, flatten(ll)) IFF (EXISTS l: member(x, l) AND member(l, ll))
       
   % Lists without duplication
@@ -122,87 +126,36 @@ BEGIN
   % Characterisation of rev_append
   rev_append_char: THEOREM
     rev_append(l1, l2) = append(reverse(l1), l2)
-END more_list_props
+  AUTO_REWRITE rev_append_char
 
-
-
-
-
-
-
-
-
-% SUFFIXE = SUBTERM !
-list_subterms[T: TYPE]: THEORY
-BEGIN
-  IMPORTING more_list_props
-  x: VAR T
-  P: VAR pred[list[T]]
-  l, m, l1, l2: VAR list[T]
-  
-  % Recursively computes the suffixes of a list
-  subterms(l): RECURSIVE list[list[T]] =
-    CASES l OF
-      null: (: null :),
-      cons(h, t): cons(l, subterms(t))
+  %% Properties on the subterm order
+  subterm_char: THEOREM
+    subterm(l, m) IFF CASES m OF
+      null: null?(l),
+      cons(h, t): l = m OR subterm(l, t)
     ENDCASES
-  MEASURE length(l)
 
-  % Checks that some suffix satisfy a property
-  some_subterm(P, l): bool = some(P)(subterms(l))
-  some_subterm(P)(l): bool = some(P)(subterms(l))
+  % Used as a rewrite rule in proof of subterm_append
+  subterm_cons: LEMMA
+    subterm(l, cons(x, m)) = (l = cons(x, m) OR subterm(l, m))
 
-  % Checks that every suffix satisfy a property
-  every_subterm(P, l): bool = every(P)(subterms(l))
-  every_subterm(P)(l): bool = every(P)(subterms(l))
-  
-  % suffix?(m, l) is TRUE iff m is a suffix/subterm of l
-  suffix?(m, l): MACRO bool = subterm(m,l)
+  % subterm actually is suffix
+  subterm_append: THEOREM
+    subterm(l2, l) IMPLIES EXISTS l1: l = append(l1, l2)
+  append_subterm: THEOREM
+    subterm(l2, append(l1, l2))
 
-  % Currified version
-  % WARNING: Arguments order is reverted w.r.t suffix?/2
-  suffix?(l)(m): bool = suffix?(m, l)
-  AUTO_REWRITE suffix?
-
-  % Characterisation of subterm with append, 
-  % Subterm inherit therefore of all properties of append (which is handy)
-  subterm_append: LEMMA subterm(l2,l) IFF EXISTS l1: l=append(l1,l2) 
-
-  % Properties on subterms/suffixes
-    % Trivials from the characterisation :
-  subterm_length: LEMMA subterm(m, l) IMPLIES length(m) <= length(l)
-  subterm_reflexive: LEMMA subterm(l, l)
+  % Subterm properties
+  subterm_length: LEMMA subterm(l, m) IMPLIES length(l) <= length(m)
+  subterm_reflexive: JUDGEMENT subterm HAS_TYPE (reflexive?[list[T]])
   subterm_null: LEMMA subterm(null, l)
-    % Trivials but handy (and not so trivial)
   subterm_cons1: LEMMA subterm(l, cons(x, l))
   subterm_cons2: LEMMA subterm(cons(x, l), m) IMPLIES subterm(l, m)
-    % Not trivials
-  subterm_transitive: LEMMA
-    subterm(l, l1) AND subterm(l1, l2) IMPLIES subterm(l, l2)
-  subterm_antisymmetric: LEMMA
-    subterm(l1, l2) AND subterm(l2, l1) IMPLIES l1 = l2
-  subterm_partial_order: THEOREM partial_order?(suffix?)
-    % Should we keep that one or write a subterm_append lemma ?
-  subterm_subset: LEMMA subterm(m, l) IMPLIES subset?(m, l)
-
-
-  % Subtermss is really the list of subterms
-  subterm_subterms: THEOREM subterm(m, l) => member(m, subterms(l))
-  subterms_subterm: THEOREM member(m, subterms(l)) => subterm(m, l)
-END list_subterms
-
-list_filter_props[T: TYPE]: THEORY
-BEGIN
-  x: VAR T
-  p: VAR pred[T]
-  l, m: VAR list[T]
-  
-  member_filter: JUDGEMENT
-    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
-
-  filter_append: LEMMA
-    filter(append(l, m), p) = append(filter(l, p), filter(m, p))
-END list_filter_props
+  subterm_transitive: JUDGEMENT subterm HAS_TYPE (transitive?[list[T]])
+  subterm_antisymmetric: JUDGEMENT subterm HAS_TYPE (antisymmetric?[list[T]])
+  subterm_partial_order: JUDGEMENT subterm HAS_TYPE (partial_order?[list[T]])
+  subterm_subset: LEMMA subterm(l, m) IMPLIES subset?(l, m)
+END more_list_props
 
 list_map_props[S: TYPE, T: TYPE]: THEORY
 BEGIN
@@ -220,35 +173,11 @@ BEGIN
   
   map_member: THEOREM
     member(s, map(f, l)) IMPLIES (EXISTS x: f(x) = s AND member(x, l))
-  
-  % ALREADY IN PRELUDE !!!
-  %nth_map: THEOREM FORALL (i:below(length(l))):
-  %  f(nth(l,i)) =  nth(map(f,l),i)
-END list_map_props
 
-concat_map[S: TYPE, T: TYPE]: THEORY
-BEGIN
-  IMPORTING more_list_props
-  IMPORTING list_map_props[list[S], T]
-
-  f: VAR [T -> list[S]]
-  x: VAR T
-  s: VAR S
-  l: VAR list[T]
-  m: VAR list[S]
-
-  concat_map(l, f): RECURSIVE list[S] =
+  mymap(l: list[T], f: [{ x | member(x, l) } -> S]): RECURSIVE list[S] =
     CASES l OF
       null: null,
-      cons(h, t): append(f(h), concat_map(t, f))
+      cons(h, t): cons(f(h), mymap(t, restrict(f)))
     ENDCASES
-  MEASURE length(l)
-
-  concat_map_flatten: THEOREM concat_map(l, f) = flatten(map(f, l))
-
-  member_concat_map: THEOREM
-    member(s, f(x)) AND member(x, l) IMPLIES member(s, concat_map(l, f))
-
-  concat_map_member: THEOREM
-    member(s, concat_map(l, f)) IMPLIES (EXISTS x: member(s, f(x)) AND member(x, l))
-END concat_map
+  MEASURE l BY <<
+END list_map_props
