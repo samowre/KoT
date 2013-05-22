@@ -164,13 +164,9 @@ BEGIN
 
   % Subterm properties
   subterm_length: LEMMA subterm(l, m) IMPLIES length(l) <= length(m)
-  subterm_reflexive: JUDGEMENT subterm HAS_TYPE (reflexive?[list[T]])
   subterm_null: LEMMA subterm(null, l)
   subterm_cons1: LEMMA subterm(l, cons(x, l))
   subterm_cons2: LEMMA subterm(cons(x, l), m) IMPLIES subterm(l, m)
-  subterm_transitive: JUDGEMENT subterm HAS_TYPE (transitive?[list[T]])
-  subterm_antisymmetric: JUDGEMENT subterm HAS_TYPE (antisymmetric?[list[T]])
-  subterm_partial_order: JUDGEMENT subterm HAS_TYPE (partial_order?[list[T]])
   subterm_subset: LEMMA subterm(l, m) IMPLIES subset?(l, m)
 END more_list_props
 
