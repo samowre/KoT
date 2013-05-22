@@ -5,7 +5,7 @@
 adt_props[T: TYPE]: THEORY
 BEGIN
   x: VAR T
-  l: VAR list[T]
+  l, m: VAR list[T]
   p, q: VAR pred[T]
 
   CONVERSION+ K_conversion
@@ -35,4 +35,11 @@ BEGIN
     (FORALL x: p(x) => q(x)) AND some(p)(l) IMPLIES some(q)(l)
 
   CONVERSION- K_conversion
+
+  % Properties on subterm
+  subterm_ltlt: THEOREM subterm(l, m) IFF (l = m OR l << m)
+  subterm_reflexive: JUDGEMENT subterm HAS_TYPE (reflexive?[list[T]])
+  subterm_transitive: JUDGEMENT subterm HAS_TYPE (transitive?[list[T]])
+  subterm_antisymmetric: JUDGEMENT subterm HAS_TYPE (antisymmetric?[list[T]])
+  subterm_po: JUDGEMENT subterm HAS_TYPE (partial_order?[list[T]])
 END adt_props

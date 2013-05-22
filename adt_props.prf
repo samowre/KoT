@@ -104,5 +104,82 @@
     (some adt-def-decl "boolean" list_adt nil)
     (T formal-type-decl nil adt_props nil)
     (list_induction formula-decl nil list_adt nil))
-   shostak)))
+   shostak))
+ (subterm_ltlt 0
+  (subterm_ltlt-1 nil 3578246561
+   ("" (apply (then (induct-and-simplify m :defs nil) (grind))) nil
+    nil)
+   ((list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil adt_props nil)
+    (<< adt-def-decl "(strict_well_founded?[list])" list_adt nil)
+    (strict_well_founded? const-decl "bool" orders nil)
+    (pred type-eq-decl nil defined_types nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (subterm adt-def-decl "boolean" list_adt nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (subterm_reflexive 0
+  (subterm_reflexive-1 nil 3578246560 ("" (grind) nil nil)
+   ((subterm adt-def-decl "boolean" list_adt nil)
+    (reflexive? const-decl "bool" relations nil))
+   nil))
+ (subterm_transitive 0
+  (subterm_transitive-1 nil 3578246560
+   ("" (expand transitive?)
+    (("" (induct-and-simplify z :defs nil)
+      (("1" (grind) nil nil) ("2" (grind) nil nil)
+       ("3" (grind) nil nil))
+      nil))
+    nil)
+   ((list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil adt_props nil)
+    (subterm adt-def-decl "boolean" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (subterm_reflexive name-judgement "(reflexive?[list[T]])" adt_props
+     nil)
+    (transitive? const-decl "bool" relations nil))
+   nil))
+ (subterm_antisymmetric 0
+  (subterm_antisymmetric-1 nil 3578246560
+   ("" (grind :rewrites subterm_ltlt)
+    (("" (use "strict_well_founded?" ("<" "list_adt[T].<<"))
+      (("" (grind :if-match all) nil nil)) nil))
+    nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (strict_well_founded? const-decl "bool" orders nil)
+    (<< adt-def-decl "(strict_well_founded?[list])" list_adt nil)
+    (T formal-type-decl nil adt_props nil)
+    (list type-decl nil list_adt nil)
+    (irreflexive? const-decl "bool" relations nil)
+    (transitive? const-decl "bool" relations nil)
+    (strict_order? const-decl "bool" orders nil)
+    (well_founded? const-decl "bool" orders nil)
+    (subterm_reflexive name-judgement "(reflexive?[list[T]])" adt_props
+     nil)
+    (subterm_transitive name-judgement "(transitive?[list[T]])"
+     adt_props nil)
+    (antisymmetric? const-decl "bool" relations nil)
+    (subterm_ltlt formula-decl nil adt_props nil))
+   nil))
+ (subterm_po 0
+  (subterm_po-1 nil 3578246560 ("" (grind) nil nil)
+   ((subterm_antisymmetric name-judgement "(antisymmetric?[list[T]])"
+     adt_props nil)
+    (subterm_transitive name-judgement "(transitive?[list[T]])"
+     adt_props nil)
+    (subterm_reflexive name-judgement "(reflexive?[list[T]])" adt_props
+     nil)
+    (partial_order? const-decl "bool" orders nil)
+    (preorder? const-decl "bool" orders nil))
+   nil)))
 
