@@ -4,7 +4,7 @@ BEGIN
 IMPORTING clauses
 
 % Array holding the initially given CNF. The clauses are not necessarily sorted at this point. We therefore do not use the type "clause". 
-cnf : TYPE = ARRAY [below(noclauses) -> list[int]]
+cnf : TYPE = ARRAY [below(noclauses) -> list[lit]]
 
 % Array storing the temporary clauses generated during the proof. They are sorted, thus we use the type "clause"
 clauses : TYPE = ARRAY[below(width) -> clause]
