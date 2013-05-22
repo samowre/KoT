@@ -12,6 +12,12 @@
     (T formal-type-decl nil more_list_props nil)
     (list_induction formula-decl nil list_adt nil))
    nil))
+ (filter_cons 0
+  (filter_cons-1 nil 3578247674 ("" (grind) nil nil)
+   ((filter def-decl "list[T]" filters nil)) shostak))
+ (filter_null 0
+  (filter_null-1 nil 3578247680 ("" (grind) nil nil)
+   ((filter def-decl "list[T]" filters nil)) shostak))
  (filter_append 0
   (filter_append-1 nil 3578161497 ("" (induct-and-simplify l) nil nil)
    ((list type-decl nil list_adt nil)
@@ -144,6 +150,15 @@
    ((member def-decl "bool" list_props nil)
     (member_equal formula-decl nil more_list_props nil))
    shostak))
+ (append_cons 0
+  (append_cons-1 nil 3578247842 ("" (grind) nil nil)
+   ((append def-decl "list[T]" list_props nil)) shostak))
+ (reverse_null 0
+  (reverse_null-1 nil 3578247847 ("" (grind) nil nil)
+   ((reverse def-decl "list[T]" list_props nil)) shostak))
+ (reverse_cons 0
+  (reverse_cons-1 nil 3578247853 ("" (grind) nil nil)
+   ((reverse def-decl "list[T]" list_props nil)) shostak))
  (member_append 0
   (member_append-1 nil 3577636826 ("" (induct-and-simplify l) nil nil)
    ((list type-decl nil list_adt nil)
@@ -901,7 +916,6 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil)
     (T formal-type-decl nil list_map_props nil)
     (list_induction formula-decl nil list_adt nil))
    nil))
@@ -913,7 +927,6 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
-    (map adt-def-decl "list[T1]" list_adt_map nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (T formal-type-decl nil list_map_props nil)

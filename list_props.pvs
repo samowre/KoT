@@ -57,11 +57,10 @@ BEGIN
     equal?(l1, l2) IMPLIES equal?(l2, l1)
   cons_equal: THEOREM member(x, l) IMPLIES equal?(l, cons(x, l))
 
-  equal_null: THEOREM equal?(null,null)
-  equal_cons: THEOREM equal?(cons(x,l),cons(y,m)) IFF x=y AND equal?(l,m)
-
   % Specification of comon list functions with cons
-    
+  append_cons: THEOREM append(cons(x,l),m) = cons(x,append(l,m))
+  reverse_null: THEOREM reverse(null) = null[T]
+  reverse_cons: THEOREM reverse(cons(x,l))= append(reverse(l),cons(x,null))  
 
 
   % Specification of common list functions with member
