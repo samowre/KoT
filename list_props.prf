@@ -72,6 +72,16 @@
     (every_forall formula-decl nil more_list_props nil)
     (T formal-type-decl nil more_list_props nil))
    shostak))
+ (subset_null 0
+  (subset_null-1 nil 3578244990 ("" (grind) nil nil)
+   ((every adt-def-decl "boolean" list_adt nil)
+    (subset? const-decl "bool" more_list_props nil))
+   shostak))
+ (subset_cons 0
+  (subset_cons-1 nil 3578244995 ("" (grind) nil nil)
+   ((every adt-def-decl "boolean" list_adt nil)
+    (subset? const-decl "bool" more_list_props nil))
+   shostak))
  (member_equal 0
   (member_equal-1 nil 3577708838
    ("" (auto-rewrite member_subset)
@@ -891,6 +901,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
     (T formal-type-decl nil list_map_props nil)
     (list_induction formula-decl nil list_adt nil))
    nil))
@@ -902,16 +913,17 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (T formal-type-decl nil list_map_props nil)
     (list_induction formula-decl nil list_adt nil))
    shostak))
- (map_TCC1 0
-  (map_TCC1-1 nil 3578170375 ("" (grind) nil nil)
+ (mymap_TCC1 0
+  (mymap_TCC1-1 nil 3578244985 ("" (grind) nil nil)
    ((member def-decl "bool" list_props nil)) nil))
- (map_TCC2 0
-  (map_TCC2-1 nil 3578170375 ("" (grind) nil nil)
+ (mymap_TCC2 0
+  (mymap_TCC2-1 nil 3578244985 ("" (grind) nil nil)
    ((member def-decl "bool" list_props nil)
     (list type-decl nil list_adt nil)
     (T formal-type-decl nil list_map_props nil)
@@ -919,8 +931,8 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil))
    nil))
- (map_TCC3 0
-  (map_TCC3-1 nil 3578170375 ("" (termination-tcc) nil nil)
+ (mymap_TCC3 0
+  (mymap_TCC3-1 nil 3578244985 ("" (termination-tcc) nil nil)
    ((<< adt-def-decl "(strict_well_founded?[list])" list_adt nil))
    nil)))
 

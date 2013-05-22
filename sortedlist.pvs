@@ -1,10 +1,10 @@
 sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
 		: THEORY
 
+
   BEGIN
 
   IMPORTING more_list_props[T]
-  IMPORTING list_filter_props[T]
 
   l, m, l1, l2 : VAR list[T]
   a,b,c: VAR T
@@ -116,6 +116,8 @@ remove_no_change: LEMMA s_remove(a,sl)=sl IFF NOT member(a,sl)
 	 cons(h1,t1): CASES sl2 OF
 	 	      null: FALSE,
 		      cons(h2,t2): key(h2)=key(h1) AND s_equal?(t1,t2)
+		      ENDCASES
+        ENDCASES
 	MEASURE length(sl2) 
 
  sorted_uniques:  LEMMA uniques?(sl)

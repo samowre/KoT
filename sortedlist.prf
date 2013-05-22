@@ -724,7 +724,7 @@
     (cons1_var skolem-const-decl "T" sortedlist nil)
     (cons2_var skolem-const-decl "list[T]" sortedlist nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (member_filter application-judgement
+    (filter_member application-judgement
      "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
      sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
@@ -1068,6 +1068,42 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
    nil))
+ (s_equal?_TCC1 0
+  (s_equal?_TCC1-1 nil 3578245369 ("" (grind) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil))
+   nil))
+ (s_equal?_TCC2 0
+  (s_equal?_TCC2-1 nil 3578245369 ("" (grind) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil))
+   nil))
+ (s_equal?_TCC3 0
+  (s_equal?_TCC3-1 nil 3578245369 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (length def-decl "nat" list_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil))
+   nil))
  (sorted_uniques 0
   (sorted_uniques-1 nil 3578073858
    ("" (induct-and-simplify sl :exclude sorted?)
@@ -1129,8 +1165,7 @@
     nil)
    ((T formal-type-decl nil sortedlist nil)
     (subset? const-decl "bool" more_list_props nil)
-    (s_subset_subset formula-decl nil sortedlist nil)
-    (s_equal? const-decl "bool" sortedlist nil)
+    (s_subset_subset formula-decl nil sortedlist nil) nil
     (equal? const-decl "bool" more_list_props nil))
    shostak))
  (strict_order 0
@@ -1480,21 +1515,19 @@
         nil))
       nil))
     nil)
-   ((list type-decl nil list_adt nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (< const-decl "[[(sorted?), (sorted?)] -> bool]" sortedlist nil)
-    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (append def-decl "list[T]" list_props nil)
-    (T formal-type-decl nil sortedlist nil)
-    (list_induction formula-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (cons2_var skolem-const-decl "list[T]" sortedlist nil)
+   ((order_lcdr formula-decl nil sortedlist nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (member_append formula-decl nil more_list_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (car_sorted formula-decl nil sortedlist nil)
+    (member def-decl "bool" list_props nil)
+    (order_char formula-decl nil sortedlist nil)
+    (bijective? const-decl "bool" functions nil)
+    (id const-decl "(bijective?[T, T])" identity nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (append_null formula-decl nil list_props nil)
     (key formal-const-decl "{k: [T -> real] | injective?(k)}"
      sortedlist nil)
     (injective? const-decl "bool" functions nil)
@@ -1507,19 +1540,21 @@
     (number nonempty-type-decl nil numbers nil)
     (pred type-eq-decl nil defined_types nil)
     (every_forall formula-decl nil more_list_props nil)
-    (append_null formula-decl nil list_props nil)
-    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (id const-decl "(bijective?[T, T])" identity nil)
-    (bijective? const-decl "bool" functions nil)
-    (order_char formula-decl nil sortedlist nil)
-    (member def-decl "bool" list_props nil)
-    (car_sorted formula-decl nil sortedlist nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (member_append formula-decl nil more_list_props nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (order_lcdr formula-decl nil sortedlist nil))
+    (cons2_var skolem-const-decl "list[T]" sortedlist nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil sortedlist nil)
+    (append def-decl "list[T]" list_props nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (< const-decl "[[(sorted?), (sorted?)] -> bool]" sortedlist nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
    shostak))
  (filter_sorted 0
   (filter_sorted-1 nil 3577837025
@@ -1539,11 +1574,16 @@
                             "cons(cons1_var,cons2_var)"))
                       (("1" (grind :exclude sorted?)
                         (("1" (grind :exclude sorted?)
-                          (("1" (lemma member_filter)
-                            (("1"
-                              (inst - cons2_var p
-                               "car(filter(cons2_var,p))")
-                              (("1" (grind) nil nil)) nil))
+                          (("1" (grind :exclude sorted?)
+                            (("1" (typepred "filter(cons2_var,p)")
+                              (("1"
+                                (inst - "car(filter(cons2_var,p))")
+                                (("1"
+                                  (grind :exclude sorted?)
+                                  nil
+                                  nil))
+                                nil))
+                              nil))
                             nil))
                           nil))
                         nil))
@@ -1559,15 +1599,17 @@
         nil))
       nil))
     nil)
-   ((member_filter application-judgement
+   ((filter_member application-judgement
      "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
      sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
-    (member_filter judgement-tcc nil list_filter_props nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (list_induction formula-decl nil list_adt nil)

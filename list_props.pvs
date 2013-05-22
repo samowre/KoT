@@ -17,11 +17,15 @@ BEGIN
   filter_member: JUDGEMENT
     filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
 
+  filter_cons: THEOREM filter(cons(x,l),p) = IF p(x) THEN cons(x,filter(l,p)) 
+  	       	       			     	     ELSE filter(l,p) ENDIF
+  filter_null: THEOREM filter(null,p) = null 
+
   filter_append: LEMMA
     filter(append(l, m), p) = append(filter(l, p), filter(m, p))
 
   % Remove (all instances of) an element from a list
-  remove(a, l): { m | FORALL x: member(x, m) IFF (x /= a AND member(x, l)) } =
+  remove(a, l): MACRO { m | FORALL x: member(x, m) IFF (x /= a AND member(x, l)) } =
     filter(l, LAMBDA x: x /= a)
 
   % Useful conversion between every/some and forall/exists
@@ -39,6 +43,9 @@ BEGIN
   member_subset: THEOREM subset?(l, m) IFF (FORALL x: member(x, l) IMPLIES member(x, m))
   subset_order: THEOREM preorder?(subset?)
 
+  subset_null: THEOREM subset?(null,m)
+  subset_cons: THEOREM subset?(cons(x,l),m) IFF member(x,m) AND subset?(l,m)
+
   % set equality
   equal?(l, m): bool = subset?(l, m) AND subset?(m, l)
   member_equal: THEOREM equal?(l, m) IFF (FORALL x: member(x, l) IFF member(x, m))
@@ -49,7 +56,14 @@ BEGIN
   equal_symmetric: THEOREM
     equal?(l1, l2) IMPLIES equal?(l2, l1)
   cons_equal: THEOREM member(x, l) IMPLIES equal?(l, cons(x, l))
-  
+
+  equal_null: THEOREM equal?(null,null)
+  equal_cons: THEOREM equal?(cons(x,l),cons(y,m)) IFF x=y AND equal?(l,m)
+
+  % Specification of comon list functions with cons
+    
+
+
   % Specification of common list functions with member
   member_append: THEOREM
     member(x, append(l, m)) IFF member(x, l) OR member(x, m)
@@ -58,11 +72,13 @@ BEGIN
   member_nth: THEOREM
     member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
 
-  nth_cons: LEMMA
+ 
+
+  % More precise specifications with nth
+ nth_cons: LEMMA
     FORALL (i: below(1 + length(l))):
       nth(cons(x, l), i) = IF i = 0 THEN x ELSE nth(l, i - 1) ENDIF
 
-  % More precise specifications with nth
   nth_append: THEOREM
     FORALL (i: below(length(l) + length(m))):
       nth(append(l, m), i) = IF i < length(l)
