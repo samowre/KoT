@@ -17,8 +17,9 @@ BEGIN
   filter_member: JUDGEMENT
     filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
 
-  filter_cons: THEOREM filter(cons(x,l),p) = IF p(x) THEN cons(x,filter(l,p)) 
-  	       	       			     	     ELSE filter(l,p) ENDIF
+  filter_cons: THEOREM filter(cons(x, l), p) =
+    IF p(x) THEN cons(x, filter(l, p)) 
+  	    ELSE filter(l, p) ENDIF
   filter_null: THEOREM filter(null,p) = null 
 
   filter_append: LEMMA
