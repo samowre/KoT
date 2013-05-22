@@ -1,0 +1,30 @@
+rev_sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
+		: THEORY
+  BEGIN
+
+  IMPORTING more_list_props[T]
+
+  l, m, l1, l2 : VAR list[T]
+  a,b,c: VAR T
+  x,y,z: VAR T
+  i,j: VAR nat
+  p: VAR PRED[T]
+
+  rev_key(x): real = -key(x)
+
+  IMPORTING sortedlist[T,key]
+  IMPORTING sortedlist[T,rev_key]
+
+
+rev_sorted?(l): bool = sorted?[T,rev_key]
+
+  sl, sl1, sl2 : VAR (sorted?[T,key])
+  rl, rl1, rl2 : VAR (rev_sorted?)
+
+
+rev_sorted: THEOREM rev_sorted?(reverse(sl))
+
+ 	
+  END rev_sortedlist
+
+

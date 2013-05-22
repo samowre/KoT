@@ -1093,30 +1093,141 @@
    shostak))
  (s_subset_subset 0
   (s_subset_subset-1 nil 3578074019
-   ("" (auto-rewrite every_forall)
-    (("" (induct sl2)
-      (("1" (grind) nil nil)
-       ("2" (grind)
-        (("1" (expand s_subset?) (("1" (grind) nil nil)) nil)
-         ("2" (grind)
-          (("2" (expand s_subset?) (("2" (grind) nil nil)) nil)) nil))
-        nil)
-       ("3" (skeep)
-        (("3" (skeep)
-          (("3" (prop)
-            (("1" (inst - sl1)
-              (("1" (expand s_subset? -1)
-                (("1" (lift-if)
-                  (("1" (prop)
-                    (("1" (postpone) nil nil) ("2" (postpone) nil nil)
-                     ("3" (postpone) nil nil) ("4" (postpone) nil nil))
+   ("" (induct sl2)
+    (("1" (grind) nil nil)
+     ("2" (grind)
+      (("1" (grind)
+        (("1" (expand s_subset?) (("1" (grind) nil nil)) nil)) nil)
+       ("2" (grind) (("2" (expand every) (("2" (grind) nil nil)) nil))
+        nil))
+      nil)
+     ("3" (skeep)
+      (("3" (skeep)
+        (("3" (split -1)
+          (("1" (prop)
+            (("1"
+              (use member_subset (l sl1 m "cons(cons1_var,cons2_var)"))
+              (("1" (prop)
+                (("1" (skeep)
+                  (("1" (expand s_subset? -2)
+                    (("1" (lift-if)
+                      (("1" (prop)
+                        (("1" (grind) nil nil)
+                         ("2" (lift-if)
+                          (("2" (prop)
+                            (("1" (grind) nil nil)
+                             ("2" (typepred key)
+                              (("2"
+                                (inst - "cdr(sl1)")
+                                (("2"
+                                  (use
+                                   member_subset
+                                   (l "cdr(sl1)" m "cons2_var"))
+                                  (("2"
+                                    (prop)
+                                    (("1" (postpone) nil nil)
+                                     ("2" (grind) nil nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("3" (inst - sl1)
+                              (("3"
+                                (typepred key)
+                                (("3"
+                                  (use
+                                   member_subset
+                                   (l sl1 m "cons2_var"))
+                                  (("3"
+                                    (grind
+                                     :exclude
+                                     (sorted?
+                                      member
+                                      s_subset?
+                                      subset?))
+                                    (("3"
+                                      (expand member 5)
+                                      (("3" (propax) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
                     nil))
                   nil))
                 nil))
               nil)
-             ("2" (postpone) nil nil) ("3" (grind) nil nil)
-             ("4" (grind) nil nil))
-            nil))
+             ("2" (expand s_subset? +)
+              (("2" (lift-if)
+                (("2" (prop)
+                  (("1" (grind) nil nil)
+                   ("2" (lift-if)
+                    (("2" (prop)
+                      (("1"
+                        (use member_subset
+                             (l sl1 m "cons(cons1_var,cons2_var)"))
+                        (("1" (prop)
+                          (("1" (inst - "car(sl1)")
+                            (("1"
+                              (use s_member_member
+                                   (a
+                                    "car(sl1)"
+                                    sl
+                                    "cons(cons1_var,cons2_var)"))
+                              (("1" (grind) nil nil)) nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("2" (inst - "cdr(sl1)")
+                        (("2" (case "subset?(cdr(sl1),cons2_var)")
+                          (("1" (grind) nil nil)
+                           ("2" (hide -3 2)
+                            (("2" (use member_subset (l "cdr(sl1)"))
+                              (("2"
+                                (use member_subset (l sl1))
+                                (("2"
+                                  (prop)
+                                  (("2"
+                                    (skeep)
+                                    (("2"
+                                      (inst - x)
+                                      (("2"
+                                        (auto-rewrite car_sorted)
+                                        (("2"
+                                          (typepred key)
+                                          (("2"
+                                            (grind
+                                             :exclude
+                                             (sorted?
+                                              member
+                                              s_subset?
+                                              subset?))
+                                            (("1" (postpone) nil nil)
+                                             ("2" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("3" (inst - sl1) (("3" (postpone) nil nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil)
+           ("2" (grind) nil nil))
           nil))
         nil))
       nil))

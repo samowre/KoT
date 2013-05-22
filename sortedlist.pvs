@@ -3,13 +3,14 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
 
   BEGIN
 
-  IMPORTING more_list_props
+  IMPORTING more_list_props[T]
+  IMPORTING list_filter_props[T]
 
   l, m, l1, l2 : VAR list[T]
   a,b,c: VAR T
   x,y,z: VAR T
-  i,j: VAR nat
   p: VAR PRED[T]
+
 
 % The key function is injective. This requirement has been thought for a long time.
 % If you think this requirement is senseless, we can modify that.
@@ -28,8 +29,12 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
   sl, sl1, sl2 : VAR (sorted?)
 
 
-  cons_sorted: LEMMA cons?(sl) => sorted?(cdr(sl))
+  cdr_sorted: LEMMA cons?(sl) => sorted?(cdr(sl))
   car_sorted:  LEMMA cons?(sl) AND member(a, cdr(sl)) IMPLIES key(car(sl)) < key(a)
+  
+  % Powerful characterisation of sorted list with nth
+
+nth_sorted: LEMMA FORALL l: sorted?(l) IFF (FORALL (i,j:below(length(l))): i < j IFF key(nth(l,i)) < key(nth(l,j)))
 
 
 % More efficient version of member in the case of a sorted list
@@ -105,7 +110,13 @@ remove_no_change: LEMMA s_remove(a,sl)=sl IFF NOT member(a,sl)
    	 ENDCASES
     MEASURE length(sl2)
 
-s_equal?(sl1,sl2): bool = s_subset?(sl1,sl2) AND s_subset?(sl2,sl1)
+  s_equal?(sl1,sl2): RECURSIVE bool = 
+	CASES sl1 OF
+	 null: null?(sl2),
+	 cons(h1,t1): CASES sl2 OF
+	 	      null: FALSE,
+		      cons(h2,t2): key(h2)=key(h1) AND s_equal?(t1,t2)
+	MEASURE length(sl2) 
 
  sorted_uniques:  LEMMA uniques?(sl)
  s_subset_subset: LEMMA s_subset?(sl1, sl2) IFF subset?(sl1, sl2)
@@ -113,43 +124,28 @@ s_equal?(sl1,sl2): bool = s_subset?(sl1,sl2) AND s_subset?(sl2,sl1)
 
 
 
-% Specification of comon list functions with sorted?
-
 % Append
 
-  % Need some order on list first
+  % Need some order on list first : sl1 < sl2 IFF every element of sl1 is smaller than any element of sl2
+  % Since sl2 is sorted, it is equivalent to : every element of sl1 is smaller than car(sl2)
 <: [[(sorted?),(sorted?)] -> bool] = LAMBDA (sl1,sl2): 
-   			  (null?(sl2) AND null?(sl1)) OR 
-		   	  (cons?(sl2) AND FORALL x: s_member(x,sl1) IMPLIES 
-			  	      	  	 key(x) < key(car(sl2)))
+		   	  (cons?(sl2) AND every(LAMBDA x: key(x) < key(car(sl2)))(sl1))
+
 
 strict_order: LEMMA strict_order?(<::[[(sorted?),(sorted?)] -> bool])
 
-append_sorted: LEMMA sl1 < sl2 IFF sorted?(append(sl1,sl2))
+  % Lemmas on order 
+% sl1 < sl2 IFF FORALL x,y in (sl1,sl2) : x<y
+order_char: LEMMA sl1 < sl2 IFF cons?(sl2) AND FORALL (x,y): member(x,sl1) AND member(y,sl2) IMPLIES key(x) < key(y)
+
+order_rcdr: LEMMA sl1 < sl2 AND length(sl2) > 1 IMPLIES sl1 < cdr(sl2)
+order_lcdr: LEMMA sl1 < sl2 AND cons?(sl1)      IMPLIES cdr(sl1) < sl2
+% more order properties in rev_sortedlist
+
+append_sorted: LEMMA (sl1 < sl2 OR null?(sl2)) IFF sorted?(append(sl1,sl2))
 
 
 
-
-
-% Reverse
-
- rev_sorted?(l): RECURSIVE bool =
-      CASES l OF
-        null: TRUE,
-     	cons(h, lt): 
-	  CASES lt OF
-	    null: TRUE,
-	    cons(th, ltt): key(h) > key(th) AND rev_sorted?(lt)
-	  ENDCASES
-      ENDCASES
-     MEASURE length(l)
-
-rev_sorted: THEOREM rev_sorted?(reverse(sl))
-
-
-% Less useful maybe, nth
-
-nth_sorted: LEMMA FORALL l: sorted?(l) IFF (FORALL i,j: i < j IFF key(nth(sl,i)) < key(nth(sl,j)))
 
 % Filter
 
