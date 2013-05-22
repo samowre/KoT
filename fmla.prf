@@ -1,72 +1,199 @@
 (funpred)
-(preterm)
-(preterm_funs
- (termnats_TCC1 0
-  (termnats_TCC1-1 nil 3578158485
-   ("" (use "strict_well_founded?" ("<" "list_adt[preterm].<<"))
-    (("" (use "strict_well_founded?" ("<" "preterm_adt.<<"))
+(tree)
+(tree_props
+ (terms_TCC1 0
+  (terms_TCC1-1 nil 3578166693
+   ("" (use "strict_well_founded?" ("<" "tree_adt[T].<<"))
+    (("" (use "strict_well_founded?" ("<" "list_adt[tree[T]].<<"))
       (("" (simplify)
         (("" (flatten)
-          (("" (expand "well_founded?")
-            (("" (hide -1 -3)
+          (("" (hide -1 -3)
+            (("" (expand well_founded?)
               (("" (skeep)
                 (("" (inst?)
                   (("" (prop)
-                    (("" (skeep)
-                      (("" (case "var?(y)")
+                    (("" (skolem!)
+                      (("" (case "leaf?(y!1)")
                         (("1" (grind) nil nil)
-                         ("2" (case "null?(args(y))")
-                          (("1" (grind) nil nil)
-                           ("2"
-                            (inst -2
-                             "LAMBDA (l: list[preterm]): p(apply(fun(y), l)) AND subterm(l, args(y))")
-                            (("2" (split)
+                         ("2"
+                          (inst -2
+                           "LAMBDA (l: list[tree[T]]): p(node(l)) AND subterm(l, children(y!1))")
+                          (("1" (typepred "y!1")
+                            (("1" (prop)
                               (("1"
-                                (skeep)
+                                (skolem!)
                                 (("1"
-                                  (inst 3 "apply(fun(y), y_1)")
-                                  (("1"
-                                    (skeep)
-                                    (("1"
-                                      (expand "lt")
-                                      (("1"
-                                        (split)
-                                        (("1"
-                                          (typepred "x_1")
-                                          (("1"
-                                            (inst -4 x_1)
+                                  (case "null?(children(y!1))")
+                                  (("1" (grind) nil nil)
+                                   ("2"
+                                    (typepred y!2)
+                                    (("2"
+                                      (inst + "node(y!2)")
+                                      (("2"
+                                        (skolem! +)
+                                        (("2"
+                                          (expand lt)
+                                          (("2"
+                                            (prop)
                                             (("1"
-                                              (typepred "y_1")
+                                              (typepred "x!1")
                                               (("1"
-                                                (hide -3)
+                                                (inst -7 x!1)
                                                 (("1"
-                                                  (hide -4)
+                                                  (hide
+                                                   -1
+                                                   -3
+                                                   -5
+                                                   -6
+                                                   -7
+                                                   1
+                                                   2)
                                                   (("1"
-                                                    (hide -4)
+                                                    (use
+                                                     "subterm_subset[tree[T]]")
                                                     (("1"
-                                                      (expand "<<")
+                                                      (prop)
                                                       (("1"
-                                                        (lift-if)
+                                                        (use
+                                                         "member_subset[tree[T]]")
                                                         (("1"
                                                           (prop)
                                                           (("1"
-                                                            (rewrite
-                                                             "some_exists[preterm]")
+                                                            (inst
+                                                             -2
+                                                             x!1)
                                                             (("1"
-                                                              (inst
-                                                               2
-                                                               "x_1")
+                                                              (prop)
                                                               (("1"
                                                                 (hide
-                                                                 -1)
+                                                                 -2
+                                                                 -3
+                                                                 -4
+                                                                 -5)
                                                                 (("1"
-                                                                  (hide
-                                                                   1
-                                                                   3
-                                                                   4)
+                                                                  (grind)
                                                                   (("1"
-                                                                    (postpone)
-                                                                    nil
+                                                                    (expand
+                                                                     <<)
+                                                                    (("1"
+                                                                      (grind)
+                                                                      (("1"
+                                                                        (reveal
+                                                                         +)
+                                                                        (("1"
+                                                                          (propax)
+                                                                          nil
+                                                                          nil))
+                                                                        nil)
+                                                                       ("2"
+                                                                        (use
+                                                                         some_exists[tree[T]])
+                                                                        (("2"
+                                                                          (prop)
+                                                                          (("2"
+                                                                            (inst
+                                                                             +
+                                                                             "x!1")
+                                                                            nil
+                                                                            nil))
+                                                                          nil))
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (typepred x!1)
+                                              (("2"
+                                                (eta "(node?)")
+                                                (("2"
+                                                  (inst?)
+                                                  (("2"
+                                                    (inst
+                                                     -8
+                                                     "children(x!1)")
+                                                    (("1"
+                                                      (grind)
+                                                      nil
+                                                      nil)
+                                                     ("2"
+                                                      (rewrite -1)
+                                                      (("2"
+                                                        (grind
+                                                         :exclude
+                                                         subterm)
+                                                        (("2"
+                                                          (hide
+                                                           -1
+                                                           -2
+                                                           -3
+                                                           -4
+                                                           -5)
+                                                          (("2"
+                                                            (hide
+                                                             -2
+                                                             -3)
+                                                            (("2"
+                                                              (hide
+                                                               2
+                                                               3
+                                                               4
+                                                               5
+                                                               6)
+                                                              (("2"
+                                                                (eta
+                                                                 "(cons?[tree[T]])")
+                                                                (("2"
+                                                                  (inst?)
+                                                                  (("2"
+                                                                    (rewrite
+                                                                     -1
+                                                                     :dir
+                                                                     rl)
+                                                                    (("2"
+                                                                      (eta
+                                                                       "(cons?[tree[T]])")
+                                                                      (("2"
+                                                                        (hide
+                                                                         -2)
+                                                                        (("2"
+                                                                          (inst?)
+                                                                          (("2"
+                                                                            (simplify)
+                                                                            (("2"
+                                                                              (hide
+                                                                               -1)
+                                                                              (("2"
+                                                                                (use
+                                                                                 "subterm_cons1[tree[T]]")
+                                                                                (("2"
+                                                                                  (use
+                                                                                   "subterm_cons2[tree[T]]")
+                                                                                  (("2"
+                                                                                    (hide
+                                                                                     -2)
+                                                                                    (("2"
+                                                                                      (rewrite
+                                                                                       -1)
+                                                                                      nil
+                                                                                      nil))
+                                                                                    nil))
+                                                                                  nil))
+                                                                                nil))
+                                                                              nil))
+                                                                            nil))
+                                                                          nil))
+                                                                        nil))
+                                                                      nil))
                                                                     nil))
                                                                   nil))
                                                                 nil))
@@ -80,85 +207,20 @@
                                                 nil))
                                               nil))
                                             nil))
-                                          nil)
-                                         ("2"
-                                          (flatten)
-                                          (("2"
-                                            (inst -5 "args(x_1)")
-                                            (("1" (grind) nil nil)
-                                             ("2"
-                                              (typepred "x_1")
-                                              (("2"
-                                                (eta "(apply?)")
-                                                (("2"
-                                                  (inst - x_1)
-                                                  (("2"
-                                                    (rewrite -4)
-                                                    (("2"
-                                                      (rewrite -1)
-                                                      (("2"
-                                                        (typepred
-                                                         "y_1")
-                                                        (("2"
-                                                          (hide
-                                                           -1
-                                                           -4
-                                                           -7
-                                                           -8)
-                                                          (("2"
-                                                            (split)
-                                                            (("1"
-                                                              (propax)
-                                                              nil
-                                                              nil)
-                                                             ("2"
-                                                              (hide
-                                                               -2
-                                                               2
-                                                               3)
-                                                              (("2"
-                                                                (rewrite
-                                                                 -3)
-                                                                (("2"
-                                                                  (postpone)
-                                                                  nil
-                                                                  nil))
-                                                                nil))
-                                                              nil))
-                                                            nil))
-                                                          nil))
-                                                        nil))
-                                                      nil))
-                                                    nil))
-                                                  nil))
-                                                nil))
-                                              nil))
-                                            nil))
                                           nil))
                                         nil))
                                       nil))
-                                    nil))
+                                    nil)
+                                   ("3" (grind) nil nil))
                                   nil))
                                 nil)
                                ("2"
-                                (inst 1 "args(y)")
-                                (("2"
-                                  (typepred "y")
-                                  (("2"
-                                    (eta "(apply?)")
-                                    (("2"
-                                      (inst?)
-                                      (("2"
-                                        (rewrite -1)
-                                        (("2" (grind) nil nil))
-                                        nil))
-                                      nil))
-                                    nil))
-                                  nil))
+                                (eta "(node?)")
+                                (("2" (grind) nil nil))
                                 nil))
                               nil))
                             nil)
-                           ("3" (grind) nil nil))
+                           ("2" (grind) nil nil))
                           nil))
                         nil))
                       nil))
@@ -171,157 +233,140 @@
         nil))
       nil))
     nil)
-   ((= const-decl "[T, T -> boolean]" equalities nil)
-    (preterm type-decl nil preterm_adt nil)
-    (var? adt-recognizer-decl "[preterm -> boolean]" preterm_adt nil)
-    (v_index adt-accessor-decl "[(var?) -> nat]" preterm_adt nil)
-    (v adt-constructor-decl "[nat -> (var?)]" preterm_adt nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
+   ((<< adt-def-decl "(strict_well_founded?[list])" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (well_founded? const-decl "bool" orders nil)
+    (y!1 skolem-const-decl "(p)" tree_props nil)
+    (node adt-constructor-decl "[list[tree] -> (node?)]" tree_adt nil)
+    (node? adt-recognizer-decl "[tree -> boolean]" tree_adt nil)
+    (p skolem-const-decl "pred[tree[T]]" tree_props nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (subterm adt-def-decl "boolean" list_adt nil)
+    (children adt-accessor-decl "[(node?) -> list[tree]]" tree_adt nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (subterm_partial_order name-judgement "(partial_order?[list[T]])"
+     more_list_props nil)
+    (member def-decl "bool" list_props nil)
+    (some adt-def-decl "boolean" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (subterm_cons2 formula-decl nil more_list_props nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (subterm_cons1 formula-decl nil more_list_props nil)
+    (list_cons_eta formula-decl nil list_adt nil)
+    (x!1 skolem-const-decl "(p)" tree_props nil)
+    (tree_node_eta formula-decl nil tree_adt nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (some_exists formula-decl nil more_list_props nil)
+    (member_subset formula-decl nil more_list_props nil)
+    (subterm_subset formula-decl nil more_list_props nil)
+    (lt def-decl "bool" tree_props nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (>= const-decl "bool" reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (subterm adt-def-decl "boolean" preterm_adt nil)
+    (leaf? adt-recognizer-decl "[tree -> boolean]" tree_adt nil)
+    (tree type-decl nil tree_adt nil)
+    (T formal-type-decl nil tree_props nil)
+    (<< adt-def-decl "(strict_well_founded?[tree])" tree_adt nil)
+    (strict_well_founded? const-decl "bool" orders nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (terms_TCC2 0
+  (terms_TCC2-1 nil 3578166693
+   ("" (grind)
+    (("" (decompose-equality) (("" (decompose-equality) nil nil)) nil))
+    nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (T formal-type-decl nil tree_props nil)
+    (tree type-decl nil tree_adt nil)
+    (leaf? adt-recognizer-decl "[tree -> boolean]" tree_adt nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (val adt-accessor-decl "[(leaf?) -> T]" tree_adt nil)
+    (leaf adt-constructor-decl "[T -> (leaf?)]" tree_adt nil)
+    (subterm adt-def-decl "boolean" tree_adt nil)
     (member def-decl "bool" list_props nil))
    nil))
- (termnats_TCC2 0
-  (termnats_TCC2-1 nil 3578158485 ("" (grind) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (funpred type-decl nil funpred_adt nil)
-    (fun? adt-def-decl "boolean" funpred_adt nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    nil (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (>= const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
+ (terms_TCC3 0
+  (terms_TCC3-1 nil 3578166693 ("" (termination-tcc) nil nil)
+   ((some adt-def-decl "boolean" list_adt nil)
     (member def-decl "bool" list_props nil)
-    (subterm adt-def-decl "boolean" preterm_adt nil))
+    (subterm adt-def-decl "boolean" tree_adt nil))
    nil))
- (termnats_TCC3 0
-  (termnats_TCC3-1 nil 3578158485 ("" (grind) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
+ (terms_TCC4 0
+  (terms_TCC4-1 nil 3578166693 ("" (termination-tcc) nil nil)
+   ((lt def-decl "bool" tree_props nil)
+    (member def-decl "bool" list_props nil))
+   nil))
+ (terms_TCC5 0
+  (terms_TCC5-1 nil 3578166693 ("" (grind) nil nil)
+   ((lt def-decl "bool" tree_props nil)
+    (member def-decl "bool" list_props nil))
+   nil))
+ (terms_TCC6 0
+  (terms_TCC6-1 nil 3578167088
+   (""
+    (grind :theories more_list_props :exclude (some_exists member_nth))
+    (("1" (rewrite some_exists)
+      (("1" (typepred "v!1(h!1)") (("1" (grind) nil nil)) nil)) nil)
+     ("2" (typepred "v!1(h!1)") (("2" (grind) nil nil)) nil)
+     ("3" (typepred "v!1(node(t2!1))") (("3" (grind) nil nil)) nil)
+     ("4" (typepred "v!1(node(t2!1))") (("4" (grind) nil nil)) nil)
+     ("5" (typepred "v!1(node(t2!1))")
+      (("5" (typepred "v!1(h!1)") (("5" (grind) nil nil)) nil)) nil)
+     ("6" (typepred "v!1(h!1)")
+      (("6" (typepred "v!1(node(t2!1))") (("6" (grind) nil nil)) nil))
+      nil)
+     ("7" (typepred "v!1(node(t2!1))")
+      (("7" (typepred "v!1(h!1)") (("7" (grind) nil nil)) nil)) nil))
+    nil)
+   ((some_exists formula-decl nil more_list_props nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (leaf? adt-recognizer-decl "[tree -> boolean]" tree_adt nil)
+    (leaf adt-constructor-decl "[T -> (leaf?)]" tree_adt nil)
+    (FALSE const-decl "bool" booleans nil)
+    (node? adt-recognizer-decl "[tree -> boolean]" tree_adt nil)
+    (node adt-constructor-decl "[list[tree] -> (node?)]" tree_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (T formal-type-decl nil tree_props nil)
+    (tree type-decl nil tree_adt nil)
+    (lt def-decl "bool" tree_props nil)
+    (member def-decl "bool" list_props nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (funpred type-decl nil funpred_adt nil)
-    (fun? adt-def-decl "boolean" funpred_adt nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
     (some adt-def-decl "boolean" list_adt nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (>= const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (member def-decl "bool" list_props nil)
-    (subterm adt-def-decl "boolean" preterm_adt nil))
+    (subterm adt-def-decl "boolean" tree_adt nil)
+    (member_append formula-decl nil more_list_props nil))
    nil))
- (termnats_TCC4 0
-  (termnats_TCC4-1 nil 3578158485 ("" (grind) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (funpred type-decl nil funpred_adt nil)
-    (fun? adt-def-decl "boolean" funpred_adt nil))
-   nil))
- (termnats_TCC5 0
-  (termnats_TCC5-1 nil 3578158485 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (funpred type-decl nil funpred_adt nil)
-    (fun? adt-def-decl "boolean" funpred_adt nil)
-    (member def-decl "bool" list_props nil)
-    (lt const-decl "bool" preterm_funs nil))
-   nil))
- (termnats_TCC6 0
-  (termnats_TCC6-1 nil 3578158485 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (funpred type-decl nil funpred_adt nil)
-    (fun? adt-def-decl "boolean" funpred_adt nil)
-    (lt const-decl "bool" preterm_funs nil))
-   nil))
- (termnats_TCC7 0
-  (termnats_TCC7-1 nil 3578164866 ("" (subtype-tcc) nil nil) nil nil))
- (termnats_spec 0
-  (termnats_spec-1 nil 3578156594
-   ("" (induct s1)
-    (("1" (grind) nil nil)
-     ("2" (skeep)
-      (("2" (use "every_forall[preterm]")
-        (("2" (prop)
-          (("2" (hide -1 -3)
-            (("2" (skeep)
-              (("2" (prop)
-                (("1" (expand "termnats" -1)
-                  (("1" (expand "reduce" -1) (("1" (postpone) nil nil))
-                    nil))
-                  nil)
-                 ("2" (skeep)
-                  (("2" (typepred "s")
-                    (("2" (inst?)
-                      (("2" (prop)
-                        (("2" (inst?)
-                          (("2" (flatten)
-                            (("2" (simplify)
-                              (("2"
-                                (assert)
-                                (("2"
-                                  (hide -2)
-                                  (("2"
-                                    (lift-if)
-                                    (("2"
-                                      (expand "termnats" 1)
-                                      (("2"
-                                        (expand "reduce" 1)
-                                        (("2"
-                                          (rewrite
-                                           "flatten_member[nat]")
-                                          (("2"
-                                            (inst?)
-                                            (("2"
-                                              (simplify)
-                                              (("2"
-                                                (postpone)
-                                                nil
-                                                nil))
-                                              nil))
-                                            nil))
-                                          nil))
-                                        nil))
-                                      nil))
-                                    nil))
+ (terms2_TCC1 0
+  (terms2_TCC1-1 nil 3578170643
+   ("" (use "strict_well_founded?" ("<" "tree_adt.<<"))
+    (("" (simplify)
+      (("" (flatten)
+        (("" (expand well_founded?)
+          (("" (skeep)
+            (("" (inst?)
+              (("" (prop)
+                (("" (skeep)
+                  (("" (inst? +)
+                    (("" (skeep)
+                      (("" (inst?)
+                        (("" (hide -1)
+                          (("" (expand <<)
+                            (("" (expand llt)
+                              ((""
+                                (grind)
+                                ((""
+                                  (use some_exists[tree[T]])
+                                  (("" (grind) nil nil))
                                   nil))
                                 nil))
                               nil))
@@ -338,27 +383,121 @@
         nil))
       nil))
     nil)
-   nil shostak))
- (termnats_v 0
-  (termnats_v-1 nil 3578156455 ("" (grind) nil nil)
-   ((nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (>= const-decl "bool" reals nil)
+   ((well_founded? const-decl "bool" orders nil)
+    (llt const-decl "bool" tree_props nil)
+    (some_exists formula-decl nil more_list_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (children adt-accessor-decl "[(node?) -> list[tree]]" tree_adt nil)
+    (node? adt-recognizer-decl "[tree -> boolean]" tree_adt nil)
+    (list type-decl nil list_adt nil) (tree type-decl nil tree_adt nil)
+    (T formal-type-decl nil tree_props nil)
+    (<< adt-def-decl "(strict_well_founded?[tree])" tree_adt nil)
+    (strict_well_founded? const-decl "bool" orders nil)
+    (pred type-eq-decl nil defined_types nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (terms2_TCC2 0
+  (terms2_TCC2-1 nil 3578210043
+   ("" (grind)
+    (("" (decompose-equality) (("" (decompose-equality) nil nil)) nil))
+    nil)
+   ((AND const-decl "[bool, bool -> bool]" booleans nil)
+    (leaf? adt-recognizer-decl "[tree -> boolean]" tree_adt nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (val adt-accessor-decl "[(leaf?) -> T]" tree_adt nil)
+    (leaf adt-constructor-decl "[T -> (leaf?)]" tree_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (flatten const-decl "list[T]" more_list_props nil)
-    (reduce adt-def-decl "[preterm -> range]" preterm_adt_reduce nil))
-   shostak))
- (termnats_apply 0
-  (termnats_apply-1 nil 3578156459 ("" (postpone) nil nil) nil
-   shostak)))
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil tree_props nil)
+    (tree type-decl nil tree_adt nil) (list type-decl nil list_adt nil)
+    (subterm adt-def-decl "boolean" tree_adt nil)
+    (member def-decl "bool" list_props nil))
+   nil))
+ (terms2_TCC3 0
+  (terms2_TCC3-1 nil 3578210710
+   ("" (grind)
+    (("" (rewrite every_forall[tree[T]]) (("" (grind) nil nil)) nil))
+    nil)
+   ((every_forall formula-decl nil more_list_props nil)
+    (pred type-eq-decl nil defined_types nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil tree_props nil)
+    (tree type-decl nil tree_adt nil) (list type-decl nil list_adt nil)
+    (member def-decl "bool" list_props nil))
+   nil))
+ (terms2_TCC4 0
+  (terms2_TCC4-1 nil 3578211442 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil tree_props nil)
+    (tree type-decl nil tree_adt nil) (list type-decl nil list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (llt const-decl "bool" tree_props nil))
+   nil))
+ (terms2_TCC5 0
+  (terms2_TCC5-1 nil 3578211852
+   ("" (grind :defs nil)
+    (("1" (rewrite "flatten_member")
+      (("1" (skeep)
+        (("1"
+          (lemma "map_member[list[T], { t | member(t, children!1) }]")
+          (("1"
+            (inst -
+             "LAMBDA (r: tree[T] | member[tree[T]](r, children!1)): v!1(children!1)(r)"
+             "children!1" "l")
+            (("1" (prop)
+              (("1" (skeep)
+                (("1" (typepred "v!1(children!1)(x)")
+                  (("1" (rewrite -2)
+                    (("1" (inst?)
+                      (("1" (prop)
+                        (("1" (hide -1 -4 -5 -6 -7)
+                          (("1" (grind)
+                            (("1" (rewrite some_exists)
+                              (("1" (grind) nil nil)) nil)
+                             ("2" (grind)
+                              (("2"
+                                (rewrite some_exists)
+                                (("2"
+                                  (rewrite some_exists)
+                                  (("2" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (hide -1 -2 -3 2)
+                (("2" (grind)
+                  (("2" (expand map)
+                    (("2" (grind)
+                      (("2" (grind)
+                        (("2" (hide 1 2) (("2" (postpone) nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("2" (grind) nil nil))
+            nil))
+          nil))
+        nil)
+       ("2" (grind) nil nil))
+      nil)
+     ("2" (rewrite flatten_member)
+      (("1" (postpone) nil nil) ("2" (grind) nil nil)) nil))
+    nil)
+   nil nil)))
 

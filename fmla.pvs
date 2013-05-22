@@ -6,62 +6,41 @@ BEGIN
   ufun(index, arity: nat): ufun?   : fun?
 END funpred
 
-preterm: DATATYPE
+tree[T: TYPE]: DATATYPE
 BEGIN
-  IMPORTING funpred
-  v(v_index: nat): var?
-  apply(fun: (fun?),
-        args: list[preterm]): apply?
-END preterm
+  leaf(val: T): leaf?
+  node(children: list[tree]): node?
+END tree
 
-preterm_funs: THEORY
+tree_props[T: TYPE]: THEORY
 BEGIN
-  IMPORTING preterm
+  IMPORTING tree[T]
   IMPORTING more_list_props
-  IMPORTING list_map_props
-  
-  pt: VAR preterm
+
+  x: VAR T
+  t, r, s: VAR tree
   n: VAR nat
-  f: VAR (fun?)
-  s, r, t: VAR preterm
-  ss: VAR list[preterm]
 
-  lt(s, r): RECURSIVE bool =
+  lt(t, r): RECURSIVE bool =
     CASES r OF
-      v(n): FALSE,
-      apply(f, args):
-        member(s, args) OR
-	(apply?(s) AND fun(s) = f AND cons?(args) AND args(s) = cdr(args))
+      leaf(n): FALSE,
+      node(children):
+        member(t, children) OR
+	(node?(t) AND cons?(children) AND children(t) = cdr(children))
     ENDCASES
+  MEASURE r BY <<
 
-  termnats(pt): RECURSIVE { l: list[nat] | FORALL n: member(n, l) IFF subterm(v(n), pt) } =
-    CASES pt OF
-      v(n): (: n :),
-      apply(f, args):
-        IF null?(args)
-	  THEN (: :)
-	  ELSE append(termnats(car(args)), termnats(apply(f, cdr(args))))
-	ENDIF
+  terms(t): RECURSIVE { l: list[T] | FORALL x: member(x, l) IFF subterm(leaf(x), t) } =
+    CASES t OF
+      leaf(n): (: n :),
+      node(children):
+        CASES children OF
+	  null: null,
+	  cons(h, t): append(terms(h), terms(node(t)))
+	ENDCASES
     ENDCASES
-  MEASURE pt BY lt
-  
-%  termnats(pt): list[nat] =
-%    reduce(LAMBDA (n: nat): (: n :),
-%           LAMBDA (f: (fun?), l: list[list[nat]]): flatten(l))(pt)
-
-  termnats_spec: THEOREM
-    member(n, termnats(s)) IFF CASES s OF
-      v(m): n = m,
-      apply(f, ss): EXISTS (s | member(s, ss)): member(n, termnats(s))
-    ENDCASES
-
-  termnats_v: THEOREM termnats(v(n)) = (: n :)
-  termnats_apply: THEOREM
-    member(n, termnats(apply(f, ss))) IMPLIES (EXISTS (s | member(s, ss)): member(n, termnats(s)))
-%  termvars(pt): set[nat]
-
-%  termvars_char: AXIOM FORALL (n: nat): member(n, termvars(pt)) IFF subterm(v(n), pt)
-END preterm_funs
+  MEASURE t BY lt
+END tree_props
 
 % fmla theory introduces the datatypes for the pre-terms and pre-formulas
 % fmla: THEORY
