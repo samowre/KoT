@@ -31,19 +31,7 @@ BEGIN
     { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x)) } =
     minlist(l, LAMBDA x: -key(x))
 
-  % rassoc2(x, l, m) is m[i] where l[i] = x, or x
-  rassoc2(x, l, m): RECURSIVE T =
-    CASES l OF
-      null: x,
-      cons(h, t):
-        IF cons?(m)
-	  THEN IF x = h
-	    THEN car(m)
-	    ELSE rassoc2(x, t, cdr(m))
-	  ENDIF ELSE x
-	ENDIF
-    ENDCASES
-  MEASURE length(l)
+ 
 
 END lists
 
@@ -59,8 +47,8 @@ BEGIN
   % From map2
      kk: VAR list[S]
      delete_reduce: LEMMA
-       delete(a, reduce(null, LAMBDA x, A: append(f(x), A))(kk)) =
-       reduce(null, LAMBDA x, A: append(delete(a, f(x)), A))(kk)
+       remove(a, reduce(null, LAMBDA x, A: append(f(x), A))(kk)) =
+       reduce(null, LAMBDA x, A: append(remove(a, f(x)), A))(kk)
 	    
      every_reduce: LEMMA
        every(LAMBDA x: f(x) = g(x))(kk) =>
