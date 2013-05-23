@@ -10,13 +10,15 @@ term: DATATYPE
 BEGIN
   IMPORTING funpred
   v(index: nat): var?
-  apply(f: fun?, args: { l: list[term] | length(l) = arity(f) }): apply?
+%  apply(fun: (fun?), args: { l: finseq[term] | l`length = arity(fun) }): apply?
+  apply(fun: (fun?), args: { l: list[term] | length(l) = arity(fun) }): apply?
 END term
 
 fmla: THEORY
 BEGIN
   IMPORTING term
   IMPORTING more_list_props
+  IMPORTING list2_props
 
   r, s, t: VAR term
   rs, ss, ts: VAR list[term]
@@ -60,7 +62,7 @@ BEGIN
   parsubst_aux(s: term,
                (ts: list[term] | every(LAMBDA r: r << s)(ts)),
 	       parsubst: [{ t | t << s } -> term]):
-    RECURSIVE { l: list[term] | length(l) = length(ts) } =
+    RECURSIVE { l: list[term] | length(l) = length(ts) AND FORALL (i: below(length(ts))): nth(l, i) = parsubst(nth(ts, i)) } =
     CASES ts OF
       null: null,
       cons(h, t): cons(parsubst(h), parsubst_aux(s, t, parsubst))
@@ -74,12 +76,37 @@ BEGIN
     ENDCASES
   MEASURE s BY <<
 
-  parsubst(s, mapping: list[[nat, term]]): term =
+  parsubst(s: term, mapping: list[[nat, term]]): term =
     parsubst(LAMBDA (i: nat): assoc(i, mapping, v(i)))(s)
 
   % Single substitution (as a shortcut)
   subst(s, n, t): term =
     parsubst(LAMBDA (i: nat): IF i = n THEN t ELSE v(i) ENDIF)(s)
+
+  equal_subst_aux(s: term,
+                  (ss: list[[term, term]] | every(LAMBDA (r, t): r << s)(ss)),
+		  mapping: [nat -> term],
+                  equal_subst: [r: { r | r << s}, t: term -> { b: bool | b = (t = parsubst(mapping)(r)) }]):
+    RECURSIVE { b: bool | b = every(LAMBDA (r, t): t = parsubst(mapping)(r))(ss) } =
+    CASES ss OF
+      null: TRUE,
+      cons(h, t):
+        equal_subst(h`1, h`2) AND equal_subst_aux(s, t, mapping, equal_subst)
+    ENDCASES
+  MEASURE length(ss)
+
+  equal_subst(s, t: term, mapping: [nat -> term]):
+    RECURSIVE { b: bool | b = (t = parsubst(mapping)(s)) } =
+    CASES s OF
+      v(i): mapping(i) = t,
+      apply(f, args):
+        CASES t OF
+	  v(i): FALSE,
+	  apply(g, args2):
+	    f = g AND equal_subst_aux(s, zip(args, args(t)), mapping, LAMBDA (r | r << s), t: equal_subst(r, t, mapping))
+	ENDCASES
+    ENDCASES
+  MEASURE s BY <<
 
   %% Formulae
   fmla: DATATYPE
@@ -165,26 +192,6 @@ END fmla
 %   IMPORTING preterm
 
 %   % term is the pre-term datatype with variables and compound terms
-
-% % % substitute term t for variable x in term s
-% % term_equal(s, t, (s_vars, t_vars: list[(var?)])): RECURSIVE bool =
-% %   CASES s OF
-% %     v(i): (var?(t) AND rassoc2(s, s_vars, t_vars) = t),
-% %     apply(f, ss): (apply?(t) AND
-% %                    f = fun(t) AND
-% % 		   % modif
-% % 		   % default value is TRUE, not FALSE.
-% % 		   % We can prove that length(ssp)==length(args(t))
-% %                    reduce2(TRUE ,
-% % 		           (LAMBDA ((s1 : term | s1 << s),
-% % 			            t1 : term,
-% % 				    b: bool):
-% % 			       b AND term_equal(s1, t1, s_vars, t_vars)),
-% % 			    ss, args(t)))
-% %    ENDCASES
-% %    MEASURE s BY <<
-
-% % aux_subst: LEMMA  length[term](subst(ss, x, t)) = length(ss)
 
 % % subst(A, x, (t | freefor(A, termvars(t)))): RECURSIVE fmla =
 % %   CASES A OF
