@@ -214,9 +214,19 @@ BEGIN
   IMPORTING more_list_props[[K, V]]
   
   k, x: VAR K
+  ks, xs: VAR list[K]
   v, y: VAR V
+  vs, ys: VAR list[V]
   p: VAR [K, V]
   l: VAR list[[K, V]]
+
+  zip(ks, (vs | length(vs) = length(ks))):
+    RECURSIVE { l | length(l) = length(ks) AND FORALL (i: below(length(ks))): nth(l, i) = (nth(ks, i), nth(vs, i)) } =
+    CASES ks OF
+      null: null,
+      cons(h, t): cons((h, car(vs)), zip(t, cdr(vs)))
+    ENDCASES
+  MEASURE length(ks)
 
   has_key(k, l): bool = some(LAMBDA (x: K, y: V): x = k)(l)
 
