@@ -722,6 +722,8 @@
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (null adt-constructor-decl "(null?)" list_adt nil)
     (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (subterm_po name-judgement "(partial_order?[list[T]])" adt_props
+     nil)
     (subterm_cons formula-decl nil more_list_props nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -737,7 +739,9 @@
   (append_subterm-1 nil 3578159353
    ("" (induct-and-simplify l1 :defs nil)
     (("1" (grind) nil nil) ("2" (grind) nil nil)) nil)
-   ((list type-decl nil list_adt nil)
+   ((subterm_po name-judgement "(partial_order?[list[T]])" adt_props
+     nil)
+    (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (subterm adt-def-decl "boolean" list_adt nil)
     (append def-decl "list[T]" list_props nil)
@@ -750,6 +754,8 @@
     (("" (grind) nil nil)) nil)
    ((nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
+    (subterm_po name-judgement "(partial_order?[list[T]])" adt_props
+     nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (subterm_char formula-decl nil more_list_props nil)
@@ -775,11 +781,6 @@
     (T formal-type-decl nil more_list_props nil)
     (list_induction formula-decl nil list_adt nil))
    shostak))
- (subterm_reflexive 0
-  (subterm_reflexive-1 nil 3578159616 ("" (grind) nil nil)
-   ((subterm adt-def-decl "boolean" list_adt nil)
-    (reflexive? const-decl "bool" relations nil))
-   nil))
  (subterm_null 0
   (subterm_null-1 nil 3578159861 ("" (induct-and-simplify l) nil nil)
    ((list type-decl nil list_adt nil)
@@ -789,8 +790,8 @@
     (null adt-constructor-decl "(null?)" list_adt nil)
     (T formal-type-decl nil more_list_props nil)
     (list_induction formula-decl nil list_adt nil)
-    (subterm_reflexive name-judgement "(reflexive?[list[T]])"
-     more_list_props nil))
+    (subterm_po name-judgement "(partial_order?[list[T]])" adt_props
+     nil))
    shostak))
  (subterm_cons1 0
   (subterm_cons1-1 nil 3578159876 ("" (grind) nil nil)
@@ -805,8 +806,8 @@
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (subterm_reflexive name-judgement "(reflexive?[list[T]])"
-     more_list_props nil)
+    (subterm_po name-judgement "(partial_order?[list[T]])" adt_props
+     nil)
     (subterm_char formula-decl nil more_list_props nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -818,75 +819,6 @@
     (T formal-type-decl nil more_list_props nil)
     (list_induction formula-decl nil list_adt nil))
    shostak))
- (subterm_transitive 0
-  (subterm_transitive-1 nil 3578159801
-   ("" (expand transitive?)
-    (("" (induct-and-simplify z :defs nil :rewrites subterm_char)
-      (("" (decompose-equality) nil nil)) nil))
-    nil)
-   ((list_induction formula-decl nil list_adt nil)
-    (T formal-type-decl nil more_list_props nil)
-    (subterm adt-def-decl "boolean" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (list type-decl nil list_adt nil)
-    (subterm_reflexive name-judgement "(reflexive?[list[T]])"
-     more_list_props nil)
-    (subterm_char formula-decl nil more_list_props nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
-    (transitive? const-decl "bool" relations nil))
-   nil))
- (subterm_antisymmetric 0
-  (subterm_antisymmetric-1 nil 3578159801
-   (""
-    (induct-and-simplify x :defs nil :rewrites
-     (subterm_char subterm_cons1 subterm_cons2) :if-match all)
-    (("" (expand antisymmetric?)
-      ((""
-        (induct-and-simplify x :defs nil :rewrites
-         (subterm_char subterm_cons1 subterm_cons2) :if-match all)
-        (("" (use subterm_cons2 :if-match all) (("" (grind) nil nil))
-          nil))
-        nil))
-      nil))
-    nil)
-   ((antisymmetric? const-decl "bool" relations nil)
-    (subterm_cons2 formula-decl nil more_list_props nil)
-    (subterm_cons1 formula-decl nil more_list_props nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (subterm_transitive name-judgement "(transitive?[list[T]])"
-     more_list_props nil)
-    (subterm_reflexive name-judgement "(reflexive?[list[T]])"
-     more_list_props nil)
-    (subterm_char formula-decl nil more_list_props nil)
-    (list type-decl nil list_adt nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (subterm adt-def-decl "boolean" list_adt nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (T formal-type-decl nil more_list_props nil)
-    (list_induction formula-decl nil list_adt nil))
-   nil))
- (subterm_partial_order 0
-  (subterm_partial_order-1 nil 3578159801 ("" (grind) nil nil)
-   ((subterm_antisymmetric name-judgement "(antisymmetric?[list[T]])"
-     more_list_props nil)
-    (subterm_transitive name-judgement "(transitive?[list[T]])"
-     more_list_props nil)
-    (subterm_reflexive name-judgement "(reflexive?[list[T]])"
-     more_list_props nil)
-    (partial_order? const-decl "bool" orders nil)
-    (preorder? const-decl "bool" orders nil))
-   nil))
  (subterm_subset 0
   (subterm_subset-1 nil 3578161077
    (""
@@ -896,8 +828,8 @@
    ((member def-decl "bool" list_props nil)
     (member_subset formula-decl nil more_list_props nil)
     (subterm_char formula-decl nil more_list_props nil)
-    (subterm_partial_order name-judgement "(partial_order?[list[T]])"
-     more_list_props nil)
+    (subterm_po name-judgement "(partial_order?[list[T]])" adt_props
+     nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
@@ -916,6 +848,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
     (T formal-type-decl nil list_map_props nil)
     (list_induction formula-decl nil list_adt nil))
    nil))
@@ -927,6 +860,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (T formal-type-decl nil list_map_props nil)
