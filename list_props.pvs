@@ -230,6 +230,12 @@ BEGIN
     ENDCASES
   MEASURE length(ks)
 
+  
+zip_nth: THEOREM
+    length(ks) = length(vs) IMPLIES
+      FORALL (i: below(length(ks))):
+        nth(zip(ks, vs), i) = (nth(ks, i), nth(vs, i))
+
   has_key(k, l): bool = some(LAMBDA (x: K, y: V): x = k)(l)
 
   assoc(k, l): { r: lift[V] | IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l) ELSE bottom?(r) ENDIF } =
