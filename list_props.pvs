@@ -72,10 +72,8 @@ BEGIN
   member_nth: THEOREM
     member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
 
- 
-
   % More precise specifications with nth
- nth_cons: LEMMA
+  nth_cons: LEMMA
     FORALL (i: below(1 + length(l))):
       nth(cons(x, l), i) = IF i = 0 THEN x ELSE nth(l, i - 1) ENDIF
 
@@ -88,6 +86,10 @@ BEGIN
   nth_reverse: THEOREM
     FORALL (i: below(length(l))):
       nth(reverse(l), i) = nth(l, length(l) - i - 1)
+  nth_equal: THEOREM
+    ( length(l1) = length(l2) AND
+        FORALL (i: below(length(l1))):
+          nth(l1, i) = nth(l2, i) ) IFF l1 = l2
 
   % Flattens a list of lists
   flatten(ll: list[list[T]]): list[T] = reduce(null, (LAMBDA l, m: append(l, m)))(ll)
