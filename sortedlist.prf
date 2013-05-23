@@ -670,45 +670,35 @@
       (("3" (skeep)
         (("3" (prop)
           (("1" (expand s_remove +)
-            (("1" (expand remove +)
-              (("1" (lift-if)
-                (("1" (prop)
-                  (("1" (typepred key)
-                    (("1" (inst - a)
-                      (("1" (expand filter)
-                        (("1" (expand remove)
-                          (("1" (lemma car_sorted)
-                            (("1"
-                              (inst - "car(cons2_var)"
-                               "cons(cons1_var,cons2_var)")
-                              (("1"
-                                (expand s_remove -4)
-                                (("1"
-                                  (grind :exclude (sorted? filter))
-                                  nil
-                                  nil))
-                                nil)
-                               ("2" (grind) nil nil))
+            (("1" (lift-if)
+              (("1" (prop)
+                (("1" (typepred key)
+                  (("1" (inst - a)
+                    (("1" (expand filter +)
+                      (("1" (lemma car_sorted)
+                        (("1"
+                          (inst - "car(cons2_var)"
+                           "cons(cons1_var,cons2_var)")
+                          (("1" (expand s_remove -4)
+                            (("1" (grind :exclude (sorted? filter)) nil
                               nil))
-                            nil))
+                            nil)
+                           ("2" (grind) nil nil))
                           nil))
                         nil))
                       nil))
-                    nil)
-                   ("2" (grind :exclude (sorted?))
-                    (("2" (expand s_remove)
-                      (("2" (grind :exclude (sorted? filter))
-                        (("1" (grind) nil nil) ("2" (grind) nil nil))
-                        nil))
+                    nil))
+                  nil)
+                 ("2" (grind :exclude (sorted?))
+                  (("2" (expand s_remove)
+                    (("2" (grind :exclude (sorted? filter))
+                      (("1" (grind) nil nil) ("2" (grind) nil nil))
                       nil))
-                    nil)
-                   ("3" (inst - a)
-                    (("3" (expand remove -)
-                      (("3" (expand filter +)
-                        (("3" (grind :exclude (sorted? filter)) nil
-                          nil))
-                        nil))
-                      nil))
+                    nil))
+                  nil)
+                 ("3" (inst - a)
+                  (("3" (expand filter +)
+                    (("3" (grind :exclude (sorted? filter)) nil nil))
                     nil))
                   nil))
                 nil))
@@ -730,13 +720,11 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (car_sorted formula-decl nil sortedlist nil)
-    (filter def-decl "list[T]" filters nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
-    (remove const-decl
-            "{m | FORALL x: member(x, m) IFF (x /= a AND member(x, l))}"
-      more_list_props nil)
     (/= const-decl "boolean" notequal nil)
+    (filter def-decl "list[T]" filters nil)
+    (pred type-eq-decl nil defined_types nil)
     (s_remove def-decl "{s: (sorted?) |
          FORALL x: member(x, s) IFF NOT key(x) = key(a) AND member(x, sl)}"
      sortedlist nil)
@@ -1129,44 +1117,601 @@
    shostak))
  (s_subset_subset 0
   (s_subset_subset-1 nil 3578074019
-   ("" (auto-rewrite every_forall)
+   ("" (auto-rewrite-theory more_list_props[T] :exclude member_nth)
     (("" (induct sl2)
       (("1" (grind) nil nil)
        ("2" (grind)
         (("1" (expand s_subset?) (("1" (grind) nil nil)) nil)
-         ("2" (grind)
-          (("2" (expand s_subset?) (("2" (grind) nil nil)) nil)) nil))
+         ("2" (expand s_subset?) (("2" (grind) nil nil)) nil))
         nil)
        ("3" (skeep)
         (("3" (skeep)
-          (("3" (prop)
-            (("1" (inst - sl1)
-              (("1" (expand s_subset? -1)
-                (("1" (lift-if)
-                  (("1" (prop)
-                    (("1" (postpone) nil nil) ("2" (postpone) nil nil)
-                     ("3" (postpone) nil nil) ("4" (postpone) nil nil))
+          (("3" (use cdr_sorted (sl "cons(cons1_var,cons2_var)"))
+            (("3" (prop)
+              (("1" (inst - sl1)
+                (("1" (expand s_subset? -1)
+                  (("1" (lift-if)
+                    (("1" (prop)
+                      (("1" (grind) nil nil) ("2" (grind) nil nil)
+                       ("3" (lift-if)
+                        (("3" (prop)
+                          (("1" (grind) nil nil) ("2" (grind) nil nil)
+                           ("3" (hide -1 -2 -4 -5 1 2 3 4)
+                            (("3" (use member_subset)
+                              (("3"
+                                (use
+                                 member_subset
+                                 (m "cons(cons1_var,cons2_var)"))
+                                (("3"
+                                  (prop)
+                                  (("3"
+                                    (skeep)
+                                    (("3"
+                                      (inst - x)
+                                      (("3" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("4" (lift-if)
+                        (("4" (prop)
+                          (("1" (grind) nil nil)
+                           ("2" (reveal *)
+                            (("2" (inst - "cdr(sl1)")
+                              (("2"
+                                (prop)
+                                (("1"
+                                  (use-with "member_subset" 3)
+                                  (("1"
+                                    (use-with "member_subset" -3)
+                                    (("1"
+                                      (prop)
+                                      (("1"
+                                        (skeep)
+                                        (("1"
+                                          (inst - x)
+                                          (("1"
+                                            (typepred key)
+                                            (("1"
+                                              (grind :if-match all)
+                                              nil
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2" (grind) nil nil))
+                                nil))
+                              nil))
+                            nil)
+                           ("3" (grind) nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (expand s_subset? +)
+                (("2" (lift-if)
+                  (("2" (prop)
+                    (("1" (grind) nil nil)
+                     ("2" (lift-if)
+                      (("2" (prop)
+                        (("1" (inst - sl1)
+                          (("1" (use member_subset)
+                            (("1" (hide -4)
+                              (("1"
+                                (prop)
+                                (("1"
+                                  (inst - "car(sl1)")
+                                  (("1"
+                                    (lemma car_sorted)
+                                    (("1"
+                                      (inst
+                                       -
+                                       "car(sl1)"
+                                       "cons(cons1_var,cons2_var)")
+                                      (("1" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil)
+                         ("2" (inst - "cdr(sl1)")
+                          (("2" (prop)
+                            (("1" (grind) nil nil)
+                             ("2" (use-with "member_subset" 1)
+                              (("2"
+                                (use-with "member_subset" -3)
+                                (("2"
+                                  (prop)
+                                  (("2"
+                                    (skeep)
+                                    (("2"
+                                      (inst - x)
+                                      (("2"
+                                        (hide -2 -5 -6 -7 2 3 4 5 6)
+                                        (("2"
+                                          (typepred sl1)
+                                          (("2"
+                                            (use sorted_uniques)
+                                            (("2"
+                                              (prop)
+                                              (("1"
+                                                (typepred key)
+                                                (("1"
+                                                  (expand member -2)
+                                                  (("1"
+                                                    (grind :defs nil)
+                                                    (("1"
+                                                      (delete -3)
+                                                      (("1"
+                                                        (use
+                                                         sorted_uniques
+                                                         (sl sl1))
+                                                        (("1"
+                                                          (expand
+                                                           uniques?)
+                                                          (("1"
+                                                            (lift-if)
+                                                            (("1"
+                                                              (prop)
+                                                              (("1"
+                                                                (hide
+                                                                 -1
+                                                                 -3
+                                                                 -4
+                                                                 1
+                                                                 3
+                                                                 4
+                                                                 5
+                                                                 6)
+                                                                (("1"
+                                                                  (grind)
+                                                                  nil
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil)
+                                               ("2" (grind) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil)
+                         ("3" (inst - sl1)
+                          (("3" (prop)
+                            (("1" (grind) nil nil)
+                             ("2" (use-with "member_subset" -1)
+                              (("2"
+                                (use-with "member_subset" 1)
+                                (("2"
+                                  (prop)
+                                  (("2"
+                                    (skeep)
+                                    (("2"
+                                      (inst - x)
+                                      (("2"
+                                        (prop)
+                                        (("2"
+                                          (typepred key)
+                                          (("2"
+                                            (expand member -2)
+                                            (("2"
+                                              (use
+                                               car_sorted
+                                               (a "cons1_var" sl sl1))
+                                              (("2" (grind) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
                     nil))
                   nil))
                 nil))
-              nil)
-             ("2" (postpone) nil nil) ("3" (grind) nil nil)
-             ("4" (grind) nil nil))
+              nil))
             nil))
           nil))
         nil))
       nil))
     nil)
-   nil shostak))
+   ((list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (s_subset? def-decl "bool" sortedlist nil)
+    (subset? const-decl "bool" more_list_props nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list_induction formula-decl nil list_adt nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (subterm_char formula-decl nil more_list_props nil)
+    (member def-decl "bool" list_props nil)
+    (member_subset formula-decl nil more_list_props nil)
+    (subterm_po name-judgement "(partial_order?[list[T]])" adt_props
+     nil)
+    (subterm_cons formula-decl nil more_list_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (id const-decl "(bijective?[T, T])" identity nil)
+    (bijective? const-decl "bool" functions nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (injective? const-decl "bool" functions nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (uniques? def-decl "bool" more_list_props nil)
+    (sorted_uniques formula-decl nil sortedlist nil)
+    (cons1_var skolem-const-decl "T" sortedlist nil)
+    (cons2_var skolem-const-decl "list[T]" sortedlist nil)
+    (car_sorted formula-decl nil sortedlist nil)
+    (cdr_sorted formula-decl nil sortedlist nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil))
+   shostak))
+ (s_equal_char 0
+  (s_equal_char-1 nil 3578255840
+   ("" (induct sl1)
+    (("1" (grind) nil nil) ("2" (grind) nil nil)
+     ("3" (skeep)
+      (("3" (skeep)
+        (("3" (use cdr_sorted)
+          (("3" (simplify)
+            (("3" (prop)
+              (("1" (expand s_equal? -1)
+                (("1" (lift-if)
+                  (("1" (prop)
+                    (("1" (typepred key)
+                      (("1" (inst - "cdr(sl2)")
+                        (("1" (decompose-equality)
+                          (("1" (grind) nil nil)) nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (expand s_equal? +)
+                (("2" (lift-if)
+                  (("2" (prop)
+                    (("1" (grind) nil nil)
+                     ("2" (decompose-equality)
+                      (("2" (inst - "cdr(sl2)")
+                        (("1" (grind) nil nil) ("2" (grind) nil nil))
+                        nil))
+                      nil)
+                     ("3" (inst - "cdr(sl2)")
+                      (("3" (decompose-equality)
+                        (("3" (grind) nil nil)) nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((cdr_sorted formula-decl nil sortedlist nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (injective? const-decl "bool" functions nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (list_cons_extensionality formula-decl nil list_adt nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (sl2 skolem-const-decl "(sorted?)" sortedlist nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil sortedlist nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (s_equal? def-decl "bool" sortedlist nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
  (s_equal_equal 0
   (s_equal_equal-1 nil 3578083479
-   ("" (skeep)
-    (("" (auto-rewrite s_subset_subset) (("" (grind) nil nil)) nil))
+   (""
+    (induct-and-simplify sl1 :theories more_list_props[T] :defs nil
+     :rewrites s_equal_char :exclude (equal_symmetric member_nth)
+     :if-match nil)
+    (("1" (grind) nil nil)
+     ("2" (inst - "cdr(sl2!1)")
+      (("1" (prop)
+        (("1" (use s_equal_char)
+          (("1" (prop)
+            (("1" (inst - cons1_var!1)
+              (("1" (inst - cons1_var!1)
+                (("1" (decompose-equality 1)
+                  (("1" (lemma car_sorted)
+                    (("1"
+                      (inst - "cons1_var!1"
+                       "cons(cons1_var!1,cons2_var!1)")
+                      (("1" (expand member -7 2)
+                        (("1" (grind :defs nil) (("1" (grind) nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil)
+         ("2" (skeep)
+          (("2" (inst - x)
+            (("2"
+              (grind-with-lemmas car_sorted :if-match all :exclude
+               sorted?)
+              (("1" (reveal *)
+                (("1" (hide -2 -3)
+                  (("1" (inst - cons1_var!1)
+                    (("1"
+                      (use car_sorted
+                           (sl "cons(cons1_var!1,cons2_var!1)" a x))
+                      (("1" (use car_sorted (sl sl2!1 a cons1_var!1))
+                        (("1" (hide 2 3)
+                          (("1" (typepred key)
+                            (("1" (grind :exclude (sorted?))
+                              (("1"
+                                (expand member -8)
+                                (("1" (grind) nil nil))
+                                nil)
+                               ("2"
+                                (expand member -7)
+                                (("2"
+                                  (expand member -4)
+                                  (("2" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (reveal *)
+                (("2" (hide -2 -3)
+                  (("2" (expand s_equal? +)
+                    (("2" (lift-if)
+                      (("2" (prop)
+                        (("1" (grind) nil nil)
+                         ("2" (lift-if)
+                          (("2" (prop)
+                            (("1" (inst - "car(sl2!1)")
+                              (("1"
+                                (use sorted_uniques)
+                                (("1"
+                                  (expand uniques?)
+                                  (("1" (grind :defs nil) nil nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("2" (copy -1)
+                              (("2"
+                                (inst - "car(sl2!1)")
+                                (("2"
+                                  (use car_sorted)
+                                  (("2"
+                                    (use
+                                     s_member_member
+                                     (sl
+                                      "cons(cons1_var!1,cons2_var!1)"))
+                                    (("2"
+                                      (grind :exclude sorted?)
+                                      (("1"
+                                        (hide
+                                         -1
+                                         -2
+                                         -4
+                                         -5
+                                         1
+                                         2
+                                         4
+                                         5
+                                         7
+                                         8
+                                         9)
+                                        (("1"
+                                          (grind)
+                                          (("1"
+                                            (expand member)
+                                            (("1" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (hide
+                                         -1
+                                         -2
+                                         -4
+                                         -5
+                                         1
+                                         2
+                                         4
+                                         5
+                                         7
+                                         8
+                                         9)
+                                        (("2"
+                                          (expand member)
+                                          (("2" (grind) nil nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("3" (inst - "car(sl2!1)")
+                              (("3"
+                                (use
+                                 s_member_member
+                                 (sl "cons(cons1_var!1,cons2_var!1)"))
+                                (("3"
+                                  (use car_sorted)
+                                  (("3"
+                                    (grind :exclude sorted?)
+                                    (("1"
+                                      (hide
+                                       -1
+                                       -2
+                                       -3
+                                       -4
+                                       1
+                                       2
+                                       3
+                                       4
+                                       5
+                                       6
+                                       8
+                                       9
+                                       10)
+                                      (("1"
+                                        (grind)
+                                        (("1"
+                                          (expand member)
+                                          (("1" (grind) nil nil))
+                                          nil))
+                                        nil))
+                                      nil)
+                                     ("2"
+                                      (hide
+                                       -1
+                                       -2
+                                       -3
+                                       -4
+                                       1
+                                       2
+                                       3
+                                       4
+                                       5
+                                       6
+                                       8
+                                       9
+                                       10)
+                                      (("2"
+                                        (expand member)
+                                        (("2" (grind) nil nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("3" (expand member 5)
+                (("3" (grind :exclude (member sorted?))
+                  (("3" (reveal *)
+                    (("3" (hide -2 -3)
+                      (("3" (inst - "cons1_var!1")
+                        (("3" (grind) nil nil)) nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil)
+       ("2" (use cdr_sorted) (("2" (grind) nil nil)) nil)
+       ("3" (grind) nil nil))
+      nil)
+     ("3" (grind) nil nil))
     nil)
-   ((T formal-type-decl nil sortedlist nil)
-    (subset? const-decl "bool" more_list_props nil)
-    (s_subset_subset formula-decl nil sortedlist nil) nil
-    (equal? const-decl "bool" more_list_props nil))
+   ((sl2!1 skolem-const-decl "(sorted?)" sortedlist nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (injective? const-decl "bool" functions nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (s_member def-decl "bool" sortedlist nil)
+    (s_member_member formula-decl nil sortedlist nil)
+    (uniques? def-decl "bool" more_list_props nil)
+    (sorted_uniques formula-decl nil sortedlist nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (list_cons_extensionality formula-decl nil list_adt nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (car_sorted formula-decl nil sortedlist nil)
+    (cdr_sorted formula-decl nil sortedlist nil)
+    (member def-decl "bool" list_props nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (member_equal formula-decl nil more_list_props nil)
+    (s_equal_char formula-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (sorted? def-decl "bool" sortedlist nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (s_equal? def-decl "bool" sortedlist nil)
+    (equal? const-decl "bool" more_list_props nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list_induction formula-decl nil list_adt nil))
    shostak))
  (strict_order 0
   (strict_order-1 nil 3578083502
