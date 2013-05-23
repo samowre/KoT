@@ -7,17 +7,14 @@
     (pred type-eq-decl nil defined_types nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
-    (filter def-decl "list[T]" filters nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (T formal-type-decl nil more_list_props nil)
     (list_induction formula-decl nil list_adt nil))
    nil))
  (filter_cons 0
-  (filter_cons-1 nil 3578247674 ("" (grind) nil nil)
-   ((filter def-decl "list[T]" filters nil)) shostak))
+  (filter_cons-1 nil 3578247674 ("" (grind) nil nil) nil shostak))
  (filter_null 0
-  (filter_null-1 nil 3578247680 ("" (grind) nil nil)
-   ((filter def-decl "list[T]" filters nil)) shostak))
+  (filter_null-1 nil 3578247680 ("" (grind) nil nil) nil shostak))
  (filter_append 0
   (filter_append-1 nil 3578161497 ("" (induct-and-simplify l) nil nil)
    ((list type-decl nil list_adt nil)
@@ -25,7 +22,6 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (pred type-eq-decl nil defined_types nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
-    (filter def-decl "list[T]" filters nil)
     (append def-decl "list[T]" list_props nil)
     (T formal-type-decl nil more_list_props nil)
     (list_induction formula-decl nil list_adt nil)
@@ -42,7 +38,6 @@
     (pred type-eq-decl nil defined_types nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (PRED type-eq-decl nil defined_types nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
     (T formal-type-decl nil more_list_props nil)
@@ -56,7 +51,6 @@
     (pred type-eq-decl nil defined_types nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (PRED type-eq-decl nil defined_types nil)
-    (some adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
     (T formal-type-decl nil more_list_props nil)
@@ -80,14 +74,10 @@
    shostak))
  (subset_null 0
   (subset_null-1 nil 3578244990 ("" (grind) nil nil)
-   ((every adt-def-decl "boolean" list_adt nil)
-    (subset? const-decl "bool" more_list_props nil))
-   shostak))
+   ((subset? const-decl "bool" more_list_props nil)) shostak))
  (subset_cons 0
   (subset_cons-1 nil 3578244995 ("" (grind) nil nil)
-   ((every adt-def-decl "boolean" list_adt nil)
-    (subset? const-decl "bool" more_list_props nil))
-   shostak))
+   ((subset? const-decl "bool" more_list_props nil)) shostak))
  (member_equal 0
   (member_equal-1 nil 3577708838
    ("" (auto-rewrite member_subset)
@@ -219,24 +209,17 @@
         nil))
       nil))
     nil)
-   ((i skolem-const-decl
-     "below(length(cons(cons1_var!1, cons2_var!1)))" more_list_props
-     nil)
-    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+   ((- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
-    (i skolem-const-decl "below(length(cons2_var!1))" more_list_props
-     nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cons1_var!1 skolem-const-decl "T" more_list_props nil)
-    (cons2_var!1 skolem-const-decl "list[T]" more_list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (real_lt_is_strict_total_order name-judgement
@@ -382,12 +365,6 @@
    ((cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (nth_cons formula-decl nil more_list_props nil)
-    (cons1_var!1 skolem-const-decl "T" more_list_props nil)
-    (cons2_var!1 skolem-const-decl "list[T]" more_list_props nil)
-    (m!1 skolem-const-decl "list[T]" more_list_props nil)
-    (i!1 skolem-const-decl
-     "below(length(cons(cons1_var!1, cons2_var!1)) + length(m!1))"
-     more_list_props nil)
     (int_plus_int_is_int application-judgement "int" integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
@@ -493,11 +470,6 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (nth_append formula-decl nil more_list_props nil)
-    (cons1_var!1 skolem-const-decl "T" more_list_props nil)
-    (cons2_var!1 skolem-const-decl "list[T]" more_list_props nil)
-    (i!1 skolem-const-decl
-     "below(length(cons(cons1_var!1, cons2_var!1)))" more_list_props
-     nil)
     (nth_cons formula-decl nil more_list_props nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil))
@@ -553,7 +525,6 @@
  (uniques_TCC1 0
   (uniques_TCC1-1 nil 3577713883 ("" (grind) nil nil)
    ((uniques? def-decl "bool" more_list_props nil)
-    (every adt-def-decl "boolean" list_adt nil)
     (subset? const-decl "bool" more_list_props nil)
     (member def-decl "bool" list_props nil)
     (equal? const-decl "bool" more_list_props nil))
@@ -665,7 +636,6 @@
     (bottom adt-constructor-decl "(bottom?)" lift_adt nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (PRED type-eq-decl nil defined_types nil)
-    (some adt-def-decl "boolean" list_adt nil)
     (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
     (up adt-constructor-decl "[T -> (up?)]" lift_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
@@ -838,6 +808,198 @@
     (subset? const-decl "bool" more_list_props nil)
     (T formal-type-decl nil more_list_props nil)
     (list_induction formula-decl nil list_adt nil))
+   shostak)))
+(list2_props
+ (assoc_TCC1 0
+  (assoc_TCC1-1 nil 3578260179
+   ("" (lemma find_char)
+    ((""
+      (grind :theories (adt_props more_list_props) :exclude member_nth)
+      nil nil))
+    nil)
+   ((has_key const-decl "bool" list2_props nil)
+    (some_exists formula-decl nil more_list_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (find_char formula-decl nil more_list_props nil)
+    (K formal-type-decl nil list2_props nil)
+    (V formal-type-decl nil list2_props nil))
+   nil))
+ (assoc_TCC2 0
+  (assoc_TCC2-1 nil 3578260179
+   ("" (lemma find_char)
+    ((""
+      (grind :theories (adt_props more_list_props) :exclude member_nth)
+      (("" (rewrite -1 :dir rl)
+        (("" (grind) (("" (eta "[K, V]") (("" (grind) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((some_exists formula-decl nil more_list_props nil)
+    (has_key const-decl "bool" list2_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (find_char formula-decl nil more_list_props nil)
+    (K formal-type-decl nil list2_props nil)
+    (V formal-type-decl nil list2_props nil))
+   nil))
+ (assoc_bottom 0
+  (assoc_bottom-1 nil 3578320069
+   ("" (lemma find_char)
+    ((""
+      (grind :theories (adt_props more_list_props) :exclude member_nth)
+      nil nil))
+    nil)
+   ((has_key const-decl "bool" list2_props nil)
+    (some_exists formula-decl nil more_list_props nil)
+    (assoc const-decl "{r: lift[V] |
+         IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l)
+         ELSE bottom?(r)
+         ENDIF}"
+      list2_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (find_char formula-decl nil more_list_props nil)
+    (K formal-type-decl nil list2_props nil)
+    (V formal-type-decl nil list2_props nil))
+   shostak))
+ (assoc_up 0
+  (assoc_up-1 nil 3578320139
+   ("" (lemma find_char)
+    ((""
+      (grind :theories (adt_props more_list_props) :exclude member_nth)
+      (("" (eta "[K, V]")
+        (("" (grind)
+          (("" (rewrite -1 :dir rl) (("" (grind) nil nil)) nil)) nil))
+        nil))
+      nil))
+    nil)
+   ((assoc const-decl "{r: lift[V] |
+         IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l)
+         ELSE bottom?(r)
+         ENDIF}"
+      list2_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (find def-decl "lift[T]" more_list_props nil)
+    (down adt-accessor-decl "[(up?) -> T]" lift_adt nil)
+    (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
+    (lift type-decl nil lift_adt nil)
+    (find_char formula-decl nil more_list_props nil)
+    (K formal-type-decl nil list2_props nil)
+    (V formal-type-decl nil list2_props nil))
+   shostak))
+ (assoc_TCC3 0
+  (assoc_TCC3-1 nil 3578260179
+   ("" (lemma find_char)
+    ((""
+      (grind :theories (adt_props more_list_props) :exclude member_nth)
+      nil nil))
+    nil)
+   ((has_key const-decl "bool" list2_props nil)
+    (some_exists formula-decl nil more_list_props nil)
+    (assoc const-decl "{r: lift[V] |
+         IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l)
+         ELSE bottom?(r)
+         ENDIF}"
+      list2_props nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (find_char formula-decl nil more_list_props nil)
+    (K formal-type-decl nil list2_props nil)
+    (V formal-type-decl nil list2_props nil))
+   nil))
+ (assoc_TCC4 0
+  (assoc_TCC4-1 nil 3578260179
+   ("" (lemma find_char)
+    ((""
+      (grind :theories (adt_props more_list_props) :exclude member_nth)
+      (("" (decompose-equality)
+        (("" (eta "[K, V]")
+          (("" (grind) (("" (rewrite -1) nil nil)) nil)) nil))
+        nil))
+      nil))
+    nil)
+   ((assoc const-decl "{r: lift[V] |
+         IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l)
+         ELSE bottom?(r)
+         ENDIF}"
+      list2_props nil)
+    (some_exists formula-decl nil more_list_props nil)
+    (has_key const-decl "bool" list2_props nil)
+    (lift type-decl nil lift_adt nil)
+    (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
+    (down adt-accessor-decl "[(up?) -> T]" lift_adt nil)
+    (find def-decl "lift[T]" more_list_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (up adt-constructor-decl "[T -> (up?)]" lift_adt nil)
+    (find_char formula-decl nil more_list_props nil)
+    (K formal-type-decl nil list2_props nil)
+    (V formal-type-decl nil list2_props nil))
+   nil))
+ (remove_assoc_cons 0
+  (remove_assoc_cons-1 nil 3578320920 ("" (grind) nil nil)
+   ((/= const-decl "boolean" notequal nil)
+    (filter def-decl "list[T]" filters nil)
+    (remove_assoc const-decl "list[[K, V]]" list2_props nil))
+   shostak))
+ (remove_assoc_assoc 0
+  (remove_assoc_assoc-1 nil 3578320555
+   (""
+    (induct-and-simplify l :theories (adt_props more_list_props)
+     :exclude member_nth :if-match nil :rewrites (remove_assoc_cons)
+     :defs nil)
+    (("1" (grind) nil nil) ("2" (grind) nil nil) ("3" (grind) nil nil)
+     ("4" (grind) nil nil))
+    nil)
+   ((list_induction formula-decl nil list_adt nil)
+    (K formal-type-decl nil list2_props nil)
+    (V formal-type-decl nil list2_props nil)
+    (bottom adt-constructor-decl "(bottom?)" lift_adt nil)
+    (remove_assoc const-decl "list[[K, V]]" list2_props nil)
+    (assoc const-decl "{r: lift[V] |
+         IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l)
+         ELSE bottom?(r)
+         ENDIF}"
+      list2_props nil)
+    (bottom? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
+    (down adt-accessor-decl "[(up?) -> T]" lift_adt nil)
+    (member def-decl "bool" list_props nil)
+    (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (has_key const-decl "bool" list2_props nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IF const-decl "[boolean, T, T -> T]" if_def nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (lift type-decl nil lift_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (filter_member application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list2_props nil)
+    (find def-decl "lift[T]" more_list_props nil)
+    (filter def-decl "list[T]" filters nil)
+    (/= const-decl "boolean" notequal nil))
    shostak)))
 (list_map_props
  (member_map 0

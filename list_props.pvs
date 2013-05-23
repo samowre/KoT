@@ -125,7 +125,7 @@ BEGIN
 
   find_char: THEOREM
     CASES find(p, l) OF
-      bottom: NOT some(p, l),
+      bottom: NOT some(p)(l),
       up(r): p(r) AND member(r, l)
     ENDCASES
 
@@ -168,6 +168,49 @@ BEGIN
   subterm_cons2: LEMMA subterm(cons(x, l), m) IMPLIES subterm(l, m)
   subterm_subset: LEMMA subterm(l, m) IMPLIES subset?(l, m)
 END more_list_props
+
+list2_props[K: TYPE, V: TYPE]: THEORY
+BEGIN
+  IMPORTING adt_props[list[[K, V]]]
+  IMPORTING more_list_props[[K, V]]
+  
+  k, x: VAR K
+  v, y: VAR V
+  p: VAR [K, V]
+  l: VAR list[[K, V]]
+
+  has_key(k, l): bool = some(LAMBDA (x: K, y: V): x = k)(l)
+
+  assoc(k, l): { r: lift[V] | IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l) ELSE bottom?(r) ENDIF } =
+    CASES find(LAMBDA (x: K, y: V): x = k, l) OF
+      bottom: bottom,
+      up(lift): up(lift`2)
+    ENDCASES
+
+  assoc_bottom: THEOREM
+    bottom?(assoc(k, l)) IMPLIES NOT has_key(k, l)
+  assoc_up: THEOREM
+    up?(assoc(k, l)) IMPLIES member((k, down(assoc(k, l))), l)
+
+  assoc(k, l, v): { r: V | IF has_key(k, l) THEN member((k, r), l) ELSE r = v ENDIF } =
+    CASES assoc(k, l) OF
+      bottom: v,
+      up(res): res
+    ENDCASES
+
+  remove_assoc(k, l): list[[K, V]] =
+    filter(l, LAMBDA (x: K, y: V): x /= k)
+
+  remove_assoc_cons: THEOREM
+    remove_assoc(k, cons(p, l)) =
+      IF k = p`1
+        THEN remove_assoc(k, l)
+	ELSE cons(p, remove_assoc(k, l))
+      ENDIF
+
+  remove_assoc_assoc: THEOREM
+    assoc(x, remove_assoc(k, l)) = IF x = k THEN bottom ELSE assoc(x, l) ENDIF
+END list2_props
 
 list_map_props[S: TYPE, T: TYPE]: THEORY
 BEGIN

@@ -6,42 +6,153 @@ BEGIN
   ufun(index, arity: nat): ufun?   : fun?
 END funpred
 
-tree[T: TYPE]: DATATYPE
+term: DATATYPE
 BEGIN
-  leaf(val: T): leaf?
-  node(children: list[tree]): node?
-END tree
+  IMPORTING funpred
+  v(index: nat): var?
+  apply(f: fun?, args: { l: list[term] | length(l) = arity(f) }): apply?
+END term
 
-tree_props[T: TYPE]: THEORY
+fmla: THEORY
 BEGIN
-  IMPORTING tree[T]
+  IMPORTING term
   IMPORTING more_list_props
 
-  % Test comment
-  x: VAR T
-  t, r, s: VAR tree
+  r, s, t: VAR term
+  rs, ss, ts: VAR list[term]
   n: VAR nat
+  ns: VAR list[nat]
+  l: VAR list[nat]
 
-  lt(t, r): RECURSIVE bool =
-    CASES r OF
-      leaf(n): FALSE,
-      node(children):
-        member(t, children) OR
-	(node?(t) AND cons?(children) AND children(t) = cdr(children))
+  %% Computation of the variables present in a term
+  % nats(t) is the type of lists containing the indices of the variables present in term t
+  nats(t): TYPE = { l | FORALL n: member(n, l) IFF subterm(v(n), t) }
+
+  aux(s: term,
+      (ts: list[term] | every(LAMBDA r: r << s)(ts)),
+      tnats: [t: { t | t << s } -> nats(t) ]):
+    RECURSIVE { l | FORALL n: member(n, l) IFF EXISTS (r | member(r, ts)): subterm(v(n), r) } =
+    CASES ts OF
+      null: null,
+      cons(h, t): append(tnats(h), aux(s, t, tnats))
     ENDCASES
-  MEASURE r BY <<
+  MEASURE length(ts)
 
-  terms(t): RECURSIVE { l: list[T] | FORALL x: member(x, l) IFF subterm(leaf(x), t) } =
+  vars(t): RECURSIVE nats(t) =
     CASES t OF
-      leaf(n): (: n :),
-      node(children):
-        CASES children OF
-	  null: null,
-	  cons(h, t): append(terms(h), terms(node(t)))
-	ENDCASES
+      v(n): (: n :),
+      apply(f, args): aux(t, args, vars)
     ENDCASES
-  MEASURE t BY lt
-END tree_props
+  MEASURE t BY <<
+  AUTO_REWRITE- vars
+
+  % Variables of a list of terms
+  vars(ts): RECURSIVE list[nat] =
+    CASES ts OF
+      null: null,
+      cons(h, t): append(vars(h), vars(t))
+    ENDCASES
+  MEASURE length(ts)
+
+  vars_subterm: THEOREM member(n, vars(s)) IFF subterm(v(n), s)
+
+  %% Parallel substitution
+  parsubst_aux(s: term,
+               (ts: list[term] | every(LAMBDA r: r << s)(ts)),
+	       parsubst: [{ t | t << s } -> term]):
+    RECURSIVE { l: list[term] | length(l) = length(ts) } =
+    CASES ts OF
+      null: null,
+      cons(h, t): cons(parsubst(h), parsubst_aux(s, t, parsubst))
+    ENDCASES
+  MEASURE length(ts)
+
+  parsubst(mapping: [nat -> term])(s): RECURSIVE term =
+    CASES s OF
+      v(i): mapping(i),
+      apply(f, args): apply(f, parsubst_aux(s, args, LAMBDA (r | r << s): parsubst(mapping)(r)))
+    ENDCASES
+  MEASURE s BY <<
+
+  parsubst(s, mapping: list[[nat, term]]): term =
+    parsubst(LAMBDA (i: nat): assoc(i, mapping, v(i)))(s)
+
+  % Single substitution (as a shortcut)
+  subst(s, n, t): term =
+    parsubst(LAMBDA (i: nat): IF i = n THEN t ELSE v(i) ENDIF)(s)
+
+  %% Formulae
+  fmla: DATATYPE
+  BEGIN
+    atom(pred: (pred?), args: { l: list[term] | length(l) = arity(pred) }): atom?
+    f_not(arg: fmla): f_not?
+    f_or(larg, rarg: fmla): f_or?
+    f_exists(bvar: nat, body: fmla): f_exists?
+  END fmla
+
+  f, g: VAR fmla
+
+  ;¬(f): fmla    = IF f_not?(f) THEN arg(f) ELSE f_not(f) ENDIF
+  ;⋁(f, g): fmla = f_or(f, g)
+  ;⋀(f, g): fmla = ¬(¬f ⋁ ¬g)
+  ;⇒(f, g): fmla = ¬f ⋁ ¬g
+  ;⇔(f, g): fmla = (f ⇒ g) ⋁ (g ⇒ f)
+  ;◇(n)(f): fmla = f_exists(n, f)
+  ;◇(ns)(f): RECURSIVE fmla =
+    CASES ns OF
+      null: f,
+      cons(n, t): f_exists(n, (◇t)(f))
+    ENDCASES
+  MEASURE length(ns)
+  ;□(n)(f): fmla  = ¬(◇n)(f)
+  ;□(ns)(f): fmla = ¬(◇ns)(f)
+
+  %% Free variables in a formula
+  freevars(f): RECURSIVE list[nat] =
+    CASES f OF
+      atom(p, args): vars(args),
+      f_not(f): freevars(f),
+      f_or(f, g): append(freevars(f), freevars(g)),
+      f_exists(n, f): remove(n, freevars(f))
+    ENDCASES
+  MEASURE f BY <<
+
+  sentence?(f): bool = null?(freevars(f))
+
+  vars(f): RECURSIVE list[nat] =
+    CASES f OF
+      atom(p, args): vars(args),
+      f_not(f): vars(f),
+      f_or(f, g): append(vars(f), vars(g)),
+      f_exists(n, f): vars(f)
+    ENDCASES
+  MEASURE f BY <<
+
+  boundvars(f): RECURSIVE list[nat] =
+    CASES f OF
+      atom(p, args): null,
+      f_not(f): boundvars(f),
+      f_or(f, g): append(boundvars(f), boundvars(g)),
+      f_exists(n, f): cons(n, boundvars(f))
+    ENDCASES
+  MEASURE f BY <<
+
+  % Are variables ns free in term f?
+  freefor(f, ns): RECURSIVE bool =
+    CASES f OF
+      atom(p, args): TRUE,
+      f_not(f): freefor(f, ns),
+      f_or(f, g): freefor(f, ns) AND freefor(g, ns),
+      f_exists(n, f): NOT member(n, ns) AND freefor(f, ns)
+    ENDCASES
+  MEASURE f BY <<
+
+  freefor(f, n): bool = freefor(f, (: n :))
+
+  % freefor characterisations
+  freefor_forall: THEOREM freefor(f, ns) IFF FORALL (n | member(n, ns)): freefor(f, n)
+  freefor_boundvars: THEOREM freefor(f, n) IFF NOT member(n, boundvars(f))
+END fmla
 
 % fmla theory introduces the datatypes for the pre-terms and pre-formulas
 % fmla: THEORY
@@ -53,138 +164,9 @@ END tree_props
 %   IMPORTING funpred, more_list_props, list_suffixes, list_map_props, concat_map
 %   IMPORTING preterm
 
-%   f: VAR fun?
-
 %   % term is the pre-term datatype with variables and compound terms
 
-%   termnats(s: term): list[nat] =
-%     reduce(LAMBDA (n: nat): (: n :),
-%            LAMBDA (f: fun?, l: list[list[nat]]): flatten(l))(s)
-
-%   r, s, t: VAR term
-%     n: VAR nat
-%     ss: VAR list[term]
-
-%   termnats_v: THEOREM termnats(v(n)) = (: n :)
-%   termnats_apply: THEOREM
-%     FORALL (f | arity(f) = length(ss)):
-%     member(n, termnats(apply(f, ss))) IMPLIES (EXISTS (s | member(s, ss)): member(n, termnats(s)))
-% %  termnats_apply2: THEOREM
-% %    FORALL ss: FORALL (f | arity(f) = length(ss)):
-
-% %      (EXISTS (s | member(s, ss)): member(n, termnats(s))) IMPLIES member(n, termnats(apply(f, ss)))
-
-
-% %  termnats_subterm: THEOREM
-% %    FORALL (n: nat): member(n, termnats(s)) IMPLIES subterm(v(n), s)
-
-% %  subterm_termnats: THEOREM
-% %    FORALL (n: nat): subterm(v(n), s) IMPLIES member(n, termnats(s))
-    
-%   % v: VAR (var?)
-%   % vs: VAR list[(var?)]
-
-%   % term_order: THEOREM
-%   %   member(s, ss) AND length(ss) = arity(f) IMPLIES s << apply(f, ss)
-
-%   % % fmla is pre-formula
-%   % fmla: DATATYPE
-%   % BEGIN
-%   %   atom(pred: (pred?), args: of_length[term](arity(pred))): atom?
-%   %   f_not(arg: fmla): f_not?
-%   %   f_or(arg1, arg2: fmla): f_or?
-%   %   f_exists(bvar: (var?), body: fmla): f_exists? 
-%   % END fmla
-
-%   % termvars(s): RECURSIVE list[(var?)] =
-%   %   CASES s OF
-%   %     v(i): (: s :),
-%   %     apply(f, ss): concat_map(ss, LAMBDA (r | member(r, ss)): termvars(r))
-%   %   ENDCASES
-%   % MEASURE s BY <<
-
-%   % termvars_spec: THEOREM
-%   %   termvars(s) = CASES s OF
-%   %     v(i): (: s :),
-%   %     apply(f, ss): concat_map(ss, termvars)
-%   %   ENDCASES
-
-%   % termvars_order: THEOREM
-%   %   member(v, termvars(s)) IFF subterm(v, s)
-  
-% % %r, s, t: VAR term
-% % ss, tt: VAR list[term]
-% % i, j, k: VAR nat
-% % ii, jj, kk: VAR list[nat]
-% % f, g, h: VAR (fun?)
-% % p, q: VAR (pred?)
-% % A, B, C: VAR fmla
-% % AA, BB, CC: VAR list[fmla]
-% % x, y, z: VAR (var?)
-% % xx, yy, zz: VAR list[(var?)]
-
-% % %termvars(s): RECURSIVE list[(var?)] =
-% % %  CASES s OF
-% % %    v(i): (: s :),
-% % %    apply(f, ss): reduce(null,
-% % %                         (LAMBDA (t | t << s), (vv: list[(var?)]): 
-% % %			 append(termvars(t), vv)))(ss)
-% % %   ENDCASES
-% % %   MEASURE s BY <<
-
-% %  F: VAR [term, list[(var?)] -> list[(var?)]]
-% %  G, H: VAR [term -> term]
-
-
-% %  reduce_reduce: LEMMA
-% %   length(ss) = arity(f) AND 
-% %   s = apply(f, ss) IMPLIES 
-% %   (FORALL tt: suffix?(ss)(tt) IMPLIES
-% %    reduce(null, (LAMBDA (t | t << s), (vv: list[(var?)]): F(t, vv)))(tt) =
-% %    reduce(null, F)(tt))
-
-% %  map_map: LEMMA
-% %    length(ss) = arity(f) AND 
-% %    s = apply(f, ss) IMPLIES 
-% %   (FORALL tt: suffix?(ss)(tt) IMPLIES
-% %    map(LAMBDA (t | t << s): G(t))(tt) =
-% %    map(G)(tt))
-
-% %  IMPORTING list_subtype
-
-% %  length_length: LEMMA
-% %    length(ss) = arity(f) AND 
-% %    s = apply(f, ss) IMPLIES 
-% %   (FORALL tt: suffix?(ss)(tt) IMPLIES
-% %    length[{t | t << s}](tt) =
-% %    length(tt))
-
-
 % % % substitute term t for variable x in term s
-% % subst(s, x, t): RECURSIVE term =
-% %   CASES s OF
-% %     v(i): (IF x = s THEN t ELSE s ENDIF),
-% %     apply(f, ss): apply(f, map((LAMBDA (r : term | r << s): 
-% % 			            subst(r, x, t)))(ss))
-% %    ENDCASES
-% %    MEASURE s BY <<
-
-% % termvars(ss): RECURSIVE list[(var?)] =
-% %    CASES ss OF
-% %      null: null,
-% %      cons(s, tt): append(termvars(s), termvars(tt))
-% %    ENDCASES
-% %    MEASURE length(ss)
-
-% % subst(ss, x, t): RECURSIVE list[term] =
-% %     CASES ss OF
-% %       null: null,
-% %       cons(s, tt): cons(subst(s, x, t), subst(tt, x, t))
-% %      ENDCASES
-% %   MEASURE ss BY <<
-
-% %   IMPORTING lists_map
-% %   IMPORTING lists_map2
 % % term_equal(s, t, (s_vars, t_vars: list[(var?)])): RECURSIVE bool =
 % %   CASES s OF
 % %     v(i): (var?(t) AND rassoc2(s, s_vars, t_vars) = t),
@@ -201,37 +183,6 @@ END tree_props
 % % 			    ss, args(t)))
 % %    ENDCASES
 % %    MEASURE s BY <<
-
-% % parsubst(s, xx, tt): RECURSIVE term =
-% %   CASES s OF
-% %      v(i): rassoc2(s, xx, tt),
-% %      apply(f, ss): apply(f, map(LAMBDA (r: term | r <<s):
-% % 			       parsubst(r, xx, tt))(ss))
-% %    ENDCASES
-% %    MEASURE s BY <<
-
-% % %free variables in (A:fmla)
-% % freevars(A): RECURSIVE list[(var?)]  = 
-% %   CASES A OF
-% %     atom(p, ss): termvars(ss),
-% %     f_not(B): freevars(B),
-% %     f_or(B, C): append(freevars(B), freevars(C)),
-% %     f_exists(x, B): delete(x, freevars(B))
-% %   ENDCASES
-% %   MEASURE A BY <<
-
-% % sentence?(A): bool = null?(freevars(A))
-
-% % % checks that variables in yy are not bound by exists in A 
-% % freefor(A, yy): RECURSIVE bool =
-% %   CASES A OF
-% %     atom(p, ss): TRUE,
-% %     f_not(B): freefor(B, yy), 
-% %     f_or(B, C): freefor(B, yy) AND freefor(C, yy), 
-% %     f_exists(y, B): NOT member(y, yy) AND
-% %                     freefor(B, yy)
-% %   ENDCASES
-% %   MEASURE A BY <<
 
 % % aux_subst: LEMMA  length[term](subst(ss, x, t)) = length(ss)
 
@@ -385,9 +336,6 @@ END tree_props
 % %     cons(A, BB): append(freesymbols(A), freesymbols(BB))
 % %   ENDCASES
 % %   MEASURE length(AA)
-
-% % f_neg(A): fmla =
-% %   (IF f_not?(A) THEN arg(A) ELSE f_not(A) ENDIF)
 
 % %   sentence_list_cons:  LEMMA
 % %     FORALL (A, AA):
