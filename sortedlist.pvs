@@ -68,9 +68,14 @@ BEGIN
   IMPORTING minlist[T,key]
 
   max_min: LEMMA max[T,rev_key](x,y) = min[T,key](x,y)
-  min_max: LEMMA min[T,rev_key](x,y) = max[T,key](x,y)
+  min_max: LEMMA min[T,rev_key](x,y) = max[T,key](x,y) ;
 
   % We hence obtain all the properties on max by those on min
+  
+  % Everytime max is imported, min[T,key] AND min[T,rev_key] are imported as well
+  % But we always want min to refer to min[T,key]
+  % It is the case with this macro
+
 END maxlist
 
 
