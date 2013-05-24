@@ -34,10 +34,10 @@ BEGIN
   % in the prelude for every, and a some is a negation of a
   % every with the theorems in the adt_props theory.
   every_forall: THEOREM
-    every(p)(l) IFF (FORALL x: member(x, l) IMPLIES p(x))
+    every(p)(l) IFF (FORALL (x | member(x, l)): p(x))
 
   some_exists: THEOREM
-    some(p)(l) IFF (EXISTS x: member(x, l) AND p(x))
+    some(p)(l) IFF (EXISTS (x | member(x, l)): p(x))
 
   % subset relation
   subset?(l, m): bool = every(member(m))(l)
@@ -118,10 +118,14 @@ BEGIN
   MEASURE length(l)
 
   % Find an element satisfying a predicate
-  find(p, l): RECURSIVE lift[T]=
+  find(p, l): RECURSIVE lift[T] =
     CASES l OF
       null: bottom,
-      cons(h, t): IF p(h) THEN up(h) ELSE find(p, t) ENDIF
+      cons(h, t):
+        IF p(h)
+	  THEN up(h)
+	  ELSE find(p, t)
+	ENDIF
     ENDCASES
   MEASURE length(l)
 
@@ -130,7 +134,6 @@ BEGIN
       bottom: NOT some(p)(l),
       up(r): p(r) AND member(r, l)
     ENDCASES
-
   
   %% Less usual functions
   % More efficient way to compute append(reverse(l1), l2)
@@ -219,6 +222,7 @@ BEGIN
   ks, xs: VAR list[K]
   v, y: VAR V
   vs, ys: VAR list[V]
+  vf: VAR finseq[V]
   p: VAR [K, V]
   l: VAR list[[K, V]]
 
@@ -230,8 +234,19 @@ BEGIN
     ENDCASES
   MEASURE length(ks)
 
-  
-zip_nth: THEOREM
+  zipi(ks, (vf | vf`length >= length(ks)), (i: upto(vf`length - length(ks)))):
+    RECURSIVE { l | length(l) = length(ks) AND FORALL (j: below(length(ks))): nth(l, j) = (nth(ks, j), vf(j + i)) } =
+    CASES ks OF
+      null: null,
+      cons(h, t): cons((h, vf(i)), zipi(t, vf, i + 1))
+    ENDCASES
+  MEASURE length(ks)
+
+  zipi(ks, (vf | vf`length = length(ks))):
+    { l | length(l) = length(ks) AND FORALL (i: below(length(ks))): nth(l, i) = (nth(ks, i), vf(i)) } =
+    zipi(ks, vf, 0)
+
+  zip_nth: THEOREM
     length(ks) = length(vs) IMPLIES
       FORALL (i: below(length(ks))):
         nth(zip(ks, vs), i) = (nth(ks, i), nth(vs, i))
