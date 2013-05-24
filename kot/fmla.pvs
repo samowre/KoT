@@ -1,141 +1,21 @@
-% A symbol is a (interpreted or not) predicate or function
-symbol: DATATYPE WITH SUBTYPES pred?, fun?
-BEGIN
-  ipred(index, arity: nat): ipred? : pred?
-  upred(index, arity: nat): upred? : pred?
-  ifun(index, arity: nat): ifun?   : fun?
-  ufun(index, arity: nat): ufun?   : fun?
-END symbol
-
-% A term is either a variable, or the application of a function symbol to a list of arguments
-term: DATATYPE
-BEGIN
-  IMPORTING symbol
-  v(index: nat): var?
-  apply(fun: (fun?), args: { l: finseq[term] | l`length = arity(fun) }): apply?
-END term
-
-% A first-order formula over terms
-fmla: DATATYPE
+fmla: THEORY
 BEGIN
   IMPORTING term
-  atom(pred: (pred?), args: { l: finseq[term] | l`length = arity(pred) }): atom?
-  f_not(arg: fmla): f_not?
-  f_or(larg, rarg: fmla): f_or?
-  f_exists(bvar: nat, body: fmla): f_exists?
-END fmla
 
-term_props: THEORY
-BEGIN
-  lists: LIBRARY "../lists"
-  IMPORTING term
-  IMPORTING lists@more_list_props
-  IMPORTING lists@list2_props
-  IMPORTING more_finseq_props
-  IMPORTING assoc2, smap, setmap
-  IMPORTING set_props
-  CONVERSION- singleton_elt
+  pred: DATATYPE
+  BEGIN
+    ipred(index, arity: nat): ipred?
+    upred(index, arity: nat): upred?
+  END pred
 
-  s, t: VAR term
-  ss, ts: VAR set[term]
-  i, n: VAR nat
-  is, ns: VAR set[nat]
-  uf: VAR (ufun?)
-
-  % Computes the set of variables present in a term.
-  % This is intended to be used in specifications only, and may not be executable.
-  V(t): RECURSIVE set[nat] =
-    CASES t OF
-      v(n): singleton(n),
-      apply(f, args): V(args :: set[term])
-    ENDCASES
-  MEASURE t BY <<
-
-  vars_subterm: THEOREM n ∈ V(t) IFF subterm(v(n), t)
-  
-  % vars only increases
-  vars_increases: THEOREM
-    t << s IMPLIES V(t) ⊂ V(s)
-
-  % Uninterpreted Function Symbols of a term
-  UFS(t): RECURSIVE set[(ufun?)] =
-    CASES t OF
-      v(n): ∅,
-      apply(f, args): { uf | uf = f OR uf ∈ UFS(args :: set[term]) }
-    ENDCASES
-  MEASURE t BY <<
-
-  % Rename variables
-  % TODO: injection, equivalence
-  alpha(s: term, rename: [nat -> nat]): RECURSIVE term =
-    CASES s OF
-      v(i): v(rename(i)),
-      apply(f, args): apply(f, smap[{ t | t << s}, term]
-                                   (LAMBDA (t | t << s): alpha(t, rename))(args))
-    ENDCASES
-  MEASURE s BY <<
-
-  % The new variables is the renaming of the old ones
-  alpha_vars: RECURSIVE JUDGEMENT
-    alpha(s: term, rename: [nat -> nat]) HAS_TYPE { t | V(t) = rename(V(s)) }
-
-  % Parallel substitution in a term using a mapping function from variables to terms.
-  parsubst(s: term, mapping: [nat -> term]): RECURSIVE term =
-    CASES s OF
-      v(i): mapping(i),
-      apply(f, args): apply(f, smap[{t | t << s }, term]
-                                   (LAMBDA (t | t << s): parsubst(t, mapping))(args))
-    ENDCASES
-  MEASURE s BY <<
-
-  % Information about the new set of variables as a recursive judgement
-  parsubst_map_vars: RECURSIVE JUDGEMENT
-    parsubst(s: term, mapping: [nat -> term]) HAS_TYPE { t | V(t) ⊂ V(mapping(V(s))) }
-
-  % Paralel substitution, with association lists
-  % Again, we can know a superset of the new variables
-  parsubst(s: term, vars: list[nat], (vals: finseq[term] | vals`length = length(vars))):
-    term =
-%    { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) } =
-%TODO    { r | V(r) ⊂ (V(s) \ vars) ∪ V(vals) }
-    parsubst(s, LAMBDA i: assoc2[nat, term](i, vars, vals, v(i)))
-
-%  parsubst_vars: JUDGEMENT
-%    parsubst(s: term, vars: list[nat], (vals: finseq[term] | vals`length = length(vars)))
-%      HAS_TYPE { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) }
-
-  % Single substitution is actually a parallel substitution
-  % We know a superset of the new variables
-  subst(s, n, t): term =
-%TODO    { r | V(r) ⊂ (V(s) \ n) ∪ V(t) }
-    parsubst(s, LAMBDA i: IF i = n THEN t ELSE v(i) ENDIF)
-
-  % Interprets an uninterpreted function by a body.
-  % There is no restriction on the variables present in the replacement function.
-  fsubst(s,
-        (u: (ufun?)),
-	(vars: (uniques?[nat]) | length(vars) = arity(u)),
-	t):
-    RECURSIVE term =
-%TODO { r | V(r) ⊂ V(s) ∪ (V(t) \ vars) }
-    CASES s OF
-      v(i): s,
-      apply(f, args):
-        LET nargs = smap[{ t | t << s }, term]
-	                (LAMBDA (r: term | r << s): fsubst(r, u, vars, t))(args) IN
-	IF f = u
-	  THEN parsubst(t, vars, nargs)
-	  ELSE apply(f, nargs)
-	ENDIF
-    ENDCASES
-  MEASURE s BY <<
-END term_props
-
-fmla_props: THEORY
-BEGIN
-  IMPORTING term
-  IMPORTING fmla
-  IMPORTING term_props
+  % A first-order formula over terms
+  fmla: DATATYPE
+  BEGIN
+    atom(pred: pred, args: { l: finseq[term] | l`length = arity(pred) }): atom?
+    f_not(arg: fmla): f_not?
+    f_or(larg, rarg: fmla): f_or?
+    f_exists(bvar: nat, body: fmla): f_exists?
+  END fmla
 
   s, t: VAR term
   ss, ts: VAR set[term]
@@ -285,7 +165,7 @@ BEGIN
       f_exists(n, b): f_exists(n, psubst(b, u, vars, g))
     ENDCASES
   MEASURE f BY <<
-END fmla_props
+END fmla
 
 %   equal_subst_aux(s: term,
 %                   (ss: list[[term, term]] | every(LAMBDA (r, t): r << s)(ss)),
