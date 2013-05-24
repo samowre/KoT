@@ -129,6 +129,23 @@ BEGIN
     ENDCASES
   MEASURE length(l)
 
+  findi(p, l): RECURSIVE lift[{ i: below(length(l)) | p(nth(l, i)) }] =
+    CASES l OF
+      null: bottom,
+      cons(h, t):
+        IF p(h)
+	  THEN up(0)
+	  ELSE CASES findi(p, t) OF
+	         bottom: bottom,
+		 up(r): up(r + 1)
+	       ENDCASES
+	ENDIF
+    ENDCASES
+  MEASURE length(l)
+
+  findi_some: THEOREM
+    some(p)(l) IMPLIES up?(findi(p, l))
+
   find_char: THEOREM
     CASES find(p, l) OF
       bottom: NOT some(p)(l),
