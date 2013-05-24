@@ -7,18 +7,10 @@ BEGIN
   ufun(index, arity: nat): ufun?   : fun?
 END symbol
 
-symbol_props: THEORY
-BEGIN
-  IMPORTING symbol
-  s: VAR symbol
-  
-  usymb?(s): bool = upred?(s) OR ufun?(s)
-END symbol_props
-
 % A term is either a variable, or the application of a function symbol to a list of arguments
 term: DATATYPE
 BEGIN
-  IMPORTING symbol_props
+  IMPORTING symbol
   v(index: nat): var?
   apply(fun: (fun?), args: { l: finseq[term] | l`length = arity(fun) }): apply?
 END term
@@ -51,18 +43,18 @@ BEGIN
 
   % Computes the set of variables present in a term.
   % This is intended to be used in specifications only, and may not be executable.
-  vars(t): RECURSIVE set[nat] =
+  V(t): RECURSIVE set[nat] =
     CASES t OF
       v(n): singleton(n),
-      apply(f, args): vars(args :: set[term])
+      apply(f, args): V(args :: set[term])
     ENDCASES
   MEASURE t BY <<
 
-  vars_subterm: THEOREM n ∈ vars(t) IFF subterm(v(n), t)
+  vars_subterm: THEOREM n ∈ V(t) IFF subterm(v(n), t)
   
   % vars only increases
   vars_increases: THEOREM
-    t << s IMPLIES vars(t) ⊂ vars(s)
+    t << s IMPLIES V(t) ⊂ V(s)
 
   % Computes the set of unintepreted symbols present in a term
   ufuns(t): RECURSIVE set[(ufun?)] =
@@ -72,29 +64,48 @@ BEGIN
     ENDCASES
   MEASURE t BY <<
 
+  % Rename variables
+  % TODO: injection
+  alpha(s: term, rename: [nat -> nat]): RECURSIVE term =
+    CASES s OF
+      v(i): v(rename(i)),
+      apply(f, args): apply(f, smap[{ t | t << s}, term]
+                                   (LAMBDA (t | t << s): alpha(t, rename))(args))
+    ENDCASES
+  MEASURE s BY <<
+
+  alpha_vars: RECURSIVE JUDGEMENT
+    alpha(s: term, rename: [nat -> nat]) HAS_TYPE { t | V(t) = rename(V(s)) }
+
   % Parallel substitution in a term using a mapping function from variables to terms.
-  % We can actually know a superset of the new variables
-  parsubst(s: term, mapping: [nat -> term]): RECURSIVE
-    { t | subset?(vars(t), vars(setmap(mapping)(vars(s)))) } =
-%TODO { t | vars(t) ⊂ vars(setmap(mapping))(vars(s)) }
+  parsubst(s: term, mapping: [nat -> term]): RECURSIVE term =
     CASES s OF
       v(i): mapping(i),
-      apply(f, args): apply(f, smap[{t | t << s }, { t | subset?(vars(t), vars(setmap(mapping)(vars(s)))) }]
+      apply(f, args): apply(f, smap[{t | t << s }, term]
                                    (LAMBDA (t | t << s): parsubst(t, mapping))(args))
     ENDCASES
   MEASURE s BY <<
+
+  % Information about the new set of variables as a recursive judgement
+  parsubst_map_vars: RECURSIVE JUDGEMENT
+    parsubst(s: term, mapping: [nat -> term]) HAS_TYPE { t | V(t) ⊂ V(mapping(V(s))) }
 
   % Paralel substitution, with association lists
   % Again, we can know a superset of the new variables
   parsubst(s: term, vars: list[nat], (vals: finseq[term] | vals`length = length(vars))):
     term =
-%TODO    { r | vars(r) ⊂ (vars(s) \ vars) ∪ vars(vals) }
+%    { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) } =
+%TODO    { r | V(r) ⊂ (V(s) \ vars) ∪ V(vals) }
     parsubst(s, LAMBDA i: assoc2[nat, term](i, vars, vals, v(i)))
+
+%  parsubst_vars: JUDGEMENT
+%    parsubst(s: term, vars: list[nat], (vals: finseq[term] | vals`length = length(vars)))
+%      HAS_TYPE { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) }
 
   % Single substitution is actually a parallel substitution
   % We know a superset of the new variables
   subst(s, n, t): term =
-%TODO    { r | vars(r) ⊂ (vars(s) \ n) ∪ vars(t) }
+%TODO    { r | V(r) ⊂ (V(s) \ n) ∪ V(t) }
     parsubst(s, LAMBDA i: IF i = n THEN t ELSE v(i) ENDIF)
 
   % Interprets an uninterpreted function by a body.
@@ -104,7 +115,7 @@ BEGIN
 	(vars: (uniques?[nat]) | length(vars) = arity(u)),
 	t):
     RECURSIVE term =
-%TODO { r | vars(r) ⊂ vars(s) ∪ (vars(t) \ vars) }
+%TODO { r | V(r) ⊂ V(s) ∪ (V(t) \ vars) }
     CASES s OF
       v(i): s,
       apply(f, args):
@@ -132,8 +143,8 @@ BEGIN
   is, ns: VAR set[nat]
   li, ln: VAR list[nat]
 
-  % Intelligent constructors
-  ;¬(f): fmla    = IF f_not?(f) THEN arg(f) ELSE f_not(f) ENDIF
+  % Readable constructors
+  ;¬(f): fmla    = f_not(f)
   ;∨(f, g): fmla = f_or(f, g)
   ;∧(f, g): fmla = ¬(¬f ∨ ¬g)
   ;⇒(f, g): fmla = ¬f ∨ ¬g
@@ -150,56 +161,47 @@ BEGIN
 
   % Free variables of a formula
   % This is intended to be used in specifications only, and may not be executable.
-  freevars(f): RECURSIVE set[nat] =
+  FV(f): RECURSIVE set[nat] =
     CASES f OF
-      atom(p, args): vars({ t | EXISTS (i: below(args`length)): t = args(i) }),
-      f_not(g): freevars(g),
-      f_or(g, h): union(freevars(g), freevars(h)),
-      f_exists(n, b): remove(n, freevars(b))
+      atom(p, args): V({ t | EXISTS (i: below(args`length)): t = args(i) }),
+      f_not(g): FV(g),
+      f_or(g, h): FV(g) ∪ FV(h),
+      f_exists(n, b): FV(b) - n
     ENDCASES  
   MEASURE f BY <<
 
   % A formula without free variables is a sentence
-  sentence?(f): bool = empty?(freevars(f))
-
-  % Free variables of a set of formulae
-  freevars(fs): set[nat] =
-    { n | EXISTS (f | member(f, fs)): member(n, freevars(f)) }
+  sentence?(f): bool = empty?(FV(f))
 
   % Bound variables (i.e, variables bound by an ∃, whether they actually are used or not)
-  boundvars(f): RECURSIVE set[nat] =
+  BV(f): RECURSIVE set[nat] =
     CASES f OF
       atom(p, args): emptyset,
-      f_not(g): boundvars(g),
-      f_or(g, h): union(boundvars(g), boundvars(h)),
-      f_exists(n, b): add(n, boundvars(b))
+      f_not(g): BV(g),
+      f_or(g, h): BV(g) ∪ BV(h),
+      f_exists(n, b): n ∪ BV(b)
     ENDCASES
   MEASURE f BY <<
 
-  % Bound variables of a set of formulae
-  boundvars(fs): set[nat] =
-    { n | EXISTS (f | member(f, fs)): member(n, boundvars(f)) }
-
   % The variables of a formula are both the free and bound variables
-  vars(f): set[nat] = union(freevars(f), boundvars(f))
-  CONVERSION LAMBDA f: vars(f)
+  V(f): set[nat] = FV(f) ∪ BV(f)
 
   % Checks whether the variables in ns are not bound in formula f
   freefor(f, ns): bool =
-    empty?(intersection(ns, boundvars(f)))
+    empty?(ns ∩ BV(f))
 
   % A term or a formula is free w.r.t f if is variables are free
   freefor(f, t): MACRO bool =
-    freefor(f, vars(t))
+    freefor(f, V(t))
   freefor(f, g): MACRO bool =
-    freefor(f, vars(g))
+    freefor(f, V(g))
 
   % Parallel substitution of variables in a formula through a mapping
   % We can actually have more informations about the free variables of the
   % new formula
   parsubst(f: fmla, mapping: [n: nat -> { t | t = v(n) OR freefor(f, t) }]):
-%TODO: { h | freevars(h) ⊂ vars(setmap(mapping))(freevars(f)) AND
-%            boundvars(h) = boundvars(f) }
+%TODO: { h | FV(h) ⊂ V(setmap(mapping))(FV(f)) AND
+%            BV(h) = BV(f) }
     RECURSIVE fmla =
     CASES f OF
       atom(p, args): atom(p, smap(LAMBDA t: parsubst(t, mapping))(args)),
@@ -213,14 +215,14 @@ BEGIN
   parsubst(f: fmla,
            vars: list[nat],
 	   (vals: finseq[{ t | freefor(f, t) }] | vals`length = length(vars))): fmla =
-%TODO: { h | freevars(h) ⊂ (freevars(f) \ vars) ∪ vars(vals) AND
-%            boundvars(h) = boundvars(f) }
+%TODO: { h | FV(h) ⊂ (FV(f) - vars) ∪ V(vals) AND
+%            BV(h) = BV(f) }
     parsubst(f, LAMBDA i: assoc2[nat, { t | t = v(i) OR freefor(f, t) }](i, vars, vals, v(i)))
 
   % Single substitution can come in handy
   subst(f, n, (t | freefor(f, t))): fmla =
-% TODO { h | freevars(h) ⊂ (freevars(f) \ n) ∪ vars(t) AND
-%            boundvars(h) = boundvars(f) }
+% TODO { h | FV(h) ⊂ (FV(f) - n) ∪ V(t) AND
+%            BV(h) = BV(f) }
     parsubst(f, LAMBDA i: IF i = n THEN t ELSE v(i) ENDIF)
 
   % Substitutes an uninterpreted function symbol with a term
@@ -229,8 +231,8 @@ BEGIN
 	 (vars: (uniques?[nat]) | length(vars) = arity(u)),
 	 (t | freefor(f, t))):
     RECURSIVE fmla =
-%TODO { h | freevars(h) ⊂ freevars(f) ∪ (vars(t) \ vars) AND
-%           boundvars(h) = boundvars(f) }
+%TODO { h | FV(h) ⊂ FV(f) ∪ (V(t) - vars) AND
+%           BV(h) = BV(f) }
     CASES f OF
       atom(p, args): atom(p, smap(LAMBDA s: fsubst(s, u, vars, t))(args)),
       f_not(g): f_not(fsubst(g, u, vars, t)),
@@ -243,10 +245,10 @@ BEGIN
   psubst(f,
          (u: (upred?)),
 	 (vars: (uniques?[nat]) | length(vars) = arity(u)),
-	 (g | subset?(freevars(g), vars) AND freefor(f, g))):
+	 (g | FV(g) ⊂ vars AND freefor(f, g))):
     RECURSIVE fmla =
-%TODO { h | freevars(h) ⊂ freevars(f) ∪ (freevars(g) \ vars) AND
-%           boundvars(h) ⊂ boundvars(f) ∪ boundvars(g) }
+%TODO { h | FV(h) ⊂ FV(f) ∪ (FV(g) - vars) AND
+%           BV(h) ⊂ BV(f) ∪ BV(g) }
     CASES f OF
       atom(p, args):
         IF p = u
@@ -287,7 +289,7 @@ END fmla_props
 
 % END fmla
 
-% % % % Need to assert that t has no freevars outside vars, and vars is a set.
+% % % % Need to assert that t has no FV outside vars, and vars is a set.
 % % % % If s is a function app with f=u, then substitute in t the variables vars 
 % % % % with the call parameters in ss in witch we substitute recursively
 % % % % (u ss1..ssN) -> [ss/vars]t (fsubst in each ss recursively)
@@ -355,9 +357,9 @@ END fmla_props
 % % %     FORALL (AA, BB):
 % % %     sentence_list?(AA) & sentence_list?(BB) <=>sentence_list?(append(AA, BB))
 
-% % %   freevars_append:  LEMMA
+% % %   FV_append:  LEMMA
 % % %     FORALL (AA, BB):
-% % %     append(freevars(AA), freevars(BB)) = freevars(append(AA, BB))
+% % %     append(FV(AA), FV(BB)) = FV(append(AA, BB))
 % % END fmla
 
   
