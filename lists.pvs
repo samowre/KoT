@@ -9,19 +9,7 @@ BEGIN
   A, B, C: VAR list[T]
   % From map2
      kk: VAR list[S]
-     delete_reduce: LEMMA
-       remove(a, reduce(null, LAMBDA x, A: append(f(x), A))(kk)) =
-       reduce(null, LAMBDA x, A: append(remove(a, f(x)), A))(kk)
-	    
-     every_reduce: LEMMA
-       every(LAMBDA x: f(x) = g(x))(kk) =>
-       reduce(null, LAMBDA x, A: append(f(x), A))(kk) =
-       reduce(null, LAMBDA x, A: append(g(x), A))(kk)
-
-     reduce_map: LEMMA
-       reduce(null, LAMBDA x, A: append(f(x), A))(map(h)(kk)) =
-       reduce(null, LAMBDA x, A: append(f(h(x)), A))(kk)
-
+    
      map(f: [S -> T])(ss: finseq[S]): finseq[T] =
        (# length := ss`length,
           seq := (LAMBDA (i: below(ss`length)): f(ss(i))) #)

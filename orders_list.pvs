@@ -1,0 +1,130 @@
+lex_list [ T: TYPE, < : PRED[[T,T]] ]: THEORY
+BEGIN
+  l,l1,l2: VAR list[T]
+  x,y,z: VAR T ;
+
+  % Lexical ordering on lists
+  <=(l1,l2): RECURSIVE bool =
+        CASES l1 OF
+   	null: TRUE,
+  	cons(h1,t1): 
+	     CASES l2 OF
+	     null: FALSE,
+	     cons(h2,t2): IF h1=h2 THEN t1 <= t2 
+			           ELSE h1<h2
+ 	     ENDIF ENDCASES
+	ENDCASES
+  MEASURE length(l1) ;
+
+  % Strict lexical ordering on lists
+  <(l1,l2): bool = l1 /= l2 AND l1 <= l2
+
+
+  % Properties of <=
+  reflexive:     LEMMA reflexive?(<=)
+  transitive: 	 LEMMA transitive?(<::PRED[[T,T]]) AND antisymmetric?(<::PRED[[T,T]]) 
+  	      	       IMPLIES transitive?(<=::PRED[[list[T],list[T]]])
+  antisymmetric: LEMMA antisymmetric?(<::PRED[[T,T]]) IMPLIES 
+  		       antisymmetric?(<=::PRED[[list[T],list[T]]])
+  dichotomous: 	 LEMMA trichotomous?(<::PRED[[T,T]]) IMPLIES 
+  	       	       dichotomous?(<=::PRED[[list[T],list[T]]])
+  % Properties of <
+  irreflexive:       LEMMA irreflexive?(<::PRED[[list[T],list[T]]])
+  transitive_strict: LEMMA transitive?(<::PRED[[T,T]]) AND antisymmetric?(<::PRED[[T,T]]) 
+  		     	   IMPLIES transitive?(<::PRED[[list[T],list[T]]])
+  trichotomous:      LEMMA trichotomous?(<::PRED[[T,T]]) IMPLIES 
+  		      	   trichotomous?(<::PRED[[list[T],list[T]]])
+  
+  % Summary : with usual orders
+  partial_order: LEMMA partial_order?(<::PRED[[T,T]])
+  	      	       IMPLIES partial_order?(<=::PRED[[list[T],list[T]]])
+  total_order: 	 LEMMA total_order?(<::PRED[[T,T]])
+  	      	       IMPLIES total_order?(<=::PRED[[list[T],list[T]]])
+
+
+  strict_order:       LEMMA strict_order?(<::PRED[[T,T]])
+  	      	      	    IMPLIES strict_order?(<::PRED[[list[T],list[T]]])
+  strict_total_order: LEMMA strict_total_order?(<::PRED[[T,T]])
+  	      	      	    IMPLIES strict_total_order?(<::PRED[[list[T],list[T]]])
+
+  % TO DO : add interaction between lex and comon list functions
+  % eg: l <= append(l1,l2) IFF (l <= l1) OR (l1=l2 AND l<=l2) [if it is true]
+
+ 
+END lex_list
+
+before_list [ T: TYPE, < : PRED[[T,T]] ]: THEORY
+BEGIN
+   IMPORTING more_list_props[T]  
+
+   l,l1,l2: VAR list[T]
+   x,y,z: VAR T ;
+
+   % sl1 < sl2 IFF every element of sl1 is smaller than any element of sl2
+   <(l1,l2): bool = cons?(l2) AND 
+  	     FORALL (x,y): member(x,l1) AND member(y,l2) 
+	      	     IMPLIES x < y
+  
+
+  % Properties of <
+  irreflexive: LEMMA irreflexive?(<::PRED[[T,T]]) IMPLIES irreflexive?(<::PRED[[list[T],list[T]]])
+  transitive:  LEMMA transitive?(<::PRED[[T,T]]) IMPLIES transitive?(<::PRED[[list[T],list[T]]])
+  well_founded: LEMMA well_founded?(<::PRED[[T,T]]) IMPLIES well_founded?(<::PRED[[list[T],list[T]]])  
+
+  % Summary: with usual orders
+  strict_order: LEMMA strict_order?(<::PRED[[T,T]]) IMPLIES strict_order?(<::PRED[[list[T],list[T]]])  
+  strict_well_founded: LEMMA strict_well_founded?(<::PRED[[T,T]]) IMPLIES strict_well_founded?(<::PRED[[list[T],list[T]]])  
+ 
+
+  % With comon list functions
+    % Cons
+  before_rcons: LEMMA l1 < cons(x,l2) AND cons?(l2) IMPLIES l1 < l2
+  before_lcons: LEMMA cons(x,l1) < l2       	   IMPLIES l1 < l2
+  lcons_before: LEMMA l1 < l2 AND every(LAMBDA y: y<x)(l1) IMPLIES
+  		      l1 < cons(x,l2)
+  rcons_before: LEMMA l1 < l2 AND every(LAMBDA y: x<y)(l2) IMPLIES
+  		      cons(x,l1) < l2
+    % Append
+  before_rappend: LEMMA l < append(l1,l2) AND cons?(l2) AND cons?(l1) 
+  		  	IFF l < l1 AND l < l2
+  before_lappend: LEMMA append(l1,l2) < l IFF l1 < l AND l2 < l
+    % Reverse 
+  before_rreverse: LEMMA l1 < reverse(l2) IFF l1 < l2
+  before_lreverse: LEMMA reverse(l1) < l2 IFF l1 < l2
+  % We could do the same for subterm, reverse, subset ... But it all can be proved
+  % very easily with all the char of these functions with member
+
+  
+
+END before_list
+
+% Characterisation of before with min and max
+before_min [ T: TYPE, key: { k:[T-> real]  | injective?(k)}]: THEORY
+BEGIN
+
+  l,l1,l2: VAR (cons?[T])
+  x,y: VAR T
+  a,b,c: VAR T
+  p: VAR PRED[T]
+
+  IMPORTING maxlist[T,key]
+  <: PRED[[T,T]] = minlist[T,key].<
+  min: MACRO [(cons?[T]) -> T] = min[T,key]
+  IMPORTING before_list[T,<]
+
+
+
+  before_char: THEOREM l1 < l2 IFF max(l1) < min(l2)
+  before_lchar: LEMMA l1 < l2 IFF FORALL x: member(x,l2) IMPLIES max(l1) < x 
+  before_rchar: LEMMA l1 < l2 IFF FORALL x: member(x,l1) IMPLIES x < min(l2) 
+
+
+END before_min
+
+subword_list [ T: TYPE, < : PRED[[T,T]] ]: THEORY
+BEGIN
+
+% TO DO
+
+END subword_list
+
