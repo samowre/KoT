@@ -34,10 +34,10 @@ BEGIN
   % in the prelude for every, and a some is a negation of a
   % every with the theorems in the adt_props theory.
   every_forall: THEOREM
-    every(p)(l) IFF (FORALL x: member(x, l) IMPLIES p(x))
+    every(p)(l) IFF (FORALL (x | member(x, l)): p(x))
 
   some_exists: THEOREM
-    some(p)(l) IFF (EXISTS x: member(x, l) AND p(x))
+    some(p)(l) IFF (EXISTS (x | member(x, l)): p(x))
 
   % subset relation
   subset?(l, m): bool = every(member(m))(l)
@@ -72,10 +72,8 @@ BEGIN
   member_nth: THEOREM
     member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
 
- 
-
   % More precise specifications with nth
- nth_cons: LEMMA
+  nth_cons: LEMMA
     FORALL (i: below(1 + length(l))):
       nth(cons(x, l), i) = IF i = 0 THEN x ELSE nth(l, i - 1) ENDIF
 
@@ -88,6 +86,10 @@ BEGIN
   nth_reverse: THEOREM
     FORALL (i: below(length(l))):
       nth(reverse(l), i) = nth(l, length(l) - i - 1)
+  nth_equal: THEOREM
+    ( length(l1) = length(l2) AND
+        FORALL (i: below(length(l1))):
+          nth(l1, i) = nth(l2, i) ) IFF l1 = l2
 
   % Flattens a list of lists
   flatten(ll: list[list[T]]): list[T] = reduce(null, (LAMBDA l, m: append(l, m)))(ll)
@@ -116,19 +118,39 @@ BEGIN
   MEASURE length(l)
 
   % Find an element satisfying a predicate
-  find(p, l): RECURSIVE lift[T]=
+  find(p, l): RECURSIVE lift[T] =
     CASES l OF
       null: bottom,
-      cons(h, t): IF p(h) THEN up(h) ELSE find(p, t) ENDIF
+      cons(h, t):
+        IF p(h)
+	  THEN up(h)
+	  ELSE find(p, t)
+	ENDIF
     ENDCASES
   MEASURE length(l)
+
+  findi(p, l): RECURSIVE lift[{ i: below(length(l)) | p(nth(l, i)) }] =
+    CASES l OF
+      null: bottom,
+      cons(h, t):
+        IF p(h)
+	  THEN up(0)
+	  ELSE CASES findi(p, t) OF
+	         bottom: bottom,
+		 up(r): up(r + 1)
+	       ENDCASES
+	ENDIF
+    ENDCASES
+  MEASURE length(l)
+
+  findi_some: THEOREM
+    some(p)(l) IMPLIES up?(findi(p, l))
 
   find_char: THEOREM
     CASES find(p, l) OF
       bottom: NOT some(p)(l),
       up(r): p(r) AND member(r, l)
     ENDCASES
-
   
   %% Less usual functions
   % More efficient way to compute append(reverse(l1), l2)
@@ -181,6 +203,7 @@ BEGIN
   ks, xs: VAR list[K]
   v, y: VAR V
   vs, ys: VAR list[V]
+  vf: VAR finseq[V]
   p: VAR [K, V]
   l: VAR list[[K, V]]
 
@@ -191,6 +214,23 @@ BEGIN
       cons(h, t): cons((h, car(vs)), zip(t, cdr(vs)))
     ENDCASES
   MEASURE length(ks)
+
+  zipi(ks, (vf | vf`length >= length(ks)), (i: upto(vf`length - length(ks)))):
+    RECURSIVE { l | length(l) = length(ks) AND FORALL (j: below(length(ks))): nth(l, j) = (nth(ks, j), vf(j + i)) } =
+    CASES ks OF
+      null: null,
+      cons(h, t): cons((h, vf(i)), zipi(t, vf, i + 1))
+    ENDCASES
+  MEASURE length(ks)
+
+  zipi(ks, (vf | vf`length = length(ks))):
+    { l | length(l) = length(ks) AND FORALL (i: below(length(ks))): nth(l, i) = (nth(ks, i), vf(i)) } =
+    zipi(ks, vf, 0)
+
+  zip_nth: THEOREM
+    length(ks) = length(vs) IMPLIES
+      FORALL (i: below(length(ks))):
+        nth(zip(ks, vs), i) = (nth(ks, i), nth(vs, i))
 
   has_key(k, l): bool = some(LAMBDA (x: K, y: V): x = k)(l)
 

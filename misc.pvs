@@ -1,0 +1,77 @@
+assoc2[K: TYPE, V: TYPE]: THEORY
+BEGIN
+  IMPORTING more_list_props
+
+  k, x: VAR K
+  ks: VAR list[K]
+  v, y: VAR V
+  vs: VAR finseq[V]
+  f: VAR [K -> V]
+
+  assoc2(k, ks, (vs | vs`length = length(ks))): lift[V] =
+    CASES findi(LAMBDA x: x = k, ks) OF
+      bottom: bottom,
+      up(i): up(vs(i))
+    ENDCASES
+
+  assoc2_lift_not_member: THEOREM
+    FORALL (vs | vs`length = length(ks)):
+      NOT member(k, ks) IMPLIES bottom?(assoc2(k, ks, vs))
+
+  assoc2_lift_member: THEOREM
+    FORALL (vs | vs`length = length(ks)):
+      member(k, ks) IMPLIES
+        EXISTS (i: below(length(ks)) | nth(ks, i) = k):
+	  assoc2(k, ks, vs) = up(vs(i))
+
+  assoc2(k, ks, (vs | vs`length = length(ks)), v): V =
+    CASES findi(LAMBDA x: x = k, ks) OF
+      bottom: v,
+      up(i): vs(i)
+    ENDCASES
+
+  assoc2_not_member: THEOREM
+    FORALL (vs | vs`length = length(ks)):
+      NOT member(k, ks) IMPLIES assoc2(k, ks, vs, v) = v
+
+  assoc2_member: THEOREM
+    FORALL (vs | vs`length = length(ks)):
+      member(k, ks) IMPLIES
+        EXISTS (i: below(length(ks)) | nth(ks, i) = k):
+	  assoc2(k, ks, vs, v) = vs(i)
+
+END assoc2
+
+smap[K: TYPE, V: TYPE]: THEORY
+BEGIN
+  f: VAR [K -> V]
+  ks: VAR finseq[K]
+  vs: VAR finseq[V]
+
+  smap(f)(ks): { vs | vs`length = ks`length } =
+    (# length := ks`length
+     , seq    := LAMBDA (i: below(ks`length)): f(ks(i))
+     #)
+
+  smap_length: THEOREM
+    smap(f)(ks)`length = ks`length
+
+  smap_seq: THEOREM
+    FORALL (i: below(ks`length)):
+      smap(f)(ks)(i) = f(ks(i))
+END smap
+
+setmap[K: TYPE, V: TYPE]: THEORY
+BEGIN
+  f: VAR [K -> V]
+  ks: VAR set[K]
+  v: VAR V
+  
+  setmap(f)(ks): MACRO set[V] =
+    { v | EXISTS (k: (ks)): v = f(k) }
+  CONVERSION setmap
+
+  setapply(F: [K -> set[V]])(ks): MACRO set[V] =
+    { v | EXISTS (k: (ks)): member(v, F(k)) }
+  CONVERSION setapply
+END setmap

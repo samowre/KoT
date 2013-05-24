@@ -1,0 +1,15 @@
+set_props[T: TYPE]: THEORY
+BEGIN
+  x: VAR T
+  a, b: VAR set[T]
+  
+  ;∈(x, a): MACRO bool = member(x, a)
+  ;⊂(a, b): MACRO bool = subset?(a, b)
+  ;∪(a, b): MACRO set[T] = union(a, b)
+  ;∪(x, a): MACRO set[T] = add(x, a)
+  ;∪(a, x): MACRO set[T] = add(x, a)
+
+  finseq2set(seq: finseq[T]): set[T] =
+    { x | EXISTS (i: below(seq`length)): x = seq(i) }
+  CONVERSION finseq2set
+END set_props

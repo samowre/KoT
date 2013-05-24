@@ -1,40 +1,66 @@
-sequents  : THEORY
-%A (one-sided) sequent consists of a list of formulas with no free variables.
-%The free symbols can be treated as schematic,
-%so that we can substitute lambda-abstracted terms or formulas for these symbols.
-%This means that definitions can be given using free constant symbols instead of
-%as universally quantified equalities.
-
-  BEGIN
-  IMPORTING fmla
+% A (one-sided) sequent consists of a list of formulae without free variables.
+% The free symbols can be treated as schematics, so that we can substitute
+% λ-abstractd terms or formulae for these symbols.
+% This means that definitions can be given using free constant symbols instead
+% of as universally quantified equalities.
+sequents: THEORY
+BEGIN
+  IMPORTING term, term_props
+  IMPORTING fmla, fmla_props
 
   s, t: VAR term
-  ss, tt: VAR list[term]
-  i, j, k: VAR nat
-  ii, jj, kk: VAR list[nat]
-  f, g, h: VAR (fun?)
-  p, q: VAR (pred?)
-  A, B, C: VAR fmla
-  AA, BB, CC: VAR list[fmla]
-  x, y, z: VAR (var?)
+  ss, ts: VAR list[term]
 
-  sequent: TYPE = (sentence_list?)
+  sequent?(ss): bool = every(sentence?)(ss)
+  sequent: TYPE = (sequent?)
 
-  G, H, G1, G2, H1, H2: VAR sequent
-
-  ax_rule?(G): bool =    %G = A, -A, ..
-    (cons?(G) AND
-     member(f_not(car(G)), cdr(G)))
+  % ————————————— (Ax)
+  % ⊢ A, Γ, ¬A, Δ
+  ax_rule?(G): bool =
+    cons?(G) AND member(¬car(G), cdr(G))
 
   % H => G
   subset_rule?(H, G): bool =
     subset(H, G)
-     
-  % H => G = a\/b ... <- H => a, b, a\/b, ...
-  or_rule?(H, G): bool =   %A or B, .. from A, B, ..
-    (cons?(G) AND
-     f_or?(car(G)) AND
-     subset?(H, cons(arg1(car(G)), cons(arg2(car(G)),G))))
+
+  % Γ ⊢ A, Δ   A, Σ ⊢ Δ
+  % ——————————————————— (Cut_A)
+  %     Γ, Σ ⊢ Δ
+  cut_rule?(A, Γ, Σ, Δ): bool =
+    subset_rule(Γ, add(A, Δ)) AND
+    subset_rule(Σ, add(¬A, Γ))
+
+  % Γ ⊢ A, B, Δ
+  % ———————————— (⋁R)
+  % Γ ⊢ A ∨ B, Δ
+  orr_rule?(Γ, G): bool =
+    % Match G
+    cons?(G) AND f_or?(car(G)) AND
+    LET A = arg1(car(G)), B = arg2(car(G)), Δ = cons(G) IN
+    Γ ⊢ 〈 A, B, Δ 〉
+
+  % Γ, A ⊢ Δ    Σ, B ⊢ Δ
+  % ———————————————————— (⋁L)
+  %  Γ, Σ, A ∨ B ⊢ Δ
+  orl_rule?(H1, H2, Δ): bool =
+    match?(H1, 〈 Γ, A 〉) AND match?(H2, 〈 Σ, B 〉) AND
+    LET (Γ, A) = match(H1, 〈 Γ, A 〉), (Σ, B) = match(H2, 〈 Σ, B 〉) IN
+    〈 Γ, A 〉 ⊢ Δ AND 〈 Σ, B 〉 ⊢ Δ
+
+  % Γ ⊢ A, Δ
+  % —————————
+  % Γ, ¬A ⊢ Δ
+  negl_rule?(A, Γ, Δ): bool =
+    Γ ⊢ 〈 A, Δ 〉
+
+  % Γ, A ⊢ Δ
+  % —————————
+  % Γ ⊢ ¬A, Δ
+  negr_rule?(Γ, G): bool =
+    % Match G with ¬A, Δ
+    cons?(G) AND f_not?(car(G)) AND
+    LET A = arg(car(G)), Δ = cdr(G) IN
+    〈 Γ, ¬A 〉 ⊢ Δ
 
   % H1 => ~A, G, H2 => ~B, G  ->  H1, H2 => G = ~(A\/B), ...
   nor_rule?(H1, H2, G): bool =  % -(A or B),.. from -A, .. and -B, ..

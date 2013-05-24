@@ -1,0 +1,25 @@
+more_finseq_props[T: TYPE]: THEORY
+BEGIN
+  p: VAR pred[T]
+  s: VAR finseq[T]
+  
+  findi(p, s, (i: upto(s`length))):
+    RECURSIVE lift[{ i: below(s`length) | p(s(i)) }] =
+    IF i = s`length THEN bottom
+    ELSIF p(s(i)) THEN up(i)
+    ELSE findi(p, s, i + 1)
+    ENDIF
+  MEASURE s`length - i
+
+  findi_exists: THEOREM
+    FORALL (i: upto(s`length)):
+      (EXISTS (j: subrange(i, s`length - 1)): p(s(j))) IMPLIES up?(findi(p, s, i))
+
+  find(p, s): lift[{ i: below(s`length) | p(s(i)) }] =
+    findi(p, s, 0)
+
+  find_exists: THEOREM
+    (EXISTS (i: below(s`length)): p(s(i))) IMPLIES up?(find(p, s))
+
+END more_finseq_props
+
