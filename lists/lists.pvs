@@ -1,20 +1,3 @@
-lists_map[S, T: TYPE]: THEORY
-BEGIN
-  IMPORTING lists
-  h: VAR [S -> S]
-  a, b, c: VAR T
-  x: VAR S
-
-  f, g: VAR [S -> list[T]]
-  A, B, C: VAR list[T]
-  % From map2
-     kk: VAR list[S]
-    
-     map(f: [S -> T])(ss: finseq[S]): finseq[T] =
-       (# length := ss`length,
-          seq := (LAMBDA (i: below(ss`length)): f(ss(i))) #)
-END lists_map
-
 lists_map2[S1, S2, T: TYPE]: THEORY
 BEGIN
     map2(f: [S1, S2 -> T], l1: list[S1], l2: list[S2]): RECURSIVE list[T] =

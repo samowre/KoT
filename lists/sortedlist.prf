@@ -504,7 +504,8 @@
             (member def-decl "bool" list_props nil)
             (member_subset formula-decl nil more_list_props nil)
             (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-            (subset? const-decl "bool" more_list_props nil) nil
+            (subset? const-decl "bool" more_list_props nil)
+            (every adt-def-decl "boolean" list_adt nil)
             (real_le_is_total_order name-judgement
              "(total_order?[real])" real_props nil)
             (boolean nonempty-type-decl nil booleans nil)
@@ -528,14 +529,18 @@
             (PRED type-eq-decl nil defined_types nil)
             (cons? adt-recognizer-decl "[list -> boolean]" list_adt
              nil)
-            nil (pred type-eq-decl nil defined_types nil)
+            (filter def-decl "list[T]" filters nil)
+            (pred type-eq-decl nil defined_types nil)
             (member def-decl "bool" list_props nil)
             (list type-decl nil list_adt nil)
             (IFF const-decl "[bool, bool -> bool]" booleans nil)
             (T formal-type-decl nil minlist nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
-            (boolean nonempty-type-decl nil booleans nil) nil
+            (boolean nonempty-type-decl nil booleans nil)
+            (filter_member application-judgement
+             "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
+             minlist nil)
             (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
             (real_le_is_total_order name-judgement
              "(total_order?[real])" real_props nil)
@@ -598,9 +603,13 @@
             (real_le_is_total_order name-judgement
              "(total_order?[real])" real_props nil)
             (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-            (PRED type-eq-decl nil defined_types nil) nil
+            (PRED type-eq-decl nil defined_types nil)
+            (filter def-decl "list[T]" filters nil)
             (pred type-eq-decl nil defined_types nil)
-            (IFF const-decl "[bool, bool -> bool]" booleans nil) nil)
+            (IFF const-decl "[bool, bool -> bool]" booleans nil)
+            (filter_member application-judgement
+             "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
+             minlist nil))
            shostak)))
 (maxlist (IMP_minlist_TCC1 0
           (IMP_minlist_TCC1-1 nil 3578338293
@@ -955,7 +964,7 @@
       nil))
     nil)
    ((+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    nil nil (TRUE const-decl "bool" booleans nil)
+    (TRUE const-decl "bool" booleans nil)
     (member def-decl "bool" list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
@@ -964,7 +973,7 @@
     (even_minus_odd_is_odd application-judgement "odd_int" integers
      nil)
     (car_sorted formula-decl nil sortedlist nil)
-    (member_nth formula-decl nil more_list_props nil) nil nil nil nil
+    (member_nth formula-decl nil more_list_props nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
@@ -1149,9 +1158,14 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil) nil
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (sorted? def-decl "bool" sortedlist nil))
    nil))
+ (s_remove_TCC5 0
+  (s_remove_TCC5-1 nil 3578427204 ("" (termination-tcc) nil nil) nil
+   nil))
+ (s_remove_TCC6 0
+  (s_remove_TCC6-1 nil 3578427204 ("" (subtype-tcc) nil nil) nil nil))
  (s_insert_TCC1 0
   (s_insert_TCC1-1 nil 3577837025
    ("" (grind) (("" (typepred key) (("" (grind) nil nil)) nil)) nil)
@@ -1283,8 +1297,8 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil) nil
-    nil nil nil (sorted? def-decl "bool" sortedlist nil))
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (sorted? def-decl "bool" sortedlist nil))
    nil))
  (sort_TCC1 0
   (sort_TCC1-1 nil 3577837025 ("" (grind) nil nil)
@@ -1430,16 +1444,16 @@
     nil)
    ((cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    nil nil (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (filter_member application-judgement
-     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
      sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (car_sorted formula-decl nil sortedlist nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
-    (/= const-decl "boolean" notequal nil) nil
+    (/= const-decl "boolean" notequal nil)
     (pred type-eq-decl nil defined_types nil)
     (s_remove def-decl "{s: (sorted?) |
          FORALL x: member(x, s) IFF NOT key(x) = key(a) AND member(x, sl)}"
@@ -1567,11 +1581,11 @@
         nil))
       nil))
     nil)
-   ((car_sorted formula-decl nil sortedlist nil) nil
+   ((car_sorted formula-decl nil sortedlist nil)
     (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (null adt-constructor-decl "(null?)" list_adt nil)
     (TRUE const-decl "bool" booleans nil)
-    (< const-decl "bool" reals nil) nil
+    (< const-decl "bool" reals nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
@@ -1646,7 +1660,7 @@
     (s_member def-decl "bool" sortedlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    nil nil (s_member_member formula-decl nil sortedlist nil)
+    (s_member_member formula-decl nil sortedlist nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
     (list_induction formula-decl nil list_adt nil)
@@ -2090,7 +2104,7 @@
      nil)
     (number nonempty-type-decl nil numbers nil)
     (uniques? def-decl "bool" more_list_props nil)
-    (sorted_uniques formula-decl nil sortedlist nil) nil nil
+    (sorted_uniques formula-decl nil sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
     (cdr_sorted formula-decl nil sortedlist nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil))
@@ -2153,7 +2167,7 @@
     (list_cons_extensionality formula-decl nil list_adt nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
@@ -2384,7 +2398,7 @@
       nil)
      ("3" (grind) nil nil))
     nil)
-   (nil (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+   ((cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
     (key formal-const-decl "{k: [T -> real] | injective?(k)}"
      sortedlist nil)
     (injective? const-decl "bool" functions nil)
@@ -2421,6 +2435,9 @@
     (T formal-type-decl nil sortedlist nil)
     (list_induction formula-decl nil list_adt nil))
    shostak))
+ (min_sorted_TCC1 0
+  (min_sorted_TCC1-1 nil 3578427204 ("" (subtype-tcc) nil nil) nil
+   nil))
  (min_sorted 0
   (min_sorted-1 nil 3578326877
    ("" (skeep)
@@ -2741,7 +2758,7 @@
       nil))
     nil)
    ((filter_member application-judgement
-     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
      sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
