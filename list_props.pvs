@@ -169,42 +169,6 @@ BEGIN
   subterm_subset: LEMMA subterm(l, m) IMPLIES subset?(l, m)
 END more_list_props
 
-minlist [ T: TYPE, key:[T-> real]]: THEORY
-BEGIN
-  l: VAR list[T]
-  x,y: VAR T
-  a,b,c: VAR T
-
-  minlist_aux(l:list[T], a, (m: real | key(a) = m)): RECURSIVE
-    { c | member(c, cons(a, l)) AND (FORALL b: member(b, cons(a, l)) IMPLIES key(c) <= key(b)) } =
-    CASES l OF
-      null: a,
-      cons(c, t):
-        LET k = key(c) IN
-	IF k < m
-	  THEN minlist_aux(t, c, k)
-	  ELSE minlist_aux(t, a, m)
-	ENDIF
-    ENDCASES
-  MEASURE length(l)
-
-  minlist(l: (cons?[T])):
-    { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y)) } =
-    minlist_aux(cdr(l), car(l), key(car(l)))
-END minlist
-
-
-maxlist [ T: TYPE, key:[T-> real]]: THEORY
-BEGIN
-  x,y : VAR T
-
-  rev_key(x): real = -key(x)
-  IMPORTING minlist[T,rev_key]
-
-  maxlist(l: (cons?[T])):
-    { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x)) } =
-    minlist(l)
-END maxlist
 
 
 
