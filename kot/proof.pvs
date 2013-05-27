@@ -9,7 +9,132 @@ proof	: THEORY
 %parametric with respect to proofs of lemmas.
 
   BEGIN
-  
+
+  proof: DATATYPE
+    % ———————————— (Ax)
+    %  ⊢ A, ¬A, Γ
+    ax(A: sentence, conc: sequent): ax?
+    %  ⊢ A, Γ    ⊢ ¬A, Σ
+    % ——————————————————— (Cut)
+    %        ⊢ Γ, Σ
+    cut(A: sentence, H1: proof, H2: proof): cut?
+    %    ⊢ A, Γ                  ⊢ B, Γ
+    % ————————————— (⋁R₁)   ————————————— (⋁R₂)
+    %  ⊢ A ∨ B, Γ             ⊢ A ∨ B, Γ
+    orr(A: sentence, B: sentence, H: proof): orr?
+    %  ⊢ ¬A, Γ      ⊢ ¬B, Σ
+    % —————————————————————— (⋁L)
+    %     ⊢ ¬(A ∨ B), Γ, Σ
+    orl(A: sentence, B: sentence, H1: proof, H2: proof): orl?
+    %     ⊢ A, Γ
+    % ——————————— (¬)
+    %  ⊢ ¬¬A, Γ
+    neg(A: sentence, H: proof): negr?
+    %  ⊢ A[t/x], Γ
+    % ————————————— (∃R)
+    %   ⊢ ∃x.A, Γ
+    existsr(t: term, x: nat, (A: fmla | FV(A) ⊂ singleton(x) ), H: proof): existsr?
+    %  ⊢ A[y/x], Γ
+    % ————————————— (∀R)
+    %   ⊢ ∀x.A, Γ
+    forallr(y: skolem, x: nat, (A: fmla | FV(A) ⊂ singleton(x)), H: proof): forallr?
+    %      ⊢ Γ
+    % —————————————— (Fλ)
+    %  ⊢ Γ[λvs.t/f]
+    fschema(f: ufun, (vs: list[nat] | length(vs) = arity(f)),
+            (t: term | V(t) ⊂ vs), H: proof): fschema?
+    %       ⊢ Γ
+    % —————————————— (Pλ)
+    %  ⊢ Γ[λvs.A/p]
+    ∀x. p(x) ⊢ ∃x. p(x)
+    pschema(p: upred, (vs: list[nat] | length(vs) = arity(p)),
+            (A: fmla | FV(A) ⊂ vs), H: proof): pschema?
+    % ———————— (Refl)
+    % ⊢ t = t
+    refl(t: term, conc: sequent): refl?
+    % ————————————————————————————————————————————————————————— (F₌)
+    % ⊢ x₁ ≠ y₁, ..., xₙ ≠ yₙ, f(x₁, ..., xₙ) = f(y₁, ..., yₙ)
+    fcongruence(f: fun, xs: finseq[skolem], (ys: finseq[skolem] | ys`length = xs`length)):
+      fcongruence?
+    % ————————————————————————————————————————————————————————— (P₌)
+    % ⊢ x₁ ≠ y₁, ..., xₙ ≠ yₙ, p(x₁, ..., xₙ), ¬p(y₁, ..., yₙ)
+    pcongruence(p: pred, xs: finseq[skolem], (ys: finseq[skolem] | ys`length = xs`length)):
+      pcongruence?
+    % ————— (Lemma)     Using this rule requires it to be conditional to a proof
+    %  ⊢ Σ              of the lemma ⊢ Σ.
+    lemma_(lem: sequent, conc: sequent): lemma?
+  END proof
+
+  CONVERSION+ conc
+
+  % sequent = set[sentence]
+  〈〉(x: sentence, y: sentence): sequent = x ∪ y
+
+  ↝(lemmas: set[sequent], Π: proof): RECURSIVE bool =
+    CASES Π OF
+      ax(A, Γ): 〈 A, ¬A 〉 ⊂ Γ,
+      cut(A, H1, H2, Γ):
+	       A ∈ H1 AND (¬A) ∈ H2
+	AND %——————————————————————————%
+	    〈 (H1 - A), (H2 - ¬A) 〉 ⊂ Γ
+        AND lemmas ↝ H1 AND lemmas ↝ H2
+      orr(A, B, H, Γ):
+            (A ∈ H OR B ∈ H)
+	AND %————————————————%
+	        (A ∨ B) ∈ Γ
+	AND lemmas ↝ H,
+      orl(A, B, H1, H2, Γ):
+             (¬A) ∈ H1 AND (¬B) ∈ H2
+	AND %——————————————————————————%
+	            ¬(A ∨ B) ∈ Γ
+	AND lemmas ↝ H1 AND lemmas ↝ H2,
+      neg(A, H, Γ):
+              A ∈ H
+	AND %—————————%
+             (¬¬A) ∈ Γ
+	AND lemmas ↝ H,
+      existsr(t, x, A, H, Γ):
+             A(x ← t) ∈ H
+        AND %—————————————%
+	      (◇x)(A) ∈ Γ
+        AND lemmas ↝ H,
+      forallr(y, x, A, H, Γ):
+             A(x ← y) ∈ H
+	AND %—————————————%
+	      (□x)(A) ∈ Γ
+	AND sk(y) ∉ Γ AND lemmas ↝ H,
+      fschema(f, vs, t, H, Γ):
+        subst(H, f, vs, t) ⊂ Γ
+	AND lemmas ↝ H
+      pschema(p, vs, A, H):
+        subst(H, p, vs, A) ⊂ Γ
+	AND lemmas ↝ H
+      refl(t: term, Γ):
+        (t ≐ t) ∈ Γ,
+      fcongruence(f, xs, ys, Γ):
+        every2(LAMBDA (x, y: skolem): (¬(x ≐ y)) ∈ Γ, xs, ys) AND
+	(apply(f, xs) ≐ apply(f, ys)) ∈ Γ
+      pcongruence(p, xs, ys, Γ):
+        every2(LAMBDA (x, y: skolem): (¬(x ≐ y)) ∈ Γ, xs, ys) AND
+	atom(p, xs) ∈ Γ AND
+	(¬atom(p, xs)) ∈ Γ
+      lemma_(Σ, Γ):
+        Σ ∈ lemmas AND Σ ⊂ Γ
+    ENDCASES
+  MEASURE p BY <<
+
+  ↝(lemmas: set[sequent], seqs: list[proof]): RECURSIVE bool =
+    CASES seqs OF
+      null: TRUE,
+      cons(Π, tl): lemmas ↝ Π AND (lemmas ∪ Π) ↝ tl
+    ENDCASES
+  MEASURE length(seqs)
+
+  consequence?(lemmas: set[sequent])(Γ: sequent): bool =
+    EXISTS (p: proof | lemmas ↝ p): Γ = conc(p)
+
+  theorem?(Γ: sequent): bool = consequence?(∅)(Γ)
+
   %for fmla type
   importing fmla
   % added with subtypes...

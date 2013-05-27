@@ -101,6 +101,90 @@ BEGIN
     ENDCASES
   MEASURE f BY <<
 
+  % α-renamingz
+  α(rename: (bijective?[nat,nat]))(f): RECURSIVE fmla =
+    CASES f OF
+      atom(p, args): atom(p, smap(α(rename))(args)),
+      f_not(g): f_not(α(rename)(g)),
+      f_or(g, h): f_or(α(rename)(g), α(rename)(h)),
+      f_exists(n, b): f_exists(rename(n), α(rename)(b))
+    ENDCASES
+  MEASURE f BY <<
+
+  alpha_freevars: RECURSIVE JUDGEMENT
+    α(rename: (bijective?[nat, nat]))(f: fmla) HAS_TYPE { g | FV(g) = rename(FV(f)) }
+
+  alpha_boundvars: RECURSIVE JUDGEMENT
+    α(rename: (bijective?[nat, nat]))(f) HAS_TYPE { g | BV(g) = rename(BV(f)) }
+
+  ;≃(f, g): bool = EXISTS (rename: (bijective?[nat, nat])): α(rename)(f) = g
+  alpha_equiv(f, g): bool = f ≃ g
+
+  alpha_fmla_identity: THEOREM
+    α(LAMBDA n: n)(f) = f
+
+  alpha_fmla_inverse: THEOREM
+    FORALL (rename: (bijective?[nat, nat])):
+      α(rename)(f) = g IMPLIES α(inverse(rename))(g) = f
+
+  alpha_fmla_composition: THEOREM
+    FORALL (rename, rename2: (bijective?[nat, nat])):
+      α(rename)(f) = g IMPLIES α(rename2)(g) = α(rename2 o rename)(f)
+
+  alpha_fmla_equiv: JUDGEMENT
+    alpha_equiv HAS_TYPE (equivalence?[fmla])
+
+  alpha_equiv(f): TYPE = { g | alpha_equiv(f, g) }
+
+  canon?(f): RECURSIVE bool =
+    CASES f OF
+      atom(p, args): TRUE,
+      f_not(g): canon?(g),
+      f_or(g, h): canon?(g) AND canon?(h),
+      f_exists(n, b):
+        canon?(b) AND
+	(FORALL (v: (BV(b))): n > v) AND
+	(n = 0 OR n - 1 ∈ BV(b))
+    ENDCASES
+  MEASURE f BY <<
+
+  nextbound(f: fmla): RECURSIVE nat =
+    CASES f OF
+      atom(p, args): 0,
+      f_not(g): nextbound(g),
+      f_or(g, h):
+        LET gnxt = nextbound(g), hnxt = nextbound(h) IN
+	IF gnxt > hnxt THEN gnxt ELSE hnxt ENDIF,
+      f_exists(b, g): 1 + nextbound(g)
+    ENDCASES
+  MEASURE f BY <<
+
+  canonize_aux(f: fmla, mapping: (bijective?[nat, nat])): RECURSIVE fmla =
+    CASES f OF
+      atom(p, args): f,
+      f_not(g): f_not(canonize(g)),
+      f_or(g, h): f_or(canonize_aux(g), canonize_aux(h)),
+      f_exists(b, g):
+        LET nb = nextbound(g) IN
+	f_exists(nb, canonize_aux(g, (LAMBDA n: IF n = b THEN nb ELSIF n = nb THEN b ELSE n ENDIF) o mapping))
+
+  canonize_aux_alpha: THEOREM
+    canonize_aux(f, mapping) = canonize_aux(α(inverse(mapping))(f), { mapping on FV(f), id on BV(f) })
+
+  canonize(f): fmla =
+    α(canonize_aux(f, LAMBDA n: n))(f)
+
+  f = α(rename)(g)
+
+  canonize_aux(f, rename) = canonize_aux(α(inverse(rename))(α(rename)(g)), { rename on FV(f), id on BV(f) })
+                          = canonize_aux(g, { rename on FV(f), id on BV(f) })
+			  = canonize_aux(α(rename)(g), rename)
+
+  canonize(f) = α(canonize_aux(f, LAMBDA n: n))(f)
+              = α(canonize_aux(α(rename)(g), LAMBDA n: n))(α(rename)(g))
+	      = α(canonize_aux(g, rename))(α(rename)(g))
+	      = α(canonize_aux(g, rename) o rename
+
   % Parallel substitution of variables in a formula through a mapping
   % We can actually have more informations about the free variables of the
   % new formula

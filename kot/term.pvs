@@ -21,11 +21,15 @@ BEGIN
     apply(fun: fun, args: { l: finseq[term] | l`length = arity(fun) }): apply?
   END term
 
-  s, t: VAR term
+  s, t, r: VAR term
   ss, ts: VAR set[term]
   i, n: VAR nat
   is, ns: VAR set[nat]
   uf: VAR (ufun?)
+
+  skolem?(s): bool =
+    apply?(s) AND ufun?(fun(s)) AND arity(fun(s)) = 0
+  skolem: TYPE = (skolem?)
 
   % Computes the set of variables present in a term.
   % This is intended to be used in specifications only, and may not be executable.
@@ -52,17 +56,46 @@ BEGIN
 
   % Rename variables
   % TODO: injection, equivalence
-  alpha(s: term, rename: [nat -> nat]): RECURSIVE term =
+  α(rename: (bijective?[nat, nat]))(s): RECURSIVE term =
     CASES s OF
       v(i): v(rename(i)),
-      apply(f, args): apply(f, smap[{ t | t << s}, term]
-                                   (LAMBDA (t | t << s): alpha(t, rename))(args))
+      apply(f, args): apply(f, smap[{ t | t << s }, term]
+                                   (LAMBDA (t | t << s): α(rename)(t))(args))
     ENDCASES
   MEASURE s BY <<
-
+				   
   % The new variables is the renaming of the old ones
   alpha_vars: RECURSIVE JUDGEMENT
-    alpha(s: term, rename: [nat -> nat]) HAS_TYPE { t | V(t) = rename(V(s)) }
+    α(rename: (bijective?[nat, nat]))(s: term) HAS_TYPE { t | V(t) = rename(V(s)) }
+
+  ;≃(s, t): MACRO bool = EXISTS (rename: (bijective?[nat, nat])): α(rename)(s) = t
+  alpha_equiv(s, t): bool = s ≃ t
+
+  alpha_structure: THEOREM
+    (s ≃ t) AND apply?(s) IMPLIES apply?(t)
+
+  alpha_identity: THEOREM
+    α(LAMBDA n: n)(s) = s
+    
+  alpha_term_reflexive: THEOREM
+    s ≃ s
+
+  alpha_term_inverse: THEOREM
+    FORALL (rename: (bijective?[nat, nat])):
+      α(rename)(s) = t IMPLIES α(inverse(rename))(t) = s
+
+  alpha_term_symmetry: THEOREM
+    (s ≃ t) IMPLIES (t ≃ s)
+
+  alpha_term_composition: THEOREM
+    FORALL (rename, rename2: (bijective?[nat, nat])):
+      α(rename)(s) = t IMPLIES α(rename2)(t) = α(rename2 o rename)(s)
+
+  alpha_term_transitivity: THEOREM
+    (s ≃ t) AND (t ≃ r) IMPLIES (s ≃ r)
+
+  alpha_term_equiv: JUDGEMENT
+    alpha_equiv HAS_TYPE (equivalence?[term])
 
   % Parallel substitution in a term using a mapping function from variables to terms.
   parsubst(s: term, mapping: [nat -> term]): RECURSIVE term =
@@ -84,7 +117,7 @@ BEGIN
 %    { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) } =
 %TODO    { r | V(r) ⊂ (V(s) \ vars) ∪ V(vals) }
     parsubst(s, LAMBDA i: assoc2[nat, term](i, vars, vals, v(i)))
-
+    
 %  parsubst_vars: JUDGEMENT
 %    parsubst(s: term, vars: list[nat], (vals: finseq[term] | vals`length = length(vars)))
 %      HAS_TYPE { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) }
