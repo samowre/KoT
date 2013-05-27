@@ -29,7 +29,29 @@
            shostak))
          (strict_total_order 0
           (strict_total_order-1 nil 3578420950
-           ("" (typepred key) (("" (postpone) nil nil)) nil) nil
+           ("" (typepred key) (("" (grind) nil nil)) nil)
+           ((irreflexive? const-decl "bool" relations nil)
+            (transitive? const-decl "bool" relations nil)
+            (strict_order? const-decl "bool" orders nil)
+            (trichotomous? const-decl "bool" orders nil)
+            (strict_total_order? const-decl "bool" orders nil)
+            (real_lt_is_strict_total_order name-judgement
+             "(strict_total_order?[real])" real_props nil)
+            (boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil))
            shostak))
          (min_le 0
           (min_le-1 nil 3578336775 ("" (grind) nil nil)
@@ -60,9 +82,8 @@
            ((boolean nonempty-type-decl nil booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
-            (number nonempty-type-decl nil numbers nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
             (T formal-type-decl nil minlist nil)
+            (number nonempty-type-decl nil numbers nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
             (number_field nonempty-type-from-decl nil number_fields
@@ -71,8 +92,7 @@
                        nil)
             (real nonempty-type-from-decl nil reals nil)
             (injective? const-decl "bool" functions nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
             (real_le_is_total_order name-judgement
              "(total_order?[real])" real_props nil)
             (member def-decl "bool" list_props nil))
@@ -82,9 +102,8 @@
            ((boolean nonempty-type-decl nil booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
-            (number nonempty-type-decl nil numbers nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
             (T formal-type-decl nil minlist nil)
+            (number nonempty-type-decl nil numbers nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
             (number_field nonempty-type-from-decl nil number_fields
@@ -93,17 +112,15 @@
                        nil)
             (real nonempty-type-from-decl nil reals nil)
             (injective? const-decl "bool" functions nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil))
+            (= const-decl "[T, T -> boolean]" equalities nil))
            nil))
          (min_aux_TCC3 0
           (min_aux_TCC3-1 nil 3578333407 ("" (termination-tcc) nil nil)
            ((boolean nonempty-type-decl nil booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
-            (number nonempty-type-decl nil numbers nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
             (T formal-type-decl nil minlist nil)
+            (number nonempty-type-decl nil numbers nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
             (number_field nonempty-type-from-decl nil number_fields
@@ -112,8 +129,7 @@
                        nil)
             (real nonempty-type-from-decl nil reals nil)
             (injective? const-decl "bool" functions nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
             (length def-decl "nat" list_props nil)
             (nnint_plus_posint_is_posint application-judgement "posint"
              integers nil)
@@ -122,15 +138,11 @@
            nil))
          (min_aux_TCC4 0
           (min_aux_TCC4-1 nil 3578333407
-           ("" (grind)
-            (("1" (typepred "v!1(t!1,c!1,key(c!1))")
-              (("1" (grind) nil nil)) nil)
-             ("2" (typepred "v!1(t!1,c!1,key(c!1))")
-              (("2" (grind) nil nil)) nil)
-             ("3" (typepred "v!1(t!1,c!1,key(c!1))")
-              (("3" (grind) nil nil)) nil)
-             ("4" (typepred "v!1(t!1,c!1,key(c!1))")
-              (("4" (grind) nil nil)) nil))
+           ("" (skosimp*)
+            (("" (typepred "v!1(t!1,c!1,key!1,k!1)")
+              (("1" (lazy-grind :if-match all) nil nil)
+               ("2" (grind) nil nil) ("3" (grind) nil nil))
+              nil))
             nil)
            ((<= const-decl "bool" reals nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
@@ -149,37 +161,36 @@
             (rational_pred const-decl "[real -> boolean]" rationals
                            nil)
             (< const-decl "bool" reals nil)
-            (list type-decl nil list_adt nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
-            (real_lt_is_strict_total_order name-judgement
-             "(strict_total_order?[real])" real_props nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (number nonempty-type-decl nil numbers nil)
             (= const-decl "[T, T -> boolean]" equalities nil)
-            (T formal-type-decl nil minlist nil)
-            (number_field_pred const-decl "[number -> boolean]"
-             number_fields nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
+            (injective? const-decl "bool" functions nil)
+            (real nonempty-type-from-decl nil reals nil)
             (real_pred const-decl "[number_field -> boolean]" reals
                        nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (injective? const-decl "bool" functions nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
-            (member def-decl "bool" list_props nil))
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number nonempty-type-decl nil numbers nil)
+            (member def-decl "bool" list_props nil)
+            (list type-decl nil list_adt nil)
+            (T formal-type-decl nil minlist nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (boolean nonempty-type-decl nil booleans nil)
+            (real_lt_is_strict_total_order name-judgement
+             "(strict_total_order?[real])" real_props nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (nnint_plus_posint_is_posint application-judgement "posint"
+             integers nil))
            nil))
          (min_aux_TCC5 0
           (min_aux_TCC5-1 nil 3578333407 ("" (termination-tcc) nil nil)
            ((boolean nonempty-type-decl nil booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
-            (number nonempty-type-decl nil numbers nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
             (T formal-type-decl nil minlist nil)
+            (number nonempty-type-decl nil numbers nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
             (number_field nonempty-type-from-decl nil number_fields
@@ -188,8 +199,7 @@
                        nil)
             (real nonempty-type-from-decl nil reals nil)
             (injective? const-decl "bool" functions nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
             (length def-decl "nat" list_props nil)
             (nnint_plus_posint_is_posint application-judgement "posint"
              integers nil)
@@ -198,15 +208,11 @@
            nil))
          (min_aux_TCC6 0
           (min_aux_TCC6-1 nil 3578333407
-           ("" (grind)
-            (("1" (typepred "v!1(t!1,a!1,m!1)")
-              (("1" (grind :if-match all) nil nil)) nil)
-             ("2" (typepred "v!1(t!1,a!1,m!1)")
-              (("2" (grind :if-match all) nil nil)) nil)
-             ("3" (typepred "v!1(t!1,a!1,m!1)")
-              (("3" (grind :if-match all) nil nil)) nil)
-             ("4" (typepred "v!1(t!1,a!1,m!1)")
-              (("4" (grind :if-match all) nil nil)) nil))
+           ("" (skosimp*)
+            (("" (typepred "v!1(t!1,a!1,key!1,m!1)")
+              (("1" (lazy-grind :if-match all) nil nil)
+               ("2" (grind) nil nil))
+              nil))
             nil)
            ((<= const-decl "bool" reals nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
@@ -225,46 +231,39 @@
             (rational_pred const-decl "[real -> boolean]" rationals
                            nil)
             (< const-decl "bool" reals nil)
-            (list type-decl nil list_adt nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
-            (real_lt_is_strict_total_order name-judgement
-             "(strict_total_order?[real])" real_props nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (number nonempty-type-decl nil numbers nil)
             (= const-decl "[T, T -> boolean]" equalities nil)
-            (T formal-type-decl nil minlist nil)
-            (number_field_pred const-decl "[number -> boolean]"
-             number_fields nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
+            (injective? const-decl "bool" functions nil)
+            (real nonempty-type-from-decl nil reals nil)
             (real_pred const-decl "[number_field -> boolean]" reals
                        nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (injective? const-decl "bool" functions nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
-            (member def-decl "bool" list_props nil))
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number nonempty-type-decl nil numbers nil)
+            (member def-decl "bool" list_props nil)
+            (list type-decl nil list_adt nil)
+            (T formal-type-decl nil minlist nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (boolean nonempty-type-decl nil booleans nil)
+            (real_lt_is_strict_total_order name-judgement
+             "(strict_total_order?[real])" real_props nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (nnint_plus_posint_is_posint application-judgement "posint"
+             integers nil))
            nil))
          (min_TCC1 0
           (min_TCC1-1 nil 3578333407
-           ("" (grind)
-            (("1"
-              (typepred
-               "min_aux(cdr[T](l!1), car[T](l!1), key(car[T](l!1)))")
-              (("1" (grind :if-match all) nil nil)) nil)
-             ("2"
-              (typepred
-               "min_aux(cdr[T](l!1), car[T](l!1), key(car[T](l!1)))")
-              (("2" (grind :if-match all) nil nil)) nil)
-             ("3"
-              (typepred
-               "min_aux(cdr[T](l!1), car[T](l!1), key(car[T](l!1)))")
-              (("3" (grind :if-match all) nil nil)) nil))
+           ("" (skosimp*)
+            ((""
+              (typepred "min_aux(cdr(l!1),car(l!1),key,key(car(l!1)))")
+              (("" (lazy-grind :if-match all) nil nil)) nil))
             nil)
-           ((car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+           ((key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
             (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
             (min_aux def-decl "{c |
          member(c, cons(a, l)) AND
@@ -274,47 +273,11 @@
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
             (cons adt-constructor-decl "[[T, list] -> (cons?)]"
                   list_adt nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
             (AND const-decl "[bool, bool -> bool]" booleans nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
-            (injective? const-decl "bool" functions nil)
             (= const-decl "[T, T -> boolean]" equalities nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (real_pred const-decl "[number_field -> boolean]" reals
-                       nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
-            (number_field_pred const-decl "[number -> boolean]"
-             number_fields nil)
-            (number nonempty-type-decl nil numbers nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (T formal-type-decl nil minlist nil)
-            (list type-decl nil list_adt nil)
-            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
-             nil)
-            (member def-decl "bool" list_props nil))
-           nil))
-         (min_cons 0
-          (min_cons-1 nil 3578336371
-           ("" (skeep)
-            (("" (typepred "min(l)")
-              (("" (typepred "min(cons(x,l))")
-                (("" (typepred key)
-                  (("" (lazy-grind :if-match all) nil nil)) nil))
-                nil))
-              nil))
-            nil)
-           ((min const-decl
-                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
-                 minlist nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
             (injective? const-decl "bool" functions nil)
-            (<= const-decl "bool" reals nil)
             (real nonempty-type-from-decl nil reals nil)
             (real_pred const-decl "[number_field -> boolean]" reals
                        nil)
@@ -323,30 +286,60 @@
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
             (number nonempty-type-decl nil numbers nil)
-            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-            (AND const-decl "[bool, bool -> bool]" booleans nil)
-            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
-             nil)
             (member def-decl "bool" list_props nil)
             (list type-decl nil list_adt nil)
             (T formal-type-decl nil minlist nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
-            (real_lt_is_strict_total_order name-judgement
-             "(strict_total_order?[real])" real_props nil)
+            (boolean nonempty-type-decl nil booleans nil))
+           nil))
+         (min_cons 0
+          (min_cons-1 nil 3578336371
+           ("" (skeep)
+            (("" (all-typepreds)
+              (("" (typepred key)
+                (("" (lazy-grind :if-match all) nil nil)) nil))
+              nil))
+            nil)
+           ((boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (list type-decl nil list_adt nil)
+            (member def-decl "bool" list_props nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (min const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
+                 minlist nil)
+            (cons adt-constructor-decl "[[T, list] -> (cons?)]"
+                  list_adt nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
+            (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+            (min const-decl "T" minlist nil)
             (min_aux def-decl "{c |
          member(c, cons(a, l)) AND
           (FORALL b: member(b, cons(a, l)) IMPLIES key(c) <= key(b))}"
              minlist nil)
-            (min const-decl "T" minlist nil)
-            (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
-            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-            (cons adt-constructor-decl "[[T, list] -> (cons?)]"
-                  list_adt nil))
+            (real_lt_is_strict_total_order name-judgement
+             "(strict_total_order?[real])" real_props nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil))
            shostak))
          (min_append_TCC1 0
           (min_append_TCC1-1 nil 3578333407 ("" (grind) nil nil)
@@ -410,60 +403,39 @@
            nil))
          (min_reverse 0
           (min_reverse-1 nil 3578339232
-           ("" (grind :rewrites member_reverse :defs nil :if-match all)
-            (("" (typepred "min(l!1)")
-              (("" (typepred "min(reverse(l!1))")
-                (("" (lemma member_reverse)
-                  ((""
-                    (grind :if-match all :rewrites member_reverse
-                     :exclude (reverse min))
-                    (("1" (typepred key)
-                      (("1"
-                        (grind :if-match all :rewrites member_reverse
-                         :exclude (reverse min))
-                        nil nil))
-                      nil)
-                     ("2" (typepred key)
-                      (("2"
-                        (grind :if-match all :rewrites member_reverse
-                         :exclude (reverse min))
-                        nil nil))
-                      nil)
-                     ("3" (typepred key)
-                      (("3"
-                        (grind :if-match all :rewrites member_reverse
-                         :exclude (reverse min))
-                        nil nil))
-                      nil))
-                    nil))
-                  nil))
+           ("" (grind :rewrites member_reverse :defs nil :if-match nil)
+            (("" (all-typepreds)
+              (("" (typepred key)
+                ((""
+                  (lazy-grind :if-match all :rewrites member_reverse
+                   :exclude (reverse min))
+                  nil nil))
                 nil))
               nil))
             nil)
-           ((min const-decl
-                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
-                 minlist nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
-            (injective? const-decl "bool" functions nil)
-            (<= const-decl "bool" reals nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (real_pred const-decl "[number_field -> boolean]" reals
-                       nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
+           ((member def-decl "bool" list_props nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
-            (number nonempty-type-decl nil numbers nil)
-            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-            (AND const-decl "[bool, bool -> bool]" booleans nil)
-            (member def-decl "bool" list_props nil)
-            (member_reverse formula-decl nil more_list_props nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (min const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
+                 minlist nil)
+            (reverse def-decl "list[T]" list_props nil)
             (real_le_is_total_order name-judgement
              "(total_order?[real])" real_props nil)
-            (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
             (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-            (reverse def-decl "list[T]" list_props nil)
+            (member_reverse formula-decl nil more_list_props nil)
             (boolean nonempty-type-decl nil booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
@@ -474,38 +446,35 @@
            shostak))
          (min_subset 0
           (min_subset-1 nil 3578339560
-           ("" (lazy-grind :if-match all :defs nil)
-            (("" (typepred "min(l1!1)")
-              (("" (typepred "min(l2!1)")
-                (("" (use member_subset)
-                  (("" (grind :if-match all :exclude (reverse min)) nil
-                    nil))
-                  nil))
-                nil))
+           ("" (grind :if-match nil :defs nil)
+            (("" (all-typepreds)
+              ((""
+                (lazy-grind :if-match all :defs nil :rewrites
+                 member_subset)
+                nil nil))
               nil))
             nil)
-           ((min const-decl
-                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
-                 minlist nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             minlist nil)
-            (injective? const-decl "bool" functions nil)
-            (<= const-decl "bool" reals nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (real_pred const-decl "[number_field -> boolean]" reals
-                       nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
+           ((member def-decl "bool" list_props nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
-            (number nonempty-type-decl nil numbers nil)
-            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-            (AND const-decl "[bool, bool -> bool]" booleans nil)
-            (member def-decl "bool" list_props nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (min const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
+                 minlist nil)
+            (total_order? const-decl "bool" orders nil)
+            (pred type-eq-decl nil defined_types nil)
             (member_subset formula-decl nil more_list_props nil)
-            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-            (subset? const-decl "bool" more_list_props nil)
-            (every adt-def-decl "boolean" list_adt nil)
             (real_le_is_total_order name-judgement
              "(total_order?[real])" real_props nil)
             (boolean nonempty-type-decl nil booleans nil)
@@ -529,7 +498,6 @@
             (PRED type-eq-decl nil defined_types nil)
             (cons? adt-recognizer-decl "[list -> boolean]" list_adt
              nil)
-            (filter def-decl "list[T]" filters nil)
             (pred type-eq-decl nil defined_types nil)
             (member def-decl "bool" list_props nil)
             (list type-decl nil list_adt nil)
@@ -538,9 +506,6 @@
             (NOT const-decl "[bool -> bool]" booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
             (boolean nonempty-type-decl nil booleans nil)
-            (filter_member application-judgement
-             "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
-             minlist nil)
             (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
             (real_le_is_total_order name-judgement
              "(total_order?[real])" real_props nil)
@@ -562,122 +527,90 @@
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil))
            nil))
          (min_filter 0
-          (min_filter-1 nil 3578339670
+          (min_filter-2 "to remove" 3578667281
            ("" (skeep)
-            (("" (typepred "min(l)")
-              (("" (typepred "filter(l,p)")
-                (("" (typepred "min(filter(l,p))")
-                  (("" (typepred key)
-                    (("" (grind :if-match all :exclude (filter min))
+            (("" (all-typepreds)
+              (("" (typepred key)
+                (("" (inst - "min(filter(l,p))")
+                  (("" (inst - "min(l)")
+                    ((""
+                      (lazy-grind :if-match all :exclude (min filter))
                       nil nil))
                     nil))
                   nil))
                 nil))
               nil))
             nil)
-           ((min const-decl
-                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
-                 minlist nil)
+           ((boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (IFF const-decl "[bool, bool -> bool]" booleans nil)
+            (list type-decl nil list_adt nil)
+            (member def-decl "bool" list_props nil)
+            (pred type-eq-decl nil defined_types nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (PRED type-eq-decl nil defined_types nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
             (key formal-const-decl "{k: [T -> real] | injective?(k)}"
              minlist nil)
-            (injective? const-decl "bool" functions nil)
-            (<= const-decl "bool" reals nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (real_pred const-decl "[number_field -> boolean]" reals
-                       nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
-            (number_field_pred const-decl "[number -> boolean]"
-             number_fields nil)
-            (number nonempty-type-decl nil numbers nil)
-            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-            (AND const-decl "[bool, bool -> bool]" booleans nil)
-            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
-             nil)
-            (member def-decl "bool" list_props nil)
-            (list type-decl nil list_adt nil)
-            (T formal-type-decl nil minlist nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
-            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-            (PRED type-eq-decl nil defined_types nil)
-            (filter def-decl "list[T]" filters nil)
-            (pred type-eq-decl nil defined_types nil)
-            (IFF const-decl "[bool, bool -> bool]" booleans nil)
-            (filter_member application-judgement
-             "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
-             minlist nil))
-           shostak)))
-(maxlist (IMP_minlist_TCC1 0
-          (IMP_minlist_TCC1-1 nil 3578338293
-           ("" (grind) (("" (typepred key) (("" (grind) nil nil)) nil))
-            nil)
-           ((key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             maxlist nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (real_pred const-decl "[number_field -> boolean]" reals
-                       nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
-            (number_field_pred const-decl "[number -> boolean]"
-             number_fields nil)
-            (number nonempty-type-decl nil numbers nil)
-            (T formal-type-decl nil maxlist nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (minus_real_is_real application-judgement "real" reals nil)
-            (injective? const-decl "bool" functions nil)
-            (rev_key const-decl "real" maxlist nil))
-           nil))
-         (max_TCC1 0
-          (max_TCC1-1 nil 3578333218
-           ("" (skeep)
-            (("" (typepred "min[T,rev_key](l)")
-              (("1" (expand rev_key)
-                (("1" (lazy-grind :if-match all :defs nil)
-                  (("1" (typepred key)
-                    (("1" (hide -2 -3 2)
-                      (("1" (lazy-grind :if-match all) nil nil)) nil))
-                    nil))
-                  nil))
-                nil)
-               ("2" (typepred key)
-                (("2" (lazy-grind :if-match all) nil nil)) nil))
-              nil))
-            nil)
-           ((min const-decl
+            (min const-decl
                  "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
                  minlist nil)
-            (rev_key const-decl "real" maxlist nil)
-            (<= const-decl "bool" reals nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (real_pred const-decl "[number_field -> boolean]" reals
-                       nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
-            (number_field_pred const-decl "[number -> boolean]"
-             number_fields nil)
-            (number nonempty-type-decl nil numbers nil)
-            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil))
+           shostak)
+          (min_filter-1 nil 3578339670
+           ("" (skeep)
+            (("" (all-typepreds)
+              (("" (typepred key)
+                (("" (grind :if-match all :exclude (filter max)) nil
+                  nil))
+                nil))
+              nil))
+            nil)
+           ((boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (IFF const-decl "[bool, bool -> bool]" booleans nil)
+            (list type-decl nil list_adt nil)
+            (member def-decl "bool" list_props nil)
+            (pred type-eq-decl nil defined_types nil)
             (cons? adt-recognizer-decl "[list -> boolean]" list_adt
              nil)
-            (member def-decl "bool" list_props nil)
-            (list type-decl nil list_adt nil)
-            (T formal-type-decl nil maxlist nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (boolean nonempty-type-decl nil booleans nil)
+            (PRED type-eq-decl nil defined_types nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
             (injective? const-decl "bool" functions nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
-            (minus_real_is_real application-judgement "real" reals nil)
             (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             maxlist nil)
+             minlist nil)
+            (min const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
+                 minlist nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
             (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
             (min_aux def-decl "{c |
          member(c, cons(a, l)) AND
@@ -685,53 +618,155 @@
              minlist nil)
             (cons adt-constructor-decl "[[T, list] -> (cons?)]"
                   list_adt nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil))
+           shostak))
+         (max_TCC1 0
+          (max_TCC1-1 nil 3578662237
+           ("" (typepred key) (("" (grind) nil nil)) nil)
+           ((rev_key const-decl "real" minlist nil)
+            (minus_real_is_real application-judgement "real" reals nil)
+            (list type-decl nil list_adt nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil))
+           nil))
+         (max_TCC2 0
+          (max_TCC2-1 nil 3578662237
+           ("" (skeep)
+            (("" (all-typepreds)
+              (("" (lazy-grind :if-match all) nil nil)) nil))
+            nil)
+           ((boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (list type-decl nil list_adt nil)
+            (member def-decl "bool" list_props nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (injective? const-decl "bool" functions nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (cons adt-constructor-decl "[[T, list] -> (cons?)]"
+                  list_adt nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (<= const-decl "bool" reals nil)
+            (min_aux def-decl "{c |
+         member(c, cons(a, l)) AND
+          (FORALL b: member(b, cons(a, l)) IMPLIES key(c) <= key(b))}"
+             minlist nil)
+            (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+            (rev_key const-decl "real" minlist nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
             (- const-decl "[numfield -> numfield]" number_fields nil)
             (numfield nonempty-type-eq-decl nil number_fields nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
-            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil))
+            (minus_real_is_real application-judgement "real" reals
+             nil))
            nil))
-         (max_min 0
-          (max_min-1 nil 3578339865
-           ("" (typepred key) (("" (grind) nil nil)) nil)
-           ((min const-decl "T" minlist nil)
+         (max_cons 0
+          (max_cons-1 nil 3578665377
+           ("" (skeep)
+            (("" (all-typepreds)
+              (("" (typepred key)
+                (("" (lazy-grind :if-match all) nil nil)) nil))
+              nil))
+            nil)
+           ((boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (list type-decl nil list_adt nil)
+            (member def-decl "bool" list_props nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (max const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
+                 minlist nil)
+            (cons adt-constructor-decl "[[T, list] -> (cons?)]"
+                  list_adt nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
+            (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+            (numfield nonempty-type-eq-decl nil number_fields nil)
+            (- const-decl "[numfield -> numfield]" number_fields nil)
             (max const-decl "T" minlist nil)
-            (rev_key const-decl "real" maxlist nil)
-            (IF const-decl "[boolean, T, T -> T]" if_def nil)
-            (<= const-decl "bool" reals nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
+            (min_aux def-decl "{c |
+         member(c, cons(a, l)) AND
+          (FORALL b: member(b, cons(a, l)) IMPLIES key(c) <= key(b))}"
+             minlist nil)
+            (rev_key const-decl "real" minlist nil)
             (minus_real_is_real application-judgement "real" reals nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (T formal-type-decl nil maxlist nil)
-            (number nonempty-type-decl nil numbers nil)
-            (number_field_pred const-decl "[number -> boolean]"
-             number_fields nil)
-            (number_field nonempty-type-from-decl nil number_fields
-             nil)
-            (real_pred const-decl "[number_field -> boolean]" reals
-                       nil)
-            (real nonempty-type-from-decl nil reals nil)
-            (injective? const-decl "bool" functions nil)
-            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             maxlist nil))
+            (real_lt_is_strict_total_order name-judgement
+             "(strict_total_order?[real])" real_props nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil))
            shostak))
-         (min_max 0
-          (min_max-1 nil 3578339887
-           ("" (typepred key) (("" (grind) nil nil)) nil)
-           ((max const-decl "T" minlist nil)
-            (min const-decl "T" minlist nil)
-            (rev_key const-decl "real" maxlist nil)
-            (IF const-decl "[boolean, T, T -> T]" if_def nil)
-            (<= const-decl "bool" reals nil)
-            (real_le_is_total_order name-judgement
-             "(total_order?[real])" real_props nil)
+         (max_append 0
+          (max_append-1 nil 3578665699
+           ("" (induct-and-simplify l1 :rewrites max_cons :exclude max)
+            (("" (expand max 2 4) (("" (grind :exclude max) nil nil))
+              nil))
+            nil)
+           ((rev_key const-decl "real" minlist nil)
+            (min_aux def-decl "{c |
+         member(c, cons(a, l)) AND
+          (FORALL b: member(b, cons(a, l)) IMPLIES key(c) <= key(b))}"
+             minlist nil)
             (minus_real_is_real application-judgement "real" reals nil)
-            (boolean nonempty-type-decl nil booleans nil)
+            (max_cons formula-decl nil minlist nil)
+            (max_max formula-decl nil minlist nil)
+            (append def-decl "list[T]" list_props nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (T formal-type-decl nil maxlist nil)
+            (boolean nonempty-type-decl nil booleans nil)
+            (list type-decl nil list_adt nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (member def-decl "bool" list_props nil)
             (number nonempty-type-decl nil numbers nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
@@ -740,18 +775,223 @@
             (real_pred const-decl "[number_field -> boolean]" reals
                        nil)
             (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
             (injective? const-decl "bool" functions nil)
             (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-             maxlist nil))
+             minlist nil)
+            (max const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
+                 minlist nil)
+            (max const-decl "T" minlist nil)
+            (T formal-type-decl nil minlist nil)
+            (list_induction formula-decl nil list_adt nil))
+           shostak))
+         (max_reverse 0
+          (max_reverse-1 nil 3578665761
+           ("" (grind :rewrites member_reverse :defs nil :if-match nil)
+            (("" (all-typepreds)
+              (("" (typepred key)
+                ((""
+                  (lazy-grind :if-match all :rewrites member_reverse
+                   :exclude (reverse max))
+                  nil nil))
+                nil))
+              nil))
+            nil)
+           ((member def-decl "bool" list_props nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (max const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
+                 minlist nil)
+            (reverse def-decl "list[T]" list_props nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+            (member_reverse formula-decl nil more_list_props nil)
+            (boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (list type-decl nil list_adt nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil))
+           shostak))
+         (max_subset 0
+          (max_subset-1 nil 3578665936
+           ("" (grind :if-match nil :defs nil)
+            (("" (all-typepreds)
+              ((""
+                (lazy-grind :if-match all :defs nil :rewrites
+                 member_subset)
+                nil nil))
+              nil))
+            nil)
+           ((member def-decl "bool" list_props nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (max const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
+                 minlist nil)
+            (total_order? const-decl "bool" orders nil)
+            (pred type-eq-decl nil defined_types nil)
+            (member_subset formula-decl nil more_list_props nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (list type-decl nil list_adt nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil))
+           shostak))
+         (max_filter_TCC1 0
+          (max_filter_TCC1-1 nil 3578662237
+           ("" (skeep)
+            (("" (all-typepreds)
+              (("" (inst -3 "max(l)") (("" (grind) nil nil)) nil))
+              nil))
+            nil)
+           ((boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (IFF const-decl "[bool, bool -> bool]" booleans nil)
+            (list type-decl nil list_adt nil)
+            (member def-decl "bool" list_props nil)
+            (pred type-eq-decl nil defined_types nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (PRED type-eq-decl nil defined_types nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (max const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
+                 minlist nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+            (rev_key const-decl "real" minlist nil)
+            (minus_real_is_real application-judgement "real" reals
+             nil))
+           nil))
+         (max_filter 0
+          (max_filter-1 nil 3578666553
+           ("" (skeep)
+            (("" (all-typepreds)
+              (("" (typepred key)
+                (("" (grind :if-match all :exclude (filter max)) nil
+                  nil))
+                nil))
+              nil))
+            nil)
+           ((boolean nonempty-type-decl nil booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (T formal-type-decl nil minlist nil)
+            (IFF const-decl "[bool, bool -> bool]" booleans nil)
+            (list type-decl nil list_adt nil)
+            (member def-decl "bool" list_props nil)
+            (pred type-eq-decl nil defined_types nil)
+            (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+             nil)
+            (PRED type-eq-decl nil defined_types nil)
+            (AND const-decl "[bool, bool -> bool]" booleans nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (number nonempty-type-decl nil numbers nil)
+            (number_field_pred const-decl "[number -> boolean]"
+             number_fields nil)
+            (number_field nonempty-type-from-decl nil number_fields
+             nil)
+            (real_pred const-decl "[number_field -> boolean]" reals
+                       nil)
+            (real nonempty-type-from-decl nil reals nil)
+            (<= const-decl "bool" reals nil)
+            (injective? const-decl "bool" functions nil)
+            (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+             minlist nil)
+            (max const-decl
+                 "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
+                 minlist nil)
+            (real_le_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (car adt-accessor-decl "[(cons?) -> T]" list_adt nil))
            shostak)))
 (sortedlist
- (sorted?_TCC1 0
-  (sorted?_TCC1-1 nil 3482515380 ("" (termination-tcc) nil nil)
-   ((length def-decl "nat" list_props nil)
+ (sorted_aux?_TCC1 0
+  (sorted_aux?_TCC1-1 nil 3578662238 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (injective? const-decl "bool" functions nil)
+    (length def-decl "nat" list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
+   nil))
+ (rev_sorted?_TCC1 0
+  (rev_sorted?_TCC1-1 nil 3578662238
+   ("" (typepred key) (("" (grind) nil nil)) nil)
+   ((rev_key const-decl "real" minlist nil)
+    (minus_real_is_real application-judgement "real" reals nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (injective? const-decl "bool" functions nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil))
    nil))
  (cdr_sorted 0
   (cdr_sorted-1 nil 3578234647 ("" (grind) nil nil)
@@ -760,155 +1000,97 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil))
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil))
    shostak))
  (car_sorted 0
   (car_sorted-1 nil 3578063647
-   ("" (induct sl)
-    (("1" (grind) nil nil) ("2" (grind) nil nil)
-     ("3" (expand sorted? 1 2)
-      (("3" (skeep)
-        (("3" (skeep)
-          (("3" (prop)
-            (("1" (inst - a)
-              (("1" (grind :exclude sorted? :if-match all)
-                (("1" (grind)
-                  (("1" (case "a=car(cons2_var)")
-                    (("1" (grind) nil nil)
-                     ("2" (grind)
-                      (("2" (expand member -3) (("2" (grind) nil nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil)
-             ("2" (grind) nil nil))
-            nil))
+   ("" (induct-and-simplify sl :defs nil :if-match nil)
+    (("1" (expand sorted?)
+      (("1" (expand sorted_aux?)
+        (("1" (expand member -3)
+          (("1"
+            (lazy-grind :if-match all :exclude (member sorted_aux?))
+            nil nil))
           nil))
         nil))
-      nil))
+      nil)
+     ("2" (grind) nil nil))
     nil)
-   ((= const-decl "[T, T -> boolean]" equalities nil)
-    (real_lt_is_strict_total_order name-judgement
+   ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (list_induction formula-decl nil list_adt nil)
-    (T formal-type-decl nil sortedlist nil)
-    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     sortedlist nil)
-    (injective? const-decl "bool" functions nil)
-    (< const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
-    (member def-decl "bool" list_props nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
-    (list type-decl nil list_adt nil))
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list_induction formula-decl nil list_adt nil))
    shostak))
  (nth_sorted 0
   (nth_sorted-1 nil 3578163072
    ("" (induct l)
     (("1" (grind) nil nil) ("2" (grind) nil nil)
-     ("3" (skeep)
-      (("3" (prop)
-        (("1" (skeep)
-          (("1" (inst - "i-1" "j-1")
-            (("1" (expand nth +)
-              (("1" (lift-if)
-                (("1" (prop)
-                  (("1" (lift-if)
-                    (("1" (prop)
-                      (("1" (grind) nil nil)
-                       ("2" (use member_nth (x "nth(cons2_var,j-1)"))
+     ("3" (skosimp*)
+      (("3" (split 1)
+        (("1" (prop)
+          (("1" (skeep)
+            (("1" (case "i>0 AND j>0")
+              (("1" (inst - "i-1" "j-1")
+                (("1" (grind) nil nil)
+                 ("2" (typepred j) (("2" (grind) nil nil)) nil)
+                 ("3" (typepred i) (("3" (grind) nil nil)) nil))
+                nil)
+               ("2" (lemma car_sorted)
+                (("2" (hide -3 -2)
+                  (("2" (lemma member_nth)
+                    (("2" (split 1)
+                      (("1"
+                        (inst - "cons(cons1_var!1,cons2_var!1)"
+                         "nth(cons(cons1_var!1,cons2_var!1),j)")
                         (("1"
-                          (use car_sorted
-                               (a
-                                "nth(cons2_var,j-1)"
-                                sl
-                                "cons(cons1_var,cons2_var)"))
-                          (("1" (prop)
-                            (("1" (inst + "j-1")
+                          (inst -
+                           "nth(cons(cons1_var!1,cons2_var!1),j)"
+                           "cons(cons1_var!1,cons2_var!1)")
+                          (("1"
+                            (grind :if-match all :exclude
+                             (sorted? member length))
+                            (("1" (lemma member_nth)
                               (("1"
-                                (hide -1 -2 -3 -4 -5 -6 2 3 5)
+                                (inst
+                                 -
+                                 cons2_var!1
+                                 "nth(cons2_var!1,j-1)")
                                 (("1" (grind) nil nil))
-                                nil))
-                              nil))
-                            nil)
-                           ("2" (hide -2 -3 -1 -4 -5 -6 -7 3)
-                            (("2" (grind) nil nil)) nil))
-                          nil)
-                         ("2" (hide -2 -3 -1 -4 -5 -6 -7 3)
-                          (("2" (grind) nil nil)) nil))
-                        nil))
-                      nil))
-                    nil)
-                   ("2" (assert) nil nil) ("3" (assert) nil nil)
-                   ("4" (assert) nil nil) ("5" (assert) nil nil)
-                   ("6" (assert) nil nil) ("7" (assert) nil nil)
-                   ("8" (assert)
-                    (("8" (lift-if)
-                      (("8" (prop)
-                        (("8"
-                          (use car_sorted
-                               (a
-                                "nth(cons2_var,i-1)"
-                                sl
-                                "cons(cons1_var,cons2_var)"))
-                          (("8" (prop)
-                            (("1" (assert) nil nil)
-                             ("2"
-                              (use member_nth (x "nth(cons2_var,i-1)"))
-                              (("2"
-                                (prop)
-                                (("2" (inst + "i-1") nil nil))
                                 nil))
                               nil))
                             nil))
                           nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil)
-             ("2" (assert)
-              (("2" (typepred j)
-                (("2" (hide -2 -3)
-                  (("2"
-                    (use car_sorted
-                         (a "nth(cons(cons1_var,cons2_var),i)" sl
-                          "cons(cons1_var,cons2_var)"))
-                    (("2" (grind)
-                      (("2"
-                        (use member_nth
-                             (x "nth(cons(cons1_var,cons2_var),i)"))
-                        (("2" (prop)
-                          (("2" (inst + "i-1")
-                            (("1" (grind)
-                              (("1"
-                                (expand nth 1 2)
-                                (("1"
-                                  (grind :exclude nth)
-                                  (("1"
-                                    (hide 1 2 3 4)
-                                    (("1" (grind) nil nil))
-                                    nil))
-                                  nil))
-                                nil))
-                              nil)
-                             ("2" (grind)
+                        nil)
+                       ("2"
+                        (inst - "cons(cons1_var!1,cons2_var!1)"
+                         "nth(cons(cons1_var!1,cons2_var!1),i)")
+                        (("2"
+                          (inst -
+                           "nth(cons(cons1_var!1,cons2_var!1),i)"
+                           "cons(cons1_var!1,cons2_var!1)")
+                          (("2"
+                            (grind :if-match all :exclude
+                             (sorted? member length))
+                            (("2" (lemma member_nth)
                               (("2"
-                                (typepred i)
+                                (inst
+                                 -
+                                 "cons(cons1_var!1,cons2_var!1)"
+                                 "nth(cons(cons1_var!1,cons2_var!1),i)")
                                 (("2" (grind) nil nil))
                                 nil))
                               nil))
@@ -919,81 +1101,73 @@
                     nil))
                   nil))
                 nil))
-              nil)
-             ("3" (typepred i)
-              (("3" (grind)
-                (("1"
-                  (use car_sorted
-                       (a "nth(cons2_var,j-1)" sl
-                        "cons(cons1_var,cons2_var)"))
-                  (("1" (use member_nth (x "nth(cons2_var,j-1)"))
-                    (("1" (grind) nil nil)) nil))
-                  nil)
-                 ("2"
-                  (use car_sorted
-                       (a "nth(cons2_var,j-1)" sl
-                        "cons(cons1_var,cons2_var)"))
-                  (("1" (use member_nth (x "nth(cons2_var,j-1)"))
-                    (("1" (grind) nil nil)) nil)
-                   ("2" (grind) nil nil))
+              nil))
+            nil)
+           ("2" (grind) nil nil))
+          nil)
+         ("2" (hide -1)
+          (("2" (prop)
+            (("1" (expand sorted?)
+              (("1" (expand sorted_aux? +)
+                (("1" (inst - 0 1)
+                  (("1" (grind) nil nil) ("2" (grind) nil nil)
+                   ("3" (grind) nil nil))
                   nil))
                 nil))
-              nil))
-            nil))
-          nil)
-         ("2" (expand sorted? +)
-          (("2" (lift-if)
-            (("2" (prop)
-              (("2" (inst - 0 1)
+              nil)
+             ("2" (skeep)
+              (("2" (inst - "i+1" "j+1")
                 (("1" (grind) nil nil) ("2" (grind) nil nil)
                  ("3" (grind) nil nil))
                 nil))
-              nil))
-            nil))
-          nil)
-         ("3" (grind) nil nil)
-         ("4" (hide 1 3)
-          (("4" (skeep)
-            (("4" (inst - "i+1" "j+1")
-              (("1" (grind) nil nil) ("2" (grind) nil nil)
-               ("3" (grind) nil nil))
               nil))
             nil))
           nil))
         nil))
       nil))
     nil)
-   ((+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    (TRUE const-decl "bool" booleans nil)
-    (member def-decl "bool" list_props nil)
+   ((j skolem-const-decl "below(length(cons2_var!1))" sortedlist nil)
+    (i skolem-const-decl "below(length(cons2_var!1))" sortedlist nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (> const-decl "bool" reals nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (even_minus_odd_is_odd application-judgement "odd_int" integers
-     nil)
-    (car_sorted formula-decl nil sortedlist nil)
-    (member_nth formula-decl nil more_list_props nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (j skolem-const-decl
+     "below(length(cons(cons1_var!1, cons2_var!1)))" sortedlist nil)
+    (i skolem-const-decl
+     "below(length(cons(cons1_var!1, cons2_var!1)))" sortedlist nil)
+    (cons2_var!1 skolem-const-decl "list[T]" sortedlist nil)
+    (cons1_var!1 skolem-const-decl "T" sortedlist nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (member def-decl "bool" list_props nil)
+    (injective? const-decl "bool" functions nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (member_nth formula-decl nil more_list_props nil)
+    (car_sorted formula-decl nil sortedlist nil)
     (null adt-constructor-decl "(null?)" list_adt nil)
     (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
     (nth def-decl "T" list_props nil)
     (below type-eq-decl nil nat_types nil)
-    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     sortedlist nil)
-    (injective? const-decl "bool" functions nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (PRED type-eq-decl nil defined_types nil)
     (below type-eq-decl nil naturalnumbers nil)
     (length def-decl "nat" list_props nil)
     (< const-decl "bool" reals nil)
@@ -1009,7 +1183,7 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number nonempty-type-decl nil numbers nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -1022,9 +1196,11 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+     "(strict_total_order?[real])" real_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
  (s_member_TCC2 0
   (s_member_TCC2-1 nil 3577837025 ("" (termination-tcc) nil nil)
@@ -1033,12 +1209,14 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (length def-decl "nat" list_props nil))
+    (length def-decl "nat" list_props nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil))
    nil))
  (s_remove_TCC1 0
   (s_remove_TCC1-1 nil 3577837025 ("" (grind) nil nil)
@@ -1047,8 +1225,9 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (member def-decl "bool" list_props nil))
+    (sorted? const-decl "bool" sortedlist nil)
+    (member def-decl "bool" list_props nil)
+    (sorted_aux? def-decl "bool" sortedlist nil))
    nil))
  (s_remove_TCC2 0
   (s_remove_TCC2-1 nil 3577837025
@@ -1064,15 +1243,17 @@
         nil))
       nil))
     nil)
-   ((boolean nonempty-type-decl nil booleans nil)
+   ((sorted_aux? def-decl "bool" sortedlist nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (member def-decl "bool" list_props nil))
    nil))
  (s_remove_TCC3 0
@@ -1082,7 +1263,9 @@
       (("" (inst - x!1 sl!1) (("" (grind) nil nil)) nil)) nil))
     nil)
    ((car_sorted formula-decl nil sortedlist nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (list type-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1093,42 +1276,67 @@
      "(strict_total_order?[real])" real_props nil))
    nil))
  (s_remove_TCC4 0
-  (s_remove_TCC4-1 nil 3577837025
-   ("" (skeep)
-    (("" (prop)
-      (("1" (expand sorted?)
-        (("1" (lift-if)
-          (("1" (prop)
-            (("1" (typepred "v(a,slt)")
-              (("1" (inst - "car(v(a,slt))")
-                (("1" (lemma car_sorted)
-                  (("1" (inst - "car(v(a,slt))" sl)
-                    (("1" (grind) nil nil)
-                     ("2" (typepred sl) (("2" (grind) nil nil)) nil))
-                    nil))
-                  nil)
-                 ("2" (typepred sl) (("2" (grind) nil nil)) nil))
+  (s_remove_TCC4-1 nil 3577837025 ("" (grind) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (sorted? const-decl "bool" sortedlist nil))
+   nil))
+ (s_remove_TCC5 0
+  (s_remove_TCC5-1 nil 3578427204 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (length def-decl "nat" list_props nil)
+    (sorted_aux? def-decl "bool" sortedlist nil))
+   nil))
+ (s_remove_TCC6 0
+  (s_remove_TCC6-1 nil 3578427204
+   ("" (subtype-tcc)
+    (("1" (typepred "v!1(a!1,slt!1)")
+      (("1" (grind) nil nil) ("2" (grind) nil nil)) nil)
+     ("2" (typepred "v!1(a!1,slt!1)")
+      (("1" (grind) nil nil) ("2" (grind) nil nil)) nil)
+     ("3" (typepred "v!1(a!1,slt!1)")
+      (("1" (grind) nil nil) ("2" (grind) nil nil)) nil)
+     ("4" (typepred "v!1(a!1,slt!1)")
+      (("1" (expand sorted? -)
+        (("1" (expand sorted_aux? +)
+          (("1" (grind :exclude sorted_aux?)
+            (("1" (typepred "v!1(a!1,slt!1)")
+              (("1" (lemma car_sorted)
+                (("1" (inst - "car(v!1(a!1,slt!1))" "sl!1")
+                  (("1" (inst - "car(v!1(a!1,slt!1))")
+                    (("1" (grind) nil nil) ("2" (grind) nil nil)) nil)
+                   ("2" (grind) nil nil))
+                  nil))
                 nil)
-               ("2" (typepred sl) (("2" (grind) nil nil)) nil))
-              nil)
-             ("2" (typepred "v(a,slt)")
-              (("1" (propax) nil nil)
-               ("2" (typepred sl) (("2" (grind) nil nil)) nil))
+               ("2" (grind) nil nil))
               nil))
             nil))
           nil))
         nil)
-       ("2" (skeep)
-        (("2" (expand member +)
-          (("2" (typepred "v(a,slt)")
-            (("1" (inst - x) (("1" (grind) nil nil)) nil)
-             ("2" (typepred sl) (("2" (grind) nil nil)) nil))
-            nil))
-          nil))
-        nil))
+       ("2" (grind) nil nil))
       nil))
     nil)
-   ((key formal-const-decl "{k: [T -> real] | injective?(k)}"
+   ((slt!1 skolem-const-decl "list[T]" sortedlist nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (car_sorted formula-decl nil sortedlist nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
      sortedlist nil)
     (injective? const-decl "bool" functions nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
@@ -1149,23 +1357,16 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number nonempty-type-decl nil numbers nil)
-    (list type-decl nil list_adt nil)
-    (T formal-type-decl nil sortedlist nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (car_sorted formula-decl nil sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil))
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
- (s_remove_TCC5 0
-  (s_remove_TCC5-1 nil 3578427204 ("" (termination-tcc) nil nil) nil
-   nil))
- (s_remove_TCC6 0
-  (s_remove_TCC6-1 nil 3578427204 ("" (subtype-tcc) nil nil) nil nil))
  (s_insert_TCC1 0
   (s_insert_TCC1-1 nil 3577837025
    ("" (grind) (("" (typepred key) (("" (grind) nil nil)) nil)) nil)
@@ -1184,7 +1385,8 @@
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
     (member def-decl "bool" list_props nil)
-    (sorted? def-decl "bool" sortedlist nil))
+    (sorted? const-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil))
    nil))
  (s_insert_TCC2 0
   (s_insert_TCC2-1 nil 3577837025
@@ -1201,6 +1403,7 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number nonempty-type-decl nil numbers nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -1208,7 +1411,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (member def-decl "bool" list_props nil))
    nil))
  (s_insert_TCC3 0
@@ -1294,15 +1497,27 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (car_sorted formula-decl nil sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil))
+    (sl skolem-const-decl "(sorted?)" sortedlist nil)
+    (v skolem-const-decl
+     "[d1: {z: [T, (sorted?)] | length(z`2) < length(sl)} ->
+   {s: (sorted?) |
+            FORALL x:
+              member(x, s) IFF key(x) = key(d1`1) OR member(x, d1`2)}]"
+     sortedlist nil)
+    (a skolem-const-decl "T" sortedlist nil)
+    (slt skolem-const-decl "list[T]" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
  (sort_TCC1 0
   (sort_TCC1-1 nil 3577837025 ("" (grind) nil nil)
-   ((sorted? def-decl "bool" sortedlist nil)
+   ((sorted_aux? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (member def-decl "bool" list_props nil))
    nil))
  (sort_TCC2 0
@@ -1340,7 +1555,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1369,26 +1584,28 @@
      ("3" (grind) nil nil) ("4" (grind) nil nil) ("5" (grind) nil nil)
      ("6" (grind) nil nil))
     nil)
-   ((key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     sortedlist nil)
-    (injective? const-decl "bool" functions nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
+   ((NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (number nonempty-type-decl nil numbers nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (injective? const-decl "bool" functions nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (s_member def-decl "bool" sortedlist nil)
     (member def-decl "bool" list_props nil)
@@ -1444,16 +1661,21 @@
     nil)
    ((cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons1_var skolem-const-decl "T" sortedlist nil)
+    (cons2_var skolem-const-decl "list[T]" sortedlist nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (filter_member application-judgement
-     "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
      sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
     (/= const-decl "boolean" notequal nil)
+    (filter def-decl "list[T]" filters nil)
     (pred type-eq-decl nil defined_types nil)
     (s_remove def-decl "{s: (sorted?) |
          FORALL x: member(x, s) IFF NOT key(x) = key(a) AND member(x, sl)}"
@@ -1472,7 +1694,7 @@
     (member def-decl "bool" list_props nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -1485,13 +1707,14 @@
       (("1" (expand s_insert +) (("1" (grind) nil nil)) nil)) nil)
      ("2" (grind) nil nil) ("3" (grind) nil nil))
     nil)
-   ((real_lt_is_strict_total_order name-judgement
+   ((sorted_aux? def-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
@@ -1520,13 +1743,14 @@
   (remove_insert-1 nil 3578072670
    ("" (induct-and-simplify sl :exclude sorted?) (("" (grind) nil nil))
     nil)
-   ((real_lt_is_strict_total_order name-judgement
+   ((sorted_aux? def-decl "bool" sortedlist nil)
+    (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
@@ -1568,11 +1792,12 @@
                 nil))
               nil)
              ("2" (lift-if)
-              (("2" (grind)
-                (("2" (lemma car_sorted)
-                  (("2" (inst - a "cons(cons1_var,cons2_var)")
-                    (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
-                  nil))
+              (("2" (prop)
+                (("1" (lemma car_sorted)
+                  (("1" (inst - a "cons(cons1_var,cons2_var)")
+                    (("1" (grind) nil nil)) nil))
+                  nil)
+                 ("2" (grind) nil nil))
                 nil))
               nil)
              ("3" (grind) nil nil) ("4" (grind) nil nil))
@@ -1582,10 +1807,9 @@
       nil))
     nil)
    ((car_sorted formula-decl nil sortedlist nil)
-    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (null adt-constructor-decl "(null?)" list_adt nil)
-    (TRUE const-decl "bool" booleans nil)
-    (< const-decl "bool" reals nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (cons2_var skolem-const-decl "list[T]" sortedlist nil)
+    (cons1_var skolem-const-decl "T" sortedlist nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
@@ -1594,6 +1818,7 @@
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
     (s_insert def-decl
@@ -1612,7 +1837,7 @@
     (member def-decl "bool" list_props nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -1658,11 +1883,15 @@
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (s_member def-decl "bool" sortedlist nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons1_var skolem-const-decl "T" sortedlist nil)
+    (cons2_var skolem-const-decl "list[T]" sortedlist nil)
     (s_member_member formula-decl nil sortedlist nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
     (s_remove def-decl "{s: (sorted?) |
@@ -1682,7 +1911,7 @@
     (member def-decl "bool" list_props nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -1693,24 +1922,26 @@
    ("" (skeep)
     (("" (skeep) (("" (typepred sl1) (("" (grind) nil nil)) nil)) nil))
     nil)
-   ((boolean nonempty-type-decl nil booleans nil)
+   ((sorted_aux? def-decl "bool" sortedlist nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil))
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
  (s_subset?_TCC2 0
   (s_subset?_TCC2-1 nil 3577837025
    ("" (skeep)
     (("" (skeep) (("" (typepred sl2) (("" (grind) nil nil)) nil)) nil))
     nil)
-   ((boolean nonempty-type-decl nil booleans nil)
+   ((sorted_aux? def-decl "bool" sortedlist nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil))
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
  (s_subset?_TCC3 0
   (s_subset?_TCC3-1 nil 3577837025 ("" (termination-tcc) nil nil)
@@ -1719,7 +1950,8 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (length def-decl "nat" list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
@@ -1733,12 +1965,13 @@
     nil)
    ((real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil))
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
  (s_subset?_TCC5 0
   (s_subset?_TCC5-1 nil 3577837025 ("" (termination-tcc) nil nil)
@@ -1747,7 +1980,8 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (length def-decl "nat" list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
@@ -1763,7 +1997,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (real_gt_is_strict_total_order name-judgement
@@ -1776,7 +2010,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (real_lt_is_strict_total_order name-judgement
@@ -1789,9 +2023,10 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+     "(strict_total_order?[real])" real_props nil)
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
  (s_equal?_TCC2 0
   (s_equal?_TCC2-1 nil 3578245369 ("" (grind) nil nil)
@@ -1800,9 +2035,10 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+     "(strict_total_order?[real])" real_props nil)
+    (sorted? const-decl "bool" sortedlist nil))
    nil))
  (s_equal?_TCC3 0
   (s_equal?_TCC3-1 nil 3578245369 ("" (termination-tcc) nil nil)
@@ -1811,7 +2047,8 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (length def-decl "nat" list_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
@@ -1827,16 +2064,18 @@
       nil)
      ("2" (grind) nil nil))
     nil)
-   ((car_sorted formula-decl nil sortedlist nil)
+   ((sorted_aux? def-decl "bool" sortedlist nil)
+    (car_sorted formula-decl nil sortedlist nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (uniques? def-decl "bool" more_list_props nil)
     (T formal-type-decl nil sortedlist nil)
     (list_induction formula-decl nil list_adt nil))
@@ -2074,7 +2313,7 @@
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (s_subset? def-decl "bool" sortedlist nil)
     (subset? const-decl "bool" more_list_props nil)
@@ -2083,6 +2322,7 @@
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (subterm_char formula-decl nil more_list_props nil)
     (member def-decl "bool" list_props nil)
     (member_subset formula-decl nil more_list_props nil)
@@ -2105,6 +2345,9 @@
     (number nonempty-type-decl nil numbers nil)
     (uniques? def-decl "bool" more_list_props nil)
     (sorted_uniques formula-decl nil sortedlist nil)
+    (cons1_var skolem-const-decl "T" sortedlist nil)
+    (cons2_var skolem-const-decl "list[T]" sortedlist nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
     (cdr_sorted formula-decl nil sortedlist nil)
     (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil))
@@ -2168,13 +2411,15 @@
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (sl2 skolem-const-decl "(sorted?)" sortedlist nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (list_induction formula-decl nil list_adt nil)
     (T formal-type-decl nil sortedlist nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (s_equal? def-decl "bool" sortedlist nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -2199,7 +2444,9 @@
                       (inst - "cons1_var!1"
                        "cons(cons1_var!1,cons2_var!1)")
                       (("1" (expand member -7 2)
-                        (("1" (grind :defs nil) (("1" (grind) nil nil))
+                        (("1" (grind :defs nil)
+                          (("1" (grind) nil nil) ("2" (grind) nil nil)
+                           ("3" (grind) nil nil) ("4" (grind) nil nil))
                           nil))
                         nil))
                       nil))
@@ -2398,7 +2645,8 @@
       nil)
      ("3" (grind) nil nil))
     nil)
-   ((cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+   ((sl2!1 skolem-const-decl "(sorted?)" sortedlist nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
     (key formal-const-decl "{k: [T -> real] | injective?(k)}"
      sortedlist nil)
     (injective? const-decl "bool" functions nil)
@@ -2417,8 +2665,10 @@
     (list_cons_extensionality formula-decl nil list_adt nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (car_sorted formula-decl nil sortedlist nil)
     (cdr_sorted formula-decl nil sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
     (member def-decl "bool" list_props nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
@@ -2428,16 +2678,519 @@
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (s_equal? def-decl "bool" sortedlist nil)
     (equal? const-decl "bool" more_list_props nil)
     (T formal-type-decl nil sortedlist nil)
     (list_induction formula-decl nil list_adt nil))
    shostak))
- (min_sorted_TCC1 0
-  (min_sorted_TCC1-1 nil 3578427204 ("" (subtype-tcc) nil nil) nil
-   nil))
+ (rev_sorted 0
+  (rev_sorted-1 nil 3578680091
+   ("" (measure-induct-and-simplify "length(sl)" sl)
+    (("" (grind)
+      (("" (reveal *)
+        (("" (hide -2)
+          (("" (inst - "reverse(cdr(reverse(x!1)))")
+            (("1" (prop)
+              (("1" (rewrite reverse_reverse)
+                (("1" (expand sorted_aux? +)
+                  (("1" (lift-if)
+                    (("1" (prop)
+                      (("1" (lift-if)
+                        (("1" (prop)
+                          (("1" (typepred x!1)
+                            (("1" (lemma nth_sorted)
+                              (("1"
+                                (inst - x!1)
+                                (("1"
+                                  (prop)
+                                  (("1"
+                                    (expand rev_key)
+                                    (("1"
+                                      (inst
+                                       -
+                                       "length(x!1)-2"
+                                       "length(x!1)-1")
+                                      (("1"
+                                        (lemma nth_reverse)
+                                        (("1"
+                                          (inst - x!1 0)
+                                          (("1"
+                                            (lemma nth_reverse)
+                                            (("1"
+                                              (inst - x!1 1)
+                                              (("1" (grind) nil nil)
+                                               ("2"
+                                                (hide -1 -2 -3 -4 -5 2)
+                                                (("2"
+                                                  (grind)
+                                                  (("2"
+                                                    (expand length)
+                                                    (("2"
+                                                      (grind)
+                                                      (("2"
+                                                        (grind)
+                                                        (("2"
+                                                          (lemma
+                                                           "length_reverse[T]")
+                                                          (("2"
+                                                            (grind)
+                                                            nil
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil)
+                                           ("2"
+                                            (hide -1 -2 -3 -4 2 3)
+                                            (("2"
+                                              (grind)
+                                              (("2"
+                                                (expand length)
+                                                (("2" (grind) nil nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (hide -1 -2 -3 2 3)
+                                        (("2"
+                                          (grind)
+                                          (("2"
+                                            (expand length)
+                                            (("2" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("3"
+                                        (hide -1 -2 -3 2)
+                                        (("3"
+                                          (lemma "length_reverse[T]")
+                                          (("3" (grind) nil nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (lemma "length_reverse[T]")
+                (("2" (inst - "cdr(reverse(x!1))")
+                  (("2" (rewrite -1 1)
+                    (("2" (lemma "length_reverse[T]")
+                      (("2" (inst - x!1)
+                        (("2" (expand length -1 1)
+                          (("2" (grind) nil nil)) nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("2" (lemma nth_sorted)
+              (("2" (inst - "reverse(cdr(reverse(x!1)))")
+                (("2" (lemma nth_sorted)
+                  (("2" (inst - x!1)
+                    (("2" (typepred x!1)
+                      (("2" (prop)
+                        (("1" (grind) nil nil)
+                         ("2" (skeep)
+                          (("2" (prop)
+                            (("1" (auto-rewrite "nth_reverse")
+                              (("1"
+                                (rewrite nth_reverse)
+                                (("1"
+                                  (rewrite nth_reverse)
+                                  (("1"
+                                    (inst - i j)
+                                    (("1"
+                                      (grind)
+                                      (("1"
+                                        (auto-rewrite
+                                         (length_cdr
+                                          length_cons
+                                          nth_cdr
+                                          nth_cons
+                                          length_reverse
+                                          nth_reverse))
+                                        (("1"
+                                          (grind)
+                                          (("1"
+                                            (rewrite nth_cdr)
+                                            (("1"
+                                              (rewrite nth_cdr)
+                                              (("1"
+                                                (rewrite nth_reverse)
+                                                (("1"
+                                                  (rewrite nth_reverse)
+                                                  (("1"
+                                                    (rewrite
+                                                     length_cdr)
+                                                    (("1"
+                                                      (grind)
+                                                      nil
+                                                      nil))
+                                                    nil)
+                                                   ("2"
+                                                    (typepred j)
+                                                    (("2"
+                                                      (rewrite
+                                                       length_reverse)
+                                                      (("2"
+                                                        (rewrite
+                                                         length_cdr)
+                                                        (("2"
+                                                          (grind)
+                                                          nil
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil)
+                                                 ("2"
+                                                  (typepred i)
+                                                  (("2"
+                                                    (rewrite
+                                                     length_cdr)
+                                                    (("2"
+                                                      (rewrite
+                                                       length_reverse)
+                                                      (("2"
+                                                        (rewrite
+                                                         length_cdr)
+                                                        (("2"
+                                                          (grind)
+                                                          nil
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil)
+                                               ("2"
+                                                (typepred j)
+                                                (("2"
+                                                  (grind
+                                                   :rewrites
+                                                   (length_cdr
+                                                    length_reverse))
+                                                  (("2"
+                                                    (rewrite
+                                                     length_cdr)
+                                                    (("2"
+                                                      (grind)
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (typepred i)
+                                              (("2"
+                                                (grind)
+                                                (("2"
+                                                  (rewrite length_cdr)
+                                                  (("2"
+                                                    (grind)
+                                                    nil
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil)
+                                     ("2"
+                                      (typepred j)
+                                      (("2"
+                                        (grind)
+                                        (("2"
+                                          (rewrite length_reverse)
+                                          (("2"
+                                            (rewrite length_cdr)
+                                            (("2"
+                                              (grind)
+                                              (("2"
+                                                (rewrite
+                                                 length_reverse)
+                                                (("2" (grind) nil nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil)
+                                     ("3"
+                                      (typepred i)
+                                      (("3"
+                                        (rewrite length_reverse)
+                                        (("3"
+                                          (rewrite length_cdr)
+                                          (("3"
+                                            (rewrite length_reverse)
+                                            (("3" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2"
+                                    (typepred j)
+                                    (("2"
+                                      (rewrite length_reverse)
+                                      nil
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2"
+                                  (typepred i)
+                                  (("2"
+                                    (rewrite length_reverse)
+                                    nil
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("2" (rewrite nth_reverse)
+                              (("1"
+                                (rewrite nth_reverse)
+                                (("1"
+                                  (rewrite nth_cdr)
+                                  (("1"
+                                    (rewrite nth_cdr)
+                                    (("1"
+                                      (rewrite nth_reverse)
+                                      (("1"
+                                        (rewrite nth_reverse)
+                                        (("1"
+                                          (rewrite length_cdr)
+                                          (("1"
+                                            (rewrite length_reverse)
+                                            (("1"
+                                              (inst - i j)
+                                              (("1" (grind) nil nil)
+                                               ("2"
+                                                (grind)
+                                                (("2"
+                                                  (typepred j)
+                                                  (("2"
+                                                    (grind
+                                                     :rewrites
+                                                     (length_cdr
+                                                      length_reverse))
+                                                    (("2"
+                                                      (rewrite
+                                                       length_cdr)
+                                                      (("2"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil)
+                                               ("3"
+                                                (typepred i)
+                                                (("3"
+                                                  (rewrite
+                                                   length_reverse)
+                                                  (("3"
+                                                    (rewrite
+                                                     length_cdr)
+                                                    (("3"
+                                                      (grind)
+                                                      (("3"
+                                                        (typepred i)
+                                                        (("3"
+                                                          (rewrite
+                                                           length_reverse)
+                                                          (("3"
+                                                            (rewrite
+                                                             length_reverse)
+                                                            (("3"
+                                                              (grind)
+                                                              nil
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil)
+                                         ("2"
+                                          (typepred j)
+                                          (("2"
+                                            (rewrite length_reverse)
+                                            (("2"
+                                              (rewrite length_cdr)
+                                              (("2"
+                                                (rewrite
+                                                 length_reverse)
+                                                (("2" (grind) nil nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (typepred i)
+                                        (("2"
+                                          (rewrite length_reverse)
+                                          (("2"
+                                            (rewrite length_cdr)
+                                            (("2"
+                                              (rewrite length_reverse)
+                                              (("2" (grind) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil)
+                                     ("2"
+                                      (typepred j)
+                                      (("2"
+                                        (rewrite length_reverse)
+                                        (("2"
+                                          (rewrite length_cdr)
+                                          (("2"
+                                            (rewrite length_reverse)
+                                            (("2" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2"
+                                    (typepred i)
+                                    (("2"
+                                      (rewrite length_reverse)
+                                      (("2"
+                                        (rewrite length_cdr)
+                                        (("2"
+                                          (rewrite length_reverse)
+                                          (("2" (grind) nil nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2"
+                                  (typepred j)
+                                  (("2"
+                                    (rewrite length_reverse)
+                                    nil
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (typepred i)
+                                (("2"
+                                  (rewrite length_reverse)
+                                  nil
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("3" (grind) nil nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((odd_minus_odd_is_even application-judgement "even_int" integers
+     nil)
+    (length_cdr formula-decl nil more_list_props nil)
+    (minus_even_is_even application-judgement "even_int" integers nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (minus_odd_is_odd application-judgement "odd_int" integers nil)
+    (nth_cdr formula-decl nil more_list_props nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (j skolem-const-decl "below(length(reverse(cdr(reverse(x!1)))))"
+     sortedlist nil)
+    (i skolem-const-decl "below(length(reverse(cdr(reverse(x!1)))))"
+     sortedlist nil)
+    (nth_sorted formula-decl nil sortedlist nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (nth def-decl "T" list_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (minus_real_is_real application-judgement "real" reals nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (length_reverse formula-decl nil list_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nth_reverse formula-decl nil more_list_props nil)
+    (rev_key const-decl "real" minlist nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (reverse_reverse formula-decl nil list_props nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (injective? const-decl "bool" functions nil)
+    (x!1 skolem-const-decl "(sorted?)" sortedlist nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (rev_sorted? const-decl "bool" sortedlist nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (wf_nat formula-decl nil naturalnumbers nil)
+    (< const-decl "bool" reals nil)
+    (length def-decl "nat" list_props nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (naturalnumber type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (T formal-type-decl nil sortedlist nil)
+    (measure_induction formula-decl nil measure_induction nil)
+    (well_founded? const-decl "bool" orders nil)
+    (pred type-eq-decl nil defined_types nil))
+   shostak))
  (min_sorted 0
   (min_sorted-1 nil 3578326877
    ("" (skeep)
@@ -2446,7 +3199,7 @@
         (("" (use car_sorted) (("" (grind) nil nil)) nil)) nil))
       nil))
     nil)
-   ((sorted? def-decl "bool" sortedlist nil)
+   ((sorted? const-decl "bool" sortedlist nil)
     (min const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
          minlist nil)
@@ -2470,190 +3223,82 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (car_sorted formula-decl nil sortedlist nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil))
    shostak))
- (s_before_before 0
-  (s_before_before-1 nil 3578421217
+ (max_sorted_TCC1 0
+  (max_sorted_TCC1-1 nil 3578662238
    ("" (skeep)
-    (("" (prop) (("1" (postpone) nil nil) ("2" (postpone) nil nil))
-      nil))
+    (("" (lemma "length_reverse[T]")
+      (("" (grind :exclude (sorted? reverse)) nil nil)) nil))
     nil)
-   nil shostak))
- (append_sorted 0
-  (append_sorted-1 nil 3578083784
-   ("" (induct sl1)
-    (("1" (grind) nil nil) ("2" (grind) nil nil)
-     ("3" (skeep)
-      (("3" (skeep)
-        (("3" (prop)
-          (("1" (expand (sorted? append) +)
-            (("1" (use order_lcdr)
-              (("1" (prop)
-                (("1" (lift-if)
-                  (("1" (prop)
-                    (("1" (lemma member_append)
-                      (("1"
-                        (inst - cons2_var sl2
-                         "car(append(cons2_var,sl2))")
-                        (("1" (prop)
-                          (("1"
-                            (use car_sorted
-                                 (a "car(append(cons2_var,sl2))"))
-                            (("1" (grind :exclude sorted?) nil nil))
-                            nil)
-                           ("2" (use-with "order_char" -4)
-                            (("2" (prop)
-                              (("2"
-                                (inst
-                                 -
-                                 cons1_var
-                                 "car(append(cons2_var,sl2))")
-                                (("2"
-                                  (grind :exclude sorted?)
-                                  nil
-                                  nil))
-                                nil))
-                              nil))
-                            nil)
-                           ("3" (grind :exclude sorted?) nil nil))
-                          nil))
-                        nil))
-                      nil)
-                     ("2" (grind :exclude sorted?) nil nil))
-                    nil))
-                  nil)
-                 ("2" (grind) nil nil))
-                nil))
-              nil))
-            nil)
-           ("2" (use append_null (l "cons(cons1_var,cons2_var)"))
-            (("2" (grind :exclude sorted?) nil nil)) nil)
-           ("3" (use order_char)
-            (("3" (prop)
-              (("1" (grind) nil nil)
-               ("2" (expand append -1)
-                (("2" (expand sorted? -1)
-                  (("2" (skeep)
-                    (("2" (lift-if)
-                      (("2" (prop)
-                        (("1" (expand append -1)
-                          (("1" (grind :exclude sorted?) nil nil)) nil)
-                         ("2" (inst - sl2)
-                          (("2" (prop)
-                            (("2" (use order_char)
-                              (("2"
-                                (prop)
-                                (("2"
-                                  (inst - x y)
-                                  (("2"
-                                    (grind :exclude sorted?)
-                                    (("1"
-                                      (lemma car_sorted)
+   ((T formal-type-decl nil sortedlist nil)
+    (length_reverse formula-decl nil list_props nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (length def-decl "nat" list_props nil))
+   nil))
+ (max_sorted 0
+  (max_sorted-1 nil 3578679035
+   ("" (skeep)
+    (("" (all-typepreds)
+      (("" (lemma nth_sorted)
+        (("" (inst - sl)
+          (("" (prop)
+            (("" (lemma member_nth)
+              (("" (inst - sl "max(sl)")
+                (("" (prop)
+                  (("" (skeep)
+                    (("" (inst - i "length(sl)-1")
+                      (("" (inst - "car(reverse(sl))")
+                        (("" (lemma nth_reverse)
+                          (("" (inst - sl 0)
+                            (("" (typepred i)
+                              ((""
+                                (lemma member_reverse)
+                                ((""
+                                  (inst - sl "car(reverse(sl))")
+                                  ((""
+                                    (flatten -1)
+                                    ((""
+                                      (split -1)
                                       (("1"
-                                        (inst
-                                         -
-                                         "car(cons2_var)"
-                                         "cons(cons1_var,cons2_var)")
+                                        (split -11)
                                         (("1"
-                                          (rewrite every_forall)
-                                          (("1"
-                                            (inst - "car(cons2_var)")
-                                            (("1"
-                                              (grind :exclude sorted?)
-                                              (("1"
-                                                (expand member 1)
-                                                (("1"
-                                                  (grind
-                                                   :exclude
-                                                   sorted?)
-                                                  nil
-                                                  nil))
-                                                nil)
-                                               ("2"
-                                                (expand member 1)
-                                                (("2"
-                                                  (grind
-                                                   :exclude
-                                                   sorted?)
-                                                  nil
-                                                  nil))
-                                                nil)
-                                               ("3"
-                                                (expand member 1)
-                                                (("3"
-                                                  (grind
-                                                   :exclude
-                                                   sorted?)
-                                                  nil
-                                                  nil))
-                                                nil))
-                                              nil)
-                                             ("2"
-                                              (expand append -5)
-                                              (("2"
-                                                (grind
-                                                 :exclude
-                                                 sorted?)
-                                                nil
-                                                nil))
-                                              nil))
-                                            nil))
+                                          (typepred key)
+                                          (("1" (grind) nil nil))
                                           nil)
-                                         ("2"
-                                          (expand append -5)
+                                         ("2" (propax) nil nil))
+                                        nil)
+                                       ("2"
+                                        (expand member 1)
+                                        (("2"
+                                          (hide
+                                           -1
+                                           -2
+                                           -3
+                                           -4
+                                           -5
+                                           -6
+                                           -7
+                                           -8
+                                           -9
+                                           -10
+                                           2)
                                           (("2"
-                                            (grind :exclude sorted?)
-                                            nil
-                                            nil))
-                                          nil))
-                                        nil))
-                                      nil)
-                                     ("2"
-                                      (lemma car_sorted)
-                                      (("2"
-                                        (inst
-                                         -
-                                         "car(cons2_var)"
-                                         "cons(cons1_var,cons2_var)")
-                                        (("1"
-                                          (rewrite every_forall)
-                                          (("1"
-                                            (inst - "car(cons2_var)")
-                                            (("1"
-                                              (grind :exclude sorted?)
-                                              (("1"
-                                                (expand member 1)
-                                                (("1" (grind) nil nil))
-                                                nil)
-                                               ("2"
-                                                (expand member 1)
-                                                (("2" (grind) nil nil))
-                                                nil)
-                                               ("3"
-                                                (expand member 1)
-                                                (("3" (grind) nil nil))
-                                                nil))
-                                              nil)
-                                             ("2"
-                                              (expand append -5)
-                                              (("2"
-                                                (grind
-                                                 :exclude
-                                                 sorted?)
-                                                nil
-                                                nil))
+                                            (lemma "length_reverse[T]")
+                                            (("2"
+                                              (grind :exclude reverse)
+                                              nil
                                               nil))
-                                            nil))
-                                          nil)
-                                         ("2"
-                                          (expand append -5)
-                                          (("2"
-                                            (grind :exclude sorted?)
-                                            nil
                                             nil))
                                           nil))
                                         nil))
@@ -2670,257 +3315,6 @@
                   nil))
                 nil))
               nil))
-            nil)
-           ("4" (grind) nil nil) ("5" (grind) nil nil)
-           ("6" (grind) nil nil))
-          nil))
-        nil))
-      nil))
-    nil)
-   ((cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (member_append formula-decl nil more_list_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (car_sorted formula-decl nil sortedlist nil)
-    (member def-decl "bool" list_props nil)
-    (bijective? const-decl "bool" functions nil)
-    (id const-decl "(bijective?[T, T])" identity nil)
-    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (append_null formula-decl nil list_props nil)
-    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     sortedlist nil)
-    (injective? const-decl "bool" functions nil)
-    (< const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (pred type-eq-decl nil defined_types nil)
-    (every_forall formula-decl nil more_list_props nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (list_induction formula-decl nil list_adt nil)
-    (T formal-type-decl nil sortedlist nil)
-    (append def-decl "list[T]" list_props nil)
-    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (< const-decl "bool" sortedlist nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (list type-decl nil list_adt nil))
-   shostak))
- (filter_sorted 0
-  (filter_sorted-1 nil 3577837025
-   ("" (induct sl)
-    (("1" (grind) nil nil) ("2" (grind) nil nil)
-     ("3" (skeep)
-      (("3" (skeep)
-        (("3" (expand filter +)
-          (("3" (prop)
-            (("1" (inst - p)
-              (("1" (expand sorted? +)
-                (("1" (lift-if)
-                  (("1" (prop)
-                    (("1"
-                      (use car_sorted
-                           (a "car(filter(cons2_var,p))" sl
-                            "cons(cons1_var,cons2_var)"))
-                      (("1" (grind :exclude sorted?)
-                        (("1" (grind :exclude sorted?)
-                          (("1" (grind :exclude sorted?)
-                            (("1" (typepred "filter(cons2_var,p)")
-                              (("1"
-                                (inst - "car(filter(cons2_var,p))")
-                                (("1"
-                                  (grind :exclude sorted?)
-                                  nil
-                                  nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil)
-             ("2" (grind) nil nil) ("3" (grind) nil nil)
-             ("4" (grind) nil nil))
-            nil))
-          nil))
-        nil))
-      nil))
-    nil)
-   ((filter_member application-judgement
-     "{m | FORALL (x: T): member(x, m) IFF p(x) AND member(x, l)}"
-     sortedlist nil)
-    (car_sorted formula-decl nil sortedlist nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (member def-decl "bool" list_props nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (list_induction formula-decl nil list_adt nil)
-    (T formal-type-decl nil sortedlist nil)
-    (pred type-eq-decl nil defined_types nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (list type-decl nil list_adt nil))
-   nil)))
-(rev_sortedlist
- (IMP_sortedlist_TCC1 0
-  (IMP_sortedlist_TCC1-1 nil 3578150680
-   ("" (typepred key) (("" (grind) nil nil)) nil)
-   ((rev_key const-decl "real" rev_sortedlist nil)
-    (minus_real_is_real application-judgement "real" reals nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (T formal-type-decl nil rev_sortedlist nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (injective? const-decl "bool" functions nil)
-    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     rev_sortedlist nil))
-   nil))
- (rev_sorted 0
-  (rev_sorted-1 nil 3578150904
-   ("" (induct sl)
-    (("1" (grind) nil nil) ("2" (grind) nil nil)
-     ("3" (skeep)
-      (("3" (expand rev_sorted?)
-        (("3" (expand reverse +)
-          (("3" (use-with "append_sorted[T,rev_key]")
-            (("1" (prop)
-              (("1" (hide 1 4 3)
-                (("1" (lemma "order_char[T,rev_key]")
-                  (("1"
-                    (inst - "reverse(cons2_var)"
-                     "cons(cons1_var,null)")
-                    (("1" (prop)
-                      (("1" (grind) nil nil)
-                       ("2" (skeep)
-                        (("2" (use-with "member_reverse" -1)
-                          (("2"
-                            (use "car_sorted[T,key]"
-                                 (a x sl "cons(cons1_var,cons2_var)"))
-                            (("2" (grind) nil nil)) nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil)
-               ("2" (grind) nil nil))
-              nil)
-             ("2" (grind) nil nil) ("3" (grind) nil nil))
-            nil))
-          nil))
-        nil))
-      nil))
-    nil)
-   ((append def-decl "list[T]" list_props nil)
-    (member def-decl "bool" list_props nil)
-    (id const-decl "(bijective?[T, T])" identity nil)
-    (bijective? const-decl "bool" functions nil)
-    (member_reverse formula-decl nil more_list_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (minus_real_is_real application-judgement "real" reals nil)
-    (car_sorted formula-decl nil sortedlist nil)
-    (< const-decl "bool" sortedlist nil)
-    (append_sorted formula-decl nil sortedlist nil)
-    (null adt-constructor-decl "(null?)" list_adt nil)
-    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
-    (rev_key const-decl "real" rev_sortedlist nil)
-    (list_induction formula-decl nil list_adt nil)
-    (T formal-type-decl nil rev_sortedlist nil)
-    (reverse def-decl "list[T]" list_props nil)
-    (rev_sorted? const-decl "bool" rev_sortedlist nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     rev_sortedlist nil)
-    (injective? const-decl "bool" functions nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (list type-decl nil list_adt nil))
-   shostak))
- (max_sorted_TCC1 0
-  (max_sorted_TCC1-1 nil 3578327403
-   ("" (grind :exclude (sorted? reverse))
-    (("" (use length_reverse (l sl!1)) (("" (grind) nil nil)) nil))
-    nil)
-   ((length_reverse formula-decl nil list_props nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (length def-decl "nat" list_props nil)
-    (reverse def-decl "list[T]" list_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (T formal-type-decl nil rev_sortedlist nil)
-    (list type-decl nil list_adt nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (injective? const-decl "bool" functions nil)
-    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     rev_sortedlist nil)
-    (sorted? def-decl "bool" sortedlist nil))
-   nil))
- (max_sorted 0
-  (max_sorted-1 nil 3578327702
-   ("" (skeep)
-    (("" (all-typepreds)
-      (("" (use rev_sorted)
-        (("" (use member_reverse)
-          (("" (inst - "car(reverse(sl))")
-            (("" (use member_reverse (x "car(reverse(sl))"))
-              (("" (use "car_sorted[T,rev_key]" (a "max(sl)"))
-                (("1" (expand member -2 1)
-                  (("1" (expand member -3 1)
-                    (("1" (expand rev_sorted?)
-                      (("1" (lazy-grind :if-match all :defs nil)
-                        (("1" (use "length_reverse[T]")
-                          (("1" (grind) nil nil)) nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil)
-                 ("2" (grind) nil nil))
-                nil))
-              nil))
             nil))
           nil))
         nil))
@@ -2929,7 +3323,7 @@
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (T formal-type-decl nil rev_sortedlist nil)
+    (T formal-type-decl nil sortedlist nil)
     (list type-decl nil list_adt nil)
     (member def-decl "bool" list_props nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
@@ -2944,30 +3338,430 @@
     (<= const-decl "bool" reals nil)
     (injective? const-decl "bool" functions nil)
     (key formal-const-decl "{k: [T -> real] | injective?(k)}"
-     rev_sortedlist nil)
+     sortedlist nil)
     (max const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
-         maxlist nil)
-    (sorted? def-decl "bool" sortedlist nil)
-    (member_reverse formula-decl nil more_list_props nil)
-    (rev_sorted? const-decl "bool" rev_sortedlist nil)
-    (length_reverse formula-decl nil list_props nil)
+         minlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (member_nth formula-decl nil more_list_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (length def-decl "nat" list_props nil)
+    (< const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (nth_reverse formula-decl nil more_list_props nil)
+    (minus_real_is_real application-judgement "real" reals nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (rev_key const-decl "real" minlist nil)
+    (nth def-decl "T" list_props nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (append def-decl "list[T]" list_props nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (below type-eq-decl nil nat_types nil)
+    (length_reverse formula-decl nil list_props nil)
+    (member_reverse formula-decl nil more_list_props nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (nth_sorted formula-decl nil sortedlist nil))
+   shostak))
+ (lessp_TCC1 0
+  (lessp_TCC1-1 nil 3578662238
+   ("" (subtype-tcc)
+    (("" (use "length_reverse[T]") (("" (grind) nil nil)) nil)) nil)
+   ((length_reverse formula-decl nil list_props nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (length def-decl "nat" list_props nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (sorted? const-decl "bool" sortedlist nil))
+   nil))
+ (s_before_before 0
+  (s_before_before-1 nil 3578421217
+   ("" (skeep)
+    (("" (lemma max_sorted)
+      (("" (lemma min_sorted)
+        (("" (lemma before_char)
+          (("" (inst - sl1 sl2)
+            (("1" (inst - sl2)
+              (("1" (inst - sl1) (("1" (grind) nil nil)) nil)) nil)
+             ("2" (grind) nil nil) ("3" (grind) nil nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((max_sorted formula-decl nil sortedlist nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (injective? const-decl "bool" functions nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (T formal-type-decl nil sortedlist nil)
+    (before_char formula-decl nil before_min nil)
     (minus_real_is_real application-judgement "real" reals nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (member def-decl "bool" list_props nil)
+    (< const-decl "bool" sortedlist nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
     (min const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
          minlist nil)
-    (rev_key const-decl "real" maxlist nil)
-    (length def-decl "nat" list_props nil)
+    (max const-decl
+         "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
+         minlist nil)
+    (rev_key const-decl "real" minlist nil)
+    (< const-decl "bool" before_list nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (< const-decl "PRED[[T, T]]" before_min nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (sl2 skolem-const-decl "(sorted?)" sortedlist nil)
+    (sl1 skolem-const-decl "(sorted?)" sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (min_sorted formula-decl nil sortedlist nil))
+   shostak))
+ (append_sorted 0
+  (append_sorted-1 nil 3578684494
+   ("" (skeep)
+    (("" (use nth_sorted)
+      (("" (prop)
+        (("1" (use s_before_before)
+          (("1" (prop)
+            (("1" (expand < 1)
+              (("1" (prop)
+                (("1" (grind) nil nil)
+                 ("2" (skeep)
+                  (("2" (use member_nth)
+                    (("2" (use member_nth (x y))
+                      (("2" (prop)
+                        (("2" (skeep)
+                          (("2" (skeep)
+                            (("2" (inst - i "i!1 + length(sl1)")
+                              (("1"
+                                (use nth_append)
+                                (("1"
+                                  (use
+                                   nth_append
+                                   (l sl1 m sl2 i "i!1 + length(sl1)"))
+                                  (("1" (grind) nil nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (rewrite length_append)
+                                (("2" (grind) nil nil))
+                                nil)
+                               ("3"
+                                (rewrite length_append)
+                                (("3" (grind) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil)
+         ("2" (use s_before_before)
+          (("2" (prop)
+            (("2" (expand < -2)
+              (("2" (prop)
+                (("2" (skeep)
+                  (("2" (rewrite nth_append)
+                    (("1" (rewrite nth_append)
+                      (("1" (lift-if)
+                        (("1" (prop)
+                          (("1" (lift-if)
+                            (("1" (prop)
+                              (("1"
+                                (typepred sl1)
+                                (("1"
+                                  (use nth_sorted)
+                                  (("1"
+                                    (prop)
+                                    (("1"
+                                      (inst - i j)
+                                      (("1" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (inst
+                                 -
+                                 "nth(sl1,i)"
+                                 "nth(sl2,j-length(sl1))")
+                                (("1"
+                                  (rewrite member_nth)
+                                  (("1"
+                                    (rewrite member_nth)
+                                    (("1" (grind) nil nil))
+                                    nil))
+                                  nil)
+                                 ("2" (grind) nil nil))
+                                nil))
+                              nil))
+                            nil)
+                           ("2" (lift-if)
+                            (("2" (prop)
+                              (("1"
+                                (typepred sl1)
+                                (("1"
+                                  (use nth_sorted)
+                                  (("1"
+                                    (prop)
+                                    (("1"
+                                      (inst - i j)
+                                      (("1" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2" (grind) nil nil))
+                              nil))
+                            nil)
+                           ("3" (lift-if)
+                            (("3" (prop)
+                              (("1" (grind) nil nil)
+                               ("2"
+                                (typepred sl2)
+                                (("2"
+                                  (use nth_sorted)
+                                  (("2"
+                                    (prop)
+                                    (("2"
+                                      (inst
+                                       -
+                                       "i-length(sl1)"
+                                       "j-length(sl1)")
+                                      (("1" (grind) nil nil)
+                                       ("2" (grind) nil nil)
+                                       ("3" (assert) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil)
+                           ("4" (lift-if)
+                            (("4" (prop)
+                              (("1"
+                                (inst
+                                 -
+                                 "nth(sl1,j)"
+                                 "nth(sl2,i-length(sl1))")
+                                (("1"
+                                  (rewrite member_nth)
+                                  (("1"
+                                    (rewrite member_nth)
+                                    (("1" (grind) nil nil))
+                                    nil))
+                                  nil)
+                                 ("2" (assert) nil nil))
+                                nil)
+                               ("2"
+                                (typepred sl2)
+                                (("2"
+                                  (use nth_sorted)
+                                  (("2"
+                                    (prop)
+                                    (("2"
+                                      (inst
+                                       -
+                                       "i-length(sl1)"
+                                       "j-length(sl1)")
+                                      (("1" (grind) nil nil)
+                                       ("2" (grind) nil nil)
+                                       ("3" (assert) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("2" (lift-if)
+                        (("2" (prop)
+                          (("1" (typepred j)
+                            (("1" (rewrite length_append) nil nil))
+                            nil)
+                           ("2" (typepred j)
+                            (("2" (rewrite length_append) nil nil))
+                            nil)
+                           ("3" (typepred j)
+                            (("3" (rewrite length_append) nil nil))
+                            nil)
+                           ("4" (typepred j)
+                            (("4" (rewrite length_append) nil nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("2" (typepred i)
+                      (("2" (rewrite length_append) nil nil)) nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil)
+         ("3" (typepred sl1)
+          (("3" (use "append_null[T]") (("3" (grind) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((nth_sorted formula-decl nil sortedlist nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (append def-decl "list[T]" list_props nil)
+    (list type-decl nil list_adt nil)
+    (T formal-type-decl nil sortedlist nil)
+    (append_null formula-decl nil list_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (below type-eq-decl nil nat_types nil)
+    (j skolem-const-decl "below(length(append(sl1, sl2)))" sortedlist
+     nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (i skolem-const-decl "below(length(append(sl1, sl2)))" sortedlist
+     nil)
+    (s_before_before formula-decl nil sortedlist nil)
+    (< const-decl "bool" before_list nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (real_le_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (rev_key const-decl "real" rev_sortedlist nil)
-    (car_sorted formula-decl nil sortedlist nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (sl2 skolem-const-decl "(sorted?)" sortedlist nil)
+    (i skolem-const-decl "below(length(sl1))" sortedlist nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (sl1 skolem-const-decl "(sorted?)" sortedlist nil)
+    (length def-decl "nat" list_props nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (< const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (i!1 skolem-const-decl "below(length(sl2))" sortedlist nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (key formal-const-decl "{k: [T -> real] | injective?(k)}"
+     sortedlist nil)
+    (injective? const-decl "bool" functions nil)
+    (< const-decl "PRED[[T, T]]" before_min nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (< const-decl "bool" sortedlist nil)
+    (nth def-decl "T" list_props nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (nth_append formula-decl nil more_list_props nil)
+    (length_append formula-decl nil list_props nil)
+    (member_nth formula-decl nil more_list_props nil))
+   shostak))
+ (filter_sorted 0
+  (filter_sorted-1 nil 3577837025
+   ("" (induct-and-simplify sl :defs nil :if-match nil)
+    (("1" (grind) nil nil)
+     ("2" (inst - p!1)
+      (("2" (expand filter +)
+        (("2" (expand sorted? 1 1)
+          (("2" (expand sorted_aux? +)
+            (("2" (grind :exclude (sorted_aux? filter))
+              (("2" (lemma car_sorted)
+                (("2"
+                  (inst - "car(filter(cons2_var!1,p!1))"
+                   "cons(cons1_var!1,cons2_var!1)")
+                  (("2" (typepred "filter(cons2_var!1,p!1)")
+                    (("2" (inst - "car(filter(cons2_var!1,p!1))")
+                      (("2" (expand member -1 1)
+                        (("2" (grind :exclude (sorted_aux? filter)) nil
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("3" (grind) nil nil))
+    nil)
+   ((real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
-    (reverse def-decl "list[T]" list_props nil)
-    (rev_sorted formula-decl nil rev_sortedlist nil))
-   shostak)))
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (< const-decl "PRED[[T, T]]" sortedlist nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (member def-decl "bool" list_props nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (car_sorted formula-decl nil sortedlist nil)
+    (sorted_aux? def-decl "bool" sortedlist nil)
+    (filter_member application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     sortedlist nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (sorted? const-decl "bool" sortedlist nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (pred type-eq-decl nil defined_types nil)
+    (filter def-decl "list[T]" filters nil)
+    (T formal-type-decl nil sortedlist nil)
+    (list_induction formula-decl nil list_adt nil))
+   nil)))
 

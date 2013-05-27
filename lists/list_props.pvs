@@ -13,6 +13,12 @@ BEGIN
   % Currified version of member
   member(l)(x): MACRO bool = member(x, l)
 
+  % Useful auto-rewrites on length:
+  length_cons: LEMMA 
+    length(cons(x,l)) = length(l) + 1
+  length_cdr: LEMMA 
+    cons?(l) IMPLIES length(cdr(l)) = length(l) - 1
+
   % Filter a list, more properties
   filter_member: JUDGEMENT
     filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
@@ -76,6 +82,10 @@ BEGIN
   nth_cons: LEMMA
     FORALL (i: below(1 + length(l))):
       nth(cons(x, l), i) = IF i = 0 THEN x ELSE nth(l, i - 1) ENDIF
+  
+  nth_cdr: LEMMA 
+    FORALL (i: below(length(l)-1)):
+      cons?(l) IMPLIES nth(cdr(l),i) = nth(l,i+1)
 
   nth_append: THEOREM
     FORALL (i: below(length(l) + length(m))):

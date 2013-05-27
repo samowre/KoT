@@ -29,21 +29,21 @@ BEGIN
   
 
   % Min of a list
-  min_aux(l:list[T], a, (m: real | key(a) = m)): RECURSIVE
-    { c | member(c, cons(a, l)) AND (FORALL b: member(b, cons(a, l)) IMPLIES c <= b) } =
+  min_aux(l:list[T],a, (key:{ k:[T-> real]  | injective?(k)}), (m: real | key(a) = m)): RECURSIVE
+    { c | member(c, cons(a, l)) AND (FORALL b: member(b, cons(a, l)) IMPLIES key(c) <= key(b)) } =
     CASES l OF
       null: a,
       cons(c, t):
         LET k = key(c) IN
 	IF k < m
-	  THEN min_aux(t, c, k)
-	  ELSE min_aux(t, a, m)
+	  THEN min_aux(t, c,key, k)
+	  ELSE min_aux(t, a,key, m)
 	ENDIF
     ENDCASES
   MEASURE length(l)
 
   min(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES x <= y) } =
-    min_aux(cdr(l), car(l), key(car(l)))
+    min_aux(cdr(l), car(l), key, key(car(l)))
 
   % Comon functions with Min
   min_cons: LEMMA min(cons(x,l)) = min(x,min(l))
@@ -51,40 +51,27 @@ BEGIN
   min_reverse: LEMMA min(reverse(l)) = min(l)
   min_subset: LEMMA subset?(l1,l2) IMPLIES min(l2) <=  min(l1)
   min_filter: LEMMA p(min(l)) IMPLIES min(filter(l,p))=min(l)
-END minlist
 
 
-maxlist [ T: TYPE, key: { k:[T-> real]  | injective?(k)}]: THEORY
-BEGIN
-  x,y : VAR T
-
+  % Max of a list : 
   rev_key(x): real = -key(x)
-  IMPORTING minlist[T,rev_key]
 
-  max(l: (cons?[T])):
-    { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x)) } =
-    min(l)
+  max(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES y <= x) } =
+    min_aux(cdr(l), car(l), rev_key, rev_key(car(l)))
 
-  IMPORTING minlist[T,key]
-
-  max_min: LEMMA max[T,rev_key](x,y) = min[T,key](x,y)
-  min_max: LEMMA min[T,rev_key](x,y) = max[T,key](x,y) ;
-
-  % We hence obtain all the properties on max by those on min
   
-  % Everytime max is imported, min[T,key] AND min[T,rev_key] are imported as well
-  % But we always want min to refer to min[T,key]
-  % It is the case with this macro
+  % Comon functions with Max
+  max_cons: LEMMA max(cons(x,l)) = max(x,max(l))
+  max_append: LEMMA max(append(l1,l2)) = max(max(l1),max(l2))
+  max_reverse: LEMMA max(reverse(l)) = max(l)
+  max_subset: LEMMA subset?(l1,l2) IMPLIES max(l1) <=  max(l2)
+  max_filter: LEMMA p(max(l)) IMPLIES max(filter(l,p))=max(l)
 
-END maxlist
-
-
+END minlist
 
 
 sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
 		: THEORY
-
-
   BEGIN
   IMPORTING before_min[T,key]
 
@@ -97,18 +84,21 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
 
 
 % The key function is injective. This requirement has been thought for a long time.
-% If you think this requirement is senseless, we can modify that.
+% If you think this requirement is senseless, we can modify it.
 % A list is sorted if the element are ordered by key, and contains no dupplicate.
-  sorted?(l): RECURSIVE bool =
+  sorted_aux?(l, (key: { k:[T-> real]  | injective?(k)})): RECURSIVE bool =
       CASES l OF
         null: TRUE,
      	cons(h, lt): 
 	  CASES lt OF
 	    null: TRUE,
-	    cons(th, ltt): h < th AND sorted?(lt)
+	    cons(th, ltt): key(h) < key(th) AND sorted_aux?(lt,key)
 	  ENDCASES
       ENDCASES
      MEASURE length(l)
+
+  sorted?(l): bool = sorted_aux?(l,key)
+  rev_sorted?(l): bool = sorted_aux?(l,rev_key)  
 
   sl, sl1, sl2 : VAR (sorted?)
 
@@ -118,7 +108,8 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
   
   % Powerful characterisation of sorted list with nth
 
-  nth_sorted: LEMMA FORALL l: sorted?(l) IFF (FORALL (i,j:below(length(l))): i < j IFF nth(l,i) < nth(l,j))
+  nth_sorted: LEMMA FORALL l: sorted?(l) IFF 
+  	      	    FORALL (i,j:below(length(l))): i < j IFF nth(l,i) < nth(l,j)
 
 
   % More efficient version of member in the case of a sorted list
@@ -133,7 +124,7 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
   MEASURE length(sl)
 
 
-  % More efficient version of remove in the case of a sorted list   
+  % More efficient version of remove in the case of a sorted list  
   s_remove(a,sl): RECURSIVE { s:(sorted?)  | FORALL x: member(x,s) IFF 
        	 	      	      NOT key(x) = key(a) AND member(x,sl)} = 
       CASES sl OF
@@ -145,7 +136,7 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
       ENDCASES
       MEASURE length(sl)
 
-% /!\ Semantic of insert : if the element is already in, just return the list
+  % /!\ Semantic of insert : if the element is already in, just return the list
   s_insert(a,sl): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF key(x) = key(a) OR member(x,sl) } =
 	CASES sl OF
 	null: cons(a,null),
@@ -210,15 +201,19 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
   % Two sorted list are equal IFF they are structurally equal
   s_equal_char: THEOREM s_equal?(sl1,sl2) IFF sl1 = sl2 
   s_equal_equal:   LEMMA  s_equal?(sl1,sl2)  IFF  equal?(sl1,sl2) ;
- 
 
-  % Min (max in rev_sortedlist)
 
-  min_sorted: LEMMA cons?(sl) IMPLIES min(sl) = car(sl) ;
+  % Interaction between rev_sorted and sorted
+  rev_sorted: THEOREM rev_sorted?(reverse(sl))
+
+  % Min and max
+  min_sorted: LEMMA cons?(sl) IMPLIES min(sl) = car(sl)
+  max_sorted: LEMMA cons?(sl) IMPLIES max(sl) = car(reverse(sl)) ;
 
   % Before order on sorted lists
-
-  <(sl1,sl2): bool =  cons?(sl2) AND every(LAMBDA x: x < car(sl2))(sl1)
+    % More efficient version of before on sorted lists
+  <(sl1,sl2): bool =  cons?(sl2) AND 
+  	      	        (null?(sl1) OR car(reverse(sl1)) < car(sl2))
 
  
   s_before_before: THEOREM sl1 < sl2 IFF (<::PRED[[list[T],list[T]]])(sl1,sl2)
@@ -230,39 +225,4 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
   filter_sorted: JUDGEMENT filter(sl,p) HAS_TYPE (sorted?)
 
 END sortedlist
-
-
-rev_sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
-		: THEORY
-  BEGIN
-  IMPORTING maxlist[T,key]
-  IMPORTING sortedlist[T,key]
-
-
-  l, m, l1, l2 : VAR list[T]
-  a,b,c: VAR T
-  x,y,z: VAR T
-  i,j: VAR nat
-  p: VAR PRED[T]
-
-  rev_key(x): real = -key(x)
-
-  IMPORTING sortedlist[T,rev_key]
-
-
-
-  rev_sorted?(l): bool = sorted?[T,rev_key](l)
-
-  sl, sl1, sl2 : VAR (sorted?[T,key])
-  rl, rl1, rl2 : VAR (rev_sorted?)
-
-
-  rev_sorted: THEOREM rev_sorted?(reverse(sl)) ;
-
-  % Max :
-
-  max_sorted: LEMMA cons?(sl) IMPLIES max(sl) = car(reverse(sl)) 	
-
-  END rev_sortedlist
-
 
