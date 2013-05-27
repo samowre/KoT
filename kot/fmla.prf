@@ -28,6 +28,11 @@
      integers nil)
     (length def-decl "nat" list_props nil))
    nil))
+ (≐_TCC1 0
+  (≐_TCC1-1 nil 3578662185 ("" (grind) nil nil)
+   ((length def-decl "nat" list_props nil)
+    (list2finseq const-decl "finseq[T]" list2finseq nil))
+   nil))
  (FV_TCC1 0
   (FV_TCC1-1 nil 3578336763 ("" (termination-tcc) nil nil)
    ((<< adt-def-decl "(strict_well_founded?[fmla])" fmla nil)) nil))
@@ -962,36 +967,6 @@
    nil))
  (canon?_TCC1 0
   (canon?_TCC1-1 nil 3578495349 ("" (grind) nil nil)
-   ((<< adt-def-decl "(strict_well_founded?[fmla])" fmla nil)) nil))
- (canon?_TCC2 0
-  (canon?_TCC2-1 nil 3578502645 ("" (termination-tcc) nil nil)
-   ((<< adt-def-decl "(strict_well_founded?[fmla])" fmla nil)) nil))
- (canon?_TCC3 0
-  (canon?_TCC3-1 nil 3578502645 ("" (termination-tcc) nil nil)
-   ((<< adt-def-decl "(strict_well_founded?[fmla])" fmla nil)) nil))
- (canon?_TCC4 0
-  (canon?_TCC4-1 nil 3578502645 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (>= const-decl "bool" reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (<< adt-def-decl "(strict_well_founded?[fmla])" fmla nil))
-   nil))
- (canon?_TCC5 0
-  (canon?_TCC5-1 nil 3578502645 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1123,7 +1098,37 @@
   (parsubst_TCC5-1 nil 3578336763
    ("" (grind)
     (("" (typepred "mapping!1(x1!1)") (("" (grind) nil nil)) nil)) nil)
-   ((<< adt-def-decl "(strict_well_founded?[fmla])" fmla nil)) nil))
+   ((V def-decl "set[nat]" term nil) (set type-eq-decl nil sets nil)
+    (fmla type-decl nil fmla nil)
+    (v adt-constructor-decl "[nat -> (var?)]" term nil)
+    (var? adt-recognizer-decl "[term -> boolean]" term nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (term type-decl nil term nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (BV def-decl "set[nat]" fmla nil)
+    (add const-decl "(nonempty?)" sets nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (freefor const-decl "bool" fmla nil)
+    (empty? const-decl "bool" sets nil)
+    (intersection const-decl "set" sets nil)
+    (member const-decl "bool" sets nil))
+   nil))
  (parsubst_TCC6 0
   (parsubst_TCC6-1 nil 3578336763 ("" (grind :defs nil) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
@@ -1132,6 +1137,7 @@
     (number nonempty-type-decl nil numbers nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil)
+    (every adt-def-decl "boolean" list_adt nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -1158,8 +1164,6 @@
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
    nil))
- (parsubst_TCC7 0
-  (parsubst_TCC7-1 nil 3578502645 ("" (subtype-tcc) nil nil) nil nil))
  (subst_TCC1 0
   (subst_TCC1-1 nil 3578336763 ("" (subtype-tcc) nil nil) nil nil))
  (fsubst_TCC1 0
@@ -1307,17 +1311,16 @@
     (length def-decl "nat" list_props nil)
     (arity shared-adt-accessor-decl "[fun -> nat]" term nil)
     (fmla type-decl nil fmla nil) (set type-eq-decl nil sets nil)
-    (freefor const-decl "bool" fmla nil) (term type-decl nil term nil)
-    (V def-decl "set[nat]" term nil)
-    (<< adt-def-decl "(strict_well_founded?[fmla])" fmla nil)
-    (empty? const-decl "bool" sets nil)
-    (intersection const-decl "set" sets nil)
-    (union const-decl "set" sets nil)
+    (term type-decl nil term nil) (V def-decl "set[nat]" term nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (BV def-decl "set[nat]" fmla nil)
+    (add const-decl "(nonempty?)" sets nil)
     (member const-decl "bool" sets nil)
-    (BV def-decl "set[nat]" fmla nil))
+    (intersection const-decl "set" sets nil)
+    (empty? const-decl "bool" sets nil)
+    (freefor const-decl "bool" fmla nil))
    nil))
- (fsubst_TCC6 0
-  (fsubst_TCC6-1 nil 3578502645 ("" (subtype-tcc) nil nil) nil nil))
  (psubst_TCC1 0
   (psubst_TCC1-1 nil 3578336763
    ("" (grind :rewrites every_forall) nil nil)

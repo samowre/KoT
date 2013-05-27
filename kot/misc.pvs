@@ -84,6 +84,7 @@ BEGIN
 
   ;∅: MACRO set[T] = emptyset
   ;∈(x, a): MACRO bool = member(x, a)
+  ;∉(x, a): MACRO bool = NOT member(x, a)
   ;⊂(a, b): MACRO bool = subset?(a, b)
   ;∪(a, b): MACRO set[T] = union(a, b)
   ;∪(a, x): MACRO set[T] = add(x, a)
@@ -124,3 +125,11 @@ BEGIN
 
 END more_finseq_props
 
+wf_pair[L: TYPE, R: TYPE, le_l: (well_founded?[L]), le_r: (well_founded?[R])]: THEORY
+BEGIN
+  le(x: [L, R], y: [L, R]): bool =
+    le_l(x`1, y`1) OR (x`1 = y`1 AND le_r(x`2, y`2))
+
+  wf_pair: JUDGEMENT
+    le HAS_TYPE (well_founded?[[L, R]])
+END wf_pair

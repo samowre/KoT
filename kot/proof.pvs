@@ -10,55 +10,59 @@ proof	: THEORY
 
   BEGIN
 
+  IMPORTING fmla
+
+  sequent: TYPE = set[sentence]
+
   proof: DATATYPE
-    % ———————————— (Ax)
-    %  ⊢ A, ¬A, Γ
+  BEGIN
+    % ————————— (Ax)
+    %  ⊢ A, ¬A
     ax(A: sentence, conc: sequent): ax?
     %  ⊢ A, Γ    ⊢ ¬A, Σ
     % ——————————————————— (Cut)
     %        ⊢ Γ, Σ
-    cut(A: sentence, H1: proof, H2: proof): cut?
+    cut(A: sentence, H1: proof, H2: proof, conc: sequent): cut?
     %    ⊢ A, Γ                  ⊢ B, Γ
-    % ————————————— (⋁R₁)   ————————————— (⋁R₂)
+    % ————————————— (⋁₁)   ————————————— (⋁₂)
     %  ⊢ A ∨ B, Γ             ⊢ A ∨ B, Γ
-    orr(A: sentence, B: sentence, H: proof): orr?
+    orr(A: sentence, B: sentence, H: proof, conc: sequent): orr?
     %  ⊢ ¬A, Γ      ⊢ ¬B, Σ
-    % —————————————————————— (⋁L)
+    % —————————————————————— (¬⋁)
     %     ⊢ ¬(A ∨ B), Γ, Σ
-    orl(A: sentence, B: sentence, H1: proof, H2: proof): orl?
+    orl(A: sentence, B: sentence, H1: proof, H2: proof, conc: sequent): orl?
     %     ⊢ A, Γ
     % ——————————— (¬)
     %  ⊢ ¬¬A, Γ
-    neg(A: sentence, H: proof): negr?
+    neg(A: sentence, H: proof, conc: sequent): negr?
     %  ⊢ A[t/x], Γ
-    % ————————————— (∃R)
+    % ————————————— (∃)
     %   ⊢ ∃x.A, Γ
-    existsr(t: term, x: nat, (A: fmla | FV(A) ⊂ singleton(x) ), H: proof): existsr?
+    existsr(t: term, x: nat, qbody: { A: fmla |  FV(A) ⊂ singleton(x) }, H: proof, conc: sequent): existsr?
     %  ⊢ A[y/x], Γ
-    % ————————————— (∀R)
+    % ————————————— (∀)
     %   ⊢ ∀x.A, Γ
-    forallr(y: skolem, x: nat, (A: fmla | FV(A) ⊂ singleton(x)), H: proof): forallr?
+    forallr(y: skolem, x: nat, qbody: { A: fmla | FV(A) ⊂ singleton(x) }, H: proof, conc: sequent): forallr?
     %      ⊢ Γ
     % —————————————— (Fλ)
     %  ⊢ Γ[λvs.t/f]
-    fschema(f: ufun, (vs: list[nat] | length(vs) = arity(f)),
-            (t: term | V(t) ⊂ vs), H: proof): fschema?
+    fschema(f: (ufun?), vs: { vs: list[nat] | length(vs) = arity(f) },
+            fbody: {t: term | V(t) ⊂ vs }, H: proof, conc: sequent): fschema?
     %       ⊢ Γ
     % —————————————— (Pλ)
     %  ⊢ Γ[λvs.A/p]
-    ∀x. p(x) ⊢ ∃x. p(x)
-    pschema(p: upred, (vs: list[nat] | length(vs) = arity(p)),
-            (A: fmla | FV(A) ⊂ vs), H: proof): pschema?
+    pschema(p: (upred?), vs: { vs: list[nat] | length(vs) = arity(p) },
+            pbody: { A: fmla | FV(A) ⊂ vs }, H: proof, conc: sequent): pschema?
     % ———————— (Refl)
     % ⊢ t = t
     refl(t: term, conc: sequent): refl?
     % ————————————————————————————————————————————————————————— (F₌)
     % ⊢ x₁ ≠ y₁, ..., xₙ ≠ yₙ, f(x₁, ..., xₙ) = f(y₁, ..., yₙ)
-    fcongruence(f: fun, xs: finseq[skolem], (ys: finseq[skolem] | ys`length = xs`length)):
+    fcongruence(f: fun, xs: finseq[skolem], ys: { ys: finseq[skolem] | ys`length = xs`length }, conc: sequent):
       fcongruence?
     % ————————————————————————————————————————————————————————— (P₌)
     % ⊢ x₁ ≠ y₁, ..., xₙ ≠ yₙ, p(x₁, ..., xₙ), ¬p(y₁, ..., yₙ)
-    pcongruence(p: pred, xs: finseq[skolem], (ys: finseq[skolem] | ys`length = xs`length)):
+    pcongruence(p: pred, xs: finseq[skolem], ys: { ys: finseq[skolem] | ys`length = xs`length }, conc: sequent):
       pcongruence?
     % ————— (Lemma)     Using this rule requires it to be conditional to a proof
     %  ⊢ Σ              of the lemma ⊢ Σ.
@@ -68,16 +72,17 @@ proof	: THEORY
   CONVERSION+ conc
 
   % sequent = set[sentence]
-  〈〉(x: sentence, y: sentence): sequent = x ∪ y
+  ;〈〉(x: sentence, y: sentence): MACRO sequent = add(x, singleton(y))
+  ;〈〉(Γ: sequent, Σ: sequent): MACRO sequent = Γ ∪ Σ
 
-  ↝(lemmas: set[sequent], Π: proof): RECURSIVE bool =
+  ;↝(lemmas: set[sequent], Π: proof): RECURSIVE bool =
     CASES Π OF
       ax(A, Γ): 〈 A, ¬A 〉 ⊂ Γ,
       cut(A, H1, H2, Γ):
 	       A ∈ H1 AND (¬A) ∈ H2
 	AND %——————————————————————————%
 	    〈 (H1 - A), (H2 - ¬A) 〉 ⊂ Γ
-        AND lemmas ↝ H1 AND lemmas ↝ H2
+        AND lemmas ↝ H1 AND lemmas ↝ H2,
       orr(A, B, H, Γ):
             (A ∈ H OR B ∈ H)
 	AND %————————————————%
@@ -94,36 +99,36 @@ proof	: THEORY
              (¬¬A) ∈ Γ
 	AND lemmas ↝ H,
       existsr(t, x, A, H, Γ):
-             A(x ← t) ∈ H
+             subst(A, x, t) ∈ H
         AND %—————————————%
 	      (◇x)(A) ∈ Γ
         AND lemmas ↝ H,
       forallr(y, x, A, H, Γ):
-             A(x ← y) ∈ H
+             subst(A, x, y) ∈ H
 	AND %—————————————%
 	      (□x)(A) ∈ Γ
-	AND sk(y) ∉ Γ AND lemmas ↝ H,
+	AND skfree(Γ, y) AND lemmas ↝ H,
       fschema(f, vs, t, H, Γ):
         subst(H, f, vs, t) ⊂ Γ
-	AND lemmas ↝ H
+	AND lemmas ↝ H,
       pschema(p, vs, A, H):
         subst(H, p, vs, A) ⊂ Γ
-	AND lemmas ↝ H
-      refl(t: term, Γ):
+	AND lemmas ↝ H,
+      refl(t, Γ):
         (t ≐ t) ∈ Γ,
       fcongruence(f, xs, ys, Γ):
         every2(LAMBDA (x, y: skolem): (¬(x ≐ y)) ∈ Γ, xs, ys) AND
-	(apply(f, xs) ≐ apply(f, ys)) ∈ Γ
+	(apply(f, xs) ≐ apply(f, ys)) ∈ Γ,
       pcongruence(p, xs, ys, Γ):
         every2(LAMBDA (x, y: skolem): (¬(x ≐ y)) ∈ Γ, xs, ys) AND
 	atom(p, xs) ∈ Γ AND
-	(¬atom(p, xs)) ∈ Γ
+	(¬atom(p, xs)) ∈ Γ,
       lemma_(Σ, Γ):
         Σ ∈ lemmas AND Σ ⊂ Γ
     ENDCASES
-  MEASURE p BY <<
+  MEASURE Π BY <<
 
-  ↝(lemmas: set[sequent], seqs: list[proof]): RECURSIVE bool =
+  ;↝(lemmas: set[sequent], seqs: list[proof]): RECURSIVE bool =
     CASES seqs OF
       null: TRUE,
       cons(Π, tl): lemmas ↝ Π AND (lemmas ∪ Π) ↝ tl
@@ -155,65 +160,65 @@ proof	: THEORY
    lemma_(index: nat) : lemma?		: no_premise?
   END rule
 
-  %for sequent type
-  importing sequents
+  %% for sequent type
+  % importing sequents
 
-  proof_step : TYPE
-   = [# sequent: sequent,
-        rule: rule,
-	subs: list[nat] #]
+  % proof_step : TYPE
+  %  = [# sequent: sequent,
+  %       rule: rule,
+  % 	subs: list[nat] #]
   
-  %replaced finite_seq with finseq
-  proof_seq: TYPE =  finseq[proof_step]
+  % %replaced finite_seq with finseq
+  % proof_seq: TYPE =  finseq[proof_step]
 
-  R, S: VAR proof_step
-  RR, SS: VAR proof_seq
+  % R, S: VAR proof_step
+  % RR, SS: VAR proof_seq
 
-  ne_proof_seq: TYPE = {RR | RR`length > 0}
+  % ne_proof_seq: TYPE = {RR | RR`length > 0}
 
-  nRR, nSS: VAR ne_proof_seq
+  % nRR, nSS: VAR ne_proof_seq
   
-  %deleted :nRR
-  %added `sequent at the end
-  conclusion(nRR): sequent =
-    (nRR`seq(nRR`length - 1))`sequent
+  % %deleted :nRR
+  % %added `sequent at the end
+  % conclusion(nRR): sequent =
+  %   (nRR`seq(nRR`length - 1))`sequent
   
-  checkProof(lemmas: finseq[sequent])(RR): bool =
-    (FORALL (i: below(RR`length)):
-     % checks if rule has enough parameters
-     (LET R = RR`seq(i) IN
-      (one_premise?(R`rule) OR two_premise?(R`rule)
-       => (cons?(R`subs) AND car(R`subs) < i)) AND
-      (two_premise?(R`rule) => (cons?(cdr(R`subs)) AND
-				car(cdr(R`subs)) < i )) AND
-      (CASES R`rule OF
-       ax : ax_rule?(R`sequent),
-       subset: subset_rule?(RR`seq(car(R`subs))`sequent ,R`sequent),
-       %replaced R`sequence with RR.seq
-       orr : or_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
-       norr: nor_rule?(RR`seq(car(R`subs))`sequent,
-	               RR`seq(car(cdr(R`subs)))`sequent,
-	               R`sequent),
-       neg : neg_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
-       cut(A): cut_rule?(A, RR`seq(car(R`subs))`sequent,
-                            RR`seq(car(cdr(R`subs)))`sequent,
-			    R`sequent),
-       existsr(u):
-         exists_rule?(u, RR`seq(car(R`subs))`sequent, R`sequent),
-       allr(f): forall_rule?(f, RR`seq(car(R`subs))`sequent, R`sequent),
-       fschema(u, vars, s): fschema_rule?(u, vars, s, RR`seq(car(R`subs))`sequent, R`sequent),
-       pschema(p, vars, A): pschema_rule?(p, vars, A, RR`seq(car(R`subs))`sequent, R`sequent),
-       reflex: reflex_rule?(R`sequent),
-       lemma_(i): (i < lemmas`length AND
-                  R`sequent = lemmas(i))
-      ENDCASES)))
+  % checkProof(lemmas: finseq[sequent])(RR): bool =
+  %   (FORALL (i: below(RR`length)):
+  %    % checks if rule has enough parameters
+  %    (LET R = RR`seq(i) IN
+  %     (one_premise?(R`rule) OR two_premise?(R`rule)
+  %      => (cons?(R`subs) AND car(R`subs) < i)) AND
+  %     (two_premise?(R`rule) => (cons?(cdr(R`subs)) AND
+  % 				car(cdr(R`subs)) < i )) AND
+  %     (CASES R`rule OF
+  %      ax : ax_rule?(R`sequent),
+  %      subset: subset_rule?(RR`seq(car(R`subs))`sequent ,R`sequent),
+  %      %replaced R`sequence with RR.seq
+  %      orr : or_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
+  %      norr: nor_rule?(RR`seq(car(R`subs))`sequent,
+  % 	               RR`seq(car(cdr(R`subs)))`sequent,
+  % 	               R`sequent),
+  %      neg : neg_rule?(RR`seq(car(R`subs))`sequent, R`sequent),
+  %      cut(A): cut_rule?(A, RR`seq(car(R`subs))`sequent,
+  %                           RR`seq(car(cdr(R`subs)))`sequent,
+  % 			    R`sequent),
+  %      existsr(u):
+  %        exists_rule?(u, RR`seq(car(R`subs))`sequent, R`sequent),
+  %      allr(f): forall_rule?(f, RR`seq(car(R`subs))`sequent, R`sequent),
+  %      fschema(u, vars, s): fschema_rule?(u, vars, s, RR`seq(car(R`subs))`sequent, R`sequent),
+  %      pschema(p, vars, A): pschema_rule?(p, vars, A, RR`seq(car(R`subs))`sequent, R`sequent),
+  %      reflex: reflex_rule?(R`sequent),
+  %      lemma_(i): (i < lemmas`length AND
+  %                 R`sequent = lemmas(i))
+  %     ENDCASES)))
 
 
-    proof: DATATYPE
-     BEGIN
-       compose(lemma_proofs : finseq[ne_proof_seq], 
-               main : (checkProof(map(conclusion)(lemma_proofs)))): compose?
-     END proof
+%    proof: DATATYPE
+%     BEGIN
+%       compose(lemma_proofs : finseq[ne_proof_seq], 
+%               main : (checkProof(map(conclusion)(lemma_proofs)))): compose?
+%     END proof
   
 %Each proof_entry can be independently checked.  We can then
 %compose these into a proof whe0re we associate proofs with
@@ -231,4 +236,4 @@ proof	: THEORY
   					  
   
 
-  END proof
+ END proof

@@ -6,15 +6,19 @@ BEGIN
   IMPORTING lists@list2_props
   IMPORTING more_finseq_props
   IMPORTING assoc2, smap, setmap
+  IMPORTING wf_pair
   IMPORTING set_props
+  % TODO: move this to set_props
   CONVERSION- singleton_elt
 
+  % A function is interpreted or uninterpreted
   fun: DATATYPE
   BEGIN
     ifun(index, arity: nat): ifun?
     ufun(index, arity: nat): ufun?
   END fun
 
+  % Terms of functions and variables
   term: DATATYPE
   BEGIN
     v(index: nat): var?
@@ -30,6 +34,29 @@ BEGIN
   skolem?(s): bool =
     apply?(s) AND ufun?(fun(s)) AND arity(fun(s)) = 0
   skolem: TYPE = (skolem?)
+
+  sk(i): term = apply(ufun(i, 0), empty_seq)
+
+  skfree_aux(s: term, ts: finseq[{ t: term | t << s }], i: upto(ts`length), x: skolem):
+    RECURSIVE bool =
+    IF i = ts`length THEN TRUE
+    ELSE LET tsi = ts(i) IN
+      CASES tsi OF
+       v(j): skfree_aux(s, ts, i + 1, x),
+       apply(f, args):
+         IF tsi = x THEN FALSE
+	 ELSE skfree_aux(tsi, args, 0, x) AND skfree_aux(s, ts, i + 1, x) ENDIF
+      ENDCASES
+    ENDIF
+  MEASURE (s, (ts`length - i) :: nat) BY le[term, nat, <<, <]
+
+  skfree(s: term, x: skolem): bool =
+    CASES s OF
+      v(i): TRUE,
+      apply(f, args):
+        IF s = x THEN FALSE
+	ELSE skfree_aux(s, args, 0, x) ENDIF
+    ENDCASES
 
   % Computes the set of variables present in a term.
   % This is intended to be used in specifications only, and may not be executable.
@@ -54,8 +81,17 @@ BEGIN
     ENDCASES
   MEASURE t BY <<
 
+  UFS_subterm: THEOREM
+    uf ∈ UFS(t) IFF EXISTS (args: finseq[term] | args`length = arity(uf)): subterm(apply(uf, args), t)
+
+  skfree_aux_UFS: RECURSIVE JUDGEMENT
+    skfree_aux(s: term, ts: finseq[{ t: term | t << s }], i: upto(ts`length), x: skolem)
+      HAS_TYPE { b: bool | b = FORALL (j: below(ts`length)): j >= i IMPLIES fun(x) ∉ UFS(ts`seq(j)) }
+
+  skfree_UFS: JUDGEMENT
+    skfree(s: term, x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(s) }
+
   % Rename variables
-  % TODO: injection, equivalence
   α(rename: (bijective?[nat, nat]))(s): RECURSIVE term =
     CASES s OF
       v(i): v(rename(i)),
@@ -68,11 +104,8 @@ BEGIN
   alpha_vars: RECURSIVE JUDGEMENT
     α(rename: (bijective?[nat, nat]))(s: term) HAS_TYPE { t | V(t) = rename(V(s)) }
 
-  ;≃(s, t): MACRO bool = EXISTS (rename: (bijective?[nat, nat])): α(rename)(s) = t
-  alpha_equiv(s, t): bool = s ≃ t
-
-  alpha_structure: THEOREM
-    (s ≃ t) AND apply?(s) IMPLIES apply?(t)
+  alpha_equiv(s, t): bool = EXISTS (rename: (bijective?[nat, nat])): α(rename)(s) = t
+  ;≃(s, t): MACRO bool = alpha_equiv(s, t)
 
   alpha_identity: THEOREM
     α(LAMBDA n: n)(s) = s

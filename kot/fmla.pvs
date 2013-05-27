@@ -2,11 +2,16 @@ fmla: THEORY
 BEGIN
   IMPORTING term
 
+  % A predicate can be interpreted or uninterpreted.
+  % The uninterpreted predicate with index 0 and arity 2
+  % is assumed to represent the equality
   pred: DATATYPE
   BEGIN
     ipred(index, arity: nat): ipred?
     upred(index, arity: nat): upred?
   END pred
+
+  ;≐: MACRO pred = ipred(0, 2)
 
   % A first-order formula over terms
   fmla: DATATYPE
@@ -29,20 +34,21 @@ BEGIN
   up: VAR (upred?)
 
   % Readable constructors
-  ;¬(f): fmla    = f_not(f)
-  ;∨(f, g): fmla = f_or(f, g)
-  ;∧(f, g): fmla = ¬(¬f ∨ ¬g)
-  ;⇒(f, g): fmla = ¬f ∨ ¬g
+  ;¬(f): MACRO fmla    = f_not(f)
+  ;∨(f, g): MACRO fmla = f_or(f, g)
+  ;∧(f, g): MACRO fmla = ¬(¬f ∨ ¬g)
+  ;⇒(f, g): MACRO fmla = ¬f ∨ ¬g
   ;⇔(f, g): fmla = (f ⇒ g) ∨ (g ⇒ f)
-  ;◇(n)(f): fmla = f_exists(n, f)
+  ;◇(n)(f): MACRO fmla = f_exists(n, f)
   ;◇(ln)(f): RECURSIVE fmla =
     CASES ln OF
       null: f,
       cons(n, t): f_exists(n, (◇t)(f))
     ENDCASES
   MEASURE length(ln)
-  ;□(n)(f): fmla  = ¬(◇n)(f)
-  ;□(ln)(f): fmla = ¬(◇ln)(f)
+  ;□(n)(f): MACRO fmla  = ¬(◇n)(f)
+  ;□(ln)(f): MACRO fmla = ¬(◇ln)(f)
+  ;≐(s, t): MACRO fmla = atom(≐, (: s, t :))
 
   % Free variables of a formula
   % This is intended to be used in specifications only, and may not be executable.
@@ -57,6 +63,7 @@ BEGIN
 
   % A formula without free variables is a sentence
   sentence?(f): bool = empty?(FV(f))
+  sentence: TYPE  = (sentence?)
 
   % Bound variables (i.e, variables bound by an ∃, whether they actually are used or not)
   BV(f): RECURSIVE set[nat] =
@@ -159,31 +166,31 @@ BEGIN
     ENDCASES
   MEASURE f BY <<
 
-  canonize_aux(f: fmla, mapping: (bijective?[nat, nat])): RECURSIVE fmla =
-    CASES f OF
-      atom(p, args): f,
-      f_not(g): f_not(canonize(g)),
-      f_or(g, h): f_or(canonize_aux(g), canonize_aux(h)),
-      f_exists(b, g):
-        LET nb = nextbound(g) IN
-	f_exists(nb, canonize_aux(g, (LAMBDA n: IF n = b THEN nb ELSIF n = nb THEN b ELSE n ENDIF) o mapping))
+  % canonize_aux(f: fmla, mapping: (bijective?[nat, nat])): RECURSIVE fmla =
+  %   CASES f OF
+  %     atom(p, args): f,
+  %     f_not(g): f_not(canonize(g)),
+  %     f_or(g, h): f_or(canonize_aux(g), canonize_aux(h)),
+  %     f_exists(b, g):
+  %       LET nb = nextbound(g) IN
+  % 	f_exists(nb, canonize_aux(g, (LAMBDA n: IF n = b THEN nb ELSIF n = nb THEN b ELSE n ENDIF) o mapping))
 
-  canonize_aux_alpha: THEOREM
-    canonize_aux(f, mapping) = canonize_aux(α(inverse(mapping))(f), { mapping on FV(f), id on BV(f) })
+  % canonize_aux_alpha: THEOREM
+  %   canonize_aux(f, mapping) = canonize_aux(α(inverse(mapping))(f), { mapping on FV(f), id on BV(f) })
 
-  canonize(f): fmla =
-    α(canonize_aux(f, LAMBDA n: n))(f)
+  % canonize(f): fmla =
+  %   α(canonize_aux(f, LAMBDA n: n))(f)
 
-  f = α(rename)(g)
+  % f = α(rename)(g)
 
-  canonize_aux(f, rename) = canonize_aux(α(inverse(rename))(α(rename)(g)), { rename on FV(f), id on BV(f) })
-                          = canonize_aux(g, { rename on FV(f), id on BV(f) })
-			  = canonize_aux(α(rename)(g), rename)
+  % canonize_aux(f, rename) = canonize_aux(α(inverse(rename))(α(rename)(g)), { rename on FV(f), id on BV(f) })
+  %                         = canonize_aux(g, { rename on FV(f), id on BV(f) })
+  % 			  = canonize_aux(α(rename)(g), rename)
 
-  canonize(f) = α(canonize_aux(f, LAMBDA n: n))(f)
-              = α(canonize_aux(α(rename)(g), LAMBDA n: n))(α(rename)(g))
-	      = α(canonize_aux(g, rename))(α(rename)(g))
-	      = α(canonize_aux(g, rename) o rename
+%  canonize(f) = α(canonize_aux(f, LAMBDA n: n))(f)
+%              = α(canonize_aux(α(rename)(g), LAMBDA n: n))(α(rename)(g))
+%	      = α(canonize_aux(g, rename))(α(rename)(g))
+%	      = α(canonize_aux(g, rename) o rename
 
   % Parallel substitution of variables in a formula through a mapping
   % We can actually have more informations about the free variables of the

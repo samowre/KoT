@@ -44,16 +44,15 @@
      "(strict_total_order?[real])" real_props nil)
     (down adt-accessor-decl "[(up?) -> T]" lift_adt nil)
     (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
-    (member_nth formula-decl nil more_list_props nil)
+    (member_nth formula-decl nil more_list_props "../lists/")
     (PRED type-eq-decl nil defined_types nil)
-    (lift type-decl nil lift_adt nil)
-    (every adt-def-decl "boolean" lift_adt nil)
+    (lift type-decl nil lift_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (< const-decl "bool" reals nil) (nth def-decl "T" list_props nil)
     (pred type-eq-decl nil defined_types nil)
     (below type-eq-decl nil naturalnumbers nil)
     (findi def-decl "lift[{i: below(length(l)) | p(nth(l, i))}]"
-     more_list_props nil)
+     more_list_props "../lists/")
     (assoc2 const-decl "lift[V]" assoc2 nil))
    shostak))
  (assoc2_lift_member_TCC1 0
@@ -83,24 +82,21 @@
     nil)
    ((pred type-eq-decl nil defined_types nil)
     (member def-decl "bool" list_props nil)
-    (some_exists formula-decl nil more_list_props nil)
+    (some_exists formula-decl nil more_list_props "../lists/")
     (findi def-decl "lift[{i: below(length(l)) | p(nth(l, i))}]"
-     more_list_props nil)
+     more_list_props "../lists/")
     (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
-    (below type-eq-decl nil naturalnumbers nil)
-    (k!1 skolem-const-decl "K" assoc2 nil)
-    (nth def-decl "T" list_props nil)
-    (ks!1 skolem-const-decl "list[K]" assoc2 nil)
+    (below type-eq-decl nil naturalnumbers nil) nil
+    (nth def-decl "T" list_props nil) nil
     (< const-decl "bool" reals nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" lift_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (PRED type-eq-decl nil defined_types nil)
     (lift type-decl nil lift_adt nil)
     (down adt-accessor-decl "[(up?) -> T]" lift_adt nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
      nil)
     (assoc2 const-decl "lift[V]" assoc2 nil)
-    (findi_some formula-decl nil more_list_props nil)
+    (findi_some formula-decl nil more_list_props "../lists/")
     (length def-decl "nat" list_props nil)
     (>= const-decl "bool" reals nil)
     (int nonempty-type-eq-decl nil integers nil)
@@ -160,18 +156,17 @@
      "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (member_nth formula-decl nil more_list_props nil)
+    (member_nth formula-decl nil more_list_props "../lists/")
     (down adt-accessor-decl "[(up?) -> T]" lift_adt nil)
     (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
     (PRED type-eq-decl nil defined_types nil)
-    (lift type-decl nil lift_adt nil)
-    (every adt-def-decl "boolean" lift_adt nil)
+    (lift type-decl nil lift_adt nil) nil
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (< const-decl "bool" reals nil) (nth def-decl "T" list_props nil)
     (pred type-eq-decl nil defined_types nil)
     (below type-eq-decl nil naturalnumbers nil)
     (findi def-decl "lift[{i: below(length(l)) | p(nth(l, i))}]"
-     more_list_props nil)
+     more_list_props "../lists/")
     (assoc2 const-decl "V" assoc2 nil))
    shostak))
  (assoc2_member 0
@@ -195,24 +190,21 @@
     nil)
    ((pred type-eq-decl nil defined_types nil)
     (member def-decl "bool" list_props nil)
-    (some_exists formula-decl nil more_list_props nil)
+    (some_exists formula-decl nil more_list_props "../lists/")
     (findi def-decl "lift[{i: below(length(l)) | p(nth(l, i))}]"
-     more_list_props nil)
+     more_list_props "../lists/")
     (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
-    (below type-eq-decl nil naturalnumbers nil)
-    (k!1 skolem-const-decl "K" assoc2 nil)
-    (nth def-decl "T" list_props nil)
-    (ks!1 skolem-const-decl "list[K]" assoc2 nil)
+    (below type-eq-decl nil naturalnumbers nil) nil
+    (nth def-decl "T" list_props nil) nil
     (< const-decl "bool" reals nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (every adt-def-decl "boolean" lift_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
     (PRED type-eq-decl nil defined_types nil)
     (lift type-decl nil lift_adt nil)
     (down adt-accessor-decl "[(up?) -> T]" lift_adt nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
      nil)
     (assoc2 const-decl "V" assoc2 nil)
-    (findi_some formula-decl nil more_list_props nil)
+    (findi_some formula-decl nil more_list_props "../lists/")
     (length def-decl "nat" list_props nil)
     (>= const-decl "bool" reals nil)
     (int nonempty-type-eq-decl nil integers nil)
@@ -256,7 +248,7 @@
     (smap const-decl "{vs | vs`length = ks`length}" smap nil))
    shostak)))
 (setmap)
-
+(set_props)
 (more_finseq_props
  (findi_TCC1 0
   (findi_TCC1-1 nil 3578323667 ("" (subtype-tcc) nil nil) nil nil))
@@ -339,10 +331,7 @@
      real_props nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (x!1 skolem-const-decl "finseq[T]" more_finseq_props nil)
-    (x!2 skolem-const-decl "upto(x!1`length)" more_finseq_props nil)
-    (j!1 skolem-const-decl "subrange(x!2, x!1`length - 1)"
-     more_finseq_props nil)
+    nil nil nil
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
@@ -351,8 +340,7 @@
      "lift[{i: below(s`length) | p(finseq_appl[T](s)(i))}]"
      more_finseq_props nil)
     (up? adt-recognizer-decl "[lift -> boolean]" lift_adt nil)
-    (below type-eq-decl nil naturalnumbers nil)
-    (every adt-def-decl "boolean" lift_adt nil)
+    (below type-eq-decl nil naturalnumbers nil) nil
     (PRED type-eq-decl nil defined_types nil)
     (lift type-decl nil lift_adt nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
@@ -404,9 +392,7 @@
     (findi def-decl
      "lift[{i: below(s`length) | p(finseq_appl[T](s)(i))}]"
      more_finseq_props nil)
-    (i!1 skolem-const-decl "below(s!1`length)" more_finseq_props nil)
-    (s!1 skolem-const-decl "finseq[T]" more_finseq_props nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    nil nil (AND const-decl "[bool, bool -> bool]" booleans nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (subrange type-eq-decl nil integers nil)
@@ -442,11 +428,88 @@
           "lift[{i: below(s`length) | p(finseq_appl[T](s)(i))}]"
       more_finseq_props nil))
    shostak)))
-(finseq2_props
- (assoc_TCC1 0
-  (assoc_TCC1-1 nil 3578323715 ("" (subtype-tcc) nil nil)
-   ((find const-decl
-          "lift[{i: below(s`length) | p(finseq_appl[T](s)(i))}]"
-      more_finseq_props nil))
+(wf_pair
+ (wf_pair 0
+  (wf_pair-1 nil 3578676333
+   ("" (comment "Introduce well-foundedness hypothesis")
+    (("" (typepred le_l)
+      (("" (typepred le_r)
+        (("" (comment "Use well-foundedness on left-hand side")
+          (("" (expand well_founded?)
+            (("" (skeep)
+              (("" (inst -2 "LAMBDA (l: L): EXISTS (r: R): p(l, r)")
+                (("" (prop)
+                  (("1"
+                    (comment "Use well-foundedness on right-hand side")
+                    (("1" (skeep)
+                      (("1" (typepred y)
+                        (("1" (inst -3 "LAMBDA (r: R): p(y, r)")
+                          (("1" (prop)
+                            (("1" (skeep)
+                              (("1"
+                                (typepred y_1)
+                                (("1"
+                                  (inst 1 "(y, y_1)")
+                                  (("1"
+                                    (skeep)
+                                    (("1"
+                                      (typepred x)
+                                      (("1"
+                                        (comment
+                                         "Deduce well-foundedness on pair")
+                                        (("1"
+                                          (expand le)
+                                          (("1"
+                                            (eta "[L, R]")
+                                            (("1"
+                                              (prop)
+                                              (("1" (grind) nil nil)
+                                               ("2" (grind) nil nil))
+                                              nil))
+                                            nil))
+                                          ";;; Deduce well-foundedness on pair"))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      ";;; Use well-foundedness on right-hand side"))
+                    nil)
+                   ("2"
+                    (comment "Prove that p(x) => p(x`1, x`2). So fun.")
+                    (("2" (skeep)
+                      (("2" (inst 1 "y`1")
+                        (("2" (inst 1 "y`2") (("2" (grind) nil nil))
+                          nil))
+                        nil))
+                      ";;; Prove that p(x) => p(x`1, x`2). So fun."))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            ";;; Use well-foundedness on left-hand side"))
+          nil))
+        nil))
+      ";;; Introduce well-foundedness hypothesis"))
+    nil)
+   ((le_l formal-const-decl "(well_founded?[L])" wf_pair nil)
+    (well_founded? const-decl "bool" orders nil)
+    (pred type-eq-decl nil defined_types nil)
+    (L formal-type-decl nil wf_pair nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (le const-decl "bool" wf_pair nil)
+    (x skolem-const-decl "(p)" wf_pair nil)
+    (y skolem-const-decl "(LAMBDA (l: L): EXISTS (r: R): p(l, r))"
+     wf_pair nil)
+    (p skolem-const-decl "pred[[L, R]]" wf_pair nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (R formal-type-decl nil wf_pair nil)
+    (le_r formal-const-decl "(well_founded?[R])" wf_pair nil))
    nil)))
 
