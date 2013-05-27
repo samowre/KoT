@@ -447,10 +447,11 @@
  (lcons_before 0
   (lcons_before-1 nil 3578415727
    ("" (lazy-grind :if-match all :rewrites every_forall) nil nil)
-   ((list type-decl nil list_adt nil)
+   ((bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
-    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (list type-decl nil list_adt nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (< const-decl "bool" before_list nil)
     (T formal-type-decl nil before_list nil)
     (every_forall formula-decl nil more_list_props nil)
@@ -463,6 +464,7 @@
     (boolean nonempty-type-decl nil booleans nil)
     (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
     (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
     (< const-decl "bool" before_list nil)
     (T formal-type-decl nil before_list nil)
     (every_forall formula-decl nil more_list_props nil)
@@ -492,6 +494,31 @@
     (T formal-type-decl nil before_list nil)
     (member_append formula-decl nil more_list_props nil)
     (< const-decl "bool" before_list nil))
+   shostak))
+ (before_rreverse 0
+  (before_rreverse-1 nil 3578667869
+   (""
+    (lazy-grind :if-match all :rewrites member_reverse :exclude
+     reverse)
+    (("1" (use "length_reverse[T]") (("1" (grind) nil nil)) nil)
+     ("2" (use "length_reverse[T]") (("2" (grind) nil nil)) nil)
+     ("3" (use "length_reverse[T]") (("3" (grind) nil nil)) nil))
+    nil)
+   ((posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (length_reverse formula-decl nil list_props nil)
+    (length def-decl "nat" list_props nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (< const-decl "bool" before_list nil)
+    (member_reverse formula-decl nil more_list_props nil)
+    (T formal-type-decl nil before_list nil))
    shostak))
  (before_lreverse 0
   (before_lreverse-1 nil 3578416171
@@ -549,7 +576,7 @@
          minlist nil)
     (max const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
-         maxlist nil)
+         minlist nil)
     (< const-decl "bool" reals nil)
     (strict_total_order? const-decl "bool" orders nil)
     (pred type-eq-decl nil defined_types nil)
@@ -563,7 +590,7 @@
     (< const-decl "bool" before_list nil)
     (< const-decl "PRED[[T, T]]" before_min nil)
     (minus_real_is_real application-judgement "real" reals nil)
-    (rev_key const-decl "real" maxlist nil))
+    (rev_key const-decl "real" minlist nil))
    shostak))
  (before_lchar 0
   (before_lchar-1 nil 3578420599
@@ -589,23 +616,23 @@
      "(strict_total_order?[real])" real_props nil)
     (max const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
-         maxlist nil)
+         minlist nil)
     (min const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
          minlist nil)
-    (<= const-decl "bool" reals nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (member def-decl "bool" list_props nil)
     (key formal-const-decl "{k: [T -> real] | injective?(k)}"
      before_min nil)
     (injective? const-decl "bool" functions nil)
+    (<= const-decl "bool" reals nil)
     (real nonempty-type-from-decl nil reals nil)
     (real_pred const-decl "[number_field -> boolean]" reals nil)
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number nonempty-type-decl nil numbers nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (member def-decl "bool" list_props nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil))
    shostak))
@@ -633,23 +660,23 @@
      "(strict_total_order?[real])" real_props nil)
     (max const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(y) <= key(x))}"
-         maxlist nil)
+         minlist nil)
     (min const-decl
          "{x | member(x, l) AND (FORALL y: member(y, l) IMPLIES key(x) <= key(y))}"
          minlist nil)
-    (<= const-decl "bool" reals nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (member def-decl "bool" list_props nil)
     (key formal-const-decl "{k: [T -> real] | injective?(k)}"
      before_min nil)
     (injective? const-decl "bool" functions nil)
+    (<= const-decl "bool" reals nil)
     (real nonempty-type-from-decl nil reals nil)
     (real_pred const-decl "[number_field -> boolean]" reals nil)
     (number_field nonempty-type-from-decl nil number_fields nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number nonempty-type-decl nil numbers nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (member def-decl "bool" list_props nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil))
    shostak)))

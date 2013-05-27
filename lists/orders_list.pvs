@@ -107,11 +107,9 @@ BEGIN
   a,b,c: VAR T
   p: VAR PRED[T]
 
-  IMPORTING maxlist[T,key]
+  IMPORTING minlist[T,key]
   <: PRED[[T,T]] = minlist[T,key].<
-  min: MACRO [(cons?[T]) -> T] = min[T,key]
   IMPORTING before_list[T,<]
-
 
 
   before_char: THEOREM l1 < l2 IFF max(l1) < min(l2)
