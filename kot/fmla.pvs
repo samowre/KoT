@@ -108,6 +108,24 @@ BEGIN
     ENDCASES
   MEASURE f BY <<
 
+  skfree(f: fmla, x: skolem): RECURSIVE bool =
+    CASES f OF
+      atom(p, args): every(LAMBDA t: skfree(t, x), args),
+      f_not(g): skfree(g, x),
+      f_or(g, h): skfree(g, x) AND skfree(h, x),
+      f_exists(b, g): skfree(g, x)
+    ENDCASES
+  MEASURE f BY <<
+
+  skfree_UFS: RECURSIVE JUDGEMENT
+    skfree(f: fmla, x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(f) }
+
+  skfree(fs: set[fmla], x: skolem): bool =
+    FORALL (f: (fs)): skfree(f, x)
+
+  skfree_set_UFS: JUDGEMENT
+    skfree(fs: set[fmla], x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(fs) }
+
   % α-renamingz
   α(rename: (bijective?[nat,nat]))(f): RECURSIVE fmla =
     CASES f OF
@@ -237,11 +255,15 @@ BEGIN
     ENDCASES
   MEASURE f BY <<
 
+  fsubst(fs: set[fmla], u: (ufun?), (vars: (uniques?[nat]) | length(vars) = arity(u)),
+         (t | FORALL (f: (fs)): freefor(f, t))): set[fmla] =
+    { g | EXISTS (f: (fs)): g = fsubst(f, u, vars, t) }
+
   % Substitutes an unintepreted predicate symbol with  formula
   psubst(f,
          (u: (upred?)),
 	 (vars: (uniques?[nat]) | length(vars) = arity(u)),
-	 (g | FV(g) ⊂ vars AND freefor(f, g))):
+	 (g | FV(g) ⊂ vars AND freefor(f, g) AND freefor(g, f))):
     RECURSIVE fmla =
 %TODO { h | FV(h) ⊂ FV(f) ∪ (FV(g) - vars) AND
 %           BV(h) ⊂ BV(f) ∪ BV(g) }
