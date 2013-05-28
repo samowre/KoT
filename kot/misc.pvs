@@ -123,6 +123,20 @@ BEGIN
   find_exists: THEOREM
     (EXISTS (i: below(s`length)): p(s(i))) IMPLIES up?(find(p, s))
 
+  every_aux(p, s, (i: upto(s`length))): RECURSIVE bool =
+    IF i = s`length THEN TRUE
+    ELSE p(s(i)) AND every_aux(p, s, i + 1) ENDIF
+  MEASURE s`length - i
+
+  every_aux_forall: RECURSIVE JUDGEMENT
+    every_aux(p, s, (i: upto(s`length))) HAS_TYPE
+      { b: bool | b = FORALL (j: subrange(i, s`length - 1)): p(s`seq(j)) }
+
+  every(p, s): bool = every_aux(p, s, 0)
+
+  every_forall: JUDGEMENT
+    every(p, s) HAS_TYPE { b: bool | b = FORALL (i: below(s`length)): p(s`seq(i)) }
+
 END more_finseq_props
 
 wf_pair[L: TYPE, R: TYPE, le_l: (well_founded?[L]), le_r: (well_founded?[R])]: THEORY

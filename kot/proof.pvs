@@ -107,12 +107,12 @@ proof	: THEORY
              subst(A, x, y) ∈ H
 	AND %—————————————%
 	      (□x)(A) ∈ Γ
-	AND skfree(Γ, y) AND lemmas ↝ H,
+	AND skfree(Γ :: set[fmla], y) AND lemmas ↝ H,
       fschema(f, vs, t, H, Γ):
-        subst(H, f, vs, t) ⊂ Γ
+        fsubst(H, f, vs, t) ⊂ Γ
 	AND lemmas ↝ H,
-      pschema(p, vs, A, H):
-        subst(H, p, vs, A) ⊂ Γ
+      pschema(p, vs, A, H, Γ):
+        psubst(H, p, vs, A) ⊂ Γ
 	AND lemmas ↝ H,
       refl(t, Γ):
         (t ≐ t) ∈ Γ,

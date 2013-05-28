@@ -35,6 +35,9 @@ BEGIN
     apply?(s) AND ufun?(fun(s)) AND arity(fun(s)) = 0
   skolem: TYPE = (skolem?)
 
+  skolem_equal: THEOREM
+    FORALL (x, y: skolem): fun(x) = fun(y) IMPLIES x = y
+
   sk(i): term = apply(ufun(i, 0), empty_seq)
 
   skfree_aux(s: term, ts: finseq[{ t: term | t << s }], i: upto(ts`length), x: skolem):
