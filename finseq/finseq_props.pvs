@@ -5,6 +5,7 @@ BEGIN
   a,b,c: VAR T
   x,y,z: VAR T
   bl(s): TYPE = below(length(s))
+  ul(s): TYPE = upto(length(s))
  
   
   % Adt file
@@ -15,21 +16,32 @@ BEGIN
 	 FORALL (i:bl(s1)): s1(i)=s2(i))
  
     % Every Some
-  every_aux(p,s,(i:bl(s))): RECURSIVE bool = 
-  	IF i=0 THEN p(s(0))
- 	ELSE p(s(i)) AND every_aux(p,s,i-1)
+  every_aux(p,s,(i:ul(s))): RECURSIVE bool = 
+  	IF i=length(s) THEN TRUE
+ 	ELSE p(s(i)) AND every_aux(p,s,i+1)
 	ENDIF
-  MEASURE i
-  every(p, s): bool = every_aux(p,s,length(s)-1)
+  MEASURE length(s) - i
+  every(p, s): bool = every_aux(p,s,0)
   every(p)(s): MACRO bool = every(p,s)
 
-  some_aux(p,s,(i:bl(s))): RECURSIVE bool = 
-  	IF i=0 THEN p(s(0))
- 	ELSE p(s(i)) OR some_aux(p,s,i-1)
+  some_aux(p,s,(i:ul(s))): RECURSIVE bool = 
+  	IF i=length(s) THEN FALSE
+ 	ELSE p(s(i)) OR some_aux(p,s,i+1)
 	ENDIF
-  MEASURE i
-  some(p, s): bool = some_aux(p,s,length(s)-1)
+  MEASURE length(s) - i
+  some(p, s): bool = some_aux(p,s,0)
   some(p)(s): MACRO bool = some(p,s)
+
+   % every some characterisation
+  every_aux_forall: LEMMA FORALL (i:ul(s)): 
+  		    	  every_aux(p,s,i) IFF 
+  		    	  FORALL (j:subrange(i,length(s)-1)): p(s(j))
+  some_aux_exists:  LEMMA FORALL (i:ul(s)):
+  		    	  some_aux(p,s,i) IFF 
+  		    	  EXISTS (j:subrange(i,length(s)-1)): p(s(j))
+
+  every_forall: LEMMA every(p)(s) IFF FORALL (i:bl(s)): p(s(i))
+  some_exists:  LEMMA every(p)(s) IFF EXISTS (i:bl(s)): p(s(i))
 
     % Suffix (= subterm)
   suffix?(s1,s2): bool =
@@ -84,41 +96,62 @@ more_finseq_props [ T:TYPE ] : THEORY
   a,b,c: VAR T
   x,y,z: VAR T
   bl(s): TYPE = below(length(s))
+  ul(s): TYPE = upto(length(s))
   c: VAR [nat,nat]
   i,j,k,l: VAR nat
   
 
   % Comon list functions
     % Member
-  member_aux(x,s,(i:bl(s))): RECURSIVE bool = 
-  		     IF i=0 THEN s(0)=x
-		     ELSE s(i)=x OR member_aux(x,s,i-1)
-		     ENDIF
-  MEASURE i
-  
-  member(x,s): bool = member_aux(x,s,length(s)-1)
+  member_aux(x, s, (i: ul(s))): RECURSIVE bool =
+    IF i = length(s) THEN FALSE
+    ELSE s(i) = x OR member_aux(x, s, i + 1) 
+    ENDIF
+  MEASURE length(s) - i
+
+  member(x, s): bool = member_aux(x, s, 0)
   member(s)(x): MACRO bool = member(x,s)
 
     % Append is already defined as o
     % Reverse
   reverse(s): finseq[T] = s WITH [ seq := LAMBDA (i:bl(s)): s(length(s)-1-i) ]
     % uniques
-  uniques_aux?(s,i): RECURSIVE bool =
-  	IF i=0 THEN TRUE
-	ELSE NOT member_aux(s(i),s,i) AND uniques_aux?(s,i-1)
+  uniques_aux?(s,(i:ul(s))): RECURSIVE bool =
+  	IF i=length(s) THEN TRUE
+	ELSE NOT member_aux(s(i),s,i+1) AND uniques_aux?(s,i+1)
 	ENDIF
-  MEASURE i
-  
+  MEASURE length(s) - i
+  uniques?(s): bool = uniques_aux?(s,0)
+    % Find
+  findi(p, s, (i: upto(s`length))):
+    RECURSIVE lift[{ i: below(s`length) | p(s(i)) }] =
+    	 IF i = s`length THEN bottom
+    	 ELSIF p(s(i)) THEN up(i)
+    	 ELSE findi(p, s, i + 1)
+    	 ENDIF
+  MEASURE s`length - i
+
+  find(p, s): lift[{ i: below(s`length) | p(s(i)) }] =
+    findi(p, s, 0)
+
+ 
  
 
   
   % Characterisation of comon functions
     % member
   member_nth: LEMMA member(x,s) IFF EXISTS (i:bl(s)): s(i)=x
-    % every some
-  every_forall: LEMMA every(p)(s) IFF FORALL (i:bl(s)): p(s(i))
-  some_exists:  LEMMA every(p)(s) IFF EXISTS (i:bl(s)): p(s(i))
+    % Unique
+  uniques_nth: LEMMA uniques?(s) IFF
+  	       	     FORALL (i,j:bl(s)): i /= j IMPLIES s(i) /= s(j)
+    % Find
+  findi_exists: THEOREM
+    FORALL (i: upto(s`length)):
+      (EXISTS (j: subrange(i, s`length - 1)): p(s(j))) IMPLIES up?(findi(p, s, i))
 
+  find_exists: THEOREM
+    (EXISTS (i: below(s`length)): p(s(i))) IMPLIES up?(find(p, s))
+  
 
   % Properties
     % All the properties member_append, member_reverse, etc are
