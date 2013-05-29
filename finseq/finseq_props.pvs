@@ -41,7 +41,7 @@ BEGIN
   		    	  EXISTS (j:subrange(i,length(s)-1)): p(s(j))
 
   every_forall: LEMMA every(p)(s) IFF FORALL (i:bl(s)): p(s(i))
-  some_exists:  LEMMA every(p)(s) IFF EXISTS (i:bl(s)): p(s(i))
+  some_exists:  LEMMA some(p)(s) IFF EXISTS (i:bl(s)): p(s(i))
 
     % Suffix (= subterm)
   suffix?(s1,s2): bool =
@@ -190,4 +190,8 @@ more_finseq_props [ T:TYPE ] : THEORY
 
 
 
-% define map
+% define map, finseq2
+% finseq2list
+% finseq2set
+
+% list2set

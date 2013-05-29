@@ -18,7 +18,9 @@ BEGIN
     length(cons(x,l)) = length(l) + 1
   length_cdr: LEMMA 
     cons?(l) IMPLIES length(cdr(l)) = length(l) - 1
-
+ 
+  %AUTO_REWRITE length_cons, length_cdr
+ 
   % Filter a list, more properties
   filter_member: JUDGEMENT
     filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
@@ -139,6 +141,7 @@ BEGIN
     ENDCASES
   MEASURE length(l)
 
+% TODO : CHANGE NAME ?
   findi(p, l): RECURSIVE lift[{ i: below(length(l)) | p(nth(l, i)) }] =
     CASES l OF
       null: bottom,
@@ -152,7 +155,7 @@ BEGIN
 	ENDIF
     ENDCASES
   MEASURE length(l)
-
+% TODO : change name ?/ IFF
   findi_some: THEOREM
     some(p)(l) IMPLIES up?(findi(p, l))
 
@@ -224,7 +227,7 @@ BEGIN
       cons(h, t): cons((h, car(vs)), zip(t, cdr(vs)))
     ENDCASES
   MEASURE length(ks)
-
+% TODO : change name
   zipi(ks, (vf | vf`length >= length(ks)), (i: upto(vf`length - length(ks)))):
     RECURSIVE { l | length(l) = length(ks) AND FORALL (j: below(length(ks))): nth(l, j) = (nth(ks, j), vf(j + i)) } =
     CASES ks OF
@@ -244,6 +247,7 @@ BEGIN
 
   has_key(k, l): bool = some(LAMBDA (x: K, y: V): x = k)(l)
 
+% TODO : assoc nth, precise it returns the first occurence
   assoc(k, l): { r: lift[V] | IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l) ELSE bottom?(r) ENDIF } =
     CASES find(LAMBDA (x: K, y: V): x = k, l) OF
       bottom: bottom,
