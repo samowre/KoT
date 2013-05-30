@@ -1,3 +1,18 @@
+list_filter_props[T: TYPE]: THEORY
+BEGIN
+  l, m: VAR list[T]
+  p: VAR pred[T]
+  x: VAR T
+  
+  filter_member: RECURSIVE JUDGEMENT
+    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
+
+%  filter_append: LEMMA
+ %   filter(append(l, m), p) = append(filter(l, p), filter(m, p))
+END list_filter_props
+
+
+
 %% Properties on lists of a single type
 more_list_props[T: TYPE]: THEORY
 BEGIN
@@ -22,8 +37,8 @@ BEGIN
   AUTO_REWRITE length_cons
  
   % Better characterization of filter
-  filter_member: JUDGEMENT
-    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
+%  filter_member: JUDGEMENT
+%    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
 
   filter_cons: THEOREM filter(cons(x, l), p) =
     IF p(x) THEN cons(x, filter(l, p)) 
@@ -205,8 +220,6 @@ BEGIN
   subterm_cons2: LEMMA subterm(cons(x, l), m) IMPLIES subterm(l, m)
   subterm_subset: LEMMA subterm(l, m) IMPLIES subset?(l, m)
 END more_list_props
-
-
 
 
 list2_props[K: TYPE, V: TYPE]: THEORY
