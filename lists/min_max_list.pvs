@@ -1,0 +1,58 @@
+min_max_list [ T: TYPE, <=:(total_order?[T])]: THEORY
+BEGIN
+  % A total_order is required, but if this theory is needed with a strict_total_order
+  % it is easy to define one from a total_order
+  IMPORTING more_list_props[T]
+
+  l,l1,l2: VAR (cons?[T])
+  x,y: VAR T
+  a,b,c: VAR T
+  p: VAR PRED[T] ;
+
+  % Min on type T
+  min(x,y): T = IF x <= y THEN x ELSE y ENDIF
+  max(x,y): T = IF x <= y THEN y ELSE x ENDIF
+
+  % Props on min
+  min_le: LEMMA min(x,y) <= x AND min(x,y) <= y
+  max_ge: LEMMA x <= max(x,y) AND y <= max(x,y)
+
+  min_min: LEMMA min(min(a,b),c) = min(a,min(b,c))
+  max_max: LEMMA max(max(a,b),c) = max(a,max(b,c))
+  AUTO_REWRITE min_min, max_max
+  
+
+  % Min of a list
+  min_aux(l:(cons?[T]), (<=:(total_order?[T]))): RECURSIVE
+    { c | member(c, l) AND (FORALL b: member(b, l) IMPLIES c <= b) } =
+       LET t=cdr(l), c=car(l) IN
+       IF null?(t) THEN  c 
+       ELSIF c <= min_aux(t,<=) 
+       	     THEN c
+       	     ELSE min_aux(t,<=)
+       ENDIF
+  MEASURE length(l)
+
+  min(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES x <= y) } =
+    min_aux(l,<=)
+
+  % Comon functions with Min
+  min_cons: LEMMA min(cons(x,l)) = min(x,min(l))
+  min_append: LEMMA min(append(l1,l2)) = min(min(l1),min(l2))
+  min_reverse: LEMMA min(reverse(l)) = min(l)
+  min_subset: LEMMA subset?(l1,l2) IMPLIES min(l2) <=  min(l1)
+  min_filter: LEMMA p(min(l)) IMPLIES min(filter(l,p))=min(l)
+
+
+  % Max of a list : 
+  max(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES y <= x) } =
+    min_aux(l,LAMBDA x,y: y <= x)
+
+  
+  % Common functions with Max
+  max_cons: LEMMA max(cons(x,l)) = max(x,max(l))
+  max_append: LEMMA max(append(l1,l2)) = max(max(l1),max(l2))
+  max_reverse: LEMMA max(reverse(l)) = max(l)
+  max_subset: LEMMA subset?(l1,l2) IMPLIES max(l1) <=  max(l2)
+  max_filter: LEMMA p(max(l)) IMPLIES max(filter(l,p))=max(l)
+END min_max_list

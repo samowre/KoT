@@ -1,173 +1,87 @@
-minlist [ T: TYPE, key: { k:[T-> real]  | injective?(k)}]: THEORY
-BEGIN
-
-  IMPORTING more_list_props[T]
-
-  l,l1,l2: VAR (cons?[T])
-  x,y: VAR T
-  a,b,c: VAR T
-  p: VAR PRED[T] ;
-
-  % We use the key to define an order on T
-  <=(x,y): MACRO bool = key(x) <= key(y) ;
-  <(x,y) : MACRO bool = key(x) <  key(y)
-
-  total_order: LEMMA total_order?(<=::PRED[[T,T]])
-  strict_total_order: LEMMA strict_total_order?(<::PRED[[T,T]])
-
-  % Min on type T
-  min(x,y): T = IF x <= y THEN x ELSE y ENDIF
-  max(x,y): T = IF x <= y THEN y ELSE x ENDIF
-
-  % Props on min
-  min_le: LEMMA min(x,y) <= x AND min(x,y) <= y
-  max_ge: LEMMA x <= max(x,y) AND y <= max(x,y)
-
-  min_min: LEMMA min(min(a,b),c) = min(a,min(b,c))
-  max_max: LEMMA max(max(a,b),c) = max(a,max(b,c))
-  AUTO_REWRITE min_min, max_max
-  
-
-  % Min of a list
-  min_aux(l:list[T],a, (key:{ k:[T-> real]  | injective?(k)}), (m: real | key(a) = m)): RECURSIVE
-    { c | member(c, cons(a, l)) AND (FORALL b: member(b, cons(a, l)) IMPLIES key(c) <= key(b)) } =
-    CASES l OF
-      null: a,
-      cons(c, t):
-        LET k = key(c) IN
-	IF k < m
-	  THEN min_aux(t, c,key, k)
-	  ELSE min_aux(t, a,key, m)
-	ENDIF
-    ENDCASES
-  MEASURE length(l)
-
-  min(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES x <= y) } =
-    min_aux(cdr(l), car(l), key, key(car(l)))
-
-  % Comon functions with Min
-  min_cons: LEMMA min(cons(x,l)) = min(x,min(l))
-  min_append: LEMMA min(append(l1,l2)) = min(min(l1),min(l2))
-  min_reverse: LEMMA min(reverse(l)) = min(l)
-  min_subset: LEMMA subset?(l1,l2) IMPLIES min(l2) <=  min(l1)
-  min_filter: LEMMA p(min(l)) IMPLIES min(filter(l,p))=min(l)
-
-
-  % Max of a list : 
-  rev_key(x): real = -key(x)
-
-  max(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES y <= x) } =
-    min_aux(cdr(l), car(l), rev_key, rev_key(car(l)))
-
-  
-  % Comon functions with Max
-  max_cons: LEMMA max(cons(x,l)) = max(x,max(l))
-  max_append: LEMMA max(append(l1,l2)) = max(max(l1),max(l2))
-  max_reverse: LEMMA max(reverse(l)) = max(l)
-  max_subset: LEMMA subset?(l1,l2) IMPLIES max(l1) <=  max(l2)
-  max_filter: LEMMA p(max(l)) IMPLIES max(filter(l,p))=max(l)
-
-END minlist
-
-
-sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
+sortedlist   [ T: TYPE, <=:(total_order?[T])]
 		: THEORY
   BEGIN
-  IMPORTING before_min[T,key]
-
-  <: PRED[[T,T]] = minlist[T,key].<
+  IMPORTING before_list[T,<=]
 
   l, m, l1, l2 : VAR list[T]
   a,b,c: VAR T
   x,y,z: VAR T
   p: VAR PRED[T]
 
+ 
 
-% The key function is injective. This requirement has been thought for a long time.
-% If you think this requirement is senseless, we can modify it.
-% A list is sorted if the element are ordered by key, and contains no dupplicate.
-  sorted_aux?(l, (key: { k:[T-> real]  | injective?(k)})): RECURSIVE bool =
+
+% A list is sorted if the elements are ordered according to <, 
+% and contains no duplicate.
+  sorted_aux?(l, (<:(strict_total_order?[T]))): RECURSIVE bool =
       CASES l OF
         null: TRUE,
      	cons(h, lt): 
 	  CASES lt OF
 	    null: TRUE,
-	    cons(th, ltt): key(h) < key(th) AND sorted_aux?(lt,key)
+	    cons(th, ltt): h < th AND sorted_aux?(lt,<)
 	  ENDCASES
       ENDCASES
      MEASURE length(l)
+  
+  nth_sorted_aux: RECURSIVE JUDGEMENT sorted_aux?(l,(<:(strict_total_order?[T]))) HAS_TYPE   
+  		  { b:bool | b IFF FORALL (i,j:below(length(l))): i < j IMPLIES nth(l,i) < nth(l,j)}
 
-  sorted?(l): bool = sorted_aux?(l,key)
-  rev_sorted?(l): bool = sorted_aux?(l,rev_key)  
+  sorted?(l): bool = sorted_aux?(l,<)
+  rev_sorted?(l): bool = sorted_aux?(l,LAMBDA x,y: y < x)  
 
   sl, sl1, sl2 : VAR (sorted?)
 
-
-  cdr_sorted: LEMMA cons?(sl) IMPLIES sorted?(cdr(sl))
-  car_sorted:  LEMMA cons?(sl) AND member(a, cdr(sl)) IMPLIES car(sl) < a
-  
   % Powerful characterisation of sorted list with nth
 
   nth_sorted: LEMMA FORALL l: sorted?(l) IFF 
   	      	    FORALL (i,j:below(length(l))): i < j IFF nth(l,i) < nth(l,j)
+  nth_revsorted: LEMMA FORALL l: rev_sorted?(l) IFF 
+  	      	    FORALL (i,j:below(length(l))): i < j IFF nth(l,j) < nth(l,i)
 
+  % Interaction between rev_sorted and sorted
+  rev_sorted: THEOREM rev_sorted?(l) IFF sorted?(reverse(l))
 
+  % Usefull properties
+  cdr_sorted: LEMMA cons?(sl) IMPLIES sorted?(cdr(sl))
+  car_sorted:  LEMMA cons?(sl) AND member(a, cdr(sl)) IMPLIES car(sl) < a
+  
+  % Min and max of a sorted list
+  min_sorted: LEMMA cons?(sl) IMPLIES min(sl) = car(sl)
+  max_sorted: LEMMA cons?(sl) IMPLIES max(sl) = car(reverse(sl)) ;
+
+  % Optimized version of comon functions
   % More efficient version of member in the case of a sorted list
   s_member(a, sl): RECURSIVE bool = 
     CASES sl OF
       null: FALSE,
-      cons(h, slt): IF    a<h		  THEN FALSE
-      	      	    ELSIF key(a) = key(h) THEN TRUE
+      cons(h, slt): IF    a<h THEN FALSE
+      	      	    ELSIF a=h THEN TRUE
 		    ELSE s_member(a, slt)
 		    ENDIF
     ENDCASES
   MEASURE length(sl)
-
-
   % More efficient version of remove in the case of a sorted list  
   s_remove(a,sl): RECURSIVE { s:(sorted?)  | FORALL x: member(x,s) IFF 
-       	 	      	      NOT key(x) = key(a) AND member(x,sl)} = 
+       	 	      	      NOT x = a AND member(x,sl)} = 
       CASES sl OF
         null : sl,
-	cons(h, slt) : IF key(a) = key(h) THEN slt
-		    ELSIF key(a) < key(h) THEN sl % a not in the list
-		      	  	   	  ELSE cons(h, s_remove(a, slt))
+	cons(h, slt) : IF a=h THEN slt
+		    ELSIF a<h THEN sl % a not in the list
+		      	      ELSE cons(h, s_remove(a, slt))
 		    ENDIF
       ENDCASES
       MEASURE length(sl)
-
   % /!\ Semantic of insert : if the element is already in, just return the list
-  s_insert(a,sl): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF key(x) = key(a) OR member(x,sl) } =
+  s_insert(a,sl): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF x = a OR member(x,sl) } =
 	CASES sl OF
 	null: cons(a,null),
-  	cons(h,slt): IF key(a) < key(h) THEN cons(a,sl)
-		  ELSIF key(a) = key(h) THEN sl
-		    	       	 	ELSE cons(h,s_insert(a,slt))
+  	cons(h,slt): IF a<h THEN cons(a,sl)
+		  ELSIF a=h THEN sl
+		    	    ELSE cons(h,s_insert(a,slt))
   		  ENDIF 
   	ENDCASES
   MEASURE length(sl)
-
-  % Sort a list, and remove dupplicates
-  sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
-   	      CASES l OF
-	      	  null: null,
-		  cons(h,lt): s_insert(h,sort(lt))
-	      ENDCASES
-  MEASURE length(l)
-
-
-  % s_member and s_remove are indeed the same as member and remove
-  s_member_member: LEMMA s_member(a, sl) IFF member(a, sl)
-  s_remove_remove: LEMMA s_remove(a, sl) = remove(a,sl)
-
-  insert_remove:   LEMMA s_insert(a,s_remove(a,sl))=s_insert(a,sl)
-  remove_insert:   LEMMA s_remove(a,s_insert(a,sl))=s_remove(a,sl)
-  insert_no_change:LEMMA s_insert(a,sl)=sl IFF member(a,sl)
-  remove_no_change:LEMMA s_remove(a,sl)=sl IFF NOT member(a,sl)
-
-
-
-  % Sorted Lists as Sets
   % More efficient version of subset
   s_subset?(sl1, sl2): RECURSIVE bool = 
     	 CASES sl1 OF
@@ -177,9 +91,9 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
 	       null: false,
 	       cons(h2, t2): 
 	         COND
-		   key(h1) < key(h2) -> false, 
-		   key(h1) = key(h2) -> s_subset?(t1, t2),
-		   key(h1) > key(h2) -> s_subset?(sl1, t2)
+		   h1 < h2 -> false, 
+		   h1 = h2 -> s_subset?(t1, t2),
+		   h2 < h1 -> s_subset?(sl1, t2)
 		 ENDCOND
 	     ENDCASES
    	 ENDCASES
@@ -190,39 +104,72 @@ sortedlist   [ T: TYPE, key: { k:[T-> real]  | injective?(k)} ]
 	 null: null?(sl2),
 	 cons(h1,t1): CASES sl2 OF
 	 	      null: FALSE,
-		      cons(h2,t2): key(h2)=key(h1) AND s_equal?(t1,t2)
+		      cons(h2,t2): h2=h1 AND s_equal?(t1,t2)
 		      ENDCASES
         ENDCASES
-	MEASURE length(sl2) 
-  % A sorted list contains no dupplicate
-  sorted_uniques:  LEMMA uniques?(sl)
-  % s_subset and s_equal are indeed subset and equal
-  s_subset_subset: LEMMA s_subset?(sl1, sl2) IFF subset?(sl1, sl2)
-  % Two sorted list are equal IFF they are structurally equal
-  s_equal_char: THEOREM s_equal?(sl1,sl2) IFF sl1 = sl2 
-  s_equal_equal:   LEMMA  s_equal?(sl1,sl2)  IFF  equal?(sl1,sl2) ;
-
-
-  % Interaction between rev_sorted and sorted
-  rev_sorted: THEOREM rev_sorted?(reverse(sl))
-
-  % Min and max
-  min_sorted: LEMMA cons?(sl) IMPLIES min(sl) = car(sl)
-  max_sorted: LEMMA cons?(sl) IMPLIES max(sl) = car(reverse(sl)) ;
-
-  % Before order on sorted lists
-    % More efficient version of before on sorted lists
+	MEASURE length(sl2) ;
+  % More efficient version of before on sorted lists
   <(sl1,sl2): bool =  cons?(sl2) AND 
   	      	        (null?(sl1) OR car(reverse(sl1)) < car(sl2))
 
- 
-  s_before_before: THEOREM sl1 < sl2 IFF (<::PRED[[list[T],list[T]]])(sl1,sl2)
-
-   
-  % Comon list functions
-
-  append_sorted: LEMMA (sl1 < sl2 OR null?(sl2)) IFF sorted?(append(sl1,sl2))
+  
+  % Some properties of sorted lists
+  % A sorted list contains no dupplicate
+  sorted_uniques:  LEMMA uniques?(sl)
+  % Two sorted list are equal IFF they are structurally equal
+  s_equal_char: THEOREM s_equal?(sl1,sl2) IFF sl1 = sl2 
+  % Filter is sorted: useful for s_remove_remove 
   filter_sorted: JUDGEMENT filter(sl,p) HAS_TYPE (sorted?)
 
-END sortedlist
+  % Optimized versions are the same as regular versions
+  s_member_member: LEMMA s_member(a, sl) IFF member(a, sl)
+  s_subset_subset: LEMMA s_subset?(sl1, sl2) IFF subset?(sl1, sl2)
+  s_equal_equal:   LEMMA  s_equal?(sl1,sl2)  IFF  equal?(sl1,sl2) ;
+  s_remove_remove: LEMMA s_remove(a, sl) = remove(a,sl)
+  s_before_before: THEOREM sl1 < sl2 IFF (<::PRED[[list[T],list[T]]])(sl1,sl2)
 
+  
+  % Comon list functions
+  % Append
+  append_sorted: LEMMA (sl1 < sl2 OR null?(sl2)) IFF sorted?(append(sl1,sl2))
+  % insert_remove (sets)
+  insert_remove:   LEMMA s_insert(a,s_remove(a,sl))=s_insert(a,sl)
+  remove_insert:   LEMMA s_remove(a,s_insert(a,sl))=s_remove(a,sl)
+  insert_no_change:LEMMA s_insert(a,sl)=sl IFF member(a,sl)
+  remove_no_change:LEMMA s_remove(a,sl)=sl IFF NOT member(a,sl)
+
+
+
+
+  % SORTS (and remove duplicates)
+    % Insertion sort
+  sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
+   	      CASES l OF
+	      	  null: null,
+		  cons(h,lt): s_insert(h,sort(lt))
+	      ENDCASES
+  MEASURE length(l)
+  
+    % Merge sort (merge remove duplicates)
+  merge(sl1,sl2): RECURSIVE { l:(sorted?) | FORALL x: member(x,l) IFF 
+  		  	      		    member(x,sl1) OR member(x,sl2)} =
+    CASES sl1 OF
+      null: sl2,
+      cons(h1,t1): 
+	CASES sl2 OF
+ 	  null: sl1,
+	  cons(h2,t2):
+ 	    IF    h1 = h2  THEN cons(h1,merge(t1,t2))
+	    ELSIF h1 <= h2 THEN cons(h1,merge(t1,sl2))
+	    ELSE           	cons(h2,merge(sl1,t2))
+	    ENDIF
+	ENDCASES
+    ENDCASES
+  MEASURE length(sl1)+length(sl2)
+
+    % Quick sort
+  
+   	    
+
+
+END sortedlist

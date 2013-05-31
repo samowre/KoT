@@ -247,7 +247,7 @@ BEGIN
 
   has_key(k, l): bool = some(LAMBDA (x: K, y: V): x = k)(l)
 
-% TODO : assoc nth, precise it returns the first occurence
+% TODO : assoc nth, precise it returns the first occurrence
   assoc(k, l): { r: lift[V] | IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l) ELSE bottom?(r) ENDIF } =
     CASES find(LAMBDA (x: K, y: V): x = k, l) OF
       bottom: bottom,
