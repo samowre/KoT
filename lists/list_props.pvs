@@ -1,3 +1,19 @@
+list_filter_props[T: TYPE]: THEORY
+BEGIN
+  l, m: VAR list[T]
+  p: VAR pred[T]
+  x: VAR T
+  
+  filter_member: RECURSIVE JUDGEMENT
+    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
+
+%  filter_append: LEMMA
+ %   filter(append(l, m), p) = append(filter(l, p), filter(m, p))
+END list_filter_props
+
+
+
+%% Properties on lists of a single type
 more_list_props[T: TYPE]: THEORY
 BEGIN
   IMPORTING adt_props
@@ -13,17 +29,16 @@ BEGIN
   % Currified version of member
   member(l)(x): MACRO bool = member(x, l)
 
-  % Useful auto-rewrites on length:
+  % Useful auto-rewrites on length
   length_cons: LEMMA 
     length(cons(x,l)) = length(l) + 1
   length_cdr: LEMMA 
     cons?(l) IMPLIES length(cdr(l)) = length(l) - 1
+  AUTO_REWRITE length_cons
  
-  %AUTO_REWRITE length_cons, length_cdr
- 
-  % Filter a list, more properties
-  filter_member: JUDGEMENT
-    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
+  % Better characterization of filter
+%  filter_member: JUDGEMENT
+%    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
 
   filter_cons: THEOREM filter(cons(x, l), p) =
     IF p(x) THEN cons(x, filter(l, p)) 
@@ -39,15 +54,15 @@ BEGIN
 
   % Useful conversion between every/some and forall/exists
   % The same conversion with nth instead of member is already
-  % in the prelude for every, and a some is a negation of a
-  % every with the theorems in the adt_props theory.
+  % in the prelude for every (and the theorem for some can be
+  % obtained from double negation, cf adt_props).
   every_forall: THEOREM
     every(p)(l) IFF (FORALL (x | member(x, l)): p(x))
 
   some_exists: THEOREM
     some(p)(l) IFF (EXISTS (x | member(x, l)): p(x))
 
-  % subset relation
+  % Subset relation
   subset?(l, m): bool = every(member(m))(l)
   member_subset: THEOREM subset?(l, m) IFF (FORALL x: member(x, l) IMPLIES member(x, m))
   subset_order: THEOREM preorder?(subset?)
@@ -55,7 +70,7 @@ BEGIN
   subset_null: THEOREM subset?(null,m)
   subset_cons: THEOREM subset?(cons(x,l),m) IFF member(x,m) AND subset?(l,m)
 
-  % set equality
+  % Set equality
   equal?(l, m): bool = subset?(l, m) AND subset?(m, l)
   member_equal: THEOREM equal?(l, m) IFF (FORALL x: member(x, l) IFF member(x, m))
   equal_equiv: THEOREM equivalence?(equal?)
@@ -66,29 +81,18 @@ BEGIN
     equal?(l1, l2) IMPLIES equal?(l2, l1)
   cons_equal: THEOREM member(x, l) IMPLIES equal?(l, cons(x, l))
 
-  % Specification of comon list functions with cons
+  % Specification of common list functions with cons
   append_cons: THEOREM append(cons(x,l),m) = cons(x,append(l,m))
   reverse_null: THEOREM reverse(null) = null[T]
   reverse_cons: THEOREM reverse(cons(x,l))= append(reverse(l),cons(x,null))  
-
-
-  % Specification of common list functions with member
-  member_append: THEOREM
-    member(x, append(l, m)) IFF member(x, l) OR member(x, m)
-  member_reverse: THEOREM
-    member(x, reverse(l)) IFF member(x, l)
-  member_nth: THEOREM
-    member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
 
   % More precise specifications with nth
   nth_cons: LEMMA
     FORALL (i: below(1 + length(l))):
       nth(cons(x, l), i) = IF i = 0 THEN x ELSE nth(l, i - 1) ENDIF
-  
-  nth_cdr: LEMMA 
-    FORALL (i: below(length(l)-1)):
-      cons?(l) IMPLIES nth(cdr(l),i) = nth(l,i+1)
-
+  nth_cdr: LEMMA
+    FORALL (i: below(length(l) - 1)):
+      cons?(l) IMPLIES nth(cdr(l), i) = nth(l, i + 1)
   nth_append: THEOREM
     FORALL (i: below(length(l) + length(m))):
       nth(append(l, m), i) = IF i < length(l)
@@ -99,9 +103,17 @@ BEGIN
     FORALL (i: below(length(l))):
       nth(reverse(l), i) = nth(l, length(l) - i - 1)
   nth_equal: THEOREM
-    ( length(l1) = length(l2) AND
-        FORALL (i: below(length(l1))):
-          nth(l1, i) = nth(l2, i) ) IFF l1 = l2
+    ( length(l1) = length(l2) AND FORALL (i: below(length(l1))): nth(l1, i) = nth(l2, i) )
+    IFF l1 = l2
+
+  % Specification of common list functions with member
+  member_append: THEOREM
+    member(x, append(l, m)) IFF member(x, l) OR member(x, m)
+  member_reverse: THEOREM
+    member(x, reverse(l)) IFF member(x, l)
+  member_nth: THEOREM
+    member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
+
 
   % Flattens a list of lists
   flatten(ll: list[list[T]]): list[T] = reduce(null, (LAMBDA l, m: append(l, m)))(ll)
@@ -130,7 +142,8 @@ BEGIN
   MEASURE length(l)
 
   % Find an element satisfying a predicate
-  find(p, l): RECURSIVE lift[T] =
+  find(p, l):
+    RECURSIVE lift[{ x: (p) | EXISTS (i: below(length(l))): x = nth(l, i) AND FORALL (j: below(i)): NOT p(nth(l, j)) }] =
     CASES l OF
       null: bottom,
       cons(h, t):
@@ -141,23 +154,27 @@ BEGIN
     ENDCASES
   MEASURE length(l)
 
-% TODO : CHANGE NAME ?
-  findi(p, l): RECURSIVE lift[{ i: below(length(l)) | p(nth(l, i)) }] =
+  find_some: THEOREM
+    some(p)(l) IFF up?(find(p, l))
+
+  find_first(p, l):
+    RECURSIVE lift[{ i: below(length(l)) |
+                        p(nth(l, i)) AND FORALL (j: below(i)): NOT p(nth(l, j)) }] =
     CASES l OF
       null: bottom,
       cons(h, t):
         IF p(h)
 	  THEN up(0)
-	  ELSE CASES findi(p, t) OF
+	  ELSE CASES find_first(p, t) OF
 	         bottom: bottom,
 		 up(r): up(r + 1)
 	       ENDCASES
 	ENDIF
     ENDCASES
   MEASURE length(l)
-% TODO : change name ?/ IFF
-  findi_some: THEOREM
-    some(p)(l) IMPLIES up?(findi(p, l))
+  
+  find_first_some: THEOREM
+    some(p)(l) IFF up?(find_first(p, l))
 
   find_char: THEOREM
     CASES find(p, l) OF
@@ -205,8 +222,6 @@ BEGIN
 END more_list_props
 
 
-
-
 list2_props[K: TYPE, V: TYPE]: THEORY
 BEGIN
   IMPORTING adt_props[list[[K, V]]]
@@ -220,6 +235,7 @@ BEGIN
   p: VAR [K, V]
   l: VAR list[[K, V]]
 
+  % zip creates a list of pairs from a pair of lists
   zip(ks, (vs | length(vs) = length(ks))):
     RECURSIVE { l | length(l) = length(ks) AND FORALL (i: below(length(ks))): nth(l, i) = (nth(ks, i), nth(vs, i)) } =
     CASES ks OF
@@ -227,39 +243,20 @@ BEGIN
       cons(h, t): cons((h, car(vs)), zip(t, cdr(vs)))
     ENDCASES
   MEASURE length(ks)
-% TODO : change name
-  zipi(ks, (vf | vf`length >= length(ks)), (i: upto(vf`length - length(ks)))):
-    RECURSIVE { l | length(l) = length(ks) AND FORALL (j: below(length(ks))): nth(l, j) = (nth(ks, j), vf(j + i)) } =
-    CASES ks OF
-      null: null,
-      cons(h, t): cons((h, vf(i)), zipi(t, vf, i + 1))
-    ENDCASES
-  MEASURE length(ks)
-
-  zipi(ks, (vf | vf`length = length(ks))):
-    { l | length(l) = length(ks) AND FORALL (i: below(length(ks))): nth(l, i) = (nth(ks, i), vf(i)) } =
-    zipi(ks, vf, 0)
-
-  zip_nth: THEOREM
-    length(ks) = length(vs) IMPLIES
-      FORALL (i: below(length(ks))):
-        nth(zip(ks, vs), i) = (nth(ks, i), nth(vs, i))
 
   has_key(k, l): bool = some(LAMBDA (x: K, y: V): x = k)(l)
 
-% TODO : assoc nth, precise it returns the first occurrence
-  assoc(k, l): { r: lift[V] | IF has_key(k, l) THEN up?(r) AND member((k, down(r)), l) ELSE bottom?(r) ENDIF } =
+  assoc(k, l): lift[{ v | EXISTS (i: below(length(l))): nth(l, i) = (k, v) AND FORALL (j: below(i)): nth(l, i)`1 /= k }] =
     CASES find(LAMBDA (x: K, y: V): x = k, l) OF
       bottom: bottom,
       up(lift): up(lift`2)
     ENDCASES
 
-  assoc_bottom: THEOREM
-    bottom?(assoc(k, l)) IMPLIES NOT has_key(k, l)
   assoc_up: THEOREM
-    up?(assoc(k, l)) IMPLIES member((k, down(assoc(k, l))), l)
+    up?(assoc(k, l)) IFF has_key(k, l)
 
-  assoc(k, l, v): { r: V | IF has_key(k, l) THEN member((k, r), l) ELSE r = v ENDIF } =
+  assoc(k, l, v):
+    { y | y = v OR EXISTS (i: below(length(l))): nth(l, i) = (k, y) } =
     CASES assoc(k, l) OF
       bottom: v,
       up(res): res

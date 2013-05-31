@@ -8,8 +8,9 @@ BEGIN
   l, m: VAR list[T]
   p, q: VAR pred[T]
 
+  %% Links between every, some, and the logic symbols
   CONVERSION+ K_conversion
-  
+
   every_neg: THEOREM
     every(NOT p)(l) IFF NOT some(p)(l)
 
@@ -36,7 +37,7 @@ BEGIN
 
   CONVERSION- K_conversion
 
-  % Properties on subterm
+  %% Properties on subterm
   subterm_ltlt: THEOREM subterm(l, m) IFF (l = m OR l << m)
   subterm_reflexive: JUDGEMENT subterm HAS_TYPE (reflexive?[list[T]])
   subterm_transitive: JUDGEMENT subterm HAS_TYPE (transitive?[list[T]])
