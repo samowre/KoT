@@ -10,7 +10,7 @@ BEGIN
   f: VAR [K -> V]
 
   assoc2(k, ks, (vs | vs`length = length(ks))): lift[V] =
-    CASES findi(LAMBDA x: x = k, ks) OF
+    CASES find_first(LAMBDA x: x = k, ks) OF
       bottom: bottom,
       up(i): up(vs(i))
     ENDCASES
@@ -26,7 +26,7 @@ BEGIN
 	  assoc2(k, ks, vs) = up(vs(i))
 
   assoc2(k, ks, (vs | vs`length = length(ks)), v): V =
-    CASES findi(LAMBDA x: x = k, ks) OF
+    CASES find_first(LAMBDA x: x = k, ks) OF
       bottom: v,
       up(i): vs(i)
     ENDCASES
@@ -147,3 +147,11 @@ BEGIN
   wf_pair: JUDGEMENT
     le HAS_TYPE (well_founded?[[L, R]])
 END wf_pair
+
+wf_finite[T: TYPE]: THEORY
+BEGIN
+  x, y: VAR T
+  <: VAR (well_founded?[T])
+
+  wf_finite: THEOREM is_finite({ x | x < y })
+END wf_finite

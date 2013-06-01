@@ -19,12 +19,12 @@ BEGIN
     atom(pred: pred, args: { l: finseq[term] | l`length = arity(pred) }): atom?
     f_not(arg: fmla): f_not?
     f_or(larg, rarg: fmla): f_or?
-    f_exists(bvar: nat, body: fmla): f_exists?
+    f_exists(body: fmla): f_exists?
   END fmla
 
   s, t: VAR term
   ss, ts: VAR set[term]
-  f, g: VAR fmla
+  f, g, h: VAR fmla
   fs, gs: VAR set[fmla]
   i, n: VAR nat
   is, ns: VAR set[nat]
@@ -33,308 +33,263 @@ BEGIN
   uf: VAR (ufun?)
   up: VAR (upred?)
 
-  % Readable constructors
-  ;¬(f): MACRO fmla    = f_not(f)
-  ;∨(f, g): MACRO fmla = f_or(f, g)
-  ;∧(f, g): MACRO fmla = ¬(¬f ∨ ¬g)
-  ;⇒(f, g): MACRO fmla = ¬f ∨ ¬g
-  ;⇔(f, g): fmla = (f ⇒ g) ∨ (g ⇒ f)
-  ;◇(n)(f): MACRO fmla = f_exists(n, f)
-  ;◇(ln)(f): RECURSIVE fmla =
-    CASES ln OF
-      null: f,
-      cons(n, t): f_exists(n, (◇t)(f))
-    ENDCASES
-  MEASURE length(ln)
-  ;□(n)(f): MACRO fmla  = ¬(◇n)(f)
-  ;□(ln)(f): MACRO fmla = ¬(◇ln)(f)
-  ;≐(s, t): MACRO fmla = atom(≐, (: s, t :))
-
-  % Free variables of a formula
-  % This is intended to be used in specifications only, and may not be executable.
   FV(f): RECURSIVE set[nat] =
     CASES f OF
       atom(p, args): V(args :: set[term]),
       f_not(g): FV(g),
       f_or(g, h): FV(g) ∪ FV(h),
-      f_exists(n, b): FV(b) - n
+      f_exists(b): { n | n + 1 ∈ FV(b) }
     ENDCASES
   MEASURE f BY <<
+
+  % Handy way to bound the free variables of a formula
+  ;<(f, n): bool = FORALL (v: (FV(f))): v < n
 
   % A formula without free variables is a sentence
+  % This is the same as being bounded by 0
+  empty_zero_bounded: THEOREM
+    empty?(FV(f)) IFF (f < 0)
   sentence?(f): bool = empty?(FV(f))
-  sentence: TYPE  = (sentence?)
+  sentence: TYPE = (sentence?)
 
-  % Bound variables (i.e, variables bound by an ∃, whether they actually are used or not)
-  BV(f): RECURSIVE set[nat] =
+  % Parallel substitution of variables by terms
+  % q is the number of outer quantificators, i.e. the number of shifts to perform at
+  % the point of the actual mapping
+  parsubst(q: nat, mapping: finseq[term])
+          (f | f < q + mapping`length):
+    RECURSIVE { h | FORALL (v: FV(h)): v < q OR EXISTS (i: below(mapping`length)): r - q ∈ V(mapping(i)) } =
     CASES f OF
-      atom(p, args): ∅,
-      f_not(g): BV(g),
-      f_or(g, h): BV(g) ∪ BV(h),
-      f_exists(n, b): n ∪ BV(b)
+      atom(p, args): atom(p, smap(parsubst(q, mapping))(args)),
+      f_not(g): f_not(parsubst(q, mapping)(g)),
+      f_or(g, h): f_or(parsubst(q, mapping)(g), parsubst(q, mapping)(h)),
+      f_exists(b): f_exists(parsubst(q + 1, mapping)(b))
     ENDCASES
   MEASURE f BY <<
 
-  % The variables of a formula are both the free and bound variables
-  V(f): set[nat] = FV(f) ∪ BV(f)
-
-  % Checks whether the variables in ns are not bound in formula f
-  freefor(f, ns): bool =
-    empty?(ns ∩ BV(f)) % TODO: disjoint?(ns, BV(f))
-
-  % A term or a formula is free w.r.t f if is variables are free
-  freefor(f, t): MACRO bool =
-    freefor(f, V(t))
-  freefor(f, g): MACRO bool =
-    freefor(f, V(g))
-
-  % Uninterpreted Function Symbols of a formula
-  UFS(f): RECURSIVE set[(ufun?)] =
+  fsubst(uf, (t | t < arity(uf)))
+        (f):
+    RECURSIVE { h | FORALL (q: nat): f < q IMPLIES h < q } =
     CASES f OF
-      atom(p, args): UFS(args :: set[term]),
-      f_not(g): UFS(g),
-      f_or(g, h): UFS(g) ∪ UFS(h),
-      f_exists(n, b): UFS(b)
+      atom(p, args): atom(p, smap(fsubst(uf, t))(args)),
+      f_not(g): f_not(fsubst(uf, t)(g)),
+      f_or(g, h): f_or(fsubst(uf, t)(g), fsubst(uf, t)(h)),
+      f_exists(b): f_exists(fsubst(uf, t)(b))
     ENDCASES
   MEASURE f BY <<
 
-  % Uninterpreted Predicate Symbols of a formula
-  UPS(f): RECURSIVE set[(upred?)] =
-    CASES f OF
-      atom(p, args): { up | up = p },
-      f_not(g): UPS(g),
-      f_or(g, h): UPS(g) ∪ UPS(h),
-      f_exists(n, b): UPS(b)
-    ENDCASES
-  MEASURE f BY <<
-
-  skfree(f: fmla, x: skolem): RECURSIVE bool =
-    CASES f OF
-      atom(p, args): every(LAMBDA t: skfree(t, x), args),
-      f_not(g): skfree(g, x),
-      f_or(g, h): skfree(g, x) AND skfree(h, x),
-      f_exists(b, g): skfree(g, x)
-    ENDCASES
-  MEASURE f BY <<
-
-  skfree_UFS: RECURSIVE JUDGEMENT
-    skfree(f: fmla, x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(f) }
-
-  skfree(fs: set[fmla], x: skolem): bool =
-    FORALL (f: (fs)): skfree(f, x)
-
-  skfree_set_UFS: JUDGEMENT
-    skfree(fs: set[fmla], x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(fs) }
-
-  % α-renamingz
-  α(rename: (bijective?[nat,nat]))(f): RECURSIVE fmla =
-    CASES f OF
-      atom(p, args): atom(p, smap(α(rename))(args)),
-      f_not(g): f_not(α(rename)(g)),
-      f_or(g, h): f_or(α(rename)(g), α(rename)(h)),
-      f_exists(n, b): f_exists(rename(n), α(rename)(b))
-    ENDCASES
-  MEASURE f BY <<
-
-  alpha_freevars: RECURSIVE JUDGEMENT
-    α(rename: (bijective?[nat, nat]))(f: fmla) HAS_TYPE { g | FV(g) = rename(FV(f)) }
-
-  alpha_boundvars: RECURSIVE JUDGEMENT
-    α(rename: (bijective?[nat, nat]))(f) HAS_TYPE { g | BV(g) = rename(BV(f)) }
-
-  ;≃(f, g): bool = EXISTS (rename: (bijective?[nat, nat])): α(rename)(f) = g
-  alpha_equiv(f, g): bool = f ≃ g
-
-  alpha_fmla_identity: THEOREM
-    α(LAMBDA n: n)(f) = f
-
-  alpha_fmla_inverse: THEOREM
-    FORALL (rename: (bijective?[nat, nat])):
-      α(rename)(f) = g IMPLIES α(inverse(rename))(g) = f
-
-  alpha_fmla_composition: THEOREM
-    FORALL (rename, rename2: (bijective?[nat, nat])):
-      α(rename)(f) = g IMPLIES α(rename2)(g) = α(rename2 o rename)(f)
-
-  alpha_fmla_equiv: JUDGEMENT
-    alpha_equiv HAS_TYPE (equivalence?[fmla])
-
-  alpha_equiv(f): TYPE = { g | alpha_equiv(f, g) }
-
-  canon?(f): RECURSIVE bool =
-    CASES f OF
-      atom(p, args): TRUE,
-      f_not(g): canon?(g),
-      f_or(g, h): canon?(g) AND canon?(h),
-      f_exists(n, b):
-        canon?(b) AND
-	(FORALL (v: (BV(b))): n > v) AND
-	(n = 0 OR n - 1 ∈ BV(b))
-    ENDCASES
-  MEASURE f BY <<
-
-  nextbound(f: fmla): RECURSIVE nat =
-    CASES f OF
-      atom(p, args): 0,
-      f_not(g): nextbound(g),
-      f_or(g, h):
-        LET gnxt = nextbound(g), hnxt = nextbound(h) IN
-	IF gnxt > hnxt THEN gnxt ELSE hnxt ENDIF,
-      f_exists(b, g): 1 + nextbound(g)
-    ENDCASES
-  MEASURE f BY <<
-
-  % canonize_aux(f: fmla, mapping: (bijective?[nat, nat])): RECURSIVE fmla =
-  %   CASES f OF
-  %     atom(p, args): f,
-  %     f_not(g): f_not(canonize(g)),
-  %     f_or(g, h): f_or(canonize_aux(g), canonize_aux(h)),
-  %     f_exists(b, g):
-  %       LET nb = nextbound(g) IN
-  % 	f_exists(nb, canonize_aux(g, (LAMBDA n: IF n = b THEN nb ELSIF n = nb THEN b ELSE n ENDIF) o mapping))
-
-  % canonize_aux_alpha: THEOREM
-  %   canonize_aux(f, mapping) = canonize_aux(α(inverse(mapping))(f), { mapping on FV(f), id on BV(f) })
-
-  % canonize(f): fmla =
-  %   α(canonize_aux(f, LAMBDA n: n))(f)
-
-  % f = α(rename)(g)
-
-  % canonize_aux(f, rename) = canonize_aux(α(inverse(rename))(α(rename)(g)), { rename on FV(f), id on BV(f) })
-  %                         = canonize_aux(g, { rename on FV(f), id on BV(f) })
-  % 			  = canonize_aux(α(rename)(g), rename)
-
-%  canonize(f) = α(canonize_aux(f, LAMBDA n: n))(f)
-%              = α(canonize_aux(α(rename)(g), LAMBDA n: n))(α(rename)(g))
-%	      = α(canonize_aux(g, rename))(α(rename)(g))
-%	      = α(canonize_aux(g, rename) o rename
-
-  % Parallel substitution of variables in a formula through a mapping
-  % We can actually have more informations about the free variables of the
-  % new formula
-  parsubst(f: fmla, mapping: [n: nat -> { t | t = v(n) OR freefor(f, t) }]):
-%TODO: { h | FV(h) ⊂ V(setmap(mapping))(FV(f)) AND
-%            BV(h) = BV(f) }
-    RECURSIVE fmla =
-    CASES f OF
-      atom(p, args): atom(p, smap(LAMBDA t: parsubst(t, mapping))(args)),
-      f_not(g): f_not(parsubst(g, mapping)),
-      f_or(g, h): f_or(parsubst(g, mapping), parsubst(h, mapping)),
-      f_exists(n, b): f_exists(n, parsubst(b, mapping))
-    ENDCASES
-  MEASURE f BY <<
-
-  % Parallel substitution with an association list
-  parsubst(f: fmla,
-           vars: list[nat],
-	   (vals: finseq[{ t | freefor(f, t) }] | vals`length = length(vars))): fmla =
-%TODO: { h | FV(h) ⊂ (FV(f) - vars) ∪ V(vals) AND
-%            BV(h) = BV(f) }
-    parsubst(f, LAMBDA i: assoc2[nat, { t | t = v(i) OR freefor(f, t) }](i, vars, vals, v(i)))
-
-  % Single substitution can come in handy
-  subst(f, n, (t | freefor(f, t))): fmla =
-% TODO { h | FV(h) ⊂ (FV(f) - n) ∪ V(t) AND
-%            BV(h) = BV(f) }
-    parsubst(f, LAMBDA i: IF i = n THEN t ELSE v(i) ENDIF)
-
-  % Substitutes an uninterpreted function symbol with a term
-  fsubst(f,
-         (u: (ufun?)),
-	 (vars: (uniques?[nat]) | length(vars) = arity(u)),
-	 (t | freefor(f, t))):
-    RECURSIVE fmla =
-%TODO { h | FV(h) ⊂ FV(f) ∪ (V(t) - vars) AND
-%           BV(h) = BV(f) }
-    CASES f OF
-      atom(p, args): atom(p, smap(LAMBDA s: fsubst(s, u, vars, t))(args)),
-      f_not(g): f_not(fsubst(g, u, vars, t)),
-      f_or(g, h): f_or(fsubst(g, u, vars, t), fsubst(h, u, vars, t)),
-      f_exists(n, b): f_exists(n, fsubst(b, u, vars, t))
-    ENDCASES
-  MEASURE f BY <<
-
-  fsubst(fs: set[fmla], u: (ufun?), (vars: (uniques?[nat]) | length(vars) = arity(u)),
-         (t | FORALL (f: (fs)): freefor(f, t))): set[fmla] =
-    { g | EXISTS (f: (fs)): g = fsubst(f, u, vars, t) }
-
-  % Substitutes an unintepreted predicate symbol with  formula
-  psubst(f,
-         (u: (upred?)),
-	 (vars: (uniques?[nat]) | length(vars) = arity(u)),
-	 (g | FV(g) ⊂ vars AND freefor(f, g) AND freefor(g, f))):
-    RECURSIVE fmla =
-%TODO { h | FV(h) ⊂ FV(f) ∪ (FV(g) - vars) AND
-%           BV(h) ⊂ BV(f) ∪ BV(g) }
+  psubst(up, (g | g < arity(up)))
+        (f):
+    RECURSIVE { h | FORALL (q: nat): f < q IMPLIES h < q } =
     CASES f OF
       atom(p, args):
-        IF p = u
-	  THEN parsubst(g, vars, args)
-	  ELSE f
-	ENDIF,
-      f_not(h): f_not(psubst(h, u, vars, g)),
-      f_or(l, r): f_or(psubst(l, u, vars, g), psubst(r, u, vars, g)),
-      f_exists(n, b): f_exists(n, psubst(b, u, vars, g))
+        IF p = up THEN parsubst(0, args)(g)
+	ELSE atom(p, args) ENDIF,
+      f_not(ff): f_not(psubst(up, g)(ff)),
+      f_or(fl, fr): f_or(psubst(up, g)(fl), psubst(up, g)(fr)),
+      f_exists(b): f_exists(psubst(up, g)(b))
     ENDCASES
   MEASURE f BY <<
+
 END fmla
 
-%   equal_subst_aux(s: term,
-%                   (ss: list[[term, term]] | every(LAMBDA (r, t): r << s)(ss)),
-% 		  mapping: [nat -> term],
-%                   equal_subst: [r: { r | r << s}, t: term -> { b: bool | b = (t = parsubst(mapping)(r)) }]):
-%     RECURSIVE { b: bool | b = every(LAMBDA (r, t): t = parsubst(mapping)(r))(ss) } =
-%     CASES ss OF
-%       null: TRUE,
-%       cons(h, t):
-%         equal_subst(h`1, h`2) AND equal_subst_aux(s, t, mapping, equal_subst)
+%   % Readable constructors
+%   ;¬(f): MACRO fmla    = f_not(f)
+%   ;∨(f, g): MACRO fmla = f_or(f, g)
+%   ;∧(f, g): MACRO fmla = ¬(¬f ∨ ¬g)
+%   ;⇒(f, g): MACRO fmla = ¬f ∨ ¬g
+%   ;⇔(f, g): fmla = (f ⇒ g) ∨ (g ⇒ f)
+%   ;◇(n)(f): MACRO fmla = f_exists(n, f)
+%   ;◇(ln)(f): RECURSIVE fmla =
+%     CASES ln OF
+%       null: f,
+%       cons(n, t): f_exists(n, (◇t)(f))
 %     ENDCASES
-%   MEASURE length(ss)
+%   MEASURE length(ln)
+%   ;□(n)(f): MACRO fmla  = ¬(◇n)(f)
+%   ;□(ln)(f): MACRO fmla = ¬(◇ln)(f)
+%   ;≐(s, t): MACRO fmla = atom(≐, (: s, t :))
 
-%   equal_subst(s, t: term, mapping: [nat -> term]):
-%     RECURSIVE { b: bool | b = (t = parsubst(mapping)(s)) } =
-%     CASES s OF
-%       v(i): mapping(i) = t,
-%       apply(f, args):
-%         CASES t OF
-% 	  v(i): FALSE,
-% 	  apply(g, args2):
-% 	    f = g AND equal_subst_aux(s, zip(args, args(t)), mapping, LAMBDA (r | r << s), t: equal_subst(r, t, mapping))
-% 	ENDCASES
+%   % A formula without free variables is a sentence
+%   sentence?(f): bool = empty?(FV(f))
+%   sentence: TYPE  = (sentence?)
+
+%   % Uninterpreted Function Symbols of a formula
+%   UFS(f): RECURSIVE set[(ufun?)] =
+%     CASES f OF
+%       atom(p, args): UFS(args :: set[term]),
+%       f_not(g): UFS(g),
+%       f_or(g, h): UFS(g) ∪ UFS(h),
+%       f_exists(n, b): UFS(b)
 %     ENDCASES
-%   MEASURE s BY <<
+%   MEASURE f BY <<
 
+%   % Uninterpreted Predicate Symbols of a formula
+%   UPS(f): RECURSIVE set[(upred?)] =
+%     CASES f OF
+%       atom(p, args): { up | up = p },
+%       f_not(g): UPS(g),
+%       f_or(g, h): UPS(g) ∪ UPS(h),
+%       f_exists(n, b): UPS(b)
+%     ENDCASES
+%   MEASURE f BY <<
+  
+%   % Checks whether the variables in ns are not bound in formula f
+%   freefor(f, ns): bool =
+%     empty?(ns ∩ BV(f)) % TODO: disjoint?(ns, BV(f))
+
+%   % A term or a formula is free w.r.t f if is variables are free
+%   freefor(f, t): MACRO bool =
+%     freefor(f, V(t))
+%   freefor(f, g): MACRO bool =
+%     freefor(f, V(g))
+
+%   skfree(f: fmla, x: skolem): RECURSIVE bool =
+%     CASES f OF
+%       atom(p, args): every(LAMBDA t: skfree(t, x), args),
+%       f_not(g): skfree(g, x),
+%       f_or(g, h): skfree(g, x) AND skfree(h, x),
+%       f_exists(b, g): skfree(g, x)
+%     ENDCASES
+%   MEASURE f BY <<
+
+%   skfree_UFS: RECURSIVE JUDGEMENT
+%     skfree(f: fmla, x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(f) }
+
+%   skfree(fs: set[fmla], x: skolem): bool =
+%     FORALL (f: (fs)): skfree(f, x)
+
+%   skfree_set_UFS: JUDGEMENT
+%     skfree(fs: set[fmla], x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(fs) }
+
+%   ↑(f, (ib: [nat, nat])): RECURSIVE fmla =
+%     IF i = 0 THEN f ELSE
+%     CASES f OF
+%       atom(p, args): atom(p, args ↑ ib),
+%       f_not(g): f_not(g ↑ ib),
+%       f_or(g, h): f_or(g ↑ ib, h ↑ ib),
+%       f_exists(b): f_exists(b ↑ (ib`1, ib`2 + 1))
+%     ENDCASES ENDIF
+%   MEASURE f BY <<
+
+%   ↑(f, i): MACRO fmla = f ↑ (i, 0)
+
+%   % Parallel substitution
+%   parsubst(mapping: list[[nat, term]])(f): RECURSIVE fmla =
+%     CASES f OF
+%       atom(p, args): atom(p, smap(parsubst(mapping))(args)),
+%       f_not(g): f_not(parsubst(mapping)(f))
+%       f_or(g, h): f_or(parsubst(mapping)(g), parsubst(mapping)(h)),
+%       f_exists(b): f_exists(parsubst(mapping ↑ 1)(b))
+%     ENDCASES
+%   MEASURE f BY <<
+
+%   subst(i, t): MACRO [fmla -> fmla] = parsubst((: (i, t) :))
+
+%   fsubst(u: (ufun?), (t | FV(t) ≤ arity(u)))(f): RECURSIVE fmla =
+%     CASES f OF
+%       atom(p, args): atom(p, fsubst),
+%       f_not(g): f_not(fsubst(u, t)(g)),
+%       f_or(g, h): f_or(fsubst(u, t)(g), fsubst(u, t)(h)),
+%       f_exists(b): f_exists(fsubst(u, t)(b))
+%     ENDCASES
+%   MEASURE f BY <<
+
+%   % Substitutes an uninterpreted function symbol with a term
+%   fsubst(f,
+%          (u: (ufun?)),
+% 	 (vars: (uniques?[nat]) | length(vars) = arity(u)),
+% 	 (t | freefor(f, t))):
+%     RECURSIVE fmla =
+% %TODO { h | FV(h) ⊂ FV(f) ∪ (V(t) - vars) AND
+% %           BV(h) = BV(f) }
+%     CASES f OF
+%       atom(p, args): atom(p, smap(LAMBDA s: fsubst(s, u, vars, t))(args)),
+%       f_not(g): f_not(fsubst(g, u, vars, t)),
+%       f_or(g, h): f_or(fsubst(g, u, vars, t), fsubst(h, u, vars, t)),
+%       f_exists(n, b): f_exists(n, fsubst(b, u, vars, t))
+%     ENDCASES
+%   MEASURE f BY <<
+
+%   fsubst(fs: set[fmla], u: (ufun?), (vars: (uniques?[nat]) | length(vars) = arity(u)),
+%          (t | FORALL (f: (fs)): freefor(f, t))): set[fmla] =
+%     { g | EXISTS (f: (fs)): g = fsubst(f, u, vars, t) }
+
+%   % Substitutes an unintepreted predicate symbol with  formula
+%   psubst(f,
+%          (u: (upred?)),
+% 	 (vars: (uniques?[nat]) | length(vars) = arity(u)),
+% 	 (g | FV(g) ⊂ vars AND freefor(f, g) AND freefor(g, f))):
+%     RECURSIVE fmla =
+% %TODO { h | FV(h) ⊂ FV(f) ∪ (FV(g) - vars) AND
+% %           BV(h) ⊂ BV(f) ∪ BV(g) }
+%     CASES f OF
+%       atom(p, args):
+%         IF p = u
+% 	  THEN parsubst(g, vars, args)
+% 	  ELSE f
+% 	ENDIF,
+%       f_not(h): f_not(psubst(h, u, vars, g)),
+%       f_or(l, r): f_or(psubst(l, u, vars, g), psubst(r, u, vars, g)),
+%       f_exists(n, b): f_exists(n, psubst(b, u, vars, g))
+%     ENDCASES
+%   MEASURE f BY <<
 % END fmla
 
-% % % % Need to assert that t has no FV outside vars, and vars is a set.
-% % % % If s is a function app with f=u, then substitute in t the variables vars 
-% % % % with the call parameters in ss in witch we substitute recursively
-% % % % (u ss1..ssN) -> [ss/vars]t (fsubst in each ss recursively)
+% %   equal_subst_aux(s: term,
+% %                   (ss: list[[term, term]] | every(LAMBDA (r, t): r << s)(ss)),
+% % 		  mapping: [nat -> term],
+% %                   equal_subst: [r: { r | r << s}, t: term -> { b: bool | b = (t = parsubst(mapping)(r)) }]):
+% %     RECURSIVE { b: bool | b = every(LAMBDA (r, t): t = parsubst(mapping)(r))(ss) } =
+% %     CASES ss OF
+% %       null: TRUE,
+% %       cons(h, t):
+% %         equal_subst(h`1, h`2) AND equal_subst_aux(s, t, mapping, equal_subst)
+% %     ENDCASES
+% %   MEASURE length(ss)
 
-% % % fmla_equal(A, B, (A_vars, B_vars: list[(var?)])): RECURSIVE bool =
-% % %   CASES A OF
-% % %     atom(p, ss): (atom?(B) AND pred(B) = p AND
-% % %                   reduce2(TRUE,
-% % % 		          LAMBDA s, t, (b:bool):
-% % % 			    b AND term_equal(s, t, A_vars, B_vars),
-% % % 			  ss, args(B))),
-% % %     f_not(A1): (f_not?(B) AND fmla_equal(A1, arg(B), A_vars, B_vars)),
-% % %     f_or(A1, A2): (f_or?(B) AND fmla_equal(A1, arg1(B), A_vars, B_vars) AND
-% % %                    fmla_equal(A2, arg2(B), A_vars, B_vars)), 
-% % %     f_exists(y, A1): (f_exists?(B) AND
-% % %                      fmla_equal(A1, body(B),
-% % % 		                cons(y, A_vars),
-% % % 				cons(bvar(B), B_vars)))
-% % %   ENDCASES
-% % %   MEASURE A BY <<
-
-% % %   sentence_list_cons:  LEMMA
-% % %     FORALL (A, AA):
-% % %     sentence?(A) & sentence_list?(AA) <=> sentence_list?(cons(A, AA))
-
-% % %   sentence_list_append:  LEMMA
-% % %     FORALL (AA, BB):
-% % %     sentence_list?(AA) & sentence_list?(BB) <=>sentence_list?(append(AA, BB))
+% %   equal_subst(s, t: term, mapping: [nat -> term]):
+% %     RECURSIVE { b: bool | b = (t = parsubst(mapping)(s)) } =
+% %     CASES s OF
+% %       v(i): mapping(i) = t,
+% %       apply(f, args):
+% %         CASES t OF
+% % 	  v(i): FALSE,
+% % 	  apply(g, args2):
+% % 	    f = g AND equal_subst_aux(s, zip(args, args(t)), mapping, LAMBDA (r | r << s), t: equal_subst(r, t, mapping))
+% % 	ENDCASES
+% %     ENDCASES
+% %   MEASURE s BY <<
 
 % % END fmla
+
+% % % % % Need to assert that t has no FV outside vars, and vars is a set.
+% % % % % If s is a function app with f=u, then substitute in t the variables vars 
+% % % % % with the call parameters in ss in witch we substitute recursively
+% % % % % (u ss1..ssN) -> [ss/vars]t (fsubst in each ss recursively)
+
+% % % % fmla_equal(A, B, (A_vars, B_vars: list[(var?)])): RECURSIVE bool =
+% % % %   CASES A OF
+% % % %     atom(p, ss): (atom?(B) AND pred(B) = p AND
+% % % %                   reduce2(TRUE,
+% % % % 		          LAMBDA s, t, (b:bool):
+% % % % 			    b AND term_equal(s, t, A_vars, B_vars),
+% % % % 			  ss, args(B))),
+% % % %     f_not(A1): (f_not?(B) AND fmla_equal(A1, arg(B), A_vars, B_vars)),
+% % % %     f_or(A1, A2): (f_or?(B) AND fmla_equal(A1, arg1(B), A_vars, B_vars) AND
+% % % %                    fmla_equal(A2, arg2(B), A_vars, B_vars)), 
+% % % %     f_exists(y, A1): (f_exists?(B) AND
+% % % %                      fmla_equal(A1, body(B),
+% % % % 		                cons(y, A_vars),
+% % % % 				cons(bvar(B), B_vars)))
+% % % %   ENDCASES
+% % % %   MEASURE A BY <<
+
+% % % %   sentence_list_cons:  LEMMA
+% % % %     FORALL (A, AA):
+% % % %     sentence?(A) & sentence_list?(AA) <=> sentence_list?(cons(A, AA))
+
+% % % %   sentence_list_append:  LEMMA
+% % % %     FORALL (AA, BB):
+% % % %     sentence_list?(AA) & sentence_list?(BB) <=>sentence_list?(append(AA, BB))
+
+% % % END fmla
