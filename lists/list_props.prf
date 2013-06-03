@@ -29,18 +29,6 @@
      integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil))
    shostak))
- (filter_member 0
-  (filter_member-1 nil 3578161357 ("" (induct-and-simplify l) nil nil)
-   ((list type-decl nil list_adt nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (pred type-eq-decl nil defined_types nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (member def-decl "bool" list_props nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (T formal-type-decl nil more_list_props nil)
-    (list_induction formula-decl nil list_adt nil))
-   nil))
  (filter_cons 0
   (filter_cons-1 nil 3578247674 ("" (grind) nil nil) nil shostak))
  (filter_null 0
@@ -54,11 +42,10 @@
     (= const-decl "[T, T -> boolean]" equalities nil)
     (append def-decl "list[T]" list_props nil)
     (T formal-type-decl nil more_list_props nil)
-    (list_induction formula-decl nil list_adt nil)
-    (filter_member application-judgement
-     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
-     more_list_props nil))
+    (list_induction formula-decl nil list_adt nil))
    shostak))
+ (remove_TCC1 0
+  (remove_TCC1-1 nil 3578935435 ("" (subtype-tcc) nil nil) nil nil))
  (every_forall 0
   (every_forall-1 nil 3577636177
    ("" (induct-and-simplify l :if-match all)
@@ -1510,9 +1497,6 @@
         EXISTS (i: below(length(l))):
           x = nth(l, i) AND (FORALL (j: below(i)): NOT p(nth(l, j)))}]"
       more_list_props nil)
-    (filter_member application-judgement
-     "{m | FORALL (x: [K, V]): member(x, m) IFF p(x) AND member(x, l)}"
-     list2_props nil)
     (list type-decl nil list_adt nil)
     (boolean nonempty-type-decl nil booleans nil)
     (lift type-decl nil lift_adt nil)
@@ -1532,6 +1516,17 @@
     (list_induction formula-decl nil list_adt nil))
    shostak)))
 (list_map_props
+ (map_curr 0
+  (map_curr-1 nil 3578940818 ("" (induct-and-simplify l) nil nil)
+   ((list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (S formal-type-decl nil list_map_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (T formal-type-decl nil list_map_props nil)
+    (list_induction formula-decl nil list_adt nil))
+   shostak))
  (member_map 0
   (member_map-1 nil 3577637101 ("" (induct-and-simplify l) nil nil)
    ((list type-decl nil list_adt nil)
@@ -1540,6 +1535,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
     (T formal-type-decl nil list_map_props nil)
     (list_induction formula-decl nil list_adt nil))
    nil))
@@ -1551,25 +1547,10 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (T formal-type-decl nil list_map_props nil)
     (list_induction formula-decl nil list_adt nil))
-   shostak))
- (mymap_TCC1 0
-  (mymap_TCC1-1 nil 3578244985 ("" (grind) nil nil)
-   ((member def-decl "bool" list_props nil)) nil))
- (mymap_TCC2 0
-  (mymap_TCC2-1 nil 3578244985 ("" (grind) nil nil)
-   ((member def-decl "bool" list_props nil)
-    (list type-decl nil list_adt nil)
-    (T formal-type-decl nil list_map_props nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (mymap_TCC3 0
-  (mymap_TCC3-1 nil 3578244985 ("" (termination-tcc) nil nil)
-   ((<< adt-def-decl "(strict_well_founded?[list])" list_adt nil))
-   nil)))
+   shostak)))
 

@@ -287,16 +287,13 @@ BEGIN
   x: VAR T
   s: VAR S
 
-  member_map: THEOREM
-    member(x, l) IMPLIES member(f(x), map(f, l))
-  
-  map_member: THEOREM
-    member(s, map(f, l)) IMPLIES (EXISTS x: f(x) = s AND member(x, l))
+  map_curr: THEOREM
+    map(f, l) = map(f)(l)
+  AUTO_REWRITE map_curr
 
-  mymap(l: list[T], f: [{ x | member(x, l) } -> S]): RECURSIVE list[S] =
-    CASES l OF
-      null: null,
-      cons(h, t): cons(f(h), mymap(t, restrict(f)))
-    ENDCASES
-  MEASURE l BY <<
+  member_map: THEOREM
+    member(x, l) IMPLIES member(f(x), map(f)(l))
+
+  map_member: THEOREM
+    member(s, map(f)(l)) IMPLIES (EXISTS x: f(x) = s AND member(x, l))
 END list_map_props
