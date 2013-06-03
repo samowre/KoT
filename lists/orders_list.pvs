@@ -53,26 +53,31 @@ BEGIN
  
 END lex_list
 
-before_list [ T: TYPE, < : PRED[[T,T]] ]: THEORY
+before_list [ T: TYPE, <= : (total_order?[T]) ]: THEORY
 BEGIN
-   IMPORTING more_list_props[T]  
+  IMPORTING min_max_list[T,<=]
 
-   l,l1,l2: VAR list[T]
-   x,y,z: VAR T ;
+  l,l1,l2: VAR list[T]
+  cl1, cl2: VAR (cons?[T])
+  x,y,z,t: VAR T ;
 
-   % sl1 < sl2 IFF every element of sl1 is smaller than any element of sl2
-   <(l1,l2): bool = cons?(l2) AND 
+  % Strict order on T
+  <(x,y): bool = x /= y AND x<=y
+  strict_total_order: LEMMA strict_total_order?(<) ;
+
+  % sl1 < sl2 IFF every element of sl1 is smaller than any element of sl2
+  <(l1,l2): bool = cons?(l2) AND 
   	     FORALL (x,y): member(x,l1) AND member(y,l2) 
 	      	     IMPLIES x < y
   
 
   % Properties of <
-  irreflexive: LEMMA irreflexive?(<::PRED[[T,T]]) IMPLIES irreflexive?(<::PRED[[list[T],list[T]]])
-  transitive:  LEMMA transitive?(<::PRED[[T,T]]) IMPLIES transitive?(<::PRED[[list[T],list[T]]])
+  irreflexive: LEMMA irreflexive?(<::PRED[[list[T],list[T]]])
+  transitive:  LEMMA transitive?(<::PRED[[list[T],list[T]]])
   well_founded: LEMMA well_founded?(<::PRED[[T,T]]) IMPLIES well_founded?(<::PRED[[list[T],list[T]]])  
 
   % Summary: with usual orders
-  strict_order: LEMMA strict_order?(<::PRED[[T,T]]) IMPLIES strict_order?(<::PRED[[list[T],list[T]]])  
+  strict_order: LEMMA strict_order?(<::PRED[[list[T],list[T]]])  
   strict_well_founded: LEMMA strict_well_founded?(<::PRED[[T,T]]) IMPLIES strict_well_founded?(<::PRED[[list[T],list[T]]])  
  
 
@@ -93,31 +98,20 @@ BEGIN
   before_lreverse: LEMMA reverse(l1) < l2 IFF l1 < l2
   % We could do the same for subterm, reverse, subset ... But it all can be proved
   % very easily with all the char of these functions with member
-
   
+  % Useful lemma
+  mix_transitive: LEMMA 
+     		  x <= y AND y < z AND z <= t IMPLIES x < t
+
+  % Characterisations of before with max and min
+  before_char: THEOREM cl1 < cl2 IFF max(cl1) < min(cl2)
+  before_lchar: LEMMA cl1 < cl2 IFF FORALL x: member(x,cl2) IMPLIES max(cl1) < x 
+  before_rchar: LEMMA cl1 < cl2 IFF FORALL x: member(x,cl1) IMPLIES x < min(cl2) 
+
+
 
 END before_list
 
-% Characterisation of before with min and max
-before_min [ T: TYPE, key: { k:[T-> real]  | injective?(k)}]: THEORY
-BEGIN
-
-  l,l1,l2: VAR (cons?[T])
-  x,y: VAR T
-  a,b,c: VAR T
-  p: VAR PRED[T]
-
-  IMPORTING minlist[T,key]
-  <: PRED[[T,T]] = minlist[T,key].<
-  IMPORTING before_list[T,<]
-
-
-  before_char: THEOREM l1 < l2 IFF max(l1) < min(l2)
-  before_lchar: LEMMA l1 < l2 IFF FORALL x: member(x,l2) IMPLIES max(l1) < x 
-  before_rchar: LEMMA l1 < l2 IFF FORALL x: member(x,l1) IMPLIES x < min(l2) 
-
-
-END before_min
 
 subword_list [ T: TYPE, < : PRED[[T,T]] ]: THEORY
 BEGIN
