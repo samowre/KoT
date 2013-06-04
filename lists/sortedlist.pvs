@@ -7,6 +7,7 @@ sortedlist   [ T: TYPE, <=:(total_order?[T])]
   a,b,c: VAR T
   x,y,z: VAR T
   p: VAR PRED[T]
+  i: VAR nat
 
  
 
@@ -142,15 +143,16 @@ sortedlist   [ T: TYPE, <=:(total_order?[T])]
 
 
   % SORTS (and remove duplicates)
-    % Insertion sort
-  sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
+  % Insertion sort
+  insert_sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
    	      CASES l OF
 	      	  null: null,
-		  cons(h,lt): s_insert(h,sort(lt))
+		  cons(h,lt): s_insert(h,insert_sort(lt))
 	      ENDCASES
   MEASURE length(l)
   
-    % Merge sort (merge remove duplicates)
+  % Merge sort 
+    % merge and remove duplicates
   merge(sl1,sl2): RECURSIVE { l:(sorted?) | FORALL x: member(x,l) IFF 
   		  	      		    member(x,sl1) OR member(x,sl2)} =
     CASES sl1 OF
@@ -166,10 +168,25 @@ sortedlist   [ T: TYPE, <=:(total_order?[T])]
 	ENDCASES
     ENDCASES
   MEASURE length(sl1)+length(sl2)
+    % Split in half
+  split_half(l): MACRO [list[T],list[T]] = partition_pos(l,LAMBDA i,x: even?(i))
+    % Merge sort
+  merge_sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
+    	CASES l OF
+	null:null,
+	cons(h,t): LET (l1,l2) = split_half(l) IN
+    		   merge(merge_sort(l1),merge_sort(l2))
+	ENDCASES
+  MEASURE length(l)
 
-    % Quick sort
-  
-   	    
+  % Quick sort
+  quick_sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
+  	    CASES l OF
+	    null: null,
+	    cons(h,t): LET (l1,l2) = partition(t,LAMBDA x: x < h) IN
+	    	       append(quick_sort(l1),s_insert(h,quick_sort(l2)))
+	    ENDCASES
+  MEASURE length(l)
 
 
 END sortedlist
