@@ -1,0 +1,73 @@
+list_basic_props[T:TYPE]: THEORY
+BEGIN
+  IMPORTING adt_props[T]
+
+  l, m, l1, l2: VAR list[T]
+  ll: VAR list[list[T]]
+  p: VAR pred[T]
+  P: VAR pred[list[T]]
+  a, b, c: VAR T
+  x, y, z: VAR T
+
+
+  %% Characterization of lists as the set of its elements
+  % Currified version of member
+  member(l)(x): MACRO bool = member(x, l)
+
+  % Useful auto-rewrites on length
+  length_cons: LEMMA 
+    length(cons(x,l)) = length(l) + 1
+  length_cdr: LEMMA 
+    cons?(l) IMPLIES length(cdr(l)) = length(l) - 1
+
+  % Useful conversion between every/some and forall/exists
+  % The same conversion with nth instead of member is already
+  % in the prelude for every (and the theorem for some can be
+  % obtained from double negation, cf adt_props).
+  every_forall: THEOREM
+    every(p)(l) IFF (FORALL (x | member(x, l)): p(x))
+
+  some_exists: THEOREM
+    some(p)(l) IFF (EXISTS (x | member(x, l)): p(x))
+
+
+  % Specification of common list functions with cons
+  append_cons: THEOREM append(cons(x,l),m) = cons(x,append(l,m))
+  reverse_null: THEOREM reverse(null) = null[T]
+  reverse_cons: THEOREM reverse(cons(x,l))= append(reverse(l),cons(x,null))  
+
+  % More precise specifications with nth
+  nth_cons: LEMMA
+    FORALL (i: below(1 + length(l))):
+      nth(cons(x, l), i) = IF i = 0 THEN x ELSE nth(l, i - 1) ENDIF
+  nth_cdr: LEMMA
+    FORALL (i: below(length(l) - 1)):
+      cons?(l) IMPLIES nth(cdr(l), i) = nth(l, i + 1)
+  nth_append: THEOREM
+    FORALL (i: below(length(l) + length(m))):
+      nth(append(l, m), i) = IF i < length(l)
+                               THEN nth(l, i)
+			       ELSE nth(m, i - length(l))
+			     ENDIF
+  nth_reverse: THEOREM
+    FORALL (i: below(length(l))):
+      nth(reverse(l), i) = nth(l, length(l) - i - 1)
+  nth_equal: THEOREM
+    ( length(l1) = length(l2) AND FORALL (i: below(length(l1))): nth(l1, i) = nth(l2, i) )
+    IFF l1 = l2
+
+  % Specification of common list functions with member
+  member_append: THEOREM
+    member(x, append(l, m)) IFF member(x, l) OR member(x, m)
+  member_reverse: THEOREM
+    member(x, reverse(l)) IFF member(x, l)
+  member_nth: THEOREM
+    member(x, l) IFF (EXISTS (i: below(length(l))): nth(l, i) = x)
+
+ 
+  % Auto rewrites
+  AUTO_REWRITE length_cons
+  AUTO_REWRITE every_forall, some_exists
+  AUTO_REWRITE reverse_null
+  %AUTO_REWRITE nth_cons,nth_cdr,nth_reverse
+END list_basic_props

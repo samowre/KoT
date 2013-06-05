@@ -1,0 +1,42 @@
+(list_flatten_props
+ (flatten_null 0
+  (flatten_null-1 nil 3577728887 ("" (grind) nil nil)
+   ((flatten const-decl "list[T]" list_flatten_props nil)
+    (reduce adt-def-decl "[list[T] -> range]" list_adt_reduce nil))
+   shostak))
+ (flatten_cons 0
+  (flatten_cons-1 nil 3577728891 ("" (induct-and-simplify ll) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (flatten const-decl "list[T]" list_flatten_props nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (append def-decl "list[T]" list_props nil)
+    (list type-decl nil list_adt nil)
+    (T formal-type-decl nil list_flatten_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (reduce adt-def-decl "[list[T] -> range]" list_adt_reduce nil))
+   shostak))
+ (flatten_member 0
+  (flatten_member-1 nil 3577728794
+   (""
+    (induct-and-simplify ll :rewrites (flatten_cons member_append)
+     :if-match all)
+    nil nil)
+   ((append def-decl "list[T]" list_props nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (member_append formula-decl nil list_basic_props nil)
+    (flatten_cons formula-decl nil list_flatten_props nil)
+    (reduce adt-def-decl "[list[T] -> range]" list_adt_reduce nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_flatten_props nil)
+    (list type-decl nil list_adt nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (flatten const-decl "list[T]" list_flatten_props nil)
+    (member def-decl "bool" list_props nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   shostak)))
+
