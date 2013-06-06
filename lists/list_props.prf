@@ -9,7 +9,7 @@
    nil)))
 (list2_props
  (zip_TCC1 0
-  (zip_TCC1-1 nil 3579378888 ("" (subtype-tcc) nil nil)
+  (zip_TCC1-1 nil 3579528446 ("" (subtype-tcc) nil nil)
    ((below type-eq-decl nil naturalnumbers nil)
     (length def-decl "nat" list_props nil)
     (list type-decl nil list_adt nil)
@@ -32,15 +32,15 @@
     (boolean nonempty-type-decl nil booleans nil))
    nil))
  (zip_TCC2 0
-  (zip_TCC2-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
+  (zip_TCC2-1 nil 3579528446 ("" (subtype-tcc) nil nil) nil nil))
  (zip_TCC3 0
-  (zip_TCC3-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
+  (zip_TCC3-1 nil 3579528446 ("" (subtype-tcc) nil nil) nil nil))
  (zip_TCC4 0
-  (zip_TCC4-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
+  (zip_TCC4-1 nil 3579528446 ("" (subtype-tcc) nil nil) nil nil))
  (zip_TCC5 0
-  (zip_TCC5-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
+  (zip_TCC5-1 nil 3579528446 ("" (subtype-tcc) nil nil) nil nil))
  (zip_TCC6 0
-  (zip_TCC6-1 nil 3579378888 ("" (termination-tcc) nil nil)
+  (zip_TCC6-1 nil 3579528446 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -69,13 +69,14 @@
      integers nil))
    nil))
  (zip_TCC7 0
-  (zip_TCC7-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
+  (zip_TCC7-1 nil 3579528446 ("" (subtype-tcc) nil nil) nil nil))
  (assoc_TCC1 0
-  (assoc_TCC1-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
+  (assoc_TCC1-1 nil 3579528446 ("" (subtype-tcc) nil nil) nil nil))
  (assoc_TCC2 0
-  (assoc_TCC2-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
+  (assoc_TCC2-2 nil 3579528543 ("" (postpone) nil nil) nil nil)
+  (assoc_TCC2-1 nil 3579528446 ("" (subtype-tcc) nil nil) nil nil))
  (assoc_TCC3 0
-  (assoc_TCC3-1 nil 3579378888 ("" (subtype-tcc) nil nil)
+  (assoc_TCC3-1 nil 3579528446 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -106,12 +107,41 @@
      "(strict_total_order?[real])" real_props nil))
    nil)))
 (list_map_props
- (mymap_TCC1 0
-  (mymap_TCC1-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
- (mymap_TCC2 0
-  (mymap_TCC2-1 nil 3579378888 ("" (subtype-tcc) nil nil) nil nil))
- (mymap_TCC3 0
-  (mymap_TCC3-1 nil 3579378888 ("" (termination-tcc) nil nil)
-   ((<< adt-def-decl "(strict_well_founded?[list])" list_adt nil))
-   nil)))
+ (map_curr 0
+  (map_curr-1 nil 3578940818 ("" (induct-and-simplify l) nil nil)
+   ((list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (S formal-type-decl nil list_map_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (T formal-type-decl nil list_map_props nil)
+    (list_induction formula-decl nil list_adt nil))
+   shostak))
+ (member_map 0
+  (member_map-1 nil 3577637101 ("" (induct-and-simplify l) nil nil)
+   ((list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (S formal-type-decl nil list_map_props nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (T formal-type-decl nil list_map_props nil)
+    (list_induction formula-decl nil list_adt nil))
+   nil))
+ (map_member 0
+  (map_member-1 nil 3577718713 ("" (induct-and-simplify l) nil nil)
+   ((list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (S formal-type-decl nil list_map_props nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (member def-decl "bool" list_props nil)
+    (map adt-def-decl "list[T1]" list_adt_map nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (T formal-type-decl nil list_map_props nil)
+    (list_induction formula-decl nil list_adt nil))
+   shostak)))
 

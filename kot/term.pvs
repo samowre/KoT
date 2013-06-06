@@ -4,19 +4,24 @@ BEGIN
   lists: LIBRARY "../lists"
   IMPORTING lists@more_list_props
   IMPORTING lists@list2_props
-  IMPORTING more_finseq_props
+  IMPORTING lists@list2set_props
+  IMPORTING lists@list_map_props
   IMPORTING assoc2, smap, setmap
   IMPORTING wf_pair
   IMPORTING set_props
   % TODO: move this to set_props
   CONVERSION- singleton_elt
 
-  % A function is interpreted or uninterpreted
+  % Datatype representing function symbols, that can be interpreted or uninterpreted
+  % An interpreted symbol of arity 0 is a constant, and an uninterpreted symbol of
+  % arity 0 is a skolem variable
   fun: DATATYPE
   BEGIN
     ifun(index, arity: nat): ifun?
     ufun(index, arity: nat): ufun?
   END fun
+  const?(f: fun): bool = ifun?(f) AND arity(f) = 0
+  skolem?(f: fun): bool = ufun?(f) AND arity(f) = 0
 
   % Terms of functions and variables
   term: DATATYPE
@@ -24,163 +29,140 @@ BEGIN
     v(index: nat): var?
     apply(fun: fun, args: { l: finseq[term] | l`length = arity(fun) }): apply?
   END term
+  % There is no fundamental difference between f and apply(f, empty_seq)
+  const_apply(f: (const?)): term = apply(f, empty_seq)
+  const_fun(f: term | apply?(f) AND const?(fun(f))): (const?) = fun(f)
+  skolem_apply(f: (const?)): term = apply(f, empty_seq)
+  skolem_fun(f: term | apply?(f) AND skolem?(fun(f))): (skolem?) = fun(f)
+  CONVERSION+ const_apply, const_fun, skolem_apply, skolem_fun
+
+  args(f: fun): TYPE = { l: finseq[term] | l`length = arity(f) }
 
   s, t, r: VAR term
-  ss, ts: VAR set[term]
   i, n: VAR nat
   is, ns: VAR set[nat]
   uf: VAR (ufun?)
+  ifun: VAR (ifun?)
 
-  skolem?(s): bool =
-    apply?(s) AND ufun?(fun(s)) AND arity(fun(s)) = 0
-  skolem: TYPE = (skolem?)
-
-  skolem_equal: THEOREM
-    FORALL (x, y: skolem): fun(x) = fun(y) IMPLIES x = y
-
-  sk(i): term = apply(ufun(i, 0), empty_seq)
-
-  skfree_aux(s: term, ts: finseq[{ t: term | t << s }], i: upto(ts`length), x: skolem):
-    RECURSIVE bool =
-    IF i = ts`length THEN TRUE
-    ELSE LET tsi = ts(i) IN
-      CASES tsi OF
-       v(j): skfree_aux(s, ts, i + 1, x),
-       apply(f, args):
-         IF tsi = x THEN FALSE
-	 ELSE skfree_aux(tsi, args, 0, x) AND skfree_aux(s, ts, i + 1, x) ENDIF
-      ENDCASES
-    ENDIF
-  MEASURE (s, (ts`length - i) :: nat) BY le[term, nat, <<, <]
-
-  skfree(s: term, x: skolem): bool =
-    CASES s OF
-      v(i): TRUE,
-      apply(f, args):
-        IF s = x THEN FALSE
-	ELSE skfree_aux(s, args, 0, x) ENDIF
-    ENDCASES
-
-  % Computes the set of variables present in a term.
-  % This is intended to be used in specifications only, and may not be executable.
-  V(t): RECURSIVE set[nat] =
+  %% Variables
+  % Computes the set of variables present in a term
+  V(t): RECURSIVE { ns: set[nat] | ns = { n: nat | subterm(v(n), t) } } =
     CASES t OF
       v(n): singleton(n),
       apply(f, args): V(args :: set[term])
     ENDCASES
   MEASURE t BY <<
+  vars_subterm: THEOREM subterm(t, s) IMPLIES V(t) ⊂ V(s)
+  vars_ltlt: THEOREM t << s IMPLIES V(t) ⊂ V(s)
+  vars_set_subterms: JUDGEMENT V(t) HAS_TYPE set[{ n | subterm(v(n), t) }]
+  subterm_finite: THEOREM is_finite({ s | subterm(s, t) })
+  vars_finite: JUDGEMENT V(t) HAS_TYPE finite_set[nat]
 
-  vars_subterm: THEOREM n ∈ V(t) IFF subterm(v(n), t)
-  
-  % vars only increases
-  vars_increases: THEOREM
-    t << s IMPLIES V(t) ⊂ V(s)
+  % Handy way to bound the variables of a term
+  ;<(t, n): bool = FORALL (v: (V(t))): v < n
 
-  % Uninterpreted Function Symbols of a term
-  UFS(t): RECURSIVE set[(ufun?)] =
+  % Computes the set of function symbols satisfying a given predicate
+  FS(p: pred[fun])(t):
+    RECURSIVE { fs: set[(p)] | fs = { f: fun | EXISTS (args: args(f)): subterm(apply(f, args), t) } } =
     CASES t OF
       v(n): ∅,
-      apply(f, args): { uf | uf = f OR uf ∈ UFS(args :: set[term]) }
+      apply(f, args): { fp: (p) | fp = f OR fp ∈ FS(p)(args :: set[term]) }
+    ENDCASES
+  MEASURE t BY <<
+  FS_subterm: THEOREM FORALL (p: pred[fun]): subterm(t, s) IMPLIES FS(p)(t) ⊂ FS(p)(s)
+  FS_ltlt: THEOREM FORALL (p: pred[fun]): t << s IMPLIES FS(p)(t) ⊂ FS(p)(s)
+
+  % Computes the set of uninterpreted function symbols present in a term
+  UFS(t):
+    { us: set[(ufun?)] | us = { uf | EXISTS (args: args(uf)): subterm(apply(uf, args), t) } } =
+    FS(ufun?)(t)
+  UFS_subterm: THEOREM subterm(t, s) IMPLIES UFS(t) ⊂ UFS(s)
+  UFS_ltlt: THEOREM t << s IMPLIES UFS(t) ⊂ UFS(s)
+
+  % Computes the set of interpreted function symbols present in a term
+  IFS(t):
+    { is: set[(ifun?)] | is = { ifun | EXISTS (args: args(ifun)): subterm(apply(ifun, args), t) } } =
+    FS(ifun?)(t)
+  IFS_subterm: THEOREM subterm(t, s) IMPLIES IFS(t) ⊂ IFS(s)
+  IFS_ltlt: THEOREM t << s IMPLIES IFS(t) ⊂ IFS(s)
+
+  % Shift variables, for substitution
+  ;↑(t, i): RECURSIVE { s | V(s) = { n | n >= i AND n - i ∈ V(t) } } =
+    CASES t OF
+      v(n): v(i + n),
+      apply(f, args): apply(f, smap[{ s | s << t }, term](LAMBDA (s | s << t): (s ↑ i))(args))
     ENDCASES
   MEASURE t BY <<
 
-  UFS_subterm: THEOREM
-    uf ∈ UFS(t) IFF EXISTS (args: finseq[term] | args`length = arity(uf)): subterm(apply(uf, args), t)
-
-  skfree_aux_UFS: RECURSIVE JUDGEMENT
-    skfree_aux(s: term, ts: finseq[{ t: term | t << s }], i: upto(ts`length), x: skolem)
-      HAS_TYPE { b: bool | b = FORALL (j: below(ts`length)): j >= i IMPLIES fun(x) ∉ UFS(ts`seq(j)) }
-
-  skfree_UFS: JUDGEMENT
-    skfree(s: term, x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(s) }
-
-  % Rename variables
-  α(rename: (bijective?[nat, nat]))(s): RECURSIVE term =
-    CASES s OF
-      v(i): v(rename(i)),
-      apply(f, args): apply(f, smap[{ t | t << s }, term]
-                                   (LAMBDA (t | t << s): α(rename)(t))(args))
+  % Parallel substitution
+  % q is the number of inner quantificators encountered (i.e., number of shifts to perform)
+  % mapping is the variables to substitude, to which the q shifts have to be performed
+  parsubst(q: nat, mapping: finseq[term])(t | t < q + mapping`length):
+    RECURSIVE { r | FORALL (v: (V(r))): v < q OR EXISTS (i: below(mapping`length)): v - q ∈ V(mapping(i)) } =
+    CASES t OF
+      v(i): IF i >= q AND i - q < mapping`length
+              THEN (mapping(i - q) ↑ q)
+	      ELSE v(i) ENDIF,
+      apply(f, args): apply(f, smap(LAMBDA (s | s << t): parsubst(q, mapping)(s))(args))
     ENDCASES
-  MEASURE s BY <<
-				   
-  % The new variables is the renaming of the old ones
-  alpha_vars: RECURSIVE JUDGEMENT
-    α(rename: (bijective?[nat, nat]))(s: term) HAS_TYPE { t | V(t) = rename(V(s)) }
+  MEASURE t BY <<
 
-  alpha_equiv(s, t): bool = EXISTS (rename: (bijective?[nat, nat])): α(rename)(s) = t
-  ;≃(s, t): MACRO bool = alpha_equiv(s, t)
-
-  alpha_identity: THEOREM
-    α(LAMBDA n: n)(s) = s
-    
-  alpha_term_reflexive: THEOREM
-    s ≃ s
-
-  alpha_term_inverse: THEOREM
-    FORALL (rename: (bijective?[nat, nat])):
-      α(rename)(s) = t IMPLIES α(inverse(rename))(t) = s
-
-  alpha_term_symmetry: THEOREM
-    (s ≃ t) IMPLIES (t ≃ s)
-
-  alpha_term_composition: THEOREM
-    FORALL (rename, rename2: (bijective?[nat, nat])):
-      α(rename)(s) = t IMPLIES α(rename2)(t) = α(rename2 o rename)(s)
-
-  alpha_term_transitivity: THEOREM
-    (s ≃ t) AND (t ≃ r) IMPLIES (s ≃ r)
-
-  alpha_term_equiv: JUDGEMENT
-    alpha_equiv HAS_TYPE (equivalence?[term])
-
-  % Parallel substitution in a term using a mapping function from variables to terms.
-  parsubst(s: term, mapping: [nat -> term]): RECURSIVE term =
+  % Substitute an uninterpreted function for an interpreted body
+  fsubst(uf, (t | t < arity(uf)))
+        (s):
+    RECURSIVE { r | FORALL (q: nat): s < q IMPLIES r < q } =
     CASES s OF
-      v(i): mapping(i),
-      apply(f, args): apply(f, smap[{t | t << s }, term]
-                                   (LAMBDA (t | t << s): parsubst(t, mapping))(args))
-    ENDCASES
-  MEASURE s BY <<
-
-  % Information about the new set of variables as a recursive judgement
-  parsubst_map_vars: RECURSIVE JUDGEMENT
-    parsubst(s: term, mapping: [nat -> term]) HAS_TYPE { t | V(t) ⊂ V(mapping(V(s))) }
-
-  % Paralel substitution, with association lists
-  % Again, we can know a superset of the new variables
-  parsubst(s: term, vars: list[nat], (vals: finseq[term] | vals`length = length(vars))):
-    term =
-%    { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) } =
-%TODO    { r | V(r) ⊂ (V(s) \ vars) ∪ V(vals) }
-    parsubst(s, LAMBDA i: assoc2[nat, term](i, vars, vals, v(i)))
-    
-%  parsubst_vars: JUDGEMENT
-%    parsubst(s: term, vars: list[nat], (vals: finseq[term] | vals`length = length(vars)))
-%      HAS_TYPE { r: term | V(r) ⊂ (V(s) - vars) ∪ V(vals :: set[term]) }
-
-  % Single substitution is actually a parallel substitution
-  % We know a superset of the new variables
-  subst(s, n, t): term =
-%TODO    { r | V(r) ⊂ (V(s) \ n) ∪ V(t) }
-    parsubst(s, LAMBDA i: IF i = n THEN t ELSE v(i) ENDIF)
-
-  % Interprets an uninterpreted function by a body.
-  % There is no restriction on the variables present in the replacement function.
-  fsubst(s,
-        (u: (ufun?)),
-	(vars: (uniques?[nat]) | length(vars) = arity(u)),
-	t):
-    RECURSIVE term =
-%TODO { r | V(r) ⊂ V(s) ∪ (V(t) \ vars) }
-    CASES s OF
-      v(i): s,
+      v(i): v(i),
       apply(f, args):
-        LET nargs = smap[{ t | t << s }, term]
-	                (LAMBDA (r: term | r << s): fsubst(r, u, vars, t))(args) IN
-	IF f = u
-	  THEN parsubst(t, vars, nargs)
-	  ELSE apply(f, nargs)
-	ENDIF
+        LET nargs = smap[{ r | r << s }, term](LAMBDA (r | r << s): fsubst(uf, t)(r))(args) IN
+	IF f = uf THEN parsubst(0, nargs)(t)
+	ELSE apply(f, nargs) ENDIF
     ENDCASES
   MEASURE s BY <<
+
+%   s, t, r: VAR term
+%   ss, ts: VAR set[term]
+%   i, n: VAR nat
+%   is, ns: VAR set[nat]
+%   uf: VAR (ufun?)
+
+%   skolem?(s): bool =
+%     apply?(s) AND ufun?(fun(s)) AND arity(fun(s)) = 0
+%   skolem: TYPE = (skolem?)
+
+%   skolem_equal: THEOREM
+%     FORALL (x, y: skolem): fun(x) = fun(y) IMPLIES x = y
+
+%   sk(i): term = apply(ufun(i, 0), empty_seq)
+
+%   skfree_aux(s: term, ts: finseq[{ t: term | t << s }], i: upto(ts`length), x: skolem):
+%     RECURSIVE bool =
+%     IF i = ts`length THEN TRUE
+%     ELSE LET tsi = ts(i) IN
+%       CASES tsi OF
+%        v(j): skfree_aux(s, ts, i + 1, x),
+%        apply(f, args):
+%          IF tsi = x THEN FALSE
+% 	 ELSE skfree_aux(tsi, args, 0, x) AND skfree_aux(s, ts, i + 1, x) ENDIF
+%       ENDCASES
+%     ENDIF
+%   MEASURE (s, (ts`length - i) :: nat) BY le[term, nat, <<, <]
+
+%   skfree(s: term, x: skolem): bool =
+%     CASES s OF
+%       v(i): TRUE,
+%       apply(f, args):
+%         IF s = x THEN FALSE
+% 	ELSE skfree_aux(s, args, 0, x) ENDIF
+%     ENDCASES
+
+%   UFS_subterm: THEOREM
+%     uf ∈ UFS(t) IFF EXISTS (args: finseq[term] | args`length = arity(uf)): subterm(apply(uf, args), t)
+
+%   skfree_aux_UFS: RECURSIVE JUDGEMENT
+%     skfree_aux(s: term, ts: finseq[{ t: term | t << s }], i: upto(ts`length), x: skolem)
+%       HAS_TYPE { b: bool | b = FORALL (j: below(ts`length)): j >= i IMPLIES fun(x) ∉ UFS(ts`seq(j)) }
+
+%   skfree_UFS: JUDGEMENT
+%     skfree(s: term, x: skolem) HAS_TYPE { b: bool | b = fun(x) ∉ UFS(s) }
 END term
