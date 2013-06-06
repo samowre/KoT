@@ -1,0 +1,20 @@
+list_flatten_props[T:TYPE]: THEORY
+BEGIN
+  IMPORTING list_basic_props[T]
+
+  l, m, l1, l2: VAR list[T]
+  ll: VAR list[list[T]]
+  p: VAR pred[T]
+  P: VAR pred[list[T]]
+  a, b, c: VAR T
+  x, y, z: VAR T
+
+
+  % Flattens a list of lists
+  flatten(ll: list[list[T]]): list[T] = reduce(null, (LAMBDA l, m: append(l, m)))(ll)
+  flatten_null: THEOREM flatten(null) = null
+  flatten_cons: THEOREM flatten(cons(l, ll)) = append(l, flatten(ll))
+  flatten_member: THEOREM
+      member(x, flatten(ll)) IFF (EXISTS l: member(x, l) AND member(l, ll))
+
+END list_flatten_props

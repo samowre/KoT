@@ -1,0 +1,1528 @@
+(list_filter_props
+ (partition_pos_TCC1 0
+  (partition_pos_TCC1-1 nil 3579445023 ("" (termination-tcc) nil nil)
+   ((real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (length def-decl "nat" list_props nil))
+   nil))
+ (filter_cons 0
+  (filter_cons-1 nil 3579360452 ("" (grind) nil nil)
+   ((filter def-decl "list[T]" filters nil)) shostak))
+ (filter_null 0
+  (filter_null-1 nil 3579360457 ("" (grind) nil nil)
+   ((filter def-decl "list[T]" filters nil)) shostak))
+ (filter_pos_cons 0
+  (filter_pos_cons-1 nil 3579436991
+   ("" (grind)
+    (("1" (use partition_aux_inv) (("1" (grind) nil nil)) nil)
+     ("2" (use partition_aux_inv) (("2" (grind) nil nil)) nil))
+    nil)
+   ((partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil))
+   shostak))
+ (filter_pos_null 0
+  (filter_pos_null-1 nil 3579437016 ("" (grind) nil nil)
+   ((partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil))
+   shostak))
+ (filter_member_TCC1 0
+  (filter_member_TCC1-1 nil 3578838340
+   ("" (recursive-judgement-tcc) nil nil)
+   ((member def-decl "bool" list_props nil)) nil))
+ (filter_member_TCC2 0
+  (filter_member_TCC2-1 nil 3578838340 ("" (grind) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (list type-decl nil list_adt nil)
+    (pred type-eq-decl nil defined_types nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (member def-decl "bool" list_props nil))
+   nil))
+ (filter_member_TCC3 0
+  (filter_member_TCC3-1 nil 3578838340
+   ("" (recursive-judgement-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (list type-decl nil list_adt nil)
+    (pred type-eq-decl nil defined_types nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (member def-decl "bool" list_props nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil))
+   nil))
+ (partition_char_TCC1 0
+  (partition_char_TCC1-1 nil 3579445023
+   ("" (recursive-judgement-tcc) nil nil)
+   ((real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (bl type-eq-decl nil list_filter_props nil)
+    (length def-decl "nat" list_props nil)
+    (list type-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (< const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (member def-decl "bool" list_props nil))
+   nil))
+ (partition_char_TCC2 0
+  (partition_char_TCC2-1 nil 3579445023
+   ("" (skolem-typepred)
+    (("" (skosimp*)
+      (("" (inst - "(t!1,LAMBDA i,x: pi!1(1+i,x))")
+        (("" (inst - x!1)
+          (("" (flatten -1)
+            (("" (split 1)
+              (("1" (split -1)
+                (("1" (skeep)
+                  (("1" (inst + "i_1 + 1")
+                    (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
+                  nil)
+                 ("2" (flatten 2)
+                  (("2" (inst + 0)
+                    (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
+                  nil))
+                nil)
+               ("2" (split -2)
+                (("1" (grind) nil nil)
+                 ("2" (flatten 2)
+                  (("2" (skeep)
+                    (("2" (inst + "i - 1")
+                      (("1" (hide -3 -4 -5)
+                        (("1" (grind)
+                          (("1" (grind)
+                            (("1" (rewrite nth_cons)
+                              (("1" (grind) nil nil)) nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("2" (typepred i) (("2" (grind) nil nil)) nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("3" (flatten 1)
+                (("3" (split -4)
+                  (("1" (skeep)
+                    (("1" (inst + "i_1 + 1")
+                      (("1" (grind) nil nil) ("2" (grind) nil nil))
+                      nil))
+                    nil)
+                   ("2" (grind) nil nil))
+                  nil))
+                nil)
+               ("4" (flatten 1)
+                (("4" (split -5)
+                  (("1" (grind) nil nil)
+                   ("2" (skeep)
+                    (("2" (inst + "i - 1")
+                      (("1" (hide -2 -3 -4)
+                        (("1" (expand nth -1) (("1" (grind) nil nil))
+                          nil))
+                        nil)
+                       ("2" (typepred i) (("2" (grind) nil nil)) nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((even_minus_odd_is_odd application-judgement "odd_int" integers
+     nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (l!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (i_1 skolem-const-decl "bl(t!1)" list_filter_props nil)
+    (t!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (i skolem-const-decl "bl(l!1)" list_filter_props nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (nth_cons formula-decl nil list_basic_props nil)
+    (i_1 skolem-const-decl "bl(t!1)" list_filter_props nil)
+    (i skolem-const-decl "bl(l!1)" list_filter_props nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (nth def-decl "T" list_props nil)
+    (below type-eq-decl nil nat_types nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (bl type-eq-decl nil list_filter_props nil)
+    (length def-decl "nat" list_props nil)
+    (< const-decl "bool" reals nil)
+    (member def-decl "bool" list_props nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (list type-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (partition_char_TCC3 0
+  (partition_char_TCC3-1 nil 3579445023
+   ("" (skolem-typepred)
+    (("" (skosimp*)
+      (("" (inst - "(t!1,LAMBDA i,x: pi!1(1+i,x))")
+        (("" (inst - x!1)
+          (("" (flatten -1)
+            (("" (split 2)
+              (("1" (split -1)
+                (("1" (skeep)
+                  (("1" (inst + "i_1 + 1")
+                    (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
+                  nil)
+                 ("2" (flatten 2)
+                  (("2" (inst + 0)
+                    (("1" (grind) nil nil) ("2" (grind) nil nil)) nil))
+                  nil))
+                nil)
+               ("2" (split -2)
+                (("1" (grind) nil nil)
+                 ("2" (flatten 2)
+                  (("2" (skeep)
+                    (("2" (inst + "i - 1")
+                      (("1" (hide -3 -4 -5)
+                        (("1" (grind)
+                          (("1" (grind)
+                            (("1" (rewrite nth_cons)
+                              (("1" (grind) nil nil)) nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("2" (typepred i) (("2" (grind) nil nil)) nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("3" (flatten 1)
+                (("3" (split -4)
+                  (("1" (skeep)
+                    (("1" (inst + "i_1 + 1")
+                      (("1" (grind) nil nil) ("2" (grind) nil nil))
+                      nil))
+                    nil)
+                   ("2" (hide -2 -3 -4)
+                    (("2" (inst + 0)
+                      (("1" (grind) nil nil) ("2" (grind) nil nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("4" (flatten 1)
+                (("4" (split -5)
+                  (("1" (grind) nil nil)
+                   ("2" (skeep)
+                    (("2" (inst + "i - 1")
+                      (("1" (hide -2 -3 -4)
+                        (("1" (expand nth -1) (("1" (grind) nil nil))
+                          nil))
+                        nil)
+                       ("2" (typepred i) (("2" (grind) nil nil)) nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((even_minus_odd_is_odd application-judgement "odd_int" integers
+     nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (l!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (i_1 skolem-const-decl "bl(t!1)" list_filter_props nil)
+    (t!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (i skolem-const-decl "bl(l!1)" list_filter_props nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (nth_cons formula-decl nil list_basic_props nil)
+    (i_1 skolem-const-decl "bl(t!1)" list_filter_props nil)
+    (i skolem-const-decl "bl(l!1)" list_filter_props nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (nth def-decl "T" list_props nil)
+    (below type-eq-decl nil nat_types nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (bl type-eq-decl nil list_filter_props nil)
+    (length def-decl "nat" list_props nil)
+    (< const-decl "bool" reals nil)
+    (member def-decl "bool" list_props nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (list type-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (partition_char 0
+  (partition_char-1 nil 3579040738
+   ("" (skolem-typepred)
+    (("" (expand partition_pos)
+      (("" (typepred "partition_aux(l!1,pi!1,0)")
+        (("" (inst - x!1) nil nil)) nil))
+      nil))
+    nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (list type-decl nil list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (pred type-eq-decl nil defined_types nil)
+    (< const-decl "bool" reals nil)
+    (length def-decl "nat" list_props nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (below type-eq-decl nil nat_types nil)
+    (nth def-decl "T" list_props nil))
+   nil))
+ (filter_pos_char 0
+  (filter_pos_char-1 nil 3579463573
+   ("" (skeep)
+    (("" (expand filter_pos)
+      (("" (typepred "partition_pos(l,pi)") (("" (grind) nil nil))
+        nil))
+      nil))
+    nil)
+   ((filter_pos const-decl "list[T]" list_filter_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (list type-decl nil list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (pred type-eq-decl nil defined_types nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (< const-decl "bool" reals nil)
+    (length def-decl "nat" list_props nil)
+    (bl type-eq-decl nil list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (below type-eq-decl nil nat_types nil)
+    (nth def-decl "T" list_props nil))
+   nil))
+ (partition_member 0
+  (partition_member-1 nil 3579355453
+   ("" (skeep)
+    (("" (all-typepreds)
+      (("" (inst - x) (("" (lazy-grind :rewrites member_nth) nil nil))
+        nil))
+      nil))
+    nil)
+   ((partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (list type-decl nil list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (pred type-eq-decl nil defined_types nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (< const-decl "bool" reals nil)
+    (length def-decl "nat" list_props nil)
+    (bl type-eq-decl nil list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (below type-eq-decl nil nat_types nil)
+    (nth def-decl "T" list_props nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (member_nth formula-decl nil list_basic_props nil)
+    (pi skolem-const-decl "pred[[nat, T]]" list_filter_props nil)
+    (i!2 skolem-const-decl "bl(l)" list_filter_props nil)
+    (l skolem-const-decl "list[T]" list_filter_props nil)
+    (i!2 skolem-const-decl "bl(l)" list_filter_props nil)
+    (i!1 skolem-const-decl "below(length(l))" list_filter_props nil))
+   shostak))
+ (partition_filter 0
+  (partition_filter-1 nil 3579351870
+   ("" (induct-and-simplify l :defs nil :if-match nil)
+    (("1" (grind) nil nil)
+     ("2" (expand partition_pos +)
+      (("2" (expand filter +)
+        (("2" (lift-if)
+          (("2" (lift-if)
+            (("2" (lift-if)
+              (("2" (inst - p!1)
+                (("2" (prop)
+                  (("1" (decompose-equality 1) nil nil)
+                   ("2" (decompose-equality 1) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (filter_member rec-application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list_filter_props nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (filter def-decl "list[T]" filters nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil))
+   shostak))
+ (partition_filter_pos 0
+  (partition_filter_pos-1 nil 3579383034
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skeep)
+      (("2" (skeep)
+        (("2" (expand filter_pos)
+          (("2" (expand partition_pos +)
+            (("2" (inst - "LAMBDA i,x: pi(i+1,x)")
+              (("2" (rewrite -1 -2) (("2" (grind) nil nil)) nil)) nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (partition_neg 0
+  (partition_neg-1 nil 3579382809
+   ("" (skeep)
+    (("" (use partition_filter_pos)
+      (("" (decompose-equality)
+        (("" (use partition_filter_pos (pi pi))
+          (("" (simplify 1)
+            (("" (grind :defs nil)
+              (("" (hide -1)
+                (("" (case "(LAMBDA i,x:pi(i,x))=pi")
+                  (("1" (grind) nil nil)
+                   ("2" (grind) (("2" (grind-with-ext) nil nil)) nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((partition_filter_pos formula-decl nil list_filter_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (list type-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (filter_pos_char application-judgement "{pp |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))}"
+     list_filter_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil))
+   shostak))
+ (filter_filter_pos 0
+  (filter_filter_pos-1 nil 3579402758
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (inst - p!1)
+        (("2" (grind)
+          (("1" (decompose-equality 1)
+            (("1" (use partition_aux_inv) (("1" (grind) nil nil)) nil))
+            nil)
+           ("2" (use partition_aux_inv) (("2" (grind) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (filter_pos_char application-judgement "{pp |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))}"
+     list_filter_props nil)
+    (filter_member rec-application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list_filter_props nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (filter def-decl "list[T]" filters nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (length_filter 0
+  (length_filter-1 nil 3579404579 ("" (induct-and-simplify l) nil nil)
+   ((list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (<= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (length def-decl "nat" list_props nil)
+    (filter def-decl "list[T]" filters nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (filter_member rec-application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list_filter_props nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil))
+   shostak))
+ (st_length_filter 0
+  (st_length_filter-1 nil 3579404592
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (inst - p!1)
+        (("2"
+          (case "length(filter(cons2_var!1,p!1)) = length(cons2_var!1)")
+          (("1" (grind) nil nil)
+           ("2" (use length_filter) (("2" (grind) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((filter_member rec-application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (every_forall formula-decl nil list_basic_props nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (member def-decl "bool" list_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (length_filter formula-decl nil list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (filter def-decl "list[T]" filters nil)
+    (length def-decl "nat" list_props nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (< const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (filter_identity 0
+  (filter_identity-1 nil 3579461707
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (inst - p!1)
+        (("2" (split 1)
+          (("1" (flatten 1)
+            (("1"
+              (typepred "filter(cons(cons1_var!1,cons2_var!1),p!1)")
+              (("1"
+                (inst -
+                 "car(filter(cons(cons1_var!1,cons2_var!1),p!1))")
+                (("1" (flatten -1)
+                  (("1" (hide -2)
+                    (("1" (expand member -1 1)
+                      (("1" (split -1)
+                        (("1" (copy -2)
+                          (("1" (expand filter -3)
+                            (("1" (rewrite -1 -2)
+                              (("1"
+                                (lift-if)
+                                (("1"
+                                  (prop)
+                                  (("1"
+                                    (grind :rewrites every_forall)
+                                    nil
+                                    nil)
+                                   ("2"
+                                    (decompose-equality -2)
+                                    nil
+                                    nil)
+                                   ("3" (grind) nil nil)
+                                   ("4" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil)
+                         ("2" (grind) nil nil) ("3" (propax) nil nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil)
+                 ("2" (grind) nil nil))
+                nil))
+              nil))
+            nil)
+           ("2" (grind) nil nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((AND const-decl "[bool, bool -> bool]" booleans nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (member def-decl "bool" list_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (filter_member rec-application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list_filter_props nil)
+    (every_forall formula-decl nil list_basic_props nil)
+    (cdr adt-accessor-decl "[(cons?) -> list]" list_adt nil)
+    (car adt-accessor-decl "[(cons?) -> T]" list_adt nil)
+    (p!1 skolem-const-decl "pred[T]" list_filter_props nil)
+    (cons2_var!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (cons1_var!1 skolem-const-decl "T" list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (filter def-decl "list[T]" filters nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (filter_append 0
+  (filter_append-1 nil 3578161497 ("" (induct-and-simplify l) nil nil)
+   ((list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (filter def-decl "list[T]" filters nil)
+    (append def-decl "list[T]" list_props nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (filter_member rec-application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list_filter_props nil))
+   shostak))
+ (filter_reverse 0
+  (filter_reverse-1 nil 3579437566
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (inst - p!1)
+        (("2" (expand reverse 1 1)
+          (("2" (use filter_append)
+            (("2" (rewrite -1 1)
+              (("2" (rewrite -1 1)
+                (("2" (lemma reverse_reverse[T])
+                  (("2" (inst - "filter(cons(cons1_var!1,null),p!1)")
+                    (("2" (rewrite -1 :dir rl)
+                      (("2" (rewrite reverse_append :dir rl)
+                        (("2" (expand filter 1 1)
+                          (("2" (lift-if)
+                            (("2" (prop)
+                              (("1"
+                                (expand filter 1 1)
+                                (("1"
+                                  (expand reverse 1 2)
+                                  (("1"
+                                    (expand reverse 1 2)
+                                    (("1"
+                                      (expand append 1 2)
+                                      (("1"
+                                        (expand append 1)
+                                        (("1"
+                                          (expand append 1)
+                                          (("1"
+                                            (expand filter 1 2)
+                                            (("1" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2"
+                                (expand filter 2 1)
+                                (("2"
+                                  (expand reverse 2 2)
+                                  (("2"
+                                    (expand append 2)
+                                    (("2" (grind) nil nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((filter_member rec-application-judgement
+     "{m | FORALL x: member(x, m) IFF p(x) AND member(x, l)}"
+     list_filter_props nil)
+    (reverse_reverse formula-decl nil list_props nil)
+    (append def-decl "list[T]" list_props nil)
+    (reverse_append formula-decl nil list_props nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (filter_append formula-decl nil list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (filter def-decl "list[T]" filters nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (length_filter_pos 0
+  (length_filter_pos-1 nil 3579436640
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (grind :if-match nil)
+        (("1" (use partition_aux_inv)
+          (("1" (inst - "LAMBDA i,x : pi!1(i+1,x)")
+            (("1" (grind) nil nil)) nil))
+          nil)
+         ("2" (inst - "LAMBDA i,x : pi!1(i+1,x)")
+          (("2" (use partition_aux_inv) (("2" (grind) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (filter_pos_char application-judgement "{pp |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))}"
+     list_filter_props nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (length def-decl "nat" list_props nil)
+    (<= const-decl "bool" reals nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (st_length_filter_pos 0
+  (st_length_filter_pos-1 nil 3579436793
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (rewrite filter_pos_cons)
+        (("2" (lift-if)
+          (("2" (rewrite length_cons)
+            (("2" (rewrite length_cons)
+              (("2" (inst - "LAMBDA i,x : pi!1(i+1,x)")
+                (("2"
+                  (case "length(filter_pos(cons2_var!1,LAMBDA i,x:pi!1(i+1,x))) = length(cons2_var!1)")
+                  (("1" (rewrite nth_cons)
+                    (("1" (lazy-grind :if-match all) nil nil)
+                     ("2" (typepred i!1) (("2" (grind) nil nil)) nil))
+                    nil)
+                   ("2" (use length_filter_pos) (("2" (grind) nil nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((= const-decl "[T, T -> boolean]" equalities nil)
+    (minus_odd_is_odd application-judgement "odd_int" integers nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (odd_plus_even_is_odd application-judgement "odd_int" integers nil)
+    (odd_plus_odd_is_even application-judgement "even_int" integers
+     nil)
+    (i!1 skolem-const-decl "bl(cons(cons1_var!1, cons2_var!1))"
+     list_filter_props nil)
+    (cons1_var!1 skolem-const-decl "T" list_filter_props nil)
+    (cons2_var!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (even_minus_odd_is_odd application-judgement "odd_int" integers
+     nil)
+    (odd_minus_odd_is_even application-judgement "even_int" integers
+     nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (nth_cons formula-decl nil list_basic_props nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (length_filter_pos formula-decl nil list_filter_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (filter_pos_char application-judgement "{pp |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))}"
+     list_filter_props nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (length_cons formula-decl nil list_basic_props nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (filter_pos_cons formula-decl nil list_filter_props nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (nth def-decl "T" list_props nil)
+    (below type-eq-decl nil nat_types nil)
+    (bl type-eq-decl nil list_filter_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (length def-decl "nat" list_props nil)
+    (< const-decl "bool" reals nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (filter_pos_identity 0
+  (filter_pos_identity-1 nil 3579463007
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (prop)
+        (("1" (use st_length_filter_pos)
+          (("1" (prop)
+            (("1" (rewrite -2 -1) (("1" (grind) nil nil)) nil)) nil))
+          nil)
+         ("2" (inst -2 "LAMBDA i,x: pi!1(1+i,x)")
+          (("2" (lazy-grind :if-match all :rewrites every_forall) nil
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (filter_pos_char application-judgement "{pp |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))}"
+     list_filter_props nil)
+    (cons2_var!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (st_length_filter_pos formula-decl nil list_filter_props nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (nth def-decl "T" list_props nil)
+    (below type-eq-decl nil nat_types nil)
+    (bl type-eq-decl nil list_filter_props nil)
+    (length def-decl "nat" list_props nil)
+    (< const-decl "bool" reals nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil))
+   shostak))
+ (filter_pos_append 0
+  (filter_pos_append-1 nil 3579459143
+   ("" (induct l)
+    (("1" (grind)
+      (("1" (case "pi!1 = LAMBDA i,x:pi!1(i,x)")
+        (("1" (grind) nil nil)
+         ("2" (grind) (("2" (decompose-equality 1) nil nil)) nil))
+        nil))
+      nil)
+     ("2" (grind) nil nil))
+    nil)
+   ((posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (length def-decl "nat" list_props nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (append def-decl "list[T]" list_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (list type-decl nil list_adt nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil))
+   shostak))
+ (filter_pos_reverse_TCC1 0
+  (filter_pos_reverse_TCC1-1 nil 3579404555 ("" (grind) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil))
+   nil))
+ (filter_pos_reverse 0
+  (filter_pos_reverse-1 nil 3579459234
+   ("" (induct l)
+    (("1" (grind) nil nil)
+     ("2" (skosimp*)
+      (("2" (expand reverse 1 1)
+        (("2" (use filter_pos_append)
+          (("2" (rewrite -1 1)
+            (("2" (inst - pi!1)
+              (("2" (rewrite -1 1)
+                (("2" (expand filter_pos)
+                  (("2" (expand partition_pos 1 2)
+                    (("2" (lift-if)
+                      (("2" (prop)
+                        (("1" (expand partition_pos 1 2)
+                          (("1" (lemma reverse_reverse[T])
+                            (("1" (inst - "cons(cons1_var!1,null)")
+                              (("1"
+                                (rewrite -1 :dir rl)
+                                (("1"
+                                  (rewrite reverse_append :dir rl)
+                                  (("1"
+                                    (expand reverse 1 2)
+                                    (("1"
+                                      (expand reverse 1 2)
+                                      (("1"
+                                        (expand append 1 2)
+                                        (("1"
+                                          (expand append 1)
+                                          (("1"
+                                            (expand append 1)
+                                            (("1"
+                                              (expand
+                                               partition_pos
+                                               1
+                                               2)
+                                              (("1"
+                                                (lift-if)
+                                                (("1"
+                                                  (rewrite
+                                                   length_reverse)
+                                                  (("1"
+                                                    (rewrite
+                                                     length_cons)
+                                                    (("1"
+                                                      (prop)
+                                                      (("1"
+                                                        (lift-if)
+                                                        (("1"
+                                                          (prop)
+                                                          (("1"
+                                                            (case
+                                                             "(LAMBDA
+                                        i, x:
+                                        IF i < length(cons2_var!1)
+                                        THEN pi!1
+                                             (length(cons2_var!1) - 1 - i,
+                                              x)
+                                        ELSE FALSE
+                                        ENDIF) = (LAMBDA (i_1: nat), (x_1: T):
+                                    IF 1 + i_1 < 1 + length(cons2_var!1)
+                                    THEN pi!1
+                                         (length(cons2_var!1) - 1 - i_1,
+                                          x_1)
+                                    ELSE FALSE
+                                    ENDIF)")
+                                                            (("1"
+                                                              (grind)
+                                                              nil
+                                                              nil)
+                                                             ("2"
+                                                              (hide
+                                                               -1
+                                                               -2
+                                                               -3
+                                                               -4
+                                                               2)
+                                                              (("2"
+                                                                (decompose-equality
+                                                                 1)
+                                                                (("1"
+                                                                  (grind)
+                                                                  nil
+                                                                  nil)
+                                                                 ("2"
+                                                                  (grind)
+                                                                  nil
+                                                                  nil)
+                                                                 ("3"
+                                                                  (grind)
+                                                                  nil
+                                                                  nil))
+                                                                nil))
+                                                              nil)
+                                                             ("3"
+                                                              (grind)
+                                                              nil
+                                                              nil)
+                                                             ("4"
+                                                              (grind)
+                                                              nil
+                                                              nil))
+                                                            nil)
+                                                           ("2"
+                                                            (grind)
+                                                            nil
+                                                            nil))
+                                                          nil))
+                                                        nil)
+                                                       ("2"
+                                                        (grind)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil)
+                         ("2" (expand partition_pos 2 2)
+                          (("2" (rewrite append_null)
+                            (("1" (expand partition_pos 2 2)
+                              (("1"
+                                (lift-if)
+                                (("1"
+                                  (prop)
+                                  (("1"
+                                    (lift-if)
+                                    (("1"
+                                      (prop)
+                                      (("1"
+                                        (rewrite length_cons)
+                                        (("1"
+                                          (hide 1)
+                                          (("1"
+                                            (rewrite length_reverse)
+                                            (("1" (grind) nil nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (case
+                                         "(LAMBDA
+                                        i, x:
+                                        IF i < length(cons2_var!1)
+                                        THEN pi!1
+                                             (length(cons2_var!1) - 1 - i,
+                                              x)
+                                        ELSE FALSE
+                                        ENDIF) = (LAMBDA (i_1: nat), (x_1: T):
+                                    IF 1 + i_1 < 1 + length(cons2_var!1)
+                                    THEN pi!1
+                                         (length(cons2_var!1) - 1 - i_1,
+                                          x_1)
+                                    ELSE FALSE
+                                    ENDIF)")
+                                        (("1" (grind) nil nil)
+                                         ("2"
+                                          (hide -1 2 3 4)
+                                          (("2"
+                                            (decompose-equality 1)
+                                            (("1" (grind) nil nil)
+                                             ("2" (grind) nil nil)
+                                             ("3" (grind) nil nil))
+                                            nil))
+                                          nil)
+                                         ("3" (grind) nil nil)
+                                         ("4" (grind) nil nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("2" (grind) nil nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("3" (grind) nil nil))
+    nil)
+   ((filter_pos_append formula-decl nil list_filter_props nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (append_null formula-decl nil list_props nil)
+    (reverse_append formula-decl nil list_props nil)
+    (length_cons formula-decl nil list_basic_props nil)
+    (partition_char rec-application-judgement "{pp, np |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))
+            AND
+            (member(x, np) IFF
+              (EXISTS (i: bl(l)): nth(l, i) = x AND NOT pi(i, x)))}"
+     list_filter_props nil)
+    (length_reverse formula-decl nil list_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (cons2_var!1 skolem-const-decl "list[T]" list_filter_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (minus_even_is_even application-judgement "even_int" integers nil)
+    (minus_nzint_is_nzint application-judgement "nzint" integers nil)
+    (minus_odd_is_odd application-judgement "odd_int" integers nil)
+    (append def-decl "list[T]" list_props nil)
+    (reverse_reverse formula-decl nil list_props nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (filter_pos_char application-judgement "{pp |
+         FORALL x:
+           (member(x, pp) IFF
+             (EXISTS (i: bl(l)): nth(l, i) = x AND pi(i, x)))}"
+     list_filter_props nil)
+    (partition_pos def-decl "[list[T], list[T]]" list_filter_props nil)
+    (list_induction formula-decl nil list_adt nil)
+    (T formal-type-decl nil list_filter_props nil)
+    (FALSE const-decl "bool" booleans nil)
+    (IF const-decl "[boolean, T, T -> T]" if_def nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (filter_pos const-decl "list[T]" list_filter_props nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (pred type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil)
+    (number nonempty-type-decl nil numbers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (< const-decl "bool" reals nil)
+    (length def-decl "nat" list_props nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (int_minus_int_is_int application-judgement "int" integers nil))
+   shostak)))
+

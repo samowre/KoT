@@ -1,0 +1,121 @@
+list_filter_props[T: TYPE]: THEORY
+BEGIN
+  IMPORTING list_basic_props[T]
+
+  l, m,pp,np: VAR list[T]
+  p: VAR pred[T]
+  pi: VAR pred[[nat,T]]
+  x,y: VAR T
+  a: VAR T
+  i,j: VAR nat
+  
+
+
+  % This theory contains 4 main functions:
+    % Filter : returns the list of elements of l satisfying p (in the prelude)
+    % Filter_pos : the same, with p depending on the position of the element in l
+    % Partition  : (filter(l,p),filter(l,NOT p))
+    % Partition_pos : (filter_pos(l,p),filter_pos(l,NOT p))
+
+  % Partition
+  % Returns the sublist of l verifying p and the one verifying not p
+  partition_pos(l,pi): RECURSIVE [list[T],list[T]] = 
+  	CASES l OF
+	   null: (null,null),
+ 	   cons(h,t): LET (pp,np) = partition_pos(t,LAMBDA i,x: pi(i+1,x)) IN
+	   	      IF pi(0,h) THEN (cons(h,pp),np)
+		      	      	 ELSE (pp,cons(h,np))
+ 		      ENDIF
+	ENDCASES
+  MEASURE length(l)
+  
+  % Same with a predicate not depending on the position
+  partition(l,p): [list[T],list[T]] = partition_pos(l,LAMBDA i,x: p(x))
+  % The same as filter, except that the predicates may depend on the position of the element
+  filter_pos(l,pi): list[T] = proj_1(partition_pos(l,pi))
+
+
+  % Specifictations: 
+
+    % Filter rewrites and comon functions
+  filter_cons: THEOREM filter(cons(x, l), p) =
+    IF p(x) THEN cons(x, filter(l, p)) 
+  	    ELSE filter(l, p) ENDIF
+  filter_null: THEOREM filter(null,p) = null 
+
+  filter_pos_cons: THEOREM filter_pos(cons(x,l),pi) = 
+    IF pi(0,x) THEN cons(x,filter_pos(l,LAMBDA i,x: pi(i+1,x)))
+       	       ELSE filter_pos(l,LAMBDA i,x: pi(i+1,x))
+	       ENDIF
+  filter_pos_null: LEMMA filter_pos(null,pi) = null
+
+
+    % Characterisation
+
+  filter_member: RECURSIVE JUDGEMENT
+    filter(l, p) HAS_TYPE { m | FORALL x: member(x, m) IFF p(x) AND member(x, l) }
+
+  partition_char: RECURSIVE JUDGEMENT partition_pos(l,pi) HAS_TYPE 
+  	{ (pp,np) | FORALL x:  
+		  (member(x,pp) IFF EXISTS (i:bl(l)): nth(l,i)=x AND pi(i,x)) AND 
+  		  (member(x,np) IFF EXISTS (i:bl(l)): nth(l,i)=x AND NOT pi(i,x)) }
+
+  filter_pos_char: JUDGEMENT filter_pos(l,pi) HAS_TYPE 
+	{ pp | FORALL x:  
+		  (member(x,pp) IFF EXISTS (i:bl(l)): nth(l,i)=x AND pi(i,x)) } 
+
+  partition_member: LEMMA member(x,l) IFF member(x,partition_pos(l,pi)`1) OR 
+  		    	  	      	  member(x,partition_pos(l,pi)`2)
+
+
+    % Partition if just 2 filters. It hence inherits of all properties of filter
+  partition_filter: LEMMA partition(l,p) = (filter(l,p),filter(l,LAMBDA x: NOT p(x)))
+    % Partition_pos is just 2 filters_pos
+  partition_filter_pos: LEMMA partition_pos(l,pi) = (filter_pos(l,pi),filter_pos(l,LAMBDA i,x: NOT pi(i,x)))
+
+    % Partitioning with [not p] is just swapping the results
+  partition_neg: LEMMA LET (pp,np)=partition_pos(l,pi) IN partition_pos(l,LAMBDA i,x: NOT pi(i,x)) = (np,pp)
+    % If p does not use the position, filter = filter_pos
+    % The same with partition is just the definition
+  filter_filter_pos: LEMMA filter(l,p) = filter_pos(l,LAMBDA i,x: p(x))
+  
+
+  % Thanks to partition_filter and partition_filter_pos, we need only to have lemmas on filter
+  % and filter_pos.
+  
+
+    % Length filter : useful for recursive calls (see merge sort in sortedlist.pvs for instance)
+  length_filter   : LEMMA length(filter(l,p)) <= length(l)
+
+  st_length_filter: LEMMA length(filter(l,p)) < length(l) OR every(p)(l) 
+  filter_identity : LEMMA filter(l,p) = l IFF every(p)(l)
+
+  filter_append: LEMMA
+    filter(append(l, m), p) = append(filter(l, p), filter(m, p))
+
+  filter_reverse: LEMMA filter(reverse(l),p) = reverse(filter(l,p))
+  
+
+  % Same with filter_pos
+  length_filter_pos: LEMMA length(filter_pos(l,pi)) <= length(l)
+
+  st_length_filter_pos: LEMMA length(filter_pos(l,pi)) < length(l) OR FORALL (i:bl(l)): pi(i,nth(l,i))
+  filter_pos_identity: LEMMA filter_pos(l,pi) = l IFF FORALL (i:bl(l)): pi(i,nth(l,i))
+
+  filter_pos_append: LEMMA
+    filter_pos(append(l,m),pi) = append(filter_pos(l,pi),
+					filter_pos(m,LAMBDA i,x: pi(i+length(l),x))) 
+  filter_pos_reverse: LEMMA
+    filter_pos(reverse(l),pi) = reverse(filter_pos(l,LAMBDA i,x: IF i<length(l) THEN pi(length(l)-1-i,x) ELSE FALSE ENDIF))
+
+
+
+    % Remove (all instances of) an element from a list
+  remove(a, l): MACRO { m | FORALL x: member(x, m) IFF (x /= a AND member(x, l)) } =
+    filter(l, LAMBDA x: x /= a)
+
+
+    % AUTO REWRITES
+    %AUTO_REWRITE partition_filter, partition_filter_pos
+    % FAUDRA M EXPLIQUER LE DELIRE AVEC CELUI LA
+END list_filter_props
