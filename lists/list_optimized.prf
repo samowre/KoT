@@ -1,0 +1,28 @@
+(list_optimized
+ (rev_append_TCC1 0
+  (rev_append_TCC1-1 nil 3579535387 ("" (termination-tcc) nil nil)
+   ((real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (length def-decl "nat" list_props nil))
+   nil))
+ (rev_append_char 0
+  (rev_append_char-1 nil 3579535398
+   ("" (induct-and-simplify l1)
+    (("" (rewrite -1) (("" (rewrite append_assoc) nil nil)) nil)) nil)
+   ((append_assoc formula-decl nil list_props nil)
+    (null? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (null adt-constructor-decl "(null?)" list_adt nil)
+    (cons adt-constructor-decl "[[T, list] -> (cons?)]" list_adt nil)
+    (cons? adt-recognizer-decl "[list -> boolean]" list_adt nil)
+    (list type-decl nil list_adt nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (rev_append def-decl "list[T]" list_optimized nil)
+    (append def-decl "list[T]" list_props nil)
+    (reverse def-decl "list[T]" list_props nil)
+    (T formal-type-decl nil list_optimized nil)
+    (list_induction formula-decl nil list_adt nil))
+   shostak)))
+
