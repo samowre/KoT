@@ -174,9 +174,13 @@ sortedlist   [ T: TYPE, <=:(total_order?[T])]
   merge_sort(l): RECURSIVE { s:(sorted?) | FORALL x: member(x,s) IFF member(x,l) } = 
     	CASES l OF
 	null:null,
-	cons(h,t): LET (l1,l2) = split_half(l) IN
-    		   merge(merge_sort(l1),merge_sort(l2))
-	ENDCASES
+	cons(h,t): 
+	    CASES t OF
+	    null: cons(h,null),
+	    cons(h2,t2): 
+	    	LET (l1,l2) = split_half(l) IN
+    		merge(merge_sort(l1),merge_sort(l2))
+	ENDCASES ENDCASES
   MEASURE length(l)
 
   % Quick sort

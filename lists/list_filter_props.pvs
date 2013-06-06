@@ -9,7 +9,7 @@ BEGIN
   a: VAR T
   i,j: VAR nat
   
-  bl(l): TYPE = below(length(l))
+
 
   % This theory contains 4 main functions:
     % Filter : returns the list of elements of l satisfying p (in the prelude)
@@ -30,7 +30,7 @@ BEGIN
   MEASURE length(l)
   
   % Same with a predicate not depending on the position
-  partition(l,p): MACRO [list[T],list[T]] = partition_pos(l,LAMBDA i,x: p(x))
+  partition(l,p): [list[T],list[T]] = partition_pos(l,LAMBDA i,x: p(x))
   % The same as filter, except that the predicates may depend on the position of the element
   filter_pos(l,pi): list[T] = proj_1(partition_pos(l,pi))
 
@@ -115,5 +115,7 @@ BEGIN
     filter(l, LAMBDA x: x /= a)
 
 
-  % The same properties on partition are easily obtained by partition_filter and partition_filter_pos
+    % AUTO REWRITES
+    %AUTO_REWRITE partition_filter, partition_filter_pos
+    % FAUDRA M EXPLIQUER LE DELIRE AVEC CELUI LA
 END list_filter_props
