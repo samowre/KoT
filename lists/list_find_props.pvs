@@ -2,100 +2,134 @@ list_find_props[T:TYPE]: THEORY
 BEGIN
   IMPORTING list_filter_props[T]
 
-  l, m, l1, l2: VAR list[T]
-  ll: VAR list[list[T]]
+  l: VAR list[T]
   p: VAR pred[T]
   pi: VAR pred[[nat,T]]
-  a, b, c: VAR T
-  x, y, z: VAR T
-  i,j: VAR nat
-
-
-  % IMPORT CONVERSION INSTEAD OF WRITING IT AGAIN !!!
-  upcast(x:T): lift[T] = up(x)
-  downcast(x:(up?[T])): T = down(x)
-  upcast_nat(n:nat): lift[nat] = up(n)
-  downcast_nat(n:(up?[nat])): nat = down(n)
-
-  CONVERSION+ upcast,downcast,upcast_nat,downcast_nat
+  x: VAR T
+  i: VAR nat
 
   % This theory contains 4 main functions:
-    % Find: returns the position of the first element of l verifying p (or bottom)
-    % Find_elt: returns the first element of l verifying p (or bottom)
-    % Find_pos: same as find but p may depend on the position of the element
-    % Find_pos_elt: same as find_elt but p may depend on the position of the element
-    % Find_aux: used to write only once the functions find_pos and find_pos_elt
+    % find: returns the position of the first element of l verifying p (or bottom)
+    % find_elt: returns the first element of l verifying p (or bottom)
+    % find_pos: same as find but p may depend on the position of the element
+    % find_pos_elt: same as find_elt but p may depend on the position of the element
+    % find_aux: used to write only once the functions find_pos and find_pos_elt
 
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Specification-level functions and predicates %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  satisfied?(pi)(l): bool = EXISTS (i: bl(l)): pi(i, nth(l, i))
+  satisfied?(p)(l): bool = EXISTS (i: bl(l)): p(nth(l, i))
+  satisfied?_some: THEOREM
+    satisfied?(p)(l) IFF some(p)(l)
 
-  % Find an element satisfying a predicate, returns the first of the list
-  find_aux(l,pi): RECURSIVE 
-  	lift[{ r:[bl(l),T] | 
-  	       LET (i,x)=r IN pi(i,x) AND x = nth(l,i) 
-  	       AND FORALL (j:below(i)): NOT pi(j,nth(l,j)) }] = 
-  	CASES l OF
-	null: bottom,
-	cons(h,t):
-	   IF pi(0,h)
-	      THEN up(0,h)
-	      ELSE CASES find_aux(t,LAMBDA i,x: pi(i+1,x)) OF
-	      	   bottom: bottom,
-		   up(r): LET (j,x)=r IN up(j+1,x)
-		   ENDCASES
-	   ENDIF
-	ENDCASES
-  MEASURE length(l)
-		   
-% Je sais pas comment indenter toutes ces merdes, t as carte blanche
-  find_pos(l,pi): lift[ { i:bl(l) | 
-  		  	pi(i,nth(l,i)) AND 
-  		  	FORALL (j:below(i)): NOT pi(j,nth(l,j)) }] = 
-	CASES find_aux(l,pi) OF
-	bottom: bottom,
-	up(r) : up(r`1)
-	ENDCASES
-  find_pos_elt(l,pi): lift[ { x:T | 
-  		      	    EXISTS (i:bl(l)): x = nth(l,i) AND pi(i,x) AND 
-  		      	    FORALL (j:below(i)): NOT pi(j,nth(l,j)) }] = 
-	CASES find_aux(l,pi) OF
-	bottom: bottom,
-	up(r) : up(r`2)
-	ENDCASES
+  % Specification-level checking that an element is the first satisfying a predicate
+  first?(l, pi)(i): bool =
+    i < length(l) AND pi(i, nth(l, i)) AND FORALL (j: below(i)): NOT pi(j, nth(l, j))
+  first?(l, p)(i): bool =
+    i < length(l) AND p(nth(l, i)) AND FORALL (j: below(i)): NOT p(nth(l, j))
 
-  find(l,p): MACRO lift[ { i:bl(l) | p(nth(l,i)) 
-  	     	   	 AND FORALL (j:below(i)): NOT p(nth(l,j)) }] = 
-	find_pos(l,LAMBDA i,x: p(x))
-  find_elt(l,p): MACRO lift[{ x:T | 
-  		       	      EXISTS (i:bl(l)): x = nth(l,i) AND p(x) AND 
-			      FORALL (j:below(i)): NOT p(nth(l,j)) }] = 
-	find_pos_elt(l,LAMBDA i,x: p(x))
+  % Characterisation of the first? predicate
+  first?_pi_p: THEOREM
+    first?(l, p) = first?(l, LAMBDA i, x: p(x))
+  satisfied?_first?: THEOREM
+    satisfied?(pi)(l) IFF singleton?(first?(l, pi))
+  first?_cons: THEOREM
+    first?(cons(x, l), pi) =
+      { i | IF i = 0 THEN pi(0, x)
+                     ELSE NOT pi(0, x) AND first?(l, LAMBDA i, x: pi(1 + i, x))(i - 1)
+            ENDIF }
 
+  % Nondeterministic find for specifications
+  first(l, pi): lift[(first?(l, pi))] =
+    IF (EXISTS (i: bl(l)): pi(i, nth(l, i)))
+      THEN up(singleton_elt(first?(l, pi)))
+      ELSE bottom
+    ENDIF
+  first(l, p): lift[(first?(l, p))] =
+    IF (EXISTS (i: bl(l)): p(nth(l, i)))
+      THEN up(singleton_elt(first?(l, p)))
+      ELSE bottom
+    ENDIF
+
+  % Characterization of the `first' function
+  first_pi_p: THEOREM first(l, p) = first(l, LAMBDA i, x: p(x))
+  satisfied?_first: THEOREM
+    satisfied?(pi)(l) IFF up?(first(l, pi))
+  first_cons: THEOREM
+    first(cons(x, l), pi) =
+      IF pi(0, x) THEN up(0)
+                  ELSE CASES first(l, LAMBDA i, x: pi(1 + i, x)) OF
+		    bottom: bottom,
+		    up(r): up(1 + r)
+		  ENDCASES
+      ENDIF
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Execution-level functions %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   
-  % Find find an element IFF there is one to find
-  find_some: THEOREM
-    some(p)(l) IFF up?(find(l,p))
-  find_elt_some: THEOREM 
-    some(p)(l) IFF up?(find_elt(l,p))
- 
-  % Link between different versions of find
-  find_pos_elt_bottom: LEMMA bottom?(find_pos(l,pi)) IFF bottom?(find_pos_elt(l,pi))
-  find_pos_elt: LEMMA up?(find_pos(l,pi)) IMPLIES nth(l,find_pos(l,pi)) = down(find_pos_elt(l,pi))
-
-  find_elt_bottom: LEMMA bottom?(find(l,p)) IFF bottom?(find_elt(l,p))
-  find_elt: LEMMA up?(find(l,p)) IMPLIES nth(l,find(l,p)) = find_elt(l,p) 
-
-  % Find/Filter
-  find_filter_pos_null: LEMMA bottom?(find_pos_elt(l,pi)) IFF null?(filter_pos(l,pi))
-  find_filter_pos_car: LEMMA up?(find_pos_elt(l,pi)) IMPLIES find_pos_elt(l,pi) = car(filter_pos(l,pi)) 
-
-  find_filter_null: LEMMA bottom?(find_elt(l,p)) IFF null?(filter(l,p))
-  find_filter_car:  LEMMA up?(find_elt(l,p)) IMPLIES find_elt(l,p) = car(filter(l,p))
-  
-
-  find_char: THEOREM
-    CASES find_elt(l, p) OF
-      bottom: NOT some(p)(l),
-      up(r): p(r) AND member(r, l)
+  % Internal function finding the first occurence of an element satisfying
+  % a predicate and returing that element and its position in the list
+  find_aux(l, pi): RECURSIVE
+    lift[{ r: [bl(l), T] | first?(l, pi)(r`1) AND r`2 = nth(l, r`1) }] =
+    CASES l OF
+      null: bottom,
+      cons(h,t): IF pi(0, h) THEN up(0, h) ELSE
+        CASES find_aux(t, LAMBDA i, x: pi(i + 1, x)) OF
+	  bottom: bottom,
+	  up(r): LET (j, x) = r IN up(j + 1, x)
+	ENDCASES ENDIF
     ENDCASES
-
+  MEASURE length(l)
+  find_aux_first: THEOREM
+    find_aux(l, pi) =
+      CASES first(l, pi) OF
+        bottom: bottom,
+	up(r): up((r, nth(l, r)))
+      ENDCASES
+  satisfied?_find_aux: THEOREM
+    satisfied?(pi)(l) IFF up?(find_aux(l, pi))
   
+  find_pos(l, pi): lift[(first?(l, pi))] =
+    CASES find_aux(l, pi) OF
+      bottom: bottom,
+      up(r): up(r`1)
+    ENDCASES
+  find_pos_first: THEOREM find_pos(l, pi) = first(l, pi)
+  satisfied?_find_pos: THEOREM
+    satisfied?(pi)(l) IFF up?(find_pos(l, pi))
+  
+  find_pos_elt(l, pi):
+    lift[{ x | EXISTS (i: bl(l)): x = nth(l, i) AND first?(l, pi)(i) }] =
+    CASES find_aux(l,pi) OF
+      bottom: bottom,
+      up(r) : up(r`2)
+    ENDCASES
+  find_pos_elt_first: THEOREM
+    find_pos_elt(l, pi) = CASES first(l, pi) OF bottom: bottom, up(i): up(nth(l, i)) ENDCASES
+  satisfied?_find_pos_elt: THEOREM
+    satisfied?(pi)(l) IFF up?(find_pos_elt(l, pi))
+
+  find(l, p): lift[(first?(l, p))] = find_pos(l, LAMBDA i, x: p(x))
+  find_first: THEOREM find(l, p) = first(l, p)
+  satisfied?_find: THEOREM
+    satisfied?(p)(l) IFF up?(find(l, p))
+  
+  find_elt(l, p):
+    lift[{ x | EXISTS (i: bl(l)): x = nth(l, i) AND first?(l, p)(i) }] =
+    find_pos_elt(l, LAMBDA i, x: p(x))
+  find_elt_first: THEOREM
+    find_elt(l, p) = CASES first(l, p) OF bottom: bottom, up(i): up(nth(l, i)) ENDCASES
+  satisfied?_find_elt: THEOREM
+    satisfied?(p)(l) IFF up?(find_elt(l, p))
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Relations between find and filter %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  find_filter_pos_car: THEOREM
+    satisfied?(pi)(l) IMPLIES down(find_pos_elt(l, pi)) = car(filter_pos(l, pi))
+
+  find_filter_car: THEOREM
+    satisfied?(p)(l) IMPLIES down(find_elt(l, p)) = car(filter(l, p))
 END list_find_props
