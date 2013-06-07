@@ -1,4 +1,49 @@
 finseq_sets_props[T:TYPE]: THEORY
 BEGIN
+  IMPORTING finseq_basic_props[T]
 
+  s, s1, s2: VAR finseq[T]
+  p: VAR PRED[T]
+  a,b,c: VAR T
+  x,y,z: VAR T
+  bl(s): TYPE = below(length(s))
+  ul(s): TYPE = upto(length(s))
+  c: VAR [nat,nat]
+  i,j,k,l: VAR nat
+
+
+  % Subset relation
+  subset?(s1,s2): bool = every(member(s2))(s1)
+  member_subset: THEOREM subset?(s1,s2) IFF (FORALL x: member(x,s1) IMPLIES member(x,s2))
+  subset_order: THEOREM preorder?(subset?)
+
+  subset_null: LEMMA subset?(empty_seq,s)
+
+  % Set equality
+  equal?(s1,s2): bool = subset?(s1,s2) AND subset?(s2,s1)
+  member_equal: THEOREM equal?(s1,s2) IFF (FORALL x: member(x,s1) IFF member(x,s2))
+
+  equal_reflexive: THEOREM equal?(s,s)
+  equal_transitive: THEOREM 
+  	equal?(s,s1) AND equal?(s1,s2) IMPLIES equal?(s,s2)
+  equal_symmetric: THEOREM
+  	equal?(s1,s2) IMPLIES equal?(s2,s1)
+  equal_equiv: THEOREM equivalence?(equal?)
+
+  % Sequence without duplication
+    % TODO, potentially with find
+
+
+  uniques_aux?(s,(i:ul(s))): RECURSIVE bool =
+  	IF i=length(s) THEN TRUE
+	ELSE NOT member_aux(s(i),s,i+1) AND uniques_aux?(s,i+1)
+	ENDIF
+  MEASURE length(s) - i
+  uniques?(s): bool = uniques_aux?(s,0)
+
+
+
+    % Unique
+  uniques_nth: LEMMA uniques?(s) IFF
+  	       	     FORALL (i,j:bl(s)): i /= j IMPLIES s(i) /= s(j)
 END finseq_sets_props
