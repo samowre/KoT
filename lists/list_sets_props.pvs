@@ -1,6 +1,6 @@
 list_sets_props[T:TYPE]: THEORY
 BEGIN
-  IMPORTING list_basic_props[T]
+  IMPORTING list_filter_props[T]
 
   l, m, l1, l2: VAR list[T]
   ll: VAR list[list[T]]
@@ -8,6 +8,7 @@ BEGIN
   P: VAR pred[list[T]]
   a, b, c: VAR T
   x, y, z: VAR T
+  i: VAR nat
 
   % Subset relation
   subset?(l, m): bool = every(member(m))(l)
@@ -36,7 +37,7 @@ BEGIN
     ENDCASES
   MEASURE length(l)
 
-  uniques(l): RECURSIVE { m | uniques?(m) AND equal?(m, l) } =
+  uniques(l): RECURSIVE { m:(uniques?) | equal?(m, l) } =
     CASES l OF
       null: null,
       cons(h, t):
@@ -46,6 +47,19 @@ BEGIN
 	ENDIF
     ENDCASES
   MEASURE length(l)
+
+  % Definition of uniques with filter, just to inherit properties
+  uniques_filter: LEMMA 
+  	uniques(l) = filter_pos(l,LAMBDA i,x: FORALL (j:bl(l)): i < j IMPLIES nth(l,j) /= x)
+  uniques_uniques: LEMMA uniques?(l) IMPLIES uniques(l) = l
+
+  % All the basic properties on uniques can be easily proved from these two lemmas
+  % For instance, to prove that 
+  % uniques(l) AND uniques(m) IMLPIES uniques?(append(l,m))
+  % you actually need to prove : uniques?(append(unique(l),unique(m)))
+  % (thanks to uniques_uniques)
+  % then finish the proof with uniques_filter and filter_append
+
 END list_sets_props
 
 

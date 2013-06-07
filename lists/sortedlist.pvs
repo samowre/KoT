@@ -193,4 +193,15 @@ sortedlist   [ T: TYPE, <=:(total_order?[T])]
   MEASURE length(l)
 
 
+  % All sorts are doing the same thing
+  merge_insert: LEMMA merge_sort(l) = insert_sort(l)
+  merge_quick : LEMMA merge_sort(l) = quick_sort(l)
+  quick_insert: LEMMA quick_sort(l) = insert_sort(l)
+
+  % Sorts deal with lists as sets
+  equal_insert: LEMMA equal?(l1,l2) IMPLIES insert_sort(l1) = insert_sort(l2)
+  equal_merge : LEMMA equal?(l1,l2) IMPLIES merge_sort(l1) = merge_sort(l2)
+  equal_quick : LEMMA equal?(l1,l2) IMPLIES quick_sort(l1) = quick_sort(l2)
+
+
 END sortedlist

@@ -2,7 +2,8 @@ min_max_list [ T: TYPE, <=:(total_order?[T])]: THEORY
 BEGIN
   % A total_order is required, but if this theory is needed with a strict_total_order
   % it is easy to define one from a total_order
-  IMPORTING more_list_props[T]
+  IMPORTING list_find_props[T]
+  IMPORTING list_sets_props[T]
 
   l,l1,l2: VAR (cons?[T])
   x,y: VAR T
@@ -36,9 +37,10 @@ BEGIN
   min(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES x <= y) } =
     min_aux(l,<=)
 
+
   % Comon functions with Min
   min_cons: LEMMA min(cons(x,l)) = min(x,min(l))
-  min_append: LEMMA min(append(l1,l2)) = min(min(l1),min(l2))
+   min_append: LEMMA min(append(l1,l2)) = min(min(l1),min(l2))
   min_reverse: LEMMA min(reverse(l)) = min(l)
   min_subset: LEMMA subset?(l1,l2) IMPLIES min(l2) <=  min(l1)
   min_filter: LEMMA p(min(l)) IMPLIES min(filter(l,p))=min(l)
@@ -48,11 +50,17 @@ BEGIN
   max(l): { x | member(x, l) AND (FORALL y: member(y, l) IMPLIES y <= x) } =
     min_aux(l,LAMBDA x,y: y <= x)
 
-  
+
+
   % Common functions with Max
   max_cons: LEMMA max(cons(x,l)) = max(x,max(l))
   max_append: LEMMA max(append(l1,l2)) = max(max(l1),max(l2))
   max_reverse: LEMMA max(reverse(l)) = max(l)
   max_subset: LEMMA subset?(l1,l2) IMPLIES max(l1) <=  max(l2)
   max_filter: LEMMA p(max(l)) IMPLIES max(filter(l,p))=max(l)
+
+  % Specification of min and max with find, to inherit some properties (currently none)
+ % min_as_find: THEOREM min(l) = find_elt(l,LAMBDA x: every(LAMBDA y: y <= x)(l))
+ % max_as_find: THEOREM max(l) = find_elt(l,LAMBDA x: every(LAMBDA y: x <= y)(l))
+  
 END min_max_list

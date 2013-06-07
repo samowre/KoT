@@ -1,95 +1,11 @@
-finseq_adt_props [T:TYPE]: THEORY
-BEGIN
-  s, s1, s2: VAR finseq[T]
-  p,q: VAR PRED[T]
-  a,b,c: VAR T
-  x,y,z: VAR T
-  bl(s): TYPE = below(length(s))
-  ul(s): TYPE = upto(length(s))
- 
-  
-  % Adt file
-    % Extensionality
-  finseq_extensionality: LEMMA 
-  	s1 = s2 IFF
-   	(length(s1) = length(s2) AND
-	 FORALL (i:bl(s1)): s1(i)=s2(i))
- 
-    % Every Some
-  every_aux(p,s,(i:ul(s))): RECURSIVE bool = 
-  	IF i=length(s) THEN TRUE
- 	ELSE p(s(i)) AND every_aux(p,s,i+1)
-	ENDIF
-  MEASURE length(s) - i
-  every(p, s): bool = every_aux(p,s,0)
-  every(p)(s): MACRO bool = every(p,s)
 
-  some_aux(p,s,(i:ul(s))): RECURSIVE bool = 
-  	IF i=length(s) THEN FALSE
- 	ELSE p(s(i)) OR some_aux(p,s,i+1)
-	ENDIF
-  MEASURE length(s) - i
-  some(p, s): bool = some_aux(p,s,0)
-  some(p)(s): MACRO bool = some(p,s)
 
-   % every some characterisation
-  every_aux_forall: LEMMA FORALL (i:ul(s)): 
-  		    	  every_aux(p,s,i) IFF 
-  		    	  FORALL (j:subrange(i,length(s)-1)): p(s(j))
-  some_aux_exists:  LEMMA FORALL (i:ul(s)):
-  		    	  some_aux(p,s,i) IFF 
-  		    	  EXISTS (j:subrange(i,length(s)-1)): p(s(j))
-
-  every_forall: LEMMA every(p)(s) IFF FORALL (i:bl(s)): p(s(i))
-  some_exists:  LEMMA some(p)(s) IFF EXISTS (i:bl(s)): p(s(i))
-
-    % Suffix (= subterm)
-  suffix?(s1,s2): bool =
-  	length(s1) <= length(s2) AND
-	s1 = ^^(s2,(length(s2)-length(s1),length(s2)))
-
-  % Adt props
- 
-   CONVERSION+ K_conversion
-  
-  every_neg: THEOREM
-    every(NOT p)(s) IFF NOT some(p)(s)
-
-  every_conjuct: THEOREM
-    every(p AND q)(s) IFF every(p)(s) AND every(q)(s)
-
-  every_disjunct: THEOREM
-    every(p)(s) OR every(q)(s) IMPLIES every(p OR q)(s)
-
-  every_imp: THEOREM
-    (FORALL x: p(x) => q(x)) AND every(p)(s) IMPLIES every(q)(s)
-
-  some_neg: THEOREM
-    some(NOT p)(s) IFF NOT every(p)(s)
-    
-  some_conjuct: THEOREM
-    some(p AND q)(s) IMPLIES some(p)(s) AND some(q)(s)
-
-  some_disjunct: THEOREM
-    some(p OR q)(s) IFF some(p)(s) OR some(q)(s)
-
-  some_imp: THEOREM
-    (FORALL x: p(x) => q(x)) AND some(p)(s) IMPLIES some(q)(s)
-
-  CONVERSION- K_conversion
-
-  % Properties on subterm
-  suffix_reflexive: JUDGEMENT suffix? HAS_TYPE (reflexive?[finseq[T]])
-  suffix_transitive: JUDGEMENT suffix? HAS_TYPE (transitive?[finseq[T]])
-  suffix_antisymmetric: JUDGEMENT suffix? HAS_TYPE (antisymmetric?[finseq[T]])
-  suffix_po: JUDGEMENT suffix? HAS_TYPE (partial_order?[finseq[T]])
-END finseq_adt_props
 
 
 
 more_finseq_props [ T:TYPE ] : THEORY
   BEGIN
-  IMPORTING finseq_adt_props[T]
+  IMPORTING finseq_basic_props[T]
 
   s, s1, s2: VAR finseq[T]
   p: VAR PRED[T]
@@ -101,20 +17,7 @@ more_finseq_props [ T:TYPE ] : THEORY
   i,j,k,l: VAR nat
   
 
-  % Comon list functions
-    % Member
-  member_aux(x, s, (i: ul(s))): RECURSIVE bool =
-    IF i = length(s) THEN FALSE
-    ELSE s(i) = x OR member_aux(x, s, i + 1) 
-    ENDIF
-  MEASURE length(s) - i
 
-  member(x, s): bool = member_aux(x, s, 0)
-  member(s)(x): MACRO bool = member(x,s)
-
-    % Append is already defined as o
-    % Reverse
-  reverse(s): finseq[T] = s WITH [ seq := LAMBDA (i:bl(s)): s(length(s)-1-i) ]
     % uniques
   uniques_aux?(s,(i:ul(s))): RECURSIVE bool =
   	IF i=length(s) THEN TRUE
@@ -139,8 +42,7 @@ more_finseq_props [ T:TYPE ] : THEORY
 
   
   % Characterisation of comon functions
-    % member
-  member_nth: LEMMA member(x,s) IFF EXISTS (i:bl(s)): s(i)=x
+
     % Unique
   uniques_nth: LEMMA uniques?(s) IFF
   	       	     FORALL (i,j:bl(s)): i /= j IMPLIES s(i) /= s(j)
@@ -153,34 +55,7 @@ more_finseq_props [ T:TYPE ] : THEORY
     (EXISTS (i: below(s`length)): p(s(i))) IMPLIES up?(find(p, s))
   
 
-  % Properties
-    % All the properties member_append, member_reverse, etc are
-    % occulted because easily obtained with member_nth.
-    % Actually, member should be systematicaly rewrote with member_nth
 
-  length_null: LEMMA length(s) = 0 IMPLIES s = empty_seq
-
-  concat_null: LEMMA o(s,empty_seq) = s
-  null_concat: LEMMA o(empty_seq,s) = s
-  % concat_assoc already in prelude
-  reverse_concat: LEMMA reverse(o(s1,s2)) = o(reverse(s2),reverse(s1))
-  reverse_reverse: LEMMA reverse(reverse(s)) = s
-  % Extract 
-  concat_extract: LEMMA i<=j AND j<=k IMPLIES
-  		     	s ^^ (i, j) o s ^^ (j, k) = s ^^ (i, k)
-
-  extract_all: LEMMA ^^(s,(0,length(s))) = s
-  reverse_extract: LEMMA FORALL (i,j: bl(s)): 
-  		   	 reverse(^^(s,(i,j))) = ^^(reverse(s),(length(s)-j,length(s)-i))
-  extract_extract: LEMMA i+l <= j IMPLIES 
-  		   	 ^^(^^(s,(i,j)),(k,l)) = ^^(s,(k+i,i+l))
-  % Every/some
-  every_concat : LEMMA every(p)(o(s1,s2)) IFF every(p)(s1) AND every(p)(s2)
-  some_concat  : LEMMA some(p)(o(s1,s2))  IFF some(p)(s1)  OR some(p)(s2)
-  every_reverse: LEMMA every(p)(reverse(s)) IFF every(p)(s)
-  some_reverse : LEMMA some(p)(reverse(s))  IFF some(p)(s)
-  every_extract: LEMMA every(p)(s) IMPLIES every(p)(^^(s,c))
-  some_extract : LEMMA some(p)(^^(s,c)) IMPLIES some(p)(s)
  
  
  

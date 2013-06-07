@@ -3,40 +3,16 @@
 %% Properties on lists of a single type
 more_list_props[T: TYPE]: THEORY
 BEGIN
-  % Import all list theories above
+  % Import all simple typed list theories
   IMPORTING list_subterm_props[T]
   IMPORTING list_find_props[T]
   IMPORTING list_flatten_props[T]
-  
-  
-  l, m, l1, l2: VAR list[T]
-  ll: VAR list[list[T]]
-  p: VAR pred[T]
-  P: VAR pred[list[T]]
-  a, b, c: VAR T
-  x, y, z: VAR T
-
-
-
-  %% Less usual functions
-  % More efficient way to compute append(reverse(l1), l2)
-  rev_append(l1, l2): RECURSIVE list[T] =
-    CASES l1 OF
-      null: l2,
-      cons(x, t1): rev_append(t1, cons(x, l2))
-    ENDCASES
-  MEASURE length(l1)
-
-  % Characterisation of rev_append
-  rev_append_char: THEOREM
-    rev_append(l1, l2) = append(reverse(l1), l2)
-  AUTO_REWRITE rev_append_char
+  IMPORTING list_optimized[T]
 END more_list_props
 
 
 list2_props[K: TYPE, V: TYPE]: THEORY
 BEGIN
-  IMPORTING adt_props[list[[K, V]]]
   IMPORTING more_list_props[[K, V]]
   
   k, x: VAR K
