@@ -19,12 +19,7 @@ more_finseq_props [ T:TYPE ] : THEORY
 
 
     % uniques
-  uniques_aux?(s,(i:ul(s))): RECURSIVE bool =
-  	IF i=length(s) THEN TRUE
-	ELSE NOT member_aux(s(i),s,i+1) AND uniques_aux?(s,i+1)
-	ENDIF
-  MEASURE length(s) - i
-  uniques?(s): bool = uniques_aux?(s,0)
+
     % Find
   findi(p, s, (i: upto(s`length))):
     RECURSIVE lift[{ i: below(s`length) | p(s(i)) }] =
@@ -38,14 +33,11 @@ more_finseq_props [ T:TYPE ] : THEORY
     findi(p, s, 0)
 
  
- 
 
   
   % Characterisation of comon functions
 
-    % Unique
-  uniques_nth: LEMMA uniques?(s) IFF
-  	       	     FORALL (i,j:bl(s)): i /= j IMPLIES s(i) /= s(j)
+
     % Find
   findi_exists: THEOREM
     FORALL (i: upto(s`length)):

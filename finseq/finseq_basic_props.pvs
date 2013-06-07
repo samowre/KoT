@@ -28,15 +28,16 @@ BEGIN
   reverse(s): finseq[T] = s WITH [ seq := LAMBDA (i:bl(s)): s(length(s)-1-i) ]
 
   % Specification
+    % All the specification with nth (nth_concat nth_reverse) are inside the definition
+    % of the functions (concat reverse etc)
+
     % member
   member_nth: LEMMA member(x,s) IFF EXISTS (i:bl(s)): s(i)=x
+  member_concat: LEMMA member(x,s1 o s2) IFF member(x,s1) OR member(x,s2)
+  member_extract: LEMMA member(x,s ^^ c) IMPLIES member(x,s)
+  member_reverse: LEMMA member(x,reverse(s)) IFF member(x,s)
 
-    % All the specification member_append, member_reverse, etc are
-    % occulted because easily obtained with member_nth.
-    % Actually, member should be systematicaly rewritten with member_nth
 
-    % All the specification with nth (nth_append etc) are inside the definition
-    % of the functions (append etc)
 
   % Basic properties
     % Length (most of properties obtained by definition)
@@ -70,6 +71,7 @@ BEGIN
 
 
   % Auto rewrites
-  AUTO_REWRITE member_nth
+  %AUTO_REWRITE member_nth
+  % removed because in the case of finseq_sets, you want to work with member
 
 END finseq_basic_props

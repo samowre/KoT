@@ -48,6 +48,10 @@ BEGIN
     ENDCASES
   MEASURE length(l)
 
+  % Characterisation of uniques?
+  uniques_char: LEMMA 
+  	uniques?(l) IFF FORALL (i,j:bl(l)): i/=j IMPLIES nth(l,i) /= nth(l,j)
+
   % Definition of uniques with filter, just to inherit properties
   uniques_filter: LEMMA 
   	uniques(l) = filter_pos(l,LAMBDA i,x: FORALL (j:bl(l)): i < j IMPLIES nth(l,j) /= x)
