@@ -43,19 +43,19 @@ BEGIN
   length_null: LEMMA length(s) = 0 IMPLIES s = empty_seq
 
     % Concat (concat_assoc in prelude)
-  concat_null: LEMMA o(s,empty_seq) = s
-  null_concat: LEMMA o(empty_seq,s) = s
+  concat_null: LEMMA s o empty_seq = s
+  null_concat: LEMMA empty_seq o s = s
 
-  reverse_concat: LEMMA reverse(o(s1,s2)) = o(reverse(s2),reverse(s1))
+  reverse_concat: LEMMA reverse(s1 o s2) = reverse(s2) o reverse(s1)
   concat_extract: LEMMA i<=j AND j<=k IMPLIES
   		     	s ^^ (i, j) o s ^^ (j, k) = s ^^ (i, k)
   
     % Extract 
-  extract_all: LEMMA ^^(s,(0,length(s))) = s
+  extract_all: LEMMA s ^^ (0,length(s)) = s
   reverse_extract: LEMMA FORALL (i,j: bl(s)): 
-  		   	 reverse(^^(s,(i,j))) = ^^(reverse(s),(length(s)-j,length(s)-i))
+  		   	 reverse(s ^^ (i,j)) = reverse(s) ^^ (length(s)-j,length(s)-i)
   extract_extract: LEMMA i+l <= j IMPLIES 
-  		   	 ^^(^^(s,(i,j)),(k,l)) = ^^(s,(k+i,i+l))
+  		   	 (s ^^ (i,j)) ^^ (k,l) = s ^^ (k+i,i+l)
   
     % reverse
   reverse_reverse: LEMMA reverse(reverse(s)) = s
@@ -65,7 +65,7 @@ BEGIN
   some_concat  : LEMMA some(p)(o(s1,s2))  IFF some(p)(s1)  OR some(p)(s2)
   every_reverse: LEMMA every(p)(reverse(s)) IFF every(p)(s)
   some_reverse : LEMMA some(p)(reverse(s))  IFF some(p)(s)
-  every_extract: LEMMA every(p)(s) IMPLIES every(p)(^^(s,c))
+  every_extract: LEMMA every(p)(s) IMPLIES every(p)(s ^^ c)
   some_extract : LEMMA some(p)(^^(s,c)) IMPLIES some(p)(s)
 
 

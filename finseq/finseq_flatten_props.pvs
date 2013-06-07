@@ -1,5 +1,34 @@
 finseq_flatten_props[T:TYPE]: THEORY
 BEGIN
+  IMPORTING finseq_basic_props[finseq[T]]
+  IMPORTING finseq_basic_props[T]
 
+
+  s, s1, s2: VAR finseq[T]
+  ss, tt : VAR finseq[finseq[T]]
+  p: VAR PRED[T]
+  a,b,c: VAR T
+  x,y,z: VAR T
+  bl(s): TYPE = below(length(s))
+  ul(s): TYPE = upto(length(s))
+  c: VAR [nat,nat]
+  i,j,k,l: VAR nat
+
+
+  % Flattens a sequence of sequence
+    % We first need the total length
+    flatten_aux(ss:finseq[finseq[T]],i:upto(length(ss))): RECURSIVE finseq[T] = 
+         IF i = length(ss) THEN empty_seq[T]
+	 ELSE ss(i) o flatten_aux(ss,i+1)
+	 ENDIF
+    MEASURE length(ss) - i
+
+    flatten(ss): finseq[T] = flatten_aux(ss,0)
+    
+    flatten_empty: THEOREM flatten(empty_seq) = empty_seq
+    flatten_concat: THEOREM flatten(ss o tt) = flatten(ss) o flatten(tt)
+    flatten_member: THEOREM member(x,flatten(ss)) IFF
+    		    	    (EXISTS s: member(x,s) AND member(s,ss))
+    
 
 END finseq_flatten_props
