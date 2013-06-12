@@ -20,7 +20,7 @@ BEGIN
   b: VAR bool
 
 
-  IMPORTING relations[seq] {{ equalities := equalities[seq] {{ = := == }} }}
+  IMPORTING relations[seq] {{ equalities := equalities[seq] {{ = := = }} }}
 
 
   % I - Definitions
@@ -34,7 +34,7 @@ BEGIN
 
   % II - Properties
     % With equal and length
-  subword_preserves_eq: LEMMA s1 == s AND s2 == t IMPLIES subword?(s1, s2) = subword?(s, t)
+  subword_preserves_eq: LEMMA s1 = s AND s2 = t IMPLIES subword?(s1, s2) = subword?(s, t)
   length_subword: LEMMA subword?(s1, s2) IMPLIES length(s1) <= length(s2)
 
     % Order properties

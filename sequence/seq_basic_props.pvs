@@ -50,18 +50,18 @@ BEGIN
 
 
   % II - Properties
-    % With ==
-  member_preserves_eq: LEMMA preserves(LAMBDA s: member(x, s), ==, =)
+    % With =
+  member_preserves_eq: LEMMA preserves(LAMBDA s: member(x, s), =, =)
   append_preserves_eq: JUDGEMENT append HAS_TYPE (p_preserves_eq?)
   reverse_preserves_eq: JUDGEMENT reverse HAS_TYPE (preserves_eq?)
-  every_preserves_eq: LEMMA preserves(LAMBDA s: every(p, s), ==, =)
-  some_preserves_eq: LEMMA preserves(LAMBDA s: some(p, s), ==, =)
+  every_preserves_eq: LEMMA preserves(LAMBDA s: every(p, s), =, =)
+  some_preserves_eq: LEMMA preserves(LAMBDA s: some(p, s), =, =)
 
     % With empty
   member_empty: LEMMA NOT member(x, empty)
-  append_empty: LEMMA append(s1, s2) == s2 IFF empty?(s1)
-  append__empty: LEMMA append(s1, s2) == s1 IFF empty?(s2)
-  append_empty2: LEMMA append(s1, s2) == empty IFF empty?(s1) AND empty?(s2)
+  append_empty: LEMMA append(s1, s2) = s2 IFF empty?(s1)
+  append__empty: LEMMA append(s1, s2) = s1 IFF empty?(s2)
+  append_empty2: LEMMA append(s1, s2) = empty IFF empty?(s1) AND empty?(s2)
   reverse_empty: LEMMA empty?(reverse(s)) IFF empty?(s)
 
 
@@ -72,18 +72,18 @@ BEGIN
   some_as_exists: LEMMA some(p, s) IFF EXISTS (x | member(x, s)): p(x)
 
     % append
-  append_assoc: LEMMA append(append(s1, s2), s) == append(s1, append(s2, s))
-  append_append: LEMMA append(append(s1, s2), s) == append(s1, append(s2, s))
-  append_reverse2: LEMMA append(reverse(s1), reverse(s2)) == reverse(append(s2, s1))
-  append_reverse: LEMMA append(reverse(s1), s2) == reverse(append(reverse(s2), s1))
-  append__reverse: LEMMA append(s1, reverse(s2)) == reverse(append(s2, reverse(s1)))
+  append_assoc: LEMMA append(append(s1, s2), s) = append(s1, append(s2, s))
+  append_append: LEMMA append(append(s1, s2), s) = append(s1, append(s2, s))
+  append_reverse2: LEMMA append(reverse(s1), reverse(s2)) = reverse(append(s2, s1))
+  append_reverse: LEMMA append(reverse(s1), s2) = reverse(append(reverse(s2), s1))
+  append__reverse: LEMMA append(s1, reverse(s2)) = reverse(append(s2, reverse(s1)))
   every_append: LEMMA every(p, append(s1, s2)) = (every(p, s1) AND every(p, s2))
   some_append: LEMMA some(p, append(s1, s2)) = (some(p, s1) OR some(p, s2))
 
 
     % reverse
-  reverse_append: LEMMA reverse(append(s2, s1)) == append(reverse(s1), reverse(s2)) 
-  reverse_reverse: LEMMA reverse(reverse(s)) == s
+  reverse_append: LEMMA reverse(append(s2, s1)) = append(reverse(s1), reverse(s2)) 
+  reverse_reverse: LEMMA reverse(reverse(s)) = s
   every_reverse: LEMMA every(p, reverse(s)) = every(p, s)
   some_reverse: LEMMA some(p, reverse(s)) = some(p, s)
 
