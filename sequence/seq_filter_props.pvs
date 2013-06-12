@@ -1,0 +1,40 @@
+seq_filter_props[T: TYPE]: THEORY
+BEGIN
+  IMPORTING seq_defs[T]
+
+  % This theory defines the comon functions to filter sequences {lists,finseq, ...} :
+  %   filter(s,p) returns the seq of elements of s satisfying the predicate p
+  %   partition(s,p) returns the pair (filter(s,p), filter(s, not p))
+  %   filter_pos and partition_pos are the same where p may depend on the position
+  %     of the element in the sequence
+
+
+  % The properties are written in a systematically way :
+  % if f and g are to functions defined in this theory or the ones before,
+  %   f_g is a rewrite of the form : f(g(),...) = ...
+  %   f__g is a rewrite of the form : f(_,g(),...) = ...
+  %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_as_g is a rewrite of the form : f() = F(g())
+  %   f_is_p is a lemma of the form : p(f()) IFF ...
+
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  P: VAR PRED[seq]
+  p, q: VAR PRED[T]
+  pi: VAR PRED[nat, T]
+  b: VAR bool
+
+
+  % I - Definitions
+  
+
+  % II - Properties
+    % With empty
+ 
+
+  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  % The following assertions are only to avoid loops with this prover command
+
+
+  
+END seq_filter_props

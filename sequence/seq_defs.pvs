@@ -1,0 +1,83 @@
+seq_defs[T:TYPE]: THEORY
+BEGIN
+
+  % This theory defines an abstract type seq (for sequence) that correspond 
+  % to any usual type to contain elements (mostly lists and finseq).
+  % This particular theory gives the elementary functions :
+  %   =, length, nth
+  %   and a constructor to make an object of type sequence
+  % Next theories will define comon functions and their properties.
+
+  % seq is a TYPE+, it contains empty even if T is empty
+  seq: TYPE+
+
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  P: VAR PRED[seq]
+  p: VAR PRED[T]
+  b: VAR bool
+
+ 
+  % We take as the 3 most elementary functions equality, length,nth
+    % equality
+    % Note that equality does not have to be the structural equality
+  ;==: (equivalence?[seq])
+    % all functions defined in the next theories must preserve ==
+  preserves_eq?(f: [seq -> seq]): bool = preserves(f, ==, ==)
+  p_preserves_eq?(f: [seq, seq -> seq]): bool = 
+  	FORALL s,t,s1,s2: s == t AND s1 == s2 IMPLIES f(s,s1) == f(t,s2) 
+
+    % length
+  length: [seq -> nat]
+  bl(s): TYPE = below(length(s))
+    % Axiom needed for nth_tcc
+  length_nonempty_ax: AXIOM EXISTS x: TRUE IFF EXISTS s: length(s) > 0
+
+    % nth
+  nth: [s: seq, bl(s) -> T]
+
+  % Fundamental theorem linking the 3 definitions above
+  nth_equal: AXIOM s1 == s2 IFF length(s1) = length(s2) AND
+  	     	      	       FORALL (i: bl(s1)): nth(s1, i) = nth(s2, i)
+  
+
+  % Definition of the/an empty sequence
+  empty_ax: AXIOM EXISTS s: length(s) = 0
+  empty: { s | length(s) = 0 }
+  empty?: { P | FORALL s: P(s) IFF length(s) = 0 }   
+  nonempty?: { P | FORALL s: P(s) IFF NOT empty?(s) }
+
+  ns: VAR (nonempty?)
+
+  % T empty <=> seq = {empty}
+  nonempty_ax: THEOREM EXISTS x: TRUE IFF EXISTS ns: TRUE
+
+  % Properties of empty
+  empty_is_empty: LEMMA empty?(s) IFF s == empty
+  nonempty_isnot_empty: LEMMA nonempty?(s) IFF NOT s == empty
+
+  %IMPORTING functions {{ =: [seq, seq -> bool] := == }}
+
+  % Constructor
+  mk_seq_ax: AXIOM 
+  	FORALL (l:nat, f: [below(l) -> T]):
+  	EXISTS s: length(s) = l AND FORALL (i: below(l)): nth(s, i) = f(i)
+
+  mk_seq(length:nat, f: [below(length) -> T]): 
+  	  { s | length(s) = length AND FORALL (i: below(length)): nth(s, i) = f(i) }
+
+  % Properties of mk_seq
+  mk_seq_seq: LEMMA mk_seq(length(s), LAMBDA (i: bl(s)): nth(s,i)) == s
+  length_mk_seq: LEMMA FORALL (l:nat, f: [below(l) -> T]):
+  		       	      length(mk_seq(l,f)) = l 
+  nth_mk_seq: LEMMA FORALL (l:nat, f: [below(l) -> T], i:below(l)): 
+  	      	    	   nth(mk_seq(l,f),i) = f(i) 
+ 
+
+  IMPORTING functions[ [l:nat, [below(l) -> T]], seq] 
+  	    	       {{ equalities := equalities[seq] {{ = := == }} }}
+
+  mk_seq_is_injective: THEOREM injective?(mk_seq)
+ % 	FORALL (l1,l2: nat),(f1: [below(l1) -> T]),(f2: [below(l2) -> T]): 
+ % 	       mk_seq(l1, f1) == mk_seq(l2, f2) IMPLIES l1 = l2 AND f1 = f2
+END seq_defs

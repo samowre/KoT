@@ -1,0 +1,129 @@
+seq_basic_props[T: TYPE]: THEORY
+BEGIN
+  IMPORTING seq_defs[T]
+
+  % This theory defines the comon functions over sequences {lists,finseq, ...} :
+  % member, append (= concat for finseq), reverse, every, some
+  % That is to say, the functions defined in the prelude for lists and finseq
+  % However "cons, car, cdr" can be found in the abastract list theory
+  % "extract" can be found in the abstract finseq theory
+
+  % The properties are written in a systematically way :
+  % if f and g are to functions defined in this theory or the ones before,
+  %   f_g is a rewrite of the form : f(g(),...) = ...
+  %   f__g is a rewrite of the form : f(_,g(),...) = ...
+  %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_as_g is a rewrite of the form : f() = F(g())
+  %   f_is_p is a lemma of the form : p(f()) IFF ...
+
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  P: VAR PRED[seq]
+  p, q: VAR PRED[T]
+  b: VAR bool
+
+
+  % I - Definitions
+    % member
+  member(x, s): bool = EXISTS (i: bl(s)): nth(s, i) = x
+  member(s)(x): MACRO bool = member(x, s)
+
+    % append
+  append(s1,s2): seq 
+  length_append: AXIOM length(append(s1, s2)) = length(s1) + length(s2) 
+  nth_append: AXIOM FORALL (i: below(length(s1) + length(s2))): 
+  	      	    nth(append(s1, s2), i) = IF i < length(s1) THEN nth(s1, i)
+			 	       	     ELSE nth(s2, i - length(s1)) ENDIF
+    % reverse
+  reverse(s): seq
+  length_reverse: AXIOM length(reverse(s)) = length(s)
+  nth_reverse: AXIOM FORALL (i: bl(s)): nth(reverse(s), i) = nth(s, length(s) - 1 - i)
+
+    % every
+  every(p, s): bool = FORALL (i: bl(s)): p(nth(s, i))
+  every(p)(s): MACRO bool = every(p, s)
+
+    % some
+  some(p, s): bool = EXISTS (i: bl(s)): p(nth(s, i))
+  some(p)(s): MACRO bool = some(p, s)
+
+
+
+  % II - Properties
+    % With ==
+  member_preserves_eq: LEMMA preserves(LAMBDA s: member(x, s), ==, =)
+  append_preserves_eq: JUDGEMENT append HAS_TYPE (p_preserves_eq?)
+  reverse_preserves_eq: JUDGEMENT reverse HAS_TYPE (preserves_eq?)
+  every_preserves_eq: LEMMA preserves(LAMBDA s: every(p, s), ==, =)
+  some_preserves_eq: LEMMA preserves(LAMBDA s: some(p, s), ==, =)
+
+    % With empty
+  member_empty: LEMMA NOT member(x, empty)
+  append_empty: LEMMA append(s1, s2) == s2 IFF empty?(s1)
+  append__empty: LEMMA append(s1, s2) == s1 IFF empty?(s2)
+  append_empty2: LEMMA append(s1, s2) == empty IFF empty?(s1) AND empty?(s2)
+  reverse_empty: LEMMA empty?(reverse(s)) IFF empty?(s)
+
+
+    % member
+  member_append: LEMMA member(x, append(s1, s2)) IFF member(x, s1) OR member(x, s2)
+  member_reverse: LEMMA member(x, reverse(s)) IFF member(x, s)
+  every_as_forall: LEMMA every(p, s) IFF FORALL (x | member(x, s)):  p(x)
+  some_as_exists: LEMMA some(p, s) IFF EXISTS (x | member(x, s)): p(x)
+
+    % append
+  append_assoc: LEMMA append(append(s1, s2), s) == append(s1, append(s2, s))
+  append_append: LEMMA append(append(s1, s2), s) == append(s1, append(s2, s))
+  append_reverse2: LEMMA append(reverse(s1), reverse(s2)) == reverse(append(s2, s1))
+  append_reverse: LEMMA append(reverse(s1), s2) == reverse(append(reverse(s2), s1))
+  append__reverse: LEMMA append(s1, reverse(s2)) == reverse(append(s2, reverse(s1)))
+  every_append: LEMMA every(p, append(s1, s2)) = (every(p, s1) AND every(p, s2))
+  some_append: LEMMA some(p, append(s1, s2)) = (some(p, s1) OR some(p, s2))
+
+
+    % reverse
+  reverse_append: LEMMA reverse(append(s2, s1)) == append(reverse(s1), reverse(s2)) 
+  reverse_reverse: LEMMA reverse(reverse(s)) == s
+  every_reverse: LEMMA every(p, reverse(s)) = every(p, s)
+  some_reverse: LEMMA some(p, reverse(s)) = some(p, s)
+
+
+    % every/some
+     %% Links between every, some, and the logic symbols
+     %% every_neg could be named every_as_some
+  CONVERSION+ K_conversion
+
+  every_neg: THEOREM
+    every(NOT p)(s) IFF NOT some(p)(s)
+
+  every_conjunct: THEOREM
+    every(p AND q)(s) IFF every(p)(s) AND every(q)(s)
+
+  every_disjunct: THEOREM
+    every(p)(s) OR every(q)(s) IMPLIES every(p OR q)(s)
+
+  every_imp: THEOREM
+    (FORALL x: p(x) => q(x)) AND every(p)(s) IMPLIES every(q)(s)
+
+  some_neg: THEOREM
+    some(NOT p)(s) IFF NOT every(p)(s)
+    
+  some_conjunct: THEOREM
+    some(p AND q)(s) IMPLIES some(p)(s) AND some(q)(s)
+
+  some_disjunct: THEOREM
+    some(p OR q)(s) IFF some(p)(s) OR some(q)(s)
+
+  some_imp: THEOREM
+    (FORALL x: p(x) => q(x)) AND some(p)(s) IMPLIES some(q)(s)
+
+  CONVERSION- K_conversion
+  
+
+
+  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  % The following assertions are only to avoid loops with this prover command
+  AUTO_REWRITE- append_reverse2, append_reverse, append__reverse
+
+  
+END seq_basic_props

@@ -1,0 +1,89 @@
+seq_suffix_prefix_props[T: TYPE]: THEORY
+BEGIN
+  IMPORTING seq_basic_props[T]
+%  IMPORTING seq_basic_props[seq[T]]
+
+
+% TODO : remove comment on suffixes, ASK BASILE
+  % This theory defines the prefix? and suffix? (= subterm for lists) predicates 
+  % over sequences {lists,finseq, ...}, as well as the prefixes and suffixes 
+  % functions that compute the sequence of all prefixes/suffixes.
+
+  % The properties are written in a systematically way :
+  % if f and g are to functions defined in this theory are the ones before,
+  %   f_g is a rewrite of the form : f(g(),...) = ...
+  %   f__g is a rewrite of the form : f(_,g(),...) = ...
+  %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_as_g is a rewrite of the form : f() = F(g())
+  %   f_is_p is a lemma of the form : p(f()) IFF ...
+
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  P: VAR PRED[seq]
+  p, q: VAR PRED[T]
+  b: VAR bool
+
+
+  % I - Definitions
+    % suffix
+  suffix?(s1, s2): bool
+  suffix?(s1)(s2): MACRO bool = suffix?(s1,s2)
+  
+  suffix_as_nth: AXIOM suffix?(s1,s2) IFF 
+  		 FORALL (i: bl(s1)): nth(s1, i) = nth(s2, length(s2) - length(s1) + i)
+
+    % prefix
+  prefix?(s1, s2): bool
+  prefix?(s1)(s2): MACRO bool = prefix?(s1, s2)
+
+  prefix_as_nth: AXIOM prefix?(s1,s2) IFF
+  		 FORALL (i: bl(s1)): nth(s1, i) = nth(s2, i)
+
+    % Suffixes
+  %suffixes: { f: [seq[T] -> seq[seq[T]]] | 
+ % 	      preserves(f, =[seq[T],seq[T]],=[seq[seq[T]],seq[seq[T]]]) }
+ % length_suffixes: AXIOM length(suffixes(s)) = length(s) + 1
+ % nth_suffixes: AXIOM 
+  
+
+
+  % II - Properties
+    % With empty
+  suffix_empty: LEMMA suffix?(empty,s)
+  suffix__empty: LEMMA suffix?(s,empty) IFF empty?(s)
+  prefix_empty: LEMMA prefix?(empty,s)
+  prefix__empty: LEMMA prefix?(s,empty) IFF empty?(s)
+
+    % Order properties
+  suffix_is_reflexive: LEMMA reflexive?(suffix?)
+  suffix_is_transitive: LEMMA transitive?(suffix?)
+  suffix_is_antisymmetric: LEMMA antisymmetric?(suffix?)
+  suffix_is_partial_order: LEMMA partial_order?(suffix?)
+
+  prefix_is_reflexive: LEMMA reflexive?(prefix?)
+  prefix_is_transitive: LEMMA transitive?(prefix?)
+  prefix_is_antisymmetric: LEMMA antisymmetric?(prefix?)
+  prefix_is_partial_order: LEMMA partial_order?(prefix?)
+
+    % With basic functions
+  suffix__append: LEMMA suffix?(s2, append(s1, s2))
+  prefix__append: LEMMA prefix?(s1, append(s1, s2))
+  suffix_as_append: LEMMA suffix?(s2, s) IFF EXISTS (s1 | prefix?(s1, s)): s = append(s1, s2)
+  prefix_as_append: LEMMA prefix?(s1, s) IFF EXISTS (s2 | suffix?(s2, s)): s = append(s1, s2)
+  suffix_as_append_alt: LEMMA suffix?(s2, s) IFF EXISTS s1: s = append(s1, s2)
+  prefix_as_append_alt: LEMMA prefix?(s1, s) IFF EXISTS s2: s = append(s1, s2)
+
+  suffix_reverse2: LEMMA suffix?(reverse(s1), reverse(s2)) IFF prefix?(s1, s2)
+  suffix_reverse: LEMMA suffix?(reverse(s1), s2) IFF prefix?(s1, reverse(s2))
+  suffix__reverse: LEMMA suffix?(s1, reverse(s2)) IFF prefix?(reverse(s1), s2)
+  prefix_reverse2: LEMMA prefix?(reverse(s1), reverse(s2)) IFF suffix?(s1, s2)
+  prefix_reverse: LEMMA prefix?(reverse(s1), s2) IFF suffix?(s1, reverse(s2))
+  prefix__reverse: LEMMA prefix?(s1, reverse(s2)) IFF suffix?(reverse(s1), s2)
+
+
+  % Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  % The following assertions are only to avoid loops with this prover command
+  AUTO_REWRITE- suffix_reverse, suffix__reverse %, suffix_reverse2
+
+
+END seq_suffix_prefix_props

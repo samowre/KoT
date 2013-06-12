@@ -1,0 +1,69 @@
+seq_subword_props[T: TYPE]: THEORY
+BEGIN
+  IMPORTING seq_basic_props[T]
+
+  % This theory defines the predicate subword on sequences {lists,finseq, ...} :
+
+
+
+  % The properties are written in a systematically way :
+  % if f and g are to functions defined in this theory or the ones before,
+  %   f_g is a rewrite of the form : f(g(),...) = ...
+  %   f__g is a rewrite of the form : f(_,g(),...) = ...
+  %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_as_g is a rewrite of the form : f() = F(g())
+  %   f_is_p is a lemma of the form : p(f()) IFF ...
+
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  p, q: VAR PRED[T]
+  b: VAR bool
+
+
+  IMPORTING relations[seq] {{ equalities := equalities[seq] {{ = := == }} }}
+
+
+  % I - Definitions
+  subword?(s1, s2): bool
+  subword?(s1)(s2): MACRO bool = subword?(s1, s2)
+
+  subword_as_nth: AXIOM subword?(s1, s2) IFF 
+  		  	EXISTS (f: [bl(s1) -> bl(s2)]): injective?(f) AND
+ 		  	       preserves(f,<,<) AND
+		  	       FORALL (i: bl(s1)): nth(s1, i) = nth(s2, f(i))
+
+  % II - Properties
+    % With equal and length
+  subword_preserves_eq: LEMMA s1 == s AND s2 == t IMPLIES subword?(s1, s2) = subword?(s, t)
+  length_subword: LEMMA subword?(s1, s2) IMPLIES length(s1) <= length(s2)
+
+    % Order properties
+  subword_is_reflexive: LEMMA reflexive?(subword?)
+  subword_is_transitive: LEMMA transitive?(subword?)
+  subword_is_antisymmetric: LEMMA antisymmetric?(subword?)
+  subword_is_partial_order: LEMMA partial_order?(subword?)
+
+    % With empty
+  subword_empty: LEMMA subword?(empty, s)
+  subword__empty: LEMMA NOT subword?(s, empty)
+
+    % With seq_basic_props
+  member_subword: LEMMA member(x, s1) AND subword?(s1, s2) IMPLIES member(x, s2)
+
+  subword_append: LEMMA subword?(s1, append(s1, s2))  % TODO !!! Name
+  subword__append: LEMMA subword?(s2, append(s1, s2))
+
+  subword_reverse2: LEMMA subword?(reverse(s1), reverse(s2)) IFF subword?(s1, s2)
+  subword_reverse: LEMMA subword?(reverse(s1), s2) IFF subword?(s1, reverse(s2))
+  subword__reverse: LEMMA subword?(s1, reverse(s2)) IFF subword?(reverse(s1), s2)
+
+  every_subword: LEMMA every(p)(s2) AND subword?(s1,s2) IMPLIES every(p)(s1)
+  some_subword: LEMMA some(p)(s1) AND subword?(s1,s2) IMPLIES some(p)(s2)
+ 
+
+  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  % The following assertions are only to avoid loops with this prover command
+  AUTO_REWRITE- subword__reverse
+
+  
+END seq_subword_props
