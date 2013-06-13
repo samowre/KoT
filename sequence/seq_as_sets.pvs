@@ -1,0 +1,54 @@
+seq_as_sets[T: TYPE]: THEORY
+BEGIN
+  IMPORTING seq_basic_props[T]
+
+  % This theory defines the interpretation of sequences as finite sets.
+  % It maps every abstract functions of finite sets on the functions written
+  % in seq_defs, seq_basic and in I - Definitions.
+
+  % The properties are written in a systematically way :
+  % if f and g are to functions defined in this theory or the ones before,
+  %   f_g is a rewrite of the form : f(g(),...) = ...
+  %   f__g is a rewrite of the form : f(_,g(),...) = ...
+  %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_as_g is a rewrite of the form : f() = F(g())
+  %   f_is_p is a judgement of the form : f HAS_TYPE (p?)
+
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  P: VAR PRED[seq]
+  p, q: VAR PRED[T]
+  b: VAR bool
+
+
+  % I - Definitions
+
+  % II - Interpretation of abstract finite sets
+
+  % III - Properties
+    % 1 - With basics
+    % 0 - With empty/length
+    % 2 - Interactions (all should be already proved in abstract sets)
+
+  % IV - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_as_sets"
+  % The following assertions are only to avoid loops with this prover command
+  %AUTO_REWRITE- 
+
+
+END seq_as_sets
+
+
+% Theories :
+  %  0 - seq_defs
+  %  1 - seq_basic
+  %  2 - seq_as_sets
+  %  3 - seq_subword
+  %  4 - seq_suffix_prefix
+  %  5 - seq_filter
+  %  6 - seq_find
+  %  7 - seq_flatten
+  %  8 - seq_min_max
+  %  9 - seq_orders
+  % 10 - seq_sorted
+  % 11 - seq_map
+  % 12 - seq2

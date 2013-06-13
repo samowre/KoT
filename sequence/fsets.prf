@@ -1,0 +1,89 @@
+(fset
+ (∅_TCC1 0
+  (∅_TCC1-1 nil 3580142543
+   ("" (use empty_existence) (("" (grind) nil nil)) nil)
+   ((empty_existence formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (∉ const-decl "bool" fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (fs!1 skolem-const-decl "(is_finite?)" fset nil)
+    (T formal-type-decl nil fset nil))
+   nil))
+ (empty_is_unique 0
+  (empty_is_unique-1 nil 3580142895
+   ("" (grind-with-lemmas :lemmas extensionality_ax)
+    (("" (inst - s!1 "∅")
+      (("" (typepred ∅) (("" (grind) nil nil)) nil)) nil))
+    nil)
+   ((is_finite? const-decl "bool" fset nil)
+    (∅ const-decl "{fs | FORALL x: (x ∉ fs)}" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (∉ const-decl "bool" fset nil)
+    (set nonempty-type-decl nil fset nil)
+    (T formal-type-decl nil fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   shostak))
+ (card_empty_TCC1 0
+  (card_empty_TCC1-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (union_is_commutative 0
+  (union_is_commutative-1 nil 3580142543 ("" (judgement-tcc) nil nil)
+   nil nil))
+ (intersection_is_commutative 0
+  (intersection_is_commutative-1 nil 3580142543
+   ("" (judgement-tcc) nil nil) nil nil))
+ (symmetric_difference_is_commutative 0
+  (symmetric_difference_is_commutative-1 nil 3580142543
+   ("" (judgement-tcc) nil nil) nil nil))
+ (union_is_associative 0
+  (union_is_associative-1 nil 3580142543 ("" (judgement-tcc) nil nil)
+   nil nil))
+ (intersection_is_associative 0
+  (intersection_is_associative-1 nil 3580142543
+   ("" (judgement-tcc) nil nil) nil nil))
+ (symmetric_difference_is_associative 0
+  (symmetric_difference_is_associative-1 nil 3580142543
+   ("" (judgement-tcc) nil nil) nil nil))
+ (subset_is_reflexive 0
+  (subset_is_reflexive-1 nil 3580142543 ("" (judgement-tcc) nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (reflexive? const-decl "bool" relations nil))
+   nil))
+ (subset_is_transitive 0
+  (subset_is_transitive-1 nil 3580142543 ("" (judgement-tcc) nil nil)
+   ((T formal-type-decl nil fset nil) (⊂ const-decl "bool" fset nil)
+    (transitive? const-decl "bool" relations nil)
+    (subset_is_reflexive name-judgement "(reflexive?[set])" fset nil))
+   nil))
+ (subset_is_antisymmetric 0
+  (subset_is_antisymmetric-1 nil 3580142543
+   ("" (judgement-tcc) nil nil) nil nil))
+ (subset_is_partial_order 0
+  (subset_is_partial_order-1 nil 3580142543
+   ("" (judgement-tcc) nil nil)
+   ((subset_is_antisymmetric name-judgement "(antisymmetric?[set])"
+     fset nil)
+    (subset_is_transitive name-judgement "(transitive?[set])" fset nil)
+    (subset_is_reflexive name-judgement "(reflexive?[set])" fset nil)
+    (partial_order? const-decl "bool" orders nil)
+    (preorder? const-decl "bool" orders nil))
+   nil))
+ (card_union_TCC1 0
+  (card_union_TCC1-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (card_union_TCC2 0
+  (card_union_TCC2-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (card_difference_TCC1 0
+  (card_difference_TCC1-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (st_subset_is_well_founded 0
+  (st_subset_is_well_founded-1 nil 3580142543
+   ("" (judgement-tcc) nil nil) nil nil)))
+
