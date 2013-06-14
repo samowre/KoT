@@ -1,13 +1,13 @@
 seq_suffix_prefix_props[T: TYPE]: THEORY
 BEGIN
-  IMPORTING seq_basic_props[T]
-%  IMPORTING seq_basic_props[seq[T]]
+  IMPORTING seq_subword_props[T]
 
 
-% TODO : remove comment on suffixes, ASK BASILE
+
+
   % This theory defines the prefix? and suffix? (= subterm for lists) predicates 
-  % over sequences {lists,finseq, ...}, as well as the prefixes and suffixes 
-  % functions that compute the sequence of all prefixes/suffixes.
+  % over sequences {lists,finseq, ...}, and the functions nth_suffix and nth_prefix
+  % that computes the suffix (resp. prefix) of length n.
 
   % The properties are written in a systematically way :
   % if f and g are to functions defined in this theory are the ones before,
@@ -15,7 +15,7 @@ BEGIN
   %   f__g is a rewrite of the form : f(_,g(),...) = ...
   %   f_g2 is a rewrite of the form : f(g(), g()) = ...
   %   f_as_g is a rewrite of the form : f() = F(g())
-  %   f_is_p is a lemma of the form : p(f()) IFF ...
+  %   f_is_p is a judgement of the form : f HAS_TYPE p
 
   s, t, s1, s2: VAR seq
   x, y, z: VAR T
@@ -26,24 +26,26 @@ BEGIN
 
   % I - Definitions
     % suffix
-  suffix?(s1, s2): bool
+  suffix?(s1, s2): bool = FORALL (i: bl(s1)): nth(s1, i) = nth(s2, length(s2) - length(s1) + i)
   suffix?(s1)(s2): MACRO bool = suffix?(s1,s2)
-  
-  suffix_as_nth: AXIOM suffix?(s1,s2) IFF 
-  		 FORALL (i: bl(s1)): nth(s1, i) = nth(s2, length(s2) - length(s1) + i)
-
+  		 
     % prefix
-  prefix?(s1, s2): bool
+  prefix?(s1, s2): bool = FORALL (i: bl(s1)): nth(s1, i) = nth(s2, i)
   prefix?(s1)(s2): MACRO bool = prefix?(s1, s2)
 
-  prefix_as_nth: AXIOM prefix?(s1,s2) IFF
-  		 FORALL (i: bl(s1)): nth(s1, i) = nth(s2, i)
-
-    % Suffixes
-  %suffixes: { f: [seq[T] -> seq[seq[T]]] | 
- % 	      preserves(f, =[seq[T],seq[T]],=[seq[seq[T]],seq[seq[T]]]) }
- % length_suffixes: AXIOM length(suffixes(s)) = length(s) + 1
- % nth_suffixes: AXIOM 
+    % nth_suffix
+  nth_suffix(s, (n: bl(s))): seq
+  length_nth_suffix: AXIOM FORALL (n: bl(s)): 
+  		     length(nth_suffix(s, n)) = n 
+  nth_nth_suffix: AXIOM FORALL (n: bl(s), i: below(n)): 
+  		  nth(nth_suffix(s, n), i) = nth(s, length(s) - 1 - n + i)
+ 
+    % nth_prefix
+  nth_prefix(s, (n: bl(s))): seq
+  length_nth_prefix: AXIOM FORALL (n: bl(s)): 
+  		     length(nth_prefix(s, n)) = n 
+  nth_nth_prefix: AXIOM FORALL (n: bl(s), i: below(n)): 
+  		  nth(nth_prefix(s, n), i) = nth(s, i)
   
 
 

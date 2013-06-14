@@ -2,54 +2,115 @@
  (∅_TCC1 0
   (∅_TCC1-1 nil 3580142543
    ("" (use empty_existence) (("" (grind) nil nil)) nil)
-   ((empty_existence formula-decl nil fset nil)
+   ((T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (fs!1 skolem-const-decl "(is_finite?)" fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (set nonempty-type-decl nil fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (empty_existence formula-decl nil fset nil))
+   nil))
+ (member_empty 0
+  (member_empty-1 nil 3580218302
+   ("" (typepred ∅) (("" (grind) nil nil)) nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (empty_is_unique 0
+  (empty_is_unique-1 nil 3580142895
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax)) nil nil)) nil)
+   ((extensionality_ax formula-decl nil fset nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (set nonempty-type-decl nil fset nil)
     (is_finite? const-decl "bool" fset nil)
-    (∉ const-decl "bool" fset nil)
-    (∈ const-decl "[T, set -> bool]" fset nil)
-    (fs!1 skolem-const-decl "(is_finite?)" fset nil)
-    (T formal-type-decl nil fset nil))
-   nil))
- (empty_is_unique 0
-  (empty_is_unique-1 nil 3580142895
-   ("" (grind-with-lemmas :lemmas extensionality_ax)
-    (("" (inst - s!1 "∅")
-      (("" (typepred ∅) (("" (grind) nil nil)) nil)) nil))
-    nil)
-   ((is_finite? const-decl "bool" fset nil)
-    (∅ const-decl "{fs | FORALL x: (x ∉ fs)}" fset nil)
-    (extensionality_ax formula-decl nil fset nil)
-    (∉ const-decl "bool" fset nil)
-    (set nonempty-type-decl nil fset nil)
     (T formal-type-decl nil fset nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
    shostak))
- (card_empty_TCC1 0
-  (card_empty_TCC1-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
-   nil))
  (union_is_commutative 0
-  (union_is_commutative-1 nil 3580142543 ("" (judgement-tcc) nil nil)
-   nil nil))
+  (union_is_commutative-1 nil 3580142543
+   ("" (grind :rewrites (extensionality_ax member_union)) nil nil)
+   ((commutative? const-decl "bool" operator_defs nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil))
+   nil))
  (intersection_is_commutative 0
   (intersection_is_commutative-1 nil 3580142543
-   ("" (judgement-tcc) nil nil) nil nil))
+   ("" (grind :rewrites (extensionality_ax member_intersection)) nil
+    nil)
+   ((commutative? const-decl "bool" operator_defs nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil))
+   nil))
  (symmetric_difference_is_commutative 0
   (symmetric_difference_is_commutative-1 nil 3580142543
-   ("" (judgement-tcc) nil nil) nil nil))
+   (""
+    (grind :rewrites (extensionality_ax member_symmetric_difference))
+    nil nil)
+   ((commutative? const-decl "bool" operator_defs nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_symmetric_difference formula-decl nil fset nil))
+   nil))
+ (disjoint_is_commutative 0
+  (disjoint_is_commutative-1 nil 3580153761
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_intersection)) nil
+      nil))
+    nil)
+   ((disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
  (union_is_associative 0
-  (union_is_associative-1 nil 3580142543 ("" (judgement-tcc) nil nil)
-   nil nil))
+  (union_is_associative-1 nil 3580142543
+   ("" (grind :rewrites (extensionality_ax member_union)) nil nil)
+   ((union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (associative? const-decl "bool" operator_defs nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil))
+   nil))
  (intersection_is_associative 0
   (intersection_is_associative-1 nil 3580142543
-   ("" (judgement-tcc) nil nil) nil nil))
+   ("" (grind :rewrites (extensionality_ax member_intersection)) nil
+    nil)
+   ((intersection_is_commutative name-judgement "(commutative?[set])"
+     fset nil)
+    (associative? const-decl "bool" operator_defs nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil))
+   nil))
  (symmetric_difference_is_associative 0
   (symmetric_difference_is_associative-1 nil 3580142543
-   ("" (judgement-tcc) nil nil) nil nil))
+   (""
+    (grind :rewrites (extensionality_ax ∉ member_symmetric_difference))
+    nil nil)
+   ((symmetric_difference_is_commutative name-judgement
+     "(commutative?[set])" fset nil)
+    (associative? const-decl "bool" operator_defs nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_symmetric_difference formula-decl nil fset nil))
+   nil))
  (subset_is_reflexive 0
   (subset_is_reflexive-1 nil 3580142543 ("" (judgement-tcc) nil nil)
    ((⊂ const-decl "bool" fset nil)
@@ -63,7 +124,13 @@
    nil))
  (subset_is_antisymmetric 0
   (subset_is_antisymmetric-1 nil 3580142543
-   ("" (judgement-tcc) nil nil) nil nil))
+   ("" (grind :rewrites (extensionality_ax)) nil nil)
+   ((subset_is_reflexive name-judgement "(reflexive?[set])" fset nil)
+    (subset_is_transitive name-judgement "(transitive?[set])" fset nil)
+    (antisymmetric? const-decl "bool" relations nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (⊂ const-decl "bool" fset nil) (T formal-type-decl nil fset nil))
+   nil))
  (subset_is_partial_order 0
   (subset_is_partial_order-1 nil 3580142543
    ("" (judgement-tcc) nil nil)
@@ -74,16 +141,1377 @@
     (partial_order? const-decl "bool" orders nil)
     (preorder? const-decl "bool" orders nil))
    nil))
+ (left_union 0
+  (left_union-1 nil 3580156112
+   ("" (grind :rewrites (extensionality_ax member_union)) nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (right_union 0
+  (right_union-1 nil 3580156713
+   ("" (grind :rewrites (extensionality_ax member_union)) nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (left_intersection 0
+  (left_intersection-1 nil 3580156730
+   ("" (grind :rewrites (extensionality_ax member_intersection)) nil
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (right_intersection 0
+  (right_intersection-1 nil 3580156752
+   ("" (grind :rewrites (extensionality_ax member_intersection)) nil
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (left_difference 0
+  (left_difference-1 nil 3580156766
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites
+       (extensionality_ax member_difference member_intersection))
+      nil nil))
+    nil)
+   ((disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (right_difference 0
+  (right_difference-1 nil 3580157253
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites
+       (extensionality_ax member_difference member_intersection))
+      nil nil))
+    nil)
+   ((member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (left_symmetric_difference 0
+  (left_symmetric_difference-1 nil 3580157334
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites (extensionality_ax member_symmetric_difference))
+      nil nil))
+    nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (right_symmetric_difference 0
+  (right_symmetric_difference-1 nil 3580157399
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites (extensionality_ax member_symmetric_difference))
+      nil nil))
+    nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (subset_empty 0
+  (subset_empty-1 nil 3580157446
+   ("" (typepred ∅) (("" (grind) nil nil)) nil)
+   ((⊂ const-decl "bool" fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (subset__empty 0
+  (subset__empty-1 nil 3580157464
+   ("" (typepred ∅) (("" (grind :rewrites extensionality_ax) nil nil))
+    nil)
+   ((extensionality_ax formula-decl nil fset nil)
+    (⊂ const-decl "bool" fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (disjoint_empty 0
+  (disjoint_empty-1 nil 3580157508
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_intersection)) nil
+      nil))
+    nil)
+   ((disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (disjoint__empty 0
+  (disjoint__empty-1 nil 3580157579
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_intersection)) nil
+      nil))
+    nil)
+   ((disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (empty_union 0
+  (empty_union-1 nil 3580157633
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_union)) nil nil))
+    nil)
+   ((member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (union_empty 0
+  (union_empty-1 nil 3580157676
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_union)) nil nil))
+    nil)
+   ((member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (union__empty 0
+  (union__empty-1 nil 3580157685
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_union)) nil nil))
+    nil)
+   ((member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (intersection_empty 0
+  (intersection_empty-1 nil 3580157692
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_intersection)) nil
+      nil))
+    nil)
+   ((member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (intersection__empty 0
+  (intersection__empty-1 nil 3580157704
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_intersection)) nil
+      nil))
+    nil)
+   ((member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (empty_difference 0
+  (empty_difference-1 nil 3580157713
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_difference)) nil
+      nil))
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (difference_empty 0
+  (difference_empty-1 nil 3580157727
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_difference)) nil
+      nil))
+    nil)
+   ((member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (difference__empty 0
+  (difference__empty-1 nil 3580157732
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_difference)) nil
+      nil))
+    nil)
+   ((member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (empty_symmetric_difference 0
+  (empty_symmetric_difference-1 nil 3580157736
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites (extensionality_ax member_symmetric_difference))
+      nil nil))
+    nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (symmetric_difference_empty 0
+  (symmetric_difference_empty-1 nil 3580157752
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites (extensionality_ax member_symmetric_difference))
+      nil nil))
+    nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (symmetric_difference__empty 0
+  (symmetric_difference__empty-1 nil 3580157761
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites (extensionality_ax member_symmetric_difference))
+      nil nil))
+    nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (union_is_idempotent 0
+  (union_is_idempotent-1 nil 3580157766
+   ("" (grind :rewrites (extensionality_ax member_union)) nil nil)
+   ((member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection_is_idempotent 0
+  (intersection_is_idempotent-1 nil 3580157781
+   ("" (grind :rewrites (extensionality_ax member_intersection)) nil
+    nil)
+   ((member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference_is_nilpotent 0
+  (difference_is_nilpotent-1 nil 3580157790
+   ("" (typepred ∅)
+    (("" (grind :rewrites (extensionality_ax member_difference)) nil
+      nil))
+    nil)
+   ((member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (symmetric_difference_is_nilpotent 0
+  (symmetric_difference_is_nilpotent-1 nil 3580157808
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites (extensionality_ax member_symmetric_difference))
+      nil nil))
+    nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (equal_as_subset 0
+  (equal_as_subset-1 nil 3580158624
+   ("" (grind :rewrites extensionality_ax) nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (intersection_as_difference 0
+  (intersection_as_difference-1 nil 3580158638
+   (""
+    (grind :rewrites
+     (extensionality_ax member_difference member_intersection ∉))
+    nil nil)
+   ((member_intersection formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (symmetric_difference_as_difference 0
+  (symmetric_difference_as_difference-1 nil 3580158713
+   (""
+    (grind :rewrites
+     (extensionality_ax member_difference member_symmetric_difference ∉
+      member_union))
+    nil nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (symmetric_difference_as_union_intersection 0
+  (symmetric_difference_as_union_intersection-1 nil 3580158743
+   (""
+    (grind :rewrites
+     (extensionality_ax member_difference member_symmetric_difference ∉
+      member_union member_intersection))
+    nil nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (subset_as_union 0
+  (subset_as_union-1 nil 3580158756
+   ("" (skeep)
+    (("" (typepred ∅)
+      (("" (prop)
+        (("1" (inst + "s2 - s1")
+          (("1"
+            (grind :rewrites
+             (extensionality_ax ∉ member_union member_intersection
+              member_difference))
+            nil nil))
+          nil)
+         ("2"
+          (grind :rewrites
+           (extensionality_ax ∉ member_union member_intersection
+            member_difference))
+          nil nil))
+        nil))
+      nil))
+    nil)
+   ((∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (T formal-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (set nonempty-type-decl nil fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (- const-decl "set" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (⊂ const-decl "bool" fset nil)
+    (subset_is_partial_order name-judgement "(partial_order?[set])"
+     fset nil)
+    (union_is_associative name-judgement "(associative?[set])" fset
+     nil)
+    (union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (intersection_is_associative name-judgement "(associative?[set])"
+     fset nil)
+    (intersection_is_commutative name-judgement "(commutative?[set])"
+     fset nil))
+   shostak))
+ (st_subset_as_union 0
+  (st_subset_as_union-1 nil 3580164083
+   ("" (skeep)
+    (("" (typepred ∅)
+      (("" (prop)
+        (("1" (inst + "s2 - s1")
+          (("1"
+            (lazy-grind :rewrites
+             (extensionality_ax ∉ member_union member_intersection
+              member_difference ⊊)
+             :if-match all)
+            nil nil)
+           ("2"
+            (lazy-grind :rewrites
+             (extensionality_ax ∉ member_union member_intersection
+              member_difference ⊊)
+             :if-match all)
+            nil nil))
+          nil)
+         ("2"
+          (lazy-grind :rewrites
+           (extensionality_ax ∉ member_union member_intersection
+            member_difference ⊊))
+          nil nil))
+        nil))
+      nil))
+    nil)
+   ((∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (T formal-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (set nonempty-type-decl nil fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (nonempty? const-decl "bool" fset nil)
+    (- const-decl "set" fset nil) (s2 skolem-const-decl "set" fset nil)
+    (s1 skolem-const-decl "set" fset nil)
+    (intersection_is_commutative name-judgement "(commutative?[set])"
+     fset nil)
+    (intersection_is_associative name-judgement "(associative?[set])"
+     fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (empty? const-decl "bool" fset nil)
+    (disjoint? const-decl "bool" fset nil)
+    (union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (union_is_associative name-judgement "(associative?[set])" fset
+     nil)
+    (subset_is_partial_order name-judgement "(partial_order?[set])"
+     fset nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (⊂ const-decl "bool" fset nil) (⊊ const-decl "bool" fset nil)
+    (member_difference formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil))
+   shostak))
+ (union_disjoint 0
+  (union_disjoint-1 nil 3580215605
+   ("" (skeep)
+    (("" (typepred ∅)
+      (("" (prop)
+        (("1" (skeep)
+          (("1" (inst + "s2 - s1")
+            (("1"
+              (lazy-grind :rewrites
+               (extensionality_ax ∉ member_union member_intersection
+                member_difference))
+              nil nil))
+            nil))
+          nil)
+         ("2" (skeep) (("2" (inst + s) nil nil)) nil))
+        nil))
+      nil))
+    nil)
+   ((∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (T formal-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (set nonempty-type-decl nil fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (union_is_associative name-judgement "(associative?[set])" fset
+     nil)
+    (union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (intersection_is_associative name-judgement "(associative?[set])"
+     fset nil)
+    (intersection_is_commutative name-judgement "(commutative?[set])"
+     fset nil)
+    (- const-decl "set" fset nil))
+   shostak))
+ (subset_union 0
+  (subset_union-1 nil 3580216047
+   ("" (grind :rewrites (extensionality_ax ∉ member_union)) nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_union formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (subset__union_l 0
+  (subset__union_l-1 nil 3580216069
+   ("" (grind :rewrites (extensionality_ax ∉ member_union)) nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_union formula-decl nil fset nil))
+   shostak))
+ (subset__union_r 0
+  (subset__union_r-1 nil 3580216074
+   ("" (grind :rewrites (extensionality_ax ∉ member_union)) nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_union formula-decl nil fset nil))
+   shostak))
+ (st_subset__union_l 0
+  (st_subset__union_l-1 nil 3580216235
+   ("" (grind :rewrites (extensionality_ax ∉ member_union)) nil nil)
+   ((⊊ const-decl "bool" fset nil) (⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (st_subset__union_r 0
+  (st_subset__union_r-1 nil 3580216243
+   ("" (grind :rewrites (extensionality_ax ∉ member_union)) nil nil)
+   ((⊊ const-decl "bool" fset nil) (⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (subset_intersection 0
+  (subset_intersection-1 nil 3580216272
+   ("" (grind :rewrites (extensionality_ax ∉ member_intersection)) nil
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (subset__intersection_l 0
+  (subset__intersection_l-1 nil 3580216284
+   ("" (grind :rewrites (extensionality_ax ∉ member_intersection)) nil
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_intersection formula-decl nil fset nil))
+   shostak))
+ (subset__intersection_r 0
+  (subset__intersection_r-1 nil 3580216288
+   ("" (grind :rewrites (extensionality_ax ∉ member_intersection)) nil
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_intersection formula-decl nil fset nil))
+   shostak))
+ (st_subset__intersection_l 0
+  (st_subset__intersection_l-1 nil 3580217554
+   ("" (grind :rewrites (extensionality_ax ∉ member_intersection)) nil
+    nil)
+   ((⊊ const-decl "bool" fset nil) (⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (st_subset__intersection_r 0
+  (st_subset__intersection_r-1 nil 3580217560
+   ("" (grind :rewrites (extensionality_ax ∉ member_intersection)) nil
+    nil)
+   ((⊊ const-decl "bool" fset nil) (⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (subset_difference 0
+  (subset_difference-1 nil 3580217567
+   ("" (grind :rewrites (extensionality_ax ∉ member_difference)) nil
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_difference formula-decl nil fset nil))
+   shostak))
+ (st_subset_difference 0
+  (st_subset_difference-1 nil 3580217588
+   ("" (typepred ∅)
+    ((""
+      (grind :rewrites
+       (extensionality_ax ∉ member_difference member_intersection))
+      nil nil))
+    nil)
+   ((≠ const-decl "[T, T -> bool]" notequal nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (⊂ const-decl "bool" fset nil) (⊊ const-decl "bool" fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (empty? const-decl "bool" fset nil)
+    (disjoint? const-decl "bool" fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil))
+   shostak))
+ (subset_difference_symmetric 0
+  (subset_difference_symmetric-1 nil 3580218052
+   (""
+    (grind :rewrites
+     (extensionality_ax ∉ member_symmetric_difference member_union))
+    nil nil)
+   ((⊂ const-decl "bool" fset nil)
+    (member_union formula-decl nil fset nil)
+    (member_symmetric_difference formula-decl nil fset nil))
+   shostak))
+ (st_subset_difference_symmetric 0
+  (st_subset_difference_symmetric-1 nil 3580218090
+   (""
+    (grind :rewrites
+     (extensionality_ax ∉ member_symmetric_difference member_union
+      member_empty member_intersection))
+    nil nil)
+   ((disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (member_empty formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (⊊ const-decl "bool" fset nil) (⊂ const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (member_symmetric_difference formula-decl nil fset nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (union_union 0
+  (union_union-1 nil 3580218323
+   ("" (grind :rewrites (extensionality_ax member_union)) nil nil)
+   ((member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (union__union 0
+  (union__union-1 nil 3580218396
+   ("" (grind :rewrites (extensionality_ax member_union)) nil nil)
+   ((member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (union_intersection 0
+  (union_intersection-1 nil 3580218406
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_intersection))
+    nil nil)
+   ((member_intersection formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (union__intersection 0
+  (union__intersection-1 nil 3580218451
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_intersection))
+    nil nil)
+   ((member_intersection formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (union_difference 0
+  (union_difference-1 nil 3580218455
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_difference ∉))
+    nil nil)
+   ((member_difference formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (union__difference 0
+  (union__difference-1 nil 3580218829
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_difference ∉))
+    nil nil)
+   ((member_difference formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection_union 0
+  (intersection_union-1 nil 3580218887
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_intersection))
+    nil nil)
+   ((member_union formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection__union 0
+  (intersection__union-1 nil 3580218902
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_intersection))
+    nil nil)
+   ((member_union formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection_intersection 0
+  (intersection_intersection-1 nil 3580218908
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_intersection))
+    nil nil)
+   ((member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection__intersection 0
+  (intersection__intersection-1 nil 3580218914
+   ("" (grind :rewrites (extensionality_ax member_intersection)) nil
+    nil)
+   ((member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection_difference 0
+  (intersection_difference-1 nil 3580218921
+   (""
+    (grind :rewrites
+     (extensionality_ax member_intersection member_difference))
+    nil nil)
+   ((member_difference formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection__difference 0
+  (intersection__difference-1 nil 3580218931
+   (""
+    (grind :rewrites
+     (extensionality_ax member_intersection member_difference))
+    nil nil)
+   ((member_difference formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection_symmetric_difference 0
+  (intersection_symmetric_difference-1 nil 3580218936
+   (""
+    (grind :rewrites
+     (extensionality_ax member_intersection
+      member_symmetric_difference))
+    nil nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (intersection__symmetric_difference 0
+  (intersection__symmetric_difference-1 nil 3580219032
+   (""
+    (grind :rewrites
+     (extensionality_ax member_intersection
+      member_symmetric_difference))
+    nil nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference_union 0
+  (difference_union-1 nil 3580219037
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_difference))
+    nil nil)
+   ((member_union formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference__union 0
+  (difference__union-1 nil 3580219050
+   (""
+    (grind :rewrites
+     (extensionality_ax member_union member_difference))
+    nil nil)
+   ((member_union formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference_intersection 0
+  (difference_intersection-1 nil 3580219053
+   (""
+    (grind :rewrites
+     (extensionality_ax member_intersection member_difference))
+    nil nil)
+   ((member_intersection formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference__intersection 0
+  (difference__intersection-1 nil 3580219064
+   (""
+    (grind :rewrites
+     (extensionality_ax member_intersection member_difference))
+    nil nil)
+   ((member_intersection formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference_difference 0
+  (difference_difference-1 nil 3580219067
+   (""
+    (grind :rewrites
+     (extensionality_ax member_difference member_union))
+    nil nil)
+   ((member_difference formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference__difference 0
+  (difference__difference-1 nil 3580219131
+   (""
+    (grind :rewrites
+     (extensionality_ax member_difference member_union
+      member_intersection))
+    nil nil)
+   ((member_difference formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (member_union formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (difference_symmetric_difference 0
+  (difference_symmetric_difference-1 nil 3580219144
+   (""
+    (grind :rewrites
+     (extensionality_ax member_difference member_symmetric_difference))
+    nil nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (symmetric_difference_symmetric_difference 0
+  (symmetric_difference_symmetric_difference-1 nil 3580219161
+   (""
+    (grind :rewrites (extensionality_ax member_symmetric_difference))
+    nil nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (symmetric_difference__symmetric_difference 0
+  (symmetric_difference__symmetric_difference-1 nil 3580219181
+   (""
+    (grind :rewrites (extensionality_ax member_symmetric_difference))
+    nil nil)
+   ((member_symmetric_difference formula-decl nil fset nil)
+    (extensionality_ax formula-decl nil fset nil))
+   shostak))
+ (disjoint_subset 0
+  (disjoint_subset-1 nil 3580219187
+   ("" (grind :rewrites (extensionality_ax member_intersection)) nil
+    nil)
+   ((⊂ const-decl "bool" fset nil)
+    (disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (T formal-type-decl nil fset nil))
+   shostak))
+ (disjoint_difference 0
+  (disjoint_difference-1 nil 3580219201
+   (""
+    (grind :rewrites
+     (extensionality_ax member_difference member_intersection
+      member_empty))
+    nil nil)
+   ((disjoint? const-decl "bool" fset nil)
+    (empty? const-decl "bool" fset nil)
+    (extensionality_ax formula-decl nil fset nil)
+    (member_empty formula-decl nil fset nil)
+    (member_intersection formula-decl nil fset nil)
+    (member_difference formula-decl nil fset nil))
+   shostak))
+ (is_finite_union 0
+  (is_finite_union-1 nil 3580220742
+   ("" (skeep)
+    (("" (prop)
+      (("1" (use subset__union_l)
+        (("1" (use subset_is_finite) (("1" (grind) nil nil)) nil)) nil)
+       ("2" (use subset__union_r)
+        (("2" (use subset_is_finite) (("2" (grind) nil nil)) nil)) nil)
+       ("3" (use union_is_finite) nil nil))
+      nil))
+    nil)
+   ((subset_is_finite formula-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (is_finite? const-decl "bool" fset nil)
+    (∪ const-decl "set" fset nil) (s1 skolem-const-decl "set" fset nil)
+    (s2 skolem-const-decl "set" fset nil)
+    (union_is_associative name-judgement "(associative?[set])" fset
+     nil)
+    (union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (set nonempty-type-decl nil fset nil)
+    (subset__union_l formula-decl nil fset nil)
+    (subset__union_r formula-decl nil fset nil)
+    (union_is_finite formula-decl nil fset nil))
+   shostak))
+ (intersection_is_finite 0
+  (intersection_is_finite-1 nil 3580220976
+   (""
+    (grind :rewrites (intersection_as_difference difference_is_finite))
+    nil nil)
+   ((intersection_as_difference formula-decl nil fset nil)
+    (difference_is_finite formula-decl nil fset nil))
+   shostak))
+ (symmetric_difference_is_finite 0
+  (symmetric_difference_is_finite-1 nil 3580221053
+   (""
+    (grind :rewrites
+     (symmetric_difference_as_difference difference_is_finite
+      union_is_finite))
+    nil nil)
+   ((symmetric_difference_as_difference formula-decl nil fset nil)
+    (difference_is_finite formula-decl nil fset nil)
+    (union_is_finite formula-decl nil fset nil))
+   shostak))
  (card_union_TCC1 0
-  (card_union_TCC1-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
-   nil))
+  (card_union_TCC1-1 nil 3580142543 ("" (use union_is_finite) nil nil)
+   ((union_is_finite formula-decl nil fset nil)) nil))
  (card_union_TCC2 0
-  (card_union_TCC2-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
-   nil))
+  (card_union_TCC2-1 nil 3580142543
+   ("" (use intersection_is_finite) nil nil)
+   ((intersection_is_finite formula-decl nil fset nil)) nil))
  (card_difference_TCC1 0
-  (card_difference_TCC1-1 nil 3580142543 ("" (subtype-tcc) nil nil) nil
+  (card_difference_TCC1-1 nil 3580142543
+   ("" (use difference_is_finite) nil nil)
+   ((difference_is_finite formula-decl nil fset nil)) nil))
+ (card_empty 0
+  (card_empty-1 nil 3580221137
+   ("" (use card_zero) (("" (grind) nil nil)) nil)
+   ((set nonempty-type-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (is_finite? const-decl "bool" fset nil)
+    (T formal-type-decl nil fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (∈ const-decl "[T, set -> bool]" fset nil)
+    (∅ const-decl "{fs | FORALL x: NOT (x ∈ fs)}" fset nil)
+    (card_zero formula-decl nil fset nil))
+   shostak))
+ (card_subset_TCC1 0
+  (card_subset_TCC1-1 nil 3580153504
+   ("" (use subset_is_finite) nil nil)
+   ((subset_is_finite formula-decl nil fset nil)) nil))
+ (card_subset 0
+  (card_subset-1 nil 3580219348
+   ("" (grind :rewrites (subset_as_union card_union card_empty))
+    (("" (rewrite card_union)
+      (("1" (rewrite disjoint?)
+        (("1" (rewrite empty?)
+          (("1" (rewrite -2)
+            (("1" (rewrite card_empty) (("1" (grind) nil nil)) nil))
+            nil))
+          nil))
+        nil)
+       ("2" (use is_finite_union) (("2" (grind) nil nil)) nil))
+      nil))
+    nil)
+   ((card_union formula-decl nil fset nil)
+    (intersection_is_commutative name-judgement "(commutative?[set])"
+     fset nil)
+    (intersection_is_associative name-judgement "(associative?[set])"
+     fset nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (∩ const-decl "set" fset nil) (empty? const-decl "bool" fset nil)
+    (card_empty formula-decl nil fset nil)
+    (disjoint? const-decl "bool" fset nil)
+    (is_finite_union formula-decl nil fset nil)
+    (real_le_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (union_is_associative name-judgement "(associative?[set])" fset
+     nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (subset_as_union formula-decl nil fset nil))
+   shostak))
+ (card_st_subset_TCC1 0
+  (card_st_subset_TCC1-1 nil 3580223152
+   ("" (use subset_is_finite) (("" (grind) nil nil)) nil)
+   ((⊊ const-decl "bool" fset nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (⊂ const-decl "bool" fset nil)
+    (is_finite? const-decl "bool" fset nil)
+    (set nonempty-type-decl nil fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (subset_is_finite formula-decl nil fset nil))
    nil))
+ (card_st_subset 0
+  (card_st_subset-1 nil 3580223153
+   ("" (skeep)
+    (("" (rewrite st_subset_as_union)
+      (("" (skeep)
+        (("" (typepred fs)
+          (("" (rewrite -3)
+            (("" (rewrite disjoint?)
+              (("" (rewrite empty?)
+                (("" (rewrite card_union)
+                  (("1" (typepred ∩)
+                    (("1" (expand commutative?)
+                      (("1" (inst - s s_1)
+                        (("1" (rewrite -2)
+                          (("1" (rewrite -3)
+                            (("1" (rewrite card_empty)
+                              (("1"
+                                (typepred s_1)
+                                (("1"
+                                  (expand nonempty?)
+                                  (("1"
+                                    (expand empty?)
+                                    (("1"
+                                      (use card_zero (fs s_1))
+                                      (("1" (grind) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil)
+                   ("2" (use is_finite_union) (("2" (grind) nil nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((st_subset_as_union formula-decl nil fset nil)
+    (set nonempty-type-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (is_finite? const-decl "bool" fset nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (nonempty? const-decl "bool" fset nil)
+    (disjoint? const-decl "bool" fset nil)
+    (intersection_is_commutative name-judgement "(commutative?[set])"
+     fset nil)
+    (intersection_is_associative name-judgement "(associative?[set])"
+     fset nil)
+    (card_union formula-decl nil fset nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (card_empty formula-decl nil fset nil)
+    (card_zero formula-decl nil fset nil)
+    (commutative? const-decl "bool" operator_defs nil)
+    (associative? const-decl "bool" operator_defs nil)
+    (is_finite_union formula-decl nil fset nil)
+    (empty? const-decl "bool" fset nil) (∩ const-decl "set" fset nil)
+    (union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (union_is_associative name-judgement "(associative?[set])" fset
+     nil))
+   shostak))
+ (card_intersection_TCC1 0
+  (card_intersection_TCC1-1 nil 3580223152
+   ("" (use intersection_is_finite) nil nil)
+   ((intersection_is_finite formula-decl nil fset nil)) nil))
+ (card_intersection_TCC2 0
+  (card_intersection_TCC2-1 nil 3580223152
+   ("" (use union_is_finite) nil nil)
+   ((union_is_finite formula-decl nil fset nil)) nil))
+ (card_intersection 0
+  (card_intersection-1 nil 3580221321
+   ("" (grind :rewrites card_union) nil nil)
+   ((card_union formula-decl nil fset nil)) shostak))
+ (card_difference_symmetric_1_TCC1 0
+  (card_difference_symmetric_1_TCC1-1 nil 3580215693
+   ("" (use symmetric_difference_is_finite) nil nil)
+   ((symmetric_difference_is_finite formula-decl nil fset nil)) nil))
+ (card_difference_symmetric_1 0
+  (card_difference_symmetric_1-1 nil 3580221987
+   ("" (skeep)
+    (("" (rewrite symmetric_difference_as_union_intersection)
+      (("" (rewrite card_difference)
+        (("" (assert)
+          (("" (rewrite intersection_union)
+            (("" (typepred ∩)
+              (("" (expand commutative?)
+                (("" (inst - fs1 fs2)
+                  (("" (rewrite intersection__intersection)
+                    (("" (rewrite intersection_is_idempotent)
+                      (("" (rewrite -2)
+                        (("" (rewrite intersection__intersection)
+                          (("" (rewrite intersection_is_idempotent)
+                            (("" (rewrite union_is_idempotent) nil
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((symmetric_difference_as_union_intersection formula-decl nil fset
+     nil)
+    (set nonempty-type-decl nil fset nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (is_finite? const-decl "bool" fset nil)
+    (intersection_is_commutative name-judgement "(commutative?[set])"
+     fset nil)
+    (intersection_is_associative name-judgement "(associative?[set])"
+     fset nil)
+    (union_is_commutative name-judgement "(commutative?[set])" fset
+     nil)
+    (union_is_associative name-judgement "(associative?[set])" fset
+     nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (associative? const-decl "bool" operator_defs nil)
+    (commutative? const-decl "bool" operator_defs nil)
+    (intersection_is_idempotent formula-decl nil fset nil)
+    (union_is_idempotent formula-decl nil fset nil)
+    (intersection__intersection formula-decl nil fset nil)
+    (intersection_union formula-decl nil fset nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (card_difference formula-decl nil fset nil)
+    (∪ const-decl "set" fset nil) (∩ const-decl "set" fset nil))
+   shostak))
+ (card_difference_symmetric_2 0
+  (card_difference_symmetric_2-1 nil 3580222156
+   (""
+    (grind :rewrites (card_difference_symmetric_1 card_intersection))
+    nil nil)
+   ((nnint_times_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (even_times_int_is_even application-judgement "even_int" integers
+     nil)
+    (mult_divides1 application-judgement "(divides(n))" divides nil)
+    (mult_divides2 application-judgement "(divides(m))" divides nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (card_difference_symmetric_1 formula-decl nil fset nil)
+    (card_intersection formula-decl nil fset nil))
+   shostak))
+ (card_difference_symmetric_3 0
+  (card_difference_symmetric_3-1 nil 3580222188
+   ("" (grind :rewrites (card_difference_symmetric_1 card_union)) nil
+    nil)
+   ((nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (even_times_int_is_even application-judgement "even_int" integers
+     nil)
+    (mult_divides1 application-judgement "(divides(n))" divides nil)
+    (mult_divides2 application-judgement "(divides(m))" divides nil)
+    (card_difference_symmetric_1 formula-decl nil fset nil)
+    (card_union formula-decl nil fset nil))
+   shostak))
  (st_subset_is_well_founded 0
   (st_subset_is_well_founded-1 nil 3580142543
-   ("" (judgement-tcc) nil nil) nil nil)))
+   ("" (case "well_founded?(LAMBDA fs1,fs2: card(fs1) < card(fs2))")
+    (("1" (expand well_founded?)
+      (("1" (skeep)
+        (("1" (inst - p)
+          (("1" (prop)
+            (("1" (skeep)
+              (("1" (inst + y)
+                (("1" (skeep)
+                  (("1" (inst - x)
+                    (("1" (use card_st_subset) (("1" (grind) nil nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("2" (hide 2)
+      (("2" (use wf_nat)
+        (("2" (expand well_founded?)
+          (("2" (skeep)
+            (("2"
+              (inst -
+               "LAMBDA (n:nat): EXISTS fs: card(fs) = n AND p(fs)")
+              (("2" (prop)
+                (("1" (skeep)
+                  (("1" (typepred "(y::nat)")
+                    (("1" (skeep)
+                      (("1" (inst + fs)
+                        (("1" (skeep)
+                          (("1" (inst - "card(x)")
+                            (("1" (grind) nil nil)
+                             ("2" (inst + x) (("2" (grind) nil nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil)
+                 ("2" (skeep)
+                  (("2" (inst + "card(y)") (("2" (inst + y) nil nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((card const-decl "[(is_finite?) -> nat]" fset nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (< const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (well_founded? const-decl "bool" orders nil)
+    (pred type-eq-decl nil defined_types nil)
+    (is_finite? const-decl "bool" fset nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (set nonempty-type-decl nil fset nil)
+    (subset_is_partial_order name-judgement "(partial_order?[set])"
+     fset nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (≠ const-decl "[T, T -> bool]" notequal nil)
+    (⊂ const-decl "bool" fset nil) (⊊ const-decl "bool" fset nil)
+    (restrict const-decl "R" restrict nil)
+    (card_st_subset formula-decl nil fset nil)
+    (wf_nat formula-decl nil naturalnumbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (p skolem-const-decl "pred[(is_finite?)]" fset nil)
+    (fs skolem-const-decl "(is_finite?)" fset nil)
+    (x skolem-const-decl "(p)" fset nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil))
+   nil)))
 

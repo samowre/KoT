@@ -13,7 +13,7 @@ BEGIN
 
   % Membership and = are the elementary functions
   ∈: [T, set -> bool]
-  ;∉(x,s): bool = NOT (x ∈ s)
+  ;∉(x,s): MACRO bool = NOT (x ∈ s)
 
   % linked by the extensionality axiom
   extensionality_ax: AXIOM s1 = s2 IFF FORALL x: (x ∈ s1) IFF (x ∈ s2)
@@ -29,33 +29,34 @@ BEGIN
   % empty set
   empty_existence: AXIOM EXISTS fs: FORALL x: (x ∉ fs)
   ∅: { fs | FORALL x: (x ∉ fs) }
+  member_empty: LEMMA x ∈ ∅ = false
+
   empty?(s): bool = s = ∅
   nonempty?(s): bool = NOT empty?(s)
 
   empty_is_unique: LEMMA FORALL (s | FORALL x: x ∉ s ): s = ∅
-  card_empty: AXIOM card(fs) = 0 IFF fs = ∅
+
 
 
 
   % I - Basic functions and membership axioms
   ;⊂(s1, s2): bool = FORALL x: (x ∈ s1) IMPLIES (x ∈ s2)
   ;⊊(s1, s2): bool = (s1 ≠ s2) AND (s1 ⊂ s2)
-% TODO : We want more unicode symbol, add ⊊ as infix symbol !
 
   ;∪(s1, s2): set
-  member_union: AXIOM (x ∈ s1 ∪ s2) IFF (x ∈ s1) OR (x ∈ s2)
+  member_union: AXIOM x ∈ (s1 ∪ s2) IFF (x ∈ s1) OR (x ∈ s2)
 
   ;∩(s1, s2): set
-  member_intersection: AXIOM (x ∈ s1 ∩ s2) IFF (x ∈ s1) AND (x ∈ s2)
+  member_intersection: AXIOM x ∈ (s1 ∩ s2) IFF (x ∈ s1) AND (x ∈ s2)
 
   disjoint?(s1, s2): bool = empty?(s1 ∩ s2)
   
   ;-(s1, s2): set
-  member_difference: AXIOM (x ∈ s1 - s2) IFF (x ∈ s1) AND (x ∉ s2)
+  member_difference: AXIOM x ∈ (s1 - s2) IFF (x ∈ s1) AND (x ∉ s2)
 
   ;⊖(s1, s2): set 
   member_symmetric_difference: AXIOM  
-  	(x ∈ s1 ⊖ s2) IFF (x ∈ s1) AND (x ∉ s2) OR (x ∉ s1) AND (x ∈ s2)
+  	x ∈ (s1 ⊖ s2) IFF (x ∈ s1) AND (x ∉ s2) OR (x ∉ s1) AND (x ∈ s2)
 
 
 
@@ -79,17 +80,17 @@ BEGIN
 
 
     % Case of invariance of an operator
-  union_inv_left: LEMMA (s1 ∪ s2) = s1 IFF s2 ⊂ s1
-  union_inv_right: LEMMA (s1 ∪ s2) = s2 IFF s1 ⊂ s2
+  left_union: LEMMA (s1 ∪ s2) = s1 IFF s2 ⊂ s1
+  right_union: LEMMA (s1 ∪ s2) = s2 IFF s1 ⊂ s2
 
-  intersection_inv_left: LEMMA (s1 ∩ s2) = s1 IFF s1 ⊂ s2
-  intersection_inv_right: LEMMA (s1 ∩ s2) = s2 IFF s2 ⊂ s1
+  left_intersection: LEMMA (s1 ∩ s2) = s1 IFF s1 ⊂ s2
+  right_intersection: LEMMA (s1 ∩ s2) = s2 IFF s2 ⊂ s1
 
-  difference_inv_left: LEMMA (s1 - s2) = s1 IFF disjoint?(s1, s2)
-  difference_inv_right: LEMMA (s1 - s2) = s2 IFF s1 = ∅ AND s2 = ∅
+  left_difference: LEMMA (s1 - s2) = s1 IFF disjoint?(s1, s2)
+  right_difference: LEMMA (s1 - s2) = s2 IFF s1 = ∅ AND s2 = ∅
 
-  symmetric_difference_inv_left: LEMMA (s1 ⊖ s2) = s1 IFF s2 = ∅
-  symmetric_difference_inv_right: LEMMA (s1 ⊖ s2) = s2 IFF s1 = ∅
+  left_symmetric_difference: LEMMA (s1 ⊖ s2) = s1 IFF s2 = ∅
+  right_symmetric_difference: LEMMA (s1 ⊖ s2) = s2 IFF s1 = ∅
 
 
     % With empty
@@ -99,18 +100,27 @@ BEGIN
   disjoint_empty: LEMMA disjoint?(∅, s)
   disjoint__empty: LEMMA disjoint?(s, ∅)
 
-  union_empty2: LEMMA (s1 ∪ s2) = ∅ IFF s1 = ∅ AND s2 = ∅
+  empty_union: LEMMA (s1 ∪ s2) = ∅ IFF s1 = ∅ AND s2 = ∅
   union_empty: LEMMA (∅ ∪ s) = s
   union__empty: LEMMA (s ∪ ∅) = s
 
   intersection_empty: LEMMA (∅ ∩ s) = ∅
   intersection__empty: LEMMA (s ∩ ∅) = ∅
 
+  empty_difference: LEMMA s1 - s2 = ∅ IFF s1 ⊂ s2
   difference_empty: LEMMA (∅ - s) = ∅
   difference__empty: LEMMA (s - ∅) = s
 
+  empty_symmetric_difference: LEMMA (s1 ⊖ s2) = ∅ IFF s1 = s2
   symmetric_difference_empty: LEMMA (∅ ⊖ s) = s
   symmetric_difference__empty: LEMMA (s ⊖ ∅) = s
+  
+    % Idempotence and nilpotence
+  union_is_idempotent: LEMMA s ∪ s = s
+  intersection_is_idempotent: LEMMA s ∩ s = s
+
+  difference_is_nilpotent: LEMMA s - s = ∅
+  symmetric_difference_is_nilpotent: LEMMA s ⊖ s = ∅
 
 
     % Alternative definitions
@@ -125,42 +135,47 @@ BEGIN
 
 
   subset_as_union: LEMMA 
-  	(s1 ⊂ s2) IFF EXISTS s: disjoint?(s, s1) AND s2 = (s1 ∪ s)
-%  st_subset_as_union: LEMMA 
-%  	(s1 ⊊ s2) IFF EXISTS (s: (nonempty?)): disjoint?(s, s1) AND s2 = (s1 ∪ s)
-  subset_as_intersection: LEMMA 
-  	(s1 ⊂ s2) IFF EXISTS s: s1 = (s2 ∩ s)
-%  st_subset_as_intersection: LEMMA 
-%  	(s1 ⊊ s2) IFF EXISTS (s: (nonempty?)): s1 = (s2 ∩ s)
+  	(s1 ⊂ s2) IFF EXISTS s: disjoint?(s1, s) AND s2 = (s1 ∪ s)
+  st_subset_as_union: LEMMA 
+  	(s1 ⊊ s2) IFF EXISTS (s: (nonempty?)): disjoint?(s, s1) AND s2 = (s1 ∪ s)
 
-  union_disjoint: LEMMA EXISTS s: s1 = (s2 ∪ s) IFF 
-  		  	EXISTS s: s1 = (s1 ∪ s2) AND disjoint?(s1, s)
+
+  % A RANGER et renommer
+  union_disjoint: LEMMA 
+  	(EXISTS s: s2 = s1 ∪ s) IFF 
+	(EXISTS s: disjoint?(s, s1) AND s2 = s1 ∪ s)
+ 
+
+
 
   % Props (if * is a commutative operator, props are written only once, on the left)
     % subset 
-% TODO : convention non respectee ! 
-  subset_union: LEMMA (s1 ⊂ s1 ∪ s2)
-  subset__union: LEMMA (s2 ⊂ s1 ∪ s2)
-%  st_subset_union: LEMMA (s1 ⊊ s1 ∪ s2) IFF NOT s2 ⊂ s1
-%  st_subset_union: LEMMA (s2 ⊊ s1 ∪ s2) IFF NOT s1 ⊂ s1
+  subset_union: LEMMA (s1 ∪ s2 ⊂ s) = ((s1 ⊂ s) AND (s2 ⊂ s))
+  subset__union_l: LEMMA (s1 ⊂ s1 ∪ s2)
+  subset__union_r: LEMMA (s2 ⊂ s1 ∪ s2)
+  st_subset__union_l: LEMMA (s1 ⊊ s1 ∪ s2) IFF NOT s2 ⊂ s1
+  st_subset__union_r: LEMMA (s2 ⊊ s1 ∪ s2) IFF NOT s1 ⊂ s2
 
-  subset_intersection: LEMMA (s1 ∩ s2 ⊂ s1)
-  subset__intersection: LEMMA (s1 ∩ s2 ⊂ s2)
-%  st_subset_intersection: LEMMA (s1 ∩ s2 ⊊ s1) IFF NOT s1 ⊂ s2 
-%  st_subset_intersection: LEMMA (s1 ∩ s2 ⊊ s2) IFF NOT s2 ⊂ s1
-% END TODO
+  subset_intersection: LEMMA (s ⊂ s1 ∩ s2) = ((s ⊂ s1) AND (s ⊂ s2))
+  subset__intersection_l: LEMMA (s1 ∩ s2 ⊂ s1)
+  subset__intersection_r: LEMMA (s1 ∩ s2 ⊂ s2)
+  st_subset__intersection_l: LEMMA (s1 ∩ s2 ⊊ s1) IFF NOT s1 ⊂ s2 
+  st_subset__intersection_r: LEMMA (s1 ∩ s2 ⊊ s2) IFF NOT s2 ⊂ s1
 
   subset_difference: LEMMA (s1 - s2 ⊂ s1)
-%  st_subset_difference: LEMMA (s1 - s2 ⊊ s1) IFF NOT disjoint?(s1, s2)
+  st_subset_difference: LEMMA (s1 - s2 ⊊ s1) IFF NOT disjoint?(s1, s2)
 
   subset_difference_symmetric: LEMMA (s1 ⊖ s2 ⊂ s1 ∪ s2)
-%  st_subset_difference_symmetric: LEMMA (s1 ⊖ s2 ⊊ s1 ∪ s2) IFF disjoint?(s1, s2) 
+  st_subset_difference_symmetric: LEMMA (s1 ⊖ s2 ⊊ s1 ∪ s2) IFF NOT disjoint?(s1, s2) 
 
     % union
   union_union: LEMMA ((s1 ∪ s2) ∪ s) = (s1 ∪ (s2 ∪ s))
   union__union: LEMMA (s1 ∪ (s2 ∪ s)) = ((s1 ∪ s2) ∪ s)
   union_intersection: LEMMA ((s1 ∩ s2) ∪ s) = (s1 ∪ s) ∩ (s2 ∪ s)
   union__intersection: LEMMA (s ∪ (s1 ∩ s2)) = (s ∪ s1) ∩ (s ∪ s2)
+
+  union_difference: LEMMA ((s1 - s2) ∪ s2) = s1 ∪ s2
+  union__difference: LEMMA (s1 ∪ (s2 - s1)) = s1 ∪ s2 
 
     % intersection
   intersection_union: LEMMA ((s1 ∪ s2) ∩ s) = (s1 ∩ s) ∪ (s2 ∩ s)
@@ -177,8 +192,9 @@ BEGIN
   difference_union: LEMMA (s1 ∪ s2) - s = (s1 - s) ∪ (s2 - s)
   difference__union: LEMMA s - (s1 ∪ s2) = (s - s1) - s2
   difference_intersection: LEMMA (s1 ∩ s2) - s = (s1 - s) ∩ (s2 - s)
+  difference__intersection: LEMMA s1 - (s1 ∩ s2) = s1 - s2
 
-  difference_difference: LEMMA (s1 - s2) - s = (s - (s1 ∪ s2))
+  difference_difference: LEMMA (s - s1) - s2 = (s - (s1 ∪ s2))
   difference__difference: LEMMA s - (s1 - s2) = (s - s1) ∪ (s ∩ s2)
   difference_symmetric_difference: LEMMA (s1 ⊖ s2) - s = ((s1 - s) ⊖ (s2 - s))
 
@@ -195,19 +211,31 @@ BEGIN
     % These functions preserve is_finite
   subset_is_finite: AXIOM s ⊂ fs IMPLIES is_finite?(s)
   union_is_finite: AXIOM is_finite?(fs1 ∪ fs2) 
-  intersection_is_finite: AXIOM is_finite?(fs1 ∩ fs2) 
   difference_is_finite: AXIOM is_finite?(fs1 - fs2)
-  symmetric_difference_is_finite: AXIOM is_finite?(fs1 ⊖ fs2) 
 
-    % Cardinals
-  card_subset: AXIOM s ⊂ fs IMPLIES card(s) <= card(fs) 
+  is_finite_union: LEMMA is_finite?(s1 ∪ s2) IFF is_finite?(s1) AND is_finite?(s2)
+  intersection_is_finite: LEMMA is_finite?(fs1 ∩ fs2) 
+  symmetric_difference_is_finite: LEMMA is_finite?(fs1 ⊖ fs2)  
+
+    % Cardinals axioms
+  card_zero: AXIOM card(fs) = 0 IFF fs = ∅
   card_union: AXIOM card(fs1 ∪ fs2) = card(fs1) + card(fs2) - card(fs1 ∩ fs2)
-  card_intersection: AXIOM card(fs1 ∩ fs2) = card(fs1) + card(fs2) - card(fs1 ∪ fs2)
   card_difference: AXIOM card(fs1 - fs2) = card(fs1) - card(fs1 ∩ fs2)
 
+    % Cardinals props
+  card_empty: LEMMA card(∅) = 0
+  card_subset: LEMMA s ⊂ fs IMPLIES card(s) <= card(fs)
+  card_st_subset: LEMMA s ⊊ fs IMPLIES card(s) < card(fs)
+  card_intersection: LEMMA card(fs1 ∩ fs2) = card(fs1) + card(fs2) - card(fs1 ∪ fs2)
+  card_difference_symmetric_1: 
+  	LEMMA card(fs1 ⊖ fs2) = card(fs1 ∪ fs2) - card(fs1 ∩ fs2)
+  card_difference_symmetric_2: 
+  	LEMMA card(fs1 ⊖ fs2) = 2 * card(fs1 ∪ fs2) - card(fs1) - card(fs2)
+  card_difference_symmetric_3: 
+  	LEMMA card(fs1 ⊖ fs2) = card(fs1) + card(fs2) - 2 * card(fs1 ∩ fs2)
   
     % More order properties
-  st_subset_is_well_founded: JUDGEMENT ⊊ HAS_TYPE (well_founded?[(is_finite?)])
+  st_subset_is_well_founded: LEMMA well_founded?[(is_finite?)](restrict[[set, set], [(is_finite?), (is_finite?)], bool](⊊)) 
 
 
 

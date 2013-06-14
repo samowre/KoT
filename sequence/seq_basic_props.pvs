@@ -14,7 +14,7 @@ BEGIN
   %   f__g is a rewrite of the form : f(_,g(),...) = ...
   %   f_g2 is a rewrite of the form : f(g(), g()) = ...
   %   f_as_g is a rewrite of the form : f() = F(g())
-  %   f_is_p is a lemma of the form : p(f()) IFF ...
+  %   f_is_p is a judgement of the form : f HAS_TYPE (p?)
 
   s, t, s1, s2: VAR seq
   x, y, z: VAR T
@@ -29,7 +29,7 @@ BEGIN
   member(s)(x): MACRO bool = member(x, s)
 
     % append
-  append(s1,s2): seq 
+  append(s1, s2): seq 
   length_append: AXIOM length(append(s1, s2)) = length(s1) + length(s2) 
   nth_append: AXIOM FORALL (i: below(length(s1) + length(s2))): 
   	      	    nth(append(s1, s2), i) = IF i < length(s1) THEN nth(s1, i)
@@ -49,22 +49,15 @@ BEGIN
 
 
 
-  % II - Properties
-    % With =
-  member_preserves_eq: LEMMA preserves(LAMBDA s: member(x, s), =, =)
-  append_preserves_eq: JUDGEMENT append HAS_TYPE (p_preserves_eq?)
-  reverse_preserves_eq: JUDGEMENT reverse HAS_TYPE (preserves_eq?)
-  every_preserves_eq: LEMMA preserves(LAMBDA s: every(p, s), =, =)
-  some_preserves_eq: LEMMA preserves(LAMBDA s: some(p, s), =, =)
-
-    % With empty
+  % II - Properties 
+    % 0 - With empty
   member_empty: LEMMA NOT member(x, empty)
   append_empty: LEMMA append(s1, s2) = s2 IFF empty?(s1)
   append__empty: LEMMA append(s1, s2) = s1 IFF empty?(s2)
   append_empty2: LEMMA append(s1, s2) = empty IFF empty?(s1) AND empty?(s2)
   reverse_empty: LEMMA empty?(reverse(s)) IFF empty?(s)
 
-
+    % 1 - Interactions
     % member
   member_append: LEMMA member(x, append(s1, s2)) IFF member(x, s1) OR member(x, s2)
   member_reverse: LEMMA member(x, reverse(s)) IFF member(x, s)
@@ -90,7 +83,6 @@ BEGIN
 
     % every/some
      %% Links between every, some, and the logic symbols
-     %% every_neg could be named every_as_some
   CONVERSION+ K_conversion
 
   every_neg: THEOREM
@@ -121,9 +113,25 @@ BEGIN
   
 
 
-  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic"
   % The following assertions are only to avoid loops with this prover command
   AUTO_REWRITE- append_reverse2, append_reverse, append__reverse
 
   
 END seq_basic_props
+
+
+% Theories :
+  %  0 - seq_defs
+  %  1 - seq_basic
+  %  2 - seq_as_sets
+  %  3 - seq_subword
+  %  4 - seq_suffix_prefix
+  %  5 - seq_filter
+  %  6 - seq_find
+  %  7 - seq_flatten
+  %  8 - seq_min_max
+  %  9 - seq_orders
+  % 10 - seq_sorted
+  % 11 - seq_map
+  % 12 - seq2
