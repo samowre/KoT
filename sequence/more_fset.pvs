@@ -1,0 +1,77 @@
+more_fset[T :TYPE]: THEORY
+BEGIN
+
+  % This theory defines additional functions and operators for the abstract finite set theory
+  % singleton, the, add, remove, choose, every, some
+
+  IMPORTING fset[T]
+
+  s, t, s1, s2: VAR set
+  x, y, z: VAR T
+  p: VAR PRED[T]
+  f: VAR [T -> T]
+
+
+  % I - Singleton and its properties
+  singleton?(s): bool = EXISTS x: x ∈ s AND FORALL y: y ∈ s IMPLIES y = x
+  singleton(x): { s | singleton?(s) AND x ∈ s}
+  ;〈〉(x): { s | singleton?(s) AND x ∈ s } = singleton(x)
+  the(s: (singleton?)): { x | x ∈ s }
+
+  singleton_is_finite: AXIOM singleton?(s) IMPLIES is_finite?(s)
+  card_one: AXIOM card(s) = 1 IFF singleton?(s)
+
+  singleton_is_nonempty: JUDGEMENT (singleton?) SUBTYPE_OF (nonempty?)
+
+ 
+  singleton_as_member: LEMMA singleton?(s) IFF FORALL (x,y: { z | z ∈ s }): x = y
+  singleton_is_singleton: LEMMA singleton?(s) IFF EXISTS x: s = singleton(x)
+  singleton_singleton: LEMMA singleton?(singleton(x))
+  is_finite_singleton: LEMMA is_finite?(singleton(x))
+  card_singleton: LEMMA card(singleton(x)) = 1
+  example: LEMMA card(〈 x 〉) = 1
+
+  the_singleton: LEMMA the(singleton(x)) = x
+  singleton_the: LEMMA FORALL (s: (singleton?)): singleton(the(s)) = s
+  member_the: LEMMA FORALL (s: (singleton?)): the(s) ∈ s
+  the_member: LEMMA FORALL (s: (singleton?)): x ∈ s IMPLIES the(s) = x  
+ 
+  member_singleton: LEMMA y ∈ singleton(x) = (y = x)
+  subset_singleton: LEMMA singleton(x) ⊂ s IFF x ∈ s
+  subset__singleton: LEMMA s ⊂ singleton(x) IFF s = ∅ OR s = singleton(x)
+  st_subset_singleton: LEMMA singleton(x) ⊊ s IFF x ∈ s AND NOT singleton?(s)
+  st_subset__singleton: LEMMA s ⊊ singleton(x) IFF s = ∅
+
+  intersection_singleton: LEMMA singleton(x) ∩ s = IF x ∈ s THEN singleton(x) ELSE ∅ ENDIF
+  intersection__singleton: LEMMA s ∩ singleton(x) = IF x ∈ s THEN singleton(x) ELSE ∅ ENDIF
+  difference_singleton: LEMMA singleton(x) - s = IF x ∈ s THEN ∅ ELSE singleton(x) ENDIF
+  disjoint_singleton: LEMMA disjoint?(singleton(x), s) = (x ∉ s)
+  disjoint__singleton: LEMMA disjoint?(s, singleton(x)) = (x ∉ s)
+
+  singleton_union: LEMMA 
+  	singleton?(s1 ∪ s2) IFF singleton?(s1) AND singleton?(s2) AND the(s1) = the(s2)
+ 
+
+  % II - Definitions
+  add(x, s): set = singleton(x) ∪ s
+  remove(x, s): set = s - singleton(x)
+
+  every(p, s): bool = FORALL x: x ∈ s IMPLIES p(x)
+  every(p)(s): MACRO bool = every(p, s)
+  some(p, s): bool = EXISTS x: x ∈ s AND p(x)
+  some(p)(s): MACRO bool = some(p, s)
+
+  choose(s: (nonempty?)): { x | x ∈ s } 
+
+  % III - Properties 
+    % member
+  member_add: LEMMA x ∈ add(y, s) IFF x = y OR x ∈ s
+  member_remove: LEMMA x ∈ remove(y, s) IFF x /= y AND x ∈ s
+  member_choose: LEMMA choose(s) ∈ s
+
+    % subset
+  subset_add: LEMMA add(x, s1) ⊂ s2 IFF x ∈ s2 AND s1 ⊂ s2
+  subset__add_l: LEMMA singleton(x) ⊂ add(x, s1)
+  subset__add_r: LEMMA s1 ⊂ add(x, s1)	
+
+END more_fset

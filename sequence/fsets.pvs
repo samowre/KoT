@@ -148,7 +148,7 @@ BEGIN
 
 
 
-  % Props (if * is a commutative operator, props are written only once, on the left)
+  % III - Interactions between operators
     % subset 
   subset_union: LEMMA (s1 ∪ s2 ⊂ s) = ((s1 ⊂ s) AND (s2 ⊂ s))
   subset__union_l: LEMMA (s1 ⊂ s1 ∪ s2)
@@ -208,7 +208,8 @@ BEGIN
    
 
 
-    % These functions preserve is_finite
+  % IV - Finite sets
+    % Comon operators preserve is_finite
   subset_is_finite: AXIOM s ⊂ fs IMPLIES is_finite?(s)
   union_is_finite: AXIOM is_finite?(fs1 ∪ fs2) 
   difference_is_finite: AXIOM is_finite?(fs1 - fs2)
@@ -217,12 +218,12 @@ BEGIN
   intersection_is_finite: LEMMA is_finite?(fs1 ∩ fs2) 
   symmetric_difference_is_finite: LEMMA is_finite?(fs1 ⊖ fs2)  
 
-    % Cardinals axioms
+    % Cardinal axioms
   card_zero: AXIOM card(fs) = 0 IFF fs = ∅
   card_union: AXIOM card(fs1 ∪ fs2) = card(fs1) + card(fs2) - card(fs1 ∩ fs2)
   card_difference: AXIOM card(fs1 - fs2) = card(fs1) - card(fs1 ∩ fs2)
 
-    % Cardinals props
+    % Cardinal props
   card_empty: LEMMA card(∅) = 0
   card_subset: LEMMA s ⊂ fs IMPLIES card(s) <= card(fs)
   card_st_subset: LEMMA s ⊊ fs IMPLIES card(s) < card(fs)
@@ -235,7 +236,8 @@ BEGIN
   	LEMMA card(fs1 ⊖ fs2) = card(fs1) + card(fs2) - 2 * card(fs1 ∩ fs2)
   
     % More order properties
-  st_subset_is_well_founded: LEMMA well_founded?[(is_finite?)](restrict[[set, set], [(is_finite?), (is_finite?)], bool](⊊)) 
+  st_subset_is_well_founded: LEMMA 
+      well_founded?[(is_finite?)](restrict[[set, set], [(is_finite?), (is_finite?)], bool](⊊)) 
 
 
 
