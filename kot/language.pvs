@@ -1,0 +1,396 @@
+language: THEORY
+BEGIN
+  IMPORTING wf_pair
+  IMPORTING more_orders_props
+
+  symbol: TYPE+
+  sbool: symbol
+  strue: symbol
+  sfalse: symbol
+  sboolop: symbol
+  snot: symbol
+  sor: symbol
+  sand: symbol
+  ssupset: symbol
+  sequal: symbol
+
+  % Union type representing the different elements of the PVS semantics
+  semantic: DATATYPE WITH SUBTYPES undefined, name, keyword, pretype, preterm, context, theory_
+  BEGIN
+    ⊥: undefined?: undefined
+
+    %% Keywords
+    KTYPE: KTYPE?: keyword
+    KCONST: KCONST?: keyword
+    KVAR: KVAR?: keyword
+    KTHEORY: KTHEORY?: keyword
+    KCONTEXT: KCONTEXT?: keyword
+
+    %% Names
+    % s[actuals].n or s[actuals]
+    dot(s: symbol, actuals: context, n: lift[name]): dot?: name
+
+    %% Types
+    % n
+    base(n: name): base?: pretype
+    % [i: dom → range]
+    fun(dom: pretype, range: pretype): fun?: pretype
+    % [i: left, right]
+    prod(left: pretype, right: pretype): prod?: pretype
+    % { x: supertype | pred }
+    subtype(supertype: pretype, pred: preterm): subtype?: pretype
+
+    %% Terms
+    % n
+    const(n: name): const?: preterm
+    % i
+    v(i: nat): var?: preterm
+    % op arg
+    app(op: preterm, arg: preterm): app?: preterm
+    % λ(x: btype): body
+    lam(btype: pretype, body: preterm): lam?: preterm
+    % (left, right)
+    pair(left: preterm, right: preterm): pair?: preterm
+    % p₁ arg
+    lproj(arg: preterm): lproj?: preterm
+    % p₂ arg
+    rproj(arg: preterm): rproj?: preterm
+
+    %% Contexts
+    % {}
+    〈〉: empty?: context
+    % rest, s: TYPE
+    ktype_decl(s: symbol, rest: context): ktype_decl?: context
+    % rest, s: TYPE = dtype
+    ktype_def(s: symbol, dtype: pretype, rest: context): ktype_def?: context
+    % rest ↑ 1, 0: VAR dtype
+    kvar(dtype: pretype, rest: context): kvar?: context
+    % rest, s: dtype
+    kconst_decl(s: symbol, dtype: pretype, rest: context): kconst_decl?: context
+    % rest, s: dtype = dterm
+    kconst_def(s: symbol, dtype: pretype, dterm: preterm, rest: context): kconst_def?: context
+    % rest, s[dformals]: THEORY = dtheory
+    ktheory_def(s: symbol, dformals: context, dtheory: context, rest: context): ktheory_def?: context
+    % rest, n
+    kname(n: name, rest: context): kname?: context
+  END semantic
+  CONVERSION+ symbol
+  AUTO_REWRITE+ undefined, keyword, name, pretype, preterm, context
+
+  subterm_ltlt_equal: THEOREM FORALL (s, t: semantic):
+    subterm(s, t) IFF (s = t OR s << t)
+
+  KIND?(s: semantic): MACRO bool = KTYPE?(s) OR KCONST?(s) OR KVAR?(s) OR KTHEORY?(s)
+  
+  ktype?(s: semantic): MACRO bool = ktype_decl?(s) OR ktype_def?(s)
+  kconst?(s: semantic): MACRO bool = kconst_decl?(s) OR kconst_def?(s)
+  ktyped?(s: semantic): MACRO bool = kvar?(s) OR kconst?(s)
+  ktheory?(s: semantic): MACRO bool = ktheory_def?(s)
+
+  kdecl?(s: semantic): MACRO bool = ktype_decl?(s) OR kconst_decl?(s) OR kvar?(s)
+  kdef?(s: semantic): MACRO bool = ktype_def?(s) OR kconst_def?(s) OR ktheory_def?(s)
+
+  expr(s: semantic): MACRO bool = pretype(s) OR preterm(s) OR name(s)
+  expr: TYPE = (expr)
+  
+  language(s: semantic): MACRO bool =  expr(s) OR context(s)
+  language: TYPE = (language)
+
+  % Variable declaration
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  e: VAR expr
+  l: VAR language
+  S: VAR semantic
+
+  % Allow ⊥
+  ;ε(p: pred[semantic]): TYPE = { S | undefined?(S) OR p(S) }
+%  ;ε[T: TYPE FROM semantic]: TYPE = ε(T_pred)
+%  ;ε[D: TYPE FROM semantic, R: TYPE FROM semantic](f: [D -> R]): [ε[D] -> ε[R]] =
+%    LAMBDA (x: ε[D]): IF undefined?(x) THEN ⊥ ELSE f(x) ENDIF
+
+  % Extended versions of the constructors that is undefined when any argument is
+  ;⇒(b: bool, S): semantic =
+    IF b THEN S ELSE ⊥ ENDIF
+
+  fun_?(A: ε(pretype), B: ε(pretype)): ε(pretype) =
+    IF pretype(A) AND pretype(B) THEN fun(A, B) ELSE ⊥ ENDIF
+  prod_?(T1: ε(pretype), T2: ε(pretype)): ε(pretype) =
+    IF pretype(T1) AND pretype(T2) THEN prod(T1, T2) ELSE ⊥ ENDIF
+  subtype_?(T: ε(pretype), p: ε(preterm)): ε(pretype) =
+    IF pretype(T) AND preterm(p) THEN subtype(T, p) ELSE ⊥ ENDIF
+
+  app_?(op: ε(preterm), arg: ε(preterm)): ε(preterm) =
+    IF preterm(op) AND preterm(arg) THEN app(op, arg) ELSE ⊥ ENDIF
+  lam_?(T: ε(pretype), b: ε(preterm)): ε(preterm) =
+    IF pretype(T) AND preterm(b) THEN lam(T, b) ELSE ⊥ ENDIF
+  pair_?(a: ε(preterm), b: ε(preterm)): ε(preterm) =
+    IF preterm(a) AND preterm(b) THEN pair(a, b) ELSE ⊥ ENDIF
+  lproj_?(a: ε(preterm)): ε(preterm) =
+    IF preterm(a) THEN lproj(a) ELSE ⊥ ENDIF
+  rproj_?(a: ε(preterm)): ε(preterm) =
+    IF preterm(a) THEN rproj(a) ELSE ⊥ ENDIF
+
+  % Readable-ish constructor definitions
+  ;→(A, B): MACRO pretype = fun(A, B)
+  ;⌈⌉(T: (fun?)): MACRO (fun?) = T
+  ;⌈⌉(A, B): MACRO pretype = prod(A, B)
+  ;Λ(T)(a): MACRO preterm = lam(T, a)
+  ;〈〉(a, b): MACRO preterm = pair(a, b)
+  app_preterm(a)(b): MACRO preterm = app(a, b) % TODO: is this really useful?
+  CONVERSION+ app_preterm
+
+  % Base symbols that should appear in almost every context
+  bool_: pretype = base(sbool)
+  TRUE_: preterm = const(strue)
+  FALSE_: preterm = const(sfalse)
+  boolop_: pretype = base(sboolop) 
+  ;¬(a): preterm = const(snot)(a)
+  ;∨(a, b): preterm = const(sor)(〈 a, b 〉)
+  ;⋁(l: list[preterm]): RECURSIVE preterm = % TODO: is this really useful?
+    CASES l OF
+      null: FALSE_,
+      cons(x, t):
+        IF null?(t) THEN x ELSE x ∨ ⋁(t) ENDIF
+    ENDCASES
+  MEASURE length(l)
+  ;∧(a, b): preterm = const(sand)(〈 a, b 〉)
+  ;⋀(l: list[preterm]): RECURSIVE preterm = % TODO: is this really useful?
+    CASES l OF
+      null: TRUE_,
+      cons(x, t):
+        IF null?(t) THEN x ELSE x ∧ ⋀(t) ENDIF
+    ENDCASES
+  MEASURE length(l)
+  ;⊃(a, b): preterm = const(ssupset)(〈 a, b 〉)
+  % TODO better
+  ;≐(a, b): preterm = const(sequal)(〈 a, b 〉)
+  forall_(T, a): preterm =
+    Λ(T)(a) ≐ Λ(T)(TRUE_)
+  forall_(T, (as_: list[preterm])): list[preterm] =
+    map(LAMBDA a: forall_(T, a))(as_)
+  exists_(T, a): preterm =
+    ¬forall_(T, ¬a)
+  exists_(T, (as_: list[preterm])): list[preterm] =
+    map(LAMBDA a: exists_(T, a))(as_)
+
+  %% Make contexts usable
+  app_ctx_symbol(Γ)(s): RECURSIVE context =
+    IF empty?(Γ) THEN 〈〉
+    ELSIF NOT kvar?(Γ) AND s(Γ) = s THEN Γ
+    ELSE app_ctx_symbol(rest(Γ))(s)
+    ENDIF
+  MEASURE Γ BY <<
+  app_ctx_symbol_subterm: RECURSIVE JUDGEMENT
+    app_ctx_symbol(Γ)(s) HAS_TYPE { Δ | subterm(Δ, Γ) }
+  CONVERSION+ app_ctx_symbol
+
+  app_ctx_var(Γ)(x): RECURSIVE context =
+    IF empty?(Γ) THEN 〈〉
+    ELSIF kvar?(Γ) THEN
+      IF x = 0 THEN Γ ELSE app_ctx_var(rest(Γ))(x - 1) ENDIF
+    ELSE app_ctx_var(rest(Γ))(x)
+    ENDIF
+  MEASURE Γ BY <<
+  app_ctx_var_subterm: RECURSIVE JUDGEMENT
+    app_ctx_var(Γ)(x) HAS_TYPE { Δ | subterm(Δ, Γ) }
+  CONVERSION+ app_ctx_var
+
+  % Syntactic sugar to checked if a name is in a context
+  ;∈(s, Γ): bool = NOT undefined?(Γ(s))
+  ;∉(s, Γ): bool = undefined?(Γ(s))
+
+  % kind, type and declaration functions
+  kind(Γ): ε(KIND?) =
+    COND
+      empty?(Γ) -> ⊥,
+      ktype?(Γ) -> KTYPE,
+      kvar?(Γ)  -> KVAR,
+      kconst?(Γ) -> KCONST,
+      ktheory?(Γ) -> KTHEORY
+    ENDCOND
+  kind_nonempty: JUDGEMENT kind(Γ | NOT empty?(Γ)) HAS_TYPE (KIND?)
+  kind_empty: JUDGEMENT kind(Γ | empty?(Γ)) HAS_TYPE undefined
+  
+  type_(Γ): ε(pretype) =
+    IF ktyped?(Γ) THEN dtype(Γ) ELSE ⊥ ENDIF
+  type_ktyped: JUDGEMENT type_(Γ | ktyped?(Γ)) HAS_TYPE pretype
+  type_nonktyped: JUDGEMENT type_(Γ | NOT ktyped?(Γ)) HAS_TYPE undefined
+
+  definition(Γ): semantic =
+    COND
+      ktype_def?(Γ) -> dtype(Γ),
+      kconst_def?(Γ) -> dterm(Γ),
+      ktheory_def?(Γ) -> dtheory(Γ),
+      kdecl?(Γ) -> ⊥,
+      empty?(Γ) -> ⊥
+    ENDCOND
+  definition_ktype: JUDGEMENT definition(Γ | ktype_def?(Γ)) HAS_TYPE pretype
+  definition_kconst: JUDGEMENT definition(Γ | kconst_def?(Γ)) HAS_TYPE preterm
+  definition_ktheory: JUDGEMENT definition(Γ | ktheory_def?(Γ)) HAS_TYPE context
+  definition_nondef: JUDGEMENT definition(Γ | NOT kdef?(Γ)) HAS_TYPE undefined
+  
+  % This allows to write
+  % 〈 Γ, KVAR ≎ T) 〉      for Γ, 0: VAR T
+  % 〈 Γ, s ≎ T 〉          for Γ, s: T
+  % 〈 Γ, s ≎ KTYPE 〉      for Γ, s: TYPE
+  % 〈 Γ, s ≎ (KTYPE, T) 〉 for Γ, s: TYPE = T
+  ;≎(kvar: (KVAR?), T)(Γ): context =
+    kvar(T, Γ)
+  ;≎(s, (typ: [(KTYPE?), pretype]))(Γ): context =
+    ktype_def(s, typ`2, Γ)
+  ;≎(s, (typ: semantic | KTYPE?(typ) OR pretype(typ)))(Γ): context =
+    IF KTYPE?(typ)
+      THEN ktype_decl(s, Γ)
+      ELSE kconst_decl(s, typ, Γ)
+    ENDIF
+  ;〈〉(Γ, (f: [context -> context])): context =
+    f(Γ)
+
+END language
+
+shift: THEORY
+BEGIN
+  IMPORTING language
+
+  ;↑(e: expr, (nb: [nat, nat])): RECURSIVE
+    { S: semantic |
+      (pretype(e) AND pretype(S)) OR
+      (preterm(e) AND preterm(S)) } =
+    LET (n, b) = nb IN
+    CASES e OF
+      symbol(s): symbol(s),
+      dot(s, σ, n): dot(s, map(LAMBDA (x: expr | x << e): x ↑ nb)(σ), n ↑ nb),
+
+      base(n): base(n ↑ nb),
+      subtype(T, a): subtype(T ↑ nb, a ↑ (n, b + 1)),
+      fun(A, B): fun(A ↑ nb, B ↑ (n, b + 1)),
+      prod(A, B): prod(A ↑ nb, B ↑ (n, b + 1)),
+
+      const(n): const(n ↑ nb),
+      v(i): IF i < b THEN v(i) ELSE v(i + n) ENDIF,
+      app(f, a): app(f ↑ nb, a ↑ nb),
+      lam(T, a): lam(T ↑ nb, a ↑ (n, b + 1)),
+      pair(a, b): pair(a ↑ nb, b ↑ nb),
+      lproj(a): lproj(a ↑ nb),
+      rproj(a): rproj(a ↑ nb)
+    ENDCASES
+  MEASURE e BY <<
+
+  ;↑(e: expr, (n: nat)): MACRO expr = e ↑ (n, 0)
+END shift
+
+subst: THEORY
+BEGIN
+  IMPORTING shift
+
+  % This is a "true" substitution - this really removes the bound variable.
+  % Outer variables see their index decreased.
+  subst(e: expr, x: nat, (t: preterm)): RECURSIVE
+    { S: semantic |
+      (pretype(e) AND pretype(S)) OR
+      (preterm(e) AND preterm(S)) } =
+    CASES e OF
+      symbol(s): symbol(s),
+      dot(s, σ, n): dot(s, map(LAMBDA (y: expr | y << e): subst(y, x, t))(σ), subst(n, x, t)),
+
+      %    s ↦      s
+      base(n): base(subst(n, x, t)),
+      % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
+      %                        λ——————————————————————\___________/
+      subtype(T,  a): subtype(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
+      % [i: A → B] ↦ [ i:   A[ x ← t] →      B[   x  ←   t  ]]
+      %                λ——————————————————————\_____________/
+      fun(  A,  B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
+      % [i: A, B] ↦ [i:    A[ x ← t],       B[   x  ←   t  ]]
+      %              λ———————————————————————\_____________/
+      prod( A, B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
+
+      %     s ↦       s
+      const(n): const(subst(n, x, t)),
+      % n ↦ t
+      % x ↦ x where the λ-binder for n has been removed
+      v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF,
+      %   f  a ↦           f[ x ← t]        a[ x ← t]
+      app(f, a): app(subst(f, x,  t), subst(a, x,  t)),
+      % λ(y: T): a ↦ λ(y:      T[ x ← t]):      a[   x  ←   t  ]
+      %                λ————————————————————————–\_____________/
+      lam(   T,  a): lam(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
+      %   (a, b) ↦ (       a[ x ← t],       b[ x ← t] )
+      pair(a, b):  〈 subst(a, x,  t), subst(b, x,  t) 〉,
+      %  p₁ a ↦ p₁          a[ x ← t]
+      lproj(a): lproj(subst(a, x,  t)),
+      %  p₂ a ↦ p₂          a[ x ← t]
+      rproj(a): rproj(subst(a, x,  t))
+    ENDCASES
+  MEASURE e BY <<
+
+END subst
+
+fsubst: THEORY
+BEGIN
+  IMPORTING subst
+  
+  Γ, Δ, Θ, Π: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  e: VAR expr
+  l: VAR language
+  S: VAR semantic
+
+  σ: VAR list[expr]
+
+  assoc(Π, σ)(s): RECURSIVE ε(language) =
+    COND
+      empty?(Π) OR null?(σ) -> ⊥,
+      NOT kvar?(Π) AND s(Π) = s -> car(σ),
+      ELSE -> assoc(rest(Π), cdr(σ))(s)
+    ENDCOND
+  MEASURE σ BY <<
+
+  η(Γ, m, σ)(e): RECURSIVE
+    { S | (preterm(e) AND preterm(S)) OR
+          (pretype(e) AND pretype(S)) OR
+	  (name(e) AND name(S)) OR
+	  undefined?(S) } =
+    LET ν = η(Γ, m, σ) IN
+    LET Π = formals(Γ(m)) IN
+    CASES e OF
+      symbol(s):
+        IF s ∈ definition(Γ(m))
+	  THEN dot(m, σ, s)
+	  ELSE assoc(Π, σ)(s) ORELSE symbol(s)
+	ENDIF,
+      dot(s, actuals, n):
+        COND
+	  context(ν(s)) -> resolve(ν(s), actuals)(n),
+	  ELSE -> dot(s, actuals, n)
+	ENDCOND
+
+      base(n):
+        COND
+	  pretype(ν(n)) -> ν(n),
+	  name(ν(n)) -> base(ν(n)),
+	  ELSE -> ⊥
+	ENDCOND,
+      fun(A, B): fun_?(ν(A), ν(B)),
+      prod(A, B): prod_?(ν(A), ν(B)),
+      subtype(T, p): subtype_?(ν(T), ν(p)),
+
+      const(n): const_?(ν(n)),
+      v(i): v(i),
+      app(f, a): app_?(ν(f), ν(a)),
+      lam(T, a): lam_?(ν(T), ν(a)),
+      pair(a, b): pair_?(ν(a), ν(b)),
+      lproj(a): lproj_?(ν(a)),
+      rproj(a): rproj_?(ν(a))
+    ENDCASES
+  MEASURE e BY <<
+END fsubst

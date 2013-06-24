@@ -1,0 +1,29 @@
+%%% PB 2
+abs_sets: THEORY
+BEGIN
+  set: TYPE+
+
+  member: [nat, set -> bool]
+END abs_sets
+
+eq_sets: THEORY
+BEGIN
+  set_eq: TYPE+
+  x: VAR nat
+  s: VAR set_eq
+  ==: equivalence[set_eq]
+
+  member_not_bar: [nat, set_eq -> bool]
+  quo: TYPE = Quotient(==)
+
+  IMPORTING abs_sets {{ set := quo, member(n: nat, x: quo) := member_not_bar(n, rep(==)(x)) }}
+
+  member_EquivClass: THEOREM member(x, EquivClass(==)(s)) = member_not_bar(x, s)
+
+END eq_sets
+
+list_as_sets: THEORY
+BEGIN
+  ==(l, m: list[nat]): bool = TRUE
+  IMPORTING eq_sets {{ set_eq := list[nat], == := == }}
+END list_as_sets

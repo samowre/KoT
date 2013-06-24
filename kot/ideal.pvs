@@ -1,0 +1,304 @@
+type_functions: THEORY
+BEGIN
+  IMPORTING language
+  
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  e: VAR expr
+  l: VAR language
+  S: VAR semantic
+
+  η(Γ, s, σ)(l): RECURSIVE { S: semantic | TRUE } = % TODO
+    LET ν = η(Γ, s, σ) IN
+    CASES l OF
+      base(n): dot(s, σ, subst(formals(Γ(s)), σ)(n)),
+      fun(A, B): fun(ν(A), ν(B)),
+      prod(A, B): prod(ν(A), ν(B)),
+      subtype(T, p): subtype(ν(T), ν(p)),
+
+      cons(n): dot(s, σ, subst(formals(Γ(s)), σ)(n)),
+      v(i): v(i),
+      app(f, a): app(ν(f), ν(a)),
+      lam(T, a): lam(ν(T), ν(a)),
+      pair(a, b): pair(ν(a), ν(b)),
+      lproj(a): lproj(ν(a)),
+      rproj(a): rproj(ν(a))
+    ENDCASES
+  MEASURE l BY <<
+  
+  δ(Γ)(T): RECURSIVE pretype =
+    CASES T OF
+      base(n):
+        CASES n OF
+	  symbol(s): IF undefined?(definition(Γ(s)))
+	               THEN base(s)
+		       ELSE δ(rest(Γ(s)))(definition(Γ(s)))
+		     ENDIF,
+	  dot(m, σ, n): ⊥ % TODO
+        IF undefined?(definition(Γ(s)))
+	  THEN base(s)
+	  ELSE δ(rest(Γ(s)))(definition(Γ(s)))
+	ENDIF,
+      % [i: A → B] ↦ [i: δ(Γ)(A) → δ(Γ)(B)]
+      fun(  A,  B):  ⌈   δ(Γ)(A) → δ(Γ)(B)⌉,
+      % [i: A, B] ↦ [i: δ(Γ)(A), δ(Γ)(B)]
+      prod( A, B):  ⌈   δ(Γ)(A), δ(Γ)(B)⌉,
+      % { x:  T | a } ↦ { x:  δ(Γ)(T) | a }
+      subtype(T,  a): subtype(δ(Γ)(T),  a)
+    ENDCASES
+  MEASURE (Γ, T) BY le[context, pretype, <<, <<]
+
+  % Should have been \, but it is not a valid PVS identifier
+  ;/(T, a): RECURSIVE pretype =
+    CASES T OF
+      %    s ↦      s
+      base(s): base(s),
+
+      % { x:  T | b } ↦ { x:  T |   a    ∧ b }
+      %                   ^————————\_/ additional λ
+      subtype(T,  b): subtype(T, (a ↑ 1) ∧ b),
+
+      % [i: A → B] ↦ [i: A\a → B\   a   ]
+      %               ^———————————–\_/ additional λ
+      fun(  A,  B):  ⌈  A/a → B/(a ↑ 1)⌉,
+
+      %   [i: A, B] ↦ [i: A\a, B\   a   ]
+      %                ^———————————\_/ additional λ
+      prod(   A, B):  ⌈   A/a, B/(a ↑ 1)⌉
+    ENDCASES
+  MEASURE T BY <<
+
+  μ₀(T): RECURSIVE pretype =
+    CASES T OF
+      % { x:  T | p } ↦ μ₀(T)
+      subtype(T,  p):   μ₀(T)
+
+      % T ↦ T
+      ELSE  T
+    ENDCASES
+  MEASURE T BY <<
+  
+  μ(T: pretype, π: [{ A | A << T } -> preterm]): RECURSIVE pretype =
+    CASES T OF
+      %    s ↦      s
+      base(s): base(s),
+
+      % { x:  T | a } ↦ μ(T   )
+      subtype(T,  a):   μ(T, π),
+
+      %  [x: A → B] ↦ [x: A → μ(B   )]
+      fun(   A,  B):  ⌈   A → μ(B, π)⌉,
+
+      % [x: A, B] ↦ [x: μ(A   ), μ(B   )\ π(A)      (  x ) ]
+      %              ^———————————————————\___/ additional λ
+      prod( A, B):  ⌈   μ(A, π), μ(B, π)/((π(A) ↑ 1)(v(0)))⌉
+    ENDCASES
+  MEASURE T BY <<
+
+  π(T): RECURSIVE preterm =
+    CASES T OF
+      % s    ↦ λ(x:   s): TRUE
+      base(s): Λ(base(s))(TRUE_),
+
+      % { x:  T | a } ↦ λ(x: μ(T)): π(T)      (  x ) ∧ a
+      %                   ^————————\____/ additional λ
+      subtype(T,  a):   Λ(   μ(T, π)) ((π(T) ↑ 1)(v(0)) ∧ a),
+
+      % [i: A → B] ↦ λ(x: [i: A → μ(B)]):  ∀  (i: A): π(B)     (  x (  i ))
+      %                ^—————————————————————————————\____/ additional λ
+      fun(  A,  B):  Λ(   ⌈   A → μ(B, π)⌉)(forall_(A, (π(B) ↑ 1)(v(1)(v(0))))),
+
+      % [i: A, B]  ↦ λ(x: [i: μ(A   ), μ(B   )\π(A)(   i)      ]): π(A)     ( p₁     x  ) ∧       π(B)[ i ← (p₁    x)] ( p₂     x)
+      %                ^——————————————————————————————————————————\____/ additional λ
+      prod( A, B):   Λ(   ⌈   μ(A, π), μ(B, π)/(π(A)(v(0)) ↑ 1)⌉)((π(A) ↑ 1)(lproj(v(0))) ∧ subst(π(B) ↑ 1, 1, lproj(v(0)))(rproj(v(0))))
+    ENDCASES
+  MEASURE T BY <<
+
+  μ(T): pretype = μ(T, π)
+
+  ;≃(T1, T2: pretype): RECURSIVE list[preterm] =
+    CASES T1 OF
+      % s ≃ s
+      base(s): IF T2 = base(s) THEN (: TRUE_ :) ELSE (: FALSE_ :) ENDIF,
+      fun(A1, B1): CASES T2 OF
+        fun(A2, B2): append(μ(A1) ≃ μ(A2),
+	               cons(π(A1) ≐ π(A2),
+		            map(LAMBDA a: forall_(A1, a))(B1 ≃ B2)))
+	ELSE (: FALSE_ :) ENDCASES,
+      prod(A1, B1): CASES T2 OF
+        prod(A2, B2): append(A1 ≃ A2,
+	                     map(LAMBDA a: forall_(A1, a))(B1 ≃ B2))
+	ELSE (: FALSE_ :) ENDCASES
+      ELSE (: FALSE_ :)
+    ENDCASES
+  MEASURE (T1, T2) BY le[semantic, semantic, <<, <<]
+
+  ;≃(T1, T2: pretype)(a): RECURSIVE list[preterm] =
+    CASES T1 OF
+      % s ≃ s
+      base(s): IF T2 = base(s) THEN (: TRUE_ :) ELSE (: FALSE_ :) ENDIF,
+      fun(A1, B1): CASES T2 OF
+        fun(A2, B2): append(μ(A1) ≃ μ(A2),
+	               cons(π(A1) ≐ π(A2),
+		            map(LAMBDA b: forall_(A1, b))((B1 ≃ B2)(a(v(0))))))
+	ELSE (: FALSE_ :) ENDCASES,
+      prod(A1, A2): CASES T2 OF
+        prod(B1, B2): append((        A1             ≃          B1             )(lproj(a)),
+	                     (β(Λ(A1)(A2)(lproj(a))) ≃ (β(Λ(A1)(B2)(lproj(a)))))(rproj(a))) % subst: TODO
+	ELSE (: FALSE_ :) ENDCASES
+      ELSE (: FALSE_ :)
+    ENDCASES
+  MEASURE (T1, T2) BY le[semantic, semantic, <<, <<]
+  
+  ;⊢(Γ, a): bool
+
+  ;∼(A, B)(Γ): bool =
+    every(LAMBDA a: Γ ⊢ a)(μ(A) ≃ μ(B))
+
+  ;∼(A, B)(a)(Γ): bool =
+    every(LAMBDA a: Γ ⊢ a)((μ(A) ≃ μ(B))(a))
+
+END type_functions
+
+tau_function: THEORY
+BEGIN
+  IMPORTING type_functions
+  
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  x, y: VAR symbol % TODO
+  a, b, f, g: VAR preterm
+
+
+  %% Type function
+  % We need this order for the termination of τ
+  ;≺(x, y: language): bool =
+       IF pretype(x) AND     pretype(y) THEN x << y
+    ELSIF preterm(x) AND     preterm(y) THEN x << y
+    ELSIF context(x) AND     context(y) THEN x << y
+    ELSIF pretype(x) AND NOT pretype(y) THEN TRUE
+    ELSIF preterm(x) AND     context(y) THEN TRUE
+    ELSE FALSE ENDIF
+
+  prec_wf: JUDGEMENT ≺ HAS_TYPE (well_founded?[language])
+
+  τ(Γ)(l: language): RECURSIVE
+    { r: semantic |
+      (pretype(l) AND KTYPE?(r)) OR
+      (preterm(l) AND pretype(r)) OR
+      (context(l) AND KCONTEXT?(r)) OR
+      undefined?(r) } =
+    CASES l OF
+      %% Contexts. We don't care τ's first argument here - it should be 〈〉 anyway.
+      〈〉: KCONTEXT,
+      ktype_decl(s, Γ):
+        (s ∉ Γ AND τ(〈〉)(Γ) = KCONTEXT)
+	  ⇒ KCONTEXT,
+      ktype_def(s, T, Γ):
+        (s ∉ Γ AND τ(〈〉)(Γ) = KCONTEXT AND τ(Γ)(T) = KTYPE)
+	  ⇒ KCONTEXT,
+      kvar(T, Γ):
+        (τ(〈〉)(Γ) = KCONTEXT AND τ(Γ)(T) = KTYPE)
+	  ⇒ KCONTEXT,
+      kconst_decl(s, T, Γ):
+        (s ∉ Γ AND τ(〈〉)(Γ) = KCONTEXT AND τ(Γ)(T) = KTYPE AND (Γ ⊢ exists_(T, TRUE_)))
+	  ⇒ KCONTEXT,
+      %% Pretypes
+      base(s):
+        (kind(Γ(s)) = KTYPE)
+	  ⇒ KTYPE,
+      subtype(T, a):
+        (τ(Γ)(T) = KTYPE AND τ(〈 Γ, KVAR ≎ T 〉)(a) = bool_)
+	  ⇒ KTYPE,
+      fun(A, B):
+        (τ(Γ)(A) = KTYPE AND τ(〈 Γ, KVAR ≎ A 〉)(B) = KTYPE)
+	  ⇒ KTYPE,
+      prod(A, B):
+        (τ(Γ)(A) = KTYPE AND τ(〈 Γ, KVAR ≎ A 〉)(B) = KTYPE)
+	  ⇒ KTYPE,
+      %% Preterm
+      const(s):
+        IF KCONST?(kind(Γ(s))) THEN δ(Γ)(type_(Γ(s))) ELSE ⊥ ENDIF,
+      v(x):
+        IF KVAR?(kind(Γ(x))) THEN δ(Γ)(type_(Γ(x))) ELSE ⊥ ENDIF,
+      app(f, a):
+        CASES μ₀(τ(Γ)(f)) OF
+	  fun(A, B): ((A ∼ τ(Γ)(a))(a)(Γ) AND (Γ ⊢ π(A)(a))) ⇒ subst(B, 0, a)
+	  ELSE ⊥
+	ENDCASES,
+      lam(A, a):
+        (τ(Γ)(A) = KTYPE) ⇒ fun_?(A, τ(〈 Γ, KVAR ≎ T 〉)(a)),
+      pair(a1, a2):
+        prod_?(τ(Γ)(a1), τ(Γ)(a2)),
+      lproj(a):
+        CASES μ₀(τ(Γ)(a)) OF
+	  prod(T1, T2): T1
+	  ELSE ⊥
+	ENDCASES,
+      rproj(a):
+        CASES μ₀(τ(Γ)(a)) OF
+	  prod(T1, T2): subst(T2, 0, lproj(a))
+	  ELSE ⊥
+	ENDCASES
+    ENDCASES
+  MEASURE l BY ≺
+
+  tau_pretype: JUDGEMENT τ(Γ)(T) HAS_TYPE ε(KTYPE?)
+  tau_preterm: JUDGEMENT τ(Γ)(a) HAS_TYPE ε(pretype)
+  tau_context: JUDGEMENT τ(Γ)(Δ) HAS_TYPE ε(KCONTEXT?)
+
+  well_formed?(Γ): bool =
+    τ(〈〉)(Γ) = KCONTEXT
+
+  type?(Γ)(T): bool =
+    τ(Γ)(T) = KTYPE
+
+  term?(Γ)(a): bool =
+    pretype(τ(Γ)(a))
+END tau_function
+
+tau_props: THEORY
+BEGIN
+  IMPORTING tau_function
+
+  Γ, Δ, Θ: VAR (well_formed?)
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  x, y: VAR symbol
+  a, b, f, g: VAR preterm
+
+  
+END tau_props
+%   term_has_type: THEOREM FORALL (t: preterm): term?(c)(t) IMPLIES type?(c)(tau(c)(t))
+% END ideal
+
+% examples: THEORY
+% BEGIN
+%   IMPORTING lift_union_conversions
+%   IMPORTING ideal[int]
+
+%   ibool: int = 0
+%   itrue: int = 1
+%   ifalse: int = 2
+
+%   sbool: pretype = base(ibool)
+%   strue: preterm = symbol(itrue)
+%   sfalse: preterm = symbol(ifalse)
+
+%   OMEGA: context = reverse( cons( (ibool, ktype), cons( (itrue, kconst(sbool)), cons( (ifalse, kconst(sbool)), null))) )
+
+%   ex1: THEOREM KCONTEXT?(tau(null)(null))
+%   ex2: THEOREM tau(null)(OMEGA) = up(inl(KCONTEXT))
+%   ex3: THEOREM tau(OMEGA)(fun(prod(sbool, sbool), sbool)) = up(inl(KTYPE))
+%   ex4: THEOREM
+%     tau(OMEGA)(pair(strue, sfalse)) = up(inr(prod(sbool, sbool)))
+%   ex5: THEOREM
+%     tau(OMEGA)(rproj(pair(strue, strue))) = up(inr(sbool))
+%   ex6: THEOREM
+%     tau(OMEGA)(lam(18, sbool, strue)) = up(inr(fun(sbool, sbool)))
+% END examples

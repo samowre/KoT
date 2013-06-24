@@ -1,0 +1,33 @@
+abs_list_basic: THEORY
+BEGIN
+  seq_member: [nat, list[nat] -> bool]
+END abs_list_basic
+
+list_basic: THEORY
+BEGIN
+  IMPORTING abs_list_basic {{ seq_member := member }}
+END list_basic
+
+abs_list_filter1[list_concrete: THEORY abs_list_basic]: THEORY
+BEGIN
+  seq_filter: [list[nat], pred[nat] -> list[nat]]
+END abs_list_filter1
+
+list_filter1: THEORY
+BEGIN
+  IMPORTING list_basic
+  IMPORTING abs_list_filter1[abs_list_basic:->list_basic] {{ seq_filter := filter }}
+END list_filter1
+
+abs_list_filter2: THEORY
+BEGIN
+  IMPORTING abs_list_basic
+  seq_filter: [list[nat], pred[nat] -> list[nat]]
+END abs_list_filter2
+
+list_filter2: THEORY
+BEGIN
+  IMPORTING list_basic
+  IMPORTING abs_list_filter2 {{ abs_list_basic := list_basic,
+                                seq_filter := filter }}
+END list_filter2
