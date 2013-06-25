@@ -13,7 +13,6 @@ BEGIN
   %   f_as_g is a rewrite of the form : f() = F(g())
   %   f_is_p is a judgement of the form : f HAS_TYPE (p?)
 
-
   s, t, s1, s2: VAR seq
   x, y, z: VAR T
   p, q: VAR PRED[T]
@@ -22,10 +21,10 @@ BEGIN
 
 
   % I - Definitions
-  subword?(s1, s2): bool = EXISTS (f: [bl(s1) -> bl(s2)]): injective?(f) AND
+  subword?(s1, s2): bool = EXISTS (f: [bl(s1) -> bl(s2)]): 
  		  	       preserves(f,<,<) AND
 		  	       FORALL (i: bl(s1)): nth(s1, i) = nth(s2, f(i))
-  subword?(s1)(s2): MACRO bool = subword?(s1, s2)
+  subword?(s2)(s1): MACRO bool = subword?(s1, s2)
   ;<<(s1,s2): bool = s1 /= s2 AND subword?(s1,s2)
   		  	
 
@@ -33,19 +32,19 @@ BEGIN
   % II - Properties
 
     % Some lemmas about injective and increasing functions
-  incr_inj_ge_id: LEMMA FORALL (n, m: nat, f: (injective?[below(n), below(m)])): 
-  		  preserves(f,<,<) IMPLIES FORALL (i: below(n)): i <= f(i)
-  incr_bij_is_id: LEMMA FORALL (n: nat, f: (injective?[below(n), below(n)])):
-  		  preserves(f,<,<) IMPLIES FORALL (i: below(n)): i = f(i)
-
-    % 2 - With sets
+  st_incr_is_injective: LEMMA FORALL (n, m : nat, f: [below(n) -> below(m)] | preserves(f,<,<)): injective?(f)
+  st_incr_ge_id: LEMMA FORALL (n, m: nat, f: [below(n) -> below(m)]):
+  		       preserves(f,<,<) IMPLIES FORALL (i: below(n)): i <= f(i)
+  incr_bij_is_id: LEMMA FORALL (n: nat, f: [below(n) -> below(n)]):
+  		  	preserves(f,<,<) IMPLIES FORALL (i: below(n)): i = f(i)
 
 
     % 1 - With basics
   member_subword: LEMMA member(x, s1) AND subword?(s1, s2) IMPLIES member(x, s2)
 
-  subword_append: LEMMA subword?(s1, append(s1, s2))  % TODO !!! Name
-  subword__append: LEMMA subword?(s2, append(s1, s2))
+  subword_append: LEMMA subword?(append(s1, s2), s) IMPLIES subword?(s1, s) AND subword?(s2, s)
+  subword__append_l: LEMMA subword?(s1, append(s1, s2))
+  subword__append_r: LEMMA subword?(s2, append(s1, s2))
 
   subword_reverse2: LEMMA subword?(reverse(s1), reverse(s2)) IFF subword?(s1, s2)
   subword_reverse: LEMMA subword?(reverse(s1), s2) IFF subword?(s1, reverse(s2))
@@ -65,11 +64,13 @@ BEGIN
     % 3 - Interactions and other properties
 
     % Order properties
-  subword_is_reflexive: JUDGEMENT subword? HAS_TYPE (reflexive?)
-  subword_is_transitive: JUDGEMENT transitive?(subword?)
-  subword_is_antisymmetric: JUDGEMENT antisymmetric?(subword?)
-  subword_is_partial_order: JUDGEMENT partial_order?(subword?)
-  subword_is_well_founded: JUDGEMENT well_founded?(<<)
+  subword_is_reflexive: JUDGEMENT subword? HAS_TYPE (reflexive?[seq])
+  subword_is_transitive: JUDGEMENT subword? HAS_TYPE (transitive?[seq])
+  subword_is_antisymmetric: JUDGEMENT subword? HAS_TYPE (antisymmetric?[seq])
+  subword_is_partial_order: JUDGEMENT subword? HAS_TYPE (partial_order?[seq])
+  subword_is_well_founded: JUDGEMENT << HAS_TYPE (well_founded?[seq])
+  
+    % Interactions (if any)
 
 
 
@@ -85,11 +86,11 @@ END seq_subword_props
 % Theories :
   %  0 - seq_defs
   %  1 - seq_basic
-  %  2 - seq_as_sets
-  %  3 - seq_subword
-  %  4 - seq_suffix_prefix
-  %  5 - seq_filter
-  %  6 - seq_find
+  %  2 - seq_subword
+  %  3 - seq_suffix_prefix
+  %  4 - seq_filter
+  %  5 - seq_find
+  %  6 - seq_as_sets
   %  7 - seq_flatten
   %  8 - seq_min_max
   %  9 - seq_orders

@@ -21,9 +21,16 @@ BEGIN
   b: VAR bool
 
 
-  % I - Definitions
+  % I - Definitions : subset relation, equality as sets and duplicateless
+  subset?(s1, s2): bool = every(member(s2))(s1)
+  ==(s1, s2): bool = subset?(s1, s2) AND subset?(s2, s1)
 
-  % II - Interpretation of abstract finite sets
+  uniques?(s): bool = FORALL (i, j: bl(s)): i /= j IMPLIES nth(s, i) /= nth(s, j)
+%  uniques(s): seq : TO DEFINE WITH FILTER
+ 
+ 
+
+
 
   % III - Properties
     % 1 - With basics

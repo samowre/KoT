@@ -3,8 +3,6 @@ BEGIN
   IMPORTING seq_subword_props[T]
 
 
-
-
   % This theory defines the prefix? and suffix? (= subterm for lists) predicates 
   % over sequences {lists,finseq, ...}, and the functions nth_suffix and nth_prefix
   % that computes the suffix (resp. prefix) of length n.
@@ -14,8 +12,13 @@ BEGIN
   %   f_g is a rewrite of the form : f(g(),...) = ...
   %   f__g is a rewrite of the form : f(_,g(),...) = ...
   %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_g_l is a rewrite of the form : f(g(x, y), x) = ...
+  %   f_g_r is a rewrite of the form : f(g(x, y), y) = ...
+  %   f__g_l is a rewrite of the form : f(x, g(x, y)) = ...
+  %   f__g_r is a rewrite of the form : f(y, g(x, y)) = ...
   %   f_as_g is a rewrite of the form : f() = F(g())
-  %   f_is_p is a judgement of the form : f HAS_TYPE p
+  %   f_is_p is a judgement of the form : f HAS_TYPE (p?)
+
 
   s, t, s1, s2: VAR seq
   x, y, z: VAR T
@@ -26,54 +29,97 @@ BEGIN
 
   % I - Definitions
     % suffix
-  suffix?(s1, s2): bool = FORALL (i: bl(s1)): nth(s1, i) = nth(s2, length(s2) - length(s1) + i)
-  suffix?(s1)(s2): MACRO bool = suffix?(s1,s2)
+  suffix?(s1, s2): bool = length(s1) <= length(s2) AND FORALL (i: bl(s1)): nth(s1, i) = nth(s2, length(s2) - length(s1) + i)
+  suffix?(s2)(s1): MACRO bool = suffix?(s1,s2)
+
+  st_suffix?(s1, s2): bool = s1 /= s2 AND suffix?(s1, s2)
   		 
     % prefix
-  prefix?(s1, s2): bool = FORALL (i: bl(s1)): nth(s1, i) = nth(s2, i)
-  prefix?(s1)(s2): MACRO bool = prefix?(s1, s2)
+  prefix?(s1, s2): bool = length(s1) <= length(s2) AND FORALL (i: bl(s1)): nth(s1, i) = nth(s2, i)
+  prefix?(s2)(s1): MACRO bool = prefix?(s1, s2)
+
+  st_prefix?(s1, s2): bool = s1 /= s2 AND prefix?(s1, s2)
 
     % nth_suffix
-  nth_suffix(s, (n: bl(s))): seq
-  length_nth_suffix: AXIOM FORALL (n: bl(s)): 
+  nth_suffix(s, (n: ul(s))): (suffix?(s))
+  length_nth_suffix: AXIOM FORALL (n: ul(s)): 
   		     length(nth_suffix(s, n)) = n 
-  nth_nth_suffix: AXIOM FORALL (n: bl(s), i: below(n)): 
-  		  nth(nth_suffix(s, n), i) = nth(s, length(s) - 1 - n + i)
+  nth_nth_suffix: AXIOM FORALL (n: ul(s), i: below(n)): 
+  		  nth(nth_suffix(s, n), i) = nth(s, length(s) - n + i)
  
     % nth_prefix
-  nth_prefix(s, (n: bl(s))): seq
-  length_nth_prefix: AXIOM FORALL (n: bl(s)): 
+  nth_prefix(s, (n: ul(s))): (prefix?(s))
+  length_nth_prefix: AXIOM FORALL (n: ul(s)): 
   		     length(nth_prefix(s, n)) = n 
-  nth_nth_prefix: AXIOM FORALL (n: bl(s), i: below(n)): 
+  nth_nth_prefix: AXIOM FORALL (n: ul(s), i: below(n)): 
   		  nth(nth_prefix(s, n), i) = nth(s, i)
   
 
 
   % II - Properties
-    % With empty
-  suffix_empty: LEMMA suffix?(empty,s)
-  suffix__empty: LEMMA suffix?(s,empty) IFF empty?(s)
-  prefix_empty: LEMMA prefix?(empty,s)
-  prefix__empty: LEMMA prefix?(s,empty) IFF empty?(s)
+    % 3 - Alternative definitions
+  suffix_as_nth_suffix: LEMMA suffix?(s1, s2) IFF length(s1) <= length(s2) AND nth_suffix(s2, length(s1)) = s1
+  prefix_as_nth_prefix: LEMMA prefix?(s1, s2) IFF length(s1) <= length(s2) AND nth_prefix(s2, length(s1)) = s1
 
-    % Order properties
-  suffix_is_reflexive: LEMMA reflexive?(suffix?)
-  suffix_is_transitive: LEMMA transitive?(suffix?)
-  suffix_is_antisymmetric: LEMMA antisymmetric?(suffix?)
-  suffix_is_partial_order: LEMMA partial_order?(suffix?)
+  suffix_as_prefix: LEMMA suffix?(s1, s2) IFF prefix?(reverse(s1), reverse(s2))
+  prefix_as_suffix: LEMMA prefix?(s1, s2) IFF suffix?(reverse(s1), reverse(s2))
 
-  prefix_is_reflexive: LEMMA reflexive?(prefix?)
-  prefix_is_transitive: LEMMA transitive?(prefix?)
-  prefix_is_antisymmetric: LEMMA antisymmetric?(prefix?)
-  prefix_is_partial_order: LEMMA partial_order?(prefix?)
 
-    % With basic functions
-  suffix__append: LEMMA suffix?(s2, append(s1, s2))
-  prefix__append: LEMMA prefix?(s1, append(s1, s2))
+    % 2 - With subword
+  suffix_is_subword: LEMMA suffix?(s1, s2) IMPLIES subword?(s1, s2)
+  prefix_is_subword: LEMMA prefix?(s1, s2) IMPLIES subword?(s1, s2)  
+
+
+    % 1 - With basic functions
+  append_nth_suffix: LEMMA FORALL (n: ul(s1)): 
+  	append(nth_suffix(s1, n), s2) = nth_suffix(append(s1, s2), n + length(s2))
+  nth_suffix_append: LEMMA FORALL (n: ul(append(s1, s2))): 
+  	nth_suffix(append(s1, s2), n) = IF n <= length(s2) THEN nth_suffix(s2, n)
+			      	      	ELSE append(nth_suffix(s1, n - length(s2)), s2)
+					ENDIF
+
+  append_nth__prefix: LEMMA FORALL (n: ul(s2)):
+  	append(s1, nth_prefix(s2, n)) = nth_prefix(append(s1, s2), length(s1) + n)  
+  nth_prefix_append: LEMMA FORALL (n: ul(append(s1, s2))):
+  	nth_prefix(append(s1, s2), n) = IF n <= length(s1) THEN nth_prefix(s1, n)
+			      	      	ELSE append(s1, nth_prefix(s2, n - length(s1)))
+					ENDIF
+
+	
+  reverse_nth_suffix: LEMMA FORALL (n: ul(s)):
+  	reverse(nth_suffix(s, n)) = nth_prefix(reverse(s), n)
+  nth_suffix_reverse: LEMMA FORALL (n: ul(s)):
+  	nth_suffix(reverse(s), n) = reverse(nth_prefix(s, n))
+
+  reverse_nth_prefix: LEMMA FORALL (n: ul(s)):
+  	reverse(nth_prefix(s, n)) = nth_suffix(reverse(s), n)
+  nth_prefix_reverse: LEMMA FORALL (n: ul(s)):
+  	nth_prefix(reverse(s), n) = reverse(nth_suffix(s, n)) 
+
+
+  suffix_append: LEMMA 
+  	suffix?(append(s1, s2), s) IFF 
+	suffix?(s2, s) AND suffix?(s1, nth_prefix(s, length(s) - length(s2)))
+  suffix__append: LEMMA 
+  	suffix?(s, append(s1, s2)) IFF 
+	suffix?(s, s2) OR (suffix?(s2, s) AND suffix?(nth_prefix(s, length(s) - length(s2)), s1))
+  suffix__append_r: LEMMA suffix?(s2, append(s1, s2))
+
+  prefix_append: LEMMA 
+  	prefix?(append(s1, s2), s) IFF 
+  	prefix?(s1, s) AND prefix?(s2, nth_suffix(s, length(s) - length(s1)))
+  prefix__append: LEMMA 
+  	prefix?(s, append(s1, s2)) IFF 
+	prefix?(s, s1) OR prefix?(s1, s) AND prefix?(nth_suffix(s, length(s) - length(s1)), s2)
+  prefix__append_l: LEMMA prefix?(s1, append(s1, s2))
+
+
   suffix_as_append: LEMMA suffix?(s2, s) IFF EXISTS (s1 | prefix?(s1, s)): s = append(s1, s2)
-  prefix_as_append: LEMMA prefix?(s1, s) IFF EXISTS (s2 | suffix?(s2, s)): s = append(s1, s2)
   suffix_as_append_alt: LEMMA suffix?(s2, s) IFF EXISTS s1: s = append(s1, s2)
+
+  prefix_as_append: LEMMA prefix?(s1, s) IFF EXISTS (s2 | suffix?(s2, s)): s = append(s1, s2)
   prefix_as_append_alt: LEMMA prefix?(s1, s) IFF EXISTS s2: s = append(s1, s2)
+
 
   suffix_reverse2: LEMMA suffix?(reverse(s1), reverse(s2)) IFF prefix?(s1, s2)
   suffix_reverse: LEMMA suffix?(reverse(s1), s2) IFF prefix?(s1, reverse(s2))
@@ -82,10 +128,63 @@ BEGIN
   prefix_reverse: LEMMA prefix?(reverse(s1), s2) IFF suffix?(s1, reverse(s2))
   prefix__reverse: LEMMA prefix?(s1, reverse(s2)) IFF suffix?(reverse(s1), s2)
 
+    % 0 - With empty and length
+  suffix_same_length: LEMMA suffix?(s1, s) AND suffix?(s2, s) AND length(s1) = length(s2) IMPLIES s1 = s2
+  prefix_same_length: LEMMA prefix?(s1, s) AND prefix?(s2, s) AND length(s1) = length(s2) IMPLIES s1 = s2
 
-  % Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  nth_suffix__zero: LEMMA nth_suffix(s, 0) = empty
+  nth_prefix__zero: LEMMA nth_prefix(s, 0) = empty
+  nth_suffix__length: LEMMA nth_suffix(s, length(s)) = s
+  nth_prefix__length: LEMMA nth_prefix(s, length(s)) = s
+
+  nth_suffix_empty: LEMMA FORALL (n: ul(empty)): nth_suffix(empty, n) = empty
+  nth_suffix__empty: LEMMA FORALL (n: ul(s)): nth_suffix(s, n) = empty IFF n = 0
+  nth_prefix_empty: LEMMA FORALL (n: ul(empty)): nth_prefix(empty, n) = empty
+  nth_prefix__empty: LEMMA FORALL (n: ul(s)): nth_prefix(s, n) = empty IFF n = 0
+
+  suffix_empty: LEMMA suffix?(empty,s)
+  suffix__empty: LEMMA suffix?(s,empty) IFF empty?(s)
+  prefix_empty: LEMMA prefix?(empty,s)
+  prefix__empty: LEMMA prefix?(s,empty) IFF empty?(s)
+ 
+  
+    % 3 - Order properties
+  suffix_is_reflexive: LEMMA reflexive?(suffix?)
+  suffix_is_transitive: LEMMA transitive?(suffix?)
+  suffix_is_antisymmetric: LEMMA antisymmetric?(suffix?)
+  suffix_is_partial_order: LEMMA partial_order?(suffix?)
+  st_suffix_is_well_founded: LEMMA well_founded?(st_suffix?)
+
+  prefix_is_reflexive: LEMMA reflexive?(prefix?)
+  prefix_is_transitive: LEMMA transitive?(prefix?)
+  prefix_is_antisymmetric: LEMMA antisymmetric?(prefix?)
+  prefix_is_partial_order: LEMMA partial_order?(prefix?)
+  st_prefix_is_well_founded: LEMMA well_founded?(st_prefix?)
+  
+
+  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
   % The following assertions are only to avoid loops with this prover command
+  AUTO_REWRITE- suffix_as_prefix, prefix_as_suffix
+  AUTO_REWRITE- nth_suffix_append, nth_prefix_append
+  AUTO_REWRITE- nth_suffix_reverse, nth_prefix_reverse
   AUTO_REWRITE- suffix_reverse, suffix__reverse %, suffix_reverse2
 
 
+
 END seq_suffix_prefix_props
+
+
+% Theories :
+  %  0 - seq_defs
+  %  1 - seq_basic
+  %  2 - seq_subword
+  %  3 - seq_suffix_prefix
+  %  4 - seq_filter
+  %  5 - seq_find
+  %  6 - seq_as_sets
+  %  7 - seq_flatten
+  %  8 - seq_min_max
+  %  9 - seq_orders
+  % 10 - seq_sorted
+  % 11 - seq_map
+  % 12 - seq2

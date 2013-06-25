@@ -1,6 +1,6 @@
 seq_filter_props[T: TYPE]: THEORY
 BEGIN
-  IMPORTING seq_defs[T]
+  IMPORTING seq_subword_props[T]
 
   % This theory defines the comon functions to filter sequences {lists,finseq, ...} :
   %   filter(s,p) returns the seq of elements of s satisfying the predicate p
@@ -10,31 +10,160 @@ BEGIN
 
 
   % The properties are written in a systematically way :
-  % if f and g are to functions defined in this theory or the ones before,
+  % if f and g are to functions defined in this theory are the ones before,
   %   f_g is a rewrite of the form : f(g(),...) = ...
   %   f__g is a rewrite of the form : f(_,g(),...) = ...
   %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_g_l is a rewrite of the form : f(g(x, y), x) = ...
+  %   f_g_r is a rewrite of the form : f(g(x, y), y) = ...
+  %   f__g_l is a rewrite of the form : f(x, g(x, y)) = ...
+  %   f__g_r is a rewrite of the form : f(y, g(x, y)) = ...
   %   f_as_g is a rewrite of the form : f() = F(g())
-  %   f_is_p is a lemma of the form : p(f()) IFF ...
+  %   f_is_p is a judgement of the form : f HAS_TYPE (p?)
+
 
   s, t, s1, s2: VAR seq
   x, y, z: VAR T
-  P: VAR PRED[seq]
   p, q: VAR PRED[T]
-  pi: VAR PRED[nat, T]
+  pi, qi: VAR PRED[[nat, T]]
   b: VAR bool
+  n: VAR nat
 
 
   % I - Definitions
+    % Predicate : is this sequence the filter of this one ?
+  filter?(s, p)(t): bool = 
+  		EXISTS (f: [bl(t) -> bl(s)] | preserves(f,<,<)): 
+ 	       	( FORALL (i: bl(t)): nth(t, i) = nth(s, f(i)) ) AND
+		( FORALL (j: bl(s)): p(nth(s, j)) IFF EXISTS (i: bl(t)): f(i) = j )
+  filter_pos?(s, pi)(t): bool = 
+  		EXISTS (f: [bl(t) -> bl(s)] | preserves(f,<,<)): 
+ 	       	( FORALL (i: bl(t)): nth(t, i) = nth(s, f(i)) ) AND
+		( FORALL (j: bl(s)): pi(j, nth(s, j)) IFF EXISTS (i: bl(t)): f(i) = j )
+
+  filter?_as_filter_pos?: LEMMA 
+  		filter?(s, p) = filter_pos?(s, LAMBDA (n, x): p(x))
+
+    % Predicates existence
+  filter_pos_is_nonempty: AXIOM EXISTS t: filter_pos?(s, pi)(t)
+  filter_is_nonempty: LEMMA EXISTS t: filter?(s, p)(t)
+    % Predicates unicity
+  singleton_lemma: LEMMA filter_pos?(s, pi)(s1) AND filter_pos?(s, pi)(s2) IMPLIES subword?(s1, s2)
+
+  filter_pos_is_singleton: JUDGEMENT filter_pos?(s, pi) HAS_TYPE (singleton?[seq])
+  filter_is_singleton: JUDGEMENT filter?(s, p) HAS_TYPE (singleton?[seq])
+
+  filter_pos_unicity: LEMMA filter_pos?(s, pi)(s1) AND filter_pos?(s, pi)(s2) IMPLIES s1 = s2
+  filter_unicity: LEMMA filter?(s, p)(s1) AND filter?(s, p)(s2) IMPLIES s1 = s2
+  
+    % Function definition
+  filter(s, p): (filter?(s, p))
+  filter_pos(s, pi): (filter_pos?(s, pi))
+  partition(s, p): [seq, seq] = (filter(s, p), filter(s, LAMBDA x: NOT p(x)))
+  partition_pos(s, pi): [seq, seq] = 
+  		 (filter_pos(s, pi), filter_pos(s, LAMBDA (n, x): NOT pi(n, x)))
+
+    % Alternative definitions
+  filter_pos_equality: LEMMA filter_pos(s, pi) = t IFF filter_pos?(s, pi)(t)
+  filter_equality: LEMMA filter(s, p) = t IFF filter?(s, p)(t)
+  
+  filter_as_filter_pos: LEMMA filter(s, p) = filter_pos(s, LAMBDA (n, x): p(x))
+  partition_as_partition_pos: LEMMA partition(s, p) = partition_pos(s, LAMBDA (n, x): p(x)) 
+
   
 
   % II - Properties
-    % With empty
+    % 4 - Interactions
+  filter_filter_pos: LEMMA 
+  		   filter(filter_pos(s, pi), p) = filter_pos(s, LAMBDA (n, x): pi(n, x) AND p(x))
+  filter_filter: LEMMA filter(filter(s, p), q) = filter(s, LAMBDA x: p(x) AND q(x))
+
+  filter_pos_true: LEMMA filter_pos(s, LAMBDA (n, x): TRUE) = s
+  filter_true: LEMMA filter(s, LAMBDA x: TRUE) = s
+  % filter_pos_filter_pos / filter_pos_filter : IMPOSSIBLE
+
+    % 3 - With suffix_prefix
+    % 2 - With subword
+  subword_filter: LEMMA subword?(filter(s, p), s)
+  subword_filter_pos: LEMMA subword?(filter_pos(s, pi), s)
+
+    % 1 - With basic
+      % member
+  member_filter: LEMMA member(x, filter(s, p)) IFF member(x, s) AND p(x)
+
+      % append
+  filter_pos_append: LEMMA 
+  	filter_pos(append(s1, s2), pi) = 
+	append(filter_pos(s1, pi), filter_pos(s2, LAMBDA (n, x): pi(n + length(s1), x)))
+  append_filter_pos2: LEMMA 
+  	append(filter_pos(s1, pi), filter_pos(s2, qi)) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) 
+			      	   THEN pi(n, x) ELSE qi(n - length(s1), x) ENDIF)
+  append_filter_pos: LEMMA 
+  	append(filter_pos(s1, pi), s2) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN pi(n, x) ELSE TRUE ENDIF)
+  append__filter_pos: LEMMA 
+  	append(s1, filter_pos(s2, pi)) =
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN TRUE ELSE pi(n, x) ENDIF)
+
+  
+  filter_append: LEMMA 
+  	filter(append(s1, s2), p) = append(filter(s1, p), filter(s2, p))
+  append_filter2: LEMMA 
+  	append(filter(s1, p), filter(s2, q)) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN p(x) ELSE q(x) ENDIF)
+  % For p = q in the previous lemma, use rewrite filter_append :dir rl
+  append_filter: LEMMA 
+  	append(filter(s1, p), s2) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN p(x) ELSE TRUE ENDIF)
+  append__filter: LEMMA 
+  	append(s1, filter(s2, p)) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN TRUE ELSE p(x) ENDIF)
+
+     % reverse
+  filter_pos_reverse: LEMMA 
+  	filter_pos(reverse(s), pi) = 
+	reverse(filter_pos(s, LAMBDA (n, x): IF n < length(s) THEN pi(length(s) - 1 - n, x) ELSE FALSE ENDIF))
+  reverse_filter_pos: LEMMA 
+  	reverse(filter_pos(s, pi)) = 
+	filter_pos(reverse(s), LAMBDA (n, x): IF n < length(s) THEN pi(length(s) - 1 - n, x) ELSE FALSE ENDIF)
+
+  filter_reverse: LEMMA filter(reverse(s), p) = reverse(filter(s, p))
+  reverse_filter: LEMMA reverse(filter(s, p)) = filter(reverse(s), p)
+
+      % every/some
+  every_filter: LEMMA every(p)(filter(s, p))
+  filter_when_every: LEMMA every(p)(s) IFF filter(s, p) = s
+  filter_when_some: LEMMA some(p)(s) IFF nonempty?(filter(s, p))
+
+
+    % 0 - With empty and length
+  filter_empty: LEMMA filter(empty, p) = empty
+  filter_empty_when: LEMMA empty?(filter(s, p)) IFF NOT some(p)(s)
  
+  length_filter: LEMMA length(filter(s, p)) <= length(s) 
 
   % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
   % The following assertions are only to avoid loops with this prover command
-
+  AUTO_REWRITE- append_filter_pos, append__filter_pos, append_filter_pos2
+  AUTO_REWRITE- append_filter, append__filter, append_filter2
+  AUTO_REWRITE- reverse_filter_pos, reverse_filter
 
   
 END seq_filter_props
+
+
+% Theories :
+  %  0 - seq_defs
+  %  1 - seq_basic
+  %  2 - seq_subword
+  %  3 - seq_suffix_prefix
+  %  4 - seq_filter
+  %  5 - seq_find
+  %  6 - seq_as_sets
+  %  7 - seq_flatten
+  %  8 - seq_min_max
+  %  9 - seq_orders
+  % 10 - seq_sorted
+  % 11 - seq_map
+  % 12 - seq2
