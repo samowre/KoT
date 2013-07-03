@@ -22,8 +22,9 @@ BEGIN
     % length
   length: [seq -> nat]
   bl(s): TYPE = below(length(s))
+  ul(s): TYPE = upto(length(s))
     % Axiom needed for nth_tcc
-  length_nonempty_ax: AXIOM EXISTS x: TRUE IFF EXISTS s: length(s) > 0
+  length_nonempty_ax: AXIOM (EXISTS x: TRUE) IFF (EXISTS s: length(s) > 0)
 
     % nth
   nth: [s: seq, bl(s) -> T]
@@ -49,6 +50,9 @@ BEGIN
   nonempty_isnot_empty: LEMMA nonempty?(s) IFF NOT s = empty
 
 
+  % One useful order property of length
+  length_is_well_founded: LEMMA well_founded?(LAMBDA s1, s2: length(s1) < length(s2))
+
   % Constructor
   mk_seq_ax: AXIOM 
   	FORALL (l:nat, f: [below(l) -> T]):
@@ -71,11 +75,11 @@ END seq_defs
 % Theories :
   %  0 - seq_defs
   %  1 - seq_basic
-  %  2 - seq_as_sets
-  %  3 - seq_subword
-  %  4 - seq_suffix_prefix
-  %  5 - seq_filter
-  %  6 - seq_find
+  %  2 - seq_subword
+  %  3 - seq_suffix_prefix
+  %  4 - seq_filter
+  %  5 - seq_find
+  %  6 - seq_as_sets
   %  7 - seq_flatten
   %  8 - seq_min_max
   %  9 - seq_orders
