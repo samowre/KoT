@@ -1,0 +1,387 @@
+language: THEORY
+BEGIN
+  symbol: TYPE+ = string
+  sbool: symbol = "bool"
+  strue: symbol = "TRUE"
+  sfalse: symbol = "FALSE"
+  sboolop: symbol = "boolop"
+  snot: symbol = "¬"
+  sor: symbol = "∨"
+  sand: symbol = "∧"
+  ssupset: symbol = "⊃"
+  sT: symbol = "T"
+  sequalities: symbol = "equalities"
+  sequal: symbol = "="
+
+  % Union type representing the different elements of the PVS semantics
+  semantic: DATATYPE
+  BEGIN
+    ⊥: undefined?
+
+    %% Keywords
+    KTYPE: KTYPE?
+    KCONST: KCONST?
+    KVAR: KVAR?
+    KTHEORY: KTHEORY?
+    KCONTEXT: KCONTEXT?
+
+    %% Names
+    symbol(s: symbol): symbol?
+    dot(m: symbol, actuals: semantic, s: symbol): dot?
+
+    %% Types
+    % [i: dom → range]
+    fun(dom: semantic, range: semantic): fun?
+    % [i: left, right]
+    prod(left: semantic, right: semantic): prod?
+    % { x: supertype | pred }
+    subtype(supertype: semantic, pred: semantic): subtype?
+
+    %% Terms
+    % i
+    v(i: nat): var?
+    % op arg
+    app(op: semantic, arg: semantic): app?
+    % λ(x: btype): body
+    lam(btype: semantic, body: semantic): lam?
+    % (left, right)
+    pair(left: semantic, right: semantic): pair?
+    % p₁ arg
+    lproj(arg: semantic): lproj?
+    % p₂ arg
+    rproj(arg: semantic): rproj?
+
+    %% Contexts
+    % {}
+    〈〉: empty?
+    % rest, s: TYPE
+    ktype_decl(s: symbol, rest: semantic): ktype_decl?
+    % rest, s: TYPE = dtype
+    ktype_def(s: symbol, dtype: semantic, rest: semantic): ktype_def?
+    % rest ↑ 1, 0: VAR dtype
+    kvar(dtype: semantic, rest: semantic): kvar?
+    % rest, s: dtype
+    kconst_decl(s: symbol, dtype: semantic, rest: semantic): kconst_decl?
+    % rest, s: dtype = dterm
+    kconst_def(s: symbol, dtype: semantic, dterm: semantic, rest: semantic): kconst_def?
+    % rest, s: THEORY dtheory
+    ktheory(s: symbol, formals: semantic, dtheory: semantic, rest: semantic): ktheory?
+
+    atype(s: symbol, dtype: semantic, rest: semantic): atype?
+    aconst(s: symbol, dterm: semantic, rest: semantic): aconst?
+  END semantic
+  CONVERSION+ symbol
+
+  ord: TYPE = { ord_bot, ord_KTYPE, ord_KCONST, ord_KVAR, ord_KTHEORY, ord_KCONTEXT,
+                ord_symbol, ord_dot, ord_fun, ord_prod, ord_subtype,
+		ord_v, ord_app, ord_lam, ord_pair, ord_lproj,
+		ord_rproj, ord_empty, ord_ktype_decl, ord_ktype_def, ord_kvar,
+		ord_atype, ord_aconst,
+		ord_kconst_decl, ord_kconst_def, ord_ktheory }
+
+  S: VAR semantic
+
+  weight(F: [ord -> nat])(S): RECURSIVE nat =
+    CASES S OF
+      ⊥: F(ord_bot) + 1,
+      KTYPE: F(ord_KTYPE) + 1,
+      KCONST: F(ord_KCONST) + 1,
+      KVAR: F(ord_KVAR) + 1,
+      KTHEORY: F(ord_KTHEORY) + 1,
+      KCONTEXT: F(ord_KCONTEXT) + 1,
+
+      symbol(s): F(ord_symbol) + 1,
+      dot(s, σ, m): F(ord_dot) + weight(F)(σ) + 1,
+
+      fun(A, B): F(ord_fun) + weight(F)(A) + weight(F)(B) + 1,
+      prod(A, B): F(ord_prod) + weight(F)(A) + weight(F)(B) + 1,
+      subtype(T, a): F(ord_subtype) + weight(F)(T) + weight(F)(a) + 1,
+
+      v(i): F(ord_v) + 1,
+      app(f, a): F(ord_app) + weight(F)(f) + weight(F)(a) + 1,
+      lam(T, a): F(ord_lam) + weight(F)(T) + weight(F)(a) + 1,
+      pair(a, b): F(ord_pair) + weight(F)(a) + weight(F)(b) + 1,
+      lproj(a): F(ord_lproj) + weight(F)(a) + 1,
+      rproj(a): F(ord_rproj) + weight(F)(a) + 1,
+
+      〈〉: F(ord_empty) + 1,
+      ktype_decl(s, Γ): F(ord_ktype_decl) + weight(F)(Γ) + 1,
+      ktype_def(s, T, Γ): F(ord_ktype_def) + weight(F)(T) + weight(F)(Γ) + 1,
+      kvar(T, Γ): F(ord_kvar) + weight(F)(T) + weight(F)(Γ) + 1,
+      kconst_decl(s, T, Γ): F(ord_kconst_decl) + weight(F)(T) + weight(F)(Γ) + 1,
+      kconst_def(s, T, a, Γ): F(ord_kconst_def) + weight(F)(T) + weight(F)(a) + weight(F)(Γ) + 1,
+      ktheory(s, Π, Θ, Γ): F(ord_ktheory) + weight(F)(Π) + weight(F)(Θ) + weight(F)(Γ) + 1,
+
+      atype(s, T, σ): F(ord_atype) + weight(F)(T) + weight(F)(σ) + 1,
+      aconst(s, a, σ): F(ord_aconst) + weight(F)(a) + weight(F)(σ) + 1
+    ENDCASES
+  MEASURE S BY <<
+  AUTO_REWRITE+ weight
+
+  w_fun?(F: [ord -> nat]): MACRO bool =
+    TRUE
+
+  F: (w_fun?)
+  w: MACRO [semantic -> nat] = weight(F)
+
+  pre_kind: TYPE = { pre_keyword, pre_name, pre_term, pre_type, pre_context,
+                     pre_actuals, pre_formals, pre_theory }
+  k: VAR pre_kind
+  ;∈(x: pre_kind, S: set[pre_kind]): MACRO bool = member(x, S)
+
+  prekind(S): RECURSIVE set[pre_kind] =
+    CASES S OF
+      ⊥:
+        emptyset,
+
+      KTYPE:
+        { k | k = pre_keyword },
+      KCONST:
+        { k | k = pre_keyword },
+      KVAR:
+        { k | k = pre_keyword },
+      KTHEORY:
+        { k | k = pre_keyword },
+      KCONTEXT:
+        { k | k = pre_keyword },
+
+      symbol(s):
+        { k | k = pre_name OR k = pre_term OR k = pre_type },
+      dot(m, σ, s):
+        { k | (k = pre_name OR k = pre_term OR k = pre_type) AND
+	      pre_actuals ∈ prekind(σ) },
+
+      fun(A, B):
+        { k | k = pre_type AND pre_type ∈ prekind(A) AND pre_type ∈ prekind(B) },
+      prod(A, B):
+        { k | k = pre_type AND pre_type ∈ prekind(A) AND pre_type ∈ prekind(B) },
+      subtype(T, a):
+        { k | k = pre_type AND pre_type ∈ prekind(T) AND pre_term ∈ prekind(a) },
+
+      v(i):
+        { k | k = pre_term },
+      app(f, a):
+        { k | k = pre_term AND pre_term ∈ prekind(f) AND pre_term ∈ prekind(a) },
+      lam(T, a):
+        { k | k = pre_term AND pre_type ∈ prekind(T) AND pre_term ∈ prekind(a) },
+      pair(a, b):
+        { k | k = pre_term AND pre_term ∈ prekind(a) AND pre_term ∈ prekind(b) },
+      lproj(a):
+        { k | k = pre_term AND pre_term ∈ prekind(a) },
+      rproj(a):
+        { k | k = pre_term AND pre_term ∈ prekind(a) },
+
+      〈〉:
+        { k | k = pre_context OR k = pre_actuals OR k = pre_theory OR k = pre_formals },
+      ktype_decl(s, Δ):
+        { k | (k = pre_context OR k = pre_theory OR k = pre_formals) AND k ∈ prekind(Δ) },
+      ktype_def(s, T, Δ):
+        { k | (k = pre_context OR k = pre_theory) AND
+	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
+      kvar(T, Δ):
+        { k | k = pre_context AND pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
+      kconst_decl(s, T, Δ):
+        { k | (k = pre_context OR k = pre_theory OR k = pre_formals) AND
+	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
+      kconst_def(s, T, a, Δ):
+        { k | (k = pre_context OR k = pre_theory) AND
+	      pre_type ∈ prekind(T) AND pre_term ∈ prekind(a) AND k ∈ prekind(Δ) },
+      ktheory(s, Π, Θ, Δ):
+        { k | (k = pre_context) AND
+	      pre_formals ∈ prekind(Π) AND pre_theory ∈ prekind(Θ) AND k ∈ prekind(Δ) },
+
+      atype(s, T, σ):
+        { k | (k = pre_actuals) AND
+	      pre_type ∈ prekind(T) AND k ∈ prekind(σ) },
+      aconst(s, a, σ):
+        { k | (k = pre_actuals) AND
+	      pre_term ∈ prekind(a) AND k ∈ prekind(σ) }
+    ENDCASES
+  MEASURE w(S)
+
+  keyword?(S): bool = pre_keyword ∈ prekind(S)
+  name?(S): bool = pre_name ∈ prekind(S)
+  preterm?(S): bool = pre_term ∈ prekind(S)
+  pretype?(S): bool = pre_type ∈ prekind(S)
+  actuals?(S): bool = pre_actuals ∈ prekind(S)
+  formals?(S): bool = pre_formals ∈ prekind(S)
+  context?(S): bool = pre_context ∈ prekind(S)
+  pretheory?(S): bool = pre_theory ∈ prekind(S)
+  syntaxic?(S): bool = prekind(S) /= emptyset
+
+  keyword: TYPE = (keyword?)
+  name: TYPE = (name?)
+  preterm: TYPE = (preterm?)
+  pretype: TYPE = (pretype?)
+  actuals: TYPE = (actuals?)
+  formals: TYPE = (formals?)
+  context: TYPE = (context?)
+  pretheory: TYPE = (pretheory?)
+  syntaxic: TYPE = (syntaxic?)
+
+  keyword: THEOREM
+    keyword?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S) OR KCONTEXT?(S))
+  name: THEOREM
+    name?(S) =
+      CASES S OF
+        symbol(s): TRUE,
+	dot(m, σ, s): actuals?(σ)
+	ELSE FALSE
+      ENDCASES
+  preterm: THEOREM
+    preterm?(S) =
+      CASES S OF
+        v(i): TRUE,
+	app(f, a): preterm?(f) AND preterm?(a),
+	lam(T, a): pretype?(T) AND preterm?(a),
+	pair(a, b): preterm?(a) AND preterm?(b),
+	lproj(a): preterm?(a),
+	rproj(a): preterm?(a)
+	ELSE name?(S)
+      ENDCASES
+  pretype: THEOREM
+    pretype?(S) =
+      CASES S OF
+        fun(A, B): pretype?(A) AND pretype?(B),
+	prod(A, B): pretype?(A) AND pretype?(B),
+	subtype(T, a): pretype?(T) AND preterm?(a)
+	ELSE name?(S)
+      ENDCASES
+  actuals: THEOREM
+    actuals?(S) =
+      CASES S OF
+        〈〉: TRUE,
+	atype(s, T, σ): pretype?(T) AND actuals?(σ),
+	aconst(s, a, σ): preterm?(a) AND actuals?(σ)
+	ELSE FALSE
+      ENDCASES
+  formals: THEOREM
+    formals?(S) =
+      CASES S OF
+        〈〉: TRUE,
+	ktype_decl(s, Δ): formals?(Δ),
+	kconst_decl(s, T, Δ): pretype?(T) AND formals?(Δ)
+	ELSE FALSE
+      ENDCASES
+  context: THEOREM
+    context?(S) =
+      CASES S OF
+        〈〉: TRUE,
+	ktype_decl(s, Δ): context?(Δ),
+	ktype_def(s, T, Δ): pretype?(T) AND context?(Δ),
+	kvar(T, Δ): pretype?(T) AND context?(Δ),
+	kconst_decl(s, T, Δ): pretype?(T) AND context?(Δ),
+	kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND context?(Δ),
+	ktheory(s, Π, Θ, Δ): formals?(Π) AND pretheory?(Θ) AND context?(Δ)
+	ELSE FALSE
+      ENDCASES
+  pretheory: THEOREM
+    pretheory?(S) =
+      CASES S OF
+        〈〉: TRUE,
+        ktype_decl(s, Δ): pretheory?(Δ),
+        ktype_def(s, T, Δ): pretype?(T) AND pretheory?(Δ),
+        kconst_decl(s, T, Δ): pretype?(T) AND pretheory?(Δ),
+        kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND pretheory?(Δ)
+        ELSE FALSE
+      ENDCASES
+  syntaxic: THEOREM
+    syntaxic?(S) =
+      (keyword?(S) OR preterm?(S) OR pretype?(S) OR context?(S) OR
+       pretheory?(S) OR actuals?(S) OR name?(S) OR formals?(S))
+
+  name_is_preterm: JUDGEMENT name SUBTYPE_OF preterm
+  name_is_pretype: JUDGEMENT name SUBTYPE_OF pretype
+  pretheory_is_context: JUDGEMENT pretheory SUBTYPE_OF context
+  formals_is_pretheory: JUDGEMENT formals SUBTYPE_OF pretheory
+  formals_is_context: JUDGEMENT formals SUBTYPE_OF context
+
+  keyword_is_syntaxic: JUDGEMENT keyword SUBTYPE_OF syntaxic
+  name_is_syntaxic: JUDGEMENT name SUBTYPE_OF syntaxic
+  preterm_is_syntaxic: JUDGEMENT preterm SUBTYPE_OF syntaxic
+  pretype_is_syntaxic: JUDGEMENT pretype SUBTYPE_OF syntaxic
+  actuals_is_syntaxic: JUDGEMENT actuals SUBTYPE_OF syntaxic
+  formals_is_syntaxic: JUDGEMENT formals SUBTYPE_OF syntaxic
+  context_is_syntaxic: JUDGEMENT context SUBTYPE_OF syntaxic
+  pretheory_is_syntaxic: JUDGEMENT pretheory SUBTYPE_OF syntaxic
+
+  AUTO_REWRITE- keyword?, name?, preterm?, pretype?, actuals?, formals?, context?, pretheory?, syntaxic?
+  AUTO_REWRITE+ keyword, name, preterm, pretype, actuals, formals, context, pretheory, syntaxic
+
+  % Variable declaration
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  Π: VAR formals
+  σ: VAR actuals
+
+  % Allow ⊥
+  ;ε(p: pred[semantic]): TYPE = { S | undefined?(S) OR p(S) }
+
+  % Readable-ish constructor definitions
+  ;→(A, B): MACRO pretype = fun(A, B)
+  ;⌈⌉(T: (fun?)): MACRO (fun?) = T
+  ;⌈⌉(A, B): MACRO pretype = prod(A, B)
+  ;Λ(T)(a): MACRO preterm = lam(T, a)
+  ;〈〉(a, b): MACRO preterm = pair(a, b)
+  app_preterm(a)(b): MACRO preterm = app(a, b) % TODO: is this really useful?
+  CONVERSION+ app_preterm
+
+  % Base symbols that should appear in almost every context
+  bool_: MACRO pretype = sbool
+  TRUE_: MACRO preterm = strue
+  FALSE_: MACRO preterm = sfalse
+  boolop_: MACRO pretype = sboolop
+  ;¬(a): MACRO preterm = app(snot, a)
+  ;∨(a, b): MACRO preterm = app(sor, 〈 a, b 〉)
+  % ;⋁(l: list[preterm]): RECURSIVE preterm = % TODO: is this really useful?
+  %   CASES l OF
+  %     null: FALSE_,
+  %     cons(x, t):
+  %       IF null?(t) THEN x ELSE x ∨ ⋁(t) ENDIF
+  %   ENDCASES
+  % MEASURE length(l)
+  ;∧(a, b): MACRO preterm = app(sand, 〈 a, b 〉)
+  % ;⋀(l: list[preterm]): RECURSIVE preterm = % TODO: is this really useful?
+  %   CASES l OF
+  %     null: TRUE_,
+  %     cons(x, t):
+  %       IF null?(t) THEN x ELSE x ∧ ⋀(t) ENDIF
+  %   ENDCASES
+  % MEASURE length(l)
+  ;⊃(a, b): MACRO preterm = app(ssupset, 〈 a, b 〉)
+  ;≐(a, b)(A): MACRO preterm =
+  % equalities{{ T = A }}.=(a, b)
+    app(dot(sequalities, atype(sT, A, 〈〉), sequal),
+        〈 a, b 〉)
+  forall_(T, a): MACRO preterm =
+    (Λ(T)(a) ≐ Λ(T)(TRUE_))(⌈ T → bool_ ⌉)
+  forall_(T, (as_: list[preterm])): MACRO list[preterm] =
+    map(LAMBDA a: forall_(T, a))(as_)
+  exists_(T, a): MACRO preterm =
+    ¬forall_(T, ¬a)
+  exists_(T, (as_: list[preterm])): MACRO list[preterm] =
+    map(LAMBDA a: exists_(T, a))(as_)
+END language
+
+%   % This allows to write
+%   % 〈 Γ, KVAR ≎ T) 〉      for Γ, 0: VAR T
+%   % 〈 Γ, s ≎ T 〉          for Γ, s: T
+%   % 〈 Γ, s ≎ KTYPE 〉      for Γ, s: TYPE
+%   % 〈 Γ, s ≎ (KTYPE, T) 〉 for Γ, s: TYPE = T
+%   ;≎(kvar: (KVAR?), T)(Γ): context =
+%     kvar(T, Γ)
+%   ;≎(s, (typ: [(KTYPE?), pretype]))(Γ): context =
+%     ktype_def(s, typ`2, Γ)
+%   ;≎(s, (typ: semantic | KTYPE?(typ) OR pretype(typ)))(Γ): context =
+%     IF KTYPE?(typ)
+%       THEN ktype_decl(s, Γ)
+%       ELSE kconst_decl(s, typ, Γ)
+%     ENDIF
+%   ;〈〉(Γ, (f: [context -> context])): context =
+%     f(Γ)
+
+% END language
