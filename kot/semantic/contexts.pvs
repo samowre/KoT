@@ -35,12 +35,13 @@ BEGIN
     ENDCASES
   MEASURE w(Δ)
   AUTO_REWRITE+ ++
-  doubleplus_theory: JUDGEMENT
+  doubleplus_theory: RECURSIVE JUDGEMENT
     ++(Γ, Δ: pretheory) HAS_TYPE pretheory
 
   ;∈(s, (S | context?(S) OR interp?(S))): RECURSIVE bool =
     COND
       empty?(S) -> FALSE,
+      null?(S) -> FALSE,
       kvar?(S) -> s ∈ rest(S),
       ELSE -> s = s(S) OR s ∈ rest(S)
     ENDCOND
@@ -59,7 +60,7 @@ BEGIN
   ;∉(x, Γ): MACRO bool = NOT x ∈ Γ
 
   app_symbol(S | context?(S) OR interp?(S))(s | s ∈ S): RECURSIVE
-    { Δ: semantic | NOT empty?(Δ) AND w(Δ) <= w(S) AND (interp?(Δ) OR knamed?(Δ)) AND s(Δ) = s } =
+    { Δ: semantic | w(Δ) <= w(S) AND NOT null?(Δ) AND (interp?(Δ) OR knamed?(Δ)) AND s(Δ) = s } =
     COND
       ktype_decl?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
       ktype_def?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
@@ -72,11 +73,11 @@ BEGIN
     ENDCOND
   MEASURE w(S)
   AUTO_REWRITE+ app_symbol
-  app_symbol_context: JUDGEMENT
+  app_symbol_context: RECURSIVE JUDGEMENT
     app_symbol(Γ)(s | s ∈ Γ) HAS_TYPE context
-  app_symbol_theory: JUDGEMENT
+  app_symbol_theory: RECURSIVE JUDGEMENT
     app_symbol(Γ: pretheory)(s | s ∈ Γ) HAS_TYPE pretheory
-  app_symbol_interp: JUDGEMENT
+  app_symbol_interp: RECURSIVE JUDGEMENT
     app_symbol(σ)(s | s ∈ σ) HAS_TYPE interp
   CONVERSION+ app_symbol
 

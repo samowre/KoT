@@ -67,6 +67,8 @@ BEGIN
     % rest, s: THEORY dtheory
     ktheory(s: symbol, dtheory: semantic, rest: semantic): ktheory?
 
+    % Interpretations
+    nil: null?
     itype(s: symbol, dtype: semantic, rest: semantic): itype?
     iconst(s: symbol, dterm: semantic, rest: semantic): iconst?
   END semantic
@@ -76,7 +78,7 @@ BEGIN
                 ord_symbol, ord_dot, ord_fun, ord_prod, ord_subtype,
 		ord_v, ord_app, ord_lam, ord_pair, ord_lproj,
 		ord_rproj, ord_empty, ord_ktype_decl, ord_ktype_def, ord_kvar,
-		ord_itype, ord_iconst,
+		ord_itype, ord_iconst, ord_nil,
 		ord_kconst_decl, ord_kconst_def, ord_ktheory }
 
   S: VAR semantic
@@ -112,6 +114,7 @@ BEGIN
       kconst_def(s, T, a, Γ): F(ord_kconst_def) + weight(F)(T) + weight(F)(a) + weight(F)(Γ) + 1,
       ktheory(s, Δ, Γ): F(ord_ktheory) + weight(F)(Δ) + weight(F)(Γ) + 1,
 
+      nil: F(ord_nil) + 1,
       itype(s, T, σ): F(ord_itype) + weight(F)(T) + weight(F)(σ) + 1,
       iconst(s, a, σ): F(ord_iconst) + weight(F)(a) + weight(F)(σ) + 1
     ENDCASES
@@ -172,7 +175,7 @@ BEGIN
         { k | k = pre_term AND pre_term ∈ prekind(a) },
 
       〈〉:
-        { k | k = pre_context OR k = pre_interp OR k = pre_theory },
+        { k | k = pre_context OR k = pre_theory },
       ktype_decl(s, Δ):
         { k | (k = pre_context OR k = pre_theory) AND k ∈ prekind(Δ) },
       ktype_def(s, T, Δ):
@@ -190,6 +193,8 @@ BEGIN
         { k | (k = pre_context) AND
 	      pre_theory ∈ prekind(Θ) AND k ∈ prekind(Δ) },
 
+      nil:
+        { k | k = pre_interp },
       itype(s, T, σ):
         { k | (k = pre_interp) AND
 	      pre_type ∈ prekind(T) AND k ∈ prekind(σ) },
@@ -248,7 +253,7 @@ BEGIN
   interp: THEOREM
     interp?(S) =
       CASES S OF
-        〈〉: TRUE,
+        nil: TRUE,
 	itype(s, T, σ): pretype?(T) AND interp?(σ),
 	iconst(s, a, σ): preterm?(a) AND interp?(σ)
 	ELSE FALSE
@@ -345,7 +350,7 @@ BEGIN
   ;⊃(a, b): MACRO preterm = app(ssupset, 〈 a, b 〉)
   ;≐(a, b)(A): MACRO preterm =
   % equalities[A].=(a, b)
-    app(dot(sequalities, itype(sT, A, 〈〉), sequal),
+    app(dot(sequalities, itype(sT, A, nil), sequal),
         〈 a, b 〉)
   forall_(T, a): MACRO preterm =
     (Λ(T)(a) ≐ Λ(T)(TRUE_))(⌈ T → bool_ ⌉)
