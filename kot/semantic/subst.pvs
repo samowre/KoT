@@ -1,0 +1,79 @@
+subst: THEORY
+BEGIN
+  IMPORTING language
+
+  S: VAR { x: semantic | pretype?(x) OR preterm?(x) OR interp?(x) }
+
+  ;↑(S, (nb: [nat, nat])):
+    RECURSIVE { T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND
+                              (preterm?(S) IMPLIES preterm?(T)) AND
+			      (interp?(S) IMPLIES interp?(T)) } =
+    CASES S OF
+      % Names
+      symbol(s): symbol(s),
+      dot(m, σ, s): dot(m, σ ↑ nb, s),
+
+      % Types
+      subtype(T, a): subtype(T ↑ nb, a ↑ (nb`1, nb`2 + 1)),
+      fun(A, B): fun(A ↑ nb, B ↑ (nb`1, nb`2 + 1)),
+      prod(A, B): prod(A ↑ nb, B ↑ (nb`1, nb`2 + 1)),
+
+      % Terms
+      v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF,
+      app(f, a): app(f ↑ nb, a ↑ nb),
+      lam(T, a): lam(T ↑ nb, a ↑ (nb`1, nb`2 + 1)),
+      pair(a, b): pair(a ↑ nb, b ↑ nb),
+      lproj(a): lproj(a ↑ nb),
+      rproj(a): rproj(a ↑ nb),
+
+      nil: nil,
+      itype(s, T, σ): itype(s, T ↑ nb, σ ↑ nb),
+      iconst(s, a, σ): iconst(s, a ↑ nb, σ ↑ nb)
+    ENDCASES
+  MEASURE w(S)
+
+  ;↑((S: semantic | pretype?(S) OR preterm?(S) OR interp?(S)), n: nat): MACRO semantic =
+    (S ↑ (n, 0))
+
+  % This is a "true" substitution - this really removes the bound variable.
+  % Outer variables see their index decreased.
+  subst(S, (x: nat), (t: preterm)): RECURSIVE
+    { T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND
+                    (preterm?(S) IMPLIES preterm?(T)) AND
+		    (interp?(S) IMPLIES interp?(T)) } =
+    CASES S OF
+      symbol(s): symbol(s),
+      dot(m, σ,s): dot(m, subst(σ, x, t), s),
+
+      % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
+      %                        λ——————————————————————\___________/
+      subtype(T,  a): subtype(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
+      % [i: A → B] ↦ [ i:   A[ x ← t] →      B[   x  ←   t  ]]
+      %                λ——————————————————————\_____________/
+      fun(  A,  B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
+      % [i: A, B] ↦ [i:    A[ x ← t],       B[   x  ←   t  ]]
+      %              λ———————————————————————\_____________/
+      prod( A, B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
+
+      % n ↦ t
+      % x ↦ x where the λ-binder for n has been removed
+      v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF,
+      %   f  a ↦           f[ x ← t]        a[ x ← t]
+      app(f, a): app(subst(f, x,  t), subst(a, x,  t)),
+      % λ(y: T): a ↦ λ(y:      T[ x ← t]):      a[   x  ←   t  ]
+      %                λ————————————————————————–\_____________/
+      lam(   T,  a): lam(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
+      %   (a, b) ↦ (       a[ x ← t],       b[ x ← t] )
+      pair(a, b):  〈 subst(a, x,  t), subst(b, x,  t) 〉,
+      %  p₁ a ↦ p₁          a[ x ← t]
+      lproj(a): lproj(subst(a, x,  t)),
+      %  p₂ a ↦ p₂          a[ x ← t]
+      rproj(a): rproj(subst(a, x,  t)),
+
+      nil: nil,
+      itype(s, T, σ): itype(s, subst(T, x, t), subst(σ, x, t)),
+      iconst(s, a, σ): iconst(s, subst(a, x, t), subst(σ, x, t))
+    ENDCASES
+  MEASURE w(S)
+
+END subst
