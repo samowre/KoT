@@ -1,6 +1,7 @@
 contexts: THEORY
 BEGIN
-  IMPORTING language
+  IMPORTING decl
+  IMPORTING apply
 
   S: VAR syntaxic
   Γ, Δ, Θ: VAR context
@@ -9,15 +10,7 @@ BEGIN
   n, m: VAR name
   x, y: VAR nat
   a, b, f, g: VAR preterm
-  σ: VAR interp
-
-  μ₀(T): RECURSIVE
-    { S | w(S) <= w(T) } =
-    CASES T OF
-      subtype(T, p): μ₀(T)
-      ELSE T
-    ENDCASES
-  MEASURE w(T)
+  σ, τ: VAR interp
 
   % Γ ++ Δ = Γ; Δ
   ;++(Γ, Δ): RECURSIVE
@@ -28,84 +21,15 @@ BEGIN
       % Γ; (Δ, s: TYPE) = (Γ; Δ), s: TYPE
       ktype_decl(s, Δ): ktype_decl(s, Γ ++ Δ),
       ktype_def(s, T, Δ): ktype_def(s, T, Γ ++ Δ),
+      ktype_ext(s, Δ): ktype_ext(s, Γ ++ Δ),
       kvar(T, Δ): kvar(T, Γ ++ Δ),
       kconst_decl(s, T, Δ): kconst_decl(s, T, Γ ++ Δ),
       kconst_def(s, T, a, Δ): kconst_def(s, T, a, Γ ++ Δ),
+      kconst_ext(s, T, Δ): kconst_ext(s, T, Γ ++ Δ),
       ktheory(s, Θ, Δ): ktheory(s, Θ, Γ ++ Δ)
     ENDCASES
   MEASURE w(Δ)
   AUTO_REWRITE+ ++
   doubleplus_theory: RECURSIVE JUDGEMENT
     ++(Γ, Δ: pretheory) HAS_TYPE pretheory
-
-  ;∈(s, (S | context?(S) OR interp?(S))): RECURSIVE bool =
-    COND
-      empty?(S) -> FALSE,
-      null?(S) -> FALSE,
-      kvar?(S) -> s ∈ rest(S),
-      ELSE -> s = s(S) OR s ∈ rest(S)
-    ENDCOND
-  MEASURE w(S)
-  AUTO_REWRITE+ ∈
-  ;∉(s, (S | context?(S) OR interp?(S))): MACRO bool = NOT s ∈ S
-
-  ;∈(x, Γ): RECURSIVE bool =
-    COND
-      empty?(Γ) -> FALSE,
-      kvar?(Γ) -> x = 0 OR (x - 1) ∈ rest(Γ),
-      ELSE -> x ∈ rest(Γ)
-    ENDCOND
-  MEASURE w(Γ)
-  AUTO_REWRITE+ ∈
-  ;∉(x, Γ): MACRO bool = NOT x ∈ Γ
-
-  app_symbol(S | context?(S) OR interp?(S))(s | s ∈ S): RECURSIVE
-    { Δ: semantic | w(Δ) <= w(S) AND NOT null?(Δ) AND (interp?(Δ) OR knamed?(Δ)) AND s(Δ) = s } =
-    COND
-      ktype_decl?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
-      ktype_def?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
-      kconst_decl?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
-      kconst_def?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
-      ktheory?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
-      itype?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
-      iconst?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
-      kvar?(S) -> app_symbol(rest(S))(s)
-    ENDCOND
-  MEASURE w(S)
-  AUTO_REWRITE+ app_symbol
-  app_symbol_context: RECURSIVE JUDGEMENT
-    app_symbol(Γ)(s | s ∈ Γ) HAS_TYPE context
-  app_symbol_theory: RECURSIVE JUDGEMENT
-    app_symbol(Γ: pretheory)(s | s ∈ Γ) HAS_TYPE pretheory
-  app_symbol_interp: RECURSIVE JUDGEMENT
-    app_symbol(σ)(s | s ∈ σ) HAS_TYPE interp
-  CONVERSION+ app_symbol
-
-  app_var(Γ)(x | x ∈ Γ): RECURSIVE
-    { Δ: (kvar?) | w(Δ) <= w(Γ) } =
-    COND
-      kvar?(Γ) -> IF x = 0 THEN Γ ELSE app_var(rest(Γ))(x - 1) ENDIF,
-      ELSE -> app_var(rest(Γ))(x)
-    ENDCOND
-  MEASURE w(Γ)
-  AUTO_REWRITE+ app_var
-
-  % interp_for?(Γ: pretheory)(σ): RECURSIVE bool =
-  %   CASES Γ OF
-  %     〈〉: empty?(σ),
-  %     ktype_decl(s, Δ): itype?(σ) AND interp_for?(Δ)(rest(σ)),
-  %     kconst_decl(s, T, Δ): iconst?(σ) AND interp_for?(Δ)(rest(σ))
-  %   ENDCASES
-  % MEASURE w(Γ)
-  % AUTO_REWRITE+ interp_for?
-
-  % subst(Γ: pretheory, σ: (interp_for?(Γ))): RECURSIVE
-  %   { Δ: pretheory | TRUE } =
-  %   CASES Π OF
-  %     〈〉: 〈〉,
-  %     ktype_decl(s, Π): ktype_def(s, dtype(σ), subst(Π, rest(σ))),
-  %     kconst_decl(s, T, Π): kconst_def(s, T, dterm(σ), subst(Π, rest(σ)))
-  %   ENDCASES
-  % MEASURE w(Π)
-  % AUTO_REWRITE+ subst
 END contexts

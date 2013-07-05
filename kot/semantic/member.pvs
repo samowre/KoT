@@ -1,0 +1,67 @@
+apply: THEORY
+BEGIN
+  IMPORTING language
+
+  S: VAR syntaxic
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  σ, τ: VAR interp
+
+  ;∈(s, (S | context?(S) OR interp?(S))): RECURSIVE bool =
+    COND
+      empty?(S) -> FALSE,
+      null?(S) -> FALSE,
+      kvar?(S) -> s ∈ rest(S),
+      ELSE -> s = s(S) OR s ∈ rest(S)
+    ENDCOND
+  MEASURE w(S)
+  AUTO_REWRITE+ ∈
+  ;∉(s, (S | context?(S) OR interp?(S))): MACRO bool = NOT s ∈ S
+
+  ;∈(x, Γ): RECURSIVE bool =
+    COND
+      empty?(Γ) -> FALSE,
+      kvar?(Γ) -> x = 0 OR (x - 1) ∈ rest(Γ),
+      ELSE -> x ∈ rest(Γ)
+    ENDCOND
+  MEASURE w(Γ)
+  AUTO_REWRITE+ ∈
+  ;∉(x, Γ): MACRO bool = NOT x ∈ Γ
+  
+  app_symbol(S | context?(S) OR interp?(S))(s | s ∈ S): RECURSIVE
+    { T: semantic | (interp?(T) AND NOT null?(T)) OR knamed?(T) } =
+    COND
+      ktype_decl?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      ktype_def?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      ktype_ext?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      kconst_decl?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      kconst_def?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      kconst_ext?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      ktheory?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      itype?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      iconst?(S) -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF,
+      kvar?(S) -> app_symbol(rest(S))(s)
+    ENDCOND
+  MEASURE w(S)
+  AUTO_REWRITE+ app_symbol
+  app_symbol_context: RECURSIVE JUDGEMENT
+    app_symbol(Γ)(s | s ∈ Γ) HAS_TYPE context
+  app_symbol_theory: RECURSIVE JUDGEMENT
+    app_symbol(Γ: pretheory)(s | s ∈ Γ) HAS_TYPE pretheory
+  app_symbol_interp: RECURSIVE JUDGEMENT
+    app_symbol(σ)(s | s ∈ σ) HAS_TYPE interp
+  CONVERSION+ app_symbol
+
+  app_var(Γ)(x | x ∈ Γ): RECURSIVE
+    { Δ: (kvar?) | w(Δ) <= w(Γ) } =
+    COND
+      kvar?(Γ) -> IF x = 0 THEN Γ ELSE app_var(rest(Γ))(x - 1) ENDIF,
+      ELSE -> app_var(rest(Γ))(x)
+    ENDCOND
+  MEASURE w(Γ)
+  AUTO_REWRITE+ app_var
+END apply

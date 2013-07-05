@@ -58,12 +58,14 @@ BEGIN
     ktype_decl(s: symbol, rest: semantic): ktype_decl?
     % rest, s: TYPE = dtype
     ktype_def(s: symbol, dtype: semantic, rest: semantic): ktype_def?
+    ktype_ext(s: symbol, rest: semantic): ktype_ext?
     % rest ↑ 1, 0: VAR dtype
     kvar(dtype: semantic, rest: semantic): kvar?
     % rest, s: dtype
     kconst_decl(s: symbol, dtype: semantic, rest: semantic): kconst_decl?
     % rest, s: dtype = dterm
     kconst_def(s: symbol, dtype: semantic, dterm: semantic, rest: semantic): kconst_def?
+    kconst_ext(s: symbol, dtype: semantic, rest: semantic): kconst_ext?
     % rest, s: THEORY dtheory
     ktheory(s: symbol, dtheory: semantic, rest: semantic): ktheory?
 
@@ -78,7 +80,7 @@ BEGIN
                 ord_symbol, ord_dot, ord_fun, ord_prod, ord_subtype,
 		ord_v, ord_app, ord_lam, ord_pair, ord_lproj,
 		ord_rproj, ord_empty, ord_ktype_decl, ord_ktype_def, ord_kvar,
-		ord_itype, ord_iconst, ord_nil,
+		ord_itype, ord_iconst, ord_nil, ord_ktype_ext, ord_kconst_ext,
 		ord_kconst_decl, ord_kconst_def, ord_ktheory }
 
   S: VAR semantic
@@ -109,9 +111,11 @@ BEGIN
       〈〉: F(ord_empty) + 1,
       ktype_decl(s, Γ): F(ord_ktype_decl) + weight(F)(Γ) + 1,
       ktype_def(s, T, Γ): F(ord_ktype_def) + weight(F)(T) + weight(F)(Γ) + 1,
+      ktype_ext(s, Γ): F(ord_ktype_ext) + weight(F)(Γ) + 1,
       kvar(T, Γ): F(ord_kvar) + weight(F)(T) + weight(F)(Γ) + 1,
       kconst_decl(s, T, Γ): F(ord_kconst_decl) + weight(F)(T) + weight(F)(Γ) + 1,
       kconst_def(s, T, a, Γ): F(ord_kconst_def) + weight(F)(T) + weight(F)(a) + weight(F)(Γ) + 1,
+      kconst_ext(s, T, Γ): F(ord_kconst_ext) + weight(F)(T) + weight(F)(Γ) + 1,
       ktheory(s, Δ, Γ): F(ord_ktheory) + weight(F)(Δ) + weight(F)(Γ) + 1,
 
       nil: F(ord_nil) + 1,
@@ -122,7 +126,9 @@ BEGIN
   AUTO_REWRITE+ weight
 
   w_fun?(F: [ord -> nat]): MACRO bool =
-    (F(ord_bot) = 0)
+    (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+    (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl))
 
   F: (w_fun?)
   w: MACRO [semantic -> nat] = weight(F)
@@ -181,9 +187,14 @@ BEGIN
       ktype_def(s, T, Δ):
         { k | (k = pre_context OR k = pre_theory) AND
 	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
+      ktype_ext(s, Δ):
+        { k | (k = pre_context OR k = pre_theory) AND k ∈ prekind(Δ) },
       kvar(T, Δ):
         { k | k = pre_context AND pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
       kconst_decl(s, T, Δ):
+        { k | (k = pre_context OR k = pre_theory) AND
+	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
+      kconst_ext(s, T, Δ):
         { k | (k = pre_context OR k = pre_theory) AND
 	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
       kconst_def(s, T, a, Δ):
@@ -204,6 +215,7 @@ BEGIN
     ENDCASES
   MEASURE w(S)
 
+  kind?(S): bool = KTYPE?(S) OR KVAR?(S) OR KCONST?(S) OR KTHEORY?(S)
   keyword?(S): bool = pre_keyword ∈ prekind(S)
   name?(S): bool = pre_name ∈ prekind(S)
   preterm?(S): bool = pre_term ∈ prekind(S)
@@ -213,6 +225,7 @@ BEGIN
   pretheory?(S): bool = pre_theory ∈ prekind(S)
   syntaxic?(S): bool = prekind(S) /= emptyset
 
+  kind: TYPE = (kind?)
   keyword: TYPE = (keyword?)
   name: TYPE = (name?)
   preterm: TYPE = (preterm?)
@@ -222,6 +235,8 @@ BEGIN
   pretheory: TYPE = (pretheory?)
   syntaxic: TYPE = (syntaxic?)
 
+  kind: THEOREM
+    kind?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S))
   keyword: THEOREM
     keyword?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S) OR KCONTEXT?(S))
   name: THEOREM
@@ -264,9 +279,11 @@ BEGIN
         〈〉: TRUE,
 	ktype_decl(s, Δ): context?(Δ),
 	ktype_def(s, T, Δ): pretype?(T) AND context?(Δ),
+	ktype_ext(s, Δ): context?(Δ),
 	kvar(T, Δ): pretype?(T) AND context?(Δ),
 	kconst_decl(s, T, Δ): pretype?(T) AND context?(Δ),
 	kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND context?(Δ),
+	kconst_ext(s, T, Δ): pretype?(T) AND context?(Δ),
 	ktheory(s, Θ, Δ): pretheory?(Θ) AND context?(Δ)
 	ELSE FALSE
       ENDCASES
@@ -276,8 +293,10 @@ BEGIN
         〈〉: TRUE,
         ktype_decl(s, Δ): pretheory?(Δ),
         ktype_def(s, T, Δ): pretype?(T) AND pretheory?(Δ),
+	ktype_ext(s, Δ): pretheory?(Δ),
         kconst_decl(s, T, Δ): pretype?(T) AND pretheory?(Δ),
-        kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND pretheory?(Δ)
+        kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND pretheory?(Δ),
+	kconst_ext(s, T, Δ): pretype?(T) AND pretheory?(Δ)
         ELSE FALSE
       ENDCASES
   syntaxic: THEOREM
@@ -297,8 +316,8 @@ BEGIN
   context_is_syntaxic: JUDGEMENT context SUBTYPE_OF syntaxic
   pretheory_is_syntaxic: JUDGEMENT pretheory SUBTYPE_OF syntaxic
 
-  AUTO_REWRITE- keyword?, name?, preterm?, pretype?, interp?, context?, pretheory?, syntaxic?
-  AUTO_REWRITE+ keyword, name, preterm, pretype, interp, context, pretheory, syntaxic
+  AUTO_REWRITE- kind?, keyword?, name?, preterm?, pretype?, interp?, context?, pretheory?, syntaxic?
+  AUTO_REWRITE+ kind, keyword, name, preterm, pretype, interp, context, pretheory, syntaxic
 
   % Variable declaration
   Γ, Δ, Θ: VAR context
@@ -311,7 +330,8 @@ BEGIN
 
   knamed?(Γ: semantic): MACRO bool =
     ktype_def?(Γ) OR ktype_decl?(Γ) OR kconst_def?(Γ) OR
-    kconst_decl?(Γ) OR ktheory?(Γ)
+    kconst_decl?(Γ) OR ktheory?(Γ) OR ktype_ext?(Γ) OR
+    kconst_ext?(Γ)
 
   % Allow ⊥
   ;ε(p: pred[semantic]): TYPE = { S | undefined?(S) OR p(S) }

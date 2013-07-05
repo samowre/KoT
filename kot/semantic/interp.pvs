@@ -1,0 +1,73 @@
+interp: THEORY
+BEGIN
+  IMPORTING decl
+  IMPORTING apply
+  
+  S: VAR syntaxic
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  σ, τ: VAR interp
+
+  ;-(σ, (s | s ∈ σ)): RECURSIVE
+    { τ | w(τ) < w(σ) } =
+    CASES σ OF
+      nil: nil,
+      itype(t, T, τ): IF t = s THEN τ ELSE itype(t, T, τ - s) ENDIF,
+      iconst(t, a, τ): IF t = s THEN τ ELSE iconst(t, a, τ - s) ENDIF
+    ENDCASES
+  MEASURE w(σ)
+  AUTO_REWRITE+ -
+  difference_apply_weight: THEOREM
+    FORALL (s | s ∈ σ):
+      w(σ - s) + w(definition(σ(s))) < w(σ)
+  
+  interp_for?(Γ: pretheory)(σ): RECURSIVE bool =
+    CASES Γ OF
+      〈〉: null?(σ),
+      ktype_decl(s, Δ):
+        IF s ∈ σ THEN
+	  kind(σ(s)) = KTYPE AND interp_for?(Δ)(σ - s)
+	ELSE interp_for?(Δ)(σ) ENDIF,
+      ktype_def(s, T, Δ): s ∉ σ AND interp_for?(Δ)(σ),
+      ktype_ext(s, Δ): s ∉ σ AND interp_for?(Δ)(σ),
+      kconst_decl(s, T, Δ):
+        IF s ∈ σ THEN
+	  kind(σ(s)) = KCONST AND interp_for?(Δ)(σ - s)
+	ELSE interp_for?(Δ)(σ) ENDIF,
+      kconst_def(s, T, a, Δ): s ∉ σ AND interp_for?(Δ)(σ),
+      kconst_ext(s, T, Δ): s ∉ σ AND interp_for?(Δ)(σ),
+      ktheory(s, Θ, Δ): s ∉ σ AND interp_for?(Δ)(σ)
+    ENDCASES
+  MEASURE w(Γ)
+  AUTO_REWRITE+ interp_for?
+
+  interp(Γ: pretheory, σ: (interp_for?(Γ))): RECURSIVE
+    { Δ: pretheory | w(Δ) <= w(Γ) + w(σ) } =
+    CASES Γ OF
+      〈〉: 〈〉,
+      ktype_decl(s, Δ):
+        IF s ∈ σ THEN
+	  ktype_def(s, definition(σ(s)), interp(Δ, σ - s))
+	ELSE
+	  ktype_decl(s, interp(Δ, σ))
+	ENDIF,
+      ktype_def(s, T, Δ): ktype_def(s, T, interp(Δ, σ)),
+      ktype_ext(s, Δ): ktype_ext(s, interp(Δ, σ)),
+      kconst_decl(s, T, Δ):
+        IF s ∈ σ THEN
+	  kconst_def(s, T, definition(σ(s)), interp(Δ, σ - s))
+	ELSE
+	  kconst_decl(s, T, interp(Δ, σ))
+	ENDIF,
+      kconst_def(s, T, a, Δ): kconst_def(s, T, a, interp(Δ, σ)),
+      kconst_ext(s, T, Δ): kconst_ext(s, T, interp(Δ, σ)),
+      ktheory(s, Θ, Δ): ktheory(s, Θ, interp(Δ, σ))
+    ENDCASES
+  MEASURE w(Γ)
+  AUTO_REWRITE+ interp
+
+END interp
