@@ -110,15 +110,15 @@
  (nonempty_ax 0
   (nonempty_ax-1 nil 3579877651
    ("" (use length_nonempty_ax) (("" (grind) nil nil)) nil)
-   ((empty? const-decl "bool" seq_defs nil)
-    (nonempty? const-decl "bool" seq_defs nil)
+   ((length_nonempty_ax formula-decl nil seq_defs nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (seq nonempty-type-decl nil seq_defs nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (T formal-type-decl nil seq_defs nil)
-    (length_nonempty_ax formula-decl nil seq_defs nil))
+    (nonempty? const-decl "bool" seq_defs nil)
+    (empty? const-decl "bool" seq_defs nil))
    shostak))
  (empty_as_empty 0
   (empty_as_empty-1 nil 3580068492
@@ -175,6 +175,8 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil))
    shostak))
+ (length_empty 0
+  (length_empty-1 nil 3581948987 ("" (grind) nil nil) nil shostak))
  (length_is_well_founded 0
   (length_is_well_founded-1 nil 3580840388
    ("" (use wf_nat)
@@ -228,7 +230,10 @@
     (length const-decl "[seq -> nat]" seq_defs nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    nil nil nil (NOT const-decl "[bool -> bool]" booleans nil)
+    (x skolem-const-decl "(p)" seq_defs nil)
+    (s skolem-const-decl "seq" seq_defs nil)
+    (p skolem-const-decl "pred[seq]" seq_defs nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
     (wf_nat formula-decl nil naturalnumbers nil))
    shostak))
  (mk_seq_ax_TCC1 0

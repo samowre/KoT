@@ -1,0 +1,275 @@
+seq_filter_props[T: TYPE]: THEORY
+BEGIN
+  IMPORTING seq_basic_props[T]
+
+  % This theory defines the comon functions to filter sequences {lists,finseq, ...} :
+  %   filter(s,p) returns the seq of elements of s satisfying the predicate p
+  %   partition(s,p) returns the pair (filter(s,p), filter(s, not p))
+  %   filter_pos and partition_pos are the same where p may depend on the position
+  %     of the element in the sequence
+
+
+  % The properties are written in a systematically way :
+  % if f and g are to functions defined in this theory are the ones before,
+  %   f_g is a rewrite of the form : f(g(),...) = ...
+  %   f__g is a rewrite of the form : f(_,g(),...) = ...
+  %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_g_l is a rewrite of the form : f(g(x, y), x) = ...
+  %   f_g_r is a rewrite of the form : f(g(x, y), y) = ...
+  %   f__g_l is a rewrite of the form : f(x, g(x, y)) = ...
+  %   f__g_r is a rewrite of the form : f(y, g(x, y)) = ...
+  %   f_as_g is a rewrite of the form : f() = F(g())
+  %   f_is_p is a judgement of the form : f HAS_TYPE (p?)
+
+  
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  p, q: VAR PRED[T]
+  pi, qi: VAR PRED[[nat, T]]
+  j, n: VAR nat
+  
+
+  % 0 - MISC
+    % Missing set theory lemmas
+  singleton_unicity[S: TYPE]: LEMMA 
+  	FORALL (s:(singleton?[S]), a: S, b: S): s(a) AND s(b) IMPLIES a = b 
+
+  below_is_finite: LEMMA 
+  	FORALL (p: PRED[below(n)]): is_finite({ j | j < n AND p(j) })
+
+    % Some lemmas about injective and increasing functions
+  st_incr_is_injective: LEMMA 
+  	FORALL (n, m : nat, f: [below(n) -> below(m)] | preserves(f,<,<)): injective?(f)
+  st_incr_ge_id: LEMMA 
+  	FORALL (n, m: nat, f: [below(n) -> below(m)]):
+  	preserves(f,<,<) IMPLIES FORALL (i: below(n)): i <= f(i)
+  incr_bij_is_id: LEMMA 
+  	FORALL (n: nat, f: [below(n) -> below(n)]):
+  	preserves(f,<,<) IMPLIES FORALL (i: below(n)): i = f(i)
+
+  %card_le_as_inj: LEMMA
+  %	FORALL (s1, s2: (is_finite[nat])): 
+  %	card(s1) <= card(s2) IFF EXISTS (f: (s1) -> (s2)): injective?(f)
+  %card_eq_as_bij: LEMMA 
+  %	FORALL (s1, s2: (is_finite[nat])): 
+  %	card(s1) <= card(s2) IFF EXISTS (f: (s1) -> (s2)): injective?(f)
+  
+  % Conversions, rewrites and macros for nice looking code
+  C1(p): PRED[[nat, T]] = LAMBDA (n, x): p(x)
+  CONVERSION+ C1
+
+
+
+
+
+  % I - Definitions
+    % Predicates
+      % nth(filter(s, p), n) = nth(s, i)
+  nth_filter_pos?(s, pi, n)(i: bl(s)): bool = 
+  	pi(i, nth(s, i)) AND 
+	card({ j | j < i AND pi(j, nth(s, j)) }) = n
+  nth_filter?(s, p, n)(i :bl(s)): bool = 
+  	p(nth(s, i)) AND 
+	card({ j | j < i AND p(nth(s, j)) }) = n
+
+  nth_filter_as_nth_filter_pos: LEMMA 
+  	nth_filter?(s, p, n) = nth_filter_pos?(s, p, n)
+
+  filter_pos?(s, pi)(t): bool = 
+  	EXISTS (f: [bl(t) -> bl(s)]): preserves(f, <, <) AND
+  	(FORALL (i: bl(s)): pi(i, nth(s, i)) IFF EXISTS (j: bl(t)): f(j) = i) AND 
+	(FORALL (j: bl(t)): nth(t, j) = nth(s, f(j)))
+
+  filter?(s, p)(t): bool = 
+  	EXISTS (f: [bl(t) -> bl(s)]): preserves(f, <, <) AND
+  	(FORALL (i: bl(s)): p(nth(s, i)) IFF EXISTS (j: bl(t)): f(j) = i) AND 
+	(FORALL (j: bl(t)): nth(t, j) = nth(s, f(j)))
+
+  filter?_as_filter_pos?: LEMMA 
+  	filter?(s, p)(t) IFF filter_pos?(s, p)(t)
+
+    % Predicates existence
+  nth_filter_pos_existence: LEMMA
+  	FORALL (n: below(card({ j | j < length(s) AND pi(j, nth(s, j)) }))): 
+  	EXISTS (i: bl(s)): nth_filter_pos?(s, pi, n)(i)
+  nth_filter_existence: LEMMA 
+  	FORALL (n: below(card({ j | j < length(s) AND p(nth(s, j)) }))): 
+  	EXISTS (i: bl(s)): nth_filter?(s, p, n)(i)
+
+    % Predicates unicity
+  nth_filter_pos_is_singleton: JUDGEMENT
+  	nth_filter_pos?(s, pi, (n: below(card({ j | j < length(s) AND pi(j, nth(s, j)) })))) 
+	HAS_TYPE (singleton?[bl(s)]) 
+  nth_filter_is_singleton: JUDGEMENT
+  	nth_filter?(s, p, (n: below(card({ j | j < length(s) AND p(nth(s, j)) })))) 
+	HAS_TYPE (singleton?[bl(s)])
+ 
+    % Predicates equivalence
+  filter_pos_as_nth_filter_pos: THEOREM 
+  	filter_pos?(s, pi)(t) IFF   	
+	length(t) = card({ j | j < length(s) AND pi(j, nth(s, j))}) AND
+	FORALL (n: bl(t)): EXISTS (i: bl(s)):  
+	nth(t, n) = nth(s, i) AND nth_filter_pos?(s, pi, n)(i)
+
+  filter_as_nth_filter: THEOREM 
+  	filter?(s, p)(t) IFF   
+	length(t) = card({ j | j < length(s) AND p(nth(s, j))}) AND
+	FORALL (n: bl(t)): EXISTS (i: bl(s)):  
+	nth(t, n) = nth(s, i) AND nth_filter?(s, p, n)(i)
+
+
+  filter_pos_existence: LEMMA EXISTS (t: seq): filter_pos?(s, pi)(t) 
+  filter_existence: LEMMA EXISTS (t: seq): filter?(s, p)(t)
+  filter_pos_is_singleton: JUDGEMENT filter_pos?(s, pi) HAS_TYPE (singleton?[seq])
+  filter_is_singleton: JUDGEMENT filter?(s, p) HAS_TYPE (singleton?[seq])
+
+
+
+    % Functions
+  filter_pos(s, pi): (filter_pos?(s, pi))
+  filter(s, p): (filter?(s, p))
+
+  length_filter_pos: LEMMA 
+  	length(filter_pos(s, pi)) = card({ j | j < length(s) AND pi(j, nth(s, j)) })
+  nth_filter_pos: LEMMA 
+  	FORALL (n: bl(filter_pos(s, pi))): EXISTS (i: bl(s)):  
+	nth(filter_pos(s, pi), n) = nth(s, i) AND nth_filter_pos?(s, pi, n)(i)
+
+  length_filter: LEMMA 
+  	length(filter(s, p)) = card({ j | j < length(s) AND p(nth(s, j)) })
+  nth_filter: LEMMA
+ 	FORALL (n: bl(filter(s, p))): EXISTS (i: bl(s)): 
+	nth(filter(s, p), n) = nth(s, i) AND nth_filter?(s, p, n)(i)
+
+  partition(s, p): [seq, seq] = (filter(s, p), filter(s, LAMBDA x: NOT p(x)))
+  partition_pos(s, pi): [seq, seq] = 
+  		 (filter_pos(s, pi), filter_pos(s, LAMBDA (n, x): NOT pi(n, x)))
+
+    % Alternative definitions
+  filter_as_filter_pos: LEMMA filter(s, p) = filter_pos(s, LAMBDA (n, x): p(x))
+  partition_as_partition_pos: LEMMA partition(s, p) = partition_pos(s, LAMBDA (n, x): p(x)) 
+
+
+
+    % Important rewrites
+  filter_pos_as_filter_pos: LEMMA 
+  	filter_pos(s, pi) = t IFF filter_pos?(s, pi)(t)
+  filter_as_filter: LEMMA 
+  	filter(s, p) = t IFF filter?(s, p)(t)
+
+  nth_filter_pos_as_nth_filter_pos: LEMMA FORALL (i: bl(s)):
+  	nth_filter_pos?(s, pi, n)(i) IMPLIES nth(filter_pos(s, pi), n) = nth(s, i)
+  nth_filter_as_nth_filter: LEMMA FORALL (i: bl(s)):
+  	nth_filter?(s, p, n)(i) IMPLIES nth(filter(s, p), n) = nth(s, i)
+
+  filter_pos_below_length: LEMMA
+   (FORALL (i: bl(s)): pi(i, nth(s, i)) = qi(i, nth(s, i))) IMPLIES filter_pos(s, pi) = filter_pos(s, qi)
+   
+
+  % II - Properties
+    % 2 - Interactions
+  filter_filter_pos: LEMMA 
+  	filter(filter_pos(s, pi), p) = filter_pos(s, LAMBDA (n, x): pi(n, x) AND p(x))
+  filter_filter: LEMMA 
+  	filter(filter(s, p), q) = filter(s, LAMBDA x: p(x) AND q(x))
+
+  filter_pos_true: LEMMA filter_pos(s, LAMBDA (n, x): TRUE) = s
+  filter_true: LEMMA filter(s, LAMBDA x: TRUE) = s
+  % filter_pos_filter_pos / filter_pos_filter : IMPOSSIBLE
+
+    % 3 - With suffix_prefix
+  %   % 2 - With subword
+  % subword_filter: LEMMA subword?(filter(s, p), s)
+  % subword_filter_pos: LEMMA subword?(filter_pos(s, pi), s)
+
+    % 1 - With basic
+      % member
+  member_filter_pos: LEMMA 
+  	member(x, filter_pos(s, pi)) IFF 
+	  member(x, s) AND 
+	  EXISTS (i: bl(s)): nth(s, i) = x AND pi(i, x)
+  member_filter: LEMMA 
+  	member(x, filter(s, p)) IFF member(x, s) AND p(x)
+
+
+      % append
+  filter_pos_append: LEMMA 
+  	filter_pos(append(s1, s2), pi) = 
+	append(filter_pos(s1, pi), filter_pos(s2, LAMBDA (n, x): pi(n + length(s1), x)))
+  append_filter_pos2: LEMMA 
+  	append(filter_pos(s1, pi), filter_pos(s2, qi)) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) 
+			      	   THEN pi(n, x) ELSE qi(n - length(s1), x) ENDIF)
+  append_filter_pos: LEMMA 
+  	append(filter_pos(s1, pi), s2) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN pi(n, x) ELSE TRUE ENDIF)
+  append__filter_pos: LEMMA 
+  	append(s1, filter_pos(s2, pi)) =
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN TRUE ELSE pi(n - length(s1), x) ENDIF)
+
+  
+  filter_append: LEMMA 
+  	filter(append(s1, s2), p) = append(filter(s1, p), filter(s2, p))
+  append_filter2: LEMMA 
+  	append(filter(s1, p), filter(s2, q)) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN p(x) ELSE q(x) ENDIF)
+  % For p = q in the previous lemma, use rewrite filter_append :dir rl
+  append_filter: LEMMA 
+  	append(filter(s1, p), s2) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN p(x) ELSE TRUE ENDIF)
+  append__filter: LEMMA 
+  	append(s1, filter(s2, p)) = 
+	filter_pos(append(s1, s2), LAMBDA (n, x): IF n < length(s1) THEN TRUE ELSE p(x) ENDIF)
+
+     % reverse
+  filter_pos_reverse: LEMMA 
+  	filter_pos(reverse(s), pi) = 
+	reverse(filter_pos(s, LAMBDA (n, x): IF n < length(s) THEN pi(length(s) - 1 - n, x) ELSE FALSE ENDIF))
+  reverse_filter_pos: LEMMA 
+  	reverse(filter_pos(s, pi)) = 
+	filter_pos(reverse(s), LAMBDA (n, x): IF n < length(s) THEN pi(length(s) - 1 - n, x) ELSE FALSE ENDIF)
+
+  filter_reverse: LEMMA filter(reverse(s), p) = reverse(filter(s, p))
+  reverse_filter: LEMMA reverse(filter(s, p)) = filter(reverse(s), p)
+
+      % every/some
+  every_filter: LEMMA every(p)(filter(s, p))
+  filter_when_every: LEMMA every(p)(s) IFF filter(s, p) = s
+  filter_when_some: LEMMA some(p)(s) IFF nonempty?(filter(s, p))
+
+
+    % 0 - With empty and length
+  filter_pos_empty: LEMMA filter_pos(empty, pi) = empty
+  filter_empty: LEMMA filter(empty, p) = empty
+  filter_empty_when: LEMMA empty?(filter(s, p)) IFF NOT some(p)(s)
+ 
+  length_filter_pos_le: LEMMA length(filter_pos(s, pi)) <= length(s)
+  length_filter_le: LEMMA length(filter(s, p)) <= length(s) 
+
+  filter_pos_when_length: LEMMA length(filter_pos(s, pi)) = length(s) IFF filter_pos(s, pi) = s
+  filter_when_length: LEMMA length(filter(s, p)) = length(s) IFF filter(s, p) = s
+
+  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  % The following assertions are only to avoid loops with this prover command
+  AUTO_REWRITE- append_filter_pos, append__filter_pos, append_filter_pos2
+  AUTO_REWRITE- append_filter, append__filter, append_filter2
+  AUTO_REWRITE- reverse_filter_pos, reverse_filter
+
+  
+END seq_filter_props
+
+
+% Theories :
+  %  0 - seq_defs
+  %  1 - seq_basic
+  %  2 - seq_subword
+  %  3 - seq_suffix_prefix
+  %  4 - seq_filter
+  %  5 - seq_find
+  %  6 - seq_as_sets
+  %  7 - seq_flatten
+  %  8 - seq_min_max
+  %  9 - seq_orders
+  % 10 - seq_sorted
+  % 11 - seq_map
+  % 12 - seq2
