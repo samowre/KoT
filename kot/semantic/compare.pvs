@@ -1,0 +1,48 @@
+compare: THEORY
+BEGIN
+  IMPORTING subst
+  IMPORTING supertype
+
+  S: VAR syntaxic
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  σ, τ: VAR interp
+  
+  ;≃(T1, T2: pretype): RECURSIVE list[preterm] =
+    CASES T1 OF
+      symbol(s): IF T2 = T1 THEN (: :) ELSE (: FALSE_ :) ENDIF,
+      dot(m, σ, s): IF T2 = T1 THEN (: :) ELSE (: FALSE_ :) ENDIF, % TODO
+      fun(A1, B1): CASES T2 OF
+        fun(A2, B2): append(μ(A1) ≃ μ(A2),
+	              cons((π(A1) ≐ π(A2))(fun(μ(A1), bool_)),
+		            forall_(A1, B1 ≃ B2)))
+	ELSE (: FALSE_ :) ENDCASES,
+      prod(A1, B1): CASES T2 OF
+        prod(A2, B2): append(A1 ≃ A2,
+	                     forall_(A1, B1 ≃ B2))
+	ELSE (: FALSE_ :) ENDCASES
+    ELSE (: FALSE_ :) ENDCASES
+  MEASURE size(T1)
+
+  ;≃(T1, T2: pretype)(a): RECURSIVE list[preterm] =
+    CASES T1 OF
+      symbol(s): IF T2 = T1 THEN (: :) ELSE (: FALSE_ :) ENDIF,
+      dot(m, σ, s): IF T2 = T2 THEN (: :) ELSE (: FALSE_ :) ENDIF,
+      fun(A1, B1): CASES T2 OF
+        fun(A2, B2): append(μ(A1) ≃ μ(A2),
+	              cons((π(A1) ≐ π(A2))(fun(μ(A1), bool_)),
+		            forall_(A1, (B1 ≃ B2)(app(a, v(0))))))
+	ELSE (: FALSE_ :) ENDCASES,
+      prod(A1, A2): CASES T2 OF
+        prod(B1, B2): append((        A1             ≃         B1            )(lproj(a)),
+	                     (subst(A2, 0, lproj(a)) ≃ subst(B2, 0, lproj(a)))(rproj(a))) % subst: TODO
+	ELSE (: FALSE_ :) ENDCASES
+      ELSE (: FALSE_ :)
+    ENDCASES
+  MEASURE size(T1)
+
+END compare

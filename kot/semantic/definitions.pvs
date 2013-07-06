@@ -1,0 +1,53 @@
+definitions: THEORY
+BEGIN
+  IMPORTING decl
+  IMPORTING apply
+  
+  S: VAR { x: semantic | pretype?(x) OR preterm?(x) OR interp?(x) }
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  σ, τ: VAR interp
+
+  η(Γ, (m: symbol), σ)(S): RECURSIVE semantic =
+    CASES S OF
+      symbol(s):
+        IF s ∈ σ THEN definition(σ(s))
+	ELSIF s ∈ Γ THEN  dot(m, σ, s)
+	ELSE symbol(s) ENDIF,
+      dot(m_, τ, s_): dot(m_, η(Γ, m, σ)(τ), s_),
+      fun(A, B): fun(η(Γ, m, σ)(A), η(Γ, m, σ)(B)),
+      prod(A, B): prod(η(Γ, m, σ)(A), η(Γ, m, σ)(B)),
+      subtype(T, a): subtype(η(Γ, m, σ)(T), η(Γ, m, σ)(a)),
+      v(i): v(i),
+      app(f, a): app(η(Γ, m, σ)(f), η(Γ, m, σ)(a)),
+      lam(T, a): lam(η(Γ, m, σ)(T), η(Γ, m, σ)(a)),
+      pair(a, b): pair(η(Γ, m, σ)(a), η(Γ, m, σ)(b)),
+      lproj(a): lproj(η(Γ, m, σ)(a)),
+      rproj(a): rproj(η(Γ, m, σ)(a)),
+      nil: nil,
+      itype(s, T, τ): itype(s, η(Γ, m, σ)(T), η(Γ, m, σ)(τ)),
+      iconst(s, a, τ): iconst(s, η(Γ, m, σ)(a), η(Γ, m, σ)(τ))
+    ENDCASES
+  MEASURE w(S)
+
+  δ(Γ)(T): RECURSIVE semantic =
+    CASES T OF
+      symbol(s):
+        IF s ∈ Γ THEN δ(Γ(s))(definition(Γ(s))) ELSE symbol(s) ENDIF,
+      dot(m, σ, s):
+        IF m ∈ Γ AND s ∈ definition(Γ(m)) THEN
+          δ(Γ)(η(Γ, m, σ)(definition(definition(Γ(m))(s))))
+	ELSE
+	  dot(m, σ, s)
+	ENDIF,
+      fun(A, B): fun(δ(Γ)(A), δ(Γ)(B)),
+      prod(A, B): prod(δ(Γ)(A), δ(Γ)(B)),
+      subtype(T, a): subtype(δ(Γ)(T), a)
+    ENDCASES
+  MEASURE w(Γ) + w(T)
+        
+END definitions

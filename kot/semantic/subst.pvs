@@ -3,7 +3,19 @@ BEGIN
   IMPORTING language
 
   S: VAR { x: semantic | pretype?(x) OR preterm?(x) OR interp?(x) }
-
+  T: VAR pretype
+  
+  size(T): RECURSIVE nat =
+    CASES T OF
+      fun(A, B): size(A) + size(B) + 1,
+      prod(A, B): size(A) + size(B) + 1,
+      subtype(T, a): size(T),
+      symbol(s): 1,
+      dot(m, σ, s): 1
+    ENDCASES
+  MEASURE w(T)
+  AUTO_REWRITE+ size
+  
   ;↑(S, (nb: [nat, nat])):
     RECURSIVE { T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND
                               (preterm?(S) IMPLIES preterm?(T)) AND
@@ -31,6 +43,10 @@ BEGIN
       iconst(s, a, σ): iconst(s, a ↑ nb, σ ↑ nb)
     ENDCASES
   MEASURE w(S)
+  shift_weight: RECURSIVE JUDGEMENT
+    ↑(S, (nb: [nat, nat])) HAS_TYPE { T: semantic | w(T) = w(S) }
+  shift_size: JUDGEMENT
+    ↑(T, (nb: [nat, nat])) HAS_TYPE { A: pretype | size(A) = size(T) }
 
   ;↑((S: semantic | pretype?(S) OR preterm?(S) OR interp?(S)), n: nat): MACRO semantic =
     (S ↑ (n, 0))
@@ -75,5 +91,7 @@ BEGIN
       iconst(s, a, σ): iconst(s, subst(a, x, t), subst(σ, x, t))
     ENDCASES
   MEASURE w(S)
+  subst_size: JUDGEMENT
+    subst(T, (x: nat), (t: preterm)) HAS_TYPE { A: pretype | size(A) = size(T) }
 
 END subst

@@ -1,5 +1,5 @@
 (supertype (μ0_TCC1 0
-            (μ0_TCC1-1 nil 3582052817 ("" (subtype-tcc) nil nil)
+            (μ0_TCC1-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -9,7 +9,7 @@
               (pretype formula-decl nil language nil))
              nil))
            (μ0_TCC2 0
-            (μ0_TCC2-1 nil 3582052817 ("" (termination-tcc) nil nil)
+            (μ0_TCC2-1 nil 3582060608 ("" (termination-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -57,7 +57,10 @@
               (sand const-decl "symbol" language nil)
               (name formula-decl nil language nil)
               (preterm formula-decl nil language nil)
-              (pretype formula-decl nil language nil))
+              (pretype formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
              nil))
            (divide_TCC4 0
             (divide_TCC4-1 nil 3582052817 ("" (subtype-tcc) nil nil)
@@ -101,9 +104,12 @@
              nil))
            (divide_TCC7 0
             (divide_TCC7-1 nil 3582052817 ("" (subtype-tcc) nil nil)
-             nil nil))
+             ((shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (divide_TCC8 0
-            (divide_TCC8-1 nil 3582052817
+            (divide_TCC8-1 nil 3582060608
              ("" (termination-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
@@ -123,10 +129,10 @@
               (pretype formula-decl nil language nil))
              nil))
            (divide_TCC9 0
-            (divide_TCC9-1 nil 3582052817 ("" (subtype-tcc) nil nil)
+            (divide_TCC9-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((pretype formula-decl nil language nil)) nil))
            (divide_TCC10 0
-            (divide_TCC10-1 nil 3582052817 ("" (subtype-tcc) nil nil)
+            (divide_TCC10-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -136,7 +142,7 @@
               (pretype formula-decl nil language nil))
              nil))
            (divide_TCC11 0
-            (divide_TCC11-1 nil 3582052817
+            (divide_TCC11-1 nil 3582060608
              ("" (termination-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
@@ -156,7 +162,7 @@
               (pretype formula-decl nil language nil))
              nil))
            (divide_TCC12 0
-            (divide_TCC12-1 nil 3582052817 ("" (subtype-tcc) nil nil)
+            (divide_TCC12-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -166,10 +172,13 @@
               (pretype formula-decl nil language nil))
              nil))
            (divide_TCC13 0
-            (divide_TCC13-1 nil 3582052817 ("" (subtype-tcc) nil nil)
-             nil nil))
+            (divide_TCC13-1 nil 3582060608 ("" (subtype-tcc) nil nil)
+             ((shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (divide_TCC14 0
-            (divide_TCC14-1 nil 3582052817
+            (divide_TCC14-1 nil 3582060608
              ("" (termination-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
@@ -189,10 +198,10 @@
               (pretype formula-decl nil language nil))
              nil))
            (divide_TCC15 0
-            (divide_TCC15-1 nil 3582052817 ("" (subtype-tcc) nil nil)
+            (divide_TCC15-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((pretype formula-decl nil language nil)) nil))
            (divide_TCC16 0
-            (divide_TCC16-1 nil 3582052817 ("" (cases-tcc) nil nil)
+            (divide_TCC16-1 nil 3582060608 ("" (cases-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -201,6 +210,134 @@
               (pretype type-eq-decl nil language nil)
               (pretype formula-decl nil language nil)
               (name formula-decl nil language nil))
+             nil))
+           (divide_size_TCC1 0
+            (divide_size_TCC1-1 nil 3582059150
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (size def-decl "nat" subst nil))
+             nil))
+           (divide_size_TCC2 0
+            (divide_size_TCC2-1 nil 3582059150
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (size def-decl "nat" subst nil))
+             nil))
+           (divide_size_TCC3 0
+            (divide_size_TCC3-1 nil 3582059150
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sand const-decl "symbol" language nil)
+              (name formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (size def-decl "nat" subst nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
+           (divide_size_TCC4 0
+            (divide_size_TCC4-1 nil 3582059150
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst nil)
+              (nnint_plus_posint_is_posint application-judgement
+               "posint" integers nil)
+              (nnint_plus_nnint_is_nnint application-judgement
+               "nonneg_int" integers nil)
+              (pretype formula-decl nil language nil)
+              (size def-decl "nat" subst nil)
+              (posint_plus_nnint_is_posint application-judgement
+               "posint" integers nil))
+             nil))
+           (divide_size_TCC5 0
+            (divide_size_TCC5-1 nil 3582059150
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst nil)
+              (nnint_plus_posint_is_posint application-judgement
+               "posint" integers nil)
+              (nnint_plus_nnint_is_nnint application-judgement
+               "nonneg_int" integers nil)
+              (pretype formula-decl nil language nil)
+              (size def-decl "nat" subst nil)
+              (posint_plus_nnint_is_posint application-judgement
+               "posint" integers nil))
              nil))
            (mubody_TCC1 0
             (mubody_TCC1-1 nil 3582052817
@@ -274,21 +411,651 @@
            (mubody_TCC2 0
             (mubody_TCC2-1 nil 3582052817
              ("" (termination-tcc) nil nil)
-             ((preterm formula-decl nil language nil)) nil))
+             ((preterm formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (mubody_TCC3 0
             (mubody_TCC3-1 nil 3582052817 ("" (subtype-tcc) nil nil)
-             ((pretype formula-decl nil language nil)) nil))
+             ((pretype formula-decl nil language nil)
+              (divide_size rec-application-judgement
+               "{A | size(A) = size(T)}" supertype nil))
+             nil))
            (mubody_TCC4 0
             (mubody_TCC4-1 nil 3582052817
-             ("" (termination-tcc) nil nil) nil nil))
+             ("" (termination-tcc) nil nil)
+             ((shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (mubody_TCC5 0
             (mubody_TCC5-1 nil 3582052817
              ("" (termination-tcc) nil nil)
              ((preterm formula-decl nil language nil)) nil))
+           (mubody_size_TCC1 0
+            (mubody_size_TCC1-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (strue const-decl "symbol" language nil)
+              (name formula-decl nil language nil)
+              (preterm formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC2 0
+            (mubody_size_TCC2-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (name formula-decl nil language nil)
+              (size def-decl "nat" subst nil))
+             nil))
+           (mubody_size_TCC3 0
+            (mubody_size_TCC3-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (strue const-decl "symbol" language nil)
+              (name formula-decl nil language nil)
+              (preterm formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC4 0
+            (mubody_size_TCC4-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (name formula-decl nil language nil)
+              (size def-decl "nat" subst nil))
+             nil))
+           (mubody_size_TCC5 0
+            (mubody_size_TCC5-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (interp formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC6 0
+            (mubody_size_TCC6-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (pretype formula-decl nil language nil)
+              (shift_size application-judgement
+               "{A: pretype | size(A) = size(T)}" subst nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sand const-decl "symbol" language nil)
+              (↑ def-decl
+               "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+               subst nil)
+              (name formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
+           (mubody_size_TCC7 0
+            (mubody_size_TCC7-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (pretype formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC8 0
+            (mubody_size_TCC8-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (pretype formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC9 0
+            (mubody_size_TCC9-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (interp formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC10 0
+            (mubody_size_TCC10-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (shift_size application-judgement
+               "{A: pretype | size(A) = size(T)}" subst nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sequalities const-decl "symbol" language nil)
+              (sT const-decl "symbol" language nil)
+              (sbool const-decl "symbol" language nil)
+              (sequal const-decl "symbol" language nil)
+              (↑ def-decl
+               "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+               subst nil)
+              (strue const-decl "symbol" language nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (interp formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
+           (mubody_size_TCC11 0
+            (mubody_size_TCC11-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (nnint_plus_posint_is_posint application-judgement
+               "posint" integers nil)
+              (nnint_plus_nnint_is_nnint application-judgement
+               "nonneg_int" integers nil)
+              (pretype formula-decl nil language nil)
+              (size def-decl "nat" subst nil)
+              (posint_plus_nnint_is_posint application-judgement
+               "posint" integers nil))
+             nil))
+           (mubody_size_TCC12 0
+            (mubody_size_TCC12-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (interp formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC13 0
+            (mubody_size_TCC13-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (shift_size application-judgement
+               "{A: pretype | size(A) = size(T)}" subst nil)
+              (pretype formula-decl nil language nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (↑ def-decl
+               "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+               subst nil)
+              (preterm formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
+           (mubody_size_TCC14 0
+            (mubody_size_TCC14-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((↑ def-decl
+               "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+               subst nil)
+              (pretype formula-decl nil language nil)
+              (divide_size rec-application-judgement
+               "{A | size(A) = size(T)}" supertype nil))
+             nil))
+           (mubody_size_TCC15 0
+            (mubody_size_TCC15-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (interp formula-decl nil language nil))
+             nil))
+           (mubody_size_TCC16 0
+            (mubody_size_TCC16-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (shift_size application-judgement
+               "{A: pretype | size(A) = size(T)}" subst nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (↑ def-decl
+               "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+               subst nil)
+              (name formula-decl nil language nil)
+              (pretype formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (interp formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
+           (mubody_size_TCC17 0
+            (mubody_size_TCC17-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((preterm formula-decl nil language nil)) nil))
+           (mubody_size_TCC18 0
+            (mubody_size_TCC18-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (size def-decl "nat" subst nil)
+              (shift_size application-judgement
+               "{A: pretype | size(A) = size(T)}" subst nil)
+              (subst_size application-judgement
+               "{A: pretype | size(A) = size(T)}" subst nil)
+              (pretype formula-decl nil language nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sand const-decl "symbol" language nil)
+              (↑ def-decl
+               "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+               subst nil)
+              (subst def-decl
+                     "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+                     subst
+                nil)
+              (name formula-decl nil language nil)
+              (preterm formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
+           (mubody_size_TCC19 0
+            (mubody_size_TCC19-1 nil 3582058996
+             ("" (recursive-judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (AND const-decl "[bool, bool -> bool]" booleans nil)
+              (preterm? const-decl "bool" language nil)
+              (preterm type-eq-decl nil language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (= const-decl "[T, T -> boolean]" equalities nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (divide_size rec-application-judgement
+               "{A | size(A) = size(T)}" supertype nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst nil)
+              (shift_size application-judgement
+               "{A: pretype | size(A) = size(T)}" subst nil)
+              (nnint_plus_posint_is_posint application-judgement
+               "posint" integers nil)
+              (nnint_plus_nnint_is_nnint application-judgement
+               "nonneg_int" integers nil)
+              (pretype formula-decl nil language nil)
+              (lam? adt-recognizer-decl "[semantic -> boolean]"
+               language nil)
+              (↑ def-decl
+               "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
+               subst nil)
+              (size def-decl "nat" subst nil)
+              (posint_plus_nnint_is_posint application-judgement
+               "posint" integers nil))
+             nil))
+           (mu_size 0
+            (mu_size-1 nil 3582059273 ("" (judgement-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "bool" language nil)
+              (pretype type-eq-decl nil language nil)
+              (mubody_size rec-application-judgement
+               "{x: [pretype, preterm] | size(x`1) = size(T)}"
+               supertype nil)
+              (μ const-decl "pretype" supertype nil))
+             nil))
            (mu_TCC1 0
             (mu_TCC1-1 nil 3582052817 ("" (subtype-tcc) nil nil)
              ((π const-decl "preterm" supertype nil)
-              (preterm formula-decl nil language nil))
+              (preterm formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
              nil))
            (mu 0
             (mu-1 nil 3582052885
@@ -400,7 +1167,9 @@
                   nil))
                 nil))
               nil)
-             ((semantic_dot_extensionality formula-decl nil language
+             ((mu_size application-judgement "{A | size(A) = size(T)}"
+               supertype nil)
+              (semantic_dot_extensionality formula-decl nil language
                nil)
               (interp adt-accessor-decl "[(dot?) -> semantic]" language
                       nil)
@@ -445,9 +1214,16 @@
               (below type-eq-decl nil nat_types nil)
               (nat nonempty-type-eq-decl nil naturalnumbers nil)
               (name formula-decl nil language nil)
+              (divide_size rec-application-judgement
+               "{A | size(A) = size(T)}" supertype nil)
               (pretype formula-decl nil language nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst nil)
               (mubody def-decl "[pretype, preterm]" supertype nil)
               (π const-decl "preterm" supertype nil)
+              (mubody_size rec-application-judgement
+               "{x: [pretype, preterm] | size(x`1) = size(T)}"
+               supertype nil)
               (μ const-decl "pretype" supertype nil)
               (boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
@@ -458,7 +1234,11 @@
              shostak))
            (pi_TCC1 0
             (pi_TCC1-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)) nil))
+             ((π const-decl "preterm" supertype nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (pi_TCC2 0
             (pi_TCC2-1 nil 3582054499 ("" (subtype-tcc) nil nil)
              ((preterm formula-decl nil language nil)) nil))
@@ -470,7 +1250,11 @@
              ((preterm formula-decl nil language nil)) nil))
            (pi_TCC5 0
             (pi_TCC5-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)) nil))
+             ((π const-decl "preterm" supertype nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (pi_TCC6 0
             (pi_TCC6-1 nil 3582054499 ("" (subtype-tcc) nil nil)
              ((μ const-decl "pretype" supertype nil)) nil))
@@ -487,7 +1271,11 @@
              nil))
            (pi_TCC8 0
             (pi_TCC8-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)) nil))
+             ((π const-decl "preterm" supertype nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (pi_TCC9 0
             (pi_TCC9-1 nil 3582054499 ("" (subtype-tcc) nil nil)
              ((preterm formula-decl nil language nil)) nil))
@@ -502,7 +1290,11 @@
              ((preterm formula-decl nil language nil)) nil))
            (pi_TCC13 0
             (pi_TCC13-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)) nil))
+             ((π const-decl "preterm" supertype nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst
+               nil))
+             nil))
            (pi 0
             (pi-1 nil 3582054618
              ("" (skosimp* :preds? t)
@@ -682,13 +1474,18 @@
                 nil))
               nil)
              ((π const-decl "preterm" supertype nil)
+              (mubody_size rec-application-judgement
+               "{x: [pretype, preterm] | size(x`1) = size(T)}"
+               supertype nil)
               (pretype formula-decl nil language nil)
               (mubody def-decl "[pretype, preterm]" supertype nil)
-              (supertype adt-accessor-decl "[(subtype?) -> semantic]"
-                         language nil)
+              (μ const-decl "pretype" supertype nil)
               (subtype? adt-recognizer-decl "[semantic -> boolean]"
                         language nil)
-              (μ const-decl "pretype" supertype nil)
+              (supertype adt-accessor-decl "[(subtype?) -> semantic]"
+                         language nil)
+              (divide_size rec-application-judgement
+               "{A | size(A) = size(T)}" supertype nil)
               (right shared-adt-accessor-decl
                "[{x: semantic | prod?(x) OR pair?(x)} -> semantic]"
                language nil)
@@ -782,10 +1579,14 @@
               (semantic_symbol_extensionality formula-decl nil language
                nil)
               (name formula-decl nil language nil)
-              (range adt-accessor-decl "[(fun?) -> semantic]" language
-                     nil)
               (fun? adt-recognizer-decl "[semantic -> boolean]"
                language nil)
+              (range adt-accessor-decl "[(fun?) -> semantic]" language
+                     nil)
+              (mu_size application-judgement "{A | size(A) = size(T)}"
+               supertype nil)
+              (shift_weight rec-application-judgement
+               "{T: semantic | weight(F)(T) = weight(F)(S)}" subst nil)
               (boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
