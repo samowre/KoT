@@ -3,10 +3,9 @@ BEGIN
   IMPORTING seq_defs[T]
 
   % This theory defines the comon functions over sequences {lists,finseq, ...} :
-  % member, append (= concat for finseq), reverse, every, some
+  %   member, append (= concat for finseq), reverse, every, some
   % That is to say, the functions defined in the prelude for lists and finseq
   % However "cons, car, cdr" can be found in the abastract list theory
-  % "extract" can be found in the abstract finseq theory
 
   % The properties are written in a systematically way :
   % if f and g are to functions defined in this theory or the ones before,
@@ -50,13 +49,6 @@ BEGIN
 
 
   % II - Properties 
-    % 0 - With empty
-  member_empty: LEMMA NOT member(x, empty)
-  append_empty: LEMMA append(s1, s2) = s2 IFF empty?(s1)
-  append__empty: LEMMA append(s1, s2) = s1 IFF empty?(s2)
-  append_empty2: LEMMA append(s1, s2) = empty IFF empty?(s1) AND empty?(s2)
-  reverse_empty: LEMMA empty?(reverse(s)) IFF empty?(s)
-
     % 1 - Interactions
     % member
   member_append: LEMMA member(x, append(s1, s2)) IFF member(x, s1) OR member(x, s2)
@@ -112,6 +104,15 @@ BEGIN
   CONVERSION- K_conversion
   
 
+   % 0 - With empty
+  empty_as_member: LEMMA empty?(s) IFF FORALL x: NOT member(x, s)
+  member_empty: LEMMA NOT member(x, empty)
+  append_empty: LEMMA append(s1, s2) = s2 IFF empty?(s1)
+  append__empty: LEMMA append(s1, s2) = s1 IFF empty?(s2)
+  append_empty2: LEMMA append(s1, s2) = empty IFF empty?(s1) AND empty?(s2)
+  reverse_empty: LEMMA empty?(reverse(s)) IFF empty?(s)
+
+
 
   % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic"
   % The following assertions are only to avoid loops with this prover command
@@ -124,12 +125,13 @@ END seq_basic_props
 % Theories :
   %  0 - seq_defs
   %  1 - seq_basic
-  %  2 - seq_subword
-  %  3 - seq_suffix_prefix
-  %  4 - seq_filter
-  %  5 - seq_find
-  %  6 - seq_as_sets
-  %  7 - seq_flatten
+  %  2 - seq_filter
+  %  3 - seq_find
+  %  4 - seq_set
+  %  5 - seq_subword
+  %  6 - seq_extract
+  %  7 - seq_suffix_prefix 
+  %  8 - seq_flatten
   %  8 - seq_min_max
   %  9 - seq_orders
   % 10 - seq_sorted

@@ -2,9 +2,10 @@ seq_as_sets[T: TYPE]: THEORY
 BEGIN
   IMPORTING seq_basic_props[T]
 
-  % This theory defines the interpretation of sequences as finite sets.
-  % It maps every abstract functions of finite sets on the functions written
-  % in seq_defs, seq_basic and in I - Definitions.
+  % This theory defines the usual functions over sets on sequence:
+  %  subset, ==, union, intersection, difference, symmetric_difference, disjoint
+  %  as well as a predicate and function uniques 
+ 
 
   % The properties are written in a systematically way :
   % if f and g are to functions defined in this theory or the ones before,
@@ -21,9 +22,14 @@ BEGIN
   b: VAR bool
 
 
-  % I - Definitions : subset relation, equality as sets and duplicateless
+  % I - Definitions
+    % subset and equality
   subset?(s1, s2): bool = every(member(s2))(s1)
   ==(s1, s2): bool = subset?(s1, s2) AND subset?(s2, s1)
+    
+    % Usual functions
+  union(s1, s2) = append(s1, s2)
+  intersection(s1, s2): seq
 
   uniques?(s): bool = FORALL (i, j: bl(s)): i /= j IMPLIES nth(s, i) /= nth(s, j)
 %  uniques(s): seq : TO DEFINE WITH FILTER

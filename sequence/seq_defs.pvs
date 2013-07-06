@@ -4,7 +4,7 @@ BEGIN
   % This theory defines an abstract type seq (for sequence) that correspond 
   % to any usual type to contain elements (mostly lists and finseq).
   % This particular theory gives the elementary functions :
-  %   length, nth
+  %   length, nth, =, empty
   %   and a constructor to make an object of type sequence
   % Next theories will define comon functions and their properties.
 
@@ -43,11 +43,13 @@ BEGIN
   ns: VAR (nonempty?)
 
   % T empty <=> seq = {empty}
-  nonempty_ax: THEOREM EXISTS x: TRUE IFF EXISTS ns: TRUE
+  nonempty_ax: THEOREM (EXISTS x: TRUE) IFF (EXISTS ns: TRUE)
 
   % Properties of empty
   empty_as_empty: LEMMA empty?(s) IFF s = empty
   nonempty_isnot_empty: LEMMA nonempty?(s) IFF NOT s = empty
+
+  length_empty: LEMMA length(empty) = 0
 
 
   % One useful order property of length
@@ -75,12 +77,13 @@ END seq_defs
 % Theories :
   %  0 - seq_defs
   %  1 - seq_basic
-  %  2 - seq_subword
-  %  3 - seq_suffix_prefix
-  %  4 - seq_filter
-  %  5 - seq_find
-  %  6 - seq_as_sets
-  %  7 - seq_flatten
+  %  2 - seq_filter
+  %  3 - seq_find
+  %  4 - seq_set
+  %  5 - seq_subword
+  %  6 - seq_extract
+  %  7 - seq_suffix_prefix 
+  %  8 - seq_flatten
   %  8 - seq_min_max
   %  9 - seq_orders
   % 10 - seq_sorted

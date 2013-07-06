@@ -1,0 +1,132 @@
+seq_find[T: TYPE]: THEORY
+BEGIN
+  IMPORTING seq_filter_props[T]
+
+  % This theory defines the functions to find an element verifying a predicate :
+  %   find returns the first element of the sequence p(x)
+  %   find_pos is the same with a p depending on the position
+
+
+  % The properties are written in a systematically way :
+  % if f and g are to functions defined in this theory are the ones before,
+  %   f_g is a rewrite of the form : f(g(),...) = ...
+  %   f__g is a rewrite of the form : f(_,g(),...) = ...
+  %   f_g2 is a rewrite of the form : f(g(), g()) = ...
+  %   f_g_l is a rewrite of the form : f(g(x, y), x) = ...
+  %   f_g_r is a rewrite of the form : f(g(x, y), y) = ...
+  %   f__g_l is a rewrite of the form : f(x, g(x, y)) = ...
+  %   f__g_r is a rewrite of the form : f(y, g(x, y)) = ...
+  %   f_as_g is a rewrite of the form : f() = F(g())
+  %   f_is_p is a judgement of the form : f HAS_TYPE (p?)
+
+  
+  s, t, s1, s2: VAR seq
+  x, y, z: VAR T
+  p, q: VAR PRED[T]
+  pi, qi: VAR PRED[[nat, T]]
+  j, n: VAR nat
+  
+
+  % Conversions, rewrites and macros for nice looking code
+  C1(p): PRED[[nat, T]] = LAMBDA (n, x): p(x)
+  CONVERSION+ C1
+
+
+
+
+  % I - Definitions 
+  find_pos(s, pi): lift[T] = 
+  	IF filter_pos(s, pi) = empty 
+	   THEN bottom
+ 	   ELSE up(nth(filter_pos(s, pi), 0))
+	ENDIF
+  find(s, p): lift[T] = 
+  	IF filter(s, p) = empty
+	   THEN bottom
+	   ELSE up(nth(filter(s, p), 0))
+	ENDIF
+
+
+    % Alternative definitions
+  find_as_find_pos: LEMMA find(s, p) = find_pos(s, p)
+  find_pos_as_first: LEMMA 
+  	find_pos(s, pi) = up(x) IFF 
+	  EXISTS (i: bl(s)): nth(s, i) = x AND pi(i, x) AND
+	  FORALL (j: below(i)): NOT pi(j, nth(s, j))
+  find_as_first: LEMMA 
+  	find(s, p) = up(x) IFF 
+	  EXISTS (i: bl(s)): nth(s, i) = x AND p(x) AND
+	  FORALL (j: below(i)): NOT p(nth(s, j))
+
+  good_find_pos: TYPE = { x: [seq, PRED[[nat, T]]] | up?(find_pos(x`1, x`2)) }
+  good_find: TYPE = { x: [seq, PRED[T]] | up?(find(x`1, x`2)) }
+
+  argi: VAR good_find_pos
+  arg: VAR good_find
+
+
+  % II - Properties
+    % 3 - Interactions
+  find_pos_true: LEMMA 
+  	find_pos(s, LAMBDA (n, x): TRUE) = IF empty?(s) THEN bottom ELSE up(nth(s, 0)) ENDIF
+  find_true: LEMMA
+  	find(s, LAMBDA x: TRUE) = IF empty?(s) THEN bottom ELSE up(nth(s, 0)) ENDIF
+
+    % 2 - With filter
+  find_filter: LEMMA
+  	find(filter(s, p), q) = find(s, LAMBDA x: p(x) AND q(x))
+
+    % 1 - With basic
+      % member
+  member_filter_pos: LEMMA 
+  	member(down(find_pos(argi)), filter_pos(argi))
+  member_filter: LEMMA 
+  	member(down(find(arg)), filter(arg))
+
+      % append
+  find_pos_append: LEMMA 
+  	find_pos(append(s1, s2), pi) = 
+	  IF up?(find_pos(s1, pi)) 
+	    THEN find_pos(s1, pi) 
+	    ELSE find_pos(s2, LAMBDA (n, x): pi(n + length(s1), x))
+	  ENDIF
+
+  find_append: LEMMA
+  	find(append(s1, s2), p) = 
+	  IF up?(find(s1, p)) 
+	    THEN find(s1, p)
+	    ELSE find(s2, p)
+	  ENDIF
+
+      % reverse: no handy rewrite
+      % every/some
+  find_when_every: LEMMA every(p)(s) IMPLIES find(s, p) = up(nth(s, 0))
+  find_when_some: LEMMA some(p)(s) IFF up?(find(s, p))
+  some_when_find: LEMMA up?(find(s, p)) IFF some(p)(s)
+
+    % 0 - With empty and length
+  find_pos_empty: LEMMA find_pos(empty, pi) = bottom
+  find_empty: LEMMA find(empty, p) = bottom
+
+  % III - Auto rewrites : if the properties above are needed as rewrites, do "grind :theories seq_basic_props"
+  % The following assertions are only to avoid loops with this prover command
+  AUTO_REWRITE- find_when_some
+
+  
+END seq_find
+
+
+% Theories :
+  %  0 - seq_defs
+  %  1 - seq_basic
+  %  2 - seq_subword
+  %  3 - seq_suffix_prefix
+  %  4 - seq_filter
+  %  5 - seq_find
+  %  6 - seq_as_sets
+  %  7 - seq_flatten
+  %  8 - seq_min_max
+  %  9 - seq_orders
+  % 10 - seq_sorted
+  % 11 - seq_map
+  % 12 - seq2

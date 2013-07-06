@@ -1,6 +1,6 @@
 seq_subword_props[T: TYPE]: THEORY
 BEGIN
-  IMPORTING seq_basic_props[T]
+  IMPORTING seq_find[T]
 
   % This theory defines the predicate subword on sequences {lists,finseq, ...} :
 
@@ -30,14 +30,6 @@ BEGIN
 
 
   % II - Properties
-
-    % Some lemmas about injective and increasing functions
-  st_incr_is_injective: LEMMA FORALL (n, m : nat, f: [below(n) -> below(m)] | preserves(f,<,<)): injective?(f)
-  st_incr_ge_id: LEMMA FORALL (n, m: nat, f: [below(n) -> below(m)]):
-  		       preserves(f,<,<) IMPLIES FORALL (i: below(n)): i <= f(i)
-  incr_bij_is_id: LEMMA FORALL (n: nat, f: [below(n) -> below(n)]):
-  		  	preserves(f,<,<) IMPLIES FORALL (i: below(n)): i = f(i)
-
 
     % 1 - With basics
   member_subword: LEMMA member(x, s1) AND subword?(s1, s2) IMPLIES member(x, s2)
