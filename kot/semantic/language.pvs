@@ -24,6 +24,7 @@ BEGIN
     KVAR: KVAR?
     KTHEORY: KTHEORY?
     KCONTEXT: KCONTEXT?
+    KTERM(dtype: semantic): KTERM?
 
     %% Names
     symbol(s: symbol): symbol?
@@ -76,7 +77,7 @@ BEGIN
   END semantic
   CONVERSION+ symbol
 
-  ord: TYPE = { ord_bot, ord_KTYPE, ord_KCONST, ord_KVAR, ord_KTHEORY, ord_KCONTEXT,
+  ord: TYPE = { ord_bot, ord_KTYPE, ord_KCONST, ord_KVAR, ord_KTHEORY, ord_KCONTEXT, ord_KTERM, 
                 ord_symbol, ord_dot, ord_fun, ord_prod, ord_subtype,
 		ord_v, ord_app, ord_lam, ord_pair, ord_lproj,
 		ord_rproj, ord_empty, ord_ktype_decl, ord_ktype_def, ord_kvar,
@@ -93,6 +94,7 @@ BEGIN
       KVAR: F(ord_KVAR) + 1,
       KTHEORY: F(ord_KTHEORY) + 1,
       KCONTEXT: F(ord_KCONTEXT) + 1,
+      KTERM(T): F(ord_KTERM) + weight(F)(T) + 1,  
 
       symbol(s): F(ord_symbol) + 1,
       dot(s, σ, m): F(ord_dot) + weight(F)(σ) + 1,
@@ -153,6 +155,8 @@ BEGIN
         { k | k = pre_keyword },
       KCONTEXT:
         { k | k = pre_keyword },
+      KTERM(T):
+        { k | k = pre_keyword AND pre_type ∈ prekind(T) },
 
       symbol(s):
         { k | k = pre_name OR k = pre_term OR k = pre_type },
@@ -235,10 +239,11 @@ BEGIN
   pretheory: TYPE = (pretheory?)
   syntaxic: TYPE = (syntaxic?)
 
+
   kind: THEOREM
     kind?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S))
   keyword: THEOREM
-    keyword?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S) OR KCONTEXT?(S))
+    keyword?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S) OR KCONTEXT?(S) OR ( KTERM?(S) AND pretype?(dtype(S)) ))
   name: THEOREM
     name?(S) =
       CASES S OF
@@ -318,6 +323,7 @@ BEGIN
 
   AUTO_REWRITE- kind?, keyword?, name?, preterm?, pretype?, interp?, context?, pretheory?, syntaxic?
   AUTO_REWRITE+ kind, keyword, name, preterm, pretype, interp, context, pretheory, syntaxic
+
 
   % Variable declaration
   Γ, Δ, Θ: VAR context

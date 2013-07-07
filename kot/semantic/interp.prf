@@ -191,8 +191,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (s!1 skolem-const-decl "{s | s ∈ σ!1}" interp nil)
            (σ!1 skolem-const-decl "interp" interp nil)
@@ -374,8 +376,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (s!1 skolem-const-decl "{s | s ∈ σ!1}" interp nil)
            (σ!1 skolem-const-decl "interp" interp nil)
@@ -425,17 +429,18 @@
             ("21" (grind) nil nil) ("22" (grind) nil nil)
             ("23" (grind) nil nil) ("24" (grind) nil nil)
             ("25" (grind) nil nil) ("26" (grind) nil nil)
-            ("27" (skosimp* :preds? t) (("27" (assert) nil nil)) nil)
+            ("27" (grind) nil nil)
             ("28" (skosimp* :preds? t) (("28" (assert) nil nil)) nil)
-            ("29" (skosimp* :preds? t)
-             (("29" (use "app_symbol_interp")
-               (("29" (lemma "app_symbol_interp")
-                 (("29" (inst?)
-                   (("29" (assert)
-                     (("29" (flatten)
-                       (("29" (assert)
-                         (("29" (assert)
-                           (("29" (case "s!1 = itype1_var!1")
+            ("29" (skosimp* :preds? t) (("29" (assert) nil nil)) nil)
+            ("30" (skosimp* :preds? t)
+             (("30" (use "app_symbol_interp")
+               (("30" (lemma "app_symbol_interp")
+                 (("30" (inst?)
+                   (("30" (assert)
+                     (("30" (flatten)
+                       (("30" (assert)
+                         (("30" (assert)
+                           (("30" (case "s!1 = itype1_var!1")
                              (("1" (assert) nil nil)
                               ("2" (assert)
                                (("2"
@@ -455,12 +460,12 @@
                  nil))
                nil))
              nil)
-            ("30" (skosimp* :preds? t)
-             (("30" (assert)
-               (("30" (skosimp* :preds? t)
-                 (("30" (assert)
-                   (("30" (assert)
-                     (("30" (case "s!1 = iconst1_var!1")
+            ("31" (skosimp* :preds? t)
+             (("31" (assert)
+               (("31" (skosimp* :preds? t)
+                 (("31" (assert)
+                   (("31" (assert)
+                     (("31" (case "s!1 = iconst1_var!1")
                        (("1" (assert) nil nil)
                         ("2" (assert)
                          (("2" (inst?) (("2" (assert) nil nil)) nil))
@@ -471,24 +476,22 @@
                  nil))
                nil))
              nil)
-            ("31" (skosimp* :preds? t)
-             (("31" (assert)
-               (("31" (assert)
-                 (("31" (rewrite "app_symbol_interp") nil nil)) nil))
+            ("32" (skosimp* :preds? t)
+             (("32" (assert)
+               (("32" (assert)
+                 (("32" (rewrite "app_symbol_interp") nil nil)) nil))
                nil))
              nil)
-            ("32" (assert)
-             (("32" (skosimp* :preds? t) (("32" (assert) nil nil))
+            ("33" (assert)
+             (("33" (skosimp* :preds? t) (("33" (assert) nil nil))
                nil))
              nil)
-            ("33" (skosimp* :preds? t) (("33" (assert) nil nil)) nil))
+            ("34" (skosimp* :preds? t) (("34" (assert) nil nil)) nil))
            nil)
           ((iconst? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
            (iconst adt-constructor-decl
             "[[symbol, semantic, semantic] -> (iconst?)]" language nil)
-           (itype? adt-recognizer-decl "[semantic -> boolean]" language
-            nil)
            (itype adt-constructor-decl
             "[[symbol, semantic, semantic] -> (itype?)]" language nil)
            (nnint_plus_posint_is_posint application-judgement "posint"
@@ -514,8 +517,10 @@
             language nil)
            (- def-decl "{τ | weight(F)(τ) < weight(F)(σ)}" interp nil)
            (interp type-eq-decl nil language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
@@ -568,23 +573,17 @@
            (NOT const-decl "[bool -> bool]" booleans nil)
            (null? adt-recognizer-decl "[semantic -> boolean]" language
             nil)
-           (ktype_def? adt-recognizer-decl "[semantic -> boolean]"
-            language nil)
            (ktype_decl? adt-recognizer-decl "[semantic -> boolean]"
-            language nil)
-           (kconst_def? adt-recognizer-decl "[semantic -> boolean]"
-            language nil)
-           (kconst_decl? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
            (ktheory? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
            (ktype_ext? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
-           (kconst_ext? adt-recognizer-decl "[semantic -> boolean]"
-            language nil)
-           (app_symbol def-decl
-            "{T: semantic |     (interp?(T) AND NOT null?(T)) OR ktype_def?(T) OR ktype_decl?(T) OR kconst_def?(T) OR kconst_decl?(T) OR ktheory?(T) OR ktype_ext?(T) OR kconst_ext?(T)}"
-            apply nil)
+           (app_symbol def-decl "{T: semantic |
+             (interp?(T) AND NOT null?(T)) OR ktype_def?(T)
+          OR ktype_decl?(T) OR kconst_def?(T) OR kconst_decl?(T)
+          OR ktheory?(T) OR ktype_ext?(T) OR kconst_ext?(T)}" apply
+            nil)
            (nat nonempty-type-eq-decl nil naturalnumbers nil)
            (below type-eq-decl nil nat_types nil)
            (character type-decl nil character_adt nil)
@@ -612,8 +611,26 @@
             language nil)
            (KCONTEXT? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
-           (preterm? const-decl "bool" language nil)
+           (KTERM? adt-recognizer-decl "[semantic -> boolean]" language
+            nil)
            (pretype? const-decl "bool" language nil)
+           (ktype_def? adt-recognizer-decl "[semantic -> boolean]"
+            language nil)
+           (kvar? adt-recognizer-decl "[semantic -> boolean]" language
+            nil)
+           (kconst_decl? adt-recognizer-decl "[semantic -> boolean]"
+            language nil)
+           (kconst_def? adt-recognizer-decl "[semantic -> boolean]"
+            language nil)
+           (kconst_ext? adt-recognizer-decl "[semantic -> boolean]"
+            language nil)
+           (itype? adt-recognizer-decl "[semantic -> boolean]" language
+            nil)
+           (dtype shared-adt-accessor-decl "[{x: semantic |
+              KTERM?(x) OR ktype_def?(x) OR kvar?(x) OR kconst_decl?(x)
+           OR kconst_def?(x) OR kconst_ext?(x) OR itype?(x)} ->
+   semantic]" language nil)
+           (preterm? const-decl "bool" language nil)
            (context? const-decl "bool" language nil)
            (pretheory? const-decl "bool" language nil)
            (name? const-decl "bool" language nil)
@@ -1122,9 +1139,11 @@
            (real_le_is_total_order name-judgement
             "(total_order?[real])" real_props nil)
            (difference_apply_weight formula-decl nil interp nil)
-           (app_symbol def-decl
-            "{T: semantic |     (interp?(T) AND NOT null?(T)) OR ktype_def?(T) OR ktype_decl?(T) OR kconst_def?(T) OR kconst_decl?(T) OR ktheory?(T) OR ktype_ext?(T) OR kconst_ext?(T)}"
-            apply nil)
+           (app_symbol def-decl "{T: semantic |
+             (interp?(T) AND NOT null?(T)) OR ktype_def?(T)
+          OR ktype_decl?(T) OR kconst_def?(T) OR kconst_decl?(T)
+          OR ktheory?(T) OR ktype_ext?(T) OR kconst_ext?(T)}" apply
+            nil)
            (null? adt-recognizer-decl "[semantic -> boolean]" language
             nil)
            (KTYPE adt-constructor-decl "(KTYPE?)" language nil)
@@ -1164,9 +1183,11 @@
             nil)
            (iconst? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
-           (rest shared-adt-accessor-decl
-                 "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
-                 language nil)
+           (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
            (below type-eq-decl nil nat_types nil)
            (character type-decl nil character_adt nil)
            (char? adt-recognizer-decl "[character -> boolean]"
@@ -1246,8 +1267,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil))
           nil))
         (interp_TCC6 0
@@ -1321,8 +1344,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (real_le_is_total_order name-judgement
             "(total_order?[real])" real_props nil)
@@ -1441,8 +1466,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (nnint_plus_nnint_is_nnint application-judgement
             "nonneg_int" integers nil)
@@ -1589,8 +1616,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil))
           nil))
         (interp_TCC16 0
@@ -1755,9 +1784,11 @@
            (real_le_is_total_order name-judgement
             "(total_order?[real])" real_props nil)
            (app_symbol_interp recursive-judgement-axiom nil apply nil)
-           (app_symbol def-decl
-            "{T: semantic |     (interp?(T) AND NOT null?(T)) OR ktype_def?(T) OR ktype_decl?(T) OR kconst_def?(T) OR kconst_decl?(T) OR ktheory?(T) OR ktype_ext?(T) OR kconst_ext?(T)}"
-            apply nil)
+           (app_symbol def-decl "{T: semantic |
+             (interp?(T) AND NOT null?(T)) OR ktype_def?(T)
+          OR ktype_decl?(T) OR kconst_def?(T) OR kconst_decl?(T)
+          OR ktheory?(T) OR ktype_ext?(T) OR kconst_ext?(T)}" apply
+            nil)
            (null? adt-recognizer-decl "[semantic -> boolean]" language
             nil)
            (KCONST adt-constructor-decl "(KCONST?)" language nil)
@@ -1777,6 +1808,8 @@
            (interp formula-decl nil language nil)
            (definition_const judgement-tcc nil decl nil)
            (difference_apply_weight formula-decl nil interp nil)
+           (KTERM? adt-recognizer-decl "[semantic -> boolean]" language
+            nil)
            (ktype_def? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
            (kvar? adt-recognizer-decl "[semantic -> boolean]" language
@@ -1789,9 +1822,10 @@
             language nil)
            (itype? adt-recognizer-decl "[semantic -> boolean]" language
             nil)
-           (dtype shared-adt-accessor-decl
-            "[{x: semantic |     ktype_def?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR itype?(x)} -> semantic]"
-            language nil)
+           (dtype shared-adt-accessor-decl "[{x: semantic |
+              KTERM?(x) OR ktype_def?(x) OR kvar?(x) OR kconst_decl?(x)
+           OR kconst_def?(x) OR kconst_ext?(x) OR itype?(x)} ->
+   semantic]" language nil)
            (ktype_decl? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
            (ktype_ext? adt-recognizer-decl "[semantic -> boolean]"
@@ -1800,9 +1834,11 @@
             language nil)
            (iconst? adt-recognizer-decl "[semantic -> boolean]"
             language nil)
-           (rest shared-adt-accessor-decl
-                 "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
-                 language nil)
+           (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
            (below type-eq-decl nil nat_types nil)
            (character type-decl nil character_adt nil)
            (char? adt-recognizer-decl "[character -> boolean]"
@@ -1882,8 +1918,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil))
           nil))
         (interp_TCC20 0
@@ -1957,8 +1995,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (nnint_plus_nnint_is_nnint application-judgement
             "nonneg_int" integers nil)
@@ -2078,8 +2118,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (nnint_plus_nnint_is_nnint application-judgement
             "nonneg_int" integers nil)
@@ -2199,8 +2241,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (nnint_plus_nnint_is_nnint application-judgement
             "nonneg_int" integers nil)
@@ -2311,8 +2355,10 @@
             language nil)
            (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
             language nil)
-           (F const-decl
-            "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+           (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_bot) = 0) AND
+    (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
             language nil)
            (pretheory formula-decl nil language nil)
            (weight def-decl "nat" language nil)

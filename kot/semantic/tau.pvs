@@ -3,8 +3,10 @@ BEGIN
 
   IMPORTING contexts
   IMPORTING interp
+  IMPORTING compare
+  IMPORTING definitions
 
-  tccs: TYPE = [context, preterm]
+  
   
 
   % Variable declaration
@@ -16,29 +18,51 @@ BEGIN
   a, b, f, g: VAR preterm
   S: VAR semantic
 
-  π(A): preterm
-  δ(Γ)(S): semantic
+  
+  %% TCCS 
+  tccs: TYPE = [context, preterm]
+
+  ;++(l1, l2: list[tccs]): list[tccs] = append(l1, l2)
+  ;⊢(Γ, a): list[tccs] = cons((Γ, a), null) 
 
   fail: [semantic, list[tccs]] = (⊥, null)
+  
+
+
+
+
+%%%%% TODO
+  % TODO : add to compare
   ;∼(A, B): [context -> list[tccs]]
-  ;∼(A, B)(a): [context -> list[tccs]] 
+  ;∼(A, B)(a): [context -> list[tccs]]
+
+  % TODO : add somewhere 
   π(A)(a): preterm = app(π(A), a)
-  ;⊢(Γ, a): tccs = (Γ, a) 
-  ;++(Θ, Γ): context
-  ;++(l1, l2: list[tccs]): list[tccs]
+
+  % TODO : add to language (probably)
   CONTEXT?(S): bool = KCONTEXT?(S) OR KTHEORY?(S)
-  subst(S, x, a): semantic 
+
+
 
 
   % Important invariants of τ to prove :
   %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
   %  - KTERM(T) is written only if τ(Θ)(T) = TYPE
-  %  - KTERM(T) is written only if μ₀(T) = T (T is not a subtype)
+  %  - KTERM(T) is written only if μ0(T) = T (T is not a subtype)
   %  - KTERM(T) is written only if δ(Γ(T)) = T (T is fully expanded)
   %  - τ(Γ)(_) generates tccs that are correct (typecheckable) in the context Γ
 
 
-  τ(Θ)(S): RECURSIVE [keyword, list[tccs]] = 
+  % Termination of τ : the only constraint is 
+  % w(interp(Δ, σ))  < w(dot(m, σ, s))
+  % And we have : w(interp(Δ, σ)) ≤ w(Δ) + w(σ)
+  % 	   	: w(dot(m, σ, s)) = F(dot) + w(σ) + 1
+  % So we must prove : w(Δ) < F(dot)  ( ∀ Δ ). It s not going to happen
+  % I let you find an appropriate order for this ****
+  % Good luck.
+
+
+  τ(Θ)(S): RECURSIVE [ε(keyword?), list[tccs]] = 
   CASES S OF
 
   %% Names
@@ -49,7 +73,7 @@ BEGIN
         THEN IF kind(Θ(s)) = KTYPE
 	  THEN (KTYPE, null)
 	ELSIF kind(Θ(s)) = KCONST
-	  THEN (KTERM(δ(Θ)(type_(Θ(s)))), tccsT)
+	  THEN (KTERM(δ(Θ)(type_(Θ(s)))), null)
 	  ELSE fail
 	ENDIF
 	ELSE fail
@@ -61,17 +85,20 @@ BEGIN
     %  	       	       	      if kind(Γ(m)) = THEORY
     % 	       	       	      and σ is a valid interpretation for definition(Γ(m))
     %			      and kind( definition(Γ(m))(s) ) = CONSTANT
+    % Note: there is no need to have a τ(Θ)(σ) = INTERP since we already
+    % check τ(Θ)(interp(Δ, σ)). Hence we don't have to define τ over the
+    % interpretations.
     dot(m, σ, s): 
       IF m ∈ Θ AND kind(Θ(m)) = KTHEORY
-    	THEN LET Δ = definition(Θ(m)) IN
+	THEN LET Δ = definition(Θ(m)) IN
 	  IF interp_for?(Δ)(σ) 
 	    THEN LET (kwi, tccsi) = τ(Θ)(interp(Δ, σ)) IN
-	      IF CONTEXT?(kwi) AND s ∈ Δ 
+	     IF KTHEORY?(kwi) AND s ∈ Δ 
 	        THEN IF kind(Δ(s)) = KTYPE
 		  THEN (KTYPE, null)
 		ELSIF kind(Δ(s)) = KCONST
-		  THEN ( KTERM( δ(Θ)( η(Θ, m, σ)( definition(definition(Γ(m))(s)) ) )),
-		        tccsi )
+		  THEN ( KTERM( δ(Θ)( η(Θ, m, σ)( definition(definition(Θ(m))(s)) ) )),
+		         tccsi )
 		  ELSE fail
 		ENDIF
 		ELSE fail
@@ -85,186 +112,229 @@ BEGIN
   %% Types
     % τ(Γ)([x: A -> B]) = TYPE if τ(Γ)(A) = TYPE 
     % 	       	    	       and τ(Γ, x: VAR A) = TYPE
-    fun(A, B): LET (kwA, tccsA) = τ(Θ)(A) IN
-     	       IF KTYPE?(kwA)
-	         THEN LET (kwB, tccsB) = τ(kvar(A, Θ))(B) IN
-	       	   IF KTYPE?(kwB) 
-		     THEN (KTYPE, tccsA ++ tccsB)
-		     ELSE fail
-		   ENDIF
-	         ELSE fail
-	       ENDIF, 
+    fun(A, B): 
+      LET (kwA, tccsA) = τ(Θ)(A) IN
+     	IF KTYPE?(kwA)
+	  THEN LET (kwB, tccsB) = τ(kvar(A, Θ))(B) IN
+	    IF KTYPE?(kwB) 
+	      THEN (KTYPE, tccsA ++ tccsB)
+	      ELSE fail
+	    ENDIF
+	  ELSE fail
+	ENDIF, 
     % τ(Γ)([x: A, B]) = TYPE if τ(Γ)(A) = TYPE 
     % 	       	    	       and τ(Γ, x: VAR A) = TYPE
-    prod(A, B): LET (kwA, tccsA) = τ(Θ)(A) IN
-     	        IF KTYPE?(kwA)
-	          THEN LET (kwB, tccsB) = τ(kvar(A, Θ))(B) IN
-	       	    IF KTYPE?(kwB) 
-		      THEN (KTYPE, tccsA ++ tccsB)
-		      ELSE fail
-		    ENDIF
-	          ELSE fail
-	        ENDIF, 
+    prod(A, B): 
+      LET (kwA, tccsA) = τ(Θ)(A) IN
+     	IF KTYPE?(kwA)
+	  THEN LET (kwB, tccsB) = τ(kvar(A, Θ))(B) IN
+	    IF KTYPE?(kwB) 
+	      THEN (KTYPE, tccsA ++ tccsB)
+	      ELSE fail
+	    ENDIF
+	  ELSE fail
+	ENDIF, 
     % τ(Γ)({x:T | a}) = TYPE if τ(Γ)(T) = TYPE
     % 		      	     and τ(Γ, x: VAR T)(a) = bool
-    subtype(T, a): LET (kwT, tccsT) = τ(Θ)(T) IN
-    	       	   IF KTYPE?(kwT)
-		     THEN LET (kwa, tccsa) = τ(kvar(T, Θ))(a) IN
-		       CASES kwa OF
-		         KTERM(A): 
-			   IF A = bool_
-			     THEN (KTYPE, tccsT ++ tccsa)
-			     ELSE fail
-			   ENDIF
-			 ELSE fail
-		       ENDCASES
-		     ELSE fail
-		   ENDIF,  
+    subtype(T, a): 
+      LET (kwT, tccsT) = τ(Θ)(T) IN
+    	IF KTYPE?(kwT)
+	  THEN LET (kwa, tccsa) = τ(kvar(T, Θ))(a) IN
+	    CASES kwa OF
+	      KTERM(A): 
+	        IF A = bool_
+		  THEN (KTYPE, tccsT ++ tccsa)
+		  ELSE fail
+		ENDIF
+	      ELSE fail
+	    ENDCASES
+	  ELSE fail
+	ENDIF,  
 		 
 
   %% Terms
     % τ(Γ)(s) = δ(Γ)(type(Γ(s)))  if  kind(Γ(s)) = variable 
     v(i): IF i ∈ Θ AND kind(Θ(i)) = KVAR 
-    	    THEN (KTERM(δ(Θ)(type_(Θ(i))), tccsT))
+    	    THEN (KTERM( δ(Θ)(type_(Θ(i))) ), null)
 	    ELSE fail
 	  ENDIF, 
-    % τ(Γ)(f a) = B' where μ₀(τ(Γ)(f)) = [x: A -> B]
+    % τ(Γ)(f a) = B' where μ0(τ(Γ)(f)) = [x: A -> B]
     % 	     	     and   τ(Γ)(a) = A'
     %		     and   (A ∼a A')_Γ
     %		     and   B' = B[a/x]
 %%%%%		     and   Γ ⊢ π(A)(a)
-    app(f, a): LET (kwf, tccsf) = τ(Θ)(f) IN
-    	       CASES kwf OF
-	         KTERM(Tf):
-	           CASES μ₀(Tf) OF
-	             prod(A, B): 
-		       LET (Ap, tccsa) = τ(Θ)(a) IN
-		       (KTERM(subst(B, 0, a)), 
-			tccsf ++ tccsa ++ (A ∼ Ap)(a)(Θ) ++ Θ ⊢ π(A)(a) )
-		     ELSE fail
-	           ENDCASES
-		 ELSE fail
-	       ENDCASES, 
+    app(f, a): 
+      LET (kwf, tccsf) = τ(Θ)(f) IN
+    	CASES kwf OF
+	  KTERM(Tf):
+	    CASES μ0(Tf) OF
+	      prod(A, B): 
+		LET (kwa, tccsa) = τ(Θ)(a) IN
+		CASES kwa OF
+		  KTERM(Ap):
+		    (KTERM(subst(B, 0, a)), 
+		     tccsf ++ tccsa ++ (A ∼ Ap)(a)(Θ) ++ (Θ ⊢ π(A)(a)) )
+		  ELSE fail
+		ENDCASES
+	      ELSE fail
+	    ENDCASES
+	  ELSE fail
+	ENDCASES, 
     % τ(Γ)(λ(x: A): a) = [x: A -> B] where
     % 		       	 B = τ(Γ, x: VAR A)(a)
     %			 τ(Γ)(A) = TYPE
-    lam(A, a): LET (kwA, tccsA) = τ(Γ)(A) IN
-    	       IF KTYPE?(kwa)
-	         THEN LET (kwa, tccsa) = τ(kvar(A, Θ))(a) IN
-    	       	   CASES kwa OF
-	             KTERM(B): (KTERM(fun(A, B)), tccsA ++ tccsa) 
-		     ELSE fail
-		   ENDCASES
-		 ELSE fail
-	       ENDIF,
+    lam(A, a): 
+      LET (kwA, tccsA) = τ(Θ)(A) IN
+    	IF KTYPE?(kwA)
+	  THEN LET (kwa, tccsa) = τ(kvar(A, Θ))(a) IN
+    	    CASES kwa OF
+	      KTERM(B): (KTERM(fun(A, B)), tccsA ++ tccsa) 
+	      ELSE fail
+	    ENDCASES
+	  ELSE fail
+	ENDIF,
     % τ(Γ)((a1, a2)) = [τ(Γ)(a1), τ(Γ)(a2)]
-    pair(a1, a2): LET (kwa1, tccsa1) = τ(Θ)(a1) IN
-    	     	  CASES kwa1 OF
-		    KTERM(A1): 
-		      LET (kwa2, tccsa2) = τ(Θ)(a2) IN
-		      CASES kwa2 OF
-		        KTERM(A2): (KTERM(prod(A1, A2)),
-				    tccsa1 ++ tccsa2 )
-			ELSE fail
-		      ENDCASES
-		    ELSE fail
-		  ENDCASES, 
-    % τ(Γ)(p1 a) = A1, where μ₀(τ(Γ)(a)) = [x: A1, A2]
-    lproj(a): LET (kwa, tccsa) = τ(Θ)(a) IN
-    	      CASES kwa OF
-	        KTERM(A): 
-		  CASES μ₀(A) OF
-		    prod(A1, A2): (KTERM(A1), tccsa)
-		    ELSE fail
-		  ENDCASES
-		ELSE fail
- 	      ENDCASES,
-    % τ(Γ)(p2 a) = A2[(p1 a)/x], where μ₀(τ(Γ)(a)) = [x: A1, A2]
-    rproj(a): LET (kwa, tccsa) = τ(Θ)(a) IN
-    	      CASES kwa OF
-	        KTERM(A): 
-		  CASES μ₀(A) OF
-		    prod(A1, A2): (KTERM(subst(A2, 0, lproj(a))), tccsa)
-		    ELSE fail
-		  ENDCASES
-		ELSE fail
-	      ENDCASES,		  
-    	   
+    pair(a1, a2): 
+      LET (kwa1, tccsa1) = τ(Θ)(a1) IN
+      CASES kwa1 OF
+        KTERM(A1): 
+	  LET (kwa2, tccsa2) = τ(Θ)(a2) IN
+	  CASES kwa2 OF
+	    KTERM(A2): (KTERM(prod(A1, A2)),
+		        tccsa1 ++ tccsa2 )
+	    ELSE fail
+	  ENDCASES
+	ELSE fail
+      ENDCASES, 
+    % τ(Γ)(p1 a) = A1, where μ0(τ(Γ)(a)) = [x: A1, A2]
+    lproj(a): 
+      LET (kwa, tccsa) = τ(Θ)(a) IN
+    	CASES kwa OF
+	  KTERM(A): 
+	  CASES μ0(A) OF
+	    prod(A1, A2): (KTERM(A1), tccsa)
+	    ELSE fail
+	  ENDCASES
+	ELSE fail
+      ENDCASES,
+    % τ(Γ)(p2 a) = A2[(p1 a)/x], where μ0(τ(Γ)(a)) = [x: A1, A2]
+    rproj(a): 
+      LET (kwa, tccsa) = τ(Θ)(a) IN
+    	CASES kwa OF
+	  KTERM(A): 
+	  CASES μ0(A) OF
+	    prod(A1, A2): (KTERM(subst(A2, 0, lproj(a))), tccsa)
+	    ELSE fail
+	  ENDCASES
+	ELSE fail
+      ENDCASES,		  
+    
+	   
   %% Context
     % τ(Θ)(〈〉) = CONTEXT
     〈〉: (KTHEORY, null),
     % τ(Θ)(Γ, s: TYPE) = CONTEXT if Γ(s) and Θ(s) are undefined
     % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
-    ktype_decl(s, Γ): LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-    		      IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
-		        THEN (kwΓ, tccsΓ)
-			ELSE fail
-		      ENDIF,
+    ktype_decl(s, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+      IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
+        THEN (kwΓ, tccsΓ)
+	ELSE fail
+      ENDIF,
     % τ(Θ)(Γ, s: TYPE = T) = CONTEXT if Γ(s) and Θ(s) are undefined
     % 	      	      	     	     and τ(Θ)(Γ) = CONTEXT
     %				     and τ(Θ, Γ)(T) = TYPE
-    ktype_def(s, T, Γ): LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-    		    	IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
-    		      	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
-			    IF kwT = KTYPE
-		      	      THEN (kwΓ, tccsΓ ++ tccsT)
-			      ELSE fail
-		            ENDIF
-			  ELSE fail
-			ENDIF,
+    ktype_def(s, T, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+      IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
+        THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
+	  IF kwT = KTYPE
+	    THEN (kwΓ, tccsΓ ++ tccsT)
+	    ELSE fail
+	  ENDIF
+	ELSE fail
+      ENDIF,
+    % For τ : ext <-> decl
+    % τ(Θ)(Γ, s: TYPE = ext) = CONTEXT if Γ(s) and Θ(s) are undefined
+    % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
+    ktype_ext(s, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+        IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
+	  THEN (kwΓ, tccsΓ)
+	  ELSE fail
+	ENDIF,
     % τ(Θ)(Γ, x: VAR T) = CONTEXT if τ(Θ)(Γ) = CONTEXT
     % 	      	     	  	  and τ(Θ, Γ)(T) = TYPE
-    kvar(T, Γ): LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-    	    	IF CONTEXT?(kwΓ)
-		  THEN LET (kwT, tccsT) = τ(Θ ++ Γ, T) IN
-		    IF kwT = KTYPE
-		      THEN (KCONTEXT, tccsΓ ++ tccsT)
-		      ELSE fail
- 		    ENDIF
-		  ELSE fail
-		ENDIF,
+    kvar(T, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+        IF CONTEXT?(kwΓ)
+	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
+	    IF kwT = KTYPE
+	      THEN (KCONTEXT, tccsΓ ++ tccsT)
+	      ELSE fail
+ 	    ENDIF
+	  ELSE fail
+	ENDIF,
     % τ(Θ)(Γ, c: T) = CONTEXT if Γ(c) and Θ(c) are undefined
     % 	      	      	      and τ(Θ)(Γ) = CONTEXT
     %			      and τ(Θ)(T) = TYPE
-    kconst_decl(c, T, Γ): LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-    		      	  IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
-		            THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
-			      IF kwT = KTYPE
-			        THEN (kwΓ, tccsΓ ++ tccsT) 
-			    	ELSE fail
-			      ENDIF
-			    ELSE fail
-		      	  ENDIF,
+    kconst_decl(c, T, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+        IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
+	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
+	    IF kwT = KTYPE
+	      THEN (kwΓ, tccsΓ ++ tccsT) 
+	      ELSE fail
+	    ENDIF
+	  ELSE fail
+	ENDIF,
     % τ(Θ)(Γ, c: T = a) = CONTEXT if Γ(c) and Θ(c) are undefined
     % 	      	     	  	  and τ(Θ)(Γ) = CONTEXT
     %				  and τ(Θ, Γ)(T) = TYPE
     %				  and τ(Θ, Γ)(a) = T'
     %				  and (T ∼ T')_Γ
 %%%%%				  and Γ ⊢ π(T)(a)    
-    kconst_def(c, T, a, Γ): LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-    		      	    IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
-		              THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
-			        IF kwT = KTYPE
-				  THEN LET (Tp, tccsa) = Τ(Θ ++ Γ)(a) IN
-				    (kwΓ, tccsΓ ++ tccsT ++ tccsa ++ 
-				      ((T ∼ Tp)(Γ)) ++ (Γ ⊢ π(T)(a)))
-			    	  ELSE fail
-				ENDIF
-			      ELSE fail
-		      	    ENDIF,
+    kconst_def(c, T, a, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+    	IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
+	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
+	    IF kwT = KTYPE
+	      THEN LET (Tp, tccsa) = τ(Θ ++ Γ)(a) IN
+	        (kwΓ, tccsΓ ++ tccsT ++ tccsa ++ 
+		 ((T ∼ Tp)(Γ)) ++ (Γ ⊢ π(T)(a)))
+	      ELSE fail
+	    ENDIF
+	  ELSE fail
+	ENDIF,
+    % For τ : ext <-> decl
+    % τ(Θ)(Γ, c: T = ext) = CONTEXT if Γ(c) and Θ(c) are undefined
+    % 	      	      	      and τ(Θ)(Γ) = CONTEXT
+    %			      and τ(Θ)(T) = TYPE
+    kconst_ext(c, T, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+        IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
+	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
+	    IF kwT = KTYPE
+	      THEN (kwΓ, tccsΓ ++ tccsT) 
+	      ELSE fail
+	    ENDIF
+	  ELSE fail
+	ENDIF,
     % τ(θ)(Γ, m: THEORY = Δ) = CONTEXT if Θ(m), Γ(m) are undefined
     % 	      	 	       	       and τ(Θ)(Γ) = CONTEXT
     %				       and τ(Θ, Γ)(Δ) = THEORY 
     %	(THEORY = context without var and theory declarations)
-    ktheory(m, Δ, Γ): LET (kwΓ, tccsΓ) = t(Θ)(Γ) IN
-    	       	      IF CONTEXT?(kwΓ) AND m ∉ Γ AND m ∉ Θ 
-		        THEN LET (kwΔ, tccsΔ) = τ(Θ ++ Γ)(Δ) IN
-			  IF KTHEORY?(kwΔ)
-			    THEN (KCONTEXT, tccsΓ ++ tccsΔ)
-			    ELSE fail
-			  ENDIF
-			ELSE fail
-		      ENDIF
+    ktheory(m, Δ, Γ): 
+      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
+        IF CONTEXT?(kwΓ) AND m ∉ Γ AND m ∉ Θ 
+	  THEN LET (kwΔ, tccsΔ) = τ(Θ ++ Γ)(Δ) IN
+	    IF KTHEORY?(kwΔ)
+	      THEN (KCONTEXT, tccsΓ ++ tccsΔ)
+	      ELSE fail
+	    ENDIF
+	  ELSE fail
+	ENDIF
+    ELSE fail
   ENDCASES
   MEASURE LAMBDA S: 0
 

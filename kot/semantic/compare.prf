@@ -319,9 +319,7 @@
                 nil))
               nil))
             nil)
-           ((size def-decl "nat" subst nil)
-            (pretype formula-decl nil language nil)
-            (real_lt_is_strict_total_order name-judgement
+           ((real_lt_is_strict_total_order name-judgement
              "(strict_total_order?[real])" real_props nil)
             (nnint_plus_posint_is_posint application-judgement "posint"
              integers nil)
@@ -329,6 +327,8 @@
              "nonneg_int" integers nil)
             (posint_plus_nnint_is_posint application-judgement "posint"
              integers nil)
+            (size def-decl "nat" subst nil)
+            (pretype formula-decl nil language nil)
             (boolean nonempty-type-decl nil booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
@@ -394,9 +394,10 @@
             (nat nonempty-type-eq-decl nil naturalnumbers nil)
             (AND const-decl "[bool, bool -> bool]" booleans nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-            (subst def-decl
-                   "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
-                   subst
+            (subst def-decl "{T: semantic |
+         (pretype?(S) IMPLIES pretype?(T)) AND
+          (preterm?(S) IMPLIES preterm?(T)) AND
+           (interp?(S) IMPLIES interp?(T))}" subst
               nil)
             (boolean nonempty-type-decl nil booleans nil)
             (bool nonempty-type-eq-decl nil booleans nil)
@@ -432,9 +433,10 @@
                 nil))
               nil))
             nil)
-           ((subst def-decl
-                   "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
-                   subst
+           ((subst def-decl "{T: semantic |
+         (pretype?(S) IMPLIES pretype?(T)) AND
+          (preterm?(S) IMPLIES preterm?(T)) AND
+           (interp?(S) IMPLIES interp?(T))}" subst
               nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
             (AND const-decl "[bool, bool -> bool]" booleans nil)
@@ -488,9 +490,10 @@
                 nil))
               nil))
             nil)
-           ((subst def-decl
-                   "{T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND (preterm?(S) IMPLIES preterm?(T)) AND (interp?(S) IMPLIES interp?(T))}"
-                   subst
+           ((subst def-decl "{T: semantic |
+         (pretype?(S) IMPLIES pretype?(T)) AND
+          (preterm?(S) IMPLIES preterm?(T)) AND
+           (interp?(S) IMPLIES interp?(T))}" subst
               nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
             (AND const-decl "[bool, bool -> bool]" booleans nil)
