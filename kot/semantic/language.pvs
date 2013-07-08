@@ -1,21 +1,38 @@
 language: THEORY
 BEGIN
-  symbol: TYPE+ = string
-  sbool: symbol = "bool"
-  strue: symbol = "TRUE"
-  sfalse: symbol = "FALSE"
-  sboolop: symbol = "boolop"
-  snot: symbol = "¬"
-  sor: symbol = "∨"
-  sand: symbol = "∧"
-  ssupset: symbol = "⊃"
-  sT: symbol = "T"
-  sequalities: symbol = "equalities"
-  sequal: symbol = "="
+  %% The type `symbol' represent the underlying type used to represent symbols.
+  %% This will typically be strings representing the fully-qualified names of
+  %% real PVS.
+  %% We also define here the external symbols PVS needs to work.
+  symbol: TYPE+       % string
+  sbool: symbol       % "bool"
+  strue: symbol       % "TRUE"
+  sfalse: symbol      % "FALSE"
+  sboolop: symbol     % "boolop"
+  snot: symbol        % "¬"
+  sor: symbol         % "∨"
+  sand: symbol        % "∧"
+  ssupset: symbol     % "⊃"
+  sT: symbol          % "T"
+  sequalities: symbol % "equalities"
+  sequal: symbol      % "%"
 
-  % Union type representing the different elements of the PVS semantics
+  %% The type `semantic' is a big union type representing every element of the
+  %% idealized PVS language – pretypes, preterms, contexts, etc.
+  %% This datatype has no subtypes, instead they are computed by the `prekind'
+  %% function defined later on, that will ensure the well-formedness of the
+  %% constructors (e.g., the `supertype' accessor of `subtype' will actually
+  %% be enforced to be a pretype, etc.).
+  %% This approach has several advantages here:
+  %%  - We can easily express that some constructors have different subtypes,
+  %%    for instance 〈〉 is both a context and a context with only constant and
+  %%    types declarations and definitions (i.e., a pretheory).
+  %%  - The actual OR of the constructors contained in the type is almost never
+  %%    appearing in the proofs, which makes it possible to use strategies like
+  %%    ``bddsimp'' without blowing up PVS.
   semantic: DATATYPE
   BEGIN
+    % Used to represent a failure – flattening of the lift datatype
     ⊥: undefined?
 
     %% Keywords
@@ -27,10 +44,13 @@ BEGIN
     KTERM(dtype: semantic): KTERM?
 
     %% Names
+    % s
     symbol(s: symbol): symbol?
+    % m {{ interp }}.s
     dot(m: symbol, interp: semantic, s: symbol): dot?
 
-    %% Types
+    %% Types.
+    %% Note that they all act as λ-binders for their second argument.
     % [i: dom → range]
     fun(dom: semantic, range: semantic): fun?
     % [i: left, right]
@@ -39,7 +59,8 @@ BEGIN
     subtype(supertype: semantic, pred: semantic): subtype?
 
     %% Terms
-    % i
+    %% Only `lam' act as a λ-binder for its second argument.
+    % i (De Bruijn variable)
     v(i: nat): var?
     % op arg
     app(op: semantic, arg: semantic): app?
@@ -53,7 +74,8 @@ BEGIN
     rproj(arg: semantic): rproj?
 
     %% Contexts
-    % {}
+    %% They are unfortunately represented backwards w.r.t the semantic document.
+    % Empty context – flattening of the list datatype for contexts
     〈〉: empty?
     % rest, s: TYPE
     ktype_decl(s: symbol, rest: semantic): ktype_decl?
@@ -70,13 +92,17 @@ BEGIN
     % rest, s: THEORY dtheory
     ktheory(s: symbol, dtheory: semantic, rest: semantic): ktheory?
 
-    % Interpretations
+    %% Interpretations
+    % Empty interpretation – flattening of the list datatype for interpretations
     nil: null?
+    % {{ s := dtype, rest }}
     itype(s: symbol, dtype: semantic, rest: semantic): itype?
+    %% {{ s := dterm, rest }}
     iconst(s: symbol, dterm: semantic, rest: semantic): iconst?
   END semantic
   CONVERSION+ symbol
 
+  %% TODO: This can probably be removed.
   ord: TYPE = { ord_bot, ord_KTYPE, ord_KCONST, ord_KVAR, ord_KTHEORY, ord_KCONTEXT, ord_KTERM, 
                 ord_symbol, ord_dot, ord_fun, ord_prod, ord_subtype,
 		ord_v, ord_app, ord_lam, ord_pair, ord_lproj,
@@ -140,6 +166,12 @@ BEGIN
   k: VAR pre_kind
   ;∈(x: pre_kind, S: set[pre_kind]): MACRO bool = member(x, S)
 
+  %% The `prekind' function computes the set of the possible subtypes that a
+  %% given `semantic' value has – it suffice to check if its associated
+  %% `pre_kind' is in the set computed by `prekind'.
+  %% This is used to avoid heavy mutual recursion in the definition of the
+  %% different subtypes predicates, that are defined in term of `prekind'
+  %% later on.
   prekind(S): RECURSIVE set[pre_kind] =
     CASES S OF
       ⊥:
@@ -219,6 +251,10 @@ BEGIN
     ENDCASES
   MEASURE w(S)
 
+  %% Subtype predicates generated from the `prekind' function.
+  %% They could have been defined as uninterpreted function, with the following
+  %% theorems written as AXIOMs – there is no real reason it has not be done
+  %% this way since they are not intended to be executed.
   kind?(S): bool = KTYPE?(S) OR KVAR?(S) OR KCONST?(S) OR KTHEORY?(S)
   keyword?(S): bool = pre_keyword ∈ prekind(S)
   name?(S): bool = pre_name ∈ prekind(S)
@@ -228,7 +264,7 @@ BEGIN
   context?(S): bool = pre_context ∈ prekind(S)
   pretheory?(S): bool = pre_theory ∈ prekind(S)
   syntaxic?(S): bool = prekind(S) /= emptyset
-
+  %% Subtypes associated with the subtype predicates
   kind: TYPE = (kind?)
   keyword: TYPE = (keyword?)
   name: TYPE = (name?)
@@ -239,7 +275,10 @@ BEGIN
   pretheory: TYPE = (pretheory?)
   syntaxic: TYPE = (syntaxic?)
 
-
+  %% Actual definition of the subtypes predicates as we would have defined them
+  %% with mutual recursion.
+  %% These are intended to be used as AUTO_REWRITE replacement of the actual
+  %% definition of the subtypes in term of `prekind'.
   kind: THEOREM
     kind?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S))
   keyword: THEOREM
