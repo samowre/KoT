@@ -75,7 +75,7 @@ BEGIN
 
     %% Contexts
     %% They are unfortunately represented backwards w.r.t the semantic document.
-    % Empty context – flattening of the list datatype for contexts
+    % Empty Context – flattening of the list datatype for contexts
     〈〉: empty?
     % rest, s: TYPE
     ktype_decl(s: symbol, rest: semantic): ktype_decl?
@@ -155,115 +155,18 @@ BEGIN
 
   w_fun?(F: [ord -> nat]): MACRO bool =
     (F(ord_bot) = 0) AND
+    (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
     (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl))
 
   F: (w_fun?)
   w: MACRO [semantic -> nat] = weight(F)
 
-  pre_kind: TYPE = { pre_keyword, pre_name, pre_term, pre_type, pre_context,
-                     pre_interp, pre_theory }
-  k: VAR pre_kind
-  ;∈(x: pre_kind, S: set[pre_kind]): MACRO bool = member(x, S)
-
-  %% The `prekind' function computes the set of the possible subtypes that a
-  %% given `semantic' value has – it suffice to check if its associated
-  %% `pre_kind' is in the set computed by `prekind'.
-  %% This is used to avoid heavy mutual recursion in the definition of the
-  %% different subtypes predicates, that are defined in term of `prekind'
-  %% later on.
-  prekind(S): RECURSIVE set[pre_kind] =
-    CASES S OF
-      ⊥:
-        emptyset,
-
-      KTYPE:
-        { k | k = pre_keyword },
-      KCONST:
-        { k | k = pre_keyword },
-      KVAR:
-        { k | k = pre_keyword },
-      KTHEORY:
-        { k | k = pre_keyword },
-      KCONTEXT:
-        { k | k = pre_keyword },
-      KTERM(T):
-        { k | k = pre_keyword AND pre_type ∈ prekind(T) },
-
-      symbol(s):
-        { k | k = pre_name OR k = pre_term OR k = pre_type },
-      dot(m, σ, s):
-        { k | (k = pre_name OR k = pre_term OR k = pre_type) AND
-	      pre_interp ∈ prekind(σ) },
-
-      fun(A, B):
-        { k | k = pre_type AND pre_type ∈ prekind(A) AND pre_type ∈ prekind(B) },
-      prod(A, B):
-        { k | k = pre_type AND pre_type ∈ prekind(A) AND pre_type ∈ prekind(B) },
-      subtype(T, a):
-        { k | k = pre_type AND pre_type ∈ prekind(T) AND pre_term ∈ prekind(a) },
-
-      v(i):
-        { k | k = pre_term },
-      app(f, a):
-        { k | k = pre_term AND pre_term ∈ prekind(f) AND pre_term ∈ prekind(a) },
-      lam(T, a):
-        { k | k = pre_term AND pre_type ∈ prekind(T) AND pre_term ∈ prekind(a) },
-      pair(a, b):
-        { k | k = pre_term AND pre_term ∈ prekind(a) AND pre_term ∈ prekind(b) },
-      lproj(a):
-        { k | k = pre_term AND pre_term ∈ prekind(a) },
-      rproj(a):
-        { k | k = pre_term AND pre_term ∈ prekind(a) },
-
-      〈〉:
-        { k | k = pre_context OR k = pre_theory },
-      ktype_decl(s, Δ):
-        { k | (k = pre_context OR k = pre_theory) AND k ∈ prekind(Δ) },
-      ktype_def(s, T, Δ):
-        { k | (k = pre_context OR k = pre_theory) AND
-	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
-      ktype_ext(s, Δ):
-        { k | (k = pre_context OR k = pre_theory) AND k ∈ prekind(Δ) },
-      kvar(T, Δ):
-        { k | k = pre_context AND pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
-      kconst_decl(s, T, Δ):
-        { k | (k = pre_context OR k = pre_theory) AND
-	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
-      kconst_ext(s, T, Δ):
-        { k | (k = pre_context OR k = pre_theory) AND
-	      pre_type ∈ prekind(T) AND k ∈ prekind(Δ) },
-      kconst_def(s, T, a, Δ):
-        { k | (k = pre_context OR k = pre_theory) AND
-	      pre_type ∈ prekind(T) AND pre_term ∈ prekind(a) AND k ∈ prekind(Δ) },
-      ktheory(s, Θ, Δ):
-        { k | (k = pre_context) AND
-	      pre_theory ∈ prekind(Θ) AND k ∈ prekind(Δ) },
-
-      nil:
-        { k | k = pre_interp },
-      itype(s, T, σ):
-        { k | (k = pre_interp) AND
-	      pre_type ∈ prekind(T) AND k ∈ prekind(σ) },
-      iconst(s, a, σ):
-        { k | (k = pre_interp) AND
-	      pre_term ∈ prekind(a) AND k ∈ prekind(σ) }
-    ENDCASES
-  MEASURE w(S)
-
   %% Subtype predicates generated from the `prekind' function.
-  %% They could have been defined as uninterpreted function, with the following
-  %% theorems written as AXIOMs – there is no real reason it has not be done
-  %% this way since they are not intended to be executed.
-  kind?(S): bool = KTYPE?(S) OR KVAR?(S) OR KCONST?(S) OR KTHEORY?(S)
-  keyword?(S): bool = pre_keyword ∈ prekind(S)
-  name?(S): bool = pre_name ∈ prekind(S)
-  preterm?(S): bool = pre_term ∈ prekind(S)
-  pretype?(S): bool = pre_type ∈ prekind(S)
-  interp?(S): bool = pre_interp ∈ prekind(S)
-  context?(S): bool = pre_context ∈ prekind(S)
-  pretheory?(S): bool = pre_theory ∈ prekind(S)
-  syntaxic?(S): bool = prekind(S) /= emptyset
+  kind?, keyword?, name?, preterm?, pretype?, interp?: [semantic -> bool]
+  context?, map?, pretheory?, syntaxic?, expr?: [semantic -> bool]
+  nonempty?, nonempty_context?, nonempty_interp?: [semantic -> bool]
   %% Subtypes associated with the subtype predicates
   kind: TYPE = (kind?)
   keyword: TYPE = (keyword?)
@@ -272,97 +175,137 @@ BEGIN
   pretype: TYPE = (pretype?)
   interp: TYPE = (interp?)
   context: TYPE = (context?)
+  map: TYPE = (map?)
   pretheory: TYPE = (pretheory?)
   syntaxic: TYPE = (syntaxic?)
+  expr: TYPE = (expr?)
+  nonempty: TYPE = (nonempty?)
+  nonempty_context: TYPE = (nonempty_context?)
+  nonempty_interp: TYPE = (nonempty_interp?)
 
   %% Actual definition of the subtypes predicates as we would have defined them
   %% with mutual recursion.
-  %% These are intended to be used as AUTO_REWRITE replacement of the actual
-  %% definition of the subtypes in term of `prekind'.
-  kind: THEOREM
+  kind: AXIOM
     kind?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S))
-  keyword: THEOREM
+  keyword: AXIOM
     keyword?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S) OR KCONTEXT?(S) OR ( KTERM?(S) AND pretype?(dtype(S)) ))
-  name: THEOREM
-    name?(S) =
-      CASES S OF
-        symbol(s): TRUE,
-	dot(m, σ, s): interp?(σ)
-	ELSE FALSE
-      ENDCASES
-  preterm: THEOREM
-    preterm?(S) =
-      CASES S OF
-        v(i): TRUE,
-	app(f, a): preterm?(f) AND preterm?(a),
-	lam(T, a): pretype?(T) AND preterm?(a),
-	pair(a, b): preterm?(a) AND preterm?(b),
-	lproj(a): preterm?(a),
-	rproj(a): preterm?(a)
-	ELSE name?(S)
-      ENDCASES
-  pretype: THEOREM
-    pretype?(S) =
-      CASES S OF
-        fun(A, B): pretype?(A) AND pretype?(B),
-	prod(A, B): pretype?(A) AND pretype?(B),
-	subtype(T, a): pretype?(T) AND preterm?(a)
-	ELSE name?(S)
-      ENDCASES
-  interp: THEOREM
-    interp?(S) =
-      CASES S OF
-        nil: TRUE,
-	itype(s, T, σ): pretype?(T) AND interp?(σ),
-	iconst(s, a, σ): preterm?(a) AND interp?(σ)
-	ELSE FALSE
-      ENDCASES
-  context: THEOREM
-    context?(S) =
-      CASES S OF
-        〈〉: TRUE,
-	ktype_decl(s, Δ): context?(Δ),
-	ktype_def(s, T, Δ): pretype?(T) AND context?(Δ),
-	ktype_ext(s, Δ): context?(Δ),
-	kvar(T, Δ): pretype?(T) AND context?(Δ),
-	kconst_decl(s, T, Δ): pretype?(T) AND context?(Δ),
-	kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND context?(Δ),
-	kconst_ext(s, T, Δ): pretype?(T) AND context?(Δ),
-	ktheory(s, Θ, Δ): pretheory?(Θ) AND context?(Δ)
-	ELSE FALSE
-      ENDCASES
-  pretheory: THEOREM
-    pretheory?(S) =
-      CASES S OF
-        〈〉: TRUE,
-        ktype_decl(s, Δ): pretheory?(Δ),
-        ktype_def(s, T, Δ): pretype?(T) AND pretheory?(Δ),
-	ktype_ext(s, Δ): pretheory?(Δ),
-        kconst_decl(s, T, Δ): pretype?(T) AND pretheory?(Δ),
-        kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND pretheory?(Δ),
-	kconst_ext(s, T, Δ): pretype?(T) AND pretheory?(Δ)
-        ELSE FALSE
-      ENDCASES
-  syntaxic: THEOREM
+  name: AXIOM
+    name?(S) = CASES S OF
+      symbol(s): TRUE,
+      dot(m, σ, s): interp?(σ)
+      ELSE FALSE
+    ENDCASES
+  preterm: AXIOM
+    preterm?(S) = CASES S OF
+      symbol(s): TRUE,
+      dot(m, σ, s): interp?(σ),
+      v(i): TRUE,
+      app(f, a): preterm?(f) AND preterm?(a),
+      lam(T, a): pretype?(T) AND preterm?(a),
+      pair(a, b): preterm?(a) AND preterm?(b),
+      lproj(a): preterm?(a),
+      rproj(a): preterm?(a)
+      ELSE FALSE
+    ENDCASES
+  pretype: AXIOM
+    pretype?(S) = CASES S OF
+      symbol(s): TRUE,
+      dot(m, σ, s): interp?(σ),
+      fun(A, B): pretype?(A) AND pretype?(B),
+      prod(A, B): pretype?(A) AND pretype?(B),
+      subtype(T, a): pretype?(T) AND preterm?(a)
+      ELSE FALSE
+    ENDCASES
+  interp: AXIOM
+    interp?(S) = CASES S OF
+      nil: TRUE,
+      itype(s, T, σ): pretype?(T) AND interp?(σ),
+      iconst(s, a, σ): preterm?(a) AND interp?(σ)
+      ELSE FALSE
+    ENDCASES
+  context: AXIOM
+    context?(S) = CASES S OF
+      〈〉: TRUE,
+      ktype_decl(s, Δ): context?(Δ),
+      ktype_def(s, T, Δ): pretype?(T) AND context?(Δ),
+      ktype_ext(s, Δ): context?(Δ),
+      kvar(T, Δ): pretype?(T) AND context?(Δ),
+      kconst_decl(s, T, Δ): pretype?(T) AND context?(Δ),
+      kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND context?(Δ),
+      kconst_ext(s, T, Δ): pretype?(T) AND context?(Δ),
+      ktheory(s, Θ, Δ): pretheory?(Θ) AND context?(Δ)
+      ELSE FALSE
+    ENDCASES
+  map: AXIOM
+    map?(S) = CASES S OF
+       〈〉: TRUE,
+       ktype_decl(s, Δ): context?(Δ),
+       ktype_def(s, T, Δ): pretype?(T) AND context?(Δ),
+       ktype_ext(s, Δ): context?(Δ),
+       kvar(T, Δ): pretype?(T) AND context?(Δ),
+       kconst_decl(s, T, Δ): pretype?(T) AND context?(Δ),
+       kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND context?(Δ),
+       kconst_ext(s, T, Δ): pretype?(T) AND context?(Δ),
+       ktheory(s, Θ, Δ): pretheory?(Θ) AND context?(Δ),
+       nil: TRUE,
+       itype(s, T, σ): pretype?(T) AND interp?(σ),
+       iconst(s, a, σ): preterm?(a) AND interp?(σ)
+       ELSE FALSE
+     ENDCASES
+  pretheory: AXIOM
+    pretheory?(S) = CASES S OF
+      〈〉: TRUE,
+      ktype_decl(s, Δ): pretheory?(Δ),
+      ktype_def(s, T, Δ): pretype?(T) AND pretheory?(Δ),
+      ktype_ext(s, Δ): pretheory?(Δ),
+      kconst_decl(s, T, Δ): pretype?(T) AND pretheory?(Δ),
+      kconst_def(s, T, a, Δ): pretype?(T) AND preterm?(a) AND pretheory?(Δ),
+      kconst_ext(s, T, Δ): pretype?(T) AND pretheory?(Δ)
+      ELSE FALSE
+    ENDCASES
+  syntaxic: AXIOM
     syntaxic?(S) =
       (keyword?(S) OR preterm?(S) OR pretype?(S) OR context?(S) OR
        pretheory?(S) OR interp?(S) OR name?(S))
+  expr: AXIOM
+    expr?(S) = (interp?(S) OR preterm?(S) OR pretype?(S))
+  nonempty: AXIOM
+    nonempty?(S) = COND
+      ktype_decl?(S) -> context?(S),
+      ktype_def?(S) -> context?(S),
+      ktype_ext?(S) -> context?(S),
+      kvar?(S) -> context?(S),
+      kconst_decl?(S) -> context?(S),
+      kconst_def?(S) -> context?(S),
+      kconst_ext?(S) -> context?(S),
+      ktheory?(S) -> context?(S),
+      itype?(S) -> interp?(S),
+      iconst?(S) -> interp?(S),
+      ELSE -> FALSE
+    ENDCOND
+  nonempty_context: AXIOM
+    nonempty_context?(S) = COND
+      ktype_decl?(S) -> context?(S),
+      ktype_def?(S) -> context?(S),
+      ktype_ext?(S) -> context?(S),
+      kvar?(S) -> context?(S),
+      kconst_decl?(S) -> context?(S),
+      kconst_def?(S) -> context?(S),
+      kconst_ext?(S) -> context?(S),
+      ktheory?(S) -> context?(S),
+      ELSE -> FALSE
+    ENDCOND
+  nonempty_interp: AXIOM
+    nonempty_interp?(S) = COND
+      itype?(S) -> interp?(S),
+      iconst?(S) -> interp?(S),
+      ELSE -> FALSE
+    ENDCOND
 
-  name_is_preterm: JUDGEMENT name SUBTYPE_OF preterm
-  name_is_pretype: JUDGEMENT name SUBTYPE_OF pretype
-  pretheory_is_context: JUDGEMENT pretheory SUBTYPE_OF context
-
-  keyword_is_syntaxic: JUDGEMENT keyword SUBTYPE_OF syntaxic
-  name_is_syntaxic: JUDGEMENT name SUBTYPE_OF syntaxic
-  preterm_is_syntaxic: JUDGEMENT preterm SUBTYPE_OF syntaxic
-  pretype_is_syntaxic: JUDGEMENT pretype SUBTYPE_OF syntaxic
-  interp_is_syntaxic: JUDGEMENT interp SUBTYPE_OF syntaxic
-  context_is_syntaxic: JUDGEMENT context SUBTYPE_OF syntaxic
-  pretheory_is_syntaxic: JUDGEMENT pretheory SUBTYPE_OF syntaxic
-
-  AUTO_REWRITE- kind?, keyword?, name?, preterm?, pretype?, interp?, context?, pretheory?, syntaxic?
-  AUTO_REWRITE+ kind, keyword, name, preterm, pretype, interp, context, pretheory, syntaxic
-
+  AUTO_REWRITE+ kind, name, nonempty_interp, nonempty_context, pretheory
+  AUTO_REWRITE+ keyword, pretype, preterm, interp, nonempty, context
+  AUTO_REWRITE+ expr, map
+  AUTO_REWRITE+ syntaxic
 
   % Variable declaration
   Γ, Δ, Θ: VAR context

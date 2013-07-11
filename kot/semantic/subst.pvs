@@ -2,8 +2,8 @@ subst: THEORY
 BEGIN
   IMPORTING language
 
-  S: VAR { x: semantic | pretype?(x) OR preterm?(x) OR interp?(x) }
-  T: VAR pretype
+  e, f: VAR expr
+  T, A, B: VAR pretype
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -15,12 +15,14 @@ BEGIN
     ENDCASES
   MEASURE w(T)
   AUTO_REWRITE+ size
+
   
-  ;↑(S, (nb: [nat, nat])):
-    RECURSIVE { T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND
-                              (preterm?(S) IMPLIES preterm?(T)) AND
-			      (interp?(S) IMPLIES interp?(T)) } =
-    CASES S OF
+  ;↑(e, (nb: [nat, nat])): RECURSIVE
+    { f | (pretype?(e) => pretype?(f)) AND
+          (preterm?(e) => preterm?(f)) AND
+	  (interp?(e)  => interp?(f)) AND
+	  w(f) = w(e) } =
+    CASES e OF
       % Names
       symbol(s): symbol(s),
       dot(m, σ, s): dot(m, σ ↑ nb, s),
@@ -42,22 +44,21 @@ BEGIN
       itype(s, T, σ): itype(s, T ↑ nb, σ ↑ nb),
       iconst(s, a, σ): iconst(s, a ↑ nb, σ ↑ nb)
     ENDCASES
-  MEASURE w(S)
-  shift_weight: RECURSIVE JUDGEMENT
-    ↑(S, (nb: [nat, nat])) HAS_TYPE { T: semantic | w(T) = w(S) }
+  MEASURE w(e)
+  AUTO_REWRITE+ ↑
   shift_size: JUDGEMENT
-    ↑(T, (nb: [nat, nat])) HAS_TYPE { A: pretype | size(A) = size(T) }
+    ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
 
-  ;↑((S: semantic | pretype?(S) OR preterm?(S) OR interp?(S)), n: nat): MACRO semantic =
-    (S ↑ (n, 0))
+  ;↑(e, (n: nat)): MACRO semantic =
+    (e ↑ (n, 0))
 
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
-  subst(S, (x: nat), (t: preterm)): RECURSIVE
-    { T: semantic | (pretype?(S) IMPLIES pretype?(T)) AND
-                    (preterm?(S) IMPLIES preterm?(T)) AND
-		    (interp?(S) IMPLIES interp?(T)) } =
-    CASES S OF
+  subst(e, (x: nat), (t: preterm)): RECURSIVE
+    { f | (pretype?(e) => pretype?(f)) AND
+          (preterm?(e) => preterm?(f)) AND
+	  (interp?(e)  => interp?(f)) } =
+    CASES e OF
       symbol(s): symbol(s),
       dot(m, σ,s): dot(m, subst(σ, x, t), s),
 
@@ -90,7 +91,7 @@ BEGIN
       itype(s, T, σ): itype(s, subst(T, x, t), subst(σ, x, t)),
       iconst(s, a, σ): iconst(s, subst(a, x, t), subst(σ, x, t))
     ENDCASES
-  MEASURE w(S)
+  MEASURE w(e)
   subst_size: JUDGEMENT
     subst(T, (x: nat), (t: preterm)) HAS_TYPE { A: pretype | size(A) = size(T) }
 

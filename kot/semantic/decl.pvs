@@ -1,6 +1,6 @@
 decl: THEORY
 BEGIN
-  IMPORTING language
+  IMPORTING language, subtype
 
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
@@ -9,9 +9,80 @@ BEGIN
   x, y: VAR nat
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
-  S: VAR { x: semantic | context?(x) OR interp?(x) }
+  S: VAR map
 
-  kind(S): ε(kind?) =
+  type_kind?(S): bool =
+    COND
+      ktype_decl?(S) -> TRUE,
+      ktype_def?(S) -> TRUE,
+      ktype_ext?(S) -> TRUE,
+      itype?(S) -> TRUE,
+      ELSE -> FALSE
+    ENDCOND
+  type_kind: TYPE = (type_kind?)
+
+  const_kind?(S): bool =
+    COND
+      kconst_decl?(S) -> TRUE,
+      kconst_def?(S) -> TRUE,
+      kconst_ext?(S) -> TRUE,
+      iconst?(S) -> TRUE,
+      ELSE -> FALSE
+    ENDCOND
+  const_kind: TYPE = (const_kind?)
+
+  var_kind?(S): bool =
+    COND
+      kvar?(S) -> TRUE,
+      ELSE -> FALSE
+    ENDCOND
+  var_kind: TYPE = (var_kind?)
+
+  typed_kind?(S): bool =
+    COND
+      kconst_decl?(S) -> TRUE,
+      kconst_def?(S) -> TRUE,
+      kconst_ext?(S) -> TRUE,
+      iconst?(S) -> TRUE,
+      kvar?(S) -> TRUE,
+      ELSE -> FALSE
+    ENDCOND
+  typed_kind: TYPE = (typed_kind?)
+
+  theory_kind?(S): bool =
+    COND
+      ktheory?(S) -> TRUE,
+      ELSE -> FALSE
+    ENDCOND
+  theory_kind: TYPE = (theory_kind?)
+
+  const_kind_is_typed_kind: JUDGEMENT
+    const_kind SUBTYPE_OF typed_kind
+  var_kind_is_typed_kind: JUDGEMENT
+    var_kind SUBTYPE_OF typed_kind
+  var_kind_when_typed_kind: THEOREM
+    typed_kind?(S) IMPLIES (var_kind?(S) IFF NOT const_kind?(S))
+  const_kind_when_typed_kind: THEOREM
+    typed_kind?(S) IMPLIES (const_kind?(S) IFF NOT var_kind?(S))
+  theory_kind_when_typed_kind: THEOREM
+    typed_kind?(S) IMPLIES NOT theory_kind?(S)
+  typed_kind_when_theory_kind: THEOREM
+    theory_kind?(S) IMPLIES NOT typed_kind?(S)
+  type_kind_when_typed_kind: THEOREM
+    typed_kind?(S) IMPLIES NOT type_kind?(S)
+  typed_kind_when_type_kind: THEOREM
+    type_kind?(S) IMPLIES NOT typed_kind?(S)
+  type_kind_when_theory_kind: THEOREM
+    theory_kind?(S) IMPLIES NOT type_kind?(S)
+  theory_kind_when_type_kind: THEOREM
+    type_kind?(S) IMPLIES NOT theory_kind?(S)
+  theory_kind_when_interp: THEOREM
+    interp?(S) IMPLIES NOT theory_kind?(S)
+  interp_when_theory_kind: THEOREM
+    theory_kind?(S) IMPLIES NOT interp?(S)
+
+  kind(S):
+    { r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥ } =
     CASES S OF
       ktype_decl(s, Δ): KTYPE,
       ktype_def(s, T, Δ): KTYPE,
@@ -25,44 +96,64 @@ BEGIN
       iconst(s, a, σ): KCONST
       ELSE ⊥
     ENDCASES
-  AUTO_REWRITE- kind
+  AUTO_REWRITE+ kind
   kind_nonempty: JUDGEMENT
-    kind(Γ | NOT empty?(Γ)) HAS_TYPE kind
-  kind_nonnull: JUDGEMENT
-    kind(σ | NOT null?(σ)) HAS_TYPE { k: kind | KTYPE?(k) OR KCONST?(k) }
+    kind(S: nonempty) HAS_TYPE kind
+  kind_type: THEOREM
+    kind(S) = KTYPE IFF type_kind?(S)
+  kind_const: THEOREM
+    kind(S) = KCONST IFF const_kind?(S)
+  kind_var: THEOREM
+    kind(S) = KVAR IFF var_kind?(S)
+  kind_theory: THEOREM
+    kind(S) = KTHEORY IFF theory_kind?(S)
+  AUTO_REWRITE+ kind_type, kind_const, kind_var, kind_theory
 
-  definition?(S): bool =
-    ktype_def?(S) OR kconst_def?(S) OR ktheory?(S) OR itype?(S) OR iconst?(S)
-
-  definition(S):
-    ε({ x: semantic | pretype?(x) OR preterm?(x) OR pretheory?(x) }) =
+  definition?(S: nonempty): bool =
+    CASES S OF
+      ktype_def(s, T, Δ): TRUE,
+      kconst_def(s, T, a, Δ): TRUE,
+      ktheory(s, Θ, Δ): TRUE,
+      itype(s, T, σ): TRUE,
+      iconst(s, a, σ): TRUE
+      ELSE FALSE
+    ENDCASES
+  AUTO_REWRITE+ definition?
+  definition: TYPE = (definition?)
+  nonempty_interp_is_definition: JUDGEMENT
+    nonempty_interp SUBTYPE_OF definition
+  
+  definition(S: definition):
+    { x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND
+                    (const_kind?(S) IMPLIES preterm?(x)) AND
+		    (theory_kind?(S) IMPLIES pretheory?(x)) AND
+		    w(x) + w(rest(S)) < w(S) } =
     CASES S OF
       ktype_def(s, T, Δ): T,
       kconst_def(s, T, a, Δ): a,
       ktheory(s, Θ, Δ): Θ,
       itype(s, T, σ): T,
       iconst(s, a, σ): a
-      ELSE ⊥
     ENDCASES
   AUTO_REWRITE+ definition
-  definition_type: JUDGEMENT
-    definition(S | definition?(S) AND kind(S) = KTYPE) HAS_TYPE pretype
-  definition_const: JUDGEMENT
-    definition(S | definition?(S) AND kind(S) = KCONST) HAS_TYPE preterm
-  definition_theory: JUDGEMENT
-    definition(S | definition?(S) AND kind(S) = KTHEORY) HAS_TYPE pretheory
 
-  type_(Γ): ε(pretype?) =
+  typed?(Γ: nonempty_context): bool =
+    COND
+      kconst_decl?(Γ) -> TRUE,
+      kconst_def?(Γ) -> TRUE,
+      kconst_ext?(Γ) -> TRUE,
+      kvar?(Γ) -> TRUE,
+      ELSE -> FALSE
+    ENDCOND
+  AUTO_REWRITE+ typed?
+  typed: TYPE = (typed?)
+
+  type_(Γ: typed): { T | w(T) + w(rest(Γ)) < w(Γ) } =
     CASES Γ OF
       kconst_decl(s, T, Δ): T,
       kconst_def(s, T, a, Δ): T,
       kconst_ext(s, T, Δ): T,
       kvar(T, Δ): T
-      ELSE ⊥
     ENDCASES
   AUTO_REWRITE+ type_
-  type_const: JUDGEMENT
-    type_(Γ | kind(Γ) = KCONST) HAS_TYPE pretype
-  type_var: JUDGEMENT
-    type_(Γ | kind(Γ) = KVAR) HAS_TYPE pretype
 END decl
