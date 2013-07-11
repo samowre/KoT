@@ -2,8 +2,9 @@ definitions: THEORY
 BEGIN
   IMPORTING decl
   IMPORTING apply
+  IMPORTING contexts
   
-  S: VAR { x: semantic | pretype?(x) OR preterm?(x) OR interp?(x) }
+  e: VAR expr
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
   r, s: VAR symbol
@@ -12,8 +13,79 @@ BEGIN
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
 
-  η(Γ, (m: symbol), σ)(S): RECURSIVE semantic =
-    CASES S OF
+  % context_size(Γ): RECURSIVE ordinal =
+  %   CASES Γ OF
+  %     〈〉: 0
+  %   , ktype_decl(s, Δ): 0
+  %   , ktype_def(s, T, Δ): 0
+  %   , ktype_ext(s, Δ): 0
+  %   , kvar(T, Δ): 0
+  %   , kconst_decl(s, T, Δ): 0
+  %   , kconst_def(s, T, a, Δ): 0
+  %   , kconst_ext(s, T, Δ): 0
+  %   , ktheory(s, Θ, Δ): 0
+  %   ENDCASES
+  % MEASURE w(Γ)
+
+    well_formed?(Γ)(e): RECURSIVE bool =
+    CASES e OF
+      symbol(s): s ∈ Γ AND kind(Γ(s)) /= KTHEORY,
+      dot(m, σ, s):
+        m ∈ Γ AND kind(Γ(m)) = KTHEORY AND s ∈ definition(Γ(m)) AND
+  	well_formed?(Γ)(σ), % AND interp_for?(definition(Γ(m)))(σ),
+      fun(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
+      prod(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
+      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
+      v(i): i ∈ Γ,
+      app(f, a): well_formed?(Γ)(f) AND well_formed?(Γ)(a),
+      lam(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
+      pair(a, b): well_formed?(Γ)(a) AND well_formed?(Γ)(b),
+      lproj(a): well_formed?(Γ)(a),
+      rproj(a): well_formed?(Γ)(a),
+      nil: TRUE,
+      itype(s, T, σ): well_formed?(Γ)(T) AND well_formed?(Γ)(σ),
+      iconst(s, a, σ): well_formed?(Γ)(a) AND well_formed?(Γ)(σ)
+    ENDCASES
+  MEASURE w(e)
+  well_formed(Γ): TYPE = (well_formed?(Γ))
+
+  length(Γ): RECURSIVE nat =
+    COND
+      empty?(Γ) -> 0,
+      ktheory?(Γ) -> 1 + length(dtheory(Γ)) + length(rest(Γ)),
+      ELSE -> 1 + length(rest(Γ))
+    ENDCOND
+  MEASURE w(Γ)
+
+  pos(Γ, s): RECURSIVE nat =
+    COND
+      empty?(Γ) -> 0,
+      kvar?(Γ) -> pos(rest(Γ), s),
+      ELSE -> IF s = s(Γ) THEN length(Γ) ELSE pos(rest(Γ), s) ENDIF
+    ENDCOND
+  MEASURE w(Γ)
+
+  pos(Γ, (e: well_formed(Γ))): RECURSIVE nat =
+    CASES e OF
+      symbol(s): pos(Γ, s),
+      dot(m, σ, s): pos(Γ, m) + pos(Γ, σ) + pos(definition(Γ(m)), s),
+      fun(A, B): max(pos(Γ, A), pos(Γ, B)),
+      prod(A, B): max(pos(Γ, A), pos(Γ, B)),
+      subtype(T, a): max(pos(Γ, T), pos(Γ, a)),
+      v(i): 0,
+      app(f, a): max(pos(Γ, f), pos(Γ, a)),
+      lam(T, a): max(pos(Γ, T), pos(Γ, a)),
+      pair(a, b): max(pos(Γ, a), pos(Γ, b)),
+      lproj(a): pos(Γ, a),
+      rproj(a): pos(Γ, a),
+      nil: 0,
+      itype(s, T, τ): max(pos(Γ, T), pos(Γ, τ)),
+      iconst(s, a, τ): max(pos(Γ, a), pos(Γ, τ))
+    ENDCASES
+  MEASURE w(e)
+
+  η(Γ, (m: symbol), σ)(e): RECURSIVE semantic =
+    CASES e OF
       symbol(s):
         IF s ∈ σ THEN definition(σ(s))
 	ELSIF s ∈ Γ THEN  dot(m, σ, s)
@@ -32,21 +104,83 @@ BEGIN
       itype(s, T, τ): itype(s, η(Γ, m, σ)(T), η(Γ, m, σ)(τ)),
       iconst(s, a, τ): iconst(s, η(Γ, m, σ)(a), η(Γ, m, σ)(τ))
     ENDCASES
-  MEASURE w(S)
+  MEASURE w(e)
 
-  δ(Γ)(T): RECURSIVE semantic =
+
+  pos_symbol_lt_length: THEOREM
+    pos(Γ, s) <= length(Γ)
+  pos_lt_length: THEOREM
+    well_formed?(Γ)(e) IMPLIES pos(Γ, e) <= length(Γ) + w(e)
+
+  pos_ktype_def: THEOREM
+    well_formed?(Γ)(T) IMPLIES
+      pos(ktype_def(s, T, Γ), symbol(s)) > pos(Γ, T)
+  pos_kconst_def: THEOREM
+    well_formed?(Γ)(T) AND well_formed?(Γ)(a) IMPLIES
+      pos(kconst_def(s, T, a, Γ), symbol(s)) > pos(Γ, a)
+
+  external?(Γ): bool = ktype_ext?(Γ) OR kconst_ext?(Γ)
+
+
+
+  % references(Γ, e): RECURSIVE [nat, nat] =
+  %   CASES e OF
+  %     symbol(s):
+  %       IF definition?(Γ(s)) THEN
+  % 	  1 + references(rest(Γ(s)), definition(Γ(s)))
+  % 	ELSE 1 ENDIF,
+  %     dot(m, σ, s):
+  %       IF s ∈ σ THEN
+  % 	  references(Γ, definition(σ(s)))
+  % 	ELSE LET Δ = definition(Γ(m)) IN
+  % 	  IF definition?(Δ(s)) THEN
+  % 	    references(Γ, η(rest(Δ(s)), m, σ)(definition(Δ(s))))
+  % 	  ELSE 1 ENDIF
+  % 	ENDIF,
+  %     fun(A, B): references(Γ, A) + references(Γ, B),
+  %     prod(A, B): references(Γ, A) + references(Γ, B),
+  %     subtype(T, a): references(Γ, T) + references(Γ, a),
+  %     v(i): 0,
+  %     app(f, a): references(Γ, f) + references(Γ, a),
+  %     lam(T, a): references(Γ, T) + references(Γ, a),
+  %     pair(a, b): references(Γ, a) + references(Γ, b),
+  %     lproj(a): references(Γ, a),
+  %     rproj(a): references(Γ, a)
+  %   ENDCASES
+  % MEASURE w(e)
+
+  δ(Γ)(T | well_formed?(Γ)(T)): RECURSIVE semantic =
     CASES T OF
       symbol(s):
-        IF s ∈ Γ THEN δ(Γ(s))(definition(Γ(s))) ELSE symbol(s) ENDIF,
+        IF definition?(Γ(s)) THEN
+          δ(rest(Γ(s)))(definition(Γ(s)))
+  	ELSE symbol(s) ENDIF,
       dot(m, σ, s):
-        IF m ∈ Γ AND s ∈ definition(Γ(m)) THEN
-          δ(Γ)(η(Γ, m, σ)(definition(definition(Γ(m))(s))))
-	ELSE
-	  dot(m, σ, s)
-	ENDIF,
+        IF s ∈ σ THEN
+  	  δ(Γ)(definition(σ(s)))
+  	ELSE
+  	  LET Δ = definition(Γ(m)) IN
+  	  IF definition?(Δ(s)) THEN
+  	    δ(Γ)(η(rest(Δ(s)), m, σ)(definition(Δ(s))))
+  	  ELSIF external?(Δ(s)) THEN
+  	    dot(m, nil, s)
+  	  ELSE dot(m, δ(Γ)(σ), s) ENDIF
+  	ENDIF,
       fun(A, B): fun(δ(Γ)(A), δ(Γ)(B)),
       prod(A, B): prod(δ(Γ)(A), δ(Γ)(B)),
-      subtype(T, a): subtype(δ(Γ)(T), a)
+      subtype(T, a): subtype(δ(Γ)(T), a),
+      〈〉: 〈〉,
+      ktype_decl(s, Δ): ktype_decl(s, δ(Γ)(Δ)),
+      ktype_def(s, T, Δ): ktype_def(s, δ(Γ ++ δ(Γ)(Δ))(T), δ(Γ)(Δ)),
+      ktype_ext(s, Δ): ktype_ext(s, δ(Γ)(Δ)),
+      kconst_decl(s, T, Δ): kconst_decl(s, δ(Γ ++ δ(Γ)(Δ))(T), δ(Γ)(Δ)),
+      kconst_def(s, T, a, Δ):
+        kconst_def(s, δ(Γ ++ δ(Γ)(Δ))(T), δ(Γ ++ δ(Γ)(Δ))(a), δ(Γ)(Δ)),
+      kconst_ext(s, T, Δ):
+        kconst_ext(s, δ(Γ ++ δ(Γ)(Δ))(T), δ(Γ)(Δ)),
+      nil: nil,
+      itype(s, T, σ): itype(s, δ(Γ)(T), δ(Γ)(σ)),
+      iconst(s, a, σ): iconst(s, δ(Γ)(a), δ(Γ)(σ))
     ENDCASES
   MEASURE w(Γ) + w(T)
         

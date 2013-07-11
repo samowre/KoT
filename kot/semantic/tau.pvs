@@ -25,7 +25,7 @@ BEGIN
   ;++(l1, l2: list[tccs]): list[tccs] = append(l1, l2)
   ;⊢(Γ, a): list[tccs] = cons((Γ, a), null) 
 
-  fail: [semantic, list[tccs]] = (⊥, null)
+  fail: [keyword, list[tccs]] = (⊥, null)
   
 
 
@@ -40,7 +40,7 @@ BEGIN
   π(A)(a): preterm = app(π(A), a)
 
   % TODO : add to language (probably)
-  CONTEXT?(S): bool = KCONTEXT?(S) OR KTHEORY?(S)
+  CONTEXT?(S: keyword): bool = KCONTEXT?(S) OR KTHEORY?(S)
 
 
 
@@ -62,7 +62,7 @@ BEGIN
   % Good luck.
 
 
-  τ(Θ)(S): RECURSIVE [ε(keyword?), list[tccs]] = 
+  τ(Θ)(S): RECURSIVE [keyword, list[tccs]] = 
   CASES S OF
 
   %% Names
@@ -301,7 +301,7 @@ BEGIN
 	    IF kwT = KTYPE
 	      THEN LET (Tp, tccsa) = τ(Θ ++ Γ)(a) IN
 	        (kwΓ, tccsΓ ++ tccsT ++ tccsa ++ 
-		 ((T ∼ Tp)(Γ)) ++ (Γ ⊢ π(T)(a)))
+		 ((T ∼ TYPEOF(Tp))(Γ)) ++ (Γ ⊢ π(T)(a)))
 	      ELSE fail
 	    ENDIF
 	  ELSE fail

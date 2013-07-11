@@ -81,8 +81,8 @@ BEGIN
   interp_when_theory_kind: THEOREM
     theory_kind?(S) IMPLIES NOT interp?(S)
 
-  kind(S):
-    { r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥ } =
+  kind(S): 
+    { r: keyword | nonempty?(S) IFF r ≠ ⊥ } =
     CASES S OF
       ktype_decl(s, Δ): KTYPE,
       ktype_def(s, T, Δ): KTYPE,
@@ -98,7 +98,7 @@ BEGIN
     ENDCASES
   AUTO_REWRITE+ kind
   kind_nonempty: JUDGEMENT
-    kind(S: nonempty) HAS_TYPE kind
+    kind(S: nonempty) HAS_TYPE keyword % TODO: kind
   kind_type: THEOREM
     kind(S) = KTYPE IFF type_kind?(S)
   kind_const: THEOREM

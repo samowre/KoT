@@ -1,0 +1,142 @@
+subtype: THEORY
+BEGIN
+  IMPORTING language
+
+  S: VAR semantic
+
+  % Subtype inclusions:
+  %
+  %       _____________ pretype \
+  %      /                       \
+  % name                          \
+  %      \_____________ preterm ———| expr ————| syntaxic
+  %                               /          /
+  % nonempty_interp ——— interp ———          /
+  %                  \           \         /
+  %                   | nonempty —\       /
+  %                  /             | map /
+  % nonempty_context \            /
+  %                   | context –/
+  % pretheory _______/
+
+  name_is_pretype: JUDGEMENT name SUBTYPE_OF pretype
+  name_is_preterm: JUDGEMENT name SUBTYPE_OF preterm
+  pretype_is_expr: JUDGEMENT pretype SUBTYPE_OF expr
+  preterm_is_expr: JUDGEMENT preterm SUBTYPE_OF expr
+  name_is_expr: JUDGEMENT name SUBTYPE_OF expr
+  expr_is_syntaxic: JUDGEMENT expr SUBTYPE_OF syntaxic
+  pretype_is_syntaxic: JUDGEMENT pretype SUBTYPE_OF syntaxic
+  preterm_is_syntaxic: JUDGEMENT preterm SUBTYPE_OF syntaxic
+  name_is_syntaxic: JUDGEMENT name SUBTYPE_OF syntaxic
+  nonempty_interp_is_interp: JUDGEMENT nonempty_interp SUBTYPE_OF interp
+  interp_is_expr: JUDGEMENT interp SUBTYPE_OF expr
+  nonempty_interp_is_expr: JUDGEMENT nonempty_interp SUBTYPE_OF expr
+  interp_is_map: JUDGEMENT interp SUBTYPE_OF map
+  nonempty_interp_is_map: JUDGEMENT nonempty_interp SUBTYPE_OF map
+  map_is_syntaxic: JUDGEMENT map SUBTYPE_OF syntaxic
+  interp_is_syntaxic: JUDGEMENT interp SUBTYPE_OF syntaxic
+  nonempty_interp_is_syntaxic: JUDGEMENT nonempty_interp SUBTYPE_OF syntaxic
+  nonempty_interp_is_nonempty: JUDGEMENT nonempty_interp SUBTYPE_OF nonempty
+  nonempty_context_is_nonempty: JUDGEMENT nonempty_context SUBTYPE_OF nonempty
+  nonempty_is_map: JUDGEMENT nonempty SUBTYPE_OF map
+  nonempty_context_is_map: JUDGEMENT nonempty_context SUBTYPE_OF map
+  nonempty_is_syntaxic: JUDGEMENT nonempty SUBTYPE_OF syntaxic
+  nonempty_context_is_syntaxic: JUDGEMENT nonempty_context SUBTYPE_OF syntaxic
+  nonempty_context_is_context: JUDGEMENT nonempty_context SUBTYPE_OF context
+  pretheory_is_context: JUDGEMENT pretheory SUBTYPE_OF context
+  context_is_map: JUDGEMENT context SUBTYPE_OF map
+  pretheory_is_map: JUDGEMENT pretheory SUBTYPE_OF map
+  context_is_syntaxic: JUDGEMENT context SUBTYPE_OF syntaxic
+  pretheory_is_syntaxic: JUDGEMENT pretheory SUBTYPE_OF syntaxic
+
+  name_when_nonempty_interp: JUDGEMENT nonempty_interp SUBTYPE_OF { S | NOT name?(S) }
+  name_when_interp: JUDGEMENT interp SUBTYPE_OF { S | NOT name?(S) }
+  name_when_nonempty: JUDGEMENT nonempty SUBTYPE_OF { S | NOT name?(S) }
+  name_when_nonempty_context: JUDGEMENT nonempty_context SUBTYPE_OF { S | NOT name?(S) }
+  name_when_context: JUDGEMENT context SUBTYPE_OF { S | NOT name?(S) }
+  name_when_pretheory: JUDGEMENT pretheory SUBTYPE_OF { S | NOT name?(S) }
+  name_when_map: JUDGEMENT map SUBTYPE_OF { S | NOT name?(S) }
+  pretype_when_nonempty_interp: JUDGEMENT nonempty_interp SUBTYPE_OF { S | NOT pretype?(S) }
+  pretype_when_interp: JUDGEMENT interp SUBTYPE_OF { S | NOT pretype?(S) }
+  pretype_when_nonempty: JUDGEMENT nonempty SUBTYPE_OF { S | NOT pretype?(S) }
+  pretype_when_nonempty_context: JUDGEMENT nonempty_context SUBTYPE_OF { S | NOT pretype?(S) }
+  pretype_when_context: JUDGEMENT context SUBTYPE_OF { S | NOT pretype?(S) }
+  pretype_when_pretheory: JUDGEMENT pretheory SUBTYPE_OF { S | NOT pretype?(S) }
+  pretype_when_map: JUDGEMENT map SUBTYPE_OF { S | NOT pretype?(S) }
+  preterm_when_nonempty_interp: JUDGEMENT nonempty_interp SUBTYPE_OF { S | NOT preterm?(S) }
+  preterm_when_interp: JUDGEMENT interp SUBTYPE_OF { S | NOT preterm?(S) }
+  preterm_when_nonempty: JUDGEMENT nonempty SUBTYPE_OF { S | NOT preterm?(S) }
+  preterm_when_nonempty_context: JUDGEMENT nonempty_context SUBTYPE_OF { S | NOT preterm?(S) }
+  preterm_when_context: JUDGEMENT context SUBTYPE_OF { S | NOT preterm?(S) }
+  preterm_when_pretheory: JUDGEMENT pretheory SUBTYPE_OF { S | NOT preterm?(S) }
+  preterm_when_map: JUDGEMENT map SUBTYPE_OF { S | NOT preterm?(S) }
+  nonempty_interp_when_name: JUDGEMENT name SUBTYPE_OF { S | NOT nonempty_interp?(S) }
+  nonempty_interp_when_pretype: JUDGEMENT pretype SUBTYPE_OF { S | NOT nonempty_interp?(S) }
+  nonempty_interp_when_preterm: JUDGEMENT preterm SUBTYPE_OF { S | NOT nonempty_interp?(S) }
+  interp_when_name: JUDGEMENT name SUBTYPE_OF { S | NOT interp?(S) }
+  interp_when_pretype: JUDGEMENT pretype SUBTYPE_OF { S | NOT interp?(S) }
+  interp_when_preterm: JUDGEMENT preterm SUBTYPE_OF { S | NOT interp?(S) }
+  nonempty_when_name: JUDGEMENT name SUBTYPE_OF { S | NOT nonempty?(S) }
+  nonempty_when_pretype: JUDGEMENT pretype SUBTYPE_OF { S | NOT nonempty?(S) }
+  nonempty_when_preterm: JUDGEMENT preterm SUBTYPE_OF { S | NOT nonempty?(S) }
+  nonempty_context_when_name: JUDGEMENT name SUBTYPE_OF { S | NOT nonempty_context?(S) }
+  nonempty_context_when_pretype: JUDGEMENT pretype SUBTYPE_OF { S | NOT nonempty_context?(S) }
+  nonempty_context_when_preterm: JUDGEMENT preterm SUBTYPE_OF { S | NOT nonempty_context?(S) }
+  context_when_name: JUDGEMENT name SUBTYPE_OF { S | NOT context?(S) }
+  context_when_pretype: JUDGEMENT pretype SUBTYPE_OF { S | NOT context?(S) }
+  context_when_preterm: JUDGEMENT preterm SUBTYPE_OF { S | NOT context?(S) }
+  pretheory_when_name: JUDGEMENT name SUBTYPE_OF { S | NOT pretheory?(S) }
+  pretheory_when_pretype: JUDGEMENT pretype SUBTYPE_OF { S | NOT pretheory?(S) }
+  pretheory_when_preterm: JUDGEMENT preterm SUBTYPE_OF { S | NOT pretheory?(S) }
+  map_when_name: JUDGEMENT name SUBTYPE_OF { S | NOT map?(S) }
+  map_when_pretype: JUDGEMENT pretype SUBTYPE_OF { S | NOT map?(S) }
+  map_when_preterm: JUDGEMENT preterm SUBTYPE_OF { S | NOT map?(S) }
+  interp_when_nonempty_context: JUDGEMENT nonempty_context SUBTYPE_OF { S | NOT interp?(S) }
+  interp_when_pretheory: JUDGEMENT pretheory SUBTYPE_OF { S | NOT interp?(S) }
+  interp_when_context: JUDGEMENT context SUBTYPE_OF { S | NOT interp?(S) }
+  nonempty_interp_when_nonempty_context: JUDGEMENT nonempty_context SUBTYPE_OF { S | NOT nonempty_interp?(S) }
+  nonempty_interp_when_pretheory: JUDGEMENT pretheory SUBTYPE_OF { S | NOT nonempty_interp?(S) }
+  nonempty_interp_when_context: JUDGEMENT context SUBTYPE_OF { S | NOT nonempty_interp?(S) }
+  expr_when_nonempty_context: JUDGEMENT nonempty_context SUBTYPE_OF { S | NOT expr?(S) }
+  expr_when_pretheory: JUDGEMENT pretheory SUBTYPE_OF { S | NOT expr?(S) }
+  expr_when_context: JUDGEMENT context SUBTYPE_OF { S | NOT expr?(S) }
+  nonempty_context_when_interp: JUDGEMENT interp SUBTYPE_OF { S | NOT nonempty_context?(S) }
+  nonempty_context_when_nonempty_interp: JUDGEMENT nonempty_interp SUBTYPE_OF { S | NOT nonempty_context?(S) }
+  nonempty_context_when_expr: JUDGEMENT expr SUBTYPE_OF { S | NOT nonempty_context?(S) }
+  pretheory_when_interp: JUDGEMENT interp SUBTYPE_OF { S | NOT pretheory?(S) }
+  pretheory_when_nonempty_interp: JUDGEMENT nonempty_interp SUBTYPE_OF { S | NOT pretheory?(S) }
+  pretheory_when_expr: JUDGEMENT expr SUBTYPE_OF { S | NOT pretheory?(S) }
+  context_when_interp: JUDGEMENT interp SUBTYPE_OF { S | NOT context?(S) }
+  context_when_nonempty_interp: JUDGEMENT nonempty_interp SUBTYPE_OF { S | NOT context?(S) }
+  context_when_expr: JUDGEMENT expr SUBTYPE_OF { S | NOT context?(S) }
+
+
+  expr_split: THEOREM
+    expr?(S) IFF pretype?(S) OR preterm?(S) OR interp?(S)
+  map_split: THEOREM
+    map?(S) IFF interp?(S) OR context?(S)
+  syntaxic_split: THEOREM
+    syntaxic?(S) IFF expr?(S) OR map?(S)
+  nonempty_split: THEOREM
+    nonempty?(S) IFF nonempty_interp?(S) OR nonempty_context?(S)
+  map_as_nonempty: THEOREM
+    map?(S) IFF nonempty?(S) OR empty?(S) OR null?(S)
+  interp_as_nonempty: THEOREM
+    interp?(S) IFF nonempty_interp?(S) OR null?(S)
+  context_as_nonempty: THEOREM
+    context?(S) IFF nonempty_context?(S) OR empty?(S)
+  nonempty_as_map: THEOREM
+    nonempty?(S) IFF (map?(S) AND NOT empty?(S) AND NOT null?(S))
+  nonempty_context_as_context: THEOREM
+    nonempty_context?(S) IFF (context?(S) AND NOT empty?(S))
+  nonempty_interp_as_interp: THEOREM
+    nonempty_interp?(S) IFF (interp?(S) AND NOT null?(S))
+
+  nonempty_rest: JUDGEMENT
+    rest(x: nonempty) HAS_TYPE { m: map | w(m) < w(x) }
+  context_rest: JUDGEMENT
+    rest(x: nonempty_context) HAS_TYPE { Γ: context | w(Γ) < w(x) }
+  interp_rest: JUDGEMENT
+    rest(x: nonempty_interp) HAS_TYPE { σ: interp | w(σ) < w(x) }
+
+END subtype
