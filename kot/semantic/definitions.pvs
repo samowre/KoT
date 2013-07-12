@@ -1,7 +1,5 @@
 definitions: THEORY
 BEGIN
-  IMPORTING decl
-  IMPORTING apply
   IMPORTING contexts
   
   e: VAR expr
@@ -12,27 +10,70 @@ BEGIN
   x, y: VAR nat
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
+  S: VAR syntaxic
 
-  well_formed?(Γ)(e): RECURSIVE bool =
-    CASES e OF
+
+    well_formed?(Γ)(S): RECURSIVE bool =
+    CASES S OF
       symbol(s): s ∈ Γ AND kind(Γ(s)) /= KTHEORY,
       dot(m, σ, s):
         m ∈ Γ AND kind(Γ(m)) = KTHEORY AND s ∈ definition(Γ(m)) AND
   	well_formed?(Γ)(σ), % AND interp_for?(definition(Γ(m)))(σ),
+
       fun(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
       prod(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
       subtype(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
+
       v(i): i ∈ Γ,
       app(f, a): well_formed?(Γ)(f) AND well_formed?(Γ)(a),
       lam(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
       pair(a, b): well_formed?(Γ)(a) AND well_formed?(Γ)(b),
       lproj(a): well_formed?(Γ)(a),
       rproj(a): well_formed?(Γ)(a),
+
+      〈〉: TRUE,
+      ktype_decl(s, Θ): 
+        s ∉ Θ AND s ∉ Γ AND
+      	well_formed?(Γ)(Θ),
+      ktype_def(s, T, Θ): 
+        s ∉ Θ AND s ∉ Γ AND
+	well_formed?(Γ ++ Θ)(T) AND 
+	well_formed?(Γ)(Θ),
+      ktype_ext(s, Θ): 
+        s ∉ Θ AND s ∉ Γ AND
+	well_formed?(Γ)(Θ),
+      kvar(T, Θ): 
+        well_formed?(Γ ++ Θ)(T) AND 
+	well_formed?(Γ)(Θ),
+      kconst_decl(s, T, Θ): 
+        s ∉ Θ AND s ∉ Γ AND
+	 well_formed?(Γ ++ Θ)(T) AND 
+	 well_formed?(Γ)(Θ),
+      kconst_def(s, T, a, Θ): 
+        s ∉ Θ AND s ∉ Γ AND
+	well_formed?(Γ ++ Θ)(T) AND 
+      	well_formed?(Γ ++ Θ)(a) AND 
+	well_formed?(Γ)(Θ),
+      kconst_ext(s, T, Θ): 
+        s ∉ Θ AND s ∉ Γ AND
+	 well_formed?(Γ ++ Θ)(T) AND 
+	 well_formed?(Γ)(Θ),
+      ktheory(s, Th, Θ): 
+        s ∉ Θ AND s ∉ Γ AND
+	well_formed?(Γ ++ Θ)(Th) AND 
+	well_formed?(Γ)(Θ),
+
       nil: TRUE,
-      itype(s, T, σ): well_formed?(Γ)(T) AND well_formed?(Γ)(σ),
-      iconst(s, a, σ): well_formed?(Γ)(a) AND well_formed?(Γ)(σ)
+      itype(s, T, σ): 
+        s ∉ σ AND 
+	well_formed?(Γ)(T) AND 
+	well_formed?(Γ)(σ),
+      iconst(s, a, σ): 
+        s ∉ σ AND 
+	well_formed?(Γ)(a) AND 
+	well_formed?(Γ)(σ)
     ENDCASES
-  MEASURE w(e)
+  MEASURE w(S)
   well_formed(Γ): TYPE = (well_formed?(Γ))
 
   % η function, as informally defined just before definition 5.5

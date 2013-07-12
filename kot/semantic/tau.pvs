@@ -1,7 +1,5 @@
 tau: THEORY
 BEGIN
-
-  IMPORTING contexts
   IMPORTING interp
   IMPORTING compare
   IMPORTING definitions
@@ -20,13 +18,13 @@ BEGIN
 
 
   %% Type TCCS 
-  tcc: TYPE = preterm
+  pretcc: TYPE = preterm
 
-  ;++(l1, l2: list[tcc]): list[tcc] = append(l1, l2)
+  ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
   % ;⊢(Γ, a): list[tcc] = cons((Γ, a), null) 
-  π(A)(a): list[tcc] = cons( app(π(A), a), null)
+  π(A)(a): list[pretcc] = cons( app(π(A), a), null)
 
-  fail: [keyword, list[tcc]] = (⊥, null)
+  fail: [keyword, list[pretcc]] = (⊥, null)
   
   % Important invariants of τ to prove :
   %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
@@ -47,7 +45,15 @@ BEGIN
 
 
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
-  τ(Θ)(S): RECURSIVE [keyword, list[tcc]] = 
+  τ(Θ | well_formed?(〈〉)(Θ))(S): RECURSIVE 
+    { x: [keyword, list[pretcc]] | 
+        LET (k, l) = x IN
+ 	(undefined?(k) OR KCONTEXT?(k) OR KTHEORY?(k) OR KTYPE?(k) OR KTERM?(k)) AND
+	(KCONTEXT?(k) IMPLIES context?(S)) AND
+	(KTHEORY?(k) IMPLIES pretheory?(S)) AND
+	(KTYPE?(k) IMPLIES pretype?(S)) AND
+	(KTERM?(k) IMPLIES preterm?(S)) AND
+	(k /= ⊥ IMPLIES well_formed?(Θ)(S)) } = 
   CASES S OF
 
   %% Names
@@ -76,13 +82,13 @@ BEGIN
     dot(m, σ, s): 
       IF m ∈ Θ AND kind(Θ(m)) = KTHEORY
 	THEN LET Δ = definition(Θ(m)) IN
-	  IF interp_for?(Δ)(σ) 
+	  IF interp?(σ) AND interp_for?(Δ)(σ) 
 	    THEN LET (kwi, tccsi) = τ(Θ)(interp(Δ, σ)) IN
 	     IF KTHEORY?(kwi) AND s ∈ Δ 
 	        THEN IF kind(Δ(s)) = KTYPE
 		  THEN (KTYPE, null)
 		ELSIF kind(Δ(s)) = KCONST
-		  THEN ( KTERM( δ(Θ)( η(Θ, m, σ)( definition(definition(Θ(m))(s)) ) )),
+		  THEN ( KTERM( δ(Θ)( η(Θ, m, σ)( type_(Δ(s)) ) )),
 		         tccsi )
 		  ELSE fail
 		ENDIF
@@ -340,6 +346,9 @@ BEGIN
   %    i.e τ(Γ)(tcc) = KTERM for each tcc generated.
   %    -> done in tau_props.pvs
 
+
+  tau_is_syntaxic: THEOREM 
+    τ(Γ)(S) /= fail IMPLIES syntaxic?(S)
   
 
 

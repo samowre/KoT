@@ -2,8 +2,12 @@ tau_props: THEORY
 BEGIN
   IMPORTING tau
 
-  % Well formed contexts
-  wf_context?(S: semantic): bool = KCONTEXT?(τ(〈〉)(S)`1)
+
+  ⊂(s1, s2: set[preterm]): MACRO bool  = subset?(s1, s2)
+
+  % Well formed contexts (should be renamed context, 
+  % and language.context should be named precontext)
+  wf_context?(S: semantic): bool =  KCONTEXT?(τ(〈〉)(S)`1)
   wf_context: TYPE = (context?)
 
   % Variable declaration
@@ -15,28 +19,47 @@ BEGIN
   a, b, f, g: VAR preterm
   S: VAR semantic
 
+
+  % Type tcc
+  tccs(Γ: wf_context): TYPE = 
+    { S: set[preterm] | 
+      	list2set(τ(〈〉)(Γ)`2) ⊂ S AND 
+        FORALL (x:(S)): 
+	  LET (kwx, tccsx) = τ(Γ)(x) IN
+	  KTERM?(kwx) AND
+	  TYPEOF(kwx) = bool_ AND
+	  list2set(tccsx) ⊂ S }
+
+
   % Well formed types and terms under context Γ
-  type?(Γ)(S): bool = KTYPE?(τ(Γ)(S)`1)
-  term?(Γ)(S): bool = KTERM?(τ(Γ)(S)`1)
+  type?(Γ)(tccs: tccs(Γ))(S): bool = 
+    LET (kwS, tccsS) = τ(Γ)(S) IN
+    KTYPE?(kwS) AND
+    tccsS ⊂ tccs
+  ttype(Γ, (tccs: tccs(Γ))): TYPE = (type?(Γ)(tccs))
 
-  ttype(Γ): TYPE = (type?(Γ))
-  term(Γ): TYPE = (term?(Γ))
+  term?(Γ)(tccs: tccs(Γ))(S): bool = 
+    LET (kwS, tccsS) = τ(Γ)(S) IN
+    KTERM?(kwS) AND
+    tccsS ⊂ tccs
+  term(Γ, (tccs: tccs(Γ))): TYPE = (term?(Γ)(tccs))
 
+  type_(Γ)(tccs: tccs(Γ))(a: term(Γ, tccs)): ttype(Γ, tccs) = TYPEOF(τ(Γ)(a)`1)
 
   % Context Extension : 2.10
   context_extension_type: THEOREM 
   	%context?(Γ) AND context?(Θ) AND 
+	FORALL (tccs: tccs(Θ)):
 	prefix?(Γ)(Θ) IMPLIES
-	FORALL A: type?(Γ)(A) IMPLIES type?(Θ)(A)
+	FORALL A: type?(Γ)(tccs)(A) IMPLIES type?(Θ)(tccs)(A)
   context_extension_term: THEOREM 
   	%context?(Γ) AND context?(Θ) AND 
+	FORALL (tccs: tccs(Θ)):
 	prefix?(Γ)(Θ) IMPLIES
-	FORALL a: term?(Γ)(a) IMPLIES term?(Θ)(a)
+	FORALL a: term?(Γ)(tccs)(a) IMPLIES term?(Θ)(tccs)(a)
 
-  % Type construction : 2.11
-  type_construction: THEOREM
-  	%context?(Γ) AND 
-	τ(Γ)(a)`1 = KTERM(A) IMPLIES type?(Γ)(A)
+  % Type construction : 2.11 (subsumed by tccs on type_)
+  type_construction: JUDGEMENT type_(Γ)(tccs: tccs(Γ))(a: term(Γ, tccs)) HAS_TYPE ttype(Γ, tccs)
 
   % Type soundness : 2.12 -> meaning function
   % Term soundness : 2.13 -> meaning function
