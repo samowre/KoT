@@ -3,3 +3,19 @@ BEGIN
   IMPORTING decl, contexts, interp, apply, subst, supertype, language, compare
   IMPORTING definitions, tau
 END top
+
+% IMPORT CHAIN:
+%
+%	   language
+%	 /          \
+%   subst	    decl
+%     |		      |
+% supertype	    apply
+%     | 	   /     \   
+%  compare    contexts   interp
+%     | 	  |         |
+%     |	     definition     |
+%      \          |	   /
+%       \	  | 	  /
+%	 \	  |	 /
+%	 	 tau
