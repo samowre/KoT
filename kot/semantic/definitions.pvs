@@ -13,30 +13,19 @@ BEGIN
   S: VAR syntaxic
 
 
-  % context_size(Γ): RECURSIVE ordinal =
-  %   CASES Γ OF
-  %     〈〉: 0
-  %   , ktype_decl(s, Δ): 0
-  %   , ktype_def(s, T, Δ): 0
-  %   , ktype_ext(s, Δ): 0
-  %   , kvar(T, Δ): 0
-  %   , kconst_decl(s, T, Δ): 0
-  %   , kconst_def(s, T, a, Δ): 0
-  %   , kconst_ext(s, T, Δ): 0
-  %   , ktheory(s, Θ, Δ): 0
-  %   ENDCASES
-  % MEASURE w(Γ)
-
-    well_formed?(Γ)(S): RECURSIVE bool =
+  % Checks that a syntaxic is well_formed in a given context,
+  % that is if every occuring symbols has been declared, 
+  % and if every symbols have been declared at most once.
+  well_formed?(Γ)(S): RECURSIVE bool =
     CASES S OF
       symbol(s): s ∈ Γ AND kind(Γ(s)) /= KTHEORY,
       dot(m, σ, s):
         m ∈ Γ AND kind(Γ(m)) = KTHEORY AND s ∈ definition(Γ(m)) AND
   	well_formed?(Γ)(σ), % AND interp_for?(definition(Γ(m)))(σ),
 
-      fun(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
-      prod(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
-      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
+      fun(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
+      prod(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
+      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(kvar(T, Γ))(a),
 
       v(i): i ∈ Γ,
       app(f, a): well_formed?(Γ)(f) AND well_formed?(Γ)(a),
@@ -89,6 +78,7 @@ BEGIN
     ENDCASES
   MEASURE w(S)
   well_formed(Γ): TYPE = (well_formed?(Γ))
+
 
   length(Γ): RECURSIVE nat =
     COND
