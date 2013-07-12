@@ -147,7 +147,6 @@
     (nonempty formula-decl nil language nil)
     (context formula-decl nil language nil)
     (map formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC2 0
@@ -161,7 +160,6 @@
     (map formula-decl nil language nil)
     (context formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC3 0
@@ -175,7 +173,6 @@
     (nonempty formula-decl nil language nil)
     (context formula-decl nil language nil)
     (map formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC4 0
@@ -189,7 +186,6 @@
     (map formula-decl nil language nil)
     (context formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC5 0
@@ -203,7 +199,6 @@
     (map formula-decl nil language nil)
     (context formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC6 0
@@ -217,7 +212,6 @@
     (map formula-decl nil language nil)
     (context formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC7 0
@@ -231,7 +225,6 @@
     (map formula-decl nil language nil)
     (context formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC8 0
@@ -245,7 +238,6 @@
     (map formula-decl nil language nil)
     (context formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC9 0
@@ -259,7 +251,6 @@
     (map formula-decl nil language nil)
     (interp formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC10 0
@@ -273,7 +264,6 @@
     (map formula-decl nil language nil)
     (interp formula-decl nil language nil)
     (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_TCC11 0
@@ -288,20 +278,16 @@
     (≠ const-decl "[T, T -> bool]" notequal nil))
    nil))
  (kind_nonempty 0
-  (kind_nonempty-1 nil 3582043686
-   ("" (skosimp* :preds? t)
-    (("" (rewrite "decl.kind") (("" (smash) nil nil)) nil)) nil)
-   ((kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
-    (map? const-decl "[semantic -> bool]" language nil)
-    (map type-eq-decl nil language nil)
-    (nonempty formula-decl nil language nil)
-    (kind formula-decl nil language nil)
-    (boolean nonempty-type-decl nil booleans nil)
+  (kind_nonempty-1 nil 3582571176 ("" (grind) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (semantic type-decl nil language nil)
     (nonempty? const-decl "[semantic -> bool]" language nil)
-    (nonempty type-eq-decl nil language nil))
+    (nonempty type-eq-decl nil language nil)
+    (nonempty formula-decl nil language nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (kind? const-decl "bool" language nil))
    nil))
  (kind_type 0
   (kind_type-1 nil 3582315799 ("" (grind) nil nil)
@@ -311,7 +297,7 @@
     (semantic type-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (map type-eq-decl nil language nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
     (type_kind? const-decl "bool" decl nil))
    shostak))
  (kind_const 0
@@ -322,7 +308,7 @@
     (semantic type-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (map type-eq-decl nil language nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
     (const_kind? const-decl "bool" decl nil))
    shostak))
  (kind_var 0
@@ -333,7 +319,7 @@
     (semantic type-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (map type-eq-decl nil language nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
     (var_kind? const-decl "bool" decl nil))
    shostak))
  (kind_theory 0
@@ -344,7 +330,7 @@
     (semantic type-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (map type-eq-decl nil language nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
     (theory_kind? const-decl "bool" decl nil))
    shostak))
  (nonempty_interp_is_definition 0

@@ -83,14 +83,13 @@
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (weight def-decl "nat" language nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -113,9 +112,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil))
@@ -184,14 +187,13 @@
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (weight def-decl "nat" language nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -214,9 +216,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil))
@@ -272,14 +278,13 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -302,9 +307,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
@@ -369,14 +378,13 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -399,9 +407,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
@@ -466,14 +478,13 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -496,9 +507,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
@@ -563,14 +578,13 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -593,9 +607,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
@@ -660,14 +678,13 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -690,9 +707,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
@@ -757,14 +778,13 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (<= const-decl "bool" reals nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
@@ -787,9 +807,13 @@
      nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
@@ -1060,10 +1084,11 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (weight def-decl "nat" language nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
-    (F const-decl
-     "(LAMBDA (F: [ord -> nat]): (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)

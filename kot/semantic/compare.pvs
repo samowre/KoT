@@ -1,6 +1,5 @@
 compare: THEORY
 BEGIN
-  IMPORTING subst
   IMPORTING supertype
 
   S: VAR syntaxic
@@ -12,6 +11,7 @@ BEGIN
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
   
+  % Type equivalence proof obligations : 3.6
   ;≃(T1, T2: pretype): RECURSIVE list[preterm] =
     CASES T1 OF
       symbol(s): IF T2 = T1 THEN (: :) ELSE (: FALSE_ :) ENDIF,
@@ -28,6 +28,7 @@ BEGIN
     ELSE (: FALSE_ :) ENDCASES
   MEASURE size(T1)
 
+  % Type equivalence for dependent types (A ≃ B)/a : 4.8
   ;≃(T1, T2: pretype)(a): RECURSIVE list[preterm] =
     CASES T1 OF
       symbol(s): IF T2 = T1 THEN (: :) ELSE (: FALSE_ :) ENDIF,
@@ -44,6 +45,21 @@ BEGIN
       ELSE (: FALSE_ :)
     ENDCASES
   MEASURE size(T1)
+
+
+  %% Type TCCS 
+  tccs: TYPE = [context, preterm]
+
+  ;++(l1, l2: list[tccs]): list[tccs] = append(l1, l2)
+  ;⊢(Γ, a): list[tccs] = cons((Γ, a), null) 
+
+  fail: [keyword, list[tccs]] = (⊥, null)
+  
+
+  % Compatible types : 3.8
+  ;∼(A, B)(Γ): list[tccs] = map(LAMBDA a: (Γ, a))(A ≃ B)
+  % Compatible types for dependent types : 4.8
+  ;∼(A, B)(a)(Γ): list[tccs] = map(LAMBDA b: (Γ, b))((A ≃ B)(a))
 
 
 END compare

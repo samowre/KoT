@@ -1,648 +1,4 @@
 (definitions
- (ordinal_of_nat_TCC1 0
-  (ordinal_of_nat_TCC1-1 nil 3582466159 ("" (grind) nil nil)
-   ((ordinal? def-decl "bool" ordinals nil)) nil))
- (ordinal_of_nat_TCC2 0
-  (ordinal_of_nat_TCC2-1 nil 3582466159 ("" (grind) nil nil)
-   ((ordinal? def-decl "bool" ordinals nil)) nil))
- (plus_TCC1 0
-  (plus_TCC1-1 nil 3582466159 ("" (subtype-tcc) nil nil)
-   ((ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (plus_TCC2 0
-  (plus_TCC2-1 nil 3582466159
-   ("" (skosimp* :preds? t)
-    (("" (expand "ordinal?" -2)
-      (("" (assert) (("" (flatten) (("" (assert) nil nil)) nil)) nil))
-      nil))
-    nil)
-   ((ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (plus_TCC3 0
-  (plus_TCC3-1 nil 3582466159 ("" (subtype-tcc) nil nil)
-   ((real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (plus_TCC4 0
-  (plus_TCC4-1 nil 3582466159 ("" (termination-tcc) nil nil)
-   ((> const-decl "bool" ordinals nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (plus_TCC5 0
-  (plus_TCC5-1 nil 3582466159 ("" (subtype-tcc) nil nil)
-   ((> const-decl "bool" ordinals nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (plus_TCC6 0
-  (plus_TCC6-1 nil 3582466159
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil)
-   ((> const-decl "bool" ordinals nil)
-    (size const-decl "[ordstruct -> nat]" ordinals nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (reduce adt-def-decl "[ordstruct -> range]"
-      ordstruct_adt_reduce nil))
-   nil))
- (plus_TCC7 0
-  (plus_TCC7-1 nil 3582466159
-   ("" (skosimp* :preds? t)
-    (("" (assert)
-      (("" (auto-rewrite "ordinal?")
-        (("" (assert)
-          (("" (flatten)
-            (("" (assert)
-              (("" (split 1)
-                (("1" (assert)
-                  (("1" (rewrite -10) (("1" (assert) nil nil)) nil))
-                  nil)
-                 ("2" (assert)
-                  (("2" (inst?)
-                    (("1" (flatten)
-                      (("1" (assert)
-                        (("1" (case "v!1 = zero")
-                          (("1" (assert)
-                            (("1" (rewrite -9)
-                              (("1"
-                                (assert)
-                                (("1" (grind) nil nil))
-                                nil))
-                              nil))
-                            nil)
-                           ("2" (assert)
-                            (("2" (rewrite -12)
-                              (("1"
-                                (assert)
-                                (("1" (grind) nil nil))
-                                nil)
-                               ("2"
-                                (smash)
-                                (("1"
-                                  (rewrite -1)
-                                  (("1" (grind) nil nil))
-                                  nil)
-                                 ("2"
-                                  (rewrite -1)
-                                  (("2" (grind) nil nil))
-                                  nil)
-                                 ("3"
-                                  (rewrite -1)
-                                  (("3" (grind) nil nil))
-                                  nil)
-                                 ("4"
-                                  (rewrite -1)
-                                  (("4" (grind) nil nil))
-                                  nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil))
-                        nil))
-                      nil)
-                     ("2" (assert) (("2" (grind) nil nil)) nil))
-                    nil))
-                  nil)
-                 ("3" (rewrite -10) (("3" (assert) nil nil)) nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil))
-    nil)
-   ((real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (> const-decl "bool" ordinals nil)
-    (add adt-constructor-decl
-     "[[posnat, ordstruct, ordstruct] -> (nonzero?)]" ordstruct_adt
-     nil)
-    (v!1 skolem-const-decl "ordstruct" definitions nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (< const-decl "bool" reals nil)
-    (numfield nonempty-type-eq-decl nil number_fields nil)
-    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (size const-decl "[ordstruct -> nat]" ordinals nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (zero? adt-recognizer-decl "[ordstruct -> boolean]" ordstruct_adt
-     nil)
-    (zero adt-constructor-decl "(zero?)" ordstruct_adt nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (nonzero? adt-recognizer-decl "[ordstruct -> boolean]"
-     ordstruct_adt nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (exp adt-accessor-decl "[(nonzero?) -> ordstruct]" ordstruct_adt
-         nil)
-    (> const-decl "bool" reals nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (posnat nonempty-type-eq-decl nil integers nil))
-   nil))
- (plus_TCC8 0
-  (plus_TCC8-1 nil 3582466159 ("" (termination-tcc) nil nil)
-   ((> const-decl "bool" ordinals nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (plus_TCC9 0
-  (plus_TCC9-1 nil 3582466159
-   ("" (subtype-tcc)
-    (("" (auto-rewrite "ordinal?") (("" (assert) nil nil)) nil)) nil)
-   ((> const-decl "bool" ordinals nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
-   nil))
- (plus_TCC10 0
-  (plus_TCC10-1 nil 3582466159
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil)
-   ((> const-decl "bool" ordinals nil)
-    (size const-decl "[ordstruct -> nat]" ordinals nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (even_times_int_is_even application-judgement "even_int" integers
-     nil)
-    (mult_divides1 application-judgement "(divides(n))" divides nil)
-    (mult_divides2 application-judgement "(divides(m))" divides nil)
-    (reduce adt-def-decl "[ordstruct -> range]"
-      ordstruct_adt_reduce nil))
-   nil))
- (plus_TCC11 0
-  (plus_TCC11-1 nil 3582466159
-   ("" (skosimp* :preds? t)
-    (("" (assert)
-      (("" (auto-rewrite "ordinal?")
-        (("" (assert)
-          (("" (split 2)
-            (("1" (assert)
-              (("1" (rewrite -6)
-                (("1" (flatten) (("1" (assert) nil nil)) nil)) nil))
-              nil)
-             ("2" (propax) nil nil)
-             ("3" (flatten)
-              (("3" (assert)
-                (("3" (inst?)
-                  (("1" (assert)
-                    (("1" (flatten)
-                      (("1" (case "v!1 = zero")
-                        (("1" (assert)
-                          (("1" (rewrite -9) (("1" (grind) nil nil))
-                            nil))
-                          nil)
-                         ("2" (assert)
-                          (("2" (case "w!1 = zero")
-                            (("1" (assert)
-                              (("1"
-                                (rewrite -10)
-                                (("1" (grind) nil nil))
-                                nil))
-                              nil)
-                             ("2" (assert)
-                              (("2"
-                                (split -10)
-                                (("1"
-                                  (assert)
-                                  (("1"
-                                    (rewrite -1)
-                                    (("1" (grind) nil nil))
-                                    nil))
-                                  nil)
-                                 ("2"
-                                  (rewrite -1)
-                                  (("2" (grind) nil nil))
-                                  nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil)
-                   ("2" (assert) (("2" (grind) nil nil)) nil)
-                   ("3" (grind) nil nil))
-                  nil))
-                nil))
-              nil)
-             ("4" (flatten)
-              (("4" (rewrite -10) (("4" (assert) nil nil)) nil)) nil))
-            nil))
-          nil))
-        nil))
-      nil))
-    nil)
-   ((posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (v!1 skolem-const-decl "ordstruct" definitions nil)
-    (w!1 skolem-const-decl "ordstruct" definitions nil)
-    (> const-decl "bool" ordinals nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (< const-decl "bool" reals nil)
-    (numfield nonempty-type-eq-decl nil number_fields nil)
-    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (size const-decl "[ordstruct -> nat]" ordinals nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (zero? adt-recognizer-decl "[ordstruct -> boolean]" ordstruct_adt
-     nil)
-    (zero adt-constructor-decl "(zero?)" ordstruct_adt nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (nonzero? adt-recognizer-decl "[ordstruct -> boolean]"
-     ordstruct_adt nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (exp adt-accessor-decl "[(nonzero?) -> ordstruct]" ordstruct_adt
-         nil)
-    (> const-decl "bool" reals nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (posnat nonempty-type-eq-decl nil integers nil))
-   nil))
- (plus_TCC12 0
-  (plus_TCC12-1 nil 3582466159 ("" (termination-tcc) nil nil)
-   ((ordinal? def-decl "bool" ordinals nil)
-    (> const-decl "bool" ordinals nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (plus_TCC13 0
-  (plus_TCC13-1 nil 3582466159
-   ("" (subtype-tcc)
-    (("" (auto-rewrite "ordinal?") (("" (assert) nil nil)) nil)) nil)
-   ((> const-decl "bool" ordinals nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
-   nil))
- (plus_TCC14 0
-  (plus_TCC14-1 nil 3582466506
-   ("" (subtype-tcc) (("" (grind) nil nil)) nil)
-   ((> const-decl "bool" ordinals nil)
-    (size const-decl "[ordstruct -> nat]" ordinals nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (posnat nonempty-type-eq-decl nil integers nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (> const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (reduce adt-def-decl "[ordstruct -> range]"
-      ordstruct_adt_reduce nil))
-   nil))
- (plus_TCC15 0
-  (plus_TCC15-1 nil 3582466506
-   ("" (skosimp* :preds? t)
-    (("" (assert)
-      (("" (auto-rewrite "ordinal?")
-        (("" (assert)
-          (("" (flatten)
-            (("" (inst?)
-              (("1" (flatten)
-                (("1" (rewrite -14)
-                  (("1" (rewrite -14)
-                    (("1" (assert)
-                      (("1" (case "NOT u!1 < z!1")
-                        (("1" (assert)
-                          (("1" (lemma "ordinal_trichotomy")
-                            (("1" (inst?)
-                              (("1"
-                                (assert)
-                                (("1" (grind) nil nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil)
-                         ("2" (grind) nil nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil)
-               ("2" (grind) nil nil) ("3" (grind) nil nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil))
-    nil)
-   ((real_gt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (w!1 skolem-const-decl "ordstruct" definitions nil)
-    (y!1 skolem-const-decl "ordinal" definitions nil)
-    (x!1 skolem-const-decl "ordinal" definitions nil)
-    (v!1 skolem-const-decl "ordstruct" definitions nil)
-    (u!1 skolem-const-decl "ordstruct" definitions nil)
-    (i!1 skolem-const-decl "posnat" definitions nil)
-    (add adt-constructor-decl
-     "[[posnat, ordstruct, ordstruct] -> (nonzero?)]" ordstruct_adt
-     nil)
-    (> const-decl "bool" ordinals nil)
-    (ordinal_trichotomy formula-decl nil ordinals nil)
-    (< def-decl "bool" ordinals nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (reduce adt-def-decl "[ordstruct -> range]"
-      ordstruct_adt_reduce nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (ordstruct type-decl nil ordstruct_adt nil)
-    (ordinal? def-decl "bool" ordinals nil)
-    (ordinal nonempty-type-eq-decl nil ordinals nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (< const-decl "bool" reals nil)
-    (numfield nonempty-type-eq-decl nil number_fields nil)
-    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (size const-decl "[ordstruct -> nat]" ordinals nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (zero? adt-recognizer-decl "[ordstruct -> boolean]" ordstruct_adt
-     nil)
-    (zero adt-constructor-decl "(zero?)" ordstruct_adt nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (nonzero? adt-recognizer-decl "[ordstruct -> boolean]"
-     ordstruct_adt nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (exp adt-accessor-decl "[(nonzero?) -> ordstruct]" ordstruct_adt
-         nil)
-    (> const-decl "bool" reals nil)
-    (nonneg_int nonempty-type-eq-decl nil integers nil)
-    (posnat nonempty-type-eq-decl nil integers nil))
-   nil))
- (context_size_TCC1 0
-  (context_size_TCC1-1 nil 3582466159 ("" (cases-tcc) nil nil) nil
-   nil))
  (well_formed?_TCC1 0
   (well_formed?_TCC1-1 nil 3582405069
    ("" (skosimp* :preds? t)
@@ -666,12 +22,14 @@
         nil))
       nil))
     nil)
-   ((symbol nonempty-type-decl nil language nil)
+   ((∈ def-decl "bool" apply nil)
+    (symbol nonempty-type-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (map type-eq-decl nil language nil)
     (interp formula-decl nil language nil)
     (preterm formula-decl nil language nil)
     (pretype formula-decl nil language nil)
+    (Γ!1 skolem-const-decl "context" definitions nil)
     (nonempty_context? const-decl "[semantic -> bool]" language nil)
     (nonempty_context type-eq-decl nil language nil)
     (nonempty_context_is_nonempty judgement-tcc nil subtype nil)
@@ -722,7 +80,8 @@
         nil))
       nil))
     nil)
-   ((symbol nonempty-type-decl nil language nil)
+   ((∈ def-decl "bool" apply nil)
+    (symbol nonempty-type-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (map type-eq-decl nil language nil)
     (interp formula-decl nil language nil)
@@ -730,6 +89,7 @@
     (nonempty_context_is_nonempty judgement-tcc nil subtype nil)
     (nonempty_context type-eq-decl nil language nil)
     (nonempty_context? const-decl "[semantic -> bool]" language nil)
+    (Γ!1 skolem-const-decl "context" definitions nil)
     (preterm formula-decl nil language nil)
     (expr formula-decl nil language nil)
     (boolean nonempty-type-decl nil booleans nil)
@@ -791,9 +151,12 @@
    ((kind_nonempty application-judgement "kind" decl nil)
     (expr formula-decl nil language nil)
     (kind_theory formula-decl nil decl nil)
-    (definition const-decl
-                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
-                decl nil)
+    (definition const-decl "{x: semantic |
+         (type_kind?(S) IMPLIES pretype?(x)) AND
+          (const_kind?(S) IMPLIES preterm?(x)) AND
+           (theory_kind?(S) IMPLIES pretheory?(x)) AND
+            weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}" decl
+                nil)
     (theory_kind? const-decl "bool" decl nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
@@ -810,6 +173,8 @@
     (pretheory formula-decl nil language nil)
     (pretheory_is_context judgement-tcc nil subtype nil)
     (pretheory type-eq-decl nil language nil)
+    (m!1 skolem-const-decl "symbol" definitions nil)
+    (Γ!1 skolem-const-decl "context" definitions nil)
     (dtheory adt-accessor-decl "[(ktheory?) -> semantic]" language nil)
     (ktheory? adt-recognizer-decl "[semantic -> boolean]" language nil)
     (context_is_map judgement-tcc nil subtype nil)
@@ -817,7 +182,7 @@
     (nonempty type-eq-decl nil language nil)
     (symbol nonempty-type-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
-    (map type-eq-decl nil language nil)
+    (map type-eq-decl nil language nil) (∈ def-decl "bool" apply nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (interp? const-decl "[semantic -> bool]" language nil)
@@ -836,9 +201,6 @@
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (weight def-decl "nat" language nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
@@ -868,11 +230,16 @@
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
     (F const-decl "(LAMBDA (F: [ord -> nat]):
-        (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_nil) <= F(ord_dot)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
-    (app_symbol def-decl
-     "{T: nonempty | (interp?(S) => interp?(T)) AND (context?(S) => context?(T)) AND (pretheory?(S) => pretheory?(T)) AND weight(F)(T) <= weight(F)(S)}"
-     apply nil)
+    (app_symbol def-decl "{T: nonempty |
+         (interp?(S) => interp?(T)) AND
+          (context?(S) => context?(T)) AND
+           (pretheory?(S) => pretheory?(T)) AND
+            weight(F)(T) <= weight(F)(S)}" apply nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
     (interp formula-decl nil language nil)
@@ -924,11 +291,13 @@
      integers nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (definition const-decl
-                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
-                decl nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl
-          nil))
+    (definition const-decl "{x: semantic |
+         (type_kind?(S) IMPLIES pretype?(x)) AND
+          (const_kind?(S) IMPLIES preterm?(x)) AND
+           (theory_kind?(S) IMPLIES pretheory?(x)) AND
+            weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}" decl
+                nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil))
    nil))
  (well_formed?_TCC7 0
   (well_formed?_TCC7-1 nil 3582405069 ("" (subtype-tcc) nil nil)
@@ -1606,20 +975,46 @@
     (expr formula-decl nil language nil))
    nil))
  (length_TCC1 0
-  (length_TCC1-1 nil 3582405937 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
+  (length_TCC1-1 nil 3582405937
+   ("" (skolem-typepred)
+    (("" (flatten)
+      (("" (assert)
+        (("" (assert)
+          (("" (flatten)
+            (("" (use pretheory_is_context :polarity? t) nil nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((context formula-decl nil language nil)
+    (Γ!1 skolem-const-decl "context" definitions nil)
+    (dtheory adt-accessor-decl "[(ktheory?) -> semantic]" language nil)
+    (ktheory? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (pretheory type-eq-decl nil language nil)
+    (pretheory? const-decl "[semantic -> bool]" language nil)
+    (pretheory_is_context judgement-tcc nil subtype nil)
     (context type-eq-decl nil language nil)
-    (context formula-decl nil language nil))
+    (context? const-decl "[semantic -> bool]" language nil)
+    (semantic type-decl nil language nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
    nil))
  (length_TCC2 0
   (length_TCC2-1 nil 3582405937
    ("" (skosimp* :preds? t)
     (("" (rewrite "context") (("" (grind) nil nil)) nil)) nil)
    ((context formula-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1633,8 +1028,31 @@
     (("" (grind) (("" (rewrite "context") (("" (grind) nil nil)) nil))
       nil))
     nil)
-   ((real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
+   ((context type-eq-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (semantic type-decl nil language nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (length_TCC4 0
+  (length_TCC4-1 nil 3582406842 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (context formula-decl nil language nil))
+   nil))
+ (length_TCC5 0
+  (length_TCC5-1 nil 3582406842 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
     (weight def-decl "nat" language nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
@@ -1642,7 +1060,29 @@
      integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil))
+   nil))
+ (length_TCC6 0
+  (length_TCC6-1 nil 3582406842 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (context formula-decl nil language nil))
+   nil))
+ (length_TCC7 0
+  (length_TCC7-1 nil 3582406842
+   ("" (grind :rewrites context)
+    (("" (use context_as_nonempty)
+      (("" (rewrite nonempty_context) (("" (grind) nil nil)) nil))
+      nil))
+    nil)
+   ((context_as_nonempty formula-decl nil subtype nil)
     (context formula-decl nil language nil)
+    (nonempty_context formula-decl nil language nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1650,20 +1090,35 @@
     (context? const-decl "[semantic -> bool]" language nil)
     (context type-eq-decl nil language nil))
    nil))
- (length_TCC4 0
-  (length_TCC4-1 nil 3582406842 ("" (subtype-tcc) nil nil) nil nil))
- (length_TCC5 0
-  (length_TCC5-1 nil 3582406842 ("" (termination-tcc) nil nil) nil
-   nil))
- (length_TCC6 0
-  (length_TCC6-1 nil 3582406842 ("" (subtype-tcc) nil nil) nil nil))
- (length_TCC7 0
-  (length_TCC7-1 nil 3582406842 ("" (subtype-tcc) nil nil) nil nil))
  (length_TCC8 0
-  (length_TCC8-1 nil 3582406842 ("" (termination-tcc) nil nil) nil
+  (length_TCC8-1 nil 3582406842
+   ("" (skeep)
+    (("" (expand weight 3 2)
+      (("" (assert) (("" (typepred Γ) (("" (grind) nil nil)) nil))
+        nil))
+      nil))
+    nil)
+   ((weight def-decl "nat" language nil)
+    (context type-eq-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (semantic type-decl nil language nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (context formula-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil))
    nil))
  (length_TCC9 0
-  (length_TCC9-1 nil 3582406842 ("" (cond-disjoint-tcc) nil nil) nil
+  (length_TCC9-1 nil 3582406842 ("" (cond-disjoint-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil))
    nil))
  (pos_TCC1 0
   (pos_TCC1-1 nil 3582405937 ("" (subtype-tcc) nil nil)
@@ -1709,8 +1164,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (semantic type-decl nil language nil)
     (context? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
-    (context formula-decl nil language nil))
+    (context type-eq-decl nil language nil))
    nil))
  (pos_TCC5 0
   (pos_TCC5-1 nil 3582405937 ("" (subtype-tcc) nil nil)
@@ -1733,15 +1187,27 @@
     (expr type-eq-decl nil language nil)
     (well_formed? def-decl "bool" definitions nil)
     (well_formed type-eq-decl nil definitions nil)
-    (definition const-decl
-                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
-                decl nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (kind_nonempty application-judgement "kind" decl nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (definition const-decl "{x: semantic |
+         (type_kind?(S) IMPLIES pretype?(x)) AND
+          (const_kind?(S) IMPLIES preterm?(x)) AND
+           (theory_kind?(S) IMPLIES pretheory?(x)) AND
+            weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}" decl
+                nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (kind_nonempty application-judgement "kind" decl nil)
-    (expr formula-decl nil language nil))
+    (interp formula-decl nil language nil))
    nil))
  (pos_TCC7 0
   (pos_TCC7-1 nil 3582405937 ("" (subtype-tcc) nil nil)
@@ -1775,10 +1241,13 @@
     (("" (rewrite -4) (("" (assert) (("" (grind) nil nil)) nil)) nil))
     nil)
    ((kind_nonempty application-judgement "kind" decl nil)
-    (definition const-decl
-                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
-                decl nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (definition const-decl "{x: semantic |
+         (type_kind?(S) IMPLIES pretype?(x)) AND
+          (const_kind?(S) IMPLIES preterm?(x)) AND
+           (theory_kind?(S) IMPLIES pretheory?(x)) AND
+            weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}" decl
+                nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
     (expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
@@ -1810,22 +1279,18 @@
       nil))
     nil)
    ((expr formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (definition const-decl
-                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
-                decl nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (definition? const-decl "bool" decl nil)
     (kind_nonempty application-judgement "kind" decl nil)
-    (nonempty formula-decl nil language nil)
-    (app_symbol def-decl
-     "{T: nonempty | (interp?(S) => interp?(T)) AND (context?(S) => context?(T)) AND (pretheory?(S) => pretheory?(T)) AND weight(F)(T) <= weight(F)(S)}"
-     apply nil)
-    (context formula-decl nil language nil)
-    (symbol nonempty-type-decl nil language nil)
-    (map? const-decl "[semantic -> bool]" language nil)
-    (map type-eq-decl nil language nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (definition const-decl "{x: semantic |
+         (type_kind?(S) IMPLIES pretype?(x)) AND
+          (const_kind?(S) IMPLIES preterm?(x)) AND
+           (theory_kind?(S) IMPLIES pretheory?(x)) AND
+            weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}" decl
+                nil)
+    (interp formula-decl nil language nil)
+    (preterm formula-decl nil language nil)
+    (pretype formula-decl nil language nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1843,10 +1308,13 @@
    ((expr formula-decl nil language nil)
     (definition? const-decl "bool" decl nil)
     (kind_nonempty application-judgement "kind" decl nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
-    (definition const-decl
-                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
-                decl nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (definition const-decl "{x: semantic |
+         (type_kind?(S) IMPLIES pretype?(x)) AND
+          (const_kind?(S) IMPLIES preterm?(x)) AND
+           (theory_kind?(S) IMPLIES pretheory?(x)) AND
+            weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}" decl
+                nil)
     (interp formula-decl nil language nil)
     (preterm formula-decl nil language nil)
     (pretype formula-decl nil language nil)
@@ -1881,92 +1349,10 @@
         nil))
       nil))
     nil)
-   ((definition const-decl
-                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
-                decl nil)
-    (expr formula-decl nil language nil)
+   ((expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
     (interp formula-decl nil language nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
-    (kind_nonempty application-judgement "kind" decl nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (real_le_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (nonempty_rest application-judgement
-     "{m: map | weight(F)(m) < weight(F)(x)}" subtype nil)
-    (nonempty formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (pretheory type-eq-decl nil language nil)
-    (ktheory? adt-recognizer-decl "[semantic -> boolean]" language nil)
-    (dtheory adt-accessor-decl "[(ktheory?) -> semantic]" language nil)
-    (pretheory_is_context judgement-tcc nil subtype nil)
-    (nonempty? const-decl "[semantic -> bool]" language nil)
-    (nonempty type-eq-decl nil language nil)
-    (symbol nonempty-type-decl nil language nil)
-    (map? const-decl "[semantic -> bool]" language nil)
-    (map type-eq-decl nil language nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (interp? const-decl "[semantic -> bool]" language nil)
-    (pretheory? const-decl "[semantic -> bool]" language nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (<= const-decl "bool" reals nil) (ord type-decl nil language nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (weight def-decl "nat" language nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
-    (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
-    (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
-    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
-    (numfield nonempty-type-eq-decl nil number_fields nil)
-    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
-     nil)
-    (ord_ktype_def adt-constructor-decl "(ord_ktype_def?)" language
-     nil)
-    (ord_itype? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_itype adt-constructor-decl "(ord_itype?)" language nil)
-    (ord_ktype_decl? adt-recognizer-decl "[ord -> boolean]" language
-     nil)
-    (ord_ktype_decl adt-constructor-decl "(ord_ktype_decl?)" language
-     nil)
-    (ord_kconst_def? adt-recognizer-decl "[ord -> boolean]" language
-     nil)
-    (ord_kconst_def adt-constructor-decl "(ord_kconst_def?)" language
-     nil)
-    (ord_iconst? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_iconst adt-constructor-decl "(ord_iconst?)" language nil)
-    (ord_kconst_decl? adt-recognizer-decl "[ord -> boolean]" language
-     nil)
-    (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
-     nil)
-    (F const-decl "(LAMBDA (F: [ord -> nat]):
-        (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_nil) <= F(ord_dot)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
-     language nil)
-    (app_symbol def-decl
-     "{T: nonempty | (interp?(S) => interp?(T)) AND (context?(S) => context?(T)) AND (pretheory?(S) => pretheory?(T)) AND weight(F)(T) <= weight(F)(S)}"
-     apply nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -2076,10 +1462,19 @@
     (expr type-eq-decl nil language nil)
     (well_formed? def-decl "bool" definitions nil)
     (well_formed type-eq-decl nil definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (expr formula-decl nil language nil))
+    (interp formula-decl nil language nil))
    nil))
  (pos_TCC17 0
   (pos_TCC17-1 nil 3582405937 ("" (subtype-tcc) nil nil)
@@ -2205,10 +1600,19 @@
     (expr type-eq-decl nil language nil)
     (well_formed? def-decl "bool" definitions nil)
     (well_formed type-eq-decl nil definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (expr formula-decl nil language nil))
+    (interp formula-decl nil language nil))
    nil))
  (pos_TCC23 0
   (pos_TCC23-1 nil 3582405937 ("" (subtype-tcc) nil nil)
@@ -2334,10 +1738,19 @@
     (expr type-eq-decl nil language nil)
     (well_formed? def-decl "bool" definitions nil)
     (well_formed type-eq-decl nil definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (expr formula-decl nil language nil))
+    (interp formula-decl nil language nil))
    nil))
  (pos_TCC29 0
   (pos_TCC29-1 nil 3582405937 ("" (subtype-tcc) nil nil)
@@ -2506,10 +1919,19 @@
     (expr type-eq-decl nil language nil)
     (well_formed? def-decl "bool" definitions nil)
     (well_formed type-eq-decl nil definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (expr formula-decl nil language nil))
+    (interp formula-decl nil language nil))
    nil))
  (η_TCC1 0
   (η_TCC1-1 nil 3582061831
@@ -2552,11 +1974,16 @@
         nil))
       nil))
     nil)
-   ((app_symbol def-decl
-     "{T: nonempty | (interp?(S) => interp?(T)) AND (context?(S) => context?(T)) AND (pretheory?(S) => pretheory?(T)) AND weight(F)(T) <= weight(F)(S)}"
-     apply nil)
+   ((app_symbol def-decl "{T: nonempty |
+         (interp?(S) => interp?(T)) AND
+          (context?(S) => context?(T)) AND
+           (pretheory?(S) => pretheory?(T)) AND
+            weight(F)(T) <= weight(F)(S)}" apply nil)
     (F const-decl "(LAMBDA (F: [ord -> nat]):
-        (F(ord_bot) = 0) AND (F(ord_nil) <= F(ord_symbol)) AND (F(ord_nil) <= F(ord_dot)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
      language nil)
     (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
      nil)
@@ -2586,9 +2013,6 @@
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
     (weight def-decl "nat" language nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (>= const-decl "bool" reals nil)
@@ -2609,7 +2033,7 @@
     (nonempty type-eq-decl nil language nil)
     (nonempty? const-decl "[semantic -> bool]" language nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (map type-eq-decl nil language nil)
+    (∈ def-decl "bool" apply nil) (map type-eq-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (symbol nonempty-type-decl nil language nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
@@ -2617,6 +2041,8 @@
     (nonempty formula-decl nil language nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
+    (s!1 skolem-const-decl "symbol" definitions nil)
+    (σ!1 skolem-const-decl "interp" definitions nil)
     (nonempty_interp? const-decl "[semantic -> bool]" language nil)
     (nonempty_interp type-eq-decl nil language nil)
     (nonempty_interp_is_definition judgement-tcc nil decl nil)
@@ -3086,6 +2512,7 @@
     (int nonempty-type-eq-decl nil integers nil)
     (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (pos def-decl "nat" definitions nil)
     (length def-decl "nat" definitions nil)
     (semantic_induction formula-decl nil language nil)
     (context formula-decl nil language nil)
@@ -3121,11 +2548,13 @@
    ("" (skosimp* :preds? t) (("" (grind) nil nil)) nil)
    ((kind_nonempty application-judgement "kind" decl nil)
     (well_formed? def-decl "bool" definitions nil)
-    (kind const-decl "{r: ε(kind?) | nonempty?(S) IFF r ≠ ⊥}" decl nil)
-    (app_symbol def-decl
-     "{T: nonempty | (interp?(S) => interp?(T)) AND (context?(S) => context?(T)) AND (pretheory?(S) => pretheory?(T)) AND weight(F)(T) <= weight(F)(S)}"
-     apply nil)
-    (expr formula-decl nil language nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (app_symbol def-decl "{T: nonempty |
+         (interp?(S) => interp?(T)) AND
+          (context?(S) => context?(T)) AND
+           (pretheory?(S) => pretheory?(T)) AND
+            weight(F)(T) <= weight(F)(S)}" apply nil)
+    (∈ def-decl "bool" apply nil) (expr formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
     (interp formula-decl nil language nil)
@@ -3148,5 +2577,1094 @@
    ((context formula-decl nil language nil)) nil))
  (pos_kconst_def_TCC2 0
   (pos_kconst_def_TCC2-1 nil 3582405937 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (δ_TCC1 0
+  (δ_TCC1-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC2 0
+  (δ_TCC2-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC3 0
+  (δ_TCC3-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (definition? const-decl "bool" decl nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC4 0
+  (δ_TCC4-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC5 0
+  (δ_TCC5-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC6 0
+  (δ_TCC6-1 nil 3582572542 ("" (termination-tcc) nil nil) nil nil))
+ (δ_TCC7 0
+  (δ_TCC7-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC8 0
+  (δ_TCC8-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC9 0
+  (δ_TCC9-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC10 0
+  (δ_TCC10-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC11 0
+  (δ_TCC11-1 nil 3582572542 ("" (termination-tcc) nil nil) nil nil))
+ (δ_TCC12 0
+  (δ_TCC12-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC13 0
+  (δ_TCC13-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC14 0
+  (δ_TCC14-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC15 0
+  (δ_TCC15-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (nonempty_rest application-judgement
+     "{m: map | weight(F)(m) < weight(F)(x)}" subtype nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (pretype formula-decl nil language nil)
+    (definition? const-decl "bool" decl nil)
+    (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
+    (iconst? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (itype? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (ktheory? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (kconst_ext? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kconst_def? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kconst_decl? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kvar? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (ktype_ext? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (ktype_def? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (ktype_decl? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (< const-decl "bool" reals nil)
+    (theory_kind? const-decl "bool" decl nil)
+    (preterm? const-decl "[semantic -> bool]" language nil)
+    (const_kind? const-decl "bool" decl nil)
+    (app_symbol def-decl "{T: nonempty |
+         (interp?(S) => interp?(T)) AND
+          (context?(S) => context?(T)) AND
+           (pretheory?(S) => pretheory?(T)) AND
+            weight(F)(T) <= weight(F)(S)}" apply nil)
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+     language nil)
+    (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
+     nil)
+    (ord_kconst_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_iconst adt-constructor-decl "(ord_iconst?)" language nil)
+    (ord_iconst? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_kconst_def adt-constructor-decl "(ord_kconst_def?)" language
+     nil)
+    (ord_kconst_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_ktype_decl adt-constructor-decl "(ord_ktype_decl?)" language
+     nil)
+    (ord_ktype_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_itype adt-constructor-decl "(ord_itype?)" language nil)
+    (ord_itype? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_ktype_def adt-constructor-decl "(ord_ktype_def?)" language
+     nil)
+    (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
+    (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (weight def-decl "nat" language nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (ord type-decl nil language nil) (<= const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (pretheory? const-decl "[semantic -> bool]" language nil)
+    (interp? const-decl "[semantic -> bool]" language nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (∈ def-decl "bool" apply nil)
+    (symbol nonempty-type-decl nil language nil)
+    (nonempty type-eq-decl nil language nil)
+    (nonempty? const-decl "[semantic -> bool]" language nil)
+    (type_kind? const-decl "bool" decl nil)
+    (map type-eq-decl nil language nil)
+    (map? const-decl "[semantic -> bool]" language nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil))
+   nil))
+ (δ_TCC16 0
+  (δ_TCC16-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC17 0
+  (δ_TCC17-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil)
+    (nonempty_rest application-judgement
+     "{m: map | weight(F)(m) < weight(F)(x)}" subtype nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
+    (iconst? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (itype? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (ktheory? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (kconst_ext? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kconst_def? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kconst_decl? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kvar? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (ktype_ext? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (ktype_def? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (ktype_decl? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (< const-decl "bool" reals nil)
+    (theory_kind? const-decl "bool" decl nil)
+    (preterm? const-decl "[semantic -> bool]" language nil)
+    (const_kind? const-decl "bool" decl nil)
+    (app_symbol def-decl "{T: nonempty |
+         (interp?(S) => interp?(T)) AND
+          (context?(S) => context?(T)) AND
+           (pretheory?(S) => pretheory?(T)) AND
+            weight(F)(T) <= weight(F)(S)}" apply nil)
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+     language nil)
+    (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
+     nil)
+    (ord_kconst_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_iconst adt-constructor-decl "(ord_iconst?)" language nil)
+    (ord_iconst? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_kconst_def adt-constructor-decl "(ord_kconst_def?)" language
+     nil)
+    (ord_kconst_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_ktype_decl adt-constructor-decl "(ord_ktype_decl?)" language
+     nil)
+    (ord_ktype_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_itype adt-constructor-decl "(ord_itype?)" language nil)
+    (ord_itype? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_ktype_def adt-constructor-decl "(ord_ktype_def?)" language
+     nil)
+    (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
+    (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (weight def-decl "nat" language nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (ord type-decl nil language nil) (<= const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (pretheory? const-decl "[semantic -> bool]" language nil)
+    (interp? const-decl "[semantic -> bool]" language nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (∈ def-decl "bool" apply nil)
+    (symbol nonempty-type-decl nil language nil)
+    (nonempty type-eq-decl nil language nil)
+    (nonempty? const-decl "[semantic -> bool]" language nil)
+    (type_kind? const-decl "bool" decl nil)
+    (map type-eq-decl nil language nil)
+    (map? const-decl "[semantic -> bool]" language nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil))
+   nil))
+ (δ_TCC18 0
+  (δ_TCC18-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC19 0
+  (δ_TCC19-1 nil 3582572542 ("" (termination-tcc) nil nil) nil nil))
+ (δ_TCC20 0
+  (δ_TCC20-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC21 0
+  (δ_TCC21-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (nonempty_rest application-judgement
+     "{m: map | weight(F)(m) < weight(F)(x)}" subtype nil)
+    (kind_nonempty application-judgement "kind" decl nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (pretype formula-decl nil language nil)
+    (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
+    (iconst? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (itype? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (ktheory? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (kconst_ext? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kconst_def? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kconst_decl? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (kvar? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (ktype_ext? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (ktype_def? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (ktype_decl? adt-recognizer-decl "[semantic -> boolean]" language
+     nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (< const-decl "bool" reals nil)
+    (theory_kind? const-decl "bool" decl nil)
+    (preterm? const-decl "[semantic -> bool]" language nil)
+    (const_kind? const-decl "bool" decl nil)
+    (app_symbol def-decl "{T: nonempty |
+         (interp?(S) => interp?(T)) AND
+          (context?(S) => context?(T)) AND
+           (pretheory?(S) => pretheory?(T)) AND
+            weight(F)(T) <= weight(F)(S)}" apply nil)
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+     language nil)
+    (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
+     nil)
+    (ord_kconst_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_iconst adt-constructor-decl "(ord_iconst?)" language nil)
+    (ord_iconst? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_kconst_def adt-constructor-decl "(ord_kconst_def?)" language
+     nil)
+    (ord_kconst_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_ktype_decl adt-constructor-decl "(ord_ktype_decl?)" language
+     nil)
+    (ord_ktype_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_itype adt-constructor-decl "(ord_itype?)" language nil)
+    (ord_itype? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_ktype_def adt-constructor-decl "(ord_ktype_def?)" language
+     nil)
+    (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
+    (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (weight def-decl "nat" language nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (ord type-decl nil language nil) (<= const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (pretheory? const-decl "[semantic -> bool]" language nil)
+    (interp? const-decl "[semantic -> bool]" language nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (∈ def-decl "bool" apply nil)
+    (symbol nonempty-type-decl nil language nil)
+    (nonempty type-eq-decl nil language nil)
+    (nonempty? const-decl "[semantic -> bool]" language nil)
+    (type_kind? const-decl "bool" decl nil)
+    (map type-eq-decl nil language nil)
+    (map? const-decl "[semantic -> bool]" language nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (external? const-decl "bool" definitions nil)
+    (definition? const-decl "bool" decl nil)
+    (definition const-decl "{x: semantic |
+         (type_kind?(S) IMPLIES pretype?(x)) AND
+          (const_kind?(S) IMPLIES preterm?(x)) AND
+           (theory_kind?(S) IMPLIES pretheory?(x)) AND
+            weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}" decl
+                nil))
+   nil))
+ (δ_TCC22 0
+  (δ_TCC22-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC23 0
+  (δ_TCC23-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC24 0
+  (δ_TCC24-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC25 0
+  (δ_TCC25-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC26 0
+  (δ_TCC26-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC27 0
+  (δ_TCC27-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC28 0
+  (δ_TCC28-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC29 0
+  (δ_TCC29-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC30 0
+  (δ_TCC30-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC31 0
+  (δ_TCC31-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC32 0
+  (δ_TCC32-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC33 0
+  (δ_TCC33-1 nil 3582572542 ("" (subtype-tcc) nil nil) nil nil))
+ (δ_TCC34 0
+  (δ_TCC34-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC35 0
+  (δ_TCC35-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC36 0
+  (δ_TCC36-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC37 0
+  (δ_TCC37-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC38 0
+  (δ_TCC38-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC39 0
+  (δ_TCC39-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC40 0
+  (δ_TCC40-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC41 0
+  (δ_TCC41-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC42 0
+  (δ_TCC42-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC43 0
+  (δ_TCC43-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC44 0
+  (δ_TCC44-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC45 0
+  (δ_TCC45-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC46 0
+  (δ_TCC46-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC47 0
+  (δ_TCC47-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC48 0
+  (δ_TCC48-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC49 0
+  (δ_TCC49-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC50 0
+  (δ_TCC50-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC51 0
+  (δ_TCC51-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC52 0
+  (δ_TCC52-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC53 0
+  (δ_TCC53-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC54 0
+  (δ_TCC54-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC55 0
+  (δ_TCC55-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC56 0
+  (δ_TCC56-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC57 0
+  (δ_TCC57-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC58 0
+  (δ_TCC58-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC59 0
+  (δ_TCC59-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC60 0
+  (δ_TCC60-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC61 0
+  (δ_TCC61-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC62 0
+  (δ_TCC62-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC63 0
+  (δ_TCC63-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC64 0
+  (δ_TCC64-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC65 0
+  (δ_TCC65-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC66 0
+  (δ_TCC66-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC67 0
+  (δ_TCC67-1 nil 3582572542 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC68 0
+  (δ_TCC68-1 nil 3582572542 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (δ_TCC69 0
+  (δ_TCC69-1 nil 3582572542 ("" (cases-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (pretype type-eq-decl nil language nil)
+    (expr? const-decl "[semantic -> bool]" language nil)
+    (expr type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (pretype formula-decl nil language nil))
    nil)))
 

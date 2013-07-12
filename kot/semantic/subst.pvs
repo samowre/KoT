@@ -17,6 +17,7 @@ BEGIN
   AUTO_REWRITE+ size
 
   
+  % Shift: classical shift operator for De Bruijn indices
   ;↑(e, (nb: [nat, nat])): RECURSIVE
     { f | (pretype?(e) => pretype?(f)) AND
           (preterm?(e) => preterm?(f)) AND
@@ -54,6 +55,7 @@ BEGIN
 
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
+  % Definition 2.15, 4.3, modified for the De Bruijn index
   subst(e, (x: nat), (t: preterm)): RECURSIVE
     { f | (pretype?(e) => pretype?(f)) AND
           (preterm?(e) => preterm?(f)) AND

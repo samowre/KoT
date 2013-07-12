@@ -11,6 +11,7 @@ BEGIN
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
   
+  % Direct Supertype : 3.2
   μ0(T): RECURSIVE pretype =
     CASES T OF
       subtype(T, a): μ0(T)
@@ -18,6 +19,7 @@ BEGIN
     ENDCASES
   MEASURE w(T)
 
+  % Adding subtype contraints : 4.4
   ;/(T, a): RECURSIVE pretype =
     CASES T OF
       symbol(s): symbol(s),
@@ -30,6 +32,8 @@ BEGIN
   divide_size: RECURSIVE JUDGEMENT
     /(T, a) HAS_TYPE { A | size(A) = size(T) }
 
+  % Function μ and π as one recursive function,
+  % in order to deal with the mutual recursion
   mubody(T): RECURSIVE [pretype, preterm] =
     CASES T OF
       symbol(s): (symbol(s), TRUE_),
@@ -55,14 +59,17 @@ BEGIN
   mubody_size: RECURSIVE JUDGEMENT
     mubody(T) HAS_TYPE { x: [pretype, preterm] | size(x`1) = size(T) }
 
+  % Maximal supertype : 3.1, 4.5
   μ(T): pretype =
     mubody(T)`1
   mu_size: JUDGEMENT
     μ(T) HAS_TYPE { A | size(A) = size(T) }
 
+  % Subtype constraints : 3.4, 4.6
   π(T): preterm =
     LET (muT, bodyT) = mubody(T) IN
     Λ(muT)(bodyT)
+
 
   mu: THEOREM
     μ(T) = CASES T OF
@@ -88,6 +95,10 @@ BEGIN
 
       ELSE Λ(T)(TRUE_)
     ENDCASES
+
+
+  % Useful form of π, used for τ
+  π(A)(a): preterm = app(π(A), a)
 
   AUTO_REWRITE- μ, π
   AUTO_REWRITE+ mu, pi

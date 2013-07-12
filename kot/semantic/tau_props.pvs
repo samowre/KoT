@@ -1,0 +1,41 @@
+tau_props: THEORY
+BEGIN
+  IMPORTING tau
+
+  S: VAR semantic
+
+  % Preds and types definitions
+  type?(S): bool = KTYPE?(τ(〈〉)(S))
+  term?(S): bool = KTERM?(τ(〈〉)(S))
+  context?(S): bool = KCONTEXT?(τ(〈〉)(S))
+  
+  ttype: TYPE = (type?)
+  term: TYPE = (term?)
+  context: TYPE = (context?)
+
+  % Variable declaration
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s, c: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  
+
+  % Context Extension : 2.10
+  context_extension_type: THEOREM 
+  	%context?(Γ) AND context?(Θ) AND 
+	prefix?(Γ, Θ) IMPLIES
+	FORALL A: τ(Γ)(A) IMPLIES τ(Θ)(A)
+  context_extension_term: THEOREM 
+  	%context?(Γ) AND context?(Θ) AND 
+	prefix?(Γ, Θ) IMPLIES
+	FORALL a: τ(Γ)(a) IMPLIES τ(Θ)(a)
+
+  % Type construction : 2.11
+  type_construction: THEOREM
+  	%context?(Γ) AND 
+	τ(Γ)(a) = KTERM(A) IMPLIES KTYPE?(τ(Γ)(A))
+
+  % Type soundness : 2.12 -> meaning function
+  % Term soundness : 2.13 -> meaning function

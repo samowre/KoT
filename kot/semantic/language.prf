@@ -135,10 +135,6 @@
   (weight_TCC34-1 nil 3582058845 ("" (termination-tcc) nil nil)
    ((<< adt-def-decl "(strict_well_founded?[semantic])" language nil))
    nil))
- (weight_TCC35 0
-  (weight_TCC35-1 nil 3582130496 ("" (termination-tcc) nil nil)
-   ((<< adt-def-decl "(strict_well_founded?[semantic])" language nil))
-   nil))
  (F_TCC1 0
   (F_TCC1-1 nil 3582058845
    (""
@@ -167,14 +163,13 @@
      nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
     (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
     (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
     (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
     (<= const-decl "bool" reals nil)
-    (ord_bot adt-constructor-decl "(ord_bot?)" language nil)
-    (ord_bot? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (= const-decl "[T, T -> boolean]" equalities nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (>= const-decl "bool" reals nil)
@@ -196,58 +191,6 @@
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil))
    nil))
- (kind 0
-       (kind-1 nil 3582046814 ("" (grind) nil nil)
-        ((kind? const-decl "[semantic -> bool]" language nil))
-        shostak))
- (keyword_TCC1 0
-  (keyword_TCC1-1 nil 3582130338 ("" (subtype-tcc) nil nil) nil nil))
- (keyword 0
-          (keyword-1 nil 3581869120
-           ("" (induct-and-simplify S) nil nil)
-           ((itype? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (kconst_ext? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (kconst_def? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (kconst_decl? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (kvar? adt-recognizer-decl "[semantic -> boolean]" language
-             nil)
-            (ktype_def? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (OR const-decl "[bool, bool -> bool]" booleans nil)
-            (KTYPE? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (KCONST? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (KVAR? adt-recognizer-decl "[semantic -> boolean]" language
-             nil)
-            (KTHEORY? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (KCONTEXT? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (KTERM? adt-recognizer-decl "[semantic -> boolean]"
-             language nil)
-            (AND const-decl "[bool, bool -> bool]" booleans nil)
-            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (boolean nonempty-type-decl nil booleans nil)
-            (semantic type-decl nil language nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
-            (keyword? const-decl "[semantic -> bool]" language nil)
-            (pretype? const-decl "[semantic -> bool]" language nil)
-            (dtype shared-adt-accessor-decl
-             "[{x: semantic |     KTERM?(x) OR ktype_def?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR itype?(x)} -> semantic]"
-             language nil)
-            (semantic_induction formula-decl nil language nil)
-            (finite_emptyset name-judgement "finite_set" finite_sets
-             nil)
-            (member const-decl "bool" sets nil)
-            (emptyset const-decl "set" sets nil) nil)
-           shostak))
  (name 0
        (name-1 nil 3581869130 ("" (induct-and-simplify "S") nil nil)
         ((semantic type-decl nil language nil)
@@ -270,7 +213,7 @@
          (semantic_induction formula-decl nil language nil)
          (finite_emptyset name-judgement "finite_set" finite_sets nil)
          (member const-decl "bool" sets nil)
-         (emptyset const-decl "set" sets nil) nil)
+         (emptyset const-decl "set" sets nil))
         shostak))
  (preterm 0
   (preterm-1 nil 3581869139 ("" (induct-and-simplify "S") nil nil)
@@ -313,7 +256,7 @@
     (semantic_induction formula-decl nil language nil)
     (finite_emptyset name-judgement "finite_set" finite_sets nil)
     (member const-decl "bool" sets nil)
-    (emptyset const-decl "set" sets nil) nil)
+    (emptyset const-decl "set" sets nil))
    shostak))
  (pretype 0
   (pretype-1 nil 3581869144 ("" (induct-and-simplify "S") nil nil)
@@ -337,7 +280,7 @@
     (semantic_induction formula-decl nil language nil)
     (finite_emptyset name-judgement "finite_set" finite_sets nil)
     (member const-decl "bool" sets nil)
-    (emptyset const-decl "set" sets nil) nil)
+    (emptyset const-decl "set" sets nil))
    shostak))
  (interp 0
          (interp-1 nil 3581888760
@@ -368,7 +311,7 @@
            (finite_emptyset name-judgement "finite_set" finite_sets
             nil)
            (member const-decl "bool" sets nil)
-           (emptyset const-decl "set" sets nil) nil)
+           (emptyset const-decl "set" sets nil))
           shostak))
  (context 0
           (context-1 nil 3581869159
@@ -429,7 +372,7 @@
             (finite_emptyset name-judgement "finite_set" finite_sets
              nil)
             (member const-decl "bool" sets nil)
-            (emptyset const-decl "set" sets nil) nil)
+            (emptyset const-decl "set" sets nil))
            shostak))
  (map 0
       (map-1 nil 3582302097
@@ -489,15 +432,15 @@
     (semantic_induction formula-decl nil language nil)
     (finite_emptyset name-judgement "finite_set" finite_sets nil)
     (member const-decl "bool" sets nil)
-    (emptyset const-decl "set" sets nil) nil)
+    (emptyset const-decl "set" sets nil))
    shostak))
  (syntaxic 0
   (syntaxic-1 nil 3581869169
    ("" (grind) (("" (decompose-equality 1) nil nil)) nil)
-   (nil (boolean nonempty-type-decl nil booleans nil)
+   ((boolean nonempty-type-decl nil booleans nil)
     (semantic type-decl nil language nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (set type-eq-decl nil sets nil) nil
+    (set type-eq-decl nil sets nil)
     (emptyset const-decl "set" sets nil)
     (finite_emptyset name-judgement "finite_set" finite_sets nil)
     (name? const-decl "[semantic -> bool]" language nil)
@@ -506,7 +449,6 @@
     (context? const-decl "[semantic -> bool]" language nil)
     (pretype? const-decl "[semantic -> bool]" language nil)
     (preterm? const-decl "[semantic -> bool]" language nil)
-    (keyword? const-decl "[semantic -> bool]" language nil)
     (member const-decl "bool" sets nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (/= const-decl "boolean" notequal nil))

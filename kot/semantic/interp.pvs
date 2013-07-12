@@ -12,6 +12,7 @@ BEGIN
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
 
+  % {{ σ1, s := _, σ2 }} - s = {{ σ1, σ2 }}  
   ;-(σ, (s | s ∈ σ)): RECURSIVE
     { τ | w(τ) < w(σ) } =
     CASES σ OF
@@ -25,7 +26,8 @@ BEGIN
     FORALL (s | s ∈ σ):
       w(σ - s) + w(definition(σ(s))) < w(σ)
       
-
+  % Checks that σ is a correct interpretation for Γ, i.e:
+  %  - for every s ∈ σ, s ∈ Γ and s is a decl in Γ
   interp_for?(Γ: pretheory)(σ): RECURSIVE bool =
     CASES Γ OF
       〈〉: null?(σ),
@@ -46,6 +48,8 @@ BEGIN
   MEASURE w(Γ)
   AUTO_REWRITE+ interp_for?
 
+  % Actually computes the interpretation, that is, creates the
+  % theory equivalent to Γ{{σ}}
   interp(Γ: pretheory, σ: (interp_for?(Γ))): RECURSIVE
     { Δ: pretheory | w(Δ) <= w(Γ) + w(σ) } =
     CASES Γ OF

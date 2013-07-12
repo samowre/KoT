@@ -32,4 +32,22 @@ BEGIN
   AUTO_REWRITE+ ++
   doubleplus_theory: RECURSIVE JUDGEMENT
     ++(Γ, Δ: pretheory) HAS_TYPE pretheory
+
+
+  % Is Γ a prefix of Δ
+  prefix?(Γ)(Δ): RECURSIVE bool = 
+    Γ = Δ OR
+    CASES Δ OF
+      〈〉: empty?(Γ),
+      ktype_decl(s, Θ): prefix?(Γ)(Θ),
+      ktype_def(s, T, Θ): prefix?(Γ)(Θ),
+      ktype_ext(s, Θ): prefix?(Γ)(Θ),
+      kvar(T, Θ): prefix?(Γ)(Θ),
+      kconst_decl(s, T, Θ): prefix?(Γ)(Θ),
+      kconst_def(s, T, a, Θ): prefix?(Γ)(Θ),
+      kconst_ext(s, T, Θ): prefix?(Γ)(Θ),
+      ktheory(s, Th, Θ): prefix?(Γ)(Θ)
+    ENDCASES 
+  MEASURE Δ BY <<
+        
 END contexts

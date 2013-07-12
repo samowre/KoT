@@ -19,32 +19,6 @@ BEGIN
   S: VAR semantic
 
   
-  %% TCCS 
-  tccs: TYPE = [context, preterm]
-
-  ;++(l1, l2: list[tccs]): list[tccs] = append(l1, l2)
-  ;⊢(Γ, a): list[tccs] = cons((Γ, a), null) 
-
-  fail: [keyword, list[tccs]] = (⊥, null)
-  
-
-
-
-
-%%%%% TODO
-  % TODO : add to compare
-  ;∼(A, B): [context -> list[tccs]]
-  ;∼(A, B)(a): [context -> list[tccs]]
-
-  % TODO : add somewhere 
-  π(A)(a): preterm = app(π(A), a)
-
-  % TODO : add to language (probably)
-  CONTEXT?(S: keyword): bool = KCONTEXT?(S) OR KTHEORY?(S)
-
-
-
-
   % Important invariants of τ to prove :
   %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
   %  - KTERM(T) is written only if τ(Θ)(T) = TYPE
@@ -62,6 +36,7 @@ BEGIN
   % Good luck.
 
 
+  % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
   τ(Θ)(S): RECURSIVE [keyword, list[tccs]] = 
   CASES S OF
 
@@ -299,9 +274,13 @@ BEGIN
     	IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
 	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
 	    IF kwT = KTYPE
-	      THEN LET (Tp, tccsa) = τ(Θ ++ Γ)(a) IN
-	        (kwΓ, tccsΓ ++ tccsT ++ tccsa ++ 
-		 ((T ∼ TYPEOF(Tp))(Γ)) ++ (Γ ⊢ π(T)(a)))
+	      THEN LET (kwa, tccsa) = τ(Θ ++ Γ)(a) IN
+ 	        CASES kwa OF
+		  KTERM(Tp):
+	            (kwΓ, tccsΓ ++ tccsT ++ tccsa ++ 
+		     ((T ∼ Tp)(Γ)) ++ (Γ ⊢ π(T)(a)))
+		  ELSE fail
+		ENDCASES
 	      ELSE fail
 	    ENDIF
 	  ELSE fail

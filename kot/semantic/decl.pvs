@@ -2,6 +2,7 @@ decl: THEORY
 BEGIN
   IMPORTING language, subtype
 
+
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
   r, s: VAR symbol
@@ -81,6 +82,9 @@ BEGIN
   interp_when_theory_kind: THEOREM
     theory_kind?(S) IMPLIES NOT interp?(S)
 
+  % Function kind as informally defined at the begining of chapter 2.
+  % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
+  % among CONSTANT, TYPE, VARIABLE, THEORY
   kind(S): 
     { r: keyword | nonempty?(S) IFF r ≠ ⊥ } =
     CASES S OF
@@ -98,7 +102,7 @@ BEGIN
     ENDCASES
   AUTO_REWRITE+ kind
   kind_nonempty: JUDGEMENT
-    kind(S: nonempty) HAS_TYPE keyword % TODO: kind
+    kind(S: nonempty) HAS_TYPE kind
   kind_type: THEOREM
     kind(S) = KTYPE IFF type_kind?(S)
   kind_const: THEOREM
@@ -109,6 +113,9 @@ BEGIN
     kind(S) = KTHEORY IFF theory_kind?(S)
   AUTO_REWRITE+ kind_type, kind_const, kind_var, kind_theory
 
+  % Checks if the first element of S is a definition (not a declaration)
+  % Used as definition?(Γ(s)) it checks that s has a definition in Γ
+  % (such as s: TYPE = def_type, or s: T = def_term)
   definition?(S: nonempty): bool =
     CASES S OF
       ktype_def(s, T, Δ): TRUE,
@@ -122,7 +129,11 @@ BEGIN
   definition: TYPE = (definition?)
   nonempty_interp_is_definition: JUDGEMENT
     nonempty_interp SUBTYPE_OF definition
+
   
+  % Function definition as informally defined at the begining of section 2.5
+  % Meant to be used as definition(Γ(s)), to give the definition of the symbol s
+  % (if it exists, see definition?), i.e a type, a term or a theory.
   definition(S: definition):
     { x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND
                     (const_kind?(S) IMPLIES preterm?(x)) AND
@@ -137,6 +148,9 @@ BEGIN
     ENDCASES
   AUTO_REWRITE+ definition
 
+  % Checks if the first element of S has a type (i.e is a preterm).
+  % Used as typed?(Γ(s)) it checks that s is a preterm in Γ,
+  % i.e appears of the form s: T or s: T = a
   typed?(Γ: nonempty_context): bool =
     COND
       kconst_decl?(Γ) -> TRUE,
@@ -148,6 +162,9 @@ BEGIN
   AUTO_REWRITE+ typed?
   typed: TYPE = (typed?)
 
+  % Function type as informally defined at the begining of chapter 2.
+  % Meant to be used as type(Γ(s)), to give the type of s
+  % (if it exists, see typed?), i.e type(s: T = def_term, Γ) = T
   type_(Γ: typed): { T | w(T) + w(rest(Γ)) < w(Γ) } =
     CASES Γ OF
       kconst_decl(s, T, Δ): T,

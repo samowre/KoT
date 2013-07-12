@@ -19,7 +19,16 @@ BEGIN
 
 
   %% The type `semantic' is a big union type representing every element of the
-  %% idealized PVS language – pretypes, preterms, contexts, etc.
+  %% idealized PVS language: pretypes, preterms, contexts, theory and interpretations 
+  %% of theories.
+  %% Note that the datatype below differs from the language defined in the Semantic Document 
+  %% on a few points:
+  %%  - parametric theories, formals and actuals have been replace by theory interpretation
+  %%  - in the original document, a context is a sequence of declarations, each declaration
+  %%  	being a type decl or type def, const decl or const def. To forbid interpretation of 
+  %%	symbols such as =, if, bool, we have added a third type: externals.
+  %%  	It behaves most of the time as a decl (since it has no definition), but behaves as a 
+  %%	def regardind interpretation (it cannot be interpreted).
   %% This datatype has no subtypes, instead they are computed by the `prekind'
   %% function defined later on, that will ensure the well-formedness of the
   %% constructors (e.g., the `supertype' accessor of `subtype' will actually
@@ -102,6 +111,10 @@ BEGIN
 
   S: VAR semantic
 
+  %% Weight function, used for termination in most of the recursive functions.
+  %% Intuitively, F is a function that gives a weight to every constructor,
+  %% w(F) is the sum of the weight of the constructors occuring in a 'semantic'.
+  %% TODO : can be subsumed by the new version with ordinals ?
   weight(F: [ord -> nat])(S): RECURSIVE nat =
     CASES S OF
       symbol(s): F(ord_symbol) + 1,
@@ -164,8 +177,6 @@ BEGIN
 
   %% Actual definition of the subtypes predicates as we would have defined them
   %% with mutual recursion.
-%  kind: AXIOM
-%    kind?(S) = (KTYPE?(S) OR KCONST?(S) OR KVAR?(S) OR KTHEORY?(S))
   name: AXIOM
     name?(S) = CASES S OF
       symbol(s): TRUE,
@@ -293,10 +304,6 @@ BEGIN
   a, b, f, g: VAR preterm
   σ: VAR interp
 
-  knamed?(Γ: semantic): MACRO bool =
-    ktype_def?(Γ) OR ktype_decl?(Γ) OR kconst_def?(Γ) OR
-    kconst_decl?(Γ) OR ktheory?(Γ) OR ktype_ext?(Γ) OR
-    kconst_ext?(Γ)
 
   % Readable-ish constructor definitions
   ;→(A, B): MACRO pretype = fun(A, B)
@@ -344,6 +351,7 @@ BEGIN
     map(LAMBDA a: exists_(T, a))(as_)
 
 
+  %% TODO : write intro for keywords
   keyword: DATATYPE
   BEGIN
     % Used to represent a failure – flattening of the lift datatype
@@ -357,6 +365,14 @@ BEGIN
     KCONTEXT: KCONTEXT?
     KTERM(TYPEOF: pretype): KTERM?
   END keyword
+
+  k: VAR keyword
+  
+  kind?(k): bool = KTYPE?(k) OR KCONST?(k) OR KVAR?(k) OR KTHEORY?(k)
+  kind: TYPE = (kind?)
+
+  CONTEXT?(S: keyword): bool = KCONTEXT?(S) OR KTHEORY?(S)
+
 END language
 
 %   % This allows to write
