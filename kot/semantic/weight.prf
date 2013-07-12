@@ -548,7 +548,8 @@
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (context formula-decl nil language nil)
-    (semantic_induction formula-decl nil language nil) nil
+    (semantic_induction formula-decl nil language nil)
+    (w def-decl "upto[length(Γ)]" weight nil)
     (upto nonempty-type-eq-decl nil nat_types nil)
     (length def-decl "nat" weight nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
@@ -760,7 +761,7 @@
      real_props nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    nil
+    (Γ!1 skolem-const-decl "context" weight nil)
     (rest shared-adt-accessor-decl
           "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
           language nil)
@@ -842,7 +843,8 @@
      real_props nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (context formula-decl nil language nil)
-    (semantic_induction formula-decl nil language nil) nil
+    (semantic_induction formula-decl nil language nil)
+    (w def-decl "upto[length(Γ)]" weight nil)
     (upto nonempty-type-eq-decl nil nat_types nil)
     (length def-decl "nat" weight nil)
     (context type-eq-decl nil language nil)
@@ -1030,8 +1032,8 @@
    ((posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
-    (numfield nonempty-type-eq-decl nil number_fields nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
     (w_var_lt formula-decl nil weight nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
@@ -1039,7 +1041,8 @@
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (context formula-decl nil language nil)
-    (semantic_induction formula-decl nil language nil) nil
+    (semantic_induction formula-decl nil language nil)
+    (w def-decl "upto[length(Γ)]" weight nil)
     (upto nonempty-type-eq-decl nil nat_types nil)
     (length def-decl "nat" weight nil) (<= const-decl "bool" reals nil)
     (prefix? def-decl "bool" contexts nil)
@@ -1183,7 +1186,8 @@
     (number nonempty-type-decl nil numbers nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
     (interp? const-decl "[semantic -> bool]" language nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (∈ def-decl "bool" apply nil)
     (symbol nonempty-type-decl nil language nil)
     (nonempty type-eq-decl nil language nil)
     (nonempty? const-decl "[semantic -> bool]" language nil)
@@ -1299,7 +1303,8 @@
     (number nonempty-type-decl nil numbers nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
     (interp? const-decl "[semantic -> bool]" language nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (∈ def-decl "bool" apply nil)
     (symbol nonempty-type-decl nil language nil)
     (nonempty type-eq-decl nil language nil)
     (nonempty? const-decl "[semantic -> bool]" language nil)
@@ -1361,11 +1366,11 @@
      "(strict_total_order?[real])" real_props nil)
     (syntaxic formula-decl nil language nil)
     (kind_theory formula-decl nil decl nil)
+    (definition? const-decl "bool" decl nil)
+    (definition type-eq-decl nil decl nil)
     (definition const-decl
                 "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
                 decl nil)
-    (definition type-eq-decl nil decl nil)
-    (definition? const-decl "bool" decl nil)
     (pretheory type-eq-decl nil language nil)
     (pretheory_is_context judgement-tcc nil subtype nil)
     (name formula-decl nil language nil)
@@ -1380,7 +1385,8 @@
     (type_kind? const-decl "bool" decl nil)
     (nonempty? const-decl "[semantic -> bool]" language nil)
     (nonempty type-eq-decl nil language nil)
-    (symbol nonempty-type-decl nil language nil) nil
+    (symbol nonempty-type-decl nil language nil)
+    (∈ def-decl "bool" apply nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (interp? const-decl "[semantic -> bool]" language nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
@@ -1533,17 +1539,15 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (semantic type-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
-    (context formula-decl nil language nil))
+    (pretype formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (interp formula-decl nil language nil)
+    (name formula-decl nil language nil)
+    (syntaxic formula-decl nil language nil))
    nil))
  (w_TCC23 0
   (w_TCC23-1 nil 3582641802 ("" (termination-tcc) nil nil)
@@ -1553,13 +1557,22 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (interp formula-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (syntaxic formula-decl nil language nil)
     (name formula-decl nil language nil)
-    (syntaxic formula-decl nil language nil))
+    (interp formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretype formula-decl nil language nil)
+    (preterm formula-decl nil language nil))
    nil))
  (w_TCC24 0
   (w_TCC24-1 nil 3582641802 ("" (subtype-tcc) nil nil)
@@ -1569,6 +1582,22 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
+    (preterm formula-decl nil language nil)
+    (pretype formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (interp formula-decl nil language nil)
+    (name formula-decl nil language nil)
+    (syntaxic formula-decl nil language nil))
+   nil))
+ (w_TCC25 0
+  (w_TCC25-1 nil 3582641802 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (syntaxic? const-decl "[semantic -> bool]" language nil)
+    (syntaxic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
@@ -1586,8 +1615,8 @@
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil))
    nil))
- (w_TCC25 0
-  (w_TCC25-1 nil 3582641802 ("" (termination-tcc) nil nil)
+ (w_TCC26 0
+  (w_TCC26-1 nil 3582641802 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1602,8 +1631,8 @@
     (name formula-decl nil language nil)
     (syntaxic formula-decl nil language nil))
    nil))
- (w_TCC26 0
-  (w_TCC26-1 nil 3582641802 ("" (subtype-tcc) nil nil)
+ (w_TCC27 0
+  (w_TCC27-1 nil 3582641802 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1626,24 +1655,6 @@
     (context formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil))
-   nil))
- (w_TCC27 0
-  (w_TCC27-1 nil 3582641802 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (context formula-decl nil language nil))
    nil))
  (w_TCC28 0
   (w_TCC28-1 nil 3582641802 ("" (termination-tcc) nil nil)
@@ -1733,17 +1744,15 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (semantic type-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil)
-    (context formula-decl nil language nil))
+    (pretype formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (interp formula-decl nil language nil)
+    (name formula-decl nil language nil)
+    (syntaxic formula-decl nil language nil))
    nil))
  (w_TCC33 0
   (w_TCC33-1 nil 3582641802 ("" (termination-tcc) nil nil)
@@ -1753,13 +1762,22 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (interp formula-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (syntaxic formula-decl nil language nil)
     (name formula-decl nil language nil)
-    (syntaxic formula-decl nil language nil))
+    (interp formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretype formula-decl nil language nil)
+    (preterm formula-decl nil language nil))
    nil))
  (w_TCC34 0
   (w_TCC34-1 nil 3582641802 ("" (subtype-tcc) nil nil)
@@ -1769,22 +1787,13 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (weight def-decl "nat" language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (context formula-decl nil language nil)
+    (preterm formula-decl nil language nil)
     (pretype formula-decl nil language nil)
-    (preterm formula-decl nil language nil))
+    (context formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (interp formula-decl nil language nil)
+    (name formula-decl nil language nil)
+    (syntaxic formula-decl nil language nil))
    nil))
  (w_TCC35 0
   (w_TCC35-1 nil 3582641802 ("" (termination-tcc) nil nil)
@@ -1794,13 +1803,22 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (interp formula-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (syntaxic formula-decl nil language nil)
     (name formula-decl nil language nil)
-    (syntaxic formula-decl nil language nil))
+    (interp formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretype formula-decl nil language nil)
+    (preterm formula-decl nil language nil))
    nil))
  (w_TCC36 0
   (w_TCC36-1 nil 3582641802 ("" (subtype-tcc) nil nil)
@@ -1810,22 +1828,13 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (weight def-decl "nat" language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (context formula-decl nil language nil)
+    (preterm formula-decl nil language nil)
     (pretype formula-decl nil language nil)
-    (preterm formula-decl nil language nil))
+    (context formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (interp formula-decl nil language nil)
+    (name formula-decl nil language nil)
+    (syntaxic formula-decl nil language nil))
    nil))
  (w_TCC37 0
   (w_TCC37-1 nil 3582641802 ("" (termination-tcc) nil nil)
@@ -1835,13 +1844,22 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (interp formula-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (weight def-decl "nat" language nil)
+    (syntaxic formula-decl nil language nil)
     (name formula-decl nil language nil)
-    (syntaxic formula-decl nil language nil))
+    (interp formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretype formula-decl nil language nil)
+    (preterm formula-decl nil language nil))
    nil))
  (w_TCC38 0
   (w_TCC38-1 nil 3582641802 ("" (subtype-tcc) nil nil)
@@ -1851,6 +1869,22 @@
     (semantic type-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (syntaxic type-eq-decl nil language nil)
+    (preterm formula-decl nil language nil)
+    (pretype formula-decl nil language nil)
+    (context formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (interp formula-decl nil language nil)
+    (name formula-decl nil language nil)
+    (syntaxic formula-decl nil language nil))
+   nil))
+ (w_TCC39 0
+  (w_TCC39-1 nil 3582641802 ("" (termination-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (syntaxic? const-decl "[semantic -> bool]" language nil)
+    (syntaxic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
@@ -1868,8 +1902,8 @@
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil))
    nil))
- (w_TCC39 0
-  (w_TCC39-1 nil 3582641802 ("" (termination-tcc) nil nil)
+ (w_TCC40 0
+  (w_TCC40-1 nil 3582641802 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1884,8 +1918,8 @@
     (name formula-decl nil language nil)
     (syntaxic formula-decl nil language nil))
    nil))
- (w_TCC40 0
-  (w_TCC40-1 nil 3582641802 ("" (subtype-tcc) nil nil)
+ (w_TCC41 0
+  (w_TCC41-1 nil 3582641802 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1908,24 +1942,6 @@
     (context formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil))
-   nil))
- (w_TCC41 0
-  (w_TCC41-1 nil 3582641802 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (context formula-decl nil language nil))
    nil))
  (w_TCC42 0
   (w_TCC42-1 nil 3582641802 ("" (termination-tcc) nil nil)
@@ -2829,103 +2845,31 @@
     (pretype formula-decl nil language nil)
     (preterm formula-decl nil language nil))
    nil))
- (w_TCC86 0
-  (w_TCC86-1 nil 3582641802 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (syntaxic formula-decl nil language nil))
-   nil))
- (w_TCC87 0
-  (w_TCC87-1 nil 3582641802 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (weight def-decl "nat" language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (preterm formula-decl nil language nil))
-   nil))
- (w_TCC88 0
-  (w_TCC88-1 nil 3582641802 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (preterm formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (syntaxic formula-decl nil language nil))
-   nil))
- (w_TCC89 0
-  (w_TCC89-1 nil 3582641901 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (weight def-decl "nat" language nil)
-    (syntaxic formula-decl nil language nil)
-    (name formula-decl nil language nil)
-    (interp formula-decl nil language nil)
-    (pretheory formula-decl nil language nil)
-    (context formula-decl nil language nil)
-    (pretype formula-decl nil language nil)
-    (preterm formula-decl nil language nil))
-   nil))
  (w_prefix 0
   (w_prefix-1 nil 3582649780
    ("" (induct "S")
-    (("1" (grind) nil nil)
-     ("2" (skosimp* :preds? t)
-      (("2" (assert)
-        (("2" (expand "w" +)
-          (("2" (assert)
-            (("2" (use "w_symbol_prefix" :polarity? t)
-              (("2" (inst -1 "symbol1_var!1")
-                (("2" (assert)
-                  (("2" (use "both_sides_plus_le1")
-                    (("2" (assert)
-                      (("2" (use "ordinal_of_nat_le")
-                        (("2" (assert) nil nil)) nil))
+    (("1" (assert) nil nil)
+     ("2" (assert)
+      (("2" (skosimp* :preds? t)
+        (("2" (assert)
+          (("2" (expand "w" +)
+            (("2" (assert)
+              (("2" (lemma "both_sides_plus_le1")
+                (("2" (inst? :polarity? t)
+                  (("2" (assert)
+                    (("2" (lemma "w_symbol_prefix")
+                      (("2" (inst? :polarity? t)
+                        (("2" (inst -1 "symbol1_var!1")
+                          (("2" (lemma "ordinal_of_nat_le")
+                            (("2" (assert)
+                              (("2"
+                                (inst? :if-match all)
+                                (("2" (assert) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
                       nil))
                     nil))
                   nil))
@@ -2936,23 +2880,151 @@
         nil))
       nil)
      ("3" (skosimp* :preds? t)
-      (("3" (expand "w" +)
-        (("3" (assert)
-          (("3" (bddsimp -4)
-            (("3" (assert)
-              (("3" (lift-if)
-                (("3" (lift-if)
-                  (("3" (lift-if)
-                    (("3" (bddsimp +)
-                      (("1" (assert) (("1" (postpone) nil nil)) nil)
-                       ("2" (postpone) nil nil)
-                       ("3" (assert) (("3" (postpone) nil nil)) nil)
-                       ("4" (postpone) nil nil)
-                       ("5" (postpone) nil nil)
-                       ("6" (postpone) nil nil)
-                       ("7" (postpone) nil nil)
-                       ("8" (postpone) nil nil)
-                       ("9" (postpone) nil nil))
+      (("3" (assert)
+        (("3" (bddsimp -4)
+          (("3" (assert)
+            (("3" (inst -4 "Γ!1" "Δ!1")
+              (("3" (assert)
+                (("3" (expand "w" +)
+                  (("3" (assert)
+                    (("3" (lemma "apply_symbol_when_prefix")
+                      (("3" (lemma "member_symbol_when_prefix")
+                        (("3" (inst -1 "dot1_var!1" "Δ!1" "Γ!1")
+                          (("3" (inst -2 "dot1_var!1" "Δ!1" "Γ!1")
+                            (("3" (assert)
+                              (("3"
+                                (case "dot1_var!1 ∈ Δ!1")
+                                (("1"
+                                  (assert)
+                                  (("1"
+                                    (assert)
+                                    (("1"
+                                      (rewrite -3)
+                                      (("1"
+                                        (assert)
+                                        (("1"
+                                          (lift-if +)
+                                          (("1"
+                                            (bddsimp +)
+                                            (("1"
+                                              (assert)
+                                              (("1"
+                                                (lemma
+                                                 "both_sides_plus_le1")
+                                                (("1"
+                                                  (inst? :polarity? t)
+                                                  (("1"
+                                                    (assert)
+                                                    (("1"
+                                                      (lemma
+                                                       "both_sides_plus_le1")
+                                                      (("1"
+                                                        (inst?
+                                                         :polarity?
+                                                         t)
+                                                        (("1"
+                                                          (assert)
+                                                          (("1"
+                                                            (hide 2)
+                                                            (("1"
+                                                              (hide 2)
+                                                              (("1"
+                                                                (lemma
+                                                                 "le_plus_le")
+                                                                (("1"
+                                                                  (invoke
+                                                                   (inst
+                                                                    -1
+                                                                    "%4"
+                                                                    "%1"
+                                                                    "%3"
+                                                                    "%2")
+                                                                   (~
+                                                                    1
+                                                                    "%1 + %2 <= %3 + %4"))
+                                                                  (("1"
+                                                                    (assert)
+                                                                    (("1"
+                                                                      (split
+                                                                       +)
+                                                                      (("1"
+                                                                        (assert)
+                                                                        (("1"
+                                                                          (grind)
+                                                                          nil
+                                                                          nil))
+                                                                        nil)
+                                                                       ("2"
+                                                                        (use
+                                                                         "w_symbol_prefix"
+                                                                         :polarity?
+                                                                         t)
+                                                                        (("2"
+                                                                          (inst
+                                                                           -1
+                                                                           "dot1_var!1")
+                                                                          (("2"
+                                                                            (assert)
+                                                                            (("2"
+                                                                              (use
+                                                                               "ordinal_of_nat_le"
+                                                                               :polarity?
+                                                                               t)
+                                                                              (("2"
+                                                                                (assert)
+                                                                                (("2"
+                                                                                  (inst
+                                                                                   -1
+                                                                                   "w(Δ!1, dot1_var!1)"
+                                                                                   "w(Γ!1, dot1_var!1)")
+                                                                                  (("2"
+                                                                                    (assert)
+                                                                                    nil
+                                                                                    nil))
+                                                                                  nil))
+                                                                                nil))
+                                                                              nil))
+                                                                            nil))
+                                                                          nil))
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (assert)
+                                              (("2"
+                                                (expand "<=" 2)
+                                                (("2"
+                                                  (propax)
+                                                  nil
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2"
+                                  (assert)
+                                  (("2" (grind) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
                       nil))
                     nil))
                   nil))
@@ -2962,17 +3034,40 @@
           nil))
         nil))
       nil)
-     ("4" (postpone) nil nil) ("5" (postpone) nil nil)
-     ("6" (postpone) nil nil) ("7" (postpone) nil nil)
-     ("8" (postpone) nil nil) ("9" (postpone) nil nil)
-     ("10" (postpone) nil nil) ("11" (postpone) nil nil)
-     ("12" (postpone) nil nil) ("13" (postpone) nil nil)
-     ("14" (postpone) nil nil) ("15" (postpone) nil nil)
-     ("16" (postpone) nil nil) ("17" (postpone) nil nil)
-     ("18" (postpone) nil nil) ("19" (postpone) nil nil)
-     ("20" (postpone) nil nil) ("21" (postpone) nil nil)
-     ("22" (postpone) nil nil) ("23" (postpone) nil nil)
-     ("24" (postpone) nil nil))
+     ("4" (assert)
+      (("4" (skosimp* :preds? t)
+        (("4" (assert)
+          (("4" (expand "w" +)
+            (("4" (assert)
+              (("4" (inst -3 "Γ!1" "Δ!1")
+                (("4" (inst -4 "Γ!1" "Δ!1")
+                  (("4" (lemma "le_cut")
+                    (("4" (lemma "le_cut")
+                      (("4" (expand "max" +)
+                        (("4" (assert)
+                          (("4" (assert) (("4" (postpone) nil nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("5" (postpone) nil nil) ("6" (postpone) nil nil)
+     ("7" (postpone) nil nil) ("8" (postpone) nil nil)
+     ("9" (postpone) nil nil) ("10" (postpone) nil nil)
+     ("11" (postpone) nil nil) ("12" (postpone) nil nil)
+     ("13" (postpone) nil nil) ("14" (postpone) nil nil)
+     ("15" (postpone) nil nil) ("16" (postpone) nil nil)
+     ("17" (postpone) nil nil) ("18" (postpone) nil nil)
+     ("19" (postpone) nil nil) ("20" (postpone) nil nil)
+     ("21" (postpone) nil nil) ("22" (postpone) nil nil)
+     ("23" (postpone) nil nil) ("24" (postpone) nil nil))
     nil)
    nil shostak)))
 

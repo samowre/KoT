@@ -49,13 +49,13 @@ BEGIN
 	  add(1, w(Γ, σ), zero) + w(Γ, m) + w(Δ, s) + 1
 	ELSE zero ENDIF,
 
-      fun(A, B): max(w(Γ, A), w(kvar(A, Γ), B)) + 1,
-      prod(A, B): max(w(Γ, A), w(kvar(A, Γ), B)) + 1,
-      subtype(T, a): max(w(Γ, T), w(kvar(T, Γ), a)) + 1,
+      fun(A, B): max(w(Γ, A), w(Γ, B)) + 1,
+      prod(A, B): max(w(Γ, A), w(Γ, B)) + 1,
+      subtype(T, a): max(w(Γ, T), w(Γ, a)) + 1,
 
       v(i): w(Γ, i) + ordinal_of_nat(1),
       app(f, a): max(w(Γ, f), w(Γ, a)) + 1,
-      lam(T, a): max(w(Γ, T), w(kvar(T, Γ), a)) + 1,
+      lam(T, a): max(w(Γ, T), w(Γ, a)) + 1,
       pair(a, b): max(w(Γ, a), w(Γ, b)) + 1,
       lproj(a): w(Γ, a) + 1,
       rproj(a): w(Γ, a) + 1,

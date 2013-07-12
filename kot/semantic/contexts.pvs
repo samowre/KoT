@@ -48,9 +48,12 @@ BEGIN
       kconst_ext(s, T, Θ): prefix?(Θ)(Γ),
       ktheory(s, Th, Θ): prefix?(Θ)(Γ)
     ENDCASES 
-  MEASURE Δ BY <<
+  MEASURE w(Δ)
 
-  member_when_prefix: THEOREM 
-    prefix?(Γ)(Θ) AND s ∈ Γ IMPLIES s ∈ Θ
-        
+  member_symbol_when_prefix: THEOREM 
+    prefix?(Δ)(Γ) AND s ∈ Γ IMPLIES s ∈ Δ
+  apply_symbol_when_prefix: THEOREM
+    prefix?(Δ)(Γ) AND s ∈ Γ IMPLIES Γ(s) = Δ(s)
+  member_var_when_prefix: THEOREM
+    prefix?(Δ)(Γ) AND x ∈ Γ IMPLIES x ∈ Δ
 END contexts
