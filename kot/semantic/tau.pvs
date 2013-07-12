@@ -18,6 +18,15 @@ BEGIN
   a, b, f, g: VAR preterm
   S: VAR semantic
 
+
+  %% Type TCCS 
+  tcc: TYPE = preterm
+
+  ;++(l1, l2: list[tcc]): list[tcc] = append(l1, l2)
+  % ;⊢(Γ, a): list[tcc] = cons((Γ, a), null) 
+  π(A)(a): list[tcc] = cons( app(π(A), a), null)
+
+  fail: [keyword, list[tcc]] = (⊥, null)
   
   % Important invariants of τ to prove :
   %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
@@ -25,6 +34,7 @@ BEGIN
   %  - KTERM(T) is written only if μ0(T) = T (T is not a subtype)
   %  - KTERM(T) is written only if δ(Γ(T)) = T (T is fully expanded)
   %  - τ(Γ)(_) generates tccs that are correct (typecheckable) in the context Γ
+  %    i.e τ(Γ)(tcc) = KTERM for each tcc generated.
 
 
   % Termination of τ : the only constraint is 
@@ -37,7 +47,7 @@ BEGIN
 
 
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
-  τ(Θ)(S): RECURSIVE [keyword, list[tccs]] = 
+  τ(Θ)(S): RECURSIVE [keyword, list[tcc]] = 
   CASES S OF
 
   %% Names
@@ -148,7 +158,7 @@ BEGIN
 		CASES kwa OF
 		  KTERM(Ap):
 		    (KTERM(subst(B, 0, a)), 
-		     tccsf ++ tccsa ++ (A ∼ Ap)(a)(Θ) ++ (Θ ⊢ π(A)(a)) )
+		     tccsf ++ tccsa ++ (A ≃ Ap)(a) ++ (π(A)(a)) )
 		  ELSE fail
 		ENDCASES
 	      ELSE fail
@@ -278,7 +288,7 @@ BEGIN
  	        CASES kwa OF
 		  KTERM(Tp):
 	            (kwΓ, tccsΓ ++ tccsT ++ tccsa ++ 
-		     ((T ∼ Tp)(Γ)) ++ (Γ ⊢ π(T)(a)))
+		     (T ≃ Tp) ++ (π(T)(a)))
 		  ELSE fail
 		ENDCASES
 	      ELSE fail
@@ -316,6 +326,21 @@ BEGIN
     ELSE fail
   ENDCASES
   MEASURE LAMBDA S: 0
+
+
+  % Important invariants of τ to prove :
+  %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
+  %    -> done implicitely with type wf_context in every theorems of tau_props.pvs
+  %  - KTERM(T) is written only if τ(Θ)(T) = TYPE
+  %    -> see thm 2.11
+  %  - KTERM(T) is written only if μ0(T) = T (T is not a subtype)
+  %    
+  %  - KTERM(T) is written only if δ(Γ(T)) = T (T is fully expanded)
+  %  - τ(Γ)(_) generates tccs that are correct (typecheckable) in the context Γ
+  %    i.e τ(Γ)(tcc) = KTERM for each tcc generated.
+  %    -> done in tau_props.pvs
+
+  
 
 
 END tau

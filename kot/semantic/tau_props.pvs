@@ -2,40 +2,43 @@ tau_props: THEORY
 BEGIN
   IMPORTING tau
 
-  S: VAR semantic
-
-  % Preds and types definitions
-  type?(S): bool = KTYPE?(τ(〈〉)(S))
-  term?(S): bool = KTERM?(τ(〈〉)(S))
-  context?(S): bool = KCONTEXT?(τ(〈〉)(S))
-  
-  ttype: TYPE = (type?)
-  term: TYPE = (term?)
-  context: TYPE = (context?)
+  % Well formed contexts
+  wf_context?(S: semantic): bool = KCONTEXT?(τ(〈〉)(S)`1)
+  wf_context: TYPE = (context?)
 
   % Variable declaration
-  Γ, Δ, Θ: VAR context
+  Γ, Δ, Θ: VAR wf_context
   A, B, T: VAR pretype
   r, s, c: VAR symbol
   n, m: VAR name
   x, y: VAR nat
   a, b, f, g: VAR preterm
-  
+  S: VAR semantic
+
+  % Well formed types and terms under context Γ
+  type?(Γ)(S): bool = KTYPE?(τ(Γ)(S)`1)
+  term?(Γ)(S): bool = KTERM?(τ(Γ)(S)`1)
+
+  ttype(Γ): TYPE = (type?(Γ))
+  term(Γ): TYPE = (term?(Γ))
+
 
   % Context Extension : 2.10
   context_extension_type: THEOREM 
   	%context?(Γ) AND context?(Θ) AND 
-	prefix?(Γ, Θ) IMPLIES
-	FORALL A: τ(Γ)(A) IMPLIES τ(Θ)(A)
+	prefix?(Γ)(Θ) IMPLIES
+	FORALL A: type?(Γ)(A) IMPLIES type?(Θ)(A)
   context_extension_term: THEOREM 
   	%context?(Γ) AND context?(Θ) AND 
-	prefix?(Γ, Θ) IMPLIES
-	FORALL a: τ(Γ)(a) IMPLIES τ(Θ)(a)
+	prefix?(Γ)(Θ) IMPLIES
+	FORALL a: term?(Γ)(a) IMPLIES term?(Θ)(a)
 
   % Type construction : 2.11
   type_construction: THEOREM
   	%context?(Γ) AND 
-	τ(Γ)(a) = KTERM(A) IMPLIES KTYPE?(τ(Γ)(A))
+	τ(Γ)(a)`1 = KTERM(A) IMPLIES type?(Γ)(A)
 
   % Type soundness : 2.12 -> meaning function
   % Term soundness : 2.13 -> meaning function
+
+END tau_props
