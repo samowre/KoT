@@ -34,61 +34,56 @@ BEGIN
 
   % Is Δ a subword of Γ?
   ;≺(Δ, Γ): RECURSIVE bool =
->>>>>>> Stashed changes
-    CASES Δ OF
-      〈〉: TRUE
+    CASES Γ OF
+      〈〉: empty?(Δ)
     , ktype_decl(s, Θ):
-        CASES Γ OF
-	  kvar(p, p): FALSE
-	, ktype_decl(t, rest): t = s AND Θ ≺ rest
-	  ELSE Θ ≺ Γ
-	ENDCASES
+      CASES Δ OF
+        ktype_decl(t, rest): IF t = s THEN rest ≺ Θ ELSE Δ ≺ Θ ENDIF
+        ELSE Δ ≺ Θ
+      ENDCASES
     , ktype_def(s, T, Θ):
-        CASES Γ OF
-	  kvar(_, _): FALSE
-	, ktype_def(t, A, rest): t = s AND A = T AND Θ ≺ rest
-	  ELSE Θ ≺ Γ
-	ENDCASES
+      CASES Δ OF
+        ktype_def(t, A, rest): IF t = s THEN T = A AND rest ≺ Θ ELSE Δ ≺ Θ ENDIF
+        ELSE Δ ≺ Θ
+      ENDCASES
     , ktype_ext(s, Θ):
-        CASES Γ OF
-	  kvar(_, _): FALSE
-	, ktype_ext(t, rest): t = s AND Θ ≺ rest,
-	  ELSE Θ ≺ Γ
-	ENDCASES
-    , kvar(T, Θ): 
-        CASES Γ OF
-	  〈〉: FALSE
-	, kvar(A, rest): T = A AND Θ ≺ rest
-	  ELSE Θ ≺ Γ
-	ENDCASES
+      CASES Δ OF
+        ktype_ext(t, rest): IF t = s THEN rest ≺ Θ ELSE Δ ≺ Θ ENDIF
+        ELSE Δ ≺ Θ
+      ENDCASES
+    , kvar(T, Θ):
+      CASES Δ OF
+        kvar(A, rest): T = A AND rest ≺ Θ
+	ELSE FALSE
+      ENDCASES
     , kconst_decl(s, T, Θ):
-        CASES Γ OF
-	  kvar(_, _): FALSE
-	, kconst_decl
-	  ELSE Θ ≺ Γ
-	ENDCASES
+      CASES Δ OF
+        kconst_decl(t, A, rest): IF t = s THEN A = T AND rest ≺ Θ ELSE Δ ≺ Θ ENDIF
+        ELSE Δ ≺ Θ
+      ENDCASES
     , kconst_def(s, T, a, Θ):
-        CASES Γ OF
-	  kvar(_, _): FALSE
-	, kconst_def
-	  ELSE Θ ≺ Γ
-	ENDCASES
+      CASES Δ OF
+        kconst_def(t, A, b, rest): IF t = s THEN A = T AND b = a AND rest ≺ Θ ELSE Δ ≺ Θ ENDIF
+        ELSE Δ ≺ Θ
+      ENDCASES
     , kconst_ext(s, T, Θ):
-        CASES Γ OF
-	  kvar(_, _): FALSE
-	, kconst_ext
-	  ELSE Θ ≺ Γ
-	ENDCASES
+      CASES Δ OF
+        kconst_ext(t, A, rest): IF t = s THEN A = T AND rest ≺ Θ ELSE Δ ≺ Θ ENDIF
+        ELSE Δ ≺ Θ
+      ENDCASES
     , ktheory(s, Th, Θ):
-        CASES Γ OF
-	  kvar(_, _): FALSE
-	, ktheory
-	  ELSE Θ ≺ Γ
-	ENDCASES
+      CASES Δ OF
+        ktheory(t, Uh, rest): IF t = s THEN Uh = Th AND rest ≺ Θ ELSE Δ ≺ Θ ENDIF
+        ELSE Δ ≺ Θ
+      ENDCASES
     ENDCASES
-  MEASURE w(Δ)
+  MEASURE w(Γ)
   member_symbol_when_subword: THEOREM
     Δ ≺ Γ AND s ∈ Δ IMPLIES s ∈ Γ
+  apply_symbol_when_subword: THEOREM
+    Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) = Γ(s)
   member_var_when_subword: THEOREM
-    Δ ≺ Γ AND x ∈ Δ IMPLIES x ∈ Γ
+    Δ ≺ Γ IMPLIES x ∈ Δ IFF x ∈ Γ
+  apply_var_when_subword: THEOREM
+    Δ ≺ Γ AND x ∈ Δ IMPLIES Δ(x) = Γ(x)
 END contexts
