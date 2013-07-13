@@ -37,25 +37,22 @@ BEGIN
   doubleplus_empty: LEMMA 〈〉 ++ Γ = Γ
 
   % Is Γ a prefix of Δ
-  prefix?(Δ)(Γ): RECURSIVE bool = 
+  prefix?(Γ)(Δ): RECURSIVE bool = 
     Γ = Δ OR
     CASES Δ OF
       〈〉: empty?(Γ),
-      ktype_decl(s, Θ): prefix?(Θ)(Γ),
-      ktype_def(s, T, Θ): prefix?(Θ)(Γ),
-      ktype_ext(s, Θ): prefix?(Θ)(Γ),
-      kvar(T, Θ): prefix?(Θ)(Γ),
-      kconst_decl(s, T, Θ): prefix?(Θ)(Γ),
-      kconst_def(s, T, a, Θ): prefix?(Θ)(Γ),
-      kconst_ext(s, T, Θ): prefix?(Θ)(Γ),
-      ktheory(s, Th, Θ): prefix?(Θ)(Γ)
+      ktype_decl(s, Θ): prefix?(Γ)(Θ),
+      ktype_def(s, T, Θ): prefix?(Γ)(Θ),
+      ktype_ext(s, Θ): prefix?(Γ)(Θ),
+      kvar(T, Θ): prefix?(Γ)(Θ),
+      kconst_decl(s, T, Θ): prefix?(Γ)(Θ),
+      kconst_def(s, T, a, Θ): prefix?(Γ)(Θ),
+      kconst_ext(s, T, Θ): prefix?(Γ)(Θ),
+      ktheory(s, Th, Θ): prefix?(Γ)(Θ)
     ENDCASES 
-  MEASURE w(Δ)
+  MEASURE Δ BY <<
 
-  member_symbol_when_prefix: THEOREM 
-    prefix?(Δ)(Γ) AND s ∈ Γ IMPLIES s ∈ Δ
-  apply_symbol_when_prefix: THEOREM
-    prefix?(Δ)(Γ) AND s ∈ Γ IMPLIES Γ(s) = Δ(s)
-  member_var_when_prefix: THEOREM
-    prefix?(Δ)(Γ) AND x ∈ Γ IMPLIES x ∈ Δ
+  member_when_prefix: THEOREM 
+    prefix?(Γ)(Θ) AND s ∈ Γ IMPLIES s ∈ Θ
+        
 END contexts
