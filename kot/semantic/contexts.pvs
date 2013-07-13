@@ -32,27 +32,63 @@ BEGIN
   doubleplus_theory: RECURSIVE JUDGEMENT
     ++(Γ, Δ: pretheory) HAS_TYPE pretheory
 
-
-  % Is Γ a prefix of Δ
-  prefix?(Δ)(Γ): RECURSIVE bool = 
-    Γ = Δ OR
+  % Is Δ a subword of Γ?
+  ;≺(Δ, Γ): RECURSIVE bool =
+>>>>>>> Stashed changes
     CASES Δ OF
-      〈〉: empty?(Γ),
-      ktype_decl(s, Θ): prefix?(Θ)(Γ),
-      ktype_def(s, T, Θ): prefix?(Θ)(Γ),
-      ktype_ext(s, Θ): prefix?(Θ)(Γ),
-      kvar(T, Θ): prefix?(Θ)(Γ),
-      kconst_decl(s, T, Θ): prefix?(Θ)(Γ),
-      kconst_def(s, T, a, Θ): prefix?(Θ)(Γ),
-      kconst_ext(s, T, Θ): prefix?(Θ)(Γ),
-      ktheory(s, Th, Θ): prefix?(Θ)(Γ)
-    ENDCASES 
+      〈〉: TRUE
+    , ktype_decl(s, Θ):
+        CASES Γ OF
+	  kvar(p, p): FALSE
+	, ktype_decl(t, rest): t = s AND Θ ≺ rest
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    , ktype_def(s, T, Θ):
+        CASES Γ OF
+	  kvar(_, _): FALSE
+	, ktype_def(t, A, rest): t = s AND A = T AND Θ ≺ rest
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    , ktype_ext(s, Θ):
+        CASES Γ OF
+	  kvar(_, _): FALSE
+	, ktype_ext(t, rest): t = s AND Θ ≺ rest,
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    , kvar(T, Θ): 
+        CASES Γ OF
+	  〈〉: FALSE
+	, kvar(A, rest): T = A AND Θ ≺ rest
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    , kconst_decl(s, T, Θ):
+        CASES Γ OF
+	  kvar(_, _): FALSE
+	, kconst_decl
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    , kconst_def(s, T, a, Θ):
+        CASES Γ OF
+	  kvar(_, _): FALSE
+	, kconst_def
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    , kconst_ext(s, T, Θ):
+        CASES Γ OF
+	  kvar(_, _): FALSE
+	, kconst_ext
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    , ktheory(s, Th, Θ):
+        CASES Γ OF
+	  kvar(_, _): FALSE
+	, ktheory
+	  ELSE Θ ≺ Γ
+	ENDCASES
+    ENDCASES
   MEASURE w(Δ)
-
-  member_symbol_when_prefix: THEOREM 
-    prefix?(Δ)(Γ) AND s ∈ Γ IMPLIES s ∈ Δ
-  apply_symbol_when_prefix: THEOREM
-    prefix?(Δ)(Γ) AND s ∈ Γ IMPLIES Γ(s) = Δ(s)
-  member_var_when_prefix: THEOREM
-    prefix?(Δ)(Γ) AND x ∈ Γ IMPLIES x ∈ Δ
+  member_symbol_when_subword: THEOREM
+    Δ ≺ Γ AND s ∈ Δ IMPLIES s ∈ Γ
+  member_var_when_subword: THEOREM
+    Δ ≺ Γ AND x ∈ Δ IMPLIES x ∈ Γ
 END contexts

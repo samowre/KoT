@@ -1,4 +1,11 @@
-%%% PB 2
+%%% How to interpret equality (without crashing completely PVS's soundness)
+
+==(x, y): x = y 
+
+[T -> S] := { f: [T -> S] |  }
+
+
+
 abs_sets: THEORY
 BEGIN
   set: TYPE+
@@ -16,7 +23,7 @@ BEGIN
   member_not_bar: [nat, set_eq -> bool]
   quo: TYPE = Quotient(==)
 
-  IMPORTING abs_sets {{ set := quo, member(n: nat, x: quo) := member_not_bar(n, rep(==)(x)) }}
+  IMPORTING abs_sets {{ set := quo, member(n: nat, x: quo) := FORALL (y: (x)): member_not_bar(n, y) }}
 
   member_EquivClass: THEOREM member(x, EquivClass(==)(s)) = member_not_bar(x, s)
 

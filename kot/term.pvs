@@ -6,8 +6,9 @@ BEGIN
   IMPORTING lists@list2_props
   IMPORTING lists@list2set_props
   IMPORTING lists@list_map_props
-  IMPORTING assoc2, smap, setmap
+  IMPORTING smap, setmap
   IMPORTING wf_pair
+  IMPORTING more_orders_props
   IMPORTING set_props
   % TODO: move this to set_props
   CONVERSION- singleton_elt
@@ -44,26 +45,61 @@ BEGIN
   uf: VAR (ufun?)
   ifun: VAR (ifun?)
 
+  ;<(s, t): bool =
+    CASES t OF
+      v(n): FALSE,
+      apply(f, args): EXISTS (i: below(args`length)): s = args(i)
+    ENDCASES
+  lt_irreflexive: JUDGEMENT < HAS_TYPE (irreflexive?[term])
+
+  subterm_ltlt_equal: THEOREM subterm(s, t) IFF (s << t OR s = t)
+  ltlt_subterm_equal: THEOREM s << t IFF (subterm(s, t) AND s /= t)
+  lt_TC_is_ltlt: THEOREM TC[term](<) = <<
+  ltlt_RC_is_subterm: THEOREM RC[term](<<) = subterm
+  lt_RTC_is_subterm: THEOREM RTC[term](<) = subterm
+  ltlt_is_finite: THEOREM is_finite({ t | t << s })
+  subterm_is_finite: THEOREM is_finite({ t | subterm(t, s) })
+
+  match?(vmatch: [nat, term -> bool], ufuns: [nat -> lift[term]])(s, t): RECURSIVE bool =
+    CASES s OF
+      v(n): vmatch(n, t),
+      apply(f, args):
+        IF ufun?(f) AND up?(ufuns(index(f)))
+	  THEN match?(LAMBDA n, t: n < arity(f) AND match?(vmatch, ufuns)(args(n), t),
+	              LAMBDA n: bottom)
+		     (down(ufuns(index(f))), t)
+          ELSE apply?(t) AND
+	       fun(t) = f AND
+	       FORALL (i: below(arity(f))): match?(vmatch, ufuns)(args(i), args(t)(i))
+	ENDIF
+    ENDCASES
+  MEASURE (EXISTS n: up?(ufuns(n)), Card({ t | t << s }))
+          BY le[bool, nat, LAMBDA (b1, b2: bool): NOT b1 AND b2, <]
+
+  match?(vars: [nat -> lift[term]], ufuns: [nat -> lift[term]]): [term, term -> bool] =
+    match?(LAMBDA n, t: vars(n) = up(t), ufuns)
+
   %% Variables
   % Computes the set of variables present in a term
   V(t): RECURSIVE { ns: set[nat] | ns = { n: nat | subterm(v(n), t) } } =
     CASES t OF
       v(n): singleton(n),
-      apply(f, args): V(args :: set[term])
+     apply(f, args): V(args :: set[term])
     ENDCASES
   MEASURE t BY <<
   vars_subterm: THEOREM subterm(t, s) IMPLIES V(t) ⊂ V(s)
   vars_ltlt: THEOREM t << s IMPLIES V(t) ⊂ V(s)
-  vars_set_subterms: JUDGEMENT V(t) HAS_TYPE set[{ n | subterm(v(n), t) }]
-  subterm_finite: THEOREM is_finite({ s | subterm(s, t) })
-  vars_finite: JUDGEMENT V(t) HAS_TYPE finite_set[nat]
+  vars_is_finite: THEOREM is_finite(V(s))
+%  V_match?: THEOREM
+%    match?(vars, ufuns)(s, t) IMPLIES
+%      V(t) = { n: nat | EXISTS (v: (V(s))): (bottom?(vars(v)) AND n = v) OR (up?(vars(v)) AND n ∈ V(down(vars(v)))) }
 
   % Handy way to bound the variables of a term
   ;<(t, n): bool = FORALL (v: (V(t))): v < n
 
   % Computes the set of function symbols satisfying a given predicate
   FS(p: pred[fun])(t):
-    RECURSIVE { fs: set[(p)] | fs = { f: fun | EXISTS (args: args(f)): subterm(apply(f, args), t) } } =
+    RECURSIVE { fs: set[(p)] | fs = { f: (p) | EXISTS (args: args(f)): subterm(apply(f, args), t) } } =
     CASES t OF
       v(n): ∅,
       apply(f, args): { fp: (p) | fp = f OR fp ∈ FS(p)(args :: set[term]) }
@@ -87,7 +123,7 @@ BEGIN
   IFS_ltlt: THEOREM t << s IMPLIES IFS(t) ⊂ IFS(s)
 
   % Shift variables, for substitution
-  ;↑(t, i): RECURSIVE { s | V(s) = { n | n >= i AND n - i ∈ V(t) } } =
+  ;↑(t, i): RECURSIVE { s | V(s) = { n | n >= i AND (n - i) ∈ V(t) } } =
     CASES t OF
       v(n): v(i + n),
       apply(f, args): apply(f, smap[{ s | s << t }, term](LAMBDA (s | s << t): (s ↑ i))(args))

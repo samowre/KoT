@@ -1,47 +1,47 @@
-assoc2[K: TYPE, V: TYPE]: THEORY
-BEGIN
-  lists: LIBRARY "../lists"
-  IMPORTING lists@more_list_props
+% assoc2[K: TYPE, V: TYPE]: THEORY
+% BEGIN
+%   lists: LIBRARY "../lists"
+%   IMPORTING lists@more_list_props
 
-  k, x: VAR K
-  ks: VAR list[K]
-  v, y: VAR V
-  vs: VAR finseq[V]
-  f: VAR [K -> V]
+%   k, x: VAR K
+%   ks: VAR list[K]
+%   v, y: VAR V
+%   vs: VAR finseq[V]
+%   f: VAR [K -> V]
 
-  assoc2(k, ks, (vs | vs`length = length(ks))): lift[V] =
-    CASES find_first(LAMBDA x: x = k, ks) OF
-      bottom: bottom,
-      up(i): up(vs(i))
-    ENDCASES
+%   assoc2(k, ks, (vs | vs`length = length(ks))): lift[V] =
+%     CASES find_first(LAMBDA x: x = k, ks) OF
+%       bottom: bottom,
+%       up(i): up(vs(i))
+%     ENDCASES
 
-  assoc2_lift_not_member: THEOREM
-    FORALL (vs | vs`length = length(ks)):
-      NOT member(k, ks) IMPLIES bottom?(assoc2(k, ks, vs))
+%   assoc2_lift_not_member: THEOREM
+%     FORALL (vs | vs`length = length(ks)):
+%       NOT member(k, ks) IMPLIES bottom?(assoc2(k, ks, vs))
 
-  assoc2_lift_member: THEOREM
-    FORALL (vs | vs`length = length(ks)):
-      member(k, ks) IMPLIES
-        EXISTS (i: below(length(ks)) | nth(ks, i) = k):
-	  assoc2(k, ks, vs) = up(vs(i))
+%   assoc2_lift_member: THEOREM
+%     FORALL (vs | vs`length = length(ks)):
+%       member(k, ks) IMPLIES
+%         EXISTS (i: below(length(ks)) | nth(ks, i) = k):
+% 	  assoc2(k, ks, vs) = up(vs(i))
 
-  assoc2(k, ks, (vs | vs`length = length(ks)), v): V =
-    CASES find_first(LAMBDA x: x = k, ks) OF
-      bottom: v,
-      up(i): vs(i)
-    ENDCASES
+%   assoc2(k, ks, (vs | vs`length = length(ks)), v): V =
+%     CASES find_first(LAMBDA x: x = k, ks) OF
+%       bottom: v,
+%       up(i): vs(i)
+%     ENDCASES
 
-  assoc2_not_member: THEOREM
-    FORALL (vs | vs`length = length(ks)):
-      NOT member(k, ks) IMPLIES assoc2(k, ks, vs, v) = v
+%   assoc2_not_member: THEOREM
+%     FORALL (vs | vs`length = length(ks)):
+%       NOT member(k, ks) IMPLIES assoc2(k, ks, vs, v) = v
 
-  assoc2_member: THEOREM
-    FORALL (vs | vs`length = length(ks)):
-      member(k, ks) IMPLIES
-        EXISTS (i: below(length(ks)) | nth(ks, i) = k):
-	  assoc2(k, ks, vs, v) = vs(i)
+%   assoc2_member: THEOREM
+%     FORALL (vs | vs`length = length(ks)):
+%       member(k, ks) IMPLIES
+%         EXISTS (i: below(length(ks)) | nth(ks, i) = k):
+% 	  assoc2(k, ks, vs, v) = vs(i)
 
-END assoc2
+% END assoc2
 
 smap[K: TYPE, V: TYPE]: THEORY
 BEGIN
@@ -97,7 +97,7 @@ BEGIN
 
   finseq2set(seq: finseq[T]): set[T] =
     { x | EXISTS (i: below(seq`length)): x = seq(i) }
-  CONVERSION finseq2set
+  CONVERSION+ finseq2set
 END set_props
 
 more_finseq_props[T: TYPE]: THEORY
@@ -148,10 +148,156 @@ BEGIN
     le HAS_TYPE (well_founded?[[L, R]])
 END wf_pair
 
-wf_finite[T: TYPE]: THEORY
+more_relations_props[T: TYPE]: THEORY
 BEGIN
-  x, y: VAR T
-  <: VAR (well_founded?[T])
+  x, y, z: VAR T
+  R, Q: VAR PRED[[T, T]]
 
-  wf_finite: THEOREM is_finite({ x | x < y })
-END wf_finite
+  %%%%%%%%%%%%%%%%%%%%%%
+  % Transitive closure %
+  %%%%%%%%%%%%%%%%%%%%%%
+  % Transitive closure with small steps on the left/right
+  TC_left(R)(x, y): INDUCTIVE bool =
+    R(x, y) OR EXISTS z: TC_left(R)(x, z) AND R(z, y)
+  TC_left_is_TC: THEOREM TC_left = TC
+  TC_right(R)(x, y): INDUCTIVE bool =
+    R(x, y) OR EXISTS z: R(x, z) AND TC_right(R)(z, y) 
+  TC_right_is_TC: THEOREM TC_right = TC
+
+  % For rewrite convenience
+  TC_expand_left: THEOREM TC(R)(x, y) = (R(x, y) OR EXISTS z: TC(R)(x, z) AND R(z, y))
+  TC_expand_right: THEOREM TC(R)(x, y) = (R(x, y) OR EXISTS z: R(x, z) AND TC(R)(z, y))
+
+  % Simple properties of the transitive closure
+  TC_is_extension: THEOREM R(x, y) IMPLIES TC(R)(x, y)
+  TC_is_transitive: JUDGEMENT TC(R) HAS_TYPE (transitive?[T])
+  TC_LFP: THEOREM
+    (FORALL (x, y): R(x, y) IMPLIES Q(x, y)) AND transitive?(Q) IMPLIES
+      (FORALL (x, y): TC(R)(x, y) IMPLIES Q(x, y))
+  TC_idempotent: THEOREM transitive?(R) IMPLIES TC(R) = R
+
+  % Properties preserved by the transitive closure
+  TC_preserves_reflexive: JUDGEMENT TC(R: (reflexive?[T])) HAS_TYPE (reflexive?[T])
+  TC_preserves_symmetric: JUDGEMENT TC(R: (symmetric?[T])) HAS_TYPE (symmetric?[T])
+  TC_preserves_connected: JUDGEMENT TC(R: (connected?[T])) HAS_TYPE (connected?[T])
+
+  %%%%%%%%%%%%%%%%%%%%%
+  % Reflexive closure %
+  %%%%%%%%%%%%%%%%%%%%%
+  % Simple properties of the reflexive closure
+  RC_is_extension: THEOREM R(x, y) IMPLIES RC(R)(x, y)
+  RC_is_reflexive: JUDGEMENT RC(R) HAS_TYPE (reflexive?[T])
+  RC_LFP: THEOREM
+    (FORALL (x, y): R(x, y) IMPLIES Q(x, y)) AND reflexive?(Q) IMPLIES
+      (FORALL (x, y): RC(R)(x, y) IMPLIES Q(x, y))
+  RC_idempotent: THEOREM reflexive?(R) IMPLIES RC(R) = R
+
+  % Properties preserved by the reflexive closure
+  RC_preserves_transitive: JUDGEMENT RC(R: (transitive?[T])) HAS_TYPE (transitive?[T])
+  RC_preserves_symmetric: JUDGEMENT RC(R: (symmetric?[T])) HAS_TYPE (symmetric?[T])
+  RC_preserves_connected: JUDGEMENT RC(R: (connected?[T])) HAS_TYPE (connected?[T])
+
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % Reflexive transitive closure %
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  % For rewrite convenience
+  RTC_is_RC_TC: THEOREM RTC(R) = RC(TC(R))
+  RTC_is_TC_RC: THEOREM RTC(R) = TC(RC(R))
+
+  % Simple properties of the reflexive-transitive closure
+  RTC_is_extension: THEOREM R(x, y) IMPLIES RTC(R)(x, y)
+  RTC_is_reflexive: JUDGEMENT RTC(R) HAS_TYPE (reflexive?[T])
+  RTC_is_transitive: JUDGEMENT RTC(R) HAS_TYPE (transitive?[T])
+  RTC_LFP: THEOREM
+    (FORALL (x, y): R(x, y) IMPLIES Q(x, y)) AND reflexive?(Q) AND transitive?(Q) IMPLIES
+      (FORALL (x, y): RTC(R)(x, y) IMPLIES Q(x, y))
+  RTC_idempotent: THEOREM reflexive?(R) AND transitive?(R) IMPLIES RTC(R) = R
+
+  % Properties preserved by the reflexive-transitive closure
+  RTC_preserves_symmetric: JUDGEMENT RTC(R: (symmetric?[T])) HAS_TYPE (symmetric?[T])
+  RTC_preserves_connected: JUDGEMENT RTC(R: (connected?[T])) HAS_TYPE (connected?[T])
+END more_relations_props
+
+more_orders_props[T: TYPE]: THEORY
+BEGIN
+  IMPORTING more_relations_props[T]
+  IMPORTING sets[T]
+  x, y, z: VAR T
+  Q: VAR PRED[[T, T]]
+  <, <<: VAR PRED[[T, T]]
+  n: VAR nat
+  p, q: VAR PRED[T]
+
+  %% TODO: Prouver implication r'eciproque wf induction
+
+  %%%%%%%%%%%%%%%%%%%%
+  % Well-foundedness %
+  %%%%%%%%%%%%%%%%%%%%
+  
+  % Extracts a decreasing sequence from a set where there is one
+  decreasing_seq(<)(S: (nonempty?) | FORALL (x: (S)): EXISTS (y: (S)): y < x)(n): RECURSIVE (S) =
+    IF n = 0 THEN choose(S)
+    ELSE choose({ x: (S) | x < decreasing_seq(<)(S)(n - 1) })
+    ENDIF
+  MEASURE n
+  decreasing_seq_decreases: JUDGEMENT
+    decreasing_seq(<)(S: (nonempty?) | FORALL (x: (S)): EXISTS (y: (S)): y < x)
+      HAS_TYPE { f: [nat -> (S)] | FORALL n: f(n + 1) < f(n) }
+
+  % Equivalent definition of well-foundedness with decreasing sequences
+  well_founded_decreasing: THEOREM
+    well_founded?(<) IFF NOT EXISTS (f: [nat -> T]): FORALL n: f(n + 1) < f(n)
+
+  % Simple properties of well-founded orders
+  well_founded_is_irreflexive: JUDGEMENT
+    (well_founded?[T]) SUBTYPE_OF (irreflexive?[T])
+  well_founded_is_antisymmetric: JUDGEMENT
+    (well_founded?[T]) SUBTYPE_OF (antisymmetric?[T])
+  restrict_well_founded: THEOREM
+    well_founded?(<<) AND (FORALL (x, y): x < y IMPLIES x << y)
+      IMPLIES well_founded?(<)
+
+  % Well-foundedness and transitive closure
+  TC_preserves_well_founded: JUDGEMENT TC(R: (well_founded?[T])) HAS_TYPE (well_founded?[T])
+  well_founded_TC: THEOREM well_founded?(<) IFF well_founded?(TC(<))
+
+  %% TODO MOVE THESE
+  is_finite_union: THEOREM
+    is_finite({ x | p(x) OR q(x) }) = (is_finite({ x | p(x) }) AND is_finite({ x | q(x) }))
+
+    P: VAR [T -> set[T]]
+  prout: THEOREM
+    LET S = { s: set[T] | EXISTS (z: (p)): s = { x | P(z)(x) } } IN
+    { x | EXISTS (z: (p)): P(z)(x) } = { x | EXISTS (s: (S)): s(x) }
+%  is_finite_test: LEMMA
+%    (is_finite(p) AND FORALL (z: (p)): is_finite(P(z)))
+%    IMPLIES is_finite({ x | EXISTS (z: (p)): P(z)(x) })
+  is_finite_exists: LEMMA
+    (is_finite({ z | p(z) }) AND FORALL (z | p(z)): is_finite({ x | Q(x, z) }))
+    IMPLIES is_finite({ x | EXISTS (z | p(z)): Q(x, z) })
+
+  %%%%%%%%%%%%%%%%%
+  % König's lemma %
+  %%%%%%%%%%%%%%%%%
+  finitely_branching?(<): bool = FORALL x: is_finite({ y | y < x })
+
+  konigs: JUDGEMENT
+    TC(< | well_founded?(<) AND finitely_branching?(<)) HAS_TYPE (finitely_branching?)
+
+  konigs_or: THEOREM
+    NOT well_founded?(<) OR NOT finitely_branching?(<) OR finitely_branching?(TC(<))
+END more_orders_props
+
+lex_order[T: TYPE, S: TYPE]: THEORY
+BEGIN
+  <: VAR pred[[T, T]]
+  <<: VAR pred[[S, S]]
+
+%  test(x: T, r: VARIADIC list[S] FROM S, T BY consST DEFAULT null): bool
+
+  lex(<, <<)(x, y: [T, S]): bool =
+    x`1 < y`1 OR (x`1 = y`1 AND x`2 << y`2)
+
+  lex_wf: JUDGEMENT
+    lex(<: (well_founded?[T]), <<: (well_founded?[S])) HAS_TYPE (well_founded?[[T, S]])
+END lex_order
