@@ -13,19 +13,16 @@ BEGIN
   S: VAR syntaxic
 
 
-  % Checks that a syntaxic is well_formed in a given context,
-  % that is if every occuring symbols has been declared, 
-  % and if every symbols have been declared at most once.
-  well_formed?(Γ)(S): RECURSIVE bool =
+    well_formed?(Γ)(S): RECURSIVE bool =
     CASES S OF
       symbol(s): s ∈ Γ AND kind(Γ(s)) /= KTHEORY,
       dot(m, σ, s):
         m ∈ Γ AND kind(Γ(m)) = KTHEORY AND s ∈ definition(Γ(m)) AND
   	well_formed?(Γ)(σ), % AND interp_for?(definition(Γ(m)))(σ),
 
-      fun(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
-      prod(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
-      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(kvar(T, Γ))(a),
+      fun(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
+      prod(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
+      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
 
       v(i): i ∈ Γ,
       app(f, a): well_formed?(Γ)(f) AND well_formed?(Γ)(a),
@@ -79,42 +76,6 @@ BEGIN
   MEASURE w(S)
   well_formed(Γ): TYPE = (well_formed?(Γ))
 
-
-  length(Γ): RECURSIVE nat =
-    COND
-      empty?(Γ) -> 0,
-      ktheory?(Γ) -> 1 + length(dtheory(Γ)) + length(rest(Γ)),
-      ELSE -> 1 + length(rest(Γ))
-    ENDCOND
-  MEASURE w(Γ)
-
-  pos(Γ, s): RECURSIVE nat =
-    COND
-      empty?(Γ) -> 0,
-      kvar?(Γ) -> pos(rest(Γ), s),
-      ELSE -> IF s = s(Γ) THEN length(Γ) ELSE pos(rest(Γ), s) ENDIF
-    ENDCOND
-  MEASURE w(Γ)
-
-  pos(Γ, (e: well_formed(Γ))): RECURSIVE nat =
-    CASES e OF
-      symbol(s): pos(Γ, s),
-      dot(m, σ, s): pos(Γ, m) + pos(Γ, σ) + pos(definition(Γ(m)), s),
-      fun(A, B): max(pos(Γ, A), pos(Γ, B)),
-      prod(A, B): max(pos(Γ, A), pos(Γ, B)),
-      subtype(T, a): max(pos(Γ, T), pos(Γ, a)),
-      v(i): 0,
-      app(f, a): max(pos(Γ, f), pos(Γ, a)),
-      lam(T, a): max(pos(Γ, T), pos(Γ, a)),
-      pair(a, b): max(pos(Γ, a), pos(Γ, b)),
-      lproj(a): pos(Γ, a),
-      rproj(a): pos(Γ, a),
-      nil: 0,
-      itype(s, T, τ): max(pos(Γ, T), pos(Γ, τ)),
-      iconst(s, a, τ): max(pos(Γ, a), pos(Γ, τ))
-    ENDCASES
-  MEASURE w(e)
-
   % η function, as informally defined just before definition 5.5
   % + some modification for the theory interpretations extension
   η(Γ, (m: symbol), σ)(e): RECURSIVE semantic =
@@ -139,49 +100,7 @@ BEGIN
     ENDCASES
   MEASURE w(e)
 
-
-  pos_symbol_lt_length: THEOREM
-    pos(Γ, s) <= length(Γ)
-  pos_lt_length: THEOREM
-    well_formed?(Γ)(e) IMPLIES pos(Γ, e) <= length(Γ) + w(e)
-
-  pos_ktype_def: THEOREM
-    well_formed?(Γ)(T) IMPLIES
-      pos(ktype_def(s, T, Γ), symbol(s)) > pos(Γ, T)
-  pos_kconst_def: THEOREM
-    well_formed?(Γ)(T) AND well_formed?(Γ)(a) IMPLIES
-      pos(kconst_def(s, T, a, Γ), symbol(s)) > pos(Γ, a)
-
   external?(Γ): bool = ktype_ext?(Γ) OR kconst_ext?(Γ)
-
-
-
-  % references(Γ, e): RECURSIVE [nat, nat] =
-  %   CASES e OF
-  %     symbol(s):
-  %       IF definition?(Γ(s)) THEN
-  % 	  1 + references(rest(Γ(s)), definition(Γ(s)))
-  % 	ELSE 1 ENDIF,
-  %     dot(m, σ, s):
-  %       IF s ∈ σ THEN
-  % 	  references(Γ, definition(σ(s)))
-  % 	ELSE LET Δ = definition(Γ(m)) IN
-  % 	  IF definition?(Δ(s)) THEN
-  % 	    references(Γ, η(rest(Δ(s)), m, σ)(definition(Δ(s))))
-  % 	  ELSE 1 ENDIF
-  % 	ENDIF,
-  %     fun(A, B): references(Γ, A) + references(Γ, B),
-  %     prod(A, B): references(Γ, A) + references(Γ, B),
-  %     subtype(T, a): references(Γ, T) + references(Γ, a),
-  %     v(i): 0,
-  %     app(f, a): references(Γ, f) + references(Γ, a),
-  %     lam(T, a): references(Γ, T) + references(Γ, a),
-  %     pair(a, b): references(Γ, a) + references(Γ, b),
-  %     lproj(a): references(Γ, a),
-  %     rproj(a): references(Γ, a)
-  %   ENDCASES
-  % MEASURE w(e)
-
 
   % Expanded Type : 2.16, 3.9, 5.5, 5.16
   % + some modification for the theory interpretations extension
