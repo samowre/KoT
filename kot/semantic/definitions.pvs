@@ -5,24 +5,26 @@ BEGIN
   e: VAR expr
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
-  r, s: VAR symbol
-  n, m: VAR name
+  r, s, m: VAR symbol
+  n: VAR name
   x, y: VAR nat
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
   S: VAR syntaxic
 
-
-    well_formed?(Γ)(S): RECURSIVE bool =
+  % Checks that a syntaxic is well formed in a given context, 
+  % that is if every symbol has been declared in the context
+  % and has been declared at most once.
+  well_formed?(Γ)(S): RECURSIVE bool =
     CASES S OF
       symbol(s): s ∈ Γ AND kind(Γ(s)) /= KTHEORY,
       dot(m, σ, s):
         m ∈ Γ AND kind(Γ(m)) = KTHEORY AND s ∈ definition(Γ(m)) AND
   	well_formed?(Γ)(σ), % AND interp_for?(definition(Γ(m)))(σ),
 
-      fun(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
-      prod(A, B): well_formed?(Γ)(A) AND well_formed?(Γ)(B),
-      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
+      fun(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
+      prod(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
+      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(kvar(T, Γ))(a),
 
       v(i): i ∈ Γ,
       app(f, a): well_formed?(Γ)(f) AND well_formed?(Γ)(a),
@@ -76,9 +78,12 @@ BEGIN
   MEASURE w(S)
   well_formed(Γ): TYPE = (well_formed?(Γ))
 
+
+  well_formed_app_symbol: THEOREM well_formed(Γ)(Θ) AND s ∈ Θ IMPLIES well_formed(Γ)(Θ(s))
+
   % η function, as informally defined just before definition 5.5
   % + some modification for the theory interpretations extension
-  η(Γ, (m: symbol), σ)(e): RECURSIVE semantic =
+  η(Γ, m, σ)(e): RECURSIVE semantic =
     CASES e OF
       symbol(s):
         IF s ∈ σ THEN definition(σ(s))
@@ -99,6 +104,13 @@ BEGIN
       iconst(s, a, τ): iconst(s, η(Γ, m, σ)(a), η(Γ, m, σ)(τ))
     ENDCASES
   MEASURE w(e)
+
+
+  %eta_pretype: JUDGEMENT η(Γ, m, σ)(e: pretype?(T)) HAS_TYPE pretype
+  %eta_pretype: JUDGEMENT η(Γ, m, σ)(e: preterm?(T)) HAS_TYPE preterm 
+  %eta_pretype: JUDGEMENT η(Γ, m, σ)(e: interp?(T)) HAS_TYPE interp
+
+
 
   external?(Γ): bool = ktype_ext?(Γ) OR kconst_ext?(Γ)
 
@@ -138,5 +150,10 @@ BEGIN
       iconst(s, a, σ): iconst(s, δ(Γ)(a), δ(Γ)(σ))
     ENDCASES
   MEASURE w(Γ) + w(T)
+
+  %delta_pretype: JUDGEMENT δ(Γ)(T | well_formed?(Γ)(T) AND pretype?(T)) HAS_TYPE pretype
+  %delta_pretheory: JUDGEMENT δ(Γ)(T | well_formed?(Γ)(T) AND pretheory?(T)) HAS_TYPE pretheory
+  %delta_precontext: JUDGEMENT δ(Γ)(T | well_formed?(Γ)(T) AND context?(T)) HAS_TYPE context
+  %delta_interp: JUDGEMENT δ(Γ)(T | well_formed?(Γ)(T) AND interp?(T)) HAS_TYPE interp
         
 END definitions
