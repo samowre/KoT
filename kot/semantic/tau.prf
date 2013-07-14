@@ -156,8 +156,18 @@
  (τ_TCC6 0
   (τ_TCC6-1 nil 3582642913
    ("" (skosimp* :preds? t)
-    (("" (typepred "type_")
-      (("" (inst?) (("" (postpone) nil nil)) nil)) nil))
+    (("" (use well_formed_app_symbol)
+      (("" (assert)
+        (("" (expand const_kind? -4)
+          (("" (bddsimp -4)
+            (("1" (expand well_formed? -2)
+              (("1" (assert) (("1" (postpone) nil nil)) nil)) nil)
+             ("2" (postpone) nil nil) ("3" (postpone) nil nil)
+             ("4" (postpone) nil nil))
+            nil))
+          nil))
+        nil))
+      nil))
     nil)
    nil nil))
  (τ_TCC7 0
@@ -1248,49 +1258,49 @@
  (τ_TCC26 0
   (τ_TCC26-1 nil 3582642913
    ("" (grind) (("" (rewrite doubleplus_empty) nil nil)) nil)
-   ((context formula-decl nil language nil)
-    (well_formed? def-decl "bool" definitions nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (int_minus_int_is_int application-judgement "int" integers nil)
-    (⊥ adt-constructor-decl "(undefined?)" language nil)
-    (/= const-decl "boolean" notequal nil)
-    (pretype? const-decl "[semantic -> bool]" language nil)
-    (pretheory? const-decl "[semantic -> bool]" language nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (KTERM? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (KTYPE? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (KTHEORY? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (KCONTEXT? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (undefined? adt-recognizer-decl "[keyword -> boolean]" language
-     nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (pretcc type-eq-decl nil tau nil)
-    (keyword type-decl nil language nil)
-    (preterm? const-decl "[semantic -> bool]" language nil)
-    (every adt-def-decl "boolean" list_adt nil)
-    (list type-decl nil list_adt nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (restrict const-decl "R" restrict nil)
-    (< const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
+   ((doubleplus_empty formula-decl nil contexts nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (syntaxic? const-decl "[semantic -> bool]" language nil)
+    (syntaxic type-eq-decl nil language nil)
+    (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (〈〉 adt-constructor-decl "(empty?)" language nil)
+    (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (number nonempty-type-decl nil numbers nil)
-    (〈〉 adt-constructor-decl "(empty?)" language nil)
-    (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
-    (semantic type-decl nil language nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (doubleplus_empty formula-decl nil contexts nil))
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (< const-decl "bool" reals nil)
+    (restrict const-decl "R" restrict nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil)
+    (every adt-def-decl "boolean" list_adt nil)
+    (preterm? const-decl "[semantic -> bool]" language nil)
+    (keyword type-decl nil language nil)
+    (pretcc type-eq-decl nil tau nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (undefined? adt-recognizer-decl "[keyword -> boolean]" language
+     nil)
+    (KCONTEXT? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTHEORY? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTYPE? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTERM? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (pretheory? const-decl "[semantic -> bool]" language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (/= const-decl "boolean" notequal nil)
+    (⊥ adt-constructor-decl "(undefined?)" language nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (context formula-decl nil language nil))
    nil))
  (τ_TCC27 0
   (τ_TCC27-1 nil 3582642913 ("" (termination-tcc) nil nil)
@@ -1380,7 +1390,35 @@
   (τ_TCC44-1 nil 3582642913 ("" (termination-tcc) nil nil) nil nil))
  (τ_TCC45 0
   (τ_TCC45-1 nil 3582642913 ("" (subtype-tcc) nil nil)
-   ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (syntaxic? const-decl "[semantic -> bool]" language nil)
+    (syntaxic type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (〈〉 adt-constructor-decl "(empty?)" language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (nonempty_context formula-decl nil language nil)
+    (typed? const-decl "bool" decl nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (kind_var formula-decl nil decl nil))
+   nil))
  (τ_TCC46 0
   (τ_TCC46-1 nil 3582642913 ("" (termination-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
@@ -1390,7 +1428,10 @@
  (τ_TCC48 0
   (τ_TCC48-1 nil 3582642913 ("" (subtype-tcc) nil nil) nil nil))
  (τ_TCC49 0
-  (τ_TCC49-1 nil 3582642913 ("" (subtype-tcc) nil nil) nil nil))
+  (τ_TCC49-1 nil 3582642913 ("" (subtype-tcc) nil nil)
+   ((kind_var formula-decl nil decl nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC50 0
   (τ_TCC50-1 nil 3582642913 ("" (termination-tcc) nil nil)
    ((kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
@@ -1399,9 +1440,7 @@
  (τ_TCC51 0
   (τ_TCC51-1 nil 3582642913 ("" (subtype-tcc) nil nil) nil nil))
  (τ_TCC52 0
-  (τ_TCC52-1 nil 3582642913 ("" (termination-tcc) nil nil) nil nil))
- (τ_TCC53 0
-  (τ_TCC53-1 nil 3582642913 ("" (subtype-tcc) nil nil)
+  (τ_TCC52-1 nil 3582642913 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1442,13 +1481,55 @@
     (⊥ adt-constructor-decl "(undefined?)" language nil)
     (pretype type-eq-decl nil language nil))
    nil))
+ (τ_TCC53 0
+  (τ_TCC53-1 nil 3582642913 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (syntaxic? const-decl "[semantic -> bool]" language nil)
+    (syntaxic type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (〈〉 adt-constructor-decl "(empty?)" language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (< const-decl "bool" reals nil)
+    (restrict const-decl "R" restrict nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil) nil
+    (preterm? const-decl "[semantic -> bool]" language nil)
+    (keyword type-decl nil language nil)
+    (pretcc type-eq-decl nil tau nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (undefined? adt-recognizer-decl "[keyword -> boolean]" language
+     nil)
+    (KCONTEXT? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTHEORY? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTYPE? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTERM? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (pretheory? const-decl "[semantic -> bool]" language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (/= const-decl "boolean" notequal nil)
+    (⊥ adt-constructor-decl "(undefined?)" language nil)
+    (pretype type-eq-decl nil language nil))
+   nil))
  (τ_TCC54 0
   (τ_TCC54-1 nil 3582642913 ("" (subtype-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC55 0
   (τ_TCC55-1 nil 3582642913 ("" (termination-tcc) nil nil) nil nil))
  (τ_TCC56 0
-  (τ_TCC56-1 nil 3582642913 ("" (termination-tcc) nil nil) nil nil))
+  (τ_TCC56-1 nil 3582642913 ("" (termination-tcc) nil nil)
+   ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC57 0
   (τ_TCC57-1 nil 3582642913 ("" (subtype-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
@@ -1470,7 +1551,8 @@
   (τ_TCC63-1 nil 3582642913 ("" (subtype-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC64 0
-  (τ_TCC64-1 nil 3582642913 ("" (termination-tcc) nil nil) nil nil))
+  (τ_TCC64-1 nil 3582642913 ("" (termination-tcc) nil nil)
+   ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC65 0
   (τ_TCC65-1 nil 3582642913 ("" (termination-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
@@ -1480,7 +1562,8 @@
  (τ_TCC67 0
   (τ_TCC67-1 nil 3582642913 ("" (subtype-tcc) nil nil) nil nil))
  (τ_TCC68 0
-  (τ_TCC68-1 nil 3582642913 ("" (termination-tcc) nil nil) nil nil))
+  (τ_TCC68-1 nil 3582642913 ("" (termination-tcc) nil nil)
+   ((pretype formula-decl nil language nil)) nil))
  (τ_TCC69 0
   (τ_TCC69-1 nil 3582642913 ("" (subtype-tcc) nil nil)
    ((pretype formula-decl nil language nil)) nil))
@@ -1497,9 +1580,7 @@
   (τ_TCC73-1 nil 3582642913 ("" (subtype-tcc) nil nil)
    ((pretype formula-decl nil language nil)) nil))
  (τ_TCC74 0
-  (τ_TCC74-1 nil 3582642913 ("" (termination-tcc) nil nil) nil nil))
- (τ_TCC75 0
-  (τ_TCC75-1 nil 3582642913 ("" (termination-tcc) nil nil)
+  (τ_TCC74-1 nil 3582642913 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1541,6 +1622,9 @@
     (pretype type-eq-decl nil language nil)
     (preterm formula-decl nil language nil))
    nil))
+ (τ_TCC75 0
+  (τ_TCC75-1 nil 3582642913 ("" (termination-tcc) nil nil)
+   ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC76 0
   (τ_TCC76-1 nil 3582642913 ("" (subtype-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
@@ -1573,6 +1657,7 @@
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (PRED type-eq-decl nil defined_types nil)
     (list type-decl nil list_adt nil)
+    (every adt-def-decl "boolean" list_adt nil)
     (preterm? const-decl "[semantic -> bool]" language nil)
     (keyword type-decl nil language nil)
     (pretcc type-eq-decl nil tau nil)
@@ -1614,8 +1699,7 @@
     (restrict const-decl "R" restrict nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
+    (list type-decl nil list_adt nil) nil
     (preterm? const-decl "[semantic -> bool]" language nil)
     (keyword type-decl nil language nil)
     (pretcc type-eq-decl nil tau nil)
@@ -1639,47 +1723,7 @@
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC82 0
   (τ_TCC82-1 nil 3582650759 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (well_formed? def-decl "bool" definitions nil)
-    (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
-    (〈〉 adt-constructor-decl "(empty?)" language nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (< const-decl "bool" reals nil)
-    (restrict const-decl "R" restrict nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (PRED type-eq-decl nil defined_types nil)
-    (list type-decl nil list_adt nil)
-    (every adt-def-decl "boolean" list_adt nil)
-    (preterm? const-decl "[semantic -> bool]" language nil)
-    (keyword type-decl nil language nil)
-    (pretcc type-eq-decl nil tau nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (undefined? adt-recognizer-decl "[keyword -> boolean]" language
-     nil)
-    (KCONTEXT? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (KTHEORY? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (KTYPE? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (KTERM? adt-recognizer-decl "[keyword -> boolean]" language nil)
-    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (pretheory? const-decl "[semantic -> bool]" language nil)
-    (pretype? const-decl "[semantic -> bool]" language nil)
-    (/= const-decl "boolean" notequal nil)
-    (⊥ adt-constructor-decl "(undefined?)" language nil)
-    (pretype type-eq-decl nil language nil)
-    (preterm formula-decl nil language nil))
-   nil))
+   ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC83 0
   (τ_TCC83-1 nil 3582650759 ("" (subtype-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
@@ -1695,7 +1739,9 @@
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (τ_TCC88 0
   (τ_TCC88-1 nil 3582650759 ("" (subtype-tcc) nil nil)
-   ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
+   ((CONTEXT? const-decl "bool" language nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC89 0
   (τ_TCC89-1 nil 3582650759 ("" (termination-tcc) nil nil)
    ((CONTEXT? const-decl "bool" language nil)
@@ -1715,7 +1761,10 @@
  (τ_TCC94 0
   (τ_TCC94-1 nil 3582650759 ("" (termination-tcc) nil nil) nil nil))
  (τ_TCC95 0
-  (τ_TCC95-1 nil 3582650759 ("" (subtype-tcc) nil nil) nil nil))
+  (τ_TCC95-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+   ((CONTEXT? const-decl "bool" language nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC96 0
   (τ_TCC96-1 nil 3582650759 ("" (subtype-tcc) nil nil)
    ((CONTEXT? const-decl "bool" language nil)
@@ -1752,7 +1801,10 @@
     (fail const-decl "[keyword, list[pretcc]]" tau nil))
    nil))
  (τ_TCC106 0
-  (τ_TCC106-1 nil 3582650759 ("" (termination-tcc) nil nil) nil nil))
+  (τ_TCC106-1 nil 3582650759 ("" (termination-tcc) nil nil)
+   ((CONTEXT? const-decl "bool" language nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC107 0
   (τ_TCC107-1 nil 3582650759 ("" (subtype-tcc) nil nil)
    ((CONTEXT? const-decl "bool" language nil)
@@ -1780,7 +1832,10 @@
  (τ_TCC113 0
   (τ_TCC113-1 nil 3582650759 ("" (termination-tcc) nil nil) nil nil))
  (τ_TCC114 0
-  (τ_TCC114-1 nil 3582650759 ("" (subtype-tcc) nil nil) nil nil))
+  (τ_TCC114-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+   ((CONTEXT? const-decl "bool" language nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC115 0
   (τ_TCC115-1 nil 3582650759 ("" (subtype-tcc) nil nil)
    ((CONTEXT? const-decl "bool" language nil)
@@ -1808,9 +1863,7 @@
  (τ_TCC121 0
   (τ_TCC121-1 nil 3582650759 ("" (termination-tcc) nil nil) nil nil))
  (τ_TCC122 0
-  (τ_TCC122-1 nil 3582650759 ("" (subtype-tcc) nil nil) nil nil))
- (τ_TCC123 0
-  (τ_TCC123-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+  (τ_TCC122-1 nil 3582650759 ("" (subtype-tcc) nil nil)
    ((int_minus_int_is_int application-judgement "int" integers nil)
     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
@@ -1905,8 +1958,106 @@
     (= const-decl "[T, T -> boolean]" equalities nil)
     (CONTEXT? const-decl "bool" language nil))
    nil))
+ (τ_TCC123 0
+  (τ_TCC123-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+   ((int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (semantic type-decl nil language nil)
+    (context? const-decl "[semantic -> bool]" language nil)
+    (context type-eq-decl nil language nil)
+    (syntaxic? const-decl "[semantic -> bool]" language nil)
+    (syntaxic type-eq-decl nil language nil)
+    (well_formed? def-decl "bool" definitions nil)
+    (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
+    (〈〉 adt-constructor-decl "(empty?)" language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (< const-decl "bool" reals nil)
+    (restrict const-decl "R" restrict nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil) nil
+    (preterm? const-decl "[semantic -> bool]" language nil)
+    (keyword type-decl nil language nil)
+    (pretcc type-eq-decl nil tau nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (undefined? adt-recognizer-decl "[keyword -> boolean]" language
+     nil)
+    (KCONTEXT? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTHEORY? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTYPE? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (KTERM? adt-recognizer-decl "[keyword -> boolean]" language nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (pretheory? const-decl "[semantic -> bool]" language nil)
+    (pretype? const-decl "[semantic -> bool]" language nil)
+    (/= const-decl "boolean" notequal nil)
+    (⊥ adt-constructor-decl "(undefined?)" language nil)
+    (pretype type-eq-decl nil language nil)
+    (++ def-decl
+     "{Θ | weight(F)(Θ) = weight(F)(Γ) + weight(F)(Δ) - F(ord_empty) - 1}"
+     contexts nil)
+    (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
+    (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+     language nil)
+    (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)" language
+     nil)
+    (ord_kconst_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_iconst adt-constructor-decl "(ord_iconst?)" language nil)
+    (ord_iconst? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_kconst_def adt-constructor-decl "(ord_kconst_def?)" language
+     nil)
+    (ord_kconst_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_ktype_decl adt-constructor-decl "(ord_ktype_decl?)" language
+     nil)
+    (ord_ktype_decl? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (ord_itype adt-constructor-decl "(ord_itype?)" language nil)
+    (ord_itype? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_ktype_def adt-constructor-decl "(ord_ktype_def?)" language
+     nil)
+    (ord_ktype_def? adt-recognizer-decl "[ord -> boolean]" language
+     nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (ord_dot adt-constructor-decl "(ord_dot?)" language nil)
+    (ord_dot? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_symbol adt-constructor-decl "(ord_symbol?)" language nil)
+    (ord_symbol? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (ord_nil adt-constructor-decl "(ord_nil?)" language nil)
+    (ord_nil? adt-recognizer-decl "[ord -> boolean]" language nil)
+    (<= const-decl "bool" reals nil)
+    (weight def-decl "nat" language nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (ord type-decl nil language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (CONTEXT? const-decl "bool" language nil))
+   nil))
  (τ_TCC124 0
-  (τ_TCC124-1 nil 3582650759 ("" (subtype-tcc) nil nil) nil nil))
+  (τ_TCC124-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+   ((CONTEXT? const-decl "bool" language nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC125 0
   (τ_TCC125-1 nil 3582650759 ("" (termination-tcc) nil nil)
    ((CONTEXT? const-decl "bool" language nil)
@@ -1942,7 +2093,10 @@
  (τ_TCC132 0
   (τ_TCC132-1 nil 3582650759 ("" (termination-tcc) nil nil) nil nil))
  (τ_TCC133 0
-  (τ_TCC133-1 nil 3582650759 ("" (subtype-tcc) nil nil) nil nil))
+  (τ_TCC133-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+   ((CONTEXT? const-decl "bool" language nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC134 0
   (τ_TCC134-1 nil 3582650759 ("" (subtype-tcc) nil nil)
    ((CONTEXT? const-decl "bool" language nil)
@@ -1970,7 +2124,10 @@
  (τ_TCC140 0
   (τ_TCC140-1 nil 3582650759 ("" (termination-tcc) nil nil) nil nil))
  (τ_TCC141 0
-  (τ_TCC141-1 nil 3582650759 ("" (subtype-tcc) nil nil) nil nil))
+  (τ_TCC141-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+   ((CONTEXT? const-decl "bool" language nil)
+    (fail const-decl "[keyword, list[pretcc]]" tau nil))
+   nil))
  (τ_TCC142 0
   (τ_TCC142-1 nil 3582650759 ("" (subtype-tcc) nil nil)
    ((CONTEXT? const-decl "bool" language nil)
@@ -1982,9 +2139,7 @@
     (fail const-decl "[keyword, list[pretcc]]" tau nil))
    nil))
  (τ_TCC144 0
-  (τ_TCC144-1 nil 3582650759 ("" (termination-tcc) nil nil) nil nil))
- (τ_TCC145 0
-  (τ_TCC145-1 nil 3582650759 ("" (subtype-tcc) nil nil)
+  (τ_TCC144-1 nil 3582650759 ("" (termination-tcc) nil nil)
    ((fail const-decl "[keyword, list[pretcc]]" tau nil)) nil))
  (tau_is_syntaxic_TCC1 0
   (tau_is_syntaxic_TCC1-1 nil 3582650759 ("" (subtype-tcc) nil nil) nil

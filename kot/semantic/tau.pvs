@@ -26,13 +26,6 @@ BEGIN
 
   fail: [keyword, list[pretcc]] = (⊥, null)
   
-  % Important invariants of τ to prove :
-  %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
-  %  - KTERM(T) is written only if τ(Θ)(T) = TYPE
-  %  - KTERM(T) is written only if μ0(T) = T (T is not a subtype)
-  %  - KTERM(T) is written only if δ(Γ(T)) = T (T is fully expanded)
-  %  - τ(Γ)(_) generates tccs that are correct (typecheckable) in the context Γ
-  %    i.e τ(Γ)(tcc) = KTERM for each tcc generated.
 
 
   % Termination of τ : the only constraint is 

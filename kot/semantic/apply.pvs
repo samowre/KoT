@@ -60,7 +60,7 @@ BEGIN
 
   % The same for variables
   app_var(Γ)(x | x ∈ Γ): RECURSIVE
-    { Δ: (kvar?) | w(Δ) <= w(Γ) } =
+    { Δ | kvar?(Δ) AND nonempty?(Δ) AND w(Δ) <= w(Γ) } =
     COND
       kvar?(Γ) -> IF x = 0 THEN Γ ELSE app_var(rest(Γ))(x - 1) ENDIF,
       ELSE -> app_var(rest(Γ))(x)
