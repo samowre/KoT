@@ -1,0 +1,170 @@
+inductions: THEORY
+BEGIN
+  IMPORTING subtype
+
+  syntaxic_induction: THEOREM
+    FORALL (p: [syntaxic -> bool]):
+      ( (FORALL (s: symbol): p(symbol(s))) AND
+        (FORALL (m: symbol,  σ: interp,  s: symbol):
+	  p(σ) IMPLIES p(dot(m, σ, s))) AND
+        (FORALL (i: nat): p(v(i))) AND
+        (FORALL (f: preterm,  a: preterm):
+          p(f) AND p(a) IMPLIES p(app(f, a))) AND
+        (FORALL (T: pretype,  a: preterm):
+          p(T) AND p(a) IMPLIES p(lam(T, a))) AND
+        (FORALL (a: preterm,  b: preterm):
+          p(a) AND p(b) IMPLIES p(pair(a, b))) AND
+        (FORALL (a: preterm):
+          p(a) IMPLIES p(lproj(a))) AND
+        (FORALL (a: preterm):
+          p(a) IMPLIES p(rproj(a))) AND
+        (FORALL (A: pretype,  B: pretype):
+          p(A) AND p(B) IMPLIES p(fun(A, B))) AND
+        (FORALL (A: pretype,  B: pretype):
+          p(A) AND p(B) IMPLIES p(prod(A, B))) AND
+        (FORALL (T: pretype,  a: preterm):
+          p(T) AND p(a) IMPLIES p(subtype(T, a))) AND
+	p(nil) AND
+        (FORALL (s: symbol,  T: pretype,  σ: interp):
+          p(T) AND p(σ) IMPLIES p(itype(s, T, σ))) AND
+        (FORALL (s: symbol,  a: preterm,  σ: interp):
+          p(a) AND p(σ) IMPLIES p(iconst(s, a, σ))) AND
+        p(〈〉) AND
+        (FORALL (s: symbol,  Δ: context):
+          p(Δ) IMPLIES p(ktype_decl(s, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
+        (FORALL (s: symbol,  Δ: context):
+          p(Δ) IMPLIES p(ktype_ext(s, Δ))) AND
+        (FORALL (T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kvar(T, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  a: preterm,  Δ: context):
+          p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kconst_ext(s, T, Δ))) AND
+        (FORALL (s: symbol,  Θ: pretheory,  Δ: context):
+          p(Δ) IMPLIES p(ktheory(s, Θ, Δ))))
+	IMPLIES
+	  (FORALL (x: syntaxic): p(x))
+
+  map_induction: THEOREM
+    FORALL (p: [map -> bool]):
+      ( p(〈〉) AND
+        (FORALL (s: symbol,  Δ: context):
+          p(Δ) IMPLIES p(ktype_decl(s, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
+        (FORALL (s: symbol,  Δ: context):
+          p(Δ) IMPLIES p(ktype_ext(s, Δ))) AND
+        (FORALL (T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kvar(T, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  a: preterm,  Δ: context):
+          p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kconst_ext(s, T, Δ))) AND
+        (FORALL (s: symbol,  Θ: pretheory,  Δ: context):
+          p(Δ) IMPLIES p(ktheory(s, Θ, Δ))) AND
+	p(nil) AND
+        (FORALL (s: symbol,  T: pretype,  σ: interp):
+          p(σ) IMPLIES p(itype(s, T, σ))) AND
+        (FORALL (s: symbol,  a: preterm,  σ: interp):
+          p(σ) IMPLIES p(iconst(s, a, σ))))
+	IMPLIES
+	  (FORALL (x: map): p(x))
+
+  expr_induction: THEOREM
+    FORALL (p: [expr -> bool]):
+      ( (FORALL (s: symbol): p(symbol(s))) AND
+        (FORALL (m: symbol,  σ: interp,  s: symbol):
+	  p(σ) IMPLIES p(dot(m, σ, s))) AND
+        (FORALL (i: nat): p(v(i))) AND
+        (FORALL (f: preterm,  a: preterm):
+          p(f) AND p(a) IMPLIES p(app(f, a))) AND
+        (FORALL (T: pretype,  a: preterm):
+          p(T) AND p(a) IMPLIES p(lam(T, a))) AND
+        (FORALL (a: preterm,  b: preterm):
+          p(a) AND p(b) IMPLIES p(pair(a, b))) AND
+        (FORALL (a: preterm):
+          p(a) IMPLIES p(lproj(a))) AND
+        (FORALL (a: preterm):
+          p(a) IMPLIES p(rproj(a))) AND
+        (FORALL (A: pretype,  B: pretype):
+          p(A) AND p(B) IMPLIES p(fun(A, B))) AND
+        (FORALL (A: pretype,  B: pretype):
+          p(A) AND p(B) IMPLIES p(prod(A, B))) AND
+        (FORALL (T: pretype,  a: preterm):
+          p(T) AND p(a) IMPLIES p(subtype(T, a))) AND
+	p(nil) AND
+        (FORALL (s: symbol,  T: pretype,  σ: interp):
+          p(T) AND p(σ) IMPLIES p(itype(s, T, σ))) AND
+        (FORALL (s: symbol,  a: preterm,  σ: interp):
+          p(a) AND p(σ) IMPLIES p(iconst(s, a, σ))))
+        IMPLIES
+          (FORALL (x: expr): p(x))
+
+  context_induction: THEOREM
+    FORALL (p: [context -> bool]):
+      ( p(〈〉) AND
+        (FORALL (s: symbol,  Δ: context):
+          p(Δ) IMPLIES p(ktype_decl(s, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
+        (FORALL (s: symbol,  Δ: context):
+          p(Δ) IMPLIES p(ktype_ext(s, Δ))) AND
+        (FORALL (T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kvar(T, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  a: preterm,  Δ: context):
+          p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: context):
+          p(Δ) IMPLIES p(kconst_ext(s, T, Δ))) AND
+        (FORALL (s: symbol,  Θ: pretheory,  Δ: context):
+          p(Δ) IMPLIES p(ktheory(s, Θ, Δ))))
+        IMPLIES
+          (FORALL (x: context): p(x))
+
+  interp_induction: THEOREM
+    FORALL (p: [interp -> bool]):
+      ( p(nil) AND
+        (FORALL (s: symbol,  T: pretype,  σ: interp):
+          p(σ) IMPLIES p(itype(s, T, σ))) AND
+        (FORALL (s: symbol,  a: preterm,  σ: interp):
+          p(σ) IMPLIES p(iconst(s, a, σ))))
+        IMPLIES
+          (FORALL (x: interp): p(x))
+	  
+  pretype_induction: THEOREM
+    FORALL (p: [pretype -> bool]):
+      ( (FORALL (s: symbol): p(symbol(s))) AND
+        (FORALL (m: symbol,  σ: interp,  s: symbol): p(dot(m, σ, s))) AND
+        (FORALL (A: pretype,  B: pretype):
+          p(A) AND p(B) IMPLIES p(fun(A, B))) AND
+        (FORALL (A: pretype,  B: pretype):
+          p(A) AND p(B) IMPLIES p(prod(A, B))) AND
+        (FORALL (T: pretype,  a: preterm):
+          p(T) IMPLIES p(subtype(T, a))))
+        IMPLIES
+          (FORALL (x: pretype): p(x))
+  preterm_induction: THEOREM
+    FORALL (p: [preterm -> bool]):
+      ( (FORALL (s: symbol): p(symbol(s))) AND
+        (FORALL (m: symbol,  σ: interp,  s: symbol): p(dot(m, σ, s))) AND
+        (FORALL (i: nat): p(v(i))) AND
+        (FORALL (f: preterm,  a: preterm):
+          p(f) AND p(a) IMPLIES p(app(f, a))) AND
+        (FORALL (T: pretype,  a: preterm):
+          p(a) IMPLIES p(lam(T, a))) AND
+        (FORALL (a: preterm,  b: preterm):
+          p(a) AND p(b) IMPLIES p(pair(a, b))) AND
+        (FORALL (a: preterm):
+          p(a) IMPLIES p(lproj(a))) AND
+        (FORALL (a: preterm):
+          p(a) IMPLIES p(rproj(a))))
+        IMPLIES
+          (FORALL (x: preterm): p(x))
+END inductions
