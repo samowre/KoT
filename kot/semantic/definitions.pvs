@@ -12,80 +12,8 @@ BEGIN
   σ, τ: VAR interp
   S: VAR syntaxic
 
-  % Checks that a syntaxic is well formed in a given context, 
-  % that is if every symbol has been declared in the context
-  % and has been declared at most once.
-  well_formed?(Γ)(S): RECURSIVE bool =
-    CASES S OF
-      symbol(s): s ∈ Γ AND kind(Γ(s)) /= KTHEORY,
-      dot(m, σ, s):
-        m ∈ Γ AND kind(Γ(m)) = KTHEORY AND s ∈ definition(Γ(m)) AND
-  	well_formed?(Γ)(σ), % AND interp_for?(definition(Γ(m)))(σ),
 
-      fun(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
-      prod(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),
-      subtype(T, a): well_formed?(Γ)(T) AND well_formed?(kvar(T, Γ))(a),
 
-      v(i): i ∈ Γ,
-      app(f, a): well_formed?(Γ)(f) AND well_formed?(Γ)(a),
-      lam(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
-      pair(a, b): well_formed?(Γ)(a) AND well_formed?(Γ)(b),
-      lproj(a): well_formed?(Γ)(a),
-      rproj(a): well_formed?(Γ)(a),
-
-      〈〉: TRUE,
-      ktype_decl(s, Θ): 
-        s ∉ Θ AND s ∉ Γ AND
-      	well_formed?(Γ)(Θ),
-      ktype_def(s, T, Θ): 
-        s ∉ Θ AND s ∉ Γ AND
-	well_formed?(Γ ++ Θ)(T) AND 
-	well_formed?(Γ)(Θ),
-      ktype_ext(s, Θ): 
-        s ∉ Θ AND s ∉ Γ AND
-	well_formed?(Γ)(Θ),
-      kvar(T, Θ): 
-        well_formed?(Γ ++ Θ)(T) AND 
-	well_formed?(Γ)(Θ),
-      kconst_decl(s, T, Θ): 
-        s ∉ Θ AND s ∉ Γ AND
-	 well_formed?(Γ ++ Θ)(T) AND 
-	 well_formed?(Γ)(Θ),
-      kconst_def(s, T, a, Θ): 
-        s ∉ Θ AND s ∉ Γ AND
-	well_formed?(Γ ++ Θ)(T) AND 
-      	well_formed?(Γ ++ Θ)(a) AND 
-	well_formed?(Γ)(Θ),
-      kconst_ext(s, T, Θ): 
-        s ∉ Θ AND s ∉ Γ AND
-	 well_formed?(Γ ++ Θ)(T) AND 
-	 well_formed?(Γ)(Θ),
-      ktheory(s, Th, Θ): 
-        s ∉ Θ AND s ∉ Γ AND
-	well_formed?(Γ ++ Θ)(Th) AND 
-	well_formed?(Γ)(Θ),
-
-      nil: TRUE,
-      itype(s, T, σ): 
-        s ∉ σ AND 
-	well_formed?(Γ)(T) AND 
-	well_formed?(Γ)(σ),
-      iconst(s, a, σ): 
-        s ∉ σ AND 
-	well_formed?(Γ)(a) AND 
-	well_formed?(Γ)(σ)
-    ENDCASES
-  MEASURE w(S)
-  well_formed(Γ): TYPE = (well_formed?(Γ))
-
-  % If a context is well formed, any prefix of it is well formed
-  % (it makes me think that it could be a good definition for prefix :
-  %  prefix?(Δ, Γ): bool = Γ(symbol(Δ)) = Δ
-  well_formed_app_symbol: THEOREM well_formed?(Γ)(Θ) AND s ∈ Θ IMPLIES well_formed?(Γ)(Θ(s))
-  well_formed_app_var: THEOREM well_formed?(Γ)(Θ) AND x ∈ Θ IMPLIES well_formed?(Γ)(Θ(x))
-
-  % The following are theorems about subword, but since we need an assumption
-  % that Γ is well formed, they are written here.
   % We would have liked to say that 
   %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) = Γ(s), 
   % but because of the way we represent Δ(s) (as a context, not just the car)

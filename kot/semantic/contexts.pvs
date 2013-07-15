@@ -1,6 +1,6 @@
 contexts: THEORY
 BEGIN
-  IMPORTING map
+  IMPORTING well_formed
 
   S: VAR syntaxic
   Γ, Δ, Θ: VAR well_formed_context
@@ -62,20 +62,14 @@ BEGIN
 
   
   subword_is_reflexive: JUDGEMENT ≺ HAS_TYPE (reflexive?[context])
-  % Transitivity of subword is FALSE. I don't think we need it so it's not a big deal
-  % But we feel like transitivity should hold, and it does if we replace the case
-  % (= if then else) by a OR. It also holds if we had the assumption that the contexts
-  % are well_formed.
-  % Maybe we should write well_formed in language, and define ≺ over well_formed
-  % contexts only. To discuss 
-  %transitivity_lemma: LEMMA nonempty?(Γ) IMPLIES rest(Γ) ≺ Γ
-  %subword_is_transitive: JUDGEMENT ≺ HAS_TYPE (transitive?[context])
-  %subword_is_antisymmetric: JUDGEMENT ≺ HAS_TYPE (antisymmetric?[context])
-  %subword_is_well_founded: JUDGEMENT ≺ HAS_TYPE (well_founded?[context])
+  subword_rest: LEMMA nonempty?(Γ) IMPLIES rest(Γ) ≺ Γ
+  subword_is_transitive: JUDGEMENT ≺ HAS_TYPE (transitive?[context])
+  subword_is_antisymmetric: JUDGEMENT ≺ HAS_TYPE (antisymmetric?[context])
+  subword_is_well_founded: JUDGEMENT ≺ HAS_TYPE (well_founded?[context])
+
 
   member_symbol_when_subword: THEOREM
     Δ ≺ Γ AND s ∈ Δ IMPLIES s ∈ Γ
-
   member_var_when_subword: THEOREM
     Δ ≺ Γ IMPLIES (x ∈ Δ IFF x ∈ Γ)
 

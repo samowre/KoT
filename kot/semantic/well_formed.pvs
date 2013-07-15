@@ -80,4 +80,11 @@ BEGIN
   well_formed(Γ): TYPE = (well_formed?(Γ))
   well_formed_context: TYPE = { Γ | well_formed?(〈〉)(Γ) }
 
+  % If a context is well formed, any prefix of it is well formed
+  % (it makes me think that it could be a good definition for prefix :
+  %  prefix?(Δ, Γ): bool = Γ(symbol(Δ)) = Δ
+  well_formed_app_symbol: THEOREM well_formed?(Γ)(Θ) AND s ∈ Θ IMPLIES well_formed?(Γ)(Θ(s))
+  well_formed_app_var: THEOREM well_formed?(Γ)(Θ) AND x ∈ Θ IMPLIES well_formed?(Γ)(Θ(x))
+
+
 END well_formed
