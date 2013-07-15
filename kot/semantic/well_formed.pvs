@@ -82,9 +82,11 @@ BEGIN
 
   % If a context is well formed, any prefix of it is well formed
   % (it makes me think that it could be a good definition for prefix :
-  %  prefix?(Δ, Γ): bool = Γ(symbol(Δ)) = Δ
+  %  prefix?(Δ, Γ): bool = Γ(symbol(Δ)) = Δ ) 
   well_formed_app_symbol: THEOREM well_formed?(Γ)(Θ) AND s ∈ Θ IMPLIES well_formed?(Γ)(Θ(s))
   well_formed_app_var: THEOREM well_formed?(Γ)(Θ) AND x ∈ Θ IMPLIES well_formed?(Γ)(Θ(x))
 
+  % Corollary
+  well_formed_rest: THEOREM well_formed?(Γ)(Θ) AND nonempty?(Θ) IMPLIES well_formed?(Γ)(rest(Θ))
 
 END well_formed

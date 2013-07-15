@@ -14,45 +14,6 @@ BEGIN
 
 
 
-  % We would have liked to say that 
-  %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) = Γ(s), 
-  % but because of the way we represent Δ(s) (as a context, not just the car)
-  % it is false. We instead give these equivalent theorems :
-  %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) and Γ(s) have same
-  % kind, definition and type. 
-
-  % NOTE: I wrote ... definition?(Δ(s)) IMPLIES definition(Δ(s)) = definition(Γ(s))
-  % The fact that definition?(Δ(s)) IMPLIES definition?(Γ(S)) will be generated
-  % as a TCC, and hence won't be easily usable. If we need it at some point, 
-  % add it to the theorem (or write the TCC as a lemma).
-  subword_symbol_kind: THEOREM 
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ 
-    IMPLIES kind(Δ(s)) = kind(Γ(s))
-  subword_symbol_definition: THEOREM
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ AND definition?(Δ(s))
-    IMPLIES definition(Δ(s)) = definition(Γ(s))
-  subword_symbol_type: THEOREM 
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ AND typed?(Δ(s)) 
-    IMPLIES type_(Δ(s)) = type_(Γ(s))
-
-  % Same for variables
-  subword_var_kind: THEOREM
-    Δ ≺ Γ AND x ∈ Δ IMPLIES kind(Δ(x)) = kind(Γ(x))
-  subword_var_type: THEOREM
-    Δ ≺ Γ AND x ∈ Δ IMPLIES type_(Δ(x)) = type_(Γ(x))
-  
-  % I don't remember why and where we need it, but we do 
-  % (probably for τ's tccs)
-  well_formed_subword: THEOREM 
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND 
-    well_formed?(Δ)(e) IMPLIES well_formed?(Γ)(e)
-
-
-
-
   % η function, as informally defined just before definition 5.5
   % + some modification for the theory interpretations extension
   η(Γ, m, σ)(e): RECURSIVE semantic =
