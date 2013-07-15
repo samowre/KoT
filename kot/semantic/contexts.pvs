@@ -11,29 +11,7 @@ BEGIN
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
 
-  % Γ ++ Δ = Γ; Δ
-  ;++(Γ, Δ): RECURSIVE
-    { Θ | w(Θ) = w(Γ) + w(Δ) - F(ord_empty) - 1 } =
-    CASES Δ OF
-      % Γ; {} = Γ
-      〈〉: Γ,
-      % Γ; (Δ, s: TYPE) = (Γ; Δ), s: TYPE
-      ktype_decl(s, Δ): ktype_decl(s, Γ ++ Δ),
-      ktype_def(s, T, Δ): ktype_def(s, T, Γ ++ Δ),
-      ktype_ext(s, Δ): ktype_ext(s, Γ ++ Δ),
-      kvar(T, Δ): kvar(T, Γ ++ Δ),
-      kconst_decl(s, T, Δ): kconst_decl(s, T, Γ ++ Δ),
-      kconst_def(s, T, a, Δ): kconst_def(s, T, a, Γ ++ Δ),
-      kconst_ext(s, T, Δ): kconst_ext(s, T, Γ ++ Δ),
-      ktheory(s, Θ, Δ): ktheory(s, Θ, Γ ++ Δ)
-    ENDCASES
-  MEASURE w(Δ)
-  AUTO_REWRITE+ ++
-  doubleplus_theory: RECURSIVE JUDGEMENT
-    ++(Γ, Δ: pretheory) HAS_TYPE pretheory
 
-
-  doubleplus_empty: LEMMA 〈〉 ++ Θ = Θ
 
   % Is Δ a subword of Γ?
   ;≺(Δ, Γ): RECURSIVE bool =
@@ -101,6 +79,7 @@ BEGIN
   member_var_when_subword: THEOREM
     Δ ≺ Γ IMPLIES (x ∈ Δ IFF x ∈ Γ)
 
+  
   subword_app_symbol: THEOREM
     s ∈ Γ IMPLIES Γ(s) ≺ Γ
 
