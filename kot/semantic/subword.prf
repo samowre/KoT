@@ -1134,10 +1134,9 @@
     nil)
    ((nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
-    (int_minus_int_is_int application-judgement "int" integers nil)
-    (∈ def-decl "bool" map nil)
+    (int_minus_int_is_int application-judgement "int" integers nil) nil
     (context_induction formula-decl nil inductions nil)
-    (≺ def-decl "bool" contexts nil)
+    (≺ def-decl "bool" subword nil)
     (well_formed_context type-eq-decl nil well_formed nil)
     (〈〉 adt-constructor-decl "(empty?)" language nil)
     (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
@@ -1153,55 +1152,9 @@
     (context formula-decl nil language nil)
     (reflexive? const-decl "bool" relations nil))
    nil))
- (subword_rest_TCC1 0
-  (subword_rest_TCC1-1 nil 3582902491 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (semantic type-decl nil language nil)
-    (context? const-decl "[semantic -> bool]" language nil)
-    (context type-eq-decl nil language nil)
-    (syntaxic? const-decl "[semantic -> bool]" language nil)
-    (syntaxic type-eq-decl nil language nil)
-    (well_formed? def-decl "bool" well_formed nil)
-    (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
-    (〈〉 adt-constructor-decl "(empty?)" language nil)
-    (well_formed_context type-eq-decl nil well_formed nil)
-    (nonempty formula-decl nil language nil))
-   nil))
- (subword_rest_TCC2 0
-  (subword_rest_TCC2-1 nil 3582902491 ("" (subtype-tcc) nil nil) nil
-   nil))
- (subword_rest 0
-  (subword_rest-1 nil 3582902986
-   ("" (induct "Γ" :name "context_induction")
-    (("1" (grind) nil nil) ("2" (grind) nil nil)
-     ("3" (skosimp* :preds? t)
-      (("3" (expand ≺ +)
-        (("3" (lift-if)
-          (("3" (bddsimp 1)
-            (("1" (postpone) nil nil) ("2" (postpone) nil nil)
-             ("3" (postpone) nil nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("4" (postpone) nil nil) ("5" (postpone) nil nil)
-     ("6" (postpone) nil nil) ("7" (postpone) nil nil)
-     ("8" (postpone) nil nil) ("9" (postpone) nil nil)
-     ("10" (postpone) nil nil) ("11" (postpone) nil nil)
-     ("12" (postpone) nil nil))
-    nil)
+ (member_symbol_when_subword 0
+  (member_symbol_when_subword-1 nil 3582905396 ("" (postpone) nil nil)
    nil shostak))
- (subword_is_transitive 0
-  (subword_is_transitive-1 nil 3582902491 ("" (judgement-tcc) nil nil)
-   nil nil))
- (subword_is_antisymmetric 0
-  (subword_is_antisymmetric-1 nil 3582902491
-   ("" (judgement-tcc) nil nil) nil nil))
- (subword_is_well_founded 0
-  (subword_is_well_founded-1 nil 3582902491
-   ("" (judgement-tcc) nil nil) nil nil))
  (subword_app_symbol_TCC1 0
   (subword_app_symbol_TCC1-1 nil 3582902491 ("" (subtype-tcc) nil nil)
    nil nil))
@@ -1258,6 +1211,9 @@
     (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
     (〈〉 adt-constructor-decl "(empty?)" language nil)
     (well_formed_context type-eq-decl nil well_formed nil)
+    (subword_is_reflexive name-judgement
+     "(reflexive?[well_formed_context])" subword nil)
+    nil nil nil
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (nonempty_context formula-decl nil language nil)
@@ -1289,6 +1245,9 @@
     (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
     (〈〉 adt-constructor-decl "(empty?)" language nil)
     (well_formed_context type-eq-decl nil well_formed nil)
+    (subword_is_reflexive name-judgement
+     "(reflexive?[well_formed_context])" subword nil)
+    nil nil nil
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (nonempty_context formula-decl nil language nil)

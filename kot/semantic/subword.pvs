@@ -63,10 +63,9 @@ BEGIN
 
   
   subword_is_reflexive: JUDGEMENT ≺ HAS_TYPE (reflexive?[well_formed_context])
-  subword_rest: LEMMA nonempty?(Γ) IMPLIES rest(Γ) ≺ Γ
-  subword_is_transitive: JUDGEMENT ≺ HAS_TYPE (transitive?[well_formed_context])
-  subword_is_antisymmetric: JUDGEMENT ≺ HAS_TYPE (antisymmetric?[well_formed_context])
-  subword_is_well_founded: JUDGEMENT ≺ HAS_TYPE (well_founded?[well_formed_context])
+  %subword_is_transitive: JUDGEMENT ≺ HAS_TYPE (transitive?[well_formed_context])
+  %subword_is_antisymmetric: JUDGEMENT ≺ HAS_TYPE (antisymmetric?[well_formed_context])
+  %subword_is_well_founded: JUDGEMENT ≺ HAS_TYPE (well_founded?[well_formed_context])
 
 
   member_symbol_when_subword: THEOREM
@@ -78,15 +77,7 @@ BEGIN
   subword_app_symbol: THEOREM
     s ∈ Γ IMPLIES Γ(s) ≺ Γ
 
-  % These theorems are indeed false as you told me, but very handy isnt it ?
-
-  %apply_symbol_when_subword: THEOREM
-  %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) = Γ(s)
-  % same comment for this one
-  %apply_var_when_subword: THEOREM
-  %  Δ ≺ Γ AND x ∈ Δ IMPLIES Δ(x) = Γ(x)
-
-
+ 
   % We would have liked to say that 
   %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) = Γ(s), 
   % but because of the way we represent Δ(s) (as a context, not just the car)
