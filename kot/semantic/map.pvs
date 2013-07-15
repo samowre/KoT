@@ -39,6 +39,8 @@ BEGIN
   AUTO_REWRITE+ ∈
   member_var_nonempty_context: THEOREM
     FORALL x, Γ: x ∈ Γ IMPLIES nonempty_context?(Γ)
+  member_var_lt: THEOREM
+    x <= y AND y ∈ Γ IMPLIES x ∈ Γ
   ;∉(x, Γ): MACRO bool = NOT x ∈ Γ
   
   % Takes a map S = (Γ, s: _, Δ) and returns (s: _, Δ)
