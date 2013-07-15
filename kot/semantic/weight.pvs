@@ -8,17 +8,6 @@ BEGIN
   i, j: VAR nat
   S: VAR syntaxic
   
-  length_subword: THEOREM
-    Δ ≺ Γ IMPLIES length(Δ) <= length(Γ)
-
-  pos_symbol_subword: THEOREM
-    Δ ≺ Γ IMPLIES pos(Δ, s) <= pos(Γ, s)
-
-  pos_var_lt: THEOREM
-    i <= j IMPLIES pos(Γ, j) <= pos(Γ, i)
-  po_var_subword: THEOREM
-    Δ ≺ Γ IMPLIES pos(Δ, i) <= pos(Γ, i)
-
   w(Γ, (S: well_formed(Γ))): RECURSIVE ordinal =
     CASES S OF
       symbol(s): w(Γ, s) + ordinal_of_nat(1),
