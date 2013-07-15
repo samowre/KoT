@@ -1,59 +1,38 @@
 weight: THEORY
 BEGIN
-  IMPORTING language, ordinals_props
-  IMPORTING contexts
+  IMPORTING inductions, ordinals_props
+  IMPORTING subword
 
-  Γ, Δ: VAR context
+  Γ, Δ: VAR well_formed_context
   s: VAR symbol
   i, j: VAR nat
   S: VAR syntaxic
   
-  length(Γ): RECURSIVE nat =
-    COND
-      empty?(Γ) -> 0,
-      ktheory?(Γ) -> 1 + length(dtheory(Γ)) + length(rest(Γ)),
-      ELSE -> 1 + length(rest(Γ))
-    ENDCOND
-  MEASURE w(Γ)
-  length_prefix: THEOREM
-    prefix?(Γ)(Δ) IMPLIES length(Δ) <= length(Γ)
+  length_subword: THEOREM
+    Δ ≺ Γ IMPLIES length(Δ) <= length(Γ)
 
-  w(Γ, s): RECURSIVE upto[length(Γ)] =
-    COND
-      empty?(Γ) -> 0,
-      kvar?(Γ) -> w(rest(Γ), s),
-      ELSE -> IF s = s(Γ) THEN length(Γ) ELSE w(rest(Γ), s) ENDIF
-    ENDCOND
-  MEASURE w(Γ)
-  w_symbol_prefix: THEOREM
-    prefix?(Γ)(Δ) IMPLIES w(Δ, s) <= w(Γ, s)
+  pos_symbol_subword: THEOREM
+    Δ ≺ Γ IMPLIES pos(Δ, s) <= pos(Γ, s)
 
-  w(Γ, i): RECURSIVE upto[length(Γ)] =
-    COND
-      empty?(Γ) -> 0,
-      kvar?(Γ) -> IF i = 0 THEN length(Γ) ELSE w(rest(Γ), i - 1) ENDIF,
-      ELSE -> IF TRUE THEN w(rest(Γ), i) ELSE 0 ENDIF % PVS bug
-    ENDCOND
-  MEASURE w(Γ)
-  w_var_lt: THEOREM
-    i <= j IMPLIES w(Γ, j) <= w(Γ, i)
-  w_var_prefix: THEOREM
-    prefix?(Γ)(Δ) IMPLIES w(Δ, i) <= w(Γ, i)
+  pos_var_lt: THEOREM
+    i <= j IMPLIES pos(Γ, j) <= pos(Γ, i)
+  po_var_subword: THEOREM
+    Δ ≺ Γ IMPLIES pos(Δ, i) <= pos(Γ, i)
 
-  w(Γ, S): RECURSIVE ordinal =
+  w(Γ, (S: well_formed(Γ))): RECURSIVE ordinal =
     CASES S OF
       symbol(s): w(Γ, s) + ordinal_of_nat(1),
       dot(m, σ, s):
         IF m ∈ Γ AND kind(Γ(m)) = KTHEORY THEN
           LET Δ = definition(Γ(m)) IN
-	  add(1, w(Γ, σ), zero) + w(Γ, m) + w(Δ, s) + 1
+	  add(1, w(Γ, σ), zero) + pos(Γ, m) + pos(Δ, s) + 1
 	ELSE zero ENDIF,
 
       fun(A, B): max(w(Γ, A), w(Γ, B)) + 1,
       prod(A, B): max(w(Γ, A), w(Γ, B)) + 1,
       subtype(T, a): max(w(Γ, T), w(Γ, a)) + 1,
 
-      v(i): w(Γ, i) + ordinal_of_nat(1),
+      v(i): pos(Γ, i) + ordinal_of_nat(1),
       app(f, a): max(w(Γ, f), w(Γ, a)) + 1,
       lam(T, a): max(w(Γ, T), w(Γ, a)) + 1,
       pair(a, b): max(w(Γ, a), w(Γ, b)) + 1,
@@ -77,5 +56,5 @@ BEGIN
   MEASURE w(S)
 
   w_prefix: THEOREM
-    prefix?(Γ)(Δ) IMPLIES w(Δ, S) <= w(Γ, S)
+    Δ ≺ Γ IMPLIES w(Δ, S) <= w(Γ, S)
 END weight
