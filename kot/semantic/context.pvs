@@ -10,6 +10,7 @@ BEGIN
   x, y: VAR nat
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
+  i: VAR nat
 
   % Γ ++ Δ = Γ; Δ
   ;++(Γ, Δ): RECURSIVE
@@ -42,20 +43,17 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
 
-  pos(Γ, s): RECURSIVE upto[length(Γ)] =
+  pos(Γ, (s | s ∈ Γ)): RECURSIVE below[length(Γ)] =
     COND
-      empty?(Γ) -> 0,
       kvar?(Γ) -> pos(rest(Γ), s),
-      ELSE -> IF s = s(Γ) THEN length(Γ) ELSE pos(rest(Γ), s) ENDIF
+      ELSE -> IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
     ENDCOND
   MEASURE w(Γ)
 
-  pos(Γ, x): RECURSIVE upto[length(Γ)] =
+  pos(Γ, (x | x ∈ Γ)): RECURSIVE below[length(Γ)] =
     COND
-      empty?(Γ) -> 0,
-      kvar?(Γ) -> IF x = 0 THEN length(Γ) ELSE pos(rest(Γ), x - 1) ENDIF,
+      kvar?(Γ) -> IF x = 0 THEN length(rest(Γ)) ELSE pos(rest(Γ), x - 1) ENDIF,
       ELSE -> IF TRUE THEN pos(rest(Γ), x) ELSE 0 ENDIF % PVS bug
     ENDCOND
   MEASURE w(Γ)
-
 END context
