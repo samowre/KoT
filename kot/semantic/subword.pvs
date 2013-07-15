@@ -68,6 +68,16 @@ BEGIN
   %subword_is_well_founded: JUDGEMENT ≺ HAS_TYPE (well_founded?[well_formed_context])
 
 
+  % TODO: place these
+  length_subword: THEOREM
+    Δ ≺ Γ IMPLIES length(Δ) <= length(Γ)
+  pos_symbol_subword: THEOREM
+    Δ ≺ Γ IMPLIES pos(Δ, s) <= pos(Γ, s)
+  pos_var_subword: THEOREM
+    Δ ≺ Γ IMPLIES pos(Δ, i) <= pos(Γ, i)
+
+
+
   member_symbol_when_subword: THEOREM
     Δ ≺ Γ AND s ∈ Δ IMPLIES s ∈ Γ
   member_var_when_subword: THEOREM

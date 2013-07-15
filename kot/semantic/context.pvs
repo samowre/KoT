@@ -56,4 +56,6 @@ BEGIN
       ELSE -> IF TRUE THEN pos(rest(Γ), x) ELSE 0 ENDIF % PVS bug
     ENDCOND
   MEASURE w(Γ)
+  pos_var_lt: THEOREM
+    i <= j IMPLIES pos(Γ, j) <= pos(Γ, i)
 END context
