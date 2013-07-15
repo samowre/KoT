@@ -12,6 +12,18 @@ BEGIN
   σ, τ: VAR interp
   i: VAR nat
 
+  vars(Γ): RECURSIVE nat =
+    COND
+      empty?(Γ) -> 0,
+      kvar?(Γ) -> 1 + vars(rest(Γ)),
+      ELSE -> vars(rest(Γ))
+    ENDCOND
+  MEASURE w(Γ)
+  vars_pretheory: THEOREM
+    pretheory?(Γ) IMPLIES vars(Γ) = 0
+  vars_member: THEOREM
+    x ∈ Γ IFF x < vars(Γ)
+
   % Γ ++ Δ = Γ; Δ
   ;++(Γ, Δ): RECURSIVE
     { Θ | w(Θ) = w(Γ) + w(Δ) - F(ord_empty) - 1 } =
@@ -34,6 +46,20 @@ BEGIN
     ++(Γ, Δ: pretheory) HAS_TYPE pretheory
   doubleplus_empty: LEMMA 
     〈〉 ++ Θ = Θ
+  vars_concat: THEOREM
+    vars(Γ ++ Δ) = vars(Γ) + vars(Δ)
+  member_symbol_concat: THEOREM
+    s ∈ Γ IMPLIES s ∈ Γ ++ Δ
+  member_symbol__concat: THEOREM
+    s ∈ Δ IMPLIES s ∈ Γ ++ Δ
+  apply_symbol__concat: THEOREM
+    s ∈ Δ IMPLIES (Γ ++ Δ)(s) = Γ ++ Δ(s)
+  member_var_concat: THEOREM
+    x ∈ Γ IMPLIES x ∈ Γ ++ Δ
+  member_var__concat: THEOREM
+    x ∈ Δ IMPLIES x ∈ Γ ++ Δ
+  apply_var__concat: THEOREM
+    x ∈ Δ IMPLIES (Γ ++ Δ)(x) = Γ ++ Δ(x)
 
   length(Γ: context): RECURSIVE nat =
     COND
@@ -59,5 +85,5 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
   pos_var_lt: THEOREM
-    x <= y IMPLIES pos(Γ, y) <= pos(Γ, x)
+    x <= y AND y ∈ Γ IMPLIES pos(Γ, y) <= pos(Γ, x)
 END context
