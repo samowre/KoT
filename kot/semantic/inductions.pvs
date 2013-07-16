@@ -102,7 +102,20 @@ BEGIN
         (FORALL (s: symbol,  T: pretype,  σ: interp):
           p(T) AND p(σ) IMPLIES p(itype(s, T, σ))) AND
         (FORALL (s: symbol,  a: preterm,  σ: interp):
-          p(a) AND p(σ) IMPLIES p(iconst(s, a, σ))))
+          p(a) AND p(σ) IMPLIES p(iconst(s, a, σ))) AND
+        p(〈〉) AND
+        (FORALL (s: symbol,  Δ: pretheory):
+          p(Δ) IMPLIES p(ktype_decl(s, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: pretheory):
+          p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
+        (FORALL (s: symbol,  Δ: pretheory):
+          p(Δ) IMPLIES p(ktype_ext(s, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: pretheory):
+          p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  a: preterm,  Δ: pretheory):
+          p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
+        (FORALL (s: symbol,  T: pretype,  Δ: pretheory):
+          p(Δ) IMPLIES p(kconst_ext(s, T, Δ))))
         IMPLIES
           (FORALL (x: expr): p(x))
 
