@@ -57,8 +57,14 @@ BEGIN
   MEASURE w(S)
   AUTO_REWRITE+ app_symbol
   CONVERSION+ app_symbol
+  s_app_symbol: THEOREM s ∈ Γ IMPLIES s(Γ(s)) = s
+  AUTO_REWRITE+ s_app_symbol
+  kvar_app_symbol: LEMMA s ∈ Γ IMPLIES NOT kvar?(Γ(s))
+  AUTO_REWRITE+ kvar_app_symbol
 
-  app_symbol_is_definition: JUDGEMENT app_symbol(σ | nonempty?(σ))(s | s ∈ σ) HAS_TYPE definition
+  app_symbol_is_definition: JUDGEMENT 
+    app_symbol(σ | nonempty?(σ))(s | s ∈ σ) HAS_TYPE definition
+ 
 
   % The same for variables
   app_var(Γ)(x | x ∈ Γ): RECURSIVE

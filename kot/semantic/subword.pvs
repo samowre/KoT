@@ -76,9 +76,10 @@ BEGIN
     Δ ≺ Γ AND x ∈ Δ IMPLIES pos(Δ, x) <= pos(Γ, x)
   
   subword_is_reflexive: JUDGEMENT ≺ HAS_TYPE (reflexive?[well_formed_context])
+  subword_rest: LEMMA nonempty?(Γ) AND NOT kvar?(Γ) IMPLIES rest(Γ) ≺ Γ
   %subword_is_transitive: JUDGEMENT ≺ HAS_TYPE (transitive?[well_formed_context])
   %subword_is_antisymmetric: JUDGEMENT ≺ HAS_TYPE (antisymmetric?[well_formed_context])
-  %subword_is_well_founded: JUDGEMENT ≺ HAS_TYPE (well_founded?[well_formed_context])
+  %st_subword_is_well_founded: JUDGEMENT st_subword HAS_TYPE (well_founded?[well_formed_context])
 
 
   subword_app_symbol: THEOREM
@@ -92,10 +93,20 @@ BEGIN
   %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) and Γ(s) have same
   % kind, definition and type. 
 
-  % NOTE: I wrote ... definition?(Δ(s)) IMPLIES definition(Δ(s)) = definition(Γ(s))
-  % The fact that definition?(Δ(s)) IMPLIES definition?(Γ(S)) will be generated
-  % as a TCC, and hence won't be easily usable. If we need it at some point, 
-  % add it to the theorem (or write the TCC as a lemma).
+  % We first need to write these two lemmas,
+  % because PVS swaps the terms of the conjunction
+  % in the TCC generated, making the expression not
+  % typecheckable.
+  subword_symbol_definition?: LEMMA 
+    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
+    s ∈ Δ AND definition?(Δ(s))
+    IMPLIES definition?(Γ(s))
+  subword_symbol_typed?: LEMMA
+    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
+    s ∈ Δ AND typed?(Δ(s)) 
+    IMPLIES typed?(Γ(s))
+
+
   subword_symbol_kind: THEOREM 
     well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
     s ∈ Δ 

@@ -147,7 +147,7 @@
     (pretheory? const-decl "[semantic -> bool]" language nil)
     (interp? const-decl "[semantic -> bool]" language nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
     (map type-eq-decl nil language nil)
     (map? const-decl "[semantic -> bool]" language nil)
     (symbol nonempty-type-decl nil language nil)
@@ -157,7 +157,7 @@
      "{m: map | weight(F)(m) < weight(F)(x)}" subtype nil)
     (ktheory? adt-recognizer-decl "[semantic -> boolean]" language nil)
     (dtheory adt-accessor-decl "[(ktheory?) -> semantic]" language nil)
-    nil nil (pretheory type-eq-decl nil language nil)
+    (pretheory type-eq-decl nil language nil)
     (context_is_map judgement-tcc nil subtype nil)
     (pretheory_is_context judgement-tcc nil subtype nil)
     (preterm formula-decl nil language nil)
@@ -897,7 +897,7 @@
     nil)
    ((pretheory_is_context judgement-tcc nil subtype nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
-    (pretheory type-eq-decl nil language nil) nil
+    (pretheory type-eq-decl nil language nil)
     (context? const-decl "[semantic -> bool]" language nil)
     (context type-eq-decl nil language nil)
     (context_is_map judgement-tcc nil subtype nil)
@@ -968,7 +968,7 @@
       (("2" (inst - Θ!1) (("2" (use context_is_map) nil nil)) nil))
       nil))
     nil)
-   ((pretheory_is_context judgement-tcc nil subtype nil) nil
+   ((pretheory_is_context judgement-tcc nil subtype nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
     (pretheory type-eq-decl nil language nil)
     (context? const-decl "[semantic -> bool]" language nil)
@@ -990,12 +990,11 @@
    nil))
  (well_formed?_TCC42 0
   (well_formed?_TCC42-1 nil 3582754779
-   ("" (grind)
-    (("" (lemma pretheory_is_context) (("" (inst - Θ!1) nil nil)) nil))
+   ("" (grind) (("" (use pretheory_is_context :polarity? t) nil nil))
     nil)
-   ((pretheory_is_context judgement-tcc nil subtype nil)
+   ((pretheory type-eq-decl nil language nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
-    (pretheory type-eq-decl nil language nil)
+    (pretheory_is_context judgement-tcc nil subtype nil)
     (preterm formula-decl nil language nil)
     (pretype formula-decl nil language nil)
     (context formula-decl nil language nil)
@@ -1115,7 +1114,7 @@
     nil)
    ((pretheory_is_context judgement-tcc nil subtype nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
-    (pretheory type-eq-decl nil language nil) nil
+    (pretheory type-eq-decl nil language nil)
     (context? const-decl "[semantic -> bool]" language nil)
     (context type-eq-decl nil language nil)
     (context_is_map judgement-tcc nil subtype nil)
@@ -1292,7 +1291,7 @@
       (("2" (inst - Θ!1) (("2" (use context_is_map) nil nil)) nil))
       nil))
     nil)
-   ((pretheory_is_context judgement-tcc nil subtype nil) nil
+   ((pretheory_is_context judgement-tcc nil subtype nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
     (pretheory type-eq-decl nil language nil)
     (context? const-decl "[semantic -> bool]" language nil)
@@ -1438,7 +1437,7 @@
       (("2" (inst - Θ!1) (("2" (use context_is_map) nil nil)) nil))
       nil))
     nil)
-   ((pretheory_is_context judgement-tcc nil subtype nil) nil
+   ((pretheory_is_context judgement-tcc nil subtype nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
     (pretheory type-eq-decl nil language nil)
     (context? const-decl "[semantic -> bool]" language nil)
@@ -1633,7 +1632,7 @@
       (("2" (inst - Θ!1) (("2" (use context_is_map) nil nil)) nil))
       nil))
     nil)
-   ((pretheory_is_context judgement-tcc nil subtype nil) nil
+   ((pretheory_is_context judgement-tcc nil subtype nil)
     (pretheory? const-decl "[semantic -> bool]" language nil)
     (pretheory type-eq-decl nil language nil)
     (context? const-decl "[semantic -> bool]" language nil)
@@ -2144,10 +2143,7 @@
     (= const-decl "[T, T -> boolean]" equalities nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (ord_empty? adt-recognizer-decl "[ord -> boolean]" language nil)
-    (ord_empty adt-constructor-decl "(ord_empty?)" language nil)
-    (++ def-decl
-     "{Θ | weight(F)(Θ) = weight(F)(Γ) + weight(F)(Δ) - F(ord_empty) - 1}"
-     map nil)
+    (ord_empty adt-constructor-decl "(ord_empty?)" language nil) nil
     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
@@ -2168,7 +2164,7 @@
     (syntaxic type-eq-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (context type-eq-decl nil language nil)
-    (nonempty? const-decl "[semantic -> bool]" language nil) nil
+    (nonempty? const-decl "[semantic -> bool]" language nil)
     (map type-eq-decl nil language nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (symbol nonempty-type-decl nil language nil)
@@ -2241,7 +2237,7 @@
     (preterm? const-decl "[semantic -> bool]" language nil)
     (preterm type-eq-decl nil language nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    nil (int_minus_int_is_int application-judgement "int" integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (pretype? const-decl "[semantic -> bool]" language nil)
@@ -2291,7 +2287,7 @@
     (ord type-decl nil language nil) (<= const-decl "bool" reals nil)
     (nonempty? const-decl "[semantic -> bool]" language nil)
     (kvar? adt-recognizer-decl "[semantic -> boolean]" language nil)
-    nil (well_formed? def-decl "bool" well_formed nil)
+    (well_formed? def-decl "bool" well_formed nil)
     (syntaxic type-eq-decl nil language nil)
     (syntaxic? const-decl "[semantic -> bool]" language nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
