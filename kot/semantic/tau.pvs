@@ -8,7 +8,7 @@ BEGIN
   
 
   % Variable declaration
-  Γ, Δ, Θ: VAR context
+  Γ, Δ, Θ: VAR well_formed_context
   A, B, T: VAR pretype
   r, s, c: VAR symbol
   n, m: VAR name
@@ -38,7 +38,7 @@ BEGIN
 
 
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
-  τ(Θ | well_formed?(〈〉)(Θ))(S): RECURSIVE 
+  τ(Θ)(S): RECURSIVE 
     { x: [keyword, list[pretcc]] | 
         LET (k, l) = x IN
  	(undefined?(k) OR KCONTEXT?(k) OR KTHEORY?(k) OR KTYPE?(k) OR KTERM?(k)) AND
@@ -324,7 +324,7 @@ BEGIN
 	ENDIF
     ELSE fail
   ENDCASES
-  MEASURE w(Γ, S)
+  MEASURE extend[semantic, well_formed(Θ), ordinal, zero](LAMBDA (s: well_formed(Θ)): w(Θ, s))(S)
 
 
   % Important invariants of τ to prove :

@@ -82,8 +82,8 @@ BEGIN
   %st_subword_is_well_founded: JUDGEMENT st_subword HAS_TYPE (well_founded?[well_formed_context])
 
 
-  subword_app_symbol: THEOREM
-    s ∈ Γ IMPLIES Γ(s) ≺ Γ
+  %subword_app_symbol: THEOREM
+  %  s ∈ Γ IMPLIES Γ(s) ≺ Γ
 
  
   % We would have liked to say that 
@@ -98,37 +98,34 @@ BEGIN
   % in the TCC generated, making the expression not
   % typecheckable.
   subword_symbol_definition?: LEMMA 
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ AND definition?(Δ(s))
+    Δ ≺ Γ AND s ∈ Δ AND definition?(Δ(s))
     IMPLIES definition?(Γ(s))
   subword_symbol_typed?: LEMMA
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ AND typed?(Δ(s)) 
+    Δ ≺ Γ AND s ∈ Δ AND typed?(Δ(s)) 
     IMPLIES typed?(Γ(s))
 
 
   subword_symbol_kind: THEOREM 
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ 
+    Δ ≺ Γ AND s ∈ Δ 
     IMPLIES kind(Δ(s)) = kind(Γ(s))
   subword_symbol_definition: THEOREM
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ AND definition?(Δ(s))
+    Δ ≺ Γ AND s ∈ Δ AND definition?(Δ(s))
     IMPLIES definition(Δ(s)) = definition(Γ(s))
   subword_symbol_type: THEOREM 
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND
-    s ∈ Δ AND typed?(Δ(s)) 
+    Δ ≺ Γ AND s ∈ Δ AND typed?(Δ(s)) 
     IMPLIES type_(Δ(s)) = type_(Γ(s))
+  AUTO_REWRITE+ subword_symbol_kind, subword_symbol_definition, subword_symbol_type
 
   % Same for variables
   subword_var_kind: THEOREM
     Δ ≺ Γ AND x ∈ Δ IMPLIES kind(Δ(x)) = kind(Γ(x))
   subword_var_type: THEOREM
     Δ ≺ Γ AND x ∈ Δ IMPLIES type_(Δ(x)) = type_(Γ(x))
+  AUTO_REWRITE+ subword_var_kind, subword_var_type
   
   % I don't remember why and where we need it, but we do 
   % (probably for τ's tccs)
   well_formed_subword: THEOREM 
-    well_formed?(〈〉)(Γ) AND Δ ≺ Γ AND 
-    well_formed?(Δ)(e) IMPLIES well_formed?(Γ)(e)
+    Δ ≺ Γ AND well_formed?(Δ)(e) 
+    IMPLIES well_formed?(Γ)(e)
 END subword
