@@ -6,6 +6,7 @@ BEGIN
   Γ, Δ: VAR well_formed_context
   s: VAR symbol
   i, j: VAR nat
+  e: VAR expr
   S: VAR syntaxic
   
   w(Γ, (S: well_formed(Γ))): RECURSIVE ordinal =
@@ -44,6 +45,6 @@ BEGIN
     ENDCASES
   MEASURE w(S)
 
-  w_prefix: THEOREM
-    Δ ≺ Γ IMPLIES w(Δ, S) <= w(Γ, S)
+  w_subword: THEOREM
+    Δ ≺ Γ AND well_formed?(Δ)(e) IMPLIES w(Δ, e) <= w(Γ, e)
 END weight

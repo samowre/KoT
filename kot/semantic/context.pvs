@@ -50,9 +50,7 @@ BEGIN
   vars_concat: THEOREM
     vars(Γ ++ Δ) = vars(Γ) + vars(Δ)
   member_symbol_concat: THEOREM
-    s ∈ Γ IMPLIES s ∈ Γ ++ Δ
-  member_symbol__concat: THEOREM
-    s ∈ Δ IMPLIES s ∈ Γ ++ Δ
+    s ∈ Γ ++ Δ IFF s ∈ Γ OR s ∈ Δ
   apply_symbol__concat: THEOREM
     s ∈ Δ IMPLIES (Γ ++ Δ)(s) = Γ ++ Δ(s)
   member_var_concat: THEOREM
@@ -61,6 +59,9 @@ BEGIN
     x ∈ Δ IMPLIES x ∈ Γ ++ Δ
   apply_var__concat: THEOREM
     x ∈ Δ IMPLIES (Γ ++ Δ)(x) = Γ ++ Δ(x)
+  concat_assoc: THEOREM
+    Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
+  AUTO_REWRITE+ concat_assoc
 
   length(Γ: context): RECURSIVE nat =
     COND
