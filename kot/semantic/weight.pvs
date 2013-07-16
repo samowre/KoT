@@ -10,37 +10,37 @@ BEGIN
   
   w(Γ, (S: well_formed(Γ))): RECURSIVE ordinal =
     CASES S OF
-      symbol(s): w(Γ, s) + ordinal_of_nat(1),
+      symbol(s): add(pos(Γ, s) + 1, 1, zero), % ω ^ (pos(Γ, s) + 1)
       dot(m, σ, s):
         IF m ∈ Γ AND kind(Γ(m)) = KTHEORY THEN
           LET Δ = definition(Γ(m)) IN
-	  add(1, w(Γ, σ), zero) + pos(Γ, m) + pos(Δ, s) + 1
+	  add(1, w(Γ, σ), zero) + add(pos(Γ, m) + pos(Δ, s) + 1, 1, zero) + 1
 	ELSE zero ENDIF,
 
-      fun(A, B): max(w(Γ, A), w(Γ, B)) + 1,
-      prod(A, B): max(w(Γ, A), w(Γ, B)) + 1,
-      subtype(T, a): max(w(Γ, T), w(Γ, a)) + 1,
+      fun(A, B): max(w(Γ, A), w(kvar(A, Γ), B)) + 1,
+      prod(A, B): max(w(Γ, A), w(kvar(A, Γ), B)) + 1,
+      subtype(T, a): max(w(Γ, T), w(kvar(T, Γ), a)) + 1,
 
-      v(i): pos(Γ, i) + ordinal_of_nat(1),
+      v(i): ordinal_of_nat(pos(Γ, i) + 1),
       app(f, a): max(w(Γ, f), w(Γ, a)) + 1,
-      lam(T, a): max(w(Γ, T), w(Γ, a)) + 1,
+      lam(T, a): max(w(Γ, T), w(kvar(T, Γ), a)) + 1,
       pair(a, b): max(w(Γ, a), w(Γ, b)) + 1,
       lproj(a): w(Γ, a) + 1,
       rproj(a): w(Γ, a) + 1,
 
       〈〉: ordinal_of_nat(1),
       ktype_decl(s, Δ): w(Γ, Δ) + 1,
-      ktype_def(s, T, Δ): max(w(Γ, T), w(Γ, Δ)) + 1,
+      ktype_def(s, T, Δ): max(w(Γ ++ Δ, T), w(Γ, Δ)) + 1,
       ktype_ext(s, Δ): w(Γ, Δ) + 1,
-      kvar(T, Δ): max(w(Γ, T), w(Γ, Δ)) + 1,
-      kconst_decl(s, T, Δ): max(w(Γ, T), w(Γ, Δ)) + 1,
-      kconst_def(s, T, a, Δ): max(w(Γ, T), max(w(Γ, a), w(Γ, Δ))) + 1,
-      kconst_ext(s, T, Δ): max(w(Γ, T), w(Γ, Δ)) + 1,
-      ktheory(s, Θ, Δ): max(w(Γ, Θ), w(Γ, Δ)) + 1,
+      kvar(T, Δ): max(w(Γ ++ Δ, T), w(Γ, Δ)) + 1,
+      kconst_decl(s, T, Δ): max(w(Γ ++ Δ, T), w(Γ, Δ)) + 1,
+      kconst_def(s, T, a, Δ): max(w(Γ ++ Δ, T), max(w(Γ ++ Δ, a), w(Γ, Δ))) + 1,
+      kconst_ext(s, T, Δ): max(w(Γ ++ Δ, T), w(Γ, Δ)) + 1,
+      ktheory(s, Θ, Δ): max(w(Γ ++ Δ, Θ), w(Γ, Δ)) + 1,
 
       nil: ordinal_of_nat(1),
-      itype(s, T, σ): w(Γ, T) + w(Γ, σ) + 1,
-      iconst(s, a, σ): w(Γ, a) + w(Γ, σ) + 1
+      itype(s, T, σ): max(w(Γ, T), w(Γ, σ)) + 1,
+      iconst(s, a, σ): max(w(Γ, a), w(Γ, σ)) + 1
     ENDCASES
   MEASURE w(S)
 

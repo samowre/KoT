@@ -1,0 +1,35 @@
+examples: THEORY
+BEGIN
+  IMPORTING well_formed
+
+  base_context: context =
+    kconst_ext(ssupset, sboolop,
+    kconst_ext(sand, sboolop,
+    kconst_ext(sor, sboolop,
+    kconst_def(snot, fun(sbool, sbool),
+      lam(sbool, (v(0) ≐ sfalse)(sbool)),
+    ktype_def(sboolop, fun(prod(sbool, sbool), sbool),
+    ktheory(sequalities,
+      kconst_ext(sequal, fun(prod(sT, sT), sbool),
+      ktype_ext(sT, 〈〉)),
+    kconst_ext(sfalse, sbool,
+    kconst_ext(strue, sbool,
+    ktype_ext(sbool,
+    〈〉)))))))))
+  base_is_well_formed: JUDGEMENT
+    base_context HAS_TYPE well_formed_context
+
+  example31: context =
+    ktype_def("natinjection",
+      subtype(fun("nat", "nat"),
+        forall_("nat", forall_("nat",
+  	  (app(v(2), v(1)) ≐ app(v(2), v(0)))("nat") ⊃ (v(1) ≐ v(0))("nat")))),
+    ktype_def("nat",
+      subtype("int", app("leq", pair("0", v(0)))),
+    kconst_decl("leq", fun(prod("int", "int"), "bool"),
+    kconst_decl("0", "int",
+    ktype_ext("int",
+    base_context)))))
+    example31_is_well_formed: JUDGEMENT
+      example31 HAS_TYPE well_formed_context
+END examples

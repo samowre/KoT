@@ -29,7 +29,7 @@ BEGIN
 
       v(i): i ∈ Γ,
       app(f, a): well_formed?(Γ)(f) AND well_formed?(Γ)(a),
-      lam(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
+      lam(T, a): well_formed?(Γ)(T) AND well_formed?(kvar(T, Γ))(a),
       pair(a, b): well_formed?(Γ)(a) AND well_formed?(Γ)(b),
       lproj(a): well_formed?(Γ)(a),
       rproj(a): well_formed?(Γ)(a),

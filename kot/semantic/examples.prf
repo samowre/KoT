@@ -1,0 +1,138 @@
+(examples
+ (base_context_TCC1 0
+  (base_context_TCC1-1 nil 3582985944 ("" (assert) nil nil)
+   ((pretype formula-decl nil language nil)) nil))
+ (base_context_TCC2 0
+  (base_context_TCC2-1 nil 3582988779 ("" (assert) nil nil)
+   ((context formula-decl nil language nil)
+    (pretheory formula-decl nil language nil)
+    (preterm formula-decl nil language nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (base_is_well_formed 0
+  (base_is_well_formed-1 nil 3582987937
+   ("" (expand "base_context")
+    (("" (assert)
+      (("" (assert)
+        (("" (assert)
+          (("" (assert)
+            ((""
+              (expand ("ssupset" "sand" "sor" "snot" "sboolop"
+                       "sbool"))
+              (("" (assert)
+                (("" (expand ("sequalities" "sfalase" "strue"))
+                  (("" (expand ("sequalities" "sfalse" "strue"))
+                    (("" (assert)
+                      (("" (expand "sequal")
+                        (("" (expand "sT") (("" (propax) nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((base_context const-decl "context" examples nil)
+    (sfalse const-decl "symbol" language nil)
+    (sequal const-decl "symbol" language nil)
+    (sT const-decl "symbol" language nil)
+    (sequalities const-decl "symbol" language nil)
+    (strue const-decl "symbol" language nil)
+    (ssupset const-decl "symbol" language nil)
+    (sand const-decl "symbol" language nil)
+    (sor const-decl "symbol" language nil)
+    (snot const-decl "symbol" language nil)
+    (sboolop const-decl "symbol" language nil)
+    (sbool const-decl "symbol" language nil) nil
+    (definition const-decl
+                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
+                decl nil)
+    (well_formed? def-decl "bool" well_formed nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (app_symbol def-decl
+     "{T: nonempty | (interp?(S) => interp?(T)) AND (context?(S) => context?(T)) AND (pretheory?(S) => pretheory?(T)) AND weight(F)(T) <= weight(F)(S)}"
+     map nil)
+    (++ def-decl
+     "{Θ | weight(F)(Θ) = weight(F)(Γ) + weight(F)(Δ) - F(ord_empty) - 1}"
+     context nil)
+    nil
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (even_times_int_is_even application-judgement "even_int" integers
+     nil)
+    (mult_divides1 application-judgement "(divides(n))" divides nil)
+    (mult_divides2 application-judgement "(divides(m))" divides nil)
+    (even_minus_odd_is_odd application-judgement "odd_int" integers
+     nil)
+    (kind_nonempty application-judgement "kind" decl nil))
+   nil))
+ (example31_TCC1 0
+  (example31_TCC1-1 nil 3582987613 ("" (subtype-tcc) nil nil)
+   ((pretype formula-decl nil language nil)
+    (list2finseq const-decl "finseq[T]" list2finseq nil))
+   nil))
+ (example31_TCC2 0
+  (example31_TCC2-1 nil 3582987613 ("" (assert) nil nil)
+   ((base_is_well_formed name-judgement "well_formed_context" examples
+     nil)
+    (context formula-decl nil language nil)
+    (preterm formula-decl nil language nil)
+    (pretype formula-decl nil language nil))
+   nil))
+ (example31_is_well_formed 0
+  (example31_is_well_formed-1 nil 3582988779
+   ("" (stop-rewrite)
+    (("" (expand "example31")
+      (("" (expand "base_context")
+        ((""
+          (expand ("ssupset" "sand" "sor" "snot" "sboolop"
+                   "sequalities" "sfalse" "strue" "sbool" "sT"
+                   "sequal"))
+          ((""
+            (auto-rewrite ("well_formed?" "∈" "++" "kind" "app_symbol"
+                           "definition"))
+            (("" (assert :ignore-prover-output? t) nil nil)) nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((example31 const-decl "context" examples nil)
+    (sfalse const-decl "symbol" language nil)
+    (snot const-decl "symbol" language nil)
+    (sor const-decl "symbol" language nil)
+    (sand const-decl "symbol" language nil)
+    (sboolop const-decl "symbol" language nil)
+    (strue const-decl "symbol" language nil)
+    (ssupset const-decl "symbol" language nil)
+    (sequal const-decl "symbol" language nil)
+    (sbool const-decl "symbol" language nil)
+    (sT const-decl "symbol" language nil)
+    (sequalities const-decl "symbol" language nil)
+    (∈ def-decl "bool" map nil)
+    (++ def-decl
+     "{Θ | weight(F)(Θ) = weight(F)(Γ) + weight(F)(Δ) - F(ord_empty) - 1}"
+     context nil)
+    (app_symbol def-decl
+     "{T: nonempty | (interp?(S) => interp?(T)) AND (context?(S) => context?(T)) AND (pretheory?(S) => pretheory?(T)) AND weight(F)(T) <= weight(F)(S)}"
+     map nil)
+    (kind const-decl "{r: keyword | nonempty?(S) IFF r ≠ ⊥}" decl nil)
+    (well_formed? def-decl "bool" well_formed nil)
+    (definition const-decl
+                "{x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND (const_kind?(S) IMPLIES preterm?(x)) AND (theory_kind?(S) IMPLIES pretheory?(x)) AND weight(F)(x) + weight(F)(rest(S)) < weight(F)(S)}"
+                decl nil)
+    (∈ def-decl "bool" map nil)
+    (kind_nonempty application-judgement "kind" decl nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (base_context const-decl "context" examples nil))
+   nil)))
+
