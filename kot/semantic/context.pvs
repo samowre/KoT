@@ -44,8 +44,9 @@ BEGIN
   AUTO_REWRITE+ ++
   doubleplus_theory: RECURSIVE JUDGEMENT
     ++(Γ, Δ: pretheory) HAS_TYPE pretheory
-  doubleplus_empty: LEMMA 
+  concat_empty: LEMMA 
     〈〉 ++ Θ = Θ
+  AUTO_REWRITE+ concat_empty
   vars_concat: THEOREM
     vars(Γ ++ Δ) = vars(Γ) + vars(Δ)
   member_symbol_concat: THEOREM
