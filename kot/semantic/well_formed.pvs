@@ -90,4 +90,7 @@ BEGIN
   % Corollary
   well_formed_rest: THEOREM well_formed?(Γ)(Θ) AND nonempty?(Θ) IMPLIES well_formed?(Γ)(rest(Θ))
 
+  well_formed_concat: THEOREM
+    well_formed?(Γ)(Θ) AND well_formed?(Γ ++ Θ)(Δ) IFF well_formed?(Γ)(Θ ++ Δ)
+
 END well_formed
