@@ -198,7 +198,6 @@
          (bool nonempty-type-eq-decl nil booleans nil)
          (= const-decl "[T, T -> boolean]" equalities nil)
          (name? const-decl "[semantic -> bool]" language nil)
-         (symbol nonempty-type-decl nil language nil)
          (symbol? adt-recognizer-decl "[semantic -> boolean]" language
           nil)
          (symbol adt-constructor-decl "[symbol -> (symbol?)]" language
@@ -294,7 +293,6 @@
             nil)
            (nil adt-constructor-decl "(null?)" language nil)
            (TRUE const-decl "bool" booleans nil)
-           (symbol nonempty-type-decl nil language nil)
            (itype? adt-recognizer-decl "[semantic -> boolean]" language
             nil)
            (itype adt-constructor-decl
@@ -325,7 +323,6 @@
              language nil)
             (〈〉 adt-constructor-decl "(empty?)" language nil)
             (TRUE const-decl "bool" booleans nil)
-            (symbol nonempty-type-decl nil language nil)
             (ktype_decl? adt-recognizer-decl "[semantic -> boolean]"
              language nil)
             (ktype_decl adt-constructor-decl
@@ -399,7 +396,6 @@
     (empty? adt-recognizer-decl "[semantic -> boolean]" language nil)
     (〈〉 adt-constructor-decl "(empty?)" language nil)
     (TRUE const-decl "bool" booleans nil)
-    (symbol nonempty-type-decl nil language nil)
     (ktype_decl? adt-recognizer-decl "[semantic -> boolean]" language
      nil)
     (ktype_decl adt-constructor-decl
@@ -571,36 +567,70 @@
    ((preterm formula-decl nil language nil)) nil))
  (bool__TCC1 0
   (bool__TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((pretype formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sbool const-decl "symbol" language nil)
+    (pretype formula-decl nil language nil))
+   nil))
  (TRUE__TCC1 0
   (TRUE__TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((preterm formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (strue const-decl "symbol" language nil)
+    (preterm formula-decl nil language nil))
+   nil))
  (FALSE__TCC1 0
   (FALSE__TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((preterm formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sfalse const-decl "symbol" language nil)
+    (preterm formula-decl nil language nil))
+   nil))
  (boolop__TCC1 0
   (boolop__TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((pretype formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sboolop const-decl "symbol" language nil)
+    (pretype formula-decl nil language nil))
+   nil))
  (¬_TCC1 0
   (¬_TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((preterm formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (snot const-decl "symbol" language nil)
+    (preterm formula-decl nil language nil))
+   nil))
  (vee_TCC1 0
   (vee_TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((preterm formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sor const-decl "symbol" language nil)
+    (preterm formula-decl nil language nil))
+   nil))
  (wedge_TCC1 0
   (wedge_TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((preterm formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sand const-decl "symbol" language nil)
+    (preterm formula-decl nil language nil))
+   nil))
  (supset_TCC1 0
   (supset_TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((preterm formula-decl nil language nil)) nil))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (ssupset const-decl "symbol" language nil)
+    (preterm formula-decl nil language nil))
+   nil))
  (doteq_TCC1 0
   (doteq_TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((interp formula-decl nil language nil)
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sequalities const-decl "symbol" language nil)
+    (sT const-decl "symbol" language nil)
+    (sequal const-decl "symbol" language nil)
+    (interp formula-decl nil language nil)
     (preterm formula-decl nil language nil))
    nil))
  (forall__TCC1 0
-  (forall__TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil) nil nil))
+  (forall__TCC1-1 nil 3581868892 ("" (subtype-tcc) nil nil)
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sbool const-decl "symbol" language nil))
+   nil))
  (forall__TCC2 0
   (forall__TCC2-1 nil 3581868892 ("" (subtype-tcc) nil nil)
-   ((pretype formula-decl nil language nil)) nil)))
+   ((list2finseq const-decl "finseq[T]" list2finseq nil)
+    (sbool const-decl "symbol" language nil)
+    (pretype formula-decl nil language nil))
+   nil)))
 
