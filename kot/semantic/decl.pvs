@@ -1,6 +1,6 @@
 decl: THEORY
 BEGIN
-  IMPORTING language, subtype, inductions, subst
+  IMPORTING language, subtype, inductions
 
 
   Γ, Δ, Θ: VAR context
@@ -13,6 +13,8 @@ BEGIN
   S: VAR syntaxic
   M: VAR map
 
+
+  % Datatype decl = context of size one
   decl: DATATYPE WITH SUBTYPES ktype_decl, kvar_decl, kconst_decl, ktheory_decl
   BEGIN
     dtype_decl: dtype_decl?: ktype_decl
@@ -26,6 +28,7 @@ BEGIN
   END decl
   AUTO_REWRITE+ ktype_decl, kvar_decl, kconst_decl, ktheory_decl
 
+  % decl(M) = "car(M)"
   decl(M: nonempty): decl =
     CASES M OF
       ktype_decl(s, Γ): dtype_decl,
@@ -63,6 +66,7 @@ BEGIN
   % Function definition as informally defined at the begining of section 2.5
   % Meant to be used as definition(Γ(s)), to give the definition of the symbol s
   % (if it exists, see definition?), i.e a type, a term or a theory.
+  % Built-in decl DATATYPE
 
   % Checks if the first element of M has a type (i.e is a preterm).
   % Used as typed?(Γ(s)) it checks that s is a preterm in Γ,
@@ -74,16 +78,5 @@ BEGIN
   % Function type as informally defined at the begining of chapter 2.
   % Meant to be used as type(Γ(s)), to give the type of s
   % (if it exists, see typed?), i.e type(s: T = def_term, Γ) = T
-
-  ;↑(d: decl, n: nat): decl =
-    CASES d OF
-      dtype_decl: dtype_decl,
-      dtype_def(T): dtype_def(T ↑ n),
-      dvar(T): dvar(T ↑ n),
-      dconst_decl(T): dconst_decl(T ↑ n),
-      dconst_def(T, a): dconst_def(T ↑ n, a ↑ n),
-      dtheory(Θ): dtheory(Θ ↑ n),
-      dtype_interp(T): dtype_interp(T ↑ n),
-      dconst_interp(a): dconst_interp(a ↑ n)
-    ENDCASES
+  % Built-in decl DATATYPE
 END decl

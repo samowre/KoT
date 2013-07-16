@@ -1,6 +1,6 @@
 subst: THEORY
 BEGIN
-  IMPORTING language
+  IMPORTING decl
 
   e, f: VAR expr
   T, A, B: VAR pretype
@@ -41,6 +41,16 @@ BEGIN
       lproj(a): lproj(a ↑ nb),
       rproj(a): rproj(a ↑ nb),
 
+      % Pretheory
+      〈〉: 〈〉,
+      ktype_decl(s, Γ): ktype_decl(s, Γ ↑ nb),
+      ktype_def(s, T, Γ): ktype_def(s, T ↑ nb, Γ ↑ nb),
+      ktype_ext(s, Γ): ktype_ext(s, Γ ↑ nb),
+      kconst_decl(s, T, Γ): kconst_decl(s, T ↑ nb, Γ ↑ nb),
+      kconst_def(s, T, a, Γ): kconst_def(s, T ↑ nb, a ↑ nb, Γ ↑ nb),
+      kconst_ext(s, T, Γ): kconst_ext(s, T ↑ nb, Γ ↑ nb),
+
+      % Interpretations
       nil: nil,
       itype(s, T, σ): itype(s, T ↑ nb, σ ↑ nb),
       iconst(s, a, σ): iconst(s, a ↑ nb, σ ↑ nb)
@@ -52,6 +62,19 @@ BEGIN
 
   ;↑(e, (n: nat)): MACRO semantic =
     (e ↑ (n, 0))
+
+  % Shift defined over decls
+  ;↑(d: decl, n: nat): decl =
+    CASES d OF
+      dtype_decl: dtype_decl,
+      dtype_def(T): dtype_def(T ↑ n),
+      dvar(T): dvar(T ↑ n),
+      dconst_decl(T): dconst_decl(T ↑ n),
+      dconst_def(T, a): dconst_def(T ↑ n, a ↑ n),
+      dtheory(Θ): dtheory(Θ ↑ n),
+      dtype_interp(T): dtype_interp(T ↑ n),
+      dconst_interp(a): dconst_interp(a ↑ n)
+    ENDCASES
 
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
@@ -89,6 +112,16 @@ BEGIN
       %  p₂ a ↦ p₂          a[ x ← t]
       rproj(a): rproj(subst(a, x,  t)),
 
+      % Pretheory
+      〈〉: 〈〉,
+      ktype_decl(s, Γ): ktype_decl(s, subst(Γ, x, t)),
+      ktype_def(s, T, Γ): ktype_def(s, subst(T, x, t), subst(Γ, x, t)),
+      ktype_ext(s, Γ): ktype_ext(s, Γ ↑ nb),
+      kconst_decl(s, T, Γ): kconst_decl(s, subst(T, x, t), subst(Γ, x, t)),
+      kconst_def(s, T, a, Γ): kconst_def(s, subst(T, x, t), subst(a, x, t), subst(Γ, x, t)),
+      kconst_ext(s, T, Γ): kconst_ext(s, subst(T, x, t), subst(Γ, x, t)),
+
+      % Interpretations
       nil: nil,
       itype(s, T, σ): itype(s, subst(T, x, t), subst(σ, x, t)),
       iconst(s, a, σ): iconst(s, subst(a, x, t), subst(σ, x, t))

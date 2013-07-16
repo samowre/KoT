@@ -23,15 +23,26 @@ BEGIN
 	ELSIF s ∈ Γ THEN  dot(m, σ, s)
 	ELSE symbol(s) ENDIF,
       dot(m_, τ, s_): dot(m_, η(Γ, m, σ)(τ), s_),
+
       fun(A, B): fun(η(Γ, m, σ)(A), η(Γ, m, σ)(B)),
       prod(A, B): prod(η(Γ, m, σ)(A), η(Γ, m, σ)(B)),
       subtype(T, a): subtype(η(Γ, m, σ)(T), η(Γ, m, σ)(a)),
+
       v(i): v(i),
       app(f, a): app(η(Γ, m, σ)(f), η(Γ, m, σ)(a)),
       lam(T, a): lam(η(Γ, m, σ)(T), η(Γ, m, σ)(a)),
       pair(a, b): pair(η(Γ, m, σ)(a), η(Γ, m, σ)(b)),
       lproj(a): lproj(η(Γ, m, σ)(a)),
       rproj(a): rproj(η(Γ, m, σ)(a)),
+
+      〈〉: 〈〉,
+      ktype_decl(s, Δ): ktype_decl(s, η(Γ, m, σ)(Δ)),
+      ktype_def(s, T, Δ): ktype_def(s, η(Γ, m, σ)(T), η(Γ, m, σ)(Δ)),
+      ktype_ext(s, Δ): ktype_ext(s, Γ ↑ nb),
+      kconst_decl(s, T, Δ): kconst_decl(s, η(Γ, m, σ)(T), η(Γ, m, σ)(Δ)),
+      kconst_def(s, T, a, Δ): kconst_def(s, η(Γ, m, σ)(T), η(Γ, m, σ)(a), η(Γ, m, σ)(Δ)),
+      kconst_ext(s, T, Δ): kconst_ext(s, η(Γ, m, σ)(T), η(Γ, m, σ)(Δ)),
+
       nil: nil,
       itype(s, T, τ): itype(s, η(Γ, m, σ)(T), η(Γ, m, σ)(τ)),
       iconst(s, a, τ): iconst(s, η(Γ, m, σ)(a), η(Γ, m, σ)(τ))
