@@ -1,5 +1,6 @@
 map: THEORY
 BEGIN
+  IMPORTING subst
   IMPORTING decl
 
   S: VAR syntaxic
@@ -10,21 +11,23 @@ BEGIN
   x, y: VAR nat
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
+  d: VAR decl
+  M: VAR map
 
   % Check if a symbol is defined in a map (= context, theory or interpretation)
   % i.e if there is a declaration (def or decl) of this symbol (as a type, term, theory)
-  ;∈(s, (S: map)): RECURSIVE bool =
+  ;∈(s, M): RECURSIVE bool =
     COND
-      empty?(S) -> FALSE,
-      null?(S) -> FALSE,
-      kvar?(S) -> s ∈ rest(S :: nonempty),
-      ELSE -> s = s(S) OR s ∈ rest(S :: nonempty)
+      empty?(M) -> FALSE,
+      null?(M) -> FALSE,
+      kvar?(M) -> s ∈ rest(M :: nonempty),
+      ELSE -> s = s(M) OR s ∈ rest(M :: nonempty)
     ENDCOND
-  MEASURE w(S)
+  MEASURE w(M)
   AUTO_REWRITE+ ∈
   member_nonempty: THEOREM
-    FORALL s, (S: map): s ∈ S IMPLIES nonempty?(S)
-  ;∉(s, (S: map)): MACRO bool = NOT s ∈ S
+    FORALL s, M: s ∈ M IMPLIES nonempty?(M)
+  ;∉(s, M): MACRO bool = NOT s ∈ M
 
   % The same for a variable
   % Note that since a variable cannot appear in a theory or interpretation
@@ -45,18 +48,16 @@ BEGIN
   
   % Takes a map S = (Γ, s: _, Δ) and returns (s: _, Δ)
   % Used only as an argument of the functions kind, definition, type_
-  app_symbol(S: nonempty)(s | s ∈ S): RECURSIVE
-    { T: nonempty | (interp?(S) => interp?(T)) AND
-                    (context?(S) => context?(T)) AND
-		    (pretheory?(S) => pretheory?(T)) AND
-		    w(T) <= w(S) } =
+  app_symbol(M)(s | s ∈ M): RECURSIVE decl =
     COND
-      kvar?(S) -> app_symbol(rest(S))(s),
-      ELSE -> IF s = s(S) THEN S ELSE app_symbol(rest(S))(s) ENDIF
+      kvar?(M) -> app_symbol(rest(M))(s) ↑ 1,
+      ELSE -> IF s = s(M) THEN decl(M) ELSE app_symbol(rest(M))(s) ↑ 1 ENDIF
     ENDCOND
-  MEASURE w(S)
+  MEASURE w(M)
   AUTO_REWRITE+ app_symbol
   CONVERSION+ app_symbol
+  app_symbol_interp: RECURSIVE JUDGEMENT
+    app_symbol(σ)(s | s ∈ σ) HAS_TYPE definition
   s_app_symbol: THEOREM s ∈ Γ IMPLIES s(Γ(s)) = s
   AUTO_REWRITE+ s_app_symbol
   kvar_app_symbol: LEMMA s ∈ Γ IMPLIES NOT kvar?(Γ(s))
@@ -64,14 +65,12 @@ BEGIN
 
   app_symbol_is_definition: JUDGEMENT 
     app_symbol(σ | nonempty?(σ))(s | s ∈ σ) HAS_TYPE definition
- 
 
   % The same for variables
-  app_var(Γ)(x | x ∈ Γ): RECURSIVE
-    { Δ | kvar?(Δ) AND nonempty?(Δ) AND w(Δ) <= w(Γ) } =
+  app_var(Γ)(x | x ∈ Γ): RECURSIVE (dvar?) =
     COND
-      kvar?(Γ) -> IF x = 0 THEN Γ ELSE app_var(rest(Γ))(x - 1) ENDIF,
-      ELSE -> app_var(rest(Γ))(x)
+      kvar?(Γ) -> IF x = 0 THEN decl(Γ) ELSE app_var(rest(Γ))(x - 1) ↑ 1 ENDIF,
+      ELSE -> app_var(rest(Γ))(x) ↑ 1
     ENDCOND
   MEASURE w(Γ)
   CONVERSION+ app_var

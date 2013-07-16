@@ -1,6 +1,6 @@
 decl: THEORY
 BEGIN
-  IMPORTING language, subtype, inductions
+  IMPORTING language, subtype, inductions, subst
 
 
   Γ, Δ, Θ: VAR context
@@ -10,167 +10,80 @@ BEGIN
   x, y: VAR nat
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
-  S: VAR map
+  S: VAR syntaxic
+  M: VAR map
 
-  type_kind?(S): bool =
-    COND
-      ktype_decl?(S) -> TRUE,
-      ktype_def?(S) -> TRUE,
-      ktype_ext?(S) -> TRUE,
-      itype?(S) -> TRUE,
-      ELSE -> FALSE
-    ENDCOND
-  type_kind: TYPE = (type_kind?)
+  decl: DATATYPE WITH SUBTYPES ktype_decl, kvar_decl, kconst_decl, ktheory_decl
+  BEGIN
+    dtype_decl: dtype_decl?: ktype_decl
+    dtype_def(definition: pretype): dtype_def?: ktype_decl
+    dvar(type_: pretype): dvar?: kvar_decl
+    dconst_decl(type_: pretype): dconst_decl?: kconst_decl
+    dconst_def(type_: pretype, definition: preterm): dconst_def?: kconst_decl
+    dtheory(definition: pretheory): dtheory?: ktheory_decl
+    dtype_interp(definition: pretype): dtype_interp?: ktype_decl
+    dconst_interp(definition: preterm): dconst_interp?: kconst_decl
+  END decl
+  AUTO_REWRITE+ ktype_decl, kvar_decl, kconst_decl, ktheory_decl
 
-  const_kind?(S): bool =
-    COND
-      kconst_decl?(S) -> TRUE,
-      kconst_def?(S) -> TRUE,
-      kconst_ext?(S) -> TRUE,
-      iconst?(S) -> TRUE,
-      ELSE -> FALSE
-    ENDCOND
-  const_kind: TYPE = (const_kind?)
-
-  var_kind?(S): bool =
-    COND
-      kvar?(S) -> TRUE,
-      ELSE -> FALSE
-    ENDCOND
-  var_kind: TYPE = (var_kind?)
-
-  typed_kind?(S): bool =
-    COND
-      kconst_decl?(S) -> TRUE,
-      kconst_def?(S) -> TRUE,
-      kconst_ext?(S) -> TRUE,
-      iconst?(S) -> TRUE,
-      kvar?(S) -> TRUE,
-      ELSE -> FALSE
-    ENDCOND
-  typed_kind: TYPE = (typed_kind?)
-
-  theory_kind?(S): bool =
-    COND
-      ktheory?(S) -> TRUE,
-      ELSE -> FALSE
-    ENDCOND
-  theory_kind: TYPE = (theory_kind?)
-
-  const_kind_is_typed_kind: JUDGEMENT
-    const_kind SUBTYPE_OF typed_kind
-  var_kind_is_typed_kind: JUDGEMENT
-    var_kind SUBTYPE_OF typed_kind
-  var_kind_when_typed_kind: THEOREM
-    typed_kind?(S) IMPLIES (var_kind?(S) IFF NOT const_kind?(S))
-  const_kind_when_typed_kind: THEOREM
-    typed_kind?(S) IMPLIES (const_kind?(S) IFF NOT var_kind?(S))
-  theory_kind_when_typed_kind: THEOREM
-    typed_kind?(S) IMPLIES NOT theory_kind?(S)
-  typed_kind_when_theory_kind: THEOREM
-    theory_kind?(S) IMPLIES NOT typed_kind?(S)
-  type_kind_when_typed_kind: THEOREM
-    typed_kind?(S) IMPLIES NOT type_kind?(S)
-  typed_kind_when_type_kind: THEOREM
-    type_kind?(S) IMPLIES NOT typed_kind?(S)
-  type_kind_when_theory_kind: THEOREM
-    theory_kind?(S) IMPLIES NOT type_kind?(S)
-  theory_kind_when_type_kind: THEOREM
-    type_kind?(S) IMPLIES NOT theory_kind?(S)
-  theory_kind_when_interp: THEOREM
-    interp?(S) IMPLIES NOT theory_kind?(S)
-  interp_when_theory_kind: THEOREM
-    theory_kind?(S) IMPLIES NOT interp?(S)
+  decl(M: nonempty): decl =
+    CASES M OF
+      ktype_decl(s, Γ): dtype_decl,
+      ktype_def(s, T, Γ): dtype_def(T),
+      ktype_ext(s, Γ): dtype_decl,
+      kvar(T, Γ): dvar(T),
+      kconst_decl(s, T, Γ): dconst_decl(T),
+      kconst_def(s, T, a, Γ): dconst_def(T, a),
+      kconst_ext(s, T, Γ): dconst_decl(T),
+      ktheory(s, Θ, Γ): dtheory(Θ),
+      itype(s, T, σ): dtype_interp(T),
+      iconst(s, a, σ): dconst_interp(a)
+    ENDCASES
 
   % Function kind as informally defined at the begining of chapter 2.
   % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
   % among CONSTANT, TYPE, VARIABLE, THEORY
-  kind(S): 
-    { r: keyword | nonempty?(S) IFF r ≠ ⊥ } =
-    CASES S OF
-      ktype_decl(s, Δ): KTYPE,
-      ktype_def(s, T, Δ): KTYPE,
-      ktype_ext(s, Δ): KTYPE,
-      kconst_decl(s, T, Δ): KCONST,
-      kconst_def(s, T, a, Δ): KCONST,
-      kconst_ext(s, T, Δ): KCONST,
-      kvar(T, Δ): KVAR,
-      ktheory(s, Θ, Δ): KTHEORY,
-      itype(s, T, σ): KTYPE,
-      iconst(s, a, σ): KCONST
-      ELSE ⊥
-    ENDCASES
+  kind(d: decl): kind =
+    COND
+      ktype_decl(d) -> KTYPE,
+      kvar_decl(d) -> KVAR,
+      kconst_decl(d) -> KCONST,
+      ktheory_decl(d) -> KTHEORY
+    ENDCOND
   AUTO_REWRITE+ kind
-  kind_nonempty: JUDGEMENT
-    kind(S: nonempty) HAS_TYPE kind
-  kind_type: THEOREM
-    kind(S) = KTYPE IFF type_kind?(S)
-  kind_const: THEOREM
-    kind(S) = KCONST IFF const_kind?(S)
-  kind_var: THEOREM
-    kind(S) = KVAR IFF var_kind?(S)
-  kind_theory: THEOREM
-    kind(S) = KTHEORY IFF theory_kind?(S)
-  AUTO_REWRITE+ kind_type, kind_const, kind_var, kind_theory
 
-  % Checks if the first element of S is a definition (not a declaration)
+  % Checks if the first element of M is a definition (not a declaration)
   % Used as definition?(Γ(s)) it checks that s has a definition in Γ
   % (such as s: TYPE = def_type, or s: T = def_term)
-  definition?(S: nonempty): bool =
-    CASES S OF
-      ktype_def(s, T, Δ): TRUE,
-      kconst_def(s, T, a, Δ): TRUE,
-      ktheory(s, Θ, Δ): TRUE,
-      itype(s, T, σ): TRUE,
-      iconst(s, a, σ): TRUE
-      ELSE FALSE
-    ENDCASES
-  AUTO_REWRITE+ definition?
+  definition?(d: decl): bool =
+    dtype_def?(d) OR dconst_def?(d) OR dtheory?(d) OR dtype_interp?(d) OR dconst_interp?(d)
   definition: TYPE = (definition?)
-  nonempty_interp_is_definition: JUDGEMENT
-    nonempty_interp SUBTYPE_OF definition
-
+  AUTO_REWRITE+ definition?
   
   % Function definition as informally defined at the begining of section 2.5
   % Meant to be used as definition(Γ(s)), to give the definition of the symbol s
   % (if it exists, see definition?), i.e a type, a term or a theory.
-  definition(S: definition):
-    { x: semantic | (type_kind?(S) IMPLIES pretype?(x)) AND
-                    (const_kind?(S) IMPLIES preterm?(x)) AND
-		    (theory_kind?(S) IMPLIES pretheory?(x)) AND
-		    w(x) + w(rest(S)) < w(S) } =
-    CASES S OF
-      ktype_def(s, T, Δ): T,
-      kconst_def(s, T, a, Δ): a,
-      ktheory(s, Θ, Δ): Θ,
-      itype(s, T, σ): T,
-      iconst(s, a, σ): a
-    ENDCASES
-  AUTO_REWRITE+ definition
 
-  % Checks if the first element of S has a type (i.e is a preterm).
+  % Checks if the first element of M has a type (i.e is a preterm).
   % Used as typed?(Γ(s)) it checks that s is a preterm in Γ,
   % i.e appears of the form s: T or s: T = a
-  typed?(Γ: nonempty_context): bool =
-    COND
-      kconst_decl?(Γ) -> TRUE,
-      kconst_def?(Γ) -> TRUE,
-      kconst_ext?(Γ) -> TRUE,
-      kvar?(Γ) -> TRUE,
-      ELSE -> FALSE
-    ENDCOND
+  typed?(d: decl): bool =
+    dvar?(d) OR dconst_def?(d) OR dconst_decl?(d)
   AUTO_REWRITE+ typed?
-  typed: TYPE = (typed?)
 
   % Function type as informally defined at the begining of chapter 2.
   % Meant to be used as type(Γ(s)), to give the type of s
   % (if it exists, see typed?), i.e type(s: T = def_term, Γ) = T
-  type_(Γ: typed): { T | w(T) + w(rest(Γ)) < w(Γ) } =
-    CASES Γ OF
-      kconst_decl(s, T, Δ): T,
-      kconst_def(s, T, a, Δ): T,
-      kconst_ext(s, T, Δ): T,
-      kvar(T, Δ): T
+
+  ;↑(d: decl, n: nat): decl =
+    CASES d OF
+      dtype_decl: dtype_decl,
+      dtype_def(T): dtype_def(T ↑ n),
+      dvar(T): dvar(T ↑ n),
+      dconst_decl(T): dconst_decl(T ↑ n),
+      dconst_def(T, a): dconst_def(T ↑ n, a ↑ n),
+      dtheory(Θ): dtheory(Θ ↑ n),
+      dtype_interp(T): dtype_interp(T ↑ n),
+      dconst_interp(a): dconst_interp(a ↑ n)
     ENDCASES
-  AUTO_REWRITE+ type_
 END decl
