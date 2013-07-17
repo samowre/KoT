@@ -28,6 +28,19 @@ BEGIN
   END decl
   AUTO_REWRITE+ ktype_decl, kvar_decl, kconst_decl, ktheory_decl
 
+  kcontext?(d: decl): bool = 
+    dtype_decl?(d) OR dtype_def?(d) OR
+    dvar?(d) OR
+    dconst_decl?(d) OR dconst_def?(d) OR
+    dtheory?(d)
+  ktheory?(d: decl): bool = 
+    dtype_decl?(d) OR dtype_def?(d) OR
+    dconst_decl?(d) OR dconst_def?(d)
+  kinterp?(d: decl): bool = 
+    dtype_interp?(d) OR dconst_interp?(d)
+
+  AUTO_REWRITE+ kcontext?, ktheory?, kinterp?
+
   % decl(M) = "car(M)"
   decl(M: nonempty): decl =
     CASES M OF
@@ -42,6 +55,10 @@ BEGIN
       itype(s, T, σ): dtype_interp(T),
       iconst(s, a, σ): dconst_interp(a)
     ENDCASES
+  decl_context: JUDGEMENT decl(Γ | nonempty?(Γ)) HAS_TYPE (kcontext?)
+  decl_theory: JUDGEMENT decl(Δ: pretheory | nonempty?(Δ)) HAS_TYPE (ktheory?)
+  decl_interp: JUDGEMENT decl(σ | nonempty?(σ)) HAS_TYPE (kinterp?)
+  
 
   % Function kind as informally defined at the begining of chapter 2.
   % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
