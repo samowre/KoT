@@ -1,0 +1,23 @@
+wf_props: THEORY
+BEGIN
+
+  weight_definition: THEOREM
+    s ∈ Γ AND definition?(Γ(s)) IMPLIES w(Γ, definition(Γ(s))) <= w(Γ, s)
+
+
+  % If a context is well formed, any prefix of it is well formed
+  % (it makes me think that it could be a good definition for prefix :
+  %  prefix?(Δ, Γ): bool = Γ(symbol(Δ)) = Δ ) 
+  well_formed_definition: THEOREM
+    well_formed?(Γ)(Θ) AND s ∈ Θ AND definition?(Θ(s))
+      IMPLIES well_formed?(Γ ++ Θ)(definition(Θ(s)))
+  well_formed_symbol_type: THEOREM
+    well_formed?(Γ)(Θ) AND s ∈ Θ AND typed?(Θ(s))
+      IMPLIES well_formed?(Γ ++ Θ)(type_(Θ(s)))
+  well_formed_var_type: THEOREM
+    well_formed?(Γ)(Θ) AND x ∈ Θ
+      IMPLIES well_formed?(Γ ++ Θ)(type_(Θ(x)))
+
+  % Corollary
+
+END wf_props

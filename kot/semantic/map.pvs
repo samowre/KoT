@@ -61,11 +61,11 @@ BEGIN
   kvar_app_symbol: LEMMA s ∈ Γ IMPLIES NOT KVAR?(kind(Γ(s)))
   AUTO_REWRITE+ kvar_app_symbol
 
-  app_symbol_is_definition: JUDGEMENT 
+  app_symbol_is_definition: RECURSIVE JUDGEMENT 
     app_symbol(σ)(s | s ∈ σ) HAS_TYPE definition
-  app_symbol_context: JUDGEMENT
+  app_symbol_context: RECURSIVE JUDGEMENT
     app_symbol(Γ)(s | s ∈ Γ) HAS_TYPE (kcontext?)
-  app_symbol_interp: JUDGEMENT
+  app_symbol_interp: RECURSIVE JUDGEMENT
     app_symbol(σ)(s | s ∈ σ) HAS_TYPE (kinterp?)
   %TODO: change ktheory name, cause :: [decl -> bool] is Soooo ugly
   app_symbol_pretheory: JUDGEMENT

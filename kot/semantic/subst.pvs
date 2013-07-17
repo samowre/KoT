@@ -4,7 +4,7 @@ BEGIN
 
   e, f: VAR expr
   T, A, B: VAR pretype
-  n: VAR nat
+  i, j, n: VAR nat
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -61,9 +61,15 @@ BEGIN
   AUTO_REWRITE+ ↑
   shift_size: JUDGEMENT
     ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
+  shift_zero: THEOREM
+    e ↑ (0, n) = e
+  AUTO_REWRITE+ shift_zero
 
   ;↑(e, (n: nat)): MACRO semantic =
     (e ↑ (n, 0))
+  shift_plus: THEOREM
+    (e ↑ (i, n)) ↑ (j, n) = e ↑ (i + j, n)
+  AUTO_REWRITE+ shift_plus
 
   % Shift defined over decls
   ;↑(d: decl, n: nat): decl =
@@ -77,8 +83,14 @@ BEGIN
       dtype_interp(T): dtype_interp(T ↑ n),
       dconst_interp(a): dconst_interp(a ↑ n)
     ENDCASES
-
   d: VAR decl
+
+  shift_decl_zero: THEOREM
+    d ↑ 0 = d
+  AUTO_REWRITE+ shift_decl_zero
+  shift_decl_plus: THEOREM
+    (d ↑ i) ↑ j = d ↑ (i + j)
+
 
   shift_kind: THEOREM
     kind(d ↑ n) = kind(d)

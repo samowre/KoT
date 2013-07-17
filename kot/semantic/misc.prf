@@ -4,10 +4,29 @@
    ((ordinal? def-decl "bool" ordinals nil)) nil))
  (ordinal_of_nat_TCC2 0
   (ordinal_of_nat_TCC2-1 nil 3582470498 ("" (grind) nil nil)
-   ((ordinal? def-decl "bool" ordinals nil)) nil))
- (ordinal_of_nat_TCC3 0
-  (ordinal_of_nat_TCC3-1 nil 3582645510 ("" (subtype-tcc) nil nil) nil
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil))
    nil))
+ (ordinal_of_nat_TCC3 0
+  (ordinal_of_nat_TCC3-1 nil 3582645510 ("" (grind) nil nil)
+   ((ordinal? def-decl "bool" ordinals nil)) nil))
  (ordinal_of_nat_lt 0
   (ordinal_of_nat_lt-1 nil 3582645393 ("" (grind) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
@@ -824,6 +843,8 @@
   (plus_TCC6-1 nil 3582470498
    ("" (grind-with-lemmas :lemmas "ordinal_antisym") nil nil)
    ((ordinal_antisym formula-decl nil ordinals nil)
+    (u!1 skolem-const-decl "ordstruct" ordinals_props nil)
+    (z!1 skolem-const-decl "ordstruct" ordinals_props nil)
     (< def-decl "bool" ordinals nil)
     (>= const-decl "bool" ordinals nil)
     (real_lt_is_strict_total_order name-judgement
@@ -1156,6 +1177,8 @@
     (ordinal_trichotomy formula-decl nil ordinals nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (v!1 skolem-const-decl "ordstruct" ordinals_props nil)
+    (x!1 skolem-const-decl "ordinal" ordinals_props nil)
     (add adt-constructor-decl
      "[[posnat, ordstruct, ordstruct] -> (nonzero?)]" ordstruct_adt
      nil)
@@ -1311,6 +1334,7 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (ordinal_antisym formula-decl nil ordinals nil)
+    (n0y!1 skolem-const-decl "{z | nonzero?(z)}" ordinals_props nil)
     (exp adt-accessor-decl "[(nonzero?) -> ordstruct]" ordstruct_adt
          nil)
     (add adt-constructor-decl
@@ -2042,6 +2066,7 @@
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (< def-decl "bool" ordinals nil)
+    (z!1 skolem-const-decl "ordinal" ordinals_props nil)
     (ordinal_irreflexive formula-decl nil ordinals nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -2068,7 +2093,9 @@
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (lt__plus formula-decl nil ordinals_props nil)
+    (r!1 skolem-const-decl "ordinal" ordinals_props nil)
     (ordstruct_add_extensionality formula-decl nil ordstruct_adt nil)
+    (y!1 skolem-const-decl "ordinal" ordinals_props nil)
     (lt_rest formula-decl nil ordinals_props nil)
     (ordinal_induction formula-decl nil ordinals nil)
     (+ def-decl
@@ -2110,6 +2137,7 @@
       nil))
     nil)
    ((NOT const-decl "[bool -> bool]" booleans nil)
+    (r!1 skolem-const-decl "ordinal" ordinals_props nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
@@ -2443,7 +2471,10 @@
      "[[posnat, ordstruct, ordstruct] -> (nonzero?)]" ordstruct_adt
      nil)
     (coef adt-accessor-decl "[(nonzero?) -> posnat]" ordstruct_adt nil)
+    (r!1 skolem-const-decl "ordinal" ordinals_props nil)
+    (x!1 skolem-const-decl "ordinal" ordinals_props nil)
     (lt_cut formula-decl nil ordinals_props nil)
+    (z!1 skolem-const-decl "ordinal" ordinals_props nil)
     (rest adt-accessor-decl "[(nonzero?) -> ordstruct]" ordstruct_adt
           nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
@@ -2938,6 +2969,9 @@
     (ordinal_trichotomy formula-decl nil ordinals nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
+    (x!1 skolem-const-decl "ordinal" ordinals_props nil)
+    (r!1 skolem-const-decl "ordinal" ordinals_props nil)
+    (y!1 skolem-const-decl "ordinal" ordinals_props nil)
     (lt_cut formula-decl nil ordinals_props nil)
     (plus__zero formula-decl nil ordinals_props nil)
     (exp_plus formula-decl nil ordinals_props nil)
@@ -3505,6 +3539,8 @@
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number nonempty-type-decl nil numbers nil)
+    (r!1 skolem-const-decl "ordinal" ordinals_props nil)
+    (z!1 skolem-const-decl "ordinal" ordinals_props nil)
     (ordinal_trichotomy formula-decl nil ordinals nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
@@ -3512,6 +3548,7 @@
      "(strict_total_order?[real])" real_props nil)
     (lt_rest formula-decl nil ordinals_props nil)
     (lt_cut formula-decl nil ordinals_props nil)
+    (x!1 skolem-const-decl "ordinal" ordinals_props nil)
     (ordinal_induction formula-decl nil ordinals nil)
     (+ def-decl
        "{z |      (z >= x) AND (z >= y) AND (zero?(x) IMPLIES z = y) AND (zero?(y) IMPLIES z = x) AND (nonzero?(x) AND nonzero?(y) IMPLIES exp(z) = max(exp(x), exp(y)))}"
@@ -4485,6 +4522,7 @@
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (both_sides_plus_lt1 formula-decl nil ordinals_props nil)
     (lt_cut formula-decl nil ordinals_props nil)
+    (y!1 skolem-const-decl "ordinal" ordinals_props nil)
     (ordinal_trichotomy formula-decl nil ordinals nil)
     (lt_rest formula-decl nil ordinals_props nil)
     (ordinal_irreflexive formula-decl nil ordinals nil)
@@ -4515,6 +4553,8 @@
     (exp_plus formula-decl nil ordinals_props nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
+    (r!1 skolem-const-decl "ordinal" ordinals_props nil)
+    (x!1 skolem-const-decl "ordinal" ordinals_props nil)
     (ordinal_antisym formula-decl nil ordinals nil)
     (> const-decl "bool" ordinals nil)
     (plus__zero formula-decl nil ordinals_props nil)
@@ -4882,6 +4922,9 @@
     nil)
    ((NOT const-decl "[bool -> bool]" booleans nil)
     (lt_cut formula-decl nil ordinals_props nil)
+    (r!1 skolem-const-decl "ordinal" ordinals_props nil)
+    (y!1 skolem-const-decl "ordinal" ordinals_props nil)
+    (z!1 skolem-const-decl "ordinal" ordinals_props nil)
     (ordinal_antisym formula-decl nil ordinals nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
@@ -5022,6 +5065,9 @@
      ordstruct_adt nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (w!1 skolem-const-decl "ordstruct" ordinals_props nil)
+    (v!1 skolem-const-decl "ordstruct" ordinals_props nil)
+    (u!1 skolem-const-decl "ordstruct" ordinals_props nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (real_gt_is_strict_total_order name-judgement
@@ -5110,6 +5156,7 @@
      ordstruct_adt nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (u!1 skolem-const-decl "ordstruct" ordinals_props nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
