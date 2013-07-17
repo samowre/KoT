@@ -4,6 +4,7 @@ BEGIN
 
   e, f: VAR expr
   T, A, B: VAR pretype
+  n: VAR nat
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -76,6 +77,20 @@ BEGIN
       dtype_interp(T): dtype_interp(T ↑ n),
       dconst_interp(a): dconst_interp(a ↑ n)
     ENDCASES
+
+  d: VAR decl
+
+  shift_kind: THEOREM
+    kind(d ↑ n) = kind(d)
+  shift_definition?: THEOREM
+    definition?(d ↑ n) IFF definition?(d)
+  shift_definition: THEOREM
+    definition?(d) IMPLIES definition(d ↑ n) = definition(d) ↑ n
+  shift_typed?: THEOREM
+    typed?(d ↑ n) IFF typed?(d)
+  shift_type: THEOREM
+    typed?(d) IMPLIES type_(d ↑ n) = type_(d) ↑ n
+  AUTO_REWRITE+ shift_kind, shift_definition?, shift_definition, shift_typed?, shift_type
 
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
