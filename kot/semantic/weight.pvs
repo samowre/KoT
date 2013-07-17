@@ -1,15 +1,15 @@
 weight: THEORY
 BEGIN
   IMPORTING inductions, ordinals_props
-  IMPORTING context
+  IMPORTING well_formed
 
-  Γ, Δ: VAR context
+  Γ, Δ: VAR well_formed_context
   s: VAR symbol
   i, j: VAR nat
   e: VAR expr
-  S: VAR syntaxic
+  S, U: VAR syntaxic
   
-  w(Γ, S): RECURSIVE ordinal =
+  w(Γ, (S | well_formed?(Γ)(S))): RECURSIVE ordinal =
     CASES S OF
       symbol(s):
         IF s ∈ Γ THEN

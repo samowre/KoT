@@ -1,7 +1,6 @@
 well_formed: THEORY
 BEGIN
   IMPORTING context
-  
 
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
@@ -81,17 +80,10 @@ BEGIN
   well_formed(Γ): TYPE = (well_formed?(Γ))
   well_formed_context: TYPE = { Γ | well_formed?(〈〉)(Γ) }
 
-  % If a context is well formed, any prefix of it is well formed
-  % (it makes me think that it could be a good definition for prefix :
-  %  prefix?(Δ, Γ): bool = Γ(symbol(Δ)) = Δ ) 
-  well_formed_definition: THEOREM well_formed?(Γ)(Θ) AND s ∈ Θ AND definition?(Θ(s)) IMPLIES well_formed?(Γ)(definition(Θ(s)))
-  well_formed_symbol_type: THEOREM well_formed?(Γ)(Θ) AND s ∈ Θ AND typed?(Θ(s)) IMPLIES well_formed?(Γ)(type_(Θ(s)))
-  well_formed_var_type: THEOREM well_formed?(Γ)(Θ) AND x ∈ Θ IMPLIES well_formed?(Γ)(type_(Θ(x)))
-
-  % Corollary
-  well_formed_rest: THEOREM well_formed?(Γ)(Θ) AND nonempty?(Θ) IMPLIES well_formed?(Γ)(rest(Θ))
-
   well_formed_concat: THEOREM
     well_formed?(Γ)(Θ) AND well_formed?(Γ ++ Θ)(Δ) IFF well_formed?(Γ)(Θ ++ Δ)
+  well_formed_rest: THEOREM
+    well_formed?(Γ)(Θ) AND nonempty?(Θ) IMPLIES
+      well_formed?(Γ)(rest(Θ))
 
 END well_formed
