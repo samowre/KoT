@@ -69,7 +69,9 @@ BEGIN
     app_symbol(Γ)(s | s ∈ Γ) HAS_TYPE (kcontext?)
   app_symbol_interp: RECURSIVE JUDGEMENT
     app_symbol(σ)(s | s ∈ σ) HAS_TYPE (kinterp?)
-  %app_symbol_pretheory ? Useless ?
+  %TODO: change ktheory name, cause :: [decl -> bool] is Soooo ugly
+  app_symbol_pretheory: JUDGEMENT
+    app_symbol(Δ: pretheory)(s | s ∈ Δ) HAS_TYPE (ktheory? :: [decl -> bool])
 
   % The same for variables
   app_var(Γ)(x | x ∈ Γ): RECURSIVE (dvar?) =
