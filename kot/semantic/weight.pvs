@@ -1,28 +1,31 @@
 weight: THEORY
 BEGIN
   IMPORTING inductions, ordinals_props
-  IMPORTING subword
+  IMPORTING well_formed
 
   Γ, Δ: VAR well_formed_context
   s: VAR symbol
   i, j: VAR nat
   e: VAR expr
-  S: VAR syntaxic
+  S, U: VAR syntaxic
   
-  w(Γ, (S: well_formed(Γ))): RECURSIVE ordinal =
+  w(Γ, (S | well_formed?(Γ)(S))): RECURSIVE ordinal =
     CASES S OF
-      symbol(s): add(pos(Γ, s) + 1, 1, zero), % ω ^ (pos(Γ, s) + 1)
+      symbol(s):
+        IF s ∈ Γ THEN
+          add(pos(Γ, s) + 1, 1, zero) % ω ^ (pos(Γ, s) + 1)
+	ELSE zero ENDIF,
       dot(m, σ, s):
         IF m ∈ Γ AND kind(Γ(m)) = KTHEORY THEN
           LET Δ = definition(Γ(m)) IN
-	  add(1, w(Γ, σ), zero) + add(pos(Γ, m) + pos(Δ, s) + 1, 1, zero) + 1
+          add(1, w(Γ, σ), zero) + add(pos(Γ, m) + IF s ∈ Δ THEN pos(Δ, s) ELSE 0 ENDIF + 1, 1, zero) + 1
 	ELSE zero ENDIF,
 
       fun(A, B): max(w(Γ, A), w(kvar(A, Γ), B)) + 1,
       prod(A, B): max(w(Γ, A), w(kvar(A, Γ), B)) + 1,
       subtype(T, a): max(w(Γ, T), w(kvar(T, Γ), a)) + 1,
 
-      v(i): ordinal_of_nat(pos(Γ, i) + 1),
+      v(i): IF i ∈ Γ THEN ordinal_of_nat(pos(Γ, i) + 1) ELSE zero ENDIF,
       app(f, a): max(w(Γ, f), w(Γ, a)) + 1,
       lam(T, a): max(w(Γ, T), w(kvar(T, Γ), a)) + 1,
       pair(a, b): max(w(Γ, a), w(Γ, b)) + 1,
@@ -44,7 +47,4 @@ BEGIN
       iconst(s, a, σ): max(w(Γ, a), w(Γ, σ)) + 1
     ENDCASES
   MEASURE w(S)
-
-  w_subword: THEOREM
-    Δ ≺ Γ AND well_formed?(Δ)(e) IMPLIES w(Δ, e) <= w(Γ, e)
 END weight
