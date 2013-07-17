@@ -51,7 +51,7 @@ BEGIN
   app_symbol(M)(s | s ∈ M): RECURSIVE decl =
     COND
       kvar?(M) -> app_symbol(rest(M :: nonempty))(s) ↑ 1,
-      ELSE -> IF s = s(M) THEN decl(M :: nonempty) ELSE app_symbol(rest(M :: nonempty))(s) ↑ 1 ENDIF
+      ELSE -> IF s = s(M) THEN decl(M :: nonempty) ELSE app_symbol(rest(M :: nonempty))(s) ENDIF
     ENDCOND
   MEASURE w(M)
   AUTO_REWRITE+ app_symbol
@@ -68,7 +68,7 @@ BEGIN
   app_var(Γ)(x | x ∈ Γ): RECURSIVE (dvar?) =
     COND
       kvar?(Γ) -> IF x = 0 THEN decl(Γ) ELSE app_var(rest(Γ))(x - 1) ↑ 1 ENDIF,
-      ELSE -> app_var(rest(Γ))(x) ↑ 1
+      ELSE -> app_var(rest(Γ))(x)
     ENDCOND
   MEASURE w(Γ)
   CONVERSION+ app_var
