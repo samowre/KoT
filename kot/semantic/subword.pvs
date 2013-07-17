@@ -82,50 +82,15 @@ BEGIN
   %st_subword_is_well_founded: JUDGEMENT st_subword HAS_TYPE (well_founded?[well_formed_context])
 
 
-  %subword_app_symbol: THEOREM
-  %  s ∈ Γ IMPLIES Γ(s) ≺ Γ
-
+  subword_symbol: THEOREM
+    Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) = Γ(s)
+  subword_var: THEOREM
+    Δ ≺ Γ AND x ∈ Δ IMPLIES Δ(x) = Γ(x)
+  AUTO_REWRITE+ subword_symbol, subword_var
  
-  % We would have liked to say that 
-  %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) = Γ(s), 
-  % but because of the way we represent Δ(s) (as a context, not just the car)
-  % it is false. We instead give these equivalent theorems :
-  %  Δ ≺ Γ AND s ∈ Δ IMPLIES Δ(s) and Γ(s) have same
-  % kind, definition and type. 
 
-  % We first need to write these two lemmas,
-  % because PVS swaps the terms of the conjunction
-  % in the TCC generated, making the expression not
-  % typecheckable.
-  subword_symbol_definition?: LEMMA 
-    Δ ≺ Γ AND s ∈ Δ AND definition?(Δ(s))
-    IMPLIES definition?(Γ(s))
-  subword_symbol_typed?: LEMMA
-    Δ ≺ Γ AND s ∈ Δ AND typed?(Δ(s)) 
-    IMPLIES typed?(Γ(s))
-
-
-  subword_symbol_kind: THEOREM 
-    Δ ≺ Γ AND s ∈ Δ 
-    IMPLIES kind(Δ(s)) = kind(Γ(s))
-  subword_symbol_definition: THEOREM
-    Δ ≺ Γ AND s ∈ Δ AND definition?(Δ(s))
-    IMPLIES definition(Δ(s)) = definition(Γ(s))
-  subword_symbol_type: THEOREM 
-    Δ ≺ Γ AND s ∈ Δ AND typed?(Δ(s)) 
-    IMPLIES type_(Δ(s)) = type_(Γ(s))
-  AUTO_REWRITE+ subword_symbol_kind, subword_symbol_definition, subword_symbol_type
-
-  % Same for variables
-  subword_var_kind: THEOREM
-    Δ ≺ Γ AND x ∈ Δ IMPLIES kind(Δ(x)) = kind(Γ(x))
-  subword_var_type: THEOREM
-    Δ ≺ Γ AND x ∈ Δ IMPLIES type_(Δ(x)) = type_(Γ(x))
-  AUTO_REWRITE+ subword_var_kind, subword_var_type
-  
-  % I don't remember why and where we need it, but we do 
-  % (probably for τ's tccs)
   well_formed_subword: THEOREM 
-    Δ ≺ Γ AND well_formed?(Δ)(e) 
+    Δ ≺ Γ AND well_formed?(Δ)(e) AND 
+    (preterm?(e) OR pretype?(e) OR interp?(e))
     IMPLIES well_formed?(Γ)(e)
 END subword
