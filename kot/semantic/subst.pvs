@@ -22,6 +22,7 @@ BEGIN
     { f | (pretype?(e) => pretype?(f)) AND
           (preterm?(e) => preterm?(f)) AND
 	  (interp?(e)  => interp?(f)) AND
+	  (pretheory?(e) => pretheory?(f)) AND
 	  w(f) = w(e) } =
     CASES e OF
       % Names
@@ -82,7 +83,8 @@ BEGIN
   subst(e, (x: nat), (t: preterm)): RECURSIVE
     { f | (pretype?(e) => pretype?(f)) AND
           (preterm?(e) => preterm?(f)) AND
-	  (interp?(e)  => interp?(f)) } =
+	  (interp?(e)  => interp?(f)) AND
+	  (pretheory?(e) => pretheory?(f)) } =
     CASES e OF
       symbol(s): symbol(s),
       dot(m, σ,s): dot(m, subst(σ, x, t), s),
@@ -116,7 +118,7 @@ BEGIN
       〈〉: 〈〉,
       ktype_decl(s, Γ): ktype_decl(s, subst(Γ, x, t)),
       ktype_def(s, T, Γ): ktype_def(s, subst(T, x, t), subst(Γ, x, t)),
-      ktype_ext(s, Γ): ktype_ext(s, Γ ↑ nb),
+      ktype_ext(s, Γ): ktype_ext(s, subst(Γ, x, t)),
       kconst_decl(s, T, Γ): kconst_decl(s, subst(T, x, t), subst(Γ, x, t)),
       kconst_def(s, T, a, Γ): kconst_def(s, subst(T, x, t), subst(a, x, t), subst(Γ, x, t)),
       kconst_ext(s, T, Γ): kconst_ext(s, subst(T, x, t), subst(Γ, x, t)),
