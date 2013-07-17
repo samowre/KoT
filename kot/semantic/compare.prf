@@ -1,6 +1,8 @@
 (compare (simeq_TCC1 0
           (simeq_TCC1-1 nil 3582057425 ("" (subtype-tcc) nil nil)
-           ((pretype formula-decl nil language nil)
+           ((list2finseq const-decl "finseq[T]" list2finseq nil)
+            (sbool const-decl "symbol" language nil)
+            (pretype formula-decl nil language nil)
             (mu_size application-judgement "{A | size(A) = size(T)}"
              supertype nil))
            nil))
@@ -119,14 +121,20 @@
            nil))
          (simeq_TCC8 0
           (simeq_TCC8-1 nil 3582057425 ("" (subtype-tcc) nil nil)
-           ((boolean nonempty-type-decl nil booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (semantic type-decl nil language nil)
+           ((pretype type-eq-decl nil language nil)
             (pretype? const-decl "[semantic -> bool]" language nil)
-            (pretype type-eq-decl nil language nil)
+            (semantic type-decl nil language nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (boolean nonempty-type-decl nil booleans nil)
             (preterm type-eq-decl nil language nil)
             (preterm? const-decl "[semantic -> bool]" language nil)
+            (list2finseq const-decl "finseq[T]" list2finseq nil)
+            (sequalities const-decl "symbol" language nil)
+            (sT const-decl "symbol" language nil)
+            (sbool const-decl "symbol" language nil)
+            (sequal const-decl "symbol" language nil)
+            (strue const-decl "symbol" language nil)
             (pretype formula-decl nil language nil)
             (interp formula-decl nil language nil)
             (preterm formula-decl nil language nil))
@@ -255,14 +263,20 @@
            nil))
          (simeq_TCC15 0
           (simeq_TCC15-1 nil 3582057425 ("" (subtype-tcc) nil nil)
-           ((boolean nonempty-type-decl nil booleans nil)
-            (bool nonempty-type-eq-decl nil booleans nil)
-            (NOT const-decl "[bool -> bool]" booleans nil)
-            (semantic type-decl nil language nil)
+           ((pretype type-eq-decl nil language nil)
             (pretype? const-decl "[semantic -> bool]" language nil)
-            (pretype type-eq-decl nil language nil)
+            (semantic type-decl nil language nil)
+            (NOT const-decl "[bool -> bool]" booleans nil)
+            (bool nonempty-type-eq-decl nil booleans nil)
+            (boolean nonempty-type-decl nil booleans nil)
             (preterm type-eq-decl nil language nil)
             (preterm? const-decl "[semantic -> bool]" language nil)
+            (list2finseq const-decl "finseq[T]" list2finseq nil)
+            (sequalities const-decl "symbol" language nil)
+            (sT const-decl "symbol" language nil)
+            (sbool const-decl "symbol" language nil)
+            (sequal const-decl "symbol" language nil)
+            (strue const-decl "symbol" language nil)
             (pretype formula-decl nil language nil)
             (interp formula-decl nil language nil)
             (preterm formula-decl nil language nil))
@@ -380,9 +394,11 @@
             (AND const-decl "[bool, bool -> bool]" booleans nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
             (interp? const-decl "[semantic -> bool]" language nil)
+            (pretheory? const-decl "[semantic -> bool]" language nil)
             (subst def-decl "{f |
          (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND (interp?(e) => interp?(f))}"
+          (preterm?(e) => preterm?(f)) AND
+           (interp?(e) => interp?(f)) AND (pretheory?(e) => pretheory?(f))}"
                    subst
               nil)
             (boolean nonempty-type-decl nil booleans nil)
@@ -422,9 +438,11 @@
             nil)
            ((subst def-decl "{f |
          (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND (interp?(e) => interp?(f))}"
+          (preterm?(e) => preterm?(f)) AND
+           (interp?(e) => interp?(f)) AND (pretheory?(e) => pretheory?(f))}"
                    subst
               nil)
+            (pretheory? const-decl "[semantic -> bool]" language nil)
             (interp? const-decl "[semantic -> bool]" language nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
             (AND const-decl "[bool, bool -> bool]" booleans nil)
@@ -480,9 +498,11 @@
             nil)
            ((subst def-decl "{f |
          (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND (interp?(e) => interp?(f))}"
+          (preterm?(e) => preterm?(f)) AND
+           (interp?(e) => interp?(f)) AND (pretheory?(e) => pretheory?(f))}"
                    subst
               nil)
+            (pretheory? const-decl "[semantic -> bool]" language nil)
             (interp? const-decl "[semantic -> bool]" language nil)
             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
             (AND const-decl "[bool, bool -> bool]" booleans nil)

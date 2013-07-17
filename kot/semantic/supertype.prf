@@ -42,9 +42,6 @@
              nil))
            (divide_TCC3 0
             (divide_TCC3-1 nil 3582052817 ("" (subtype-tcc) nil nil)
-             ((expr formula-decl nil language nil)) nil))
-           (divide_TCC4 0
-            (divide_TCC4-1 nil 3582052817 ("" (subtype-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -53,7 +50,19 @@
               (pretype type-eq-decl nil language nil)
               (preterm? const-decl "[semantic -> bool]" language nil)
               (preterm type-eq-decl nil language nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sand const-decl "symbol" language nil)
               (preterm formula-decl nil language nil)
+              (pretype formula-decl nil language nil))
+             nil))
+           (divide_TCC4 0
+            (divide_TCC4-1 nil 3582052817 ("" (subtype-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "[semantic -> bool]" language nil)
+              (pretype type-eq-decl nil language nil)
               (pretype formula-decl nil language nil))
              nil))
            (divide_TCC5 0
@@ -65,6 +74,15 @@
               (semantic type-decl nil language nil)
               (pretype? const-decl "[semantic -> bool]" language nil)
               (pretype type-eq-decl nil language nil)
+              (real_lt_is_strict_total_order name-judgement
+               "(strict_total_order?[real])" real_props nil)
+              (nnint_plus_posint_is_posint application-judgement
+               "posint" integers nil)
+              (nnint_plus_nnint_is_nnint application-judgement
+               "nonneg_int" integers nil)
+              (posint_plus_nnint_is_posint application-judgement
+               "posint" integers nil)
+              (weight def-decl "nat" language nil)
               (pretype formula-decl nil language nil))
              nil))
            (divide_TCC6 0
@@ -75,6 +93,20 @@
               (semantic type-decl nil language nil)
               (pretype? const-decl "[semantic -> bool]" language nil)
               (pretype type-eq-decl nil language nil)
+              (pretype formula-decl nil language nil))
+             nil))
+           (divide_TCC7 0
+            (divide_TCC7-1 nil 3582052817 ("" (subtype-tcc) nil nil)
+             nil nil))
+           (divide_TCC8 0
+            (divide_TCC8-1 nil 3582060608
+             ("" (termination-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "[semantic -> bool]" language nil)
+              (pretype type-eq-decl nil language nil)
               (real_lt_is_strict_total_order name-judgement
                "(strict_total_order?[real])" real_props nil)
               (nnint_plus_posint_is_posint application-judgement
@@ -86,23 +118,9 @@
               (weight def-decl "nat" language nil)
               (pretype formula-decl nil language nil))
              nil))
-           (divide_TCC7 0
-            (divide_TCC7-1 nil 3582052817 ("" (subtype-tcc) nil nil)
-             ((boolean nonempty-type-decl nil booleans nil)
-              (bool nonempty-type-eq-decl nil booleans nil)
-              (NOT const-decl "[bool -> bool]" booleans nil)
-              (semantic type-decl nil language nil)
-              (pretype? const-decl "[semantic -> bool]" language nil)
-              (pretype type-eq-decl nil language nil)
-              (pretype formula-decl nil language nil))
-             nil))
-           (divide_TCC8 0
-            (divide_TCC8-1 nil 3582060608
-             ("" (termination-tcc) nil nil)
-             ((expr formula-decl nil language nil)) nil))
            (divide_TCC9 0
             (divide_TCC9-1 nil 3582060608 ("" (subtype-tcc) nil nil)
-             nil nil))
+             ((pretype formula-decl nil language nil)) nil))
            (divide_TCC10 0
             (divide_TCC10-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
@@ -111,6 +129,17 @@
               (semantic type-decl nil language nil)
               (pretype? const-decl "[semantic -> bool]" language nil)
               (pretype type-eq-decl nil language nil)
+              (pretype formula-decl nil language nil))
+             nil))
+           (divide_TCC11 0
+            (divide_TCC11-1 nil 3582060608
+             ("" (termination-tcc) nil nil)
+             ((boolean nonempty-type-decl nil booleans nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (NOT const-decl "[bool -> bool]" booleans nil)
+              (semantic type-decl nil language nil)
+              (pretype? const-decl "[semantic -> bool]" language nil)
+              (pretype type-eq-decl nil language nil)
               (real_lt_is_strict_total_order name-judgement
                "(strict_total_order?[real])" real_props nil)
               (nnint_plus_posint_is_posint application-judgement
@@ -122,10 +151,6 @@
               (weight def-decl "nat" language nil)
               (pretype formula-decl nil language nil))
              nil))
-           (divide_TCC11 0
-            (divide_TCC11-1 nil 3582060608
-             ("" (termination-tcc) nil nil)
-             ((pretype formula-decl nil language nil)) nil))
            (divide_TCC12 0
             (divide_TCC12-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
@@ -138,23 +163,7 @@
              nil))
            (divide_TCC13 0
             (divide_TCC13-1 nil 3582060608 ("" (subtype-tcc) nil nil)
-             ((boolean nonempty-type-decl nil booleans nil)
-              (bool nonempty-type-eq-decl nil booleans nil)
-              (NOT const-decl "[bool -> bool]" booleans nil)
-              (semantic type-decl nil language nil)
-              (pretype? const-decl "[semantic -> bool]" language nil)
-              (pretype type-eq-decl nil language nil)
-              (real_lt_is_strict_total_order name-judgement
-               "(strict_total_order?[real])" real_props nil)
-              (nnint_plus_posint_is_posint application-judgement
-               "posint" integers nil)
-              (nnint_plus_nnint_is_nnint application-judgement
-               "nonneg_int" integers nil)
-              (posint_plus_nnint_is_posint application-judgement
-               "posint" integers nil)
-              (weight def-decl "nat" language nil)
-              (pretype formula-decl nil language nil))
-             nil))
+             nil nil))
            (divide_TCC14 0
             (divide_TCC14-1 nil 3582060608
              ("" (termination-tcc) nil nil)
@@ -164,23 +173,6 @@
               (semantic type-decl nil language nil)
               (pretype? const-decl "[semantic -> bool]" language nil)
               (pretype type-eq-decl nil language nil)
-              (pretype formula-decl nil language nil))
-             nil))
-           (divide_TCC15 0
-            (divide_TCC15-1 nil 3582060608 ("" (subtype-tcc) nil nil)
-             ((expr formula-decl nil language nil)) nil))
-           (divide_TCC16 0
-            (divide_TCC16-1 nil 3582060608 ("" (cases-tcc) nil nil) nil
-             nil))
-           (divide_TCC17 0
-            (divide_TCC17-1 nil 3582574663
-             ("" (termination-tcc) nil nil)
-             ((boolean nonempty-type-decl nil booleans nil)
-              (bool nonempty-type-eq-decl nil booleans nil)
-              (NOT const-decl "[bool -> bool]" booleans nil)
-              (semantic type-decl nil language nil)
-              (pretype? const-decl "[semantic -> bool]" language nil)
-              (pretype type-eq-decl nil language nil)
               (real_lt_is_strict_total_order name-judgement
                "(strict_total_order?[real])" real_props nil)
               (nnint_plus_posint_is_posint application-judgement
@@ -192,11 +184,11 @@
               (weight def-decl "nat" language nil)
               (pretype formula-decl nil language nil))
              nil))
-           (divide_TCC18 0
-            (divide_TCC18-1 nil 3582574663 ("" (subtype-tcc) nil nil)
+           (divide_TCC15 0
+            (divide_TCC15-1 nil 3582060608 ("" (subtype-tcc) nil nil)
              ((pretype formula-decl nil language nil)) nil))
-           (divide_TCC19 0
-            (divide_TCC19-1 nil 3582574663 ("" (cases-tcc) nil nil)
+           (divide_TCC16 0
+            (divide_TCC16-1 nil 3582060608 ("" (cases-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -240,6 +232,9 @@
               (pretype type-eq-decl nil language nil)
               (preterm? const-decl "[semantic -> bool]" language nil)
               (preterm type-eq-decl nil language nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sand const-decl "symbol" language nil)
               (preterm formula-decl nil language nil)
               (pretype formula-decl nil language nil)
               (size def-decl "nat" subst nil))
@@ -323,10 +318,6 @@
            (mubody_TCC1 0
             (mubody_TCC1-1 nil 3582052817
              ("" (well-founded-tcc) nil nil)
-             ((expr formula-decl nil language nil)) nil))
-           (mubody_TCC2 0
-            (mubody_TCC2-1 nil 3582052817
-             ("" (termination-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -402,36 +393,31 @@
               (preterm formula-decl nil language nil)
               (pretype formula-decl nil language nil))
              nil))
-           (mubody_TCC3 0
-            (mubody_TCC3-1 nil 3582052817 ("" (subtype-tcc) nil nil)
-             ((expr formula-decl nil language nil)) nil))
-           (mubody_TCC4 0
-            (mubody_TCC4-1 nil 3582052817
-             ("" (termination-tcc) nil nil)
-             ((expr formula-decl nil language nil)) nil))
-           (mubody_TCC5 0
-            (mubody_TCC5-1 nil 3582052817
+           (mubody_TCC2 0
+            (mubody_TCC2-1 nil 3582052817
              ("" (termination-tcc) nil nil)
              ((preterm formula-decl nil language nil)) nil))
-           (mubody_TCC6 0
-            (mubody_TCC6-1 nil 3582574663 ("" (subtype-tcc) nil nil)
+           (mubody_TCC3 0
+            (mubody_TCC3-1 nil 3582052817 ("" (subtype-tcc) nil nil)
              ((pretype formula-decl nil language nil)
               (divide_size rec-application-judgement
                "{A | size(A) = size(T)}" supertype nil))
              nil))
-           (mubody_TCC7 0
-            (mubody_TCC7-1 nil 3582574663 ("" (subtype-tcc) nil nil)
-             ((expr formula-decl nil language nil)) nil))
-           (mubody_TCC8 0
-            (mubody_TCC8-1 nil 3582574663 ("" (subtype-tcc) nil nil)
-             nil nil))
-           (mubody_TCC9 0
-            (mubody_TCC9-1 nil 3582574663 ("" (subtype-tcc) nil nil)
+           (mubody_TCC4 0
+            (mubody_TCC4-1 nil 3582052817
+             ("" (termination-tcc) nil nil) nil nil))
+           (mubody_TCC5 0
+            (mubody_TCC5-1 nil 3582052817
+             ("" (termination-tcc) nil nil)
              ((preterm formula-decl nil language nil)) nil))
            (mubody_size_TCC1 0
             (mubody_size_TCC1-1 nil 3582058996
              ("" (recursive-judgement-tcc) nil nil)
-             ((preterm formula-decl nil language nil)) nil))
+             ((length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (strue const-decl "symbol" language nil)
+              (preterm formula-decl nil language nil))
+             nil))
            (mubody_size_TCC2 0
             (mubody_size_TCC2-1 nil 3582058996
              ("" (recursive-judgement-tcc) nil nil)
@@ -447,7 +433,11 @@
            (mubody_size_TCC3 0
             (mubody_size_TCC3-1 nil 3582058996
              ("" (recursive-judgement-tcc) nil nil)
-             ((preterm formula-decl nil language nil)) nil))
+             ((length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (strue const-decl "symbol" language nil)
+              (preterm formula-decl nil language nil))
+             nil))
            (mubody_size_TCC4 0
             (mubody_size_TCC4-1 nil 3582058996
              ("" (recursive-judgement-tcc) nil nil)
@@ -495,6 +485,7 @@
               (interp formula-decl nil language nil)
               (preterm formula-decl nil language nil)
               (pretype formula-decl nil language nil)
+              (pretheory formula-decl nil language nil)
               (expr formula-decl nil language nil))
              nil))
            (mubody_size_TCC6 0
@@ -532,11 +523,14 @@
               (pretype formula-decl nil language nil)
               (shift_size application-judgement
                "{B | size(B) = size(A)}" subst nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sand const-decl "symbol" language nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (preterm formula-decl nil language nil))
              nil))
            (mubody_size_TCC7 0
@@ -642,6 +636,7 @@
               (interp formula-decl nil language nil)
               (preterm formula-decl nil language nil)
               (pretype formula-decl nil language nil)
+              (pretheory formula-decl nil language nil)
               (expr formula-decl nil language nil))
              nil))
            (mubody_size_TCC10 0
@@ -678,11 +673,18 @@
                language nil)
               (shift_size application-judgement
                "{B | size(B) = size(A)}" subst nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sequalities const-decl "symbol" language nil)
+              (sT const-decl "symbol" language nil)
+              (sbool const-decl "symbol" language nil)
+              (sequal const-decl "symbol" language nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
+              (strue const-decl "symbol" language nil)
               (pretype formula-decl nil language nil)
               (interp formula-decl nil language nil)
               (preterm formula-decl nil language nil))
@@ -762,6 +764,7 @@
               (interp formula-decl nil language nil)
               (preterm formula-decl nil language nil)
               (pretype formula-decl nil language nil)
+              (pretheory formula-decl nil language nil)
               (expr formula-decl nil language nil))
              nil))
            (mubody_size_TCC13 0
@@ -800,20 +803,20 @@
               (lam? adt-recognizer-decl "[semantic -> boolean]"
                language nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (preterm formula-decl nil language nil))
              nil))
            (mubody_size_TCC14 0
             (mubody_size_TCC14-1 nil 3582058996
              ("" (recursive-judgement-tcc) nil nil)
              ((↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (pretype formula-decl nil language nil)
               (divide_size rec-application-judgement
                "{A | size(A) = size(T)}" supertype nil))
@@ -853,6 +856,7 @@
               (interp formula-decl nil language nil)
               (preterm formula-decl nil language nil)
               (pretype formula-decl nil language nil)
+              (pretheory formula-decl nil language nil)
               (expr formula-decl nil language nil))
              nil))
            (mubody_size_TCC16 0
@@ -896,14 +900,18 @@
               (pretype formula-decl nil language nil)
               (lam? adt-recognizer-decl "[semantic -> boolean]"
                language nil)
+              (length def-decl "nat" list_props nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (sand const-decl "symbol" language nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (subst def-decl "{f |
          (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND (interp?(e) => interp?(f))}"
+          (preterm?(e) => preterm?(f)) AND
+           (interp?(e) => interp?(f)) AND (pretheory?(e) => pretheory?(f))}"
                      subst
                 nil)
               (preterm formula-decl nil language nil))
@@ -949,10 +957,10 @@
               (lam? adt-recognizer-decl "[semantic -> boolean]"
                language nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (size def-decl "nat" subst nil)
               (posint_plus_nnint_is_posint application-judgement
                "posint" integers nil))
@@ -973,19 +981,11 @@
            (mu_TCC1 0
             (mu_TCC1-1 nil 3582052817 ("" (subtype-tcc) nil nil)
              ((π const-decl "preterm" supertype nil)
-              (interp formula-decl nil language nil)
-              (preterm formula-decl nil language nil)
-              (pretype formula-decl nil language nil)
-              (expr formula-decl nil language nil))
-             nil))
-           (mu_TCC2 0
-            (mu_TCC2-1 nil 3582574663 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (preterm formula-decl nil language nil)
               (shift_size application-judgement
                "{B | size(B) = size(A)}" subst nil))
@@ -1141,15 +1141,21 @@
               (OR const-decl "[bool, bool -> bool]" booleans nil)
               (symbol adt-constructor-decl "[symbol -> (symbol?)]"
                language nil)
-              (symbol nonempty-type-decl nil language nil)
+              (symbol nonempty-type-eq-decl nil language nil)
+              (char type-eq-decl nil strings nil)
+              (char? adt-recognizer-decl "[character -> boolean]"
+               character_adt nil)
+              (character type-decl nil character_adt nil)
+              (below type-eq-decl nil nat_types nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
               (divide_size rec-application-judgement
                "{A | size(A) = size(T)}" supertype nil)
               (pretype formula-decl nil language nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (shift_size application-judgement
                "{B | size(B) = size(A)}" subst nil)
               (mubody def-decl "[pretype, preterm]" supertype nil)
@@ -1167,7 +1173,16 @@
              shostak))
            (pi_TCC1 0
             (pi_TCC1-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((preterm formula-decl nil language nil)) nil))
+             ((π const-decl "preterm" supertype nil)
+              (↑ def-decl "{f |
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
+              (preterm formula-decl nil language nil)
+              (shift_size application-judgement
+               "{B | size(B) = size(A)}" subst nil))
+             nil))
            (pi_TCC2 0
             (pi_TCC2-1 nil 3582054499 ("" (subtype-tcc) nil nil)
              ((preterm formula-decl nil language nil)) nil))
@@ -1176,9 +1191,24 @@
              ((preterm formula-decl nil language nil)) nil))
            (pi_TCC4 0
             (pi_TCC4-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((μ const-decl "pretype" supertype nil)) nil))
+             ((preterm formula-decl nil language nil)) nil))
            (pi_TCC5 0
             (pi_TCC5-1 nil 3582054499 ("" (subtype-tcc) nil nil)
+             ((π const-decl "preterm" supertype nil)
+              (↑ def-decl "{f |
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
+              (preterm formula-decl nil language nil)
+              (shift_size application-judgement
+               "{B | size(B) = size(A)}" subst nil))
+             nil))
+           (pi_TCC6 0
+            (pi_TCC6-1 nil 3582054499 ("" (subtype-tcc) nil nil)
+             ((μ const-decl "pretype" supertype nil)) nil))
+           (pi_TCC7 0
+            (pi_TCC7-1 nil 3582054499 ("" (subtype-tcc) nil nil)
              ((boolean nonempty-type-decl nil booleans nil)
               (bool nonempty-type-eq-decl nil booleans nil)
               (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1188,59 +1218,48 @@
               (μ const-decl "pretype" supertype nil)
               (pretype formula-decl nil language nil))
              nil))
-           (pi_TCC6 0
-            (pi_TCC6-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((preterm formula-decl nil language nil)) nil))
-           (pi_TCC7 0
-            (pi_TCC7-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)
-              (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil))
-             nil))
            (pi_TCC8 0
             (pi_TCC8-1 nil 3582054499 ("" (subtype-tcc) nil nil)
-             ((preterm formula-decl nil language nil)) nil))
+             ((π const-decl "preterm" supertype nil)
+              (↑ def-decl "{f |
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
+              (preterm formula-decl nil language nil)
+              (shift_size application-judgement
+               "{B | size(B) = size(A)}" subst nil))
+             nil))
            (pi_TCC9 0
             (pi_TCC9-1 nil 3582054499 ("" (subtype-tcc) nil nil)
              ((preterm formula-decl nil language nil)) nil))
            (pi_TCC10 0
             (pi_TCC10-1 nil 3582054499 ("" (subtype-tcc) nil nil)
              ((π const-decl "preterm" supertype nil)
-              (interp formula-decl nil language nil)
-              (preterm formula-decl nil language nil)
-              (pretype formula-decl nil language nil)
-              (expr formula-decl nil language nil))
+              (↑ def-decl "{f |
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil))
              nil))
            (pi_TCC11 0
             (pi_TCC11-1 nil 3582574663 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)
-              (interp formula-decl nil language nil)
-              (preterm formula-decl nil language nil)
-              (pretype formula-decl nil language nil)
-              (expr formula-decl nil language nil))
-             nil))
+             ((preterm formula-decl nil language nil)) nil))
            (pi_TCC12 0
             (pi_TCC12-1 nil 3582574663 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)
-              (interp formula-decl nil language nil)
-              (preterm formula-decl nil language nil)
-              (pretype formula-decl nil language nil)
-              (expr formula-decl nil language nil))
-             nil))
+             ((preterm formula-decl nil language nil)) nil))
            (pi_TCC13 0
             (pi_TCC13-1 nil 3582574663 ("" (subtype-tcc) nil nil)
              ((π const-decl "preterm" supertype nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (interp formula-decl nil language nil)
               (preterm formula-decl nil language nil)
               (pretype formula-decl nil language nil)
+              (pretheory formula-decl nil language nil)
               (expr formula-decl nil language nil)
               (shift_size application-judgement
                "{B | size(B) = size(A)}" subst nil))
@@ -1435,10 +1454,10 @@
               (shift_size application-judgement
                "{B | size(B) = size(A)}" subst nil)
               (↑ def-decl "{f |
-         (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-           (interp?(e) => interp?(f)) AND weight(F)(f) = weight(F)(e)}"
-               subst nil)
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
               (supertype adt-accessor-decl "[(subtype?) -> semantic]"
                          language nil)
               (subtype? adt-recognizer-decl "[semantic -> boolean]"
@@ -1464,9 +1483,20 @@
                       nil)
               (semantic_dot_extensionality formula-decl nil language
                nil)
+              (strue const-decl "symbol" language nil)
+              (list2finseq const-decl "finseq[T]" list2finseq nil)
+              (length def-decl "nat" list_props nil)
+              (nnint_plus_posint_is_posint application-judgement
+               "posint" integers nil)
               (lam adt-constructor-decl
                    "[[semantic, semantic] -> (lam?)]" language nil)
-              (symbol nonempty-type-decl nil language nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (below type-eq-decl nil nat_types nil)
+              (character type-decl nil character_adt nil)
+              (char? adt-recognizer-decl "[character -> boolean]"
+               character_adt nil)
+              (char type-eq-decl nil strings nil)
+              (symbol nonempty-type-eq-decl nil language nil)
               (symbol? adt-recognizer-decl "[semantic -> boolean]"
                language nil)
               (symbol adt-constructor-decl "[symbol -> (symbol?)]"
@@ -1496,7 +1526,33 @@
            OR ktype_ext?(x) OR kconst_decl?(x) OR kconst_def?(x)
            OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
    symbol]" language nil)
-              (strue const-decl "symbol" language nil)
+              (number nonempty-type-decl nil numbers nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (>= const-decl "bool" reals nil)
+              (< const-decl "bool" reals nil)
+              (list type-decl nil list_adt nil)
+              (cons? adt-recognizer-decl "[list -> boolean]" list_adt
+               nil)
+              (cons adt-constructor-decl "[[T, list] -> (cons?)]"
+                    list_adt nil)
+              (char adt-constructor-decl "[below[256] -> (char?)]"
+                    character_adt nil)
+              (null? adt-recognizer-decl "[list -> boolean]" list_adt
+               nil)
+              (null adt-constructor-decl "(null?)" list_adt nil)
+              (nth def-decl "T" list_props nil)
               (semantic_lam_extensionality formula-decl nil language
                nil)
               (lam? adt-recognizer-decl "[semantic -> boolean]"
@@ -1515,10 +1571,5 @@
               (semantic type-decl nil language nil)
               (pretype? const-decl "[semantic -> bool]" language nil)
               (pretype type-eq-decl nil language nil))
-             shostak))
-           (π_TCC1 0
-            (π_TCC1-1 nil 3582574663 ("" (subtype-tcc) nil nil)
-             ((π const-decl "preterm" supertype nil)
-              (preterm formula-decl nil language nil))
-             nil)))
+             shostak)))
 
