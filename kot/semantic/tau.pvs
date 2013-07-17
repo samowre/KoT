@@ -4,12 +4,38 @@ BEGIN
   IMPORTING compare
   IMPORTING definitions
 
-  % TCC4: need well_formed(Γ)(Θ) => well_formed(Γ)(Θ(s))
-  % TCC5: need δ
-  % TCC10: need weight
-  % TCC12: just need the theorem: well_formed(_)(interp(Δ)(σ) IMPLIES well_formed(_)(σ)
-  % TCC14: need η
-  % TCC15: need η
+  % TCC4: well_formed(Γ)(Θ) AND s ∈ Θ IMPLIES well_formed(Γ)(Θ(s))
+  % TCC5: δ(Θ)(T: pretype) HAS_TYPE pretype
+  % 	  type_(_) HAS_TYPE pretype
+  % TCC10: w(Θ, interp(Δ, σ)) < w(Θ, dot(m, σ, s)
+  % 	   where Δ = defintion(Θ(m))
+  % TCC12: well_formed(Θ)(interp(Δ)(σ) IMPLIES well_formed(Θ)(σ)
+  % TCC14: inst th TCC4 with Γ = Θ ++ definition(Θ)(m)
+  % 	   therefore we need : well_formed()(Θ ++ definition(Θ)(m)
+  % TCC16: η(T: pretype) HAS_TYPE pretype
+  % 	   well_formed?(Δ)(e) AND well_formed?(Θ)(Δ) AND Δ is a theory
+  %	   IMPLIES well_formed?(Θ)(η(Θ, ..)(e))
+  % TCC17: subsumed
+  % TCC18: well_formed?(Θ)(interp(Δ, σ)) IMPLIES well_formed?(Θ)(σ)
+  % TCC24: w(kvar(A, Θ), B) < w(Θ, fun(A, B)) 
+  % TCC28: w(Θ, A) < w(Θ, fun(A,B))
+  % TCC30: subsumed by TCC24
+  % TCC34: w(Θ, A) < w(Θ, prod(A,B))
+  % TCC36: w(kvar(A, Θ), B) < w(Θ, prod(A, B)) 
+  % TCC41: w(Θ, T) < w(Θ, subtype(T, a))
+  % TCC43: well_formed(Γ)(Θ) AND x ∈ Θ IMPLIES well_formed(Γ)(Θ(x))
+  % 	   (= TCC4 for vars instead of symbols)
+  % TCC44: subsumed by TCC5
+  % TCC47: w on app (right)
+  % TCC56: w on app (left)
+  % TCC58: w on lam (right)
+  % TCC63: w on lam (left)
+  % TCC64: w on pair (right)
+  % TCC69: w on pair (left)
+  % TCC74: w on lproj
+  % TCC81: w on rproj
+  % TCC86: w on ktype_decl
+
 
   % Variable declaration
   Γ, Δ, Θ: VAR well_formed_context
