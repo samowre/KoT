@@ -12,6 +12,8 @@ BEGIN
   S: VAR syntaxic
   Th: VAR pretheory
   e: VAR expr
+  d: VAR decl
+  i, j, k, l: VAR nat
 
 
   % Checks that a syntaxic is well formed in a given context, 
@@ -82,12 +84,36 @@ BEGIN
   well_formed(Γ): TYPE = (well_formed?(Γ))
   well_formed_context: TYPE = { Γ | well_formed?(〈〉)(Γ) }
 
+  ;==(Γ, Δ): bool = FORALL S: well_formed?(Γ)(S) IFF well_formed?(Δ)(S)
+
+  well_formed_decl?(Γ)(d): bool =
+    CASES d OF
+      dtype_decl: TRUE,
+      dtype_def(T): well_formed?(Γ)(T),
+      dvar(T): well_formed?(Γ)(T),
+      dconst_decl(T): well_formed?(Γ)(T),
+      dconst_def(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
+      dtheory(Θ): well_formed?(Γ)(Θ),
+      dtype_interp(T): well_formed?(Γ)(T),
+      dconst_interp(a): well_formed?(Γ)(a)
+    ENDCASES
+
   well_formed_concat: THEOREM
     well_formed?(Γ)(Θ) AND well_formed?(Γ ++ Θ)(Δ) IFF well_formed?(Γ)(Θ ++ Δ)
-  well_formed_rest: THEOREM
+  well_formed__rest: THEOREM
     well_formed?(Γ)(Θ) AND nonempty?(Θ) IMPLIES
       well_formed?(Γ)(rest(Θ))
   apply_symbol_concat: THEOREM
     s ∈ Γ AND well_formed?(Γ)(Θ) IMPLIES
       (Γ ++ Θ)(s) = Γ(s) ↑ vars(Θ)
+  % swap_kvar: THEOREM
+  %   well_formed?(kvar(A ↑ 1, kvar(B, Γ)))(e ↑ 1) IMPLIES
+  %     well_formed?(kvar(B ↑ 1, kvar(A, Γ)))(e ↑ (1, 1))
+  % well_formed_kvar: THEOREM
+  %   j <= vars(Γ) IMPLIES
+  %     (well_formed?(Γ)(e ↑ (i, j)) IFF well_formed?(kvar(T, Γ))(e ↑ (i + 1, j)))
+  well_formed_rest: THEOREM FORALL (Γ: well_formed_context):
+    nonempty?(Γ) AND well_formed?(rest(Γ))(e) IMPLIES well_formed?(Γ)(e)
+  well_formed_app_symbol: RECURSIVE JUDGEMENT
+    app_symbol(Γ: well_formed_context)(s | s ∈ Γ) HAS_TYPE (well_formed_decl?(Γ))
 END well_formed
