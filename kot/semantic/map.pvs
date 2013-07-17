@@ -4,7 +4,8 @@ BEGIN
   IMPORTING decl
 
   S: VAR syntaxic
-  Γ, Δ, Θ: VAR context
+  Γ, Δ: VAR context
+  Θ: VAR pretheory
   A, B, T: VAR pretype
   r, s: VAR symbol
   n, m: VAR name
@@ -13,6 +14,7 @@ BEGIN
   σ, τ: VAR interp
   d: VAR decl
   M: VAR map
+  i, j: VAR nat
 
   % Check if a symbol is defined in a map (= context, theory or interpretation)
   % i.e if there is a declaration (def or decl) of this symbol (as a type, term, theory)
@@ -77,4 +79,7 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
   CONVERSION+ app_var
+
+  shift_member: THEOREM
+    s ∈ Θ IMPLIES s ∈ (Θ ↑ (i, j))
 END map

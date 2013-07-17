@@ -78,7 +78,6 @@ BEGIN
   definition?(d: decl): bool =
     dtype_def?(d) OR dconst_def?(d) OR dtheory?(d) OR dtype_interp?(d) OR dconst_interp?(d)
   definition: TYPE = (definition?)
-  AUTO_REWRITE+ definition?
   
   % Function definition as informally defined at the begining of section 2.5
   % Meant to be used as definition(Γ(s)), to give the definition of the symbol s

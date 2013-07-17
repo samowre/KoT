@@ -3,7 +3,8 @@ BEGIN
   IMPORTING well_formed
 
   S: VAR syntaxic
-  Γ, Δ, Θ: VAR well_formed_context
+  Γ, Δ: VAR well_formed_context
+  Θ: VAR context
   A, B, T: VAR pretype
   r, s: VAR symbol
   n, m: VAR name
@@ -62,7 +63,6 @@ BEGIN
   MEASURE w(Γ)
   AUTO_REWRITE ≺
 
-
   member_symbol_when_subword: THEOREM
     Δ ≺ Γ AND s ∈ Δ IMPLIES s ∈ Γ
   member_var_when_subword: THEOREM
@@ -93,4 +93,11 @@ BEGIN
     Δ ≺ Γ AND well_formed?(Δ)(e) AND 
     (preterm?(e) OR pretype?(e) OR interp?(e))
     IMPLIES well_formed?(Γ)(e)
+
+  subword_concat: THEOREM
+      well_formed?(Γ)(Θ) AND vars(Θ) = 0 IMPLIES
+        Γ ≺ (Γ ++ Θ)
+  both_sides_concat_subword: THEOREM
+    well_formed?(Δ)(Θ) AND well_formed?(Γ)(Θ) AND Δ ≺ Γ IMPLIES
+      Δ ++ Θ ≺ Γ ++ Θ
 END subword
