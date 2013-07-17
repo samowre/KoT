@@ -85,5 +85,7 @@ BEGIN
   well_formed_rest: THEOREM
     well_formed?(Γ)(Θ) AND nonempty?(Θ) IMPLIES
       well_formed?(Γ)(rest(Θ))
-
+  apply_symbol_concat: THEOREM
+    s ∈ Γ AND well_formed?(Γ)(Θ) IMPLIES
+      (Γ ++ Θ)(s) = Γ(s) ↑ vars(Θ)
 END well_formed

@@ -33,19 +33,19 @@ BEGIN
         (FORALL (s: symbol,  Δ: context):
           p(Δ) IMPLIES p(ktype_decl(s, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  Δ: context):
-          p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
+          p(T) AND p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
         (FORALL (s: symbol,  Δ: context):
           p(Δ) IMPLIES p(ktype_ext(s, Δ))) AND
         (FORALL (T: pretype,  Δ: context):
-          p(Δ) IMPLIES p(kvar(T, Δ))) AND
+          p(T) AND p(Δ) IMPLIES p(kvar(T, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  Δ: context):
-          p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
+          p(T) AND p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  a: preterm,  Δ: context):
-          p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
+          p(T) AND p(a) AND p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  Δ: context):
-          p(Δ) IMPLIES p(kconst_ext(s, T, Δ))) AND
+          p(T) AND p(Δ) IMPLIES p(kconst_ext(s, T, Δ))) AND
         (FORALL (s: symbol,  Θ: pretheory,  Δ: context):
-          p(Δ) IMPLIES p(ktheory(s, Θ, Δ))))
+          p(Θ) AND p(Δ) IMPLIES p(ktheory(s, Θ, Δ))))
 	IMPLIES
 	  (FORALL (x: syntaxic): p(x))
 
@@ -107,15 +107,15 @@ BEGIN
         (FORALL (s: symbol,  Δ: pretheory):
           p(Δ) IMPLIES p(ktype_decl(s, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  Δ: pretheory):
-          p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
+          p(T) AND p(Δ) IMPLIES p(ktype_def(s, T, Δ))) AND
         (FORALL (s: symbol,  Δ: pretheory):
           p(Δ) IMPLIES p(ktype_ext(s, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  Δ: pretheory):
-          p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
+          p(T) AND p(Δ) IMPLIES p(kconst_decl(s, T, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  a: preterm,  Δ: pretheory):
-          p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
+          p(T) AND p(a) AND p(Δ) IMPLIES p(kconst_def(s, T, a, Δ))) AND
         (FORALL (s: symbol,  T: pretype,  Δ: pretheory):
-          p(Δ) IMPLIES p(kconst_ext(s, T, Δ))))
+          p(T) AND p(Δ) IMPLIES p(kconst_ext(s, T, Δ))))
         IMPLIES
           (FORALL (x: expr): p(x))
 

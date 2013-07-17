@@ -1579,11 +1579,9 @@
             (posint_plus_nnint_is_posint application-judgement "posint"
              integers nil)
             (weight def-decl "nat" language nil)
-            (rest shared-adt-accessor-decl "[{x: semantic |
-              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
-           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
-           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
-   semantic]" language nil)
+            (rest shared-adt-accessor-decl
+                  "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
+                  language nil)
             (iconst? adt-recognizer-decl "[semantic -> boolean]"
              language nil)
             (itype? adt-recognizer-decl "[semantic -> boolean]"
