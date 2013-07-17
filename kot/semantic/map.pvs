@@ -56,13 +56,18 @@ BEGIN
   MEASURE w(M)
   AUTO_REWRITE+ app_symbol
   CONVERSION+ app_symbol
-  app_symbol_interp: RECURSIVE JUDGEMENT
-    app_symbol(σ)(s | s ∈ σ) HAS_TYPE definition
+  %app_symbol_interp: RECURSIVE JUDGEMENT
+  %  app_symbol(σ)(s | s ∈ σ) HAS_TYPE definition
   kvar_app_symbol: LEMMA s ∈ Γ IMPLIES NOT KVAR?(kind(Γ(s)))
   AUTO_REWRITE+ kvar_app_symbol
 
-  app_symbol_is_definition: JUDGEMENT 
-    app_symbol(σ | nonempty?(σ))(s | s ∈ σ) HAS_TYPE definition
+  app_symbol_is_definition: RECURSIVE JUDGEMENT 
+    app_symbol(σ)(s | s ∈ σ) HAS_TYPE definition
+  app_symbol_context: RECURSIVE JUDGEMENT
+    app_symbol(Γ)(s | s ∈ Γ) HAS_TYPE (kcontext?)
+  app_symbol_interp: RECURSIVE JUDGEMENT
+    app_symbol(σ)(s | s ∈ σ) HAS_TYPE (kinterp?)
+  %app_symbol_pretheory ? Useless ?
 
   % The same for variables
   app_var(Γ)(x | x ∈ Γ): RECURSIVE (dvar?) =
