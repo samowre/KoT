@@ -142,7 +142,7 @@
           (("" (rewrite "map_as_nonempty") (("" (smash) nil nil)) nil))
           nil))
         nil)
-       (nil (map_as_nonempty formula-decl nil subtype nil)
+       ((map_as_nonempty formula-decl nil subtype nil)
         (boolean nonempty-type-decl nil booleans nil)
         (bool nonempty-type-eq-decl nil booleans nil)
         (NOT const-decl "[bool -> bool]" booleans nil)
@@ -324,7 +324,6 @@
         (boolean nonempty-type-decl nil booleans nil)
         (real_lt_is_strict_total_order name-judgement
          "(strict_total_order?[real])" real_props nil)
-        nil
         (nonempty_context? const-decl "[semantic -> bool]" language
          nil)
         (nonempty_context type-eq-decl nil language nil)
@@ -359,7 +358,7 @@
         (("" (rewrite "context_as_nonempty") (("" (smash) nil nil))
           nil))
         nil)
-       ((context_as_nonempty formula-decl nil subtype nil) nil
+       ((context_as_nonempty formula-decl nil subtype nil)
         (real_ge_is_total_order name-judgement "(total_order?[real])"
          real_props nil)
         (boolean nonempty-type-decl nil booleans nil)
@@ -414,7 +413,7 @@
         (pretype? const-decl "[semantic -> bool]" language nil)
         (pretype type-eq-decl nil language nil)
         (NOT const-decl "[bool -> bool]" booleans nil)
-        (context_induction formula-decl nil inductions nil) nil
+        (context_induction formula-decl nil inductions nil)
         (<= const-decl "bool" reals nil)
         (AND const-decl "[bool, bool -> bool]" booleans nil)
         (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
@@ -450,7 +449,7 @@
         (char? adt-recognizer-decl "[character -> boolean]"
          character_adt nil)
         (char type-eq-decl nil strings nil)
-        (symbol nonempty-type-eq-decl nil language nil) nil
+        (symbol nonempty-type-eq-decl nil language nil)
         (map formula-decl nil language nil))
        nil))
      (app_symbol_TCC2 0
@@ -482,7 +481,7 @@
         (char? adt-recognizer-decl "[character -> boolean]"
          character_adt nil)
         (char type-eq-decl nil strings nil)
-        (symbol nonempty-type-eq-decl nil language nil) nil)
+        (symbol nonempty-type-eq-decl nil language nil))
        nil))
      (app_symbol_TCC3 0
       (app_symbol_TCC3-1 nil 3582305991
@@ -500,7 +499,7 @@
         (char? adt-recognizer-decl "[character -> boolean]"
          character_adt nil)
         (char type-eq-decl nil strings nil)
-        (symbol nonempty-type-eq-decl nil language nil) nil)
+        (symbol nonempty-type-eq-decl nil language nil))
        nil))
      (kvar_app_symbol 0
       (kvar_app_symbol-1 nil 3582991711
@@ -533,7 +532,7 @@
         (decl type-decl nil decl nil)
         (KVAR? adt-recognizer-decl "[keyword -> boolean]" language nil)
         (keyword type-decl nil language nil)
-        (NOT const-decl "[bool -> bool]" booleans nil) nil
+        (NOT const-decl "[bool -> bool]" booleans nil)
         (map type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
         (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
@@ -567,7 +566,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (interp formula-decl nil language nil))
        nil))
      (app_symbol_is_definition_TCC2 0
@@ -575,7 +574,7 @@
        ("" (recursive-judgement-tcc) nil nil)
        ((interp formula-decl nil language nil)
         (nonempty formula-decl nil language nil)
-        (context formula-decl nil language nil) nil
+        (context formula-decl nil language nil)
         (map type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
         (symbol nonempty-type-eq-decl nil language nil)
@@ -595,7 +594,7 @@
      (app_symbol_is_definition_TCC3 0
       (app_symbol_is_definition_TCC3-1 nil 3583061829
        ("" (recursive-judgement-tcc) nil nil)
-       (nil (map type-eq-decl nil language nil)
+       ((map type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (char type-eq-decl nil strings nil)
@@ -614,7 +613,7 @@
      (app_symbol_is_definition_TCC4 0
       (app_symbol_is_definition_TCC4-1 nil 3583061829
        ("" (recursive-judgement-tcc) nil nil)
-       ((interp formula-decl nil language nil) nil
+       ((interp formula-decl nil language nil)
         (map type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
         (symbol nonempty-type-eq-decl nil language nil)
@@ -636,9 +635,11 @@
        ("" (recursive-judgement-tcc) nil nil)
        ((definition? const-decl "bool" decl nil)
         (↑ const-decl "decl" subst nil)
-        (rest shared-adt-accessor-decl
-              "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
-              language nil)
+        (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
         (iconst? adt-recognizer-decl "[semantic -> boolean]" language
          nil)
         (itype? adt-recognizer-decl "[semantic -> boolean]" language
@@ -662,7 +663,7 @@
         (OR const-decl "[bool, bool -> bool]" booleans nil)
         (interp formula-decl nil language nil)
         (definition type-eq-decl nil decl nil)
-        (decl type-decl nil decl nil) nil
+        (decl type-decl nil decl nil)
         (map type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
         (symbol nonempty-type-eq-decl nil language nil)
@@ -698,16 +699,18 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil)
+        (map type-eq-decl nil language nil))
        nil))
      (app_symbol_is_definition_TCC7 0
       (app_symbol_is_definition_TCC7-1 nil 3583061829
        ("" (grind)
         (("" (use "member_nonempty") (("" (assert) nil nil)) nil)) nil)
        ((member_nonempty formula-decl nil map nil)
-        (s shared-adt-accessor-decl
-         "[{x: semantic |     symbol?(x) OR dot?(x) OR ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> symbol]"
-         language nil)
+        (s shared-adt-accessor-decl "[{x: semantic |
+              symbol?(x) OR dot?(x) OR ktype_decl?(x) OR ktype_def?(x)
+           OR ktype_ext?(x) OR kconst_decl?(x) OR kconst_def?(x)
+           OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   symbol]" language nil)
         (iconst? adt-recognizer-decl "[semantic -> boolean]" language
          nil)
         (itype? adt-recognizer-decl "[semantic -> boolean]" language
@@ -744,7 +747,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil)
+        (map type-eq-decl nil language nil))
        nil))
      (app_symbol_is_definition_TCC8 0
       (app_symbol_is_definition_TCC8-1 nil 3583061829
@@ -763,7 +766,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (interp formula-decl nil language nil)
         (decl const-decl "decl" decl nil)
         (definition? const-decl "bool" decl nil))
@@ -788,7 +791,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (context formula-decl nil language nil))
        nil))
      (app_symbol_context_TCC2 0
@@ -808,7 +811,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (nonempty formula-decl nil language nil))
        nil))
      (app_symbol_context_TCC3 0
@@ -828,7 +831,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil)
+        (map type-eq-decl nil language nil))
        nil))
      (app_symbol_context_TCC4 0
       (app_symbol_context_TCC4-1 nil 3583061829
@@ -847,7 +850,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (context formula-decl nil language nil))
        nil))
      (app_symbol_context_TCC5 0
@@ -867,7 +870,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (decl type-decl nil decl nil)
         (context formula-decl nil language nil)
         (OR const-decl "[bool, bool -> bool]" booleans nil)
@@ -891,9 +894,11 @@
          nil)
         (iconst? adt-recognizer-decl "[semantic -> boolean]" language
          nil)
-        (rest shared-adt-accessor-decl
-              "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
-              language nil)
+        (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
         (↑ const-decl "decl" subst nil)
         (kcontext? const-decl "bool" decl nil))
        nil))
@@ -916,7 +921,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil)
+        (map type-eq-decl nil language nil))
        nil))
      (app_symbol_context_TCC7 0
       (app_symbol_context_TCC7-1 nil 3583061829
@@ -946,9 +951,11 @@
          nil)
         (iconst? adt-recognizer-decl "[semantic -> boolean]" language
          nil)
-        (s shared-adt-accessor-decl
-         "[{x: semantic |     symbol?(x) OR dot?(x) OR ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> symbol]"
-         language nil)
+        (s shared-adt-accessor-decl "[{x: semantic |
+              symbol?(x) OR dot?(x) OR ktype_decl?(x) OR ktype_def?(x)
+           OR ktype_ext?(x) OR kconst_decl?(x) OR kconst_def?(x)
+           OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   symbol]" language nil)
         (member_nonempty formula-decl nil map nil)
         (boolean nonempty-type-decl nil booleans nil)
         (bool nonempty-type-eq-decl nil booleans nil)
@@ -964,7 +971,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil)
+        (map type-eq-decl nil language nil))
        nil))
      (app_symbol_context_TCC8 0
       (app_symbol_context_TCC8-1 nil 3583061829
@@ -985,7 +992,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (kcontext? const-decl "bool" decl nil)
         (decl const-decl "decl" decl nil))
        nil))
@@ -1009,7 +1016,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (decl type-decl nil decl nil)
         (interp formula-decl nil language nil)
         (OR const-decl "[bool, bool -> bool]" booleans nil)
@@ -1033,9 +1040,11 @@
          nil)
         (iconst? adt-recognizer-decl "[semantic -> boolean]" language
          nil)
-        (rest shared-adt-accessor-decl
-              "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
-              language nil)
+        (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
         (↑ const-decl "decl" subst nil)
         (kinterp? const-decl "bool" decl nil))
        nil))
@@ -1056,7 +1065,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) nil
+        (map type-eq-decl nil language nil)
         (interp formula-decl nil language nil)
         (decl const-decl "decl" decl nil)
         (kinterp? const-decl "bool" decl nil))
@@ -1064,6 +1073,77 @@
      (app_symbol_interp 0
       (app_symbol_interp-1 nil 3583061546 ("" (judgement-tcc) nil nil)
        nil nil))
+     (app_symbol_pretheory 0
+      (app_symbol_pretheory-1 nil 3583071510
+       ("" (induct Δ :name "context_induction")
+        (("1" (grind) nil nil) ("2" (grind) nil nil)
+         ("3" (grind) nil nil) ("4" (grind) nil nil)
+         ("5" (grind) nil nil) ("6" (grind) nil nil)
+         ("7" (grind) nil nil) ("8" (grind) nil nil)
+         ("9" (grind) nil nil) ("10" (grind) nil nil))
+        nil)
+       ((kconst_ext adt-constructor-decl
+         "[[symbol, semantic, semantic] -> (kconst_ext?)]" language
+         nil)
+        (kconst_ext? adt-recognizer-decl "[semantic -> boolean]"
+         language nil)
+        (kconst_def adt-constructor-decl
+         "[[symbol, semantic, semantic, semantic] -> (kconst_def?)]"
+         language nil)
+        (kconst_def? adt-recognizer-decl "[semantic -> boolean]"
+         language nil)
+        (preterm? const-decl "[semantic -> bool]" language nil)
+        (preterm type-eq-decl nil language nil)
+        (kconst_decl adt-constructor-decl
+         "[[symbol, semantic, semantic] -> (kconst_decl?)]" language
+         nil)
+        (kconst_decl? adt-recognizer-decl "[semantic -> boolean]"
+         language nil)
+        (↑ const-decl "decl" subst nil)
+        (ktype_ext adt-constructor-decl
+         "[[symbol, semantic] -> (ktype_ext?)]" language nil)
+        (ktype_ext? adt-recognizer-decl "[semantic -> boolean]"
+         language nil)
+        (ktype_def adt-constructor-decl
+         "[[symbol, semantic, semantic] -> (ktype_def?)]" language nil)
+        (ktype_def? adt-recognizer-decl "[semantic -> boolean]"
+         language nil)
+        (pretype? const-decl "[semantic -> bool]" language nil)
+        (pretype type-eq-decl nil language nil)
+        (app_symbol_context rec-application-judgement "(kcontext?)" map
+         nil)
+        (ktype_decl adt-constructor-decl
+         "[[symbol, semantic] -> (ktype_decl?)]" language nil)
+        (ktype_decl? adt-recognizer-decl "[semantic -> boolean]"
+         language nil)
+        (〈〉 adt-constructor-decl "(empty?)" language nil)
+        (empty? adt-recognizer-decl "[semantic -> boolean]" language
+         nil)
+        (NOT const-decl "[bool -> bool]" booleans nil)
+        (decl const-decl "decl" decl nil)
+        (pretheory formula-decl nil language nil)
+        (pretheory type-eq-decl nil language nil)
+        (context_induction formula-decl nil inductions nil)
+        (app_symbol def-decl "decl" map nil)
+        (ktheory? const-decl "bool" decl nil)
+        (decl type-decl nil decl nil) (∈ def-decl "bool" map nil)
+        (map type-eq-decl nil language nil)
+        (map? const-decl "[semantic -> bool]" language nil)
+        (symbol nonempty-type-eq-decl nil language nil)
+        (char type-eq-decl nil strings nil)
+        (char? adt-recognizer-decl "[character -> boolean]"
+         character_adt nil)
+        (character type-decl nil character_adt nil)
+        (below type-eq-decl nil nat_types nil)
+        (nat nonempty-type-eq-decl nil naturalnumbers nil)
+        (pretheory? const-decl "[semantic -> bool]" language nil)
+        (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+        (context type-eq-decl nil language nil)
+        (context? const-decl "[semantic -> bool]" language nil)
+        (bool nonempty-type-eq-decl nil booleans nil)
+        (boolean nonempty-type-decl nil booleans nil)
+        (semantic type-decl nil language nil))
+       nil))
      (app_var_TCC1 0
       (app_var_TCC1-1 nil 3582305991 ("" (subtype-tcc) nil nil)
        ((boolean nonempty-type-decl nil booleans nil)
@@ -1083,7 +1163,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil
+        (nat nonempty-type-eq-decl nil naturalnumbers nil)
         (nonempty formula-decl nil language nil))
        nil))
      (app_var_TCC2 0
@@ -1105,7 +1185,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil
+        (nat nonempty-type-eq-decl nil naturalnumbers nil)
         (decl const-decl "decl" decl nil))
        nil))
      (app_var_TCC3 0
@@ -1127,7 +1207,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil
+        (nat nonempty-type-eq-decl nil naturalnumbers nil)
         (int_minus_int_is_int application-judgement "int" integers nil)
         (real_ge_is_total_order name-judgement "(total_order?[real])"
          real_props nil)
@@ -1152,7 +1232,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil
+        (nat nonempty-type-eq-decl nil naturalnumbers nil)
         (context formula-decl nil language nil))
        nil))
      (app_var_TCC5 0
@@ -1212,17 +1292,22 @@
          language nil)
         (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
          language nil)
-        (F const-decl
-         "(LAMBDA (F: [ord -> nat]): (F(ord_nil) <= F(ord_symbol)) AND (F(ord_nil) <= F(ord_dot)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+        (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
          language nil)
-        nil (decl type-decl nil decl nil)
+        (decl type-decl nil decl nil)
         (dvar? adt-recognizer-decl "[decl -> boolean]" decl nil)
         (context formula-decl nil language nil)
         (- const-decl "[numfield, numfield -> numfield]" number_fields
            nil)
-        (rest shared-adt-accessor-decl
-              "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
-              language nil)
+        (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
         (iconst? adt-recognizer-decl "[semantic -> boolean]" language
          nil)
         (itype? adt-recognizer-decl "[semantic -> boolean]" language
@@ -1275,7 +1360,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil)
+        (nat nonempty-type-eq-decl nil naturalnumbers nil))
        nil))
      (app_var_TCC7 0
       (app_var_TCC7-1 nil 3582305991
@@ -1301,7 +1386,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil)
+        (nat nonempty-type-eq-decl nil naturalnumbers nil))
        nil))
      (app_var_TCC8 0
       (app_var_TCC8-1 nil 3582305991
@@ -1334,7 +1419,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil)
+        (nat nonempty-type-eq-decl nil naturalnumbers nil))
        nil))
      (app_var_TCC9 0
       (app_var_TCC9-3 nil 3582754594
@@ -1358,7 +1443,7 @@
         (integer_pred const-decl "[rational -> boolean]" integers nil)
         (int nonempty-type-eq-decl nil integers nil)
         (>= const-decl "bool" reals nil)
-        (nat nonempty-type-eq-decl nil naturalnumbers nil) nil)
+        (nat nonempty-type-eq-decl nil naturalnumbers nil))
        nil)
       (app_var_TCC9-2 nil 3582754313
        ("" (skosimp* :preds? t)
@@ -1438,9 +1523,11 @@
          nil)
         (nonempty_context type-eq-decl nil language nil)
         (context_rest judgement-tcc nil subtype nil)
-        (rest shared-adt-accessor-decl
-              "[{x: semantic |     ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x) OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x) OR ktheory?(x) OR itype?(x) OR iconst?(x)} -> semantic]"
-              language nil)
+        (rest shared-adt-accessor-decl "[{x: semantic |
+              ktype_decl?(x) OR ktype_def?(x) OR ktype_ext?(x) OR kvar?(x)
+           OR kconst_decl?(x) OR kconst_def?(x) OR kconst_ext?(x)
+           OR ktheory?(x) OR itype?(x) OR iconst?(x)} ->
+   semantic]" language nil)
         (iconst? adt-recognizer-decl "[semantic -> boolean]" language
          nil)
         (itype? adt-recognizer-decl "[semantic -> boolean]" language
@@ -1515,8 +1602,11 @@
          language nil)
         (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
          language nil)
-        (F const-decl
-         "(LAMBDA (F: [ord -> nat]): (F(ord_nil) <= F(ord_symbol)) AND (F(ord_nil) <= F(ord_dot)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+        (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
          language nil)
         (kvar? adt-recognizer-decl "[semantic -> boolean]" language
          nil))
@@ -1550,15 +1640,17 @@
         (boolean nonempty-type-decl nil booleans nil)
         (real_ge_is_total_order name-judgement "(total_order?[real])"
          real_props nil)
-        (context_is_map judgement-tcc nil subtype nil)
-        (Θ!1 skolem-const-decl "pretheory" map nil)
-        (i!1 skolem-const-decl "nat" map nil)
-        (j!1 skolem-const-decl "nat" map nil)
-        (↑ def-decl
-         "{f |      (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f)) AND (interp?(e) => interp?(f)) AND (pretheory?(e) => pretheory?(f)) AND weight(F)(f) = weight(F)(e)}"
-         subst nil)
-        (F const-decl
-         "(LAMBDA (F: [ord -> nat]): (F(ord_nil) <= F(ord_symbol)) AND (F(ord_nil) <= F(ord_dot)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+        (context_is_map judgement-tcc nil subtype nil) nil nil nil
+        (↑ def-decl "{f |
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
+        (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
          language nil)
         (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
          language nil)
@@ -1633,10 +1725,7 @@
           nil)
          ("12" (delete 2) (("12" (grind) nil nil)) nil))
         nil)
-       ((context_is_map judgement-tcc nil subtype nil)
-        (Θ!2 skolem-const-decl "context" map nil)
-        (i!1 skolem-const-decl "nat" map nil)
-        (j!1 skolem-const-decl "nat" map nil)
+       ((context_is_map judgement-tcc nil subtype nil) nil nil nil
         (pretheory_is_context judgement-tcc nil subtype nil)
         (preterm type-eq-decl nil language nil)
         (pretype type-eq-decl nil language nil)
@@ -1697,12 +1786,17 @@
          language nil)
         (ord_kconst_decl adt-constructor-decl "(ord_kconst_decl?)"
          language nil)
-        (F const-decl
-         "(LAMBDA (F: [ord -> nat]): (F(ord_nil) <= F(ord_symbol)) AND (F(ord_nil) <= F(ord_dot)) AND (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
+        (F const-decl "(LAMBDA (F: [ord -> nat]):
+   (F(ord_nil) <= F(ord_symbol)) AND
+    (F(ord_nil) <= F(ord_dot)) AND
+     (F(ord_ktype_def) + F(ord_itype) <= F(ord_ktype_decl)) AND
+      (F(ord_kconst_def) + F(ord_iconst) <= F(ord_kconst_decl)))"
          language nil)
-        (↑ def-decl
-         "{f |      (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f)) AND (interp?(e) => interp?(f)) AND (pretheory?(e) => pretheory?(f)) AND weight(F)(f) = weight(F)(e)}"
-         subst nil)
+        (↑ def-decl "{f |
+              (pretype?(e) => pretype?(f)) AND (preterm?(e) => preterm?(f))
+          AND (interp?(e) => interp?(f))
+          AND (pretheory?(e) => pretheory?(f))
+          AND weight(F)(f) = weight(F)(e)}" subst nil)
         (semantic type-decl nil language nil)
         (boolean nonempty-type-decl nil booleans nil)
         (bool nonempty-type-eq-decl nil booleans nil)
@@ -1718,7 +1812,7 @@
         (char type-eq-decl nil strings nil)
         (symbol nonempty-type-eq-decl nil language nil)
         (map? const-decl "[semantic -> bool]" language nil)
-        (map type-eq-decl nil language nil) (∈ def-decl "bool" map nil)
+        (map type-eq-decl nil language nil) nil
         (OR const-decl "[bool, bool -> bool]" booleans nil)
         (interp? const-decl "[semantic -> bool]" language nil)
         (preterm? const-decl "[semantic -> bool]" language nil)
