@@ -102,7 +102,7 @@ BEGIN
     , ktype_decl(s, Δ): vars(Δ)
     , ktype_def(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , ktype_ext(s, Δ): vars(Δ)
-    , kvar(T, Δ): union(vars(T) - dvars(Δ), vars(Δ)) + 1
+    , kvar(T, Δ): union(vars(T) - dvars(Δ), vars(Δ) + 1)
     , kconst_decl(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , kconst_def(s, T, a, Δ): union(vars(T) - dvars(Δ), union(vars(a) - dvars(Δ), vars(Δ)))
     , kconst_ext(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
@@ -169,5 +169,7 @@ BEGIN
   MEASURE w(M)
   AUTO_REWRITE uniques?
 
-
+  closed?(Γ)(S): bool =
+    vars(S) ⊂ { x | x < dvars(Γ) } AND
+    symbols(S) ⊂ dsymbols(Γ)
 END syntaxic_sets
