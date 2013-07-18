@@ -37,6 +37,7 @@ BEGIN
     % { x + i | x ∈ vars }, j = x + i
     { j: nat | j >= i AND member(j - i, vars) }
 
+  % Number of vars declared in Γ (VAR ...)
   dvars(Γ): RECURSIVE nat =
     CASES Γ OF
       〈〉: 0
@@ -54,9 +55,10 @@ BEGIN
     pretheory?(Γ) IMPLIES dvars(Γ) = 0
   AUTO_REWRITE dvars_pretheory, dvars
 
+  % Set of all symbols declared in Γ (s: ...)
   dsymbols(Γ): RECURSIVE set[symbol] =
     CASES Γ OF
-      〈〉: emptyset
+      〈〉: ∅
     , ktype_decl(s, Δ): add(s, dsymbols(Δ))
     , ktype_def(s, T, Δ): add(s, dsymbols(Δ))
     , ktype_ext(s, Δ): add(s, dsymbols(Δ))
@@ -69,9 +71,20 @@ BEGIN
   MEASURE w(Γ)
   AUTO_REWRITE dsymbols
 
+  % Set of all symbols interpreted in σ (s := ...)
+  isymbols(σ): RECURSIVE set[symbol] = 
+    CASES σ OF
+      nil: ∅
+    , itype(s, T, τ): add(s, dsymbols(τ))
+    , iconst(s, a, τ): add(s, dsymbols(τ))
+    ENDCASES
+  MEASURE w(σ)
+  AUTO_REWRITE isymbols
+      
+  % Set of all vars used in S
   vars(S): RECURSIVE set[nat] =
     CASES S OF
-      symbol(s): emptyset
+      symbol(s): ∅
     , dot(m, σ, s): vars(σ)
 
     , fun(A, B): union(vars(A), vars(B) - 1)
@@ -85,7 +98,7 @@ BEGIN
     , lproj(a): vars(a)
     , rproj(a): vars(a)
 
-    , 〈〉: emptyset
+    , 〈〉: ∅
     , ktype_decl(s, Δ): vars(Δ)
     , ktype_def(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , ktype_ext(s, Δ): vars(Δ)
@@ -95,13 +108,14 @@ BEGIN
     , kconst_ext(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , ktheory(s, Θ, Δ): union(vars(Θ) - dvars(Δ), vars(Δ))
 
-    , nil: emptyset
+    , nil: ∅
     , itype(s, T, σ): union(vars(T), vars(σ))
     , iconst(s, a, σ): union(vars(a), vars(σ))
     ENDCASES
   MEASURE w(S)
   AUTO_REWRITE vars
 
+  % Set of all symbols used in S
   symbols(S): RECURSIVE set[symbol] =
     CASES S OF
       symbol(s): singleton(s)
@@ -111,14 +125,14 @@ BEGIN
     , prod(A, B): union(symbols(A), symbols(B))
     , subtype(T, a): union(symbols(T), symbols(a))
 
-    , v(i): emptyset
+    , v(i): ∅
     , app(f, a): union(symbols(f), symbols(a))
     , lam(T, a): union(symbols(T), symbols(a))
     , pair(a, b): union(symbols(a), symbols(b))
     , lproj(a): symbols(a)
     , rproj(a): symbols(a)
 
-    , 〈〉: emptyset
+    , 〈〉: ∅
     , ktype_decl(s, Δ): symbols(Δ)
     , ktype_def(s, T, Δ): union(symbols(T) - dsymbols(Δ), symbols(Δ))
     , ktype_ext(s, Δ): symbols(Δ)
@@ -128,15 +142,16 @@ BEGIN
     , kconst_ext(s, T, Δ): union(symbols(T) - dsymbols(Δ), symbols(Δ))
     , ktheory(s, Θ, Δ): union(symbols(Θ) - dsymbols(Δ), symbols(Δ))
 
-    , nil: emptyset
+    , nil: ∅
     , itype(s, T, σ): union(symbols(T), symbols(σ))
     , iconst(s, a, σ): union(symbols(a), symbols(σ))
     ENDCASES
   MEASURE w(S)
   AUTO_REWRITE symbols
 
-  uniques?(Γ): RECURSIVE bool =
-    CASES Γ OF
+  % Checks if every symbol in the context is defined at most once
+  uniques?(M): RECURSIVE bool =
+    CASES M OF
       〈〉: TRUE
     , ktype_decl(s, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
     , ktype_def(s, T, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
@@ -146,7 +161,12 @@ BEGIN
     , kconst_def(s, T, a, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
     , kconst_ext(s, T, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
     , ktheory(s, Θ, Δ): s ∉ dsymbols(Δ) AND uniques?(Θ) AND uniques?(Δ)
+
+    , itype(s, T, σ): s ∉ dsymbols(σ) AND uniques?(σ)
+    , iconst(s, a, σ): s ∉ dsymbols(σ) AND uniques?(σ)
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE uniques?
+
+
 END syntaxic_sets
