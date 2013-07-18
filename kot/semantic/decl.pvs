@@ -13,7 +13,7 @@ BEGIN
   S: VAR syntaxic
   M: VAR map
   
-  find(Γ)(s: (dsymbols(Γ))): RECURSIVE context =
+  find(Γ)(s: (dsymbols(Γ))): RECURSIVE context	 =
     COND
       kvar?(Γ) -> find(rest(Γ))(s) ↑ 1
     , ELSE -> IF s = s(Γ) THEN Γ ELSE find(rest(Γ))(s) ENDIF
@@ -32,7 +32,7 @@ BEGIN
   symbols_definition: THEOREM FORALL (s: (definition?(Γ))):
     symbols(definition(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
   vars_definition: THEOREM FORALL (s: (definition?(Γ))):
-    vars(definition(Γ)(s)) ∈ (vars(Γ) ∪ { x | x < dvars(Γ) })
+    vars(definition(Γ)(s)) ⊂ { x | x < dvars(Γ) }
 
   typed?(Γ)(s: (dsymbols(Γ))): bool =
     kconst_decl?(find(Γ)(s)) OR

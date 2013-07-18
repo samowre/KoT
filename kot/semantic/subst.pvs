@@ -12,6 +12,7 @@ BEGIN
   σ, τ: VAR interp
   S, U: VAR syntaxic
   M: VAR map
+  i, j: VAR nat
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -25,13 +26,13 @@ BEGIN
   AUTO_REWRITE+ size
   
   % Shift: classical shift operator for De Bruijn indices
-  ;↑(S, (nb: [nat, nat])): RECURSIVE
+% TODO: expr
+  ;↑(S, (nb: [nat, nat] | nb`2 >= dvars(S))): RECURSIVE
     { U | (pretype?(S) => pretype?(U)) AND
           (preterm?(S) => preterm?(U)) AND
 	  (interp?(S)  => interp?(U)) AND
 	  (pretheory?(S) => pretheory?(U)) AND
-	  (context?(S) => context?(U)) AND
-	  w(f) = w(S) } =
+	  w(U) = w(S) } =
     CASES S OF
       % Names
       symbol(s): symbol(s),
@@ -55,21 +56,31 @@ BEGIN
       ktype_decl(s, Γ): ktype_decl(s, Γ ↑ nb),
       ktype_def(s, T, Γ): ktype_def(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
       ktype_ext(s, Γ): ktype_ext(s, Γ ↑ nb),
-      kvar(T, Γ): kvar(T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
       kconst_decl(s, T, Γ): kconst_decl(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
       kconst_def(s, T, a, Γ): kconst_def(s, T ↑ (nb`1, nb`2 + dvars(Γ)), a ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
       kconst_ext(s, T, Γ): kconst_ext(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
-      ktheory(s, Θ, Γ): ktheory(s, Θ ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
 
       % Interpretations
       nil: nil,
       itype(s, T, σ): itype(s, T ↑ nb, σ ↑ nb),
       iconst(s, a, σ): iconst(s, a ↑ nb, σ ↑ nb)
     ENDCASES
-  MEASURE w(e)
+  MEASURE w(S)
   AUTO_REWRITE+ ↑
+  dsymbols_shift: THEOREM
+    j >= dvars(Γ) IMPLIES dsymbols(Γ ↑ (i, j)) = dsymbols(Γ)
+  symbols_shift: THEOREM
+    j >= dvars(S) IMPLIES symbols(S ↑ (i, j)) = symbols(S)
+  dvars_shift: THEOREM
+    j >= dvars(Γ) IMPLIES dvars(Γ ↑ (i, j)) = dvars(Γ)
+  vars_shift: THEOREM
+    j >= dvars(S) IMPLIES
+      vars(S ↑ (i, j)) =
+        { k: nat | k < j AND k ∈ vars(S) OR k >= i + j AND (k - i) ∈ vars(S) }
+  nonrecursive_shift: THEOREM
+    j >= dvars(Γ) IMPLIES nonrecursive?(Γ ↑ (i, j)) IFF nonrecursive?(Γ)
 
-  ;↑(S, n): MACRO semantic = S ↑ (n, 0)
+  ;↑(S, i): MACRO semantic = S ↑ (i, 0)
 
 
   % shift_size: JUDGEMENT

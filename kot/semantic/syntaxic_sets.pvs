@@ -33,9 +33,12 @@ BEGIN
   ;-(vars: set[nat], i: nat): set[nat] =
     % { x - i | x ∈ vars }, j = x - i
     { j: nat | member(j + i, vars) }
+  ;+(vars: set[nat], i: nat): set[nat] =
+    % { x + i | x ∈ vars }, j = x + i
+    { j: nat | j >= i AND member(j - i, vars) }
 
-  dvars(Γ): RECURSIVE nat =
-    CASES Γ OF
+  dvars(S): RECURSIVE nat =
+    CASES S OF
       〈〉: 0
     , ktype_decl(s, Δ): dvars(Δ)
     , ktype_def(s, T, Δ): dvars(Δ)
@@ -45,10 +48,18 @@ BEGIN
     , kconst_def(s, T, a, Δ): dvars(Δ)
     , kconst_ext(s, T, Δ): dvars(Δ)
     , ktheory(s, Θ, Δ): dvars(Δ)
+    ELSE 0
     ENDCASES
-  MEASURE w(Γ)
+  MEASURE w(S)
   dvars_pretheory: THEOREM
     pretheory?(Γ) IMPLIES dvars(Γ) = 0
+  dvars_pretype: THEOREM
+    dvars(T) = 0
+  dvars_preterm: THEOREM
+    dvars(a) = 0
+  dvars_interp: THEOREM
+    dvars(σ) = 0
+  AUTO_REWRITE dvars_pretheory, dvars_pretype, dvars_preterm, dvars_interp
 
   dsymbols(Γ): RECURSIVE set[symbol] =
     CASES Γ OF
@@ -84,7 +95,7 @@ BEGIN
     , ktype_decl(s, Δ): vars(Δ)
     , ktype_def(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , ktype_ext(s, Δ): vars(Δ)
-    , kvar(T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
+    , kvar(T, Δ): union(vars(T) - dvars(Δ), vars(Δ)) + 1
     , kconst_decl(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , kconst_def(s, T, a, Δ): union(vars(T) - dvars(Δ), union(vars(a) - dvars(Δ), vars(Δ)))
     , kconst_ext(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
