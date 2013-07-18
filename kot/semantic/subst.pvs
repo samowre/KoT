@@ -1,12 +1,17 @@
 subst: THEORY
 BEGIN
-  IMPORTING inductions
-%  IMPORTING decl
+  IMPORTING syntaxic_sets
 
-  e, f: VAR expr
-  T, A, B: VAR pretype
-  i, j, n: VAR nat
-  Θ: VAR pretheory
+    
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  σ, τ: VAR interp
+  S, U: VAR syntaxic
+  M: VAR map
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -18,16 +23,16 @@ BEGIN
     ENDCASES
   MEASURE w(T)
   AUTO_REWRITE+ size
-
   
   % Shift: classical shift operator for De Bruijn indices
-  ;↑(e, (nb: [nat, nat])): RECURSIVE
-    { f | (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-	  (interp?(e)  => interp?(f)) AND
-	  (pretheory?(e) => pretheory?(f)) AND
-	  w(f) = w(e) } =
-    CASES e OF
+  ;↑(S, (nb: [nat, nat])): RECURSIVE
+    { U | (pretype?(S) => pretype?(U)) AND
+          (preterm?(S) => preterm?(U)) AND
+	  (interp?(S)  => interp?(U)) AND
+	  (pretheory?(S) => pretheory?(U)) AND
+	  (context?(S) => context?(U)) AND
+	  w(f) = w(S) } =
+    CASES S OF
       % Names
       symbol(s): symbol(s),
       dot(m, σ, s): dot(m, σ ↑ nb, s),
@@ -48,11 +53,13 @@ BEGIN
       % Pretheory
       〈〉: 〈〉,
       ktype_decl(s, Γ): ktype_decl(s, Γ ↑ nb),
-      ktype_def(s, T, Γ): ktype_def(s, T ↑ nb, Γ ↑ nb),
+      ktype_def(s, T, Γ): ktype_def(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
       ktype_ext(s, Γ): ktype_ext(s, Γ ↑ nb),
-      kconst_decl(s, T, Γ): kconst_decl(s, T ↑ nb, Γ ↑ nb),
-      kconst_def(s, T, a, Γ): kconst_def(s, T ↑ nb, a ↑ nb, Γ ↑ nb),
-      kconst_ext(s, T, Γ): kconst_ext(s, T ↑ nb, Γ ↑ nb),
+      kvar(T, Γ): kvar(T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
+      kconst_decl(s, T, Γ): kconst_decl(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
+      kconst_def(s, T, a, Γ): kconst_def(s, T ↑ (nb`1, nb`2 + dvars(Γ)), a ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
+      kconst_ext(s, T, Γ): kconst_ext(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
+      ktheory(s, Θ, Γ): ktheory(s, Θ ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
 
       % Interpretations
       nil: nil,
@@ -61,104 +68,108 @@ BEGIN
     ENDCASES
   MEASURE w(e)
   AUTO_REWRITE+ ↑
-  shift_size: JUDGEMENT
-    ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
-  shift_zero: THEOREM
-    e ↑ (0, n) = e
-  AUTO_REWRITE+ shift_zero
 
-  ;↑(e, (n: nat)): MACRO semantic =
-    (e ↑ (n, 0))
-  shift_plus: THEOREM
-    (e ↑ (i, n)) ↑ (j, n) = e ↑ (i + j, n)
-  AUTO_REWRITE+ shift_plus
+  ;↑(S, n): MACRO semantic = S ↑ (n, 0)
 
-  % Shift defined over decls
-  % ;↑(d: decl, n: nat): decl =
-  %   CASES d OF
-  %     dtype_decl: dtype_decl,
-  %     dtype_def(T): dtype_def(T ↑ n),
-  %     dvar(T): dvar(T ↑ n),
-  %     dconst_decl(T): dconst_decl(T ↑ n),
-  %     dconst_def(T, a): dconst_def(T ↑ n, a ↑ n),
-  %     dtheory(Θ): dtheory(Θ ↑ n),
-  %     dtype_interp(T): dtype_interp(T ↑ n),
-  %     dconst_interp(a): dconst_interp(a ↑ n)
+
+  % shift_size: JUDGEMENT
+  %   ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
+  % shift_zero: THEOREM
+  %   e ↑ (0, n) = e
+  % AUTO_REWRITE+ shift_zero
+
+  % ;↑(e, (n: nat)): MACRO semantic =
+  %   (e ↑ (n, 0))
+  % shift_plus: THEOREM
+  %   (e ↑ (i, n)) ↑ (j, n) = e ↑ (i + j, n)
+  % AUTO_REWRITE+ shift_plus
+
+  % % Shift defined over decls
+  % % ;↑(d: decl, n: nat): decl =
+  % %   CASES d OF
+  % %     dtype_decl: dtype_decl,
+  % %     dtype_def(T): dtype_def(T ↑ n),
+  % %     dvar(T): dvar(T ↑ n),
+  % %     dconst_decl(T): dconst_decl(T ↑ n),
+  % %     dconst_def(T, a): dconst_def(T ↑ n, a ↑ n),
+  % %     dtheory(Θ): dtheory(Θ ↑ n),
+  % %     dtype_interp(T): dtype_interp(T ↑ n),
+  % %     dconst_interp(a): dconst_interp(a ↑ n)
+  % %   ENDCASES
+  % % d: VAR decl
+
+  % % shift_decl_zero: THEOREM
+  % %   d ↑ 0 = d
+  % % AUTO_REWRITE+ shift_decl_zero
+  % % shift_decl_plus: THEOREM
+  % %   (d ↑ i) ↑ j = d ↑ (i + j)
+
+
+  % % shift_kind: THEOREM
+  % %   kind(d ↑ n) = kind(d)
+  % % shift_definition?: THEOREM
+  % %   definition?(d ↑ n) IFF definition?(d)
+  % % shift_definition: THEOREM
+  % %   definition?(d) IMPLIES definition(d ↑ n) = definition(d) ↑ n
+  % % shift_typed?: THEOREM
+  % %   typed?(d ↑ n) IFF typed?(d)
+  % % shift_type: THEOREM
+  % %   typed?(d) IMPLIES type_(d ↑ n) = type_(d) ↑ n
+  % % AUTO_REWRITE+ shift_kind, shift_definition?, shift_definition, shift_typed?, shift_type
+
+  % % This is a "true" substitution - this really removes the bound variable.
+  % % Outer variables see their index decreased.
+  % % Definition 2.15, 4.3, modified for the De Bruijn index
+  % subst(e, (x: nat), (t: preterm)): RECURSIVE
+  %   { f | (pretype?(e) => pretype?(f)) AND
+  %         (preterm?(e) => preterm?(f)) AND
+  % 	  (interp?(e)  => interp?(f)) AND
+  % 	  (pretheory?(e) => pretheory?(f)) } =
+  %   CASES e OF
+  %     symbol(s): symbol(s),
+  %     dot(m, σ,s): dot(m, subst(σ, x, t), s),
+
+  %     % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
+  %     %                        λ——————————————————————\___________/
+  %     subtype(T,  a): subtype(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
+  %     % [i: A → B] ↦ [ i:   A[ x ← t] →      B[   x  ←   t  ]]
+  %     %                λ——————————————————————\_____________/
+  %     fun(  A,  B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
+  %     % [i: A, B] ↦ [i:    A[ x ← t],       B[   x  ←   t  ]]
+  %     %              λ———————————————————————\_____________/
+  %     prod( A, B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
+
+  %     % n ↦ t
+  %     % x ↦ x where the λ-binder for n has been removed
+  %     v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF,
+  %     %   f  a ↦           f[ x ← t]        a[ x ← t]
+  %     app(f, a): app(subst(f, x,  t), subst(a, x,  t)),
+  %     % λ(y: T): a ↦ λ(y:      T[ x ← t]):      a[   x  ←   t  ]
+  %     %                λ————————————————————————–\_____________/
+  %     lam(   T,  a): lam(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
+  %     %   (a, b) ↦ (       a[ x ← t],       b[ x ← t] )
+  %     pair(a, b):  〈 subst(a, x,  t), subst(b, x,  t) 〉,
+  %     %  p₁ a ↦ p₁          a[ x ← t]
+  %     lproj(a): lproj(subst(a, x,  t)),
+  %     %  p₂ a ↦ p₂          a[ x ← t]
+  %     rproj(a): rproj(subst(a, x,  t)),
+
+  %     % Pretheory
+  %     〈〉: 〈〉,
+  %     ktype_decl(s, Γ): ktype_decl(s, subst(Γ, x, t)),
+  %     ktype_def(s, T, Γ): ktype_def(s, subst(T, x, t), subst(Γ, x, t)),
+  %     ktype_ext(s, Γ): ktype_ext(s, subst(Γ, x, t)),
+  %     kconst_decl(s, T, Γ): kconst_decl(s, subst(T, x, t), subst(Γ, x, t)),
+  %     kconst_def(s, T, a, Γ): kconst_def(s, subst(T, x, t), subst(a, x, t), subst(Γ, x, t)),
+  %     kconst_ext(s, T, Γ): kconst_ext(s, subst(T, x, t), subst(Γ, x, t)),
+
+  %     % Interpretations
+  %     nil: nil,
+  %     itype(s, T, σ): itype(s, subst(T, x, t), subst(σ, x, t)),
+  %     iconst(s, a, σ): iconst(s, subst(a, x, t), subst(σ, x, t))
   %   ENDCASES
-  % d: VAR decl
-
-  % shift_decl_zero: THEOREM
-  %   d ↑ 0 = d
-  % AUTO_REWRITE+ shift_decl_zero
-  % shift_decl_plus: THEOREM
-  %   (d ↑ i) ↑ j = d ↑ (i + j)
-
-
-  % shift_kind: THEOREM
-  %   kind(d ↑ n) = kind(d)
-  % shift_definition?: THEOREM
-  %   definition?(d ↑ n) IFF definition?(d)
-  % shift_definition: THEOREM
-  %   definition?(d) IMPLIES definition(d ↑ n) = definition(d) ↑ n
-  % shift_typed?: THEOREM
-  %   typed?(d ↑ n) IFF typed?(d)
-  % shift_type: THEOREM
-  %   typed?(d) IMPLIES type_(d ↑ n) = type_(d) ↑ n
-  % AUTO_REWRITE+ shift_kind, shift_definition?, shift_definition, shift_typed?, shift_type
-
-  % This is a "true" substitution - this really removes the bound variable.
-  % Outer variables see their index decreased.
-  % Definition 2.15, 4.3, modified for the De Bruijn index
-  subst(e, (x: nat), (t: preterm)): RECURSIVE
-    { f | (pretype?(e) => pretype?(f)) AND
-          (preterm?(e) => preterm?(f)) AND
-	  (interp?(e)  => interp?(f)) AND
-	  (pretheory?(e) => pretheory?(f)) } =
-    CASES e OF
-      symbol(s): symbol(s),
-      dot(m, σ,s): dot(m, subst(σ, x, t), s),
-
-      % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
-      %                        λ——————————————————————\___________/
-      subtype(T,  a): subtype(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
-      % [i: A → B] ↦ [ i:   A[ x ← t] →      B[   x  ←   t  ]]
-      %                λ——————————————————————\_____________/
-      fun(  A,  B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
-      % [i: A, B] ↦ [i:    A[ x ← t],       B[   x  ←   t  ]]
-      %              λ———————————————————————\_____________/
-      prod( A, B):  ⌈subst(A, x,  t), subst(B, x + 1, t ↑ 1)⌉,
-
-      % n ↦ t
-      % x ↦ x where the λ-binder for n has been removed
-      v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF,
-      %   f  a ↦           f[ x ← t]        a[ x ← t]
-      app(f, a): app(subst(f, x,  t), subst(a, x,  t)),
-      % λ(y: T): a ↦ λ(y:      T[ x ← t]):      a[   x  ←   t  ]
-      %                λ————————————————————————–\_____________/
-      lam(   T,  a): lam(subst(T, x,  t), subst(a, x + 1, t ↑ 1)),
-      %   (a, b) ↦ (       a[ x ← t],       b[ x ← t] )
-      pair(a, b):  〈 subst(a, x,  t), subst(b, x,  t) 〉,
-      %  p₁ a ↦ p₁          a[ x ← t]
-      lproj(a): lproj(subst(a, x,  t)),
-      %  p₂ a ↦ p₂          a[ x ← t]
-      rproj(a): rproj(subst(a, x,  t)),
-
-      % Pretheory
-      〈〉: 〈〉,
-      ktype_decl(s, Γ): ktype_decl(s, subst(Γ, x, t)),
-      ktype_def(s, T, Γ): ktype_def(s, subst(T, x, t), subst(Γ, x, t)),
-      ktype_ext(s, Γ): ktype_ext(s, subst(Γ, x, t)),
-      kconst_decl(s, T, Γ): kconst_decl(s, subst(T, x, t), subst(Γ, x, t)),
-      kconst_def(s, T, a, Γ): kconst_def(s, subst(T, x, t), subst(a, x, t), subst(Γ, x, t)),
-      kconst_ext(s, T, Γ): kconst_ext(s, subst(T, x, t), subst(Γ, x, t)),
-
-      % Interpretations
-      nil: nil,
-      itype(s, T, σ): itype(s, subst(T, x, t), subst(σ, x, t)),
-      iconst(s, a, σ): iconst(s, subst(a, x, t), subst(σ, x, t))
-    ENDCASES
-  MEASURE w(e)
-  subst_size: JUDGEMENT
-    subst(T, (x: nat), (t: preterm)) HAS_TYPE { A: pretype | size(A) = size(T) }
+  % MEASURE w(e)
+  % subst_size: JUDGEMENT
+  %   subst(T, (x: nat), (t: preterm)) HAS_TYPE { A: pretype | size(A) = size(T) }
 
 END subst
