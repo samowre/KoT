@@ -64,18 +64,16 @@ BEGIN
   MEASURE w(e)
   AUTO_REWRITE+ ↑
   dsymbols_shift: THEOREM
-    pretheory?(Γ) IMPLIES
-      dsymbols(Γ ↑ (i, j)) = dsymbols(Γ)
+    dsymbols(Θ ↑ (i, j)) = dsymbols(Θ)
   symbols_shift: THEOREM
-    symbols(e ↑ (i, j)) = symbols(S)
+    symbols(e ↑ (i, j)) = symbols(e)
   dvars_shift: THEOREM
-    pretheory?(Γ) IMPLIES
-      dvars(Γ ↑ (i, j)) = dvars(Γ)
+      dvars(Θ ↑ (i, j)) = dvars(Θ)
   vars_shift: THEOREM
       vars(e ↑ (i, j)) =
         { k: nat | k < j AND k ∈ vars(e) OR k >= i + j AND (k - i) ∈ vars(e) }
   uniques_shift: THEOREM
-    uniques?(Γ ↑ (i, j)) IFF uniques?(Γ)
+    uniques?(Θ ↑ (i, j)) IFF uniques?(Θ)
   shift_size: JUDGEMENT
     ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
   shift_zero: THEOREM
