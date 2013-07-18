@@ -12,7 +12,7 @@ BEGIN
   S: VAR syntaxic
   s: VAR symbol
   nb: VAR [nat, nat]
-  t: VAR pretype
+  t: VAR preterm
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -28,7 +28,11 @@ BEGIN
   
   % Shift: classical shift operator for De Bruijn indices
   ;↑(e, nb): RECURSIVE
-    { f | w(f) = w(e) } =
+    { f | (pretype?(e) IMPLIES pretype?(f)) AND
+      	  (preterm?(e) IMPLIES preterm?(f)) AND
+	  (interp?(e) IMPLIES interp?(f)) AND
+	  (pretheory?(e) IMPLIES pretheory?(f)) AND
+	  w(f) = w(e) } =
     CASES e OF
       % Names
       symbol(s): symbol(s),
@@ -65,14 +69,14 @@ BEGIN
   AUTO_REWRITE+ ↑
 
   % Judgements
-  shift_pretype: RECURSIVE JUDGEMENT  
-    ↑(T, nb) HAS_TYPE pretype
-  shift_preterm: RECURSIVE JUDGEMENT  
-    ↑(a, nb) HAS_TYPE preterm
-  shift_interp: RECURSIVE JUDGEMENT  
-    ↑(σ, nb) HAS_TYPE interp
-  shift_pretheory: RECURSIVE JUDGEMENT  
-    ↑(Θ, nb) HAS_TYPE pretheory
+  shift_pretype: THEOREM  
+   pretype?(T ↑ nb)
+  shift_preterm: THEOREM  
+    preterm?(a ↑ nb)
+  shift_interp: THEOREM  
+    interp?(σ ↑ nb)
+  shift_pretheory: THEOREM  
+    pretheory?(Θ ↑ nb)
   shift_size: JUDGEMENT
     ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
   AUTO_REWRITE shift_pretype, shift_preterm, shift_interp, shift_pretheory, shift_size
@@ -86,7 +90,7 @@ BEGIN
     symbols(e ↑ (i, j)) = symbols(e)
   AUTO_REWRITE symbols_shift
   dvars_shift: THEOREM
-      dvars(Θ ↑ (i, j)) = dvars(Θ)
+      dvars(Θ ↑ (i, j)) = dvars(Θ) % = 0
   AUTO_REWRITE dvars_shift
   vars_shift: THEOREM
       vars(e ↑ (i, j)) =
@@ -111,7 +115,11 @@ BEGIN
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
   % Definition 2.15, 4.3, modified for the De Bruijn index
-  subst(e, x, t): RECURSIVE expr =
+  subst(e, x, t): RECURSIVE 
+    { f | (pretype?(e) IMPLIES pretype?(f)) AND
+      	  (preterm?(e) IMPLIES preterm?(f)) AND
+	  (interp?(e) IMPLIES interp?(f)) AND
+	  (pretheory?(e) IMPLIES pretheory?(f)) } =
     CASES e OF
       symbol(s): symbol(s),
       dot(m, σ,s): dot(m, subst(σ, x, t), s),
@@ -158,19 +166,30 @@ BEGIN
   MEASURE w(e)
 
   % Judgements
-  subst_pretype: JUDGEMENT subst(T, x, t) HAS_TYPE pretype
-  subst_preterm: JUDGEMENT subst(a, x, t) HAS_TYPE preterm
-  subst_interp: JUDGEMENT subst(σ, x, t) HAS_TYPE interp
-  subst_pretheory: JUDGEMENT subst(Θ, x, t) HAS_TYPE pretheory
+  subst_pretype: THEOREM pretype?(subst(T, x, t))
+  subst_preterm: THEOREM preterm?(subst(a, x, t))
+  subst_interp: THEOREM interp?(subst(σ, x, t))
+  subst_pretheory: THEOREM pretheory?(subst(Θ, x, t))
   subst_size: JUDGEMENT
+
     subst(T, (x: nat), (t: preterm)) HAS_TYPE { A: pretype | size(A) = size(T) }
   AUTO_REWRITE subst_pretype, subst_preterm, subst_interp, subst_pretheory, subst_size
 
 
   % Interactions between subst and syntaxic_sets
   % (dsymbols, symbols, dvar, var)
-  %dsymbols_subst: THEOREM
-  %  dsymbols(subst(Θ, x, t)) = 
+  dsymbols_subst: THEOREM
+    dsymbols(subst(Θ, x, t)) = dsymbols(Θ)
+  AUTO_REWRITE dsymbols_subst
+  symbols_subst: THEOREM
+    symbols(subst(e, x, t)) = symbols(e) ∪ symbols(t)
+  AUTO_REWRITE symbols_subst
+
+  dvars_subst: THEOREM
+    dvars(subst(Θ, x, t)) = dvars(Θ) % = 0
+  vars_subst: THEOREM
+    vars(subst(e, x, t)) = (vars(e) - { n | n = x }) ∪ vars(t)
+    
 
 
  % dsymbols_shift: THEOREM
