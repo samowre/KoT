@@ -1,7 +1,7 @@
 decl: THEORY
 BEGIN
   IMPORTING language, subtype, inductions
-  IMPORTING subst
+  IMPORTING context
 
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
@@ -85,8 +85,8 @@ BEGIN
   kind(Γ)(s: (dsymbols(Γ))): kind =
     COND
       dtype?(Γ)(s) -> KTYPE
-      dconst?(Γ)(s) -> KCONST
-      dtheory?(Γ)(s) -> KTHEORY
+    ,  dconst?(Γ)(s) -> KCONST
+    ,  dtheory?(Γ)(s) -> KTHEORY
     ENDCOND 
 
   AUTO_REWRITE definition?, dtheory?, dtype?, dconst?

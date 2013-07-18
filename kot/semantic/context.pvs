@@ -38,34 +38,8 @@ BEGIN
     dvars(Γ ++ Δ) = dvars(Γ) + dvars(Δ)
   vars_concat: THEOREM
     vars(Γ ++ Δ) = vars(Γ) ∪ (vars(Δ) - dvars(Γ))
-  % doubleplus_theory: RECURSIVE JUDGEMENT
-  %   ++(Γ, Δ: pretheory) HAS_TYPE pretheory
-  % concat_empty: LEMMA 
-  %   〈〉 ++ Θ = Θ
-  % AUTO_REWRITE+ concat_empty
-  % vars_concat: THEOREM
-  %   vars(Γ ++ Δ) = vars(Γ) + vars(Δ)
-  % member_symbol_concat: THEOREM
-  %   s ∈ Γ ++ Δ IFF s ∈ Γ OR s ∈ Δ
-  % apply_symbol__concat: THEOREM
-  %   s ∈ Δ IMPLIES (Γ ++ Δ)(s) = Δ(s)
-  % member_var_concat: THEOREM
-  %   x ∈ Γ IMPLIES x + vars(Δ) ∈ Γ ++ Δ
-  % member_var__concat: THEOREM
-  %   x ∈ Δ IMPLIES x ∈ Γ ++ Δ
-  % apply_var__concat: THEOREM
-  %   x ∈ Δ IMPLIES (Γ ++ Δ)(x) = Δ(x)
-  % concat_assoc: THEOREM
-  %   Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
-  % AUTO_REWRITE+ concat_assoc
-  % member_symbol_rest: THEOREM
-  %   NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES s ∈ rest(Γ)
-  % member_symbol_when_member_rest: THEOREM
-  %   nonempty?(Γ) AND s ∈ rest(Γ) IMPLIES s ∈ Γ
-  % member_symbol_rest_kvar: THEOREM
-  %   kvar?(Γ) AND s ∈ Γ IMPLIES s ∈ rest(Γ)
-  % apply_symbol_rest: THEOREM
-  %   NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES rest(Γ)(s) = Γ(s)
-  % apply_symbol_rest_kvar: THEOREM
-  %   kvar?(Γ) AND s ∈ Γ IMPLIES rest(Γ)(s) ↑ 1 = Γ(s)
+  closed_concat: THEOREM
+    closed?(Γ)(Δ) AND closed?(Γ ++ Δ)(Θ) IFF closed?(Γ)(Δ ++ Θ)
+  uniques_concat: THEOREM
+    uniques?(Γ ++ Δ) IFF uniques?(Γ) AND uniques?(Δ) AND disjoint?(dsymbols(Γ), dsymbols(Δ))
 END context
