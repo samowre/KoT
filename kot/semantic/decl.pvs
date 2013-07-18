@@ -13,6 +13,9 @@ BEGIN
   S: VAR syntaxic
   M: VAR map
 
+  % find(Γ, s: ..., Δ)(s) = Γ
+  % It is the context in which s is declared
+  % (hence in which defintion(s) and type(s) are defined)
   find(Γ)(s: (dsymbols(Γ))): RECURSIVE context =
     COND
       kvar?(Γ) -> find(rest(Γ))(s)
@@ -32,8 +35,8 @@ BEGIN
   find_is_uniques: JUDGEMENT
     find(Γ | uniques?(Γ))(s: (dsymbols(Γ))) HAS_TYPE (uniques?)
 
-  % Checks if the first element of M is a definition (not a declaration)
-  % Used as definition?(Γ(s)) it checks that s has a definition in Γ
+
+  % Checks that s has a definition in Γ
   % (such as s: TYPE = def_type, or s: T = def_term)
   definition?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
     COND
@@ -43,6 +46,7 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
 
+  % dtheory?(Γ, s: THEORY ..., Δ)(s) = TRUE
   dtheory?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
     COND
       kvar?(Γ) -> dtheory?(rest(Γ))(s)
@@ -53,6 +57,7 @@ BEGIN
   dtheory_is_definition: THEOREM FORALL (s: (dsymbols(Γ))):
     dtheory?(Γ)(s) IMPLIES definition?(Γ)(s)
 
+  % dtype?(Γ, s: TYPE = ..., Δ)(s) = TRUE
   dtype?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
     COND
       kvar?(Γ) -> dtype?(rest(Γ))(s)
@@ -63,6 +68,7 @@ BEGIN
   dtype_is_definition: THEOREM FORALL (s: (dsymbols(Γ))):
     dtype?(Γ)(s) IMPLIES definition?(Γ)(s)
 
+  % dconst?(Γ, s: T = ..., Δ)(s) = TRUE
   dconst?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
     COND
       kvar?(Γ) -> dconst?(rest(Γ))(s)
@@ -73,13 +79,20 @@ BEGIN
   dconst_is_definition: THEOREM FORALL (s: (dsymbols(Γ))):
     dconst?(Γ)(s) IMPLIES definition?(Γ)(s)
 
+  % Function kind as informally defined at the begining of chapter 2.
+  % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
+  % among CONSTANT, TYPE, VARIABLE, THEORY
+  %kind(Γ)(s: (dsymbols(Γ))): kind =
+  %  CASES 
+
+
   AUTO_REWRITE definition?, dtheory?, dtype?, dconst?
   AUTO_REWRITE dtheory_is_definition, dtype_is_definition, dconst_is_definition
 
   % Function definition as informally defined at the begining of section 2.5
-  % Meant to be used as definition(Γ(s)), to give the definition of the symbol s
-  % (if it exists, see definition?), i.e a type, a term or a theory.
-  % Built-in decl DATATYPE
+  % definition(Γ, s: TYPE = T, Δ)(s) = T
+  % definition(Γ, s: T = a, Δ)(s) = a
+  % definition(Γ, s: THEORY BEGIN Θ END, Δ)(s) = Θ
   definition(Γ)(s: (definition?(Γ))): RECURSIVE expr =
     CASES Γ OF
       ktype_def(t, T, Δ): IF t = s THEN T ELSE definition(Δ)(s) ENDIF
@@ -95,21 +108,26 @@ BEGIN
     definition(Γ)(s: (dconst?(Γ))) HAS_TYPE preterm
   definition_dtheory: RECURSIVE JUDGEMENT
     definition(Γ)(s: (dtheory?(Γ))) HAS_TYPE pretheory
-    
+
+  % If Γ is closed (ie uses only symbols declared in Γ) then
+  % definition(Γ)(s) only uses symbols that have been previously
+  % declared in Γ
   symbols_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
     symbols(definition(Γ)(s)) ⊂ dsymbols(find(Γ)(s))
+  % Same for vars
   vars_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
     vars(definition(Γ)(s)) ⊂ { x | x < dvars(find(Γ)(s)) }
+  % closed_definition = symbols_definition AND vars_definition
   closed_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
     closed?(find(Γ)(s))(definition(Γ)(s))
     
+  % A theory does not define variables
   dvars_definition: THEOREM FORALL (s: (dtheory?(Γ))):
     dvars(definition(Γ)(s)) = 0
   uniques_definition: THEOREM FORALL (s: (dtheory?(Γ))):
     uniques?(Γ) IMPLIES uniques?(definition(Γ)(s))
 
-  % Checks if the first element of M has a type (i.e is a preterm).
-  % Used as typed?(Γ(s)) it checks that s is a preterm in Γ,
+  % Checks that s is a preterm in Γ,
   % i.e appears of the form s: T or s: T = a
   typed?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
     COND
@@ -121,9 +139,8 @@ BEGIN
   AUTO_REWRITE typed?
 
   % Function type as informally defined at the begining of chapter 2.
-  % Meant to be used as type(Γ(s)), to give the type of s
-  % (if it exists, see typed?), i.e type(s: T = def_term, Γ) = T
-  % Built-in decl DATATYPE
+  % type(Γ, s: T, Δ) = T
+  % type(Γ, s: T = a, Δ) = T
   type_(Γ)(s: (typed?(Γ))): RECURSIVE pretype =
     CASES Γ OF
       kconst_def(t, T, a, Δ): IF t = s THEN T ELSE type_(Δ)(s) ENDIF
@@ -133,13 +150,20 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE type_
+
+  % If Γ is closed, then type(Γ)(s) only uses symbols
+  % that have been previously declared in Γ
   symbols_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
     symbols(type_(Γ)(s)) ⊂ dsymbols(find(Γ)(s))
+  % same for vars
   vars_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
     vars(type_(Γ)(s)) ⊂ { x | x < dvars(find(Γ)(s)) }
+  % closed_type = symbols_type AND vars_type
   closed_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
     closed?(find(Γ)(s))(type_(Γ)(s))
 
+
+  % Length of a context (as a list)
   length(Γ): RECURSIVE nat =
     CASES Γ OF
       〈〉: 0
@@ -148,6 +172,10 @@ BEGIN
   MEASURE w(Γ)
   AUTO_REWRITE length
 
+  % pos(Γ)(s) returns the position of s in Γ 
+  % where contexts are seen as reversed lists
+  % ie pos(Γ, s: ...)(s) = length(Γ)
+  % and nth(s: ..., Γ)(s) = 0
   pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[length(Γ)] =
     CASES Γ OF
       kvar(T, Δ): pos(Δ, s)
@@ -162,14 +190,24 @@ BEGIN
     FORALL (t: (symbols(type_(Γ)(s)))):
       t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
 
+
+  % If the symbol t is used in the definition of symbol s
+  % then t is defined before s, 
+  % hence pos(Γ)(t) < pos(Γ)(s)
+  pos_definition: THEOREM FORALL (s: (definition?(Γ))):
+    uniques?(Γ) IMPLIES
+      FORALL (t: (symbols(definition(Γ)(s)))):
+        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  % Same in the type of symbol s
+  pos_type: THEOREM FORALL (s: (typed?(Γ))):
+    uniques?(Γ) IMPLIES
+      FORALL (t: (symbols(type_(Γ)(s)))):
+        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  % Returns the position of a variable in a context
   pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
     CASES Γ OF
       kvar(T, Δ): IF x = 0 THEN length(Δ) ELSE pos(Δ, x - 1) ENDIF
       ELSE pos(rest(Γ), x)
     ENDCASES
   MEASURE w(Γ)
-
-  % Function kind as informally defined at the begining of chapter 2.
-  % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
-  % among CONSTANT, TYPE, VARIABLE, THEORY
 END decl
