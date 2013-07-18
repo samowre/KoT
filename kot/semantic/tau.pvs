@@ -11,12 +11,12 @@ BEGIN
   % 	   where Δ = defintion(Θ(m))
   % TCC12: well_formed(Θ)(interp(Δ)(σ) IMPLIES well_formed(Θ)(σ)
   % TCC14: inst th TCC4 with Γ = Θ ++ definition(Θ)(m)
-  % 	   therefore we need : well_formed()(Θ ++ definition(Θ)(m)
+  % 	   therefore we need : well_formed()(Θ ++ definition(Θ)(m))
   % TCC16: η(T: pretype) HAS_TYPE pretype
   % 	   well_formed?(Δ)(e) AND well_formed?(Θ)(Δ) AND Δ is a theory
   %	   IMPLIES well_formed?(Θ)(η(Θ, ..)(e))
   % TCC17: subsumed
-  % TCC18: well_formed?(Θ)(interp(Δ, σ)) IMPLIES well_formed?(Θ)(σ)
+  % TCC18: subsumed TCC12
   % TCC24: w(kvar(A, Θ), B) < w(Θ, fun(A, B)) 
   % TCC28: w(Θ, A) < w(Θ, fun(A,B))
   % TCC30: subsumed by TCC24
@@ -35,7 +35,20 @@ BEGIN
   % TCC74: w on lproj
   % TCC81: w on rproj
   % TCC86: w on ktype_decl
-
+  % TCC90: w on ktype_def
+  % TCC94: w on ktype_def
+  % TCC98: w on ktype_ext
+  % TCC101: w on kvar
+  % TCC105: w on kvar
+  % TCC109: w on kconst_decl
+  % TCC113: w on kconst_decl
+  % TCC117: w on kconst_def
+  % TCC118: w on kconst_def
+  % TCC125: w on kconst_def
+  % TCC129: w on kconst_ext
+  % TCC133: w on kconst_ext
+  % TCC137: w on ktheory
+  % TCC141: w on ktheory
 
   % Variable declaration
   Γ, Δ, Θ: VAR well_formed_context
@@ -182,7 +195,7 @@ BEGIN
     	CASES kwf OF
 	  KTERM(Tf):
 	    CASES μ0(Tf) OF
-	      prod(A, B): 
+	      fun(A, B): 
 		LET (kwa, tccsa) = τ(Θ)(a) IN
 		CASES kwa OF
 		  KTERM(Ap):
@@ -214,7 +227,7 @@ BEGIN
         KTERM(A1): 
 	  LET (kwa2, tccsa2) = τ(Θ)(a2) IN
 	  CASES kwa2 OF
-	    KTERM(A2): (KTERM(prod(A1, A2)),
+	    KTERM(A2): (KTERM(prod(A1, A2 ↑ 1)),
 		        tccsa1 ++ tccsa2 )
 	    ELSE fail
 	  ENDCASES
