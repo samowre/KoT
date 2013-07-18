@@ -1,11 +1,14 @@
 subst: THEORY
 BEGIN
-  IMPORTING decl
+  IMPORTING syntaxic_sets
 
   e, f: VAR expr
   T, A, B: VAR pretype
   i, j, n: VAR nat
   Θ: VAR pretheory
+  Γ: VAR context
+  S: VAR syntaxic
+  s: VAR symbol
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -47,11 +50,11 @@ BEGIN
       % Pretheory
       〈〉: 〈〉,
       ktype_decl(s, Γ): ktype_decl(s, Γ ↑ nb),
-      ktype_def(s, T, Γ): ktype_def(s, T ↑ nb, Γ ↑ nb),
+      ktype_def(s, T, Γ): ktype_def(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
       ktype_ext(s, Γ): ktype_ext(s, Γ ↑ nb),
-      kconst_decl(s, T, Γ): kconst_decl(s, T ↑ nb, Γ ↑ nb),
-      kconst_def(s, T, a, Γ): kconst_def(s, T ↑ nb, a ↑ nb, Γ ↑ nb),
-      kconst_ext(s, T, Γ): kconst_ext(s, T ↑ nb, Γ ↑ nb),
+      kconst_decl(s, T, Γ): kconst_decl(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
+      kconst_def(s, T, a, Γ): kconst_def(s, T ↑ (nb`1, nb`2 + dvars(Γ)), a ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
+      kconst_ext(s, T, Γ): kconst_ext(s, T ↑ (nb`1, nb`2 + dvars(Γ)), Γ ↑ nb),
 
       % Interpretations
       nil: nil,
@@ -60,6 +63,19 @@ BEGIN
     ENDCASES
   MEASURE w(e)
   AUTO_REWRITE+ ↑
+  dsymbols_shift: THEOREM
+    pretheory?(Γ) IMPLIES
+      dsymbols(Γ ↑ (i, j)) = dsymbols(Γ)
+  symbols_shift: THEOREM
+    symbols(e ↑ (i, j)) = symbols(S)
+  dvars_shift: THEOREM
+    pretheory?(Γ) IMPLIES
+      dvars(Γ ↑ (i, j)) = dvars(Γ)
+  vars_shift: THEOREM
+      vars(e ↑ (i, j)) =
+        { k: nat | k < j AND k ∈ vars(e) OR k >= i + j AND (k - i) ∈ vars(e) }
+  uniques_shift: THEOREM
+    uniques?(Γ ↑ (i, j)) IFF uniques?(Γ)
   shift_size: JUDGEMENT
     ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
   shift_zero: THEOREM
@@ -71,40 +87,6 @@ BEGIN
   shift_plus: THEOREM
     (e ↑ (i, n)) ↑ (j, n) = e ↑ (i + j, n)
   AUTO_REWRITE+ shift_plus
-
-  % Shift defined over decls
-  ;↑(d: decl, nb: [nat, nat]): decl =
-    CASES d OF
-      dtype_decl: dtype_decl,
-      dtype_def(T): dtype_def(T ↑ nb),
-      dvar(T): dvar(T ↑ nb),
-      dconst_decl(T): dconst_decl(T ↑ nb),
-      dconst_def(T, a): dconst_def(T ↑ nb, a ↑ nb),
-      dtheory(Θ): dtheory(Θ ↑ nb),
-      dtype_interp(T): dtype_interp(T ↑ nb),
-      dconst_interp(a): dconst_interp(a ↑ nb)
-    ENDCASES
-  d: VAR decl
-  ;↑(d, n): MACRO decl = (d ↑ (n, 0))
-
-  shift_decl_zero: THEOREM
-    d ↑ 0 = d
-  AUTO_REWRITE+ shift_decl_zero
-  shift_decl_plus: THEOREM
-    (d ↑ i) ↑ j = d ↑ (i + j)
-
-
-  shift_kind: THEOREM
-    kind(d ↑ n) = kind(d)
-  shift_definition?: THEOREM
-    definition?(d ↑ n) IFF definition?(d)
-  shift_definition: THEOREM
-    definition?(d) IMPLIES definition(d ↑ n) = definition(d) ↑ n
-  shift_typed?: THEOREM
-    typed?(d ↑ n) IFF typed?(d)
-  shift_type: THEOREM
-    typed?(d) IMPLIES type_(d ↑ n) = type_(d) ↑ n
-  AUTO_REWRITE+ shift_kind, shift_definition?, shift_definition, shift_typed?, shift_type
 
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
