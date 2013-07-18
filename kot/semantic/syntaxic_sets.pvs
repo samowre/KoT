@@ -75,8 +75,8 @@ BEGIN
   isymbols(σ): RECURSIVE set[symbol] = 
     CASES σ OF
       nil: ∅
-    , itype(s, T, τ): add(s, dsymbols(τ))
-    , iconst(s, a, τ): add(s, dsymbols(τ))
+    , itype(s, T, τ): add(s, isymbols(τ))
+    , iconst(s, a, τ): add(s, isymbols(τ))
     ENDCASES
   MEASURE w(σ)
   AUTO_REWRITE isymbols
@@ -162,10 +162,11 @@ BEGIN
     , kconst_ext(s, T, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
     , ktheory(s, Θ, Δ): s ∉ dsymbols(Δ) AND uniques?(Θ) AND uniques?(Δ)
 
-    , itype(s, T, σ): s ∉ dsymbols(σ) AND uniques?(σ)
-    , iconst(s, a, σ): s ∉ dsymbols(σ) AND uniques?(σ)
+    , nil: TRUE
+    , itype(s, T, σ): s ∉ isymbols(σ) AND uniques?(σ)
+    , iconst(s, a, σ): s ∉ isymbols(σ) AND uniques?(σ)
     ENDCASES
-  MEASURE w(Γ)
+  MEASURE w(M)
   AUTO_REWRITE uniques?
 
 
