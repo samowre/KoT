@@ -1,6 +1,6 @@
 interp: THEORY
 BEGIN
-  IMPORTING map
+  IMPORTING well_formed
   
   S: VAR syntaxic
   Γ, Δ, Θ: VAR context
@@ -73,5 +73,35 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE+ interp
+
+  member_difference: THEOREM
+    FORALL (s | s ∈ σ):
+    r ∈ σ - s IMPLIES r ∈ σ
+  member_difference_when: THEOREM
+    FORALL (s | s ∈ σ):
+    r ∈ σ AND r /= s IMPLIES r ∈ σ - s
+
+  member_interp_for: THEOREM
+    FORALL (Δ: pretheory):
+      interp_for?(Δ)(σ) AND s ∈ σ 
+      IMPLIES s ∈ Δ
+
+  member_interp: THEOREM
+    FORALL (Δ: pretheory):
+      s ∈ Δ AND interp_for?(Δ)(σ)
+      IMPLIES s ∈ interp(Δ, σ)
+ 
+  %interp_for_uniques: THEOREM
+  %  FORALL (Γ: well_formed_context, Δ: pretheory):
+  %    well_formed?(Γ)(Δ) AND interp_for?(Δ)(σ) AND nonempty?(σ) 
+  %    IMPLIES s(σ) ∉ rest(σ) 
+
+  well_formed_interp_l: THEOREM
+    FORALL (Γ: well_formed_context, Δ: pretheory, σ | interp_for?(Δ)(σ)):
+    well_formed?(Γ)(interp(Δ, σ)) IMPLIES well_formed?(Γ)(Δ)  
+
+  well_formed_interp: THEOREM
+    FORALL (Γ: well_formed_context, Δ: pretheory | interp_for?(Δ)(σ)):
+    well_formed?(Γ)(interp(Δ, σ)) IMPLIES well_formed?(Γ)(σ)  
 
 END interp
