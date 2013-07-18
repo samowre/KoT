@@ -19,6 +19,18 @@ BEGIN
     , ELSE -> IF s = s(Γ) THEN rest(Γ) ELSE find(rest(Γ))(s) ENDIF
     ENDCOND
   MEASURE w(Γ)
+  dsymbols_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    dsymbols(find(Γ)(s)) ⊂ dsymbols(Γ)
+  dvars_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    dvars(find(Γ)(s)) <= dvars(Γ)
+  symbols_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    symbols(find(Γ)(s)) ⊂ symbols(Γ)
+  vars_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    vars(find(Γ)(s)) ⊂ { x | (x + dvars(Γ) - dvars(find(Γ)(s))) ∈ vars(Γ) }
+  find_is_closed: JUDGEMENT
+    find(Δ | closed?(Γ)(Δ))(s: (dsymbols(Δ))) HAS_TYPE (closed?(Γ))
+  find_is_uniques: JUDGEMENT
+    find(Γ | uniques?(Γ))(s: (dsymbols(Γ))) HAS_TYPE (uniques?)
 
   % Checks if the first element of M is a definition (not a declaration)
   % Used as definition?(Γ(s)) it checks that s has a definition in Γ
@@ -76,6 +88,7 @@ BEGIN
       ELSE definition(rest(Γ))(s)
     ENDCASES
   MEASURE w(Γ)
+  AUTO_REWRITE definition
   definition_dtype: RECURSIVE JUDGEMENT
     definition(Γ)(s: (dtype?(Γ))) HAS_TYPE pretype
   definition_dconst: RECURSIVE JUDGEMENT
@@ -119,6 +132,7 @@ BEGIN
       ELSE type_(rest(Γ))(s)
     ENDCASES
   MEASURE w(Γ)
+  AUTO_REWRITE type_
   symbols_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
     symbols(type_(Γ)(s)) ⊂ dsymbols(find(Γ)(s))
   vars_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
@@ -132,6 +146,7 @@ BEGIN
       ELSE 1 + length(rest(Γ))
     ENDCASES
   MEASURE w(Γ)
+  AUTO_REWRITE length
 
   pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[length(Γ)] =
     CASES Γ OF
@@ -139,14 +154,13 @@ BEGIN
       ELSE IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
     ENDCASES
   MEASURE w(Γ)
-  pos_definition: THEOREM FORALL (s: (definition?(Γ))):
-    uniques?(Γ) IMPLIES
-      FORALL (t: (symbols(definition(Γ)(s)))):
-        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
-  pos_type: THEOREM FORALL (s: (typed?(Γ))):
-    uniques?(Γ) IMPLIES
-      FORALL (t: (symbols(type_(Γ)(s)))):
-        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  AUTO_REWRITE pos
+  pos_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
+    FORALL (t: (symbols(definition(Γ)(s)))):
+      t ∈ dsymbols(find(Γ)(s)) IMPLIES pos(find(Γ)(s), t) < pos(Γ, s)
+  pos_type: THEOREM FORALL (Γ: (uniques?), s: (typed?(Γ))):
+    FORALL (t: (symbols(type_(Γ)(s)))):
+      t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
 
   pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
     CASES Γ OF
