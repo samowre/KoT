@@ -6,23 +6,31 @@ END top
 
 % IMPORT CHAIN:
 %
-% language > subtype > inductions
-%	 /          \
-%   subst	    decl
-%     |		      |
-% supertype	    map
-%     |              |
-%     |           context
-%     | 	     |
-%     |		 well_formed  
-%     | 	   /    \   
-%  compare    subword   interp
-%     | 	  |         |
-%     |	       weight       |
-%      \          |	   /
-%       \    definition   /
-%	 \	  |	 /
-%	  \_____ tau ___/
+%	   language
+%	       |
+%	    subtype
+%	       |
+%	   inductions
+%	       |
+%	 syntaxic_sets
+%	       |
+%	     subst
+% 	  /          \
+%   supertype	     decl   
+%       |  	       |
+%    compare	      map
+%     	|              |
+%       |           context
+%       |  	       |
+%       |	  well_formed  
+%       | 	   /       \   
+%       |      subword   weight
+%       | 	   \       / 
+%       |	    wf_props
+%       |           /      \
+%       |  definitions     interp
+%	 \        |        /
+%	  \_____ tau _____/
 %		  |
 %	      tau_props
 
