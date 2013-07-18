@@ -3,7 +3,8 @@ BEGIN
   IMPORTING well_formed
   
   S: VAR syntaxic
-  Γ, Δ, Θ: VAR context
+  Γ, Θ: VAR context
+  Δ: VAR pretheory
   A, B, T: VAR pretype
   r, s: VAR symbol
   n, m: VAR name
@@ -74,6 +75,8 @@ BEGIN
   MEASURE w(Γ)
   AUTO_REWRITE+ interp
 
+
+
   member_difference: THEOREM
     FORALL (s | s ∈ σ):
     r ∈ σ - s IMPLIES r ∈ σ
@@ -82,19 +85,16 @@ BEGIN
     r ∈ σ AND r /= s IMPLIES r ∈ σ - s
 
   member_interp_for: THEOREM
-    FORALL (Δ: pretheory):
-      interp_for?(Δ)(σ) AND s ∈ σ 
-      IMPLIES s ∈ Δ
+    interp_for?(Δ)(σ) AND s ∈ σ 
+    IMPLIES s ∈ Δ
 
-  member_interp: THEOREM
-    FORALL (Δ: pretheory):
-      s ∈ Δ AND interp_for?(Δ)(σ)
-      IMPLIES s ∈ interp(Δ, σ)
+  member_interp: THEOREM 
+    interp_for?(Δ)(σ) IMPLIES 
+    (s ∈ Δ IFF s ∈ interp(Δ, σ))
  
-  %interp_for_uniques: THEOREM
-  %  FORALL (Γ: well_formed_context, Δ: pretheory):
-  %    well_formed?(Γ)(Δ) AND interp_for?(Δ)(σ) AND nonempty?(σ) 
-  %    IMPLIES s(σ) ∉ rest(σ) 
+  definition_interp: THEOREM  
+    interp_for?(Δ)(σ) AND s ∈ Δ IMPLIES
+    (definition?(interp(Δ, σ)(s)) IFF definition?(Δ(s)) OR s ∈ σ)
 
   well_formed_interp_l: THEOREM
     FORALL (Γ: well_formed_context, Δ: pretheory, σ | interp_for?(Δ)(σ)):
@@ -105,3 +105,10 @@ BEGIN
     well_formed?(Γ)(interp(Δ, σ)) IMPLIES well_formed?(Γ)(σ)  
 
 END interp
+
+ 
+
+
+
+
+
