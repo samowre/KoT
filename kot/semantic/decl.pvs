@@ -2,7 +2,6 @@ decl: THEORY
 BEGIN
   IMPORTING language, subtype, inductions
 
-
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
   r, s: VAR symbol
@@ -13,6 +12,208 @@ BEGIN
   S: VAR syntaxic
   M: VAR map
 
+  ;-(vars: set[nat], i: nat): set[nat] =
+    % { x - i | x ∈ vars }, j = x - i
+    { j: nat | member(j + i, vars) }
+
+  ;-(a, b: set[symbol]): set[symbol] =
+    { s: symbol | member(s, a) AND NOT member(s, b) }
+
+  dvars(Γ): RECURSIVE nat =
+    CASES Γ OF
+      〈〉: 0
+    , ktype_decl(s, Δ): dvars(Δ)
+    , ktype_def(s, T, Δ): dvars(Δ)
+    , ktype_ext(s, Δ): dvars(Δ)
+    , kvar(T, Δ): dvars(Δ) + 1
+    , kconst_decl(s, T, Δ): dvars(Δ)
+    , kconst_def(s, T, a, Δ): dvars(Δ)
+    , kconst_ext(s, T, Δ): dvars(Δ)
+    , ktheory(s, Θ, Δ): dvars(Δ)
+    ENDCASES
+  MEASURE w(Γ)
+  dvars_pretheory: THEOREM
+    pretheory?(Γ) IMPLIES dvars(Γ) = 0
+
+  dsymbols(Γ): RECURSIVE set[symbol] =
+    CASES Γ OF
+      〈〉: emptyset
+    , ktype_decl(s, Δ): add(s, dsymbols(Δ))
+    , ktype_def(s, T, Δ): add(s, dsymbols(Δ))
+    , ktype_ext(s, Δ): add(s, dsymbols(Δ))
+    , kvar(T, Δ): dsymbols(Δ)
+    , kconst_decl(s, T, Δ): add(s, dsymbols(Δ))
+    , kconst_def(s, T, a, Δ): add(s, dsymbols(Δ))
+    , kconst_ext(s, T, Δ): add(s, dsymbols(Δ))
+    , ktheory(s, Θ, Δ): add(s, dsymbols(Δ))
+    ENDCASES
+  MEASURE w(Γ)
+
+  vars(S): RECURSIVE set[nat] =
+    CASES S OF
+      symbol(s): emptyset
+    , dot(m, σ, s): vars(σ)
+
+    , fun(A, B): union(vars(A), vars(B) - 1)
+    , prod(A, B): union(vars(A), vars(B) - 1)
+    , subtype(T, a): union(vars(T), vars(a) - 1)
+
+    , v(i): singleton(i)
+    , app(f, a): union(vars(f), vars(a))
+    , lam(T, a): union(vars(T), vars(a) - 1)
+    , pair(a, b): union(vars(a), vars(b))
+    , lproj(a): vars(a)
+    , rproj(a): vars(a)
+
+    , 〈〉: emptyset
+    , ktype_decl(s, Δ): vars(Δ)
+    , ktype_def(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
+    , ktype_ext(s, Δ): vars(Δ)
+    , kvar(T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
+    , kconst_decl(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
+    , kconst_def(s, T, a, Δ): union(vars(T) - dvars(Δ), union(vars(a) - dvars(Δ), vars(Δ)))
+    , kconst_ext(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
+    , ktheory(s, Θ, Δ): union(vars(Θ) - dvars(Δ), vars(Δ))
+
+    , nil: emptyset
+    , itype(s, T, σ): union(vars(T), vars(σ))
+    , iconst(s, a, σ): union(vars(a), vars(σ))
+    ENDCASES
+  MEASURE w(S)
+
+  symbols(S): RECURSIVE set[symbol] =
+    CASES S OF
+      symbol(s): singleton(s)
+    , dot(m, σ, s): add(m, symbols(σ))
+
+    , fun(A, B): union(symbols(A), symbols(B))
+    , prod(A, B): union(symbols(A), symbols(B))
+    , subtype(T, a): union(symbols(T), symbols(a))
+
+    , v(i): emptyset
+    , app(f, a): union(symbols(f), symbols(a))
+    , lam(T, a): union(symbols(T), symbols(a))
+    , pair(a, b): union(symbols(a), symbols(b))
+    , lproj(a): symbols(a)
+    , rproj(a): symbols(a)
+
+    , 〈〉: emptyset
+    , ktype_decl(s, Δ): symbols(Δ)
+    , ktype_def(s, T, Δ): union(symbols(T) - dsymbols(Δ), symbols(Δ))
+    , ktype_ext(s, Δ): symbols(Δ)
+    , kvar(T, Δ): union(symbols(T) - dsymbols(Δ), symbols(Δ))
+    , kconst_decl(s, T, Δ): union(symbols(T) - dsymbols(Δ), symbols(Δ))
+    , kconst_def(s, T, a, Δ): union(symbols(T) - dsymbols(Δ), union(symbols(a) - dsymbols(Δ), symbols(Δ)))
+    , kconst_ext(s, T, Δ): union(symbols(T) - dsymbols(Δ), symbols(Δ))
+    , ktheory(s, Θ, Δ): union(symbols(Θ) - dsymbols(Δ), symbols(Δ))
+
+    , nil: emptyset
+    , itype(s, T, σ): union(symbols(T) - dsymbols(Δ), symbols(σ))
+    , iconst(s, a, σ): union(symbols(a) - dsymbols(Δ), symbols(σ))
+    ENDCASES
+  MEASURE w(S)
+
+  nonrecursive?(Γ): RECURSIVE bool =
+    CASES Γ OF
+      〈〉: TRUE
+    , ktype_decl(s, Δ): s ∉ dsymbols(Δ) AND nonrecursive?(Δ)
+    , ktype_def(s, T, Δ): s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND nonrecursive?(Δ)
+    , ktype_ext(s, Δ): s ∉ dsymbols(Δ) AND nonrecursive?(Δ)
+    , kvar(T, Δ): nonrecursive?(Δ)
+    , kconst_decl(s, T, Δ): s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND nonrecursive?(Δ)
+    , kconst_def(s, T, a, Δ):
+        s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND s ∉ symbols(a) AND nonrecursive?(Δ)
+    , kconst_ext(s, T, Δ): s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND nonrecursive?(Δ)
+    , ktheory(s, Θ, Δ):
+        s ∉ dsymbols(Δ) AND s ∉ symbols(Θ) AND nonrecursive?(Θ) AND nonrecursive?(Δ)
+    ENDCASES
+  MEASURE w(Γ)
+
+  find(Γ)(s: (dsymbols(Γ))): RECURSIVE expr =
+    COND
+      kvar?(Γ) -> find(rest(Γ))(s) ↑ 1
+    , ELSE -> IF s = s(Γ) THEN Γ ELSE find(rest(Γ))(s) ENDIF
+    ENDCOND
+  MEASURE w(Γ)
+
+  definition?(Γ)(s: (dsymbols(Γ))): bool =
+    ktype_def?(find(Γ)(s)) OR
+    kconst_def?(find(Γ)(s))
+
+  definition(Γ)(s: definition?(Γ)): expr =
+    CASES find(Γ)(s) OF
+      ktype_def(s, T, Δ): T
+    , kconst_def(s, T, a, Δ): a
+    ENDCASES
+  symbols_definition: THEOREM FORALL (s: definition?(Γ)):
+    symbols(definition(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
+  vars_definition: THEOREM FORALL (s: definition?(Γ)):
+    vars(definition(Γ)(s)) ∈ (vars(Γ) ∪ { x | x < dvars(Γ) })
+
+  typed?(Γ)(s: (dsymbols(Γ))): bool =
+    kconst_decl?(find(Γ)(s)) OR
+    kconst_def?(find(Γ)(s)) OR
+    kconst_ext?(find(Γ)(s))
+
+  type_(Γ)(s: typed?(Γ)): pretype =
+    dtype(find(Γ)(s))
+  symbols_type: THEOREM FORALL (s: typed?(Γ)):
+    symbols(type_(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
+  vars_type: THEOREM FORALL (s: typed?(Γ)):
+    vars(type_(Γ)(s)) ⊂ (vars(Γ) ∪ { x | x < dvars(Γ) })
+
+  theory?(Γ)(s: (dsymbols(Γ))): bool =
+    ktheory?(find(Γ)(s))
+
+  body(Γ)(s: theory?(Γ)): pretheory =
+    dtheory(find(Γ)(s))
+  symbols_body: THEOREM FORALL (s: theory?(Γ)):
+    symbols(body(Γ)(s)) ⊂ ((dsymbols(Γ) ∪ symbols(Γ)) - dsymbols(body(Γ))(s))
+  dvars_body: THEOREM FORALL (s: theory?(Γ)):
+    dvars(body(Γ)(s)) = 0
+  vars_body: THEOREM FORALL (s: theory?(Γ)):
+    vars(body(Γ)(s)) ⊂ ((vars(Γ) ∪ { x | x < dvars(Γ) }) - dvars(body(Γ))(s))
+  nonrecursive_body: THEOREM FORALL (s: theory?(Γ)):
+    nonrecursive?(Γ) IMPLIES nonrecursive?(body(Γ)(s))
+
+  length(Γ): RECURSIVE nat =
+    CASES Γ OF
+      〈〉: 0
+      ELSE 1 + length(rest(Γ))
+    ENDCASES
+  MEASURE w(Γ)
+
+  pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[length(Γ)] =
+    CASES Γ OF
+      kvar(T, Δ): pos(Δ, s)
+      ELSE IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+  pos_definition: THEOREM FORALL (s: definition?(Γ)):
+    nonrecursive?(Γ) IMPLIES
+      FORALL (t: (symbols(definition(Γ)(s)))):
+        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  pos_type: THEOREM FORALL (s: typed?(Γ)):
+    nonrecursive?(Γ) IMPLIES
+      FORALL (t: (symbols(type_(Γ)(s)))):
+        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  pos_body: THEOREM FORALL (s: theory?(Γ)):
+    nonrecursive?(Γ) IMPLIES
+      FORALL (t: symbols(body(Γ)(s))):
+        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+
+  pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
+    CASES Γ OF
+      kvar(T, Δ): IF x = 0 THEN length(Δ) ELSE pos(Δ, x - 1) ENDIF
+      ELSE pos(rest(Γ), x)
+    ENDCASES
+  MEASURE w(Γ)
+
+  closed?(Γ)(S): bool =
+    FORALL (x: vars(S)): x < dvars(Γ)
+
+  defined?(Γ)(S): bool =
+    FORALL (s: symbols(S)): s ∈ dsymbols(Γ)
 
   % Datatype decl = context of size one
   decl: DATATYPE WITH SUBTYPES ktype_decl, kvar_decl, kconst_decl, ktheory_decl
