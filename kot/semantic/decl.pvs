@@ -80,14 +80,18 @@ BEGIN
     dconst?(Γ)(s) IMPLIES definition?(Γ)(s)
 
   % Function kind as informally defined at the begining of chapter 2.
-  % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
-  % among CONSTANT, TYPE, VARIABLE, THEORY
-  %kind(Γ)(s: (dsymbols(Γ))): kind =
-  %  CASES 
-
+  % Returns the kind of the symbol s
+  % among CONSTANT, TYPE, THEORY
+  kind(Γ)(s: (dsymbols(Γ))): kind =
+    COND
+      dtype?(Γ)(s) -> KTYPE
+      dconst?(Γ)(s) -> KCONST
+      dtheory?(Γ)(s) -> KTHEORY
+    ENDCOND 
 
   AUTO_REWRITE definition?, dtheory?, dtype?, dconst?
   AUTO_REWRITE dtheory_is_definition, dtype_is_definition, dconst_is_definition
+  AUTO_REWRITE+ kind
 
   % Function definition as informally defined at the begining of section 2.5
   % definition(Γ, s: TYPE = T, Δ)(s) = T
