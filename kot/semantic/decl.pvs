@@ -18,6 +18,7 @@ END set_props
 decl: THEORY
 BEGIN
   IMPORTING language, subtype, inductions
+  IMPORTING subst
   IMPORTING set_props
 
   Γ, Δ, Θ: VAR context
@@ -123,8 +124,8 @@ BEGIN
     , ktheory(s, Θ, Δ): union(symbols(Θ) - dsymbols(Δ), symbols(Δ))
 
     , nil: emptyset
-    , itype(s, T, σ): union(symbols(T) - dsymbols(Δ), symbols(σ))
-    , iconst(s, a, σ): union(symbols(a) - dsymbols(Δ), symbols(σ))
+    , itype(s, T, σ): union(symbols(T), symbols(σ))
+    , iconst(s, a, σ): union(symbols(a), symbols(σ))
     ENDCASES
   MEASURE w(S)
 
@@ -144,7 +145,7 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
 
-  find(Γ)(s: (dsymbols(Γ))): RECURSIVE expr =
+  find(Γ)(s: (dsymbols(Γ))): RECURSIVE context =
     COND
       kvar?(Γ) -> find(rest(Γ))(s) ↑ 1
     , ELSE -> IF s = s(Γ) THEN Γ ELSE find(rest(Γ))(s) ENDIF
@@ -155,14 +156,14 @@ BEGIN
     ktype_def?(find(Γ)(s)) OR
     kconst_def?(find(Γ)(s))
 
-  definition(Γ)(s: definition?(Γ)): expr =
+  definition(Γ)(s: (definition?(Γ))): expr =
     CASES find(Γ)(s) OF
       ktype_def(s, T, Δ): T
     , kconst_def(s, T, a, Δ): a
     ENDCASES
-  symbols_definition: THEOREM FORALL (s: definition?(Γ)):
+  symbols_definition: THEOREM FORALL (s: (definition?(Γ))):
     symbols(definition(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
-  vars_definition: THEOREM FORALL (s: definition?(Γ)):
+  vars_definition: THEOREM FORALL (s: (definition?(Γ))):
     vars(definition(Γ)(s)) ∈ (vars(Γ) ∪ { x | x < dvars(Γ) })
 
   typed?(Γ)(s: (dsymbols(Γ))): bool =
@@ -170,25 +171,25 @@ BEGIN
     kconst_def?(find(Γ)(s)) OR
     kconst_ext?(find(Γ)(s))
 
-  type_(Γ)(s: typed?(Γ)): pretype =
+  type_(Γ)(s: (typed?(Γ))): pretype =
     dtype(find(Γ)(s))
-  symbols_type: THEOREM FORALL (s: typed?(Γ)):
+  symbols_type: THEOREM FORALL (s: (typed?(Γ))):
     symbols(type_(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
-  vars_type: THEOREM FORALL (s: typed?(Γ)):
+  vars_type: THEOREM FORALL (s: (typed?(Γ))):
     vars(type_(Γ)(s)) ⊂ (vars(Γ) ∪ { x | x < dvars(Γ) })
 
   theory?(Γ)(s: (dsymbols(Γ))): bool =
     ktheory?(find(Γ)(s))
 
-  body(Γ)(s: theory?(Γ)): pretheory =
+  body(Γ)(s: (theory?(Γ))): pretheory =
     dtheory(find(Γ)(s))
-  symbols_body: THEOREM FORALL (s: theory?(Γ)):
-    symbols(body(Γ)(s)) ⊂ ((dsymbols(Γ) ∪ symbols(Γ)) - dsymbols(body(Γ))(s))
-  dvars_body: THEOREM FORALL (s: theory?(Γ)):
+  symbols_body: THEOREM FORALL (s: (theory?(Γ))):
+    symbols(body(Γ)(s)) ⊂ ((dsymbols(Γ) ∪ symbols(Γ)) - dsymbols(body(Γ)(s)))
+  dvars_body: THEOREM FORALL (s: (theory?(Γ))):
     dvars(body(Γ)(s)) = 0
-  vars_body: THEOREM FORALL (s: theory?(Γ)):
-    vars(body(Γ)(s)) ⊂ ((vars(Γ) ∪ { x | x < dvars(Γ) }) - dvars(body(Γ))(s))
-  nonrecursive_body: THEOREM FORALL (s: theory?(Γ)):
+  vars_body: THEOREM FORALL (s: (theory?(Γ))):
+    vars(body(Γ)(s)) ⊂ ((vars(Γ) ∪ { x | x < dvars(Γ) }) - dvars(body(Γ)(s)))
+  nonrecursive_body: THEOREM FORALL (s: (theory?(Γ))):
     nonrecursive?(Γ) IMPLIES nonrecursive?(body(Γ)(s))
 
   length(Γ): RECURSIVE nat =
@@ -204,17 +205,17 @@ BEGIN
       ELSE IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
     ENDCASES
   MEASURE w(Γ)
-  pos_definition: THEOREM FORALL (s: definition?(Γ)):
+  pos_definition: THEOREM FORALL (s: (definition?(Γ))):
     nonrecursive?(Γ) IMPLIES
       FORALL (t: (symbols(definition(Γ)(s)))):
         t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
-  pos_type: THEOREM FORALL (s: typed?(Γ)):
+  pos_type: THEOREM FORALL (s: (typed?(Γ))):
     nonrecursive?(Γ) IMPLIES
       FORALL (t: (symbols(type_(Γ)(s)))):
         t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
-  pos_body: THEOREM FORALL (s: theory?(Γ)):
+  pos_body: THEOREM FORALL (s: (theory?(Γ))):
     nonrecursive?(Γ) IMPLIES
-      FORALL (t: symbols(body(Γ)(s))):
+      FORALL (t: (symbols(body(Γ)(s)))):
         t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
 
   pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
@@ -225,90 +226,90 @@ BEGIN
   MEASURE w(Γ)
 
   closed?(Γ)(S): bool =
-    FORALL (x: vars(S)): x < dvars(Γ)
+    FORALL (x: (vars(S))): x < dvars(Γ)
 
   defined?(Γ)(S): bool =
-    FORALL (s: symbols(S)): s ∈ dsymbols(Γ)
+    FORALL (s: (symbols(S))): s ∈ dsymbols(Γ)
 
-  % Datatype decl = context of size one
-  decl: DATATYPE WITH SUBTYPES ktype_decl, kvar_decl, kconst_decl, ktheory_decl
-  BEGIN
-    dtype_decl: dtype_decl?: ktype_decl
-    dtype_def(definition: pretype): dtype_def?: ktype_decl
-    dvar(type_: pretype): dvar?: kvar_decl
-    dconst_decl(type_: pretype): dconst_decl?: kconst_decl
-    dconst_def(type_: pretype, definition: preterm): dconst_def?: kconst_decl
-    dtheory(definition: pretheory): dtheory?: ktheory_decl
-    dtype_interp(definition: pretype): dtype_interp?: ktype_decl
-    dconst_interp(definition: preterm): dconst_interp?: kconst_decl
-  END decl
-  AUTO_REWRITE+ ktype_decl, kvar_decl, kconst_decl, ktheory_decl
+  % % Datatype decl = context of size one
+  % decl: DATATYPE WITH SUBTYPES ktype_decl, kvar_decl, kconst_decl, ktheory_decl
+  % BEGIN
+  %   dtype_decl: dtype_decl?: ktype_decl
+  %   dtype_def(definition: pretype): dtype_def?: ktype_decl
+  %   dvar(type_: pretype): dvar?: kvar_decl
+  %   dconst_decl(type_: pretype): dconst_decl?: kconst_decl
+  %   dconst_def(type_: pretype, definition: preterm): dconst_def?: kconst_decl
+  %   dtheory(definition: pretheory): dtheory?: ktheory_decl
+  %   dtype_interp(definition: pretype): dtype_interp?: ktype_decl
+  %   dconst_interp(definition: preterm): dconst_interp?: kconst_decl
+  % END decl
+  % AUTO_REWRITE+ ktype_decl, kvar_decl, kconst_decl, ktheory_decl
 
-  kcontext?(d: decl): bool = 
-    dtype_decl?(d) OR dtype_def?(d) OR
-    dvar?(d) OR
-    dconst_decl?(d) OR dconst_def?(d) OR
-    dtheory?(d)
-  ktheory?(d: decl): bool = 
-    dtype_decl?(d) OR dtype_def?(d) OR
-    dconst_decl?(d) OR dconst_def?(d)
-  kinterp?(d: decl): bool = 
-    dtype_interp?(d) OR dconst_interp?(d)
+  % kcontext?(d: decl): bool = 
+  %   dtype_decl?(d) OR dtype_def?(d) OR
+  %   dvar?(d) OR
+  %   dconst_decl?(d) OR dconst_def?(d) OR
+  %   dtheory?(d)
+  % ktheory?(d: decl): bool = 
+  %   dtype_decl?(d) OR dtype_def?(d) OR
+  %   dconst_decl?(d) OR dconst_def?(d)
+  % kinterp?(d: decl): bool = 
+  %   dtype_interp?(d) OR dconst_interp?(d)
 
-  %AUTO_REWRITE+ kcontext?, ktheory?, kinterp?
+  % %AUTO_REWRITE+ kcontext?, ktheory?, kinterp?
 
-  % decl(M) = "car(M)"
-  decl(M: nonempty): decl =
-    CASES M OF
-      ktype_decl(s, Γ): dtype_decl,
-      ktype_def(s, T, Γ): dtype_def(T),
-      ktype_ext(s, Γ): dtype_decl,
-      kvar(T, Γ): dvar(T),
-      kconst_decl(s, T, Γ): dconst_decl(T),
-      kconst_def(s, T, a, Γ): dconst_def(T, a),
-      kconst_ext(s, T, Γ): dconst_decl(T),
-      ktheory(s, Θ, Γ): dtheory(Θ),
-      itype(s, T, σ): dtype_interp(T),
-      iconst(s, a, σ): dconst_interp(a)
-    ENDCASES
-  decl_context: JUDGEMENT decl(Γ | nonempty?(Γ)) HAS_TYPE (kcontext?)
-  decl_theory: JUDGEMENT decl(Δ: pretheory | nonempty?(Δ)) HAS_TYPE (ktheory?)
-  decl_interp: JUDGEMENT decl(σ | nonempty?(σ)) HAS_TYPE (kinterp?)
+  % % decl(M) = "car(M)"
+  % decl(M: nonempty): decl =
+  %   CASES M OF
+  %     ktype_decl(s, Γ): dtype_decl,
+  %     ktype_def(s, T, Γ): dtype_def(T),
+  %     ktype_ext(s, Γ): dtype_decl,
+  %     kvar(T, Γ): dvar(T),
+  %     kconst_decl(s, T, Γ): dconst_decl(T),
+  %     kconst_def(s, T, a, Γ): dconst_def(T, a),
+  %     kconst_ext(s, T, Γ): dconst_decl(T),
+  %     ktheory(s, Θ, Γ): dtheory(Θ),
+  %     itype(s, T, σ): dtype_interp(T),
+  %     iconst(s, a, σ): dconst_interp(a)
+  %   ENDCASES
+  % decl_context: JUDGEMENT decl(Γ | nonempty?(Γ)) HAS_TYPE (kcontext?)
+  % decl_theory: JUDGEMENT decl(Δ: pretheory | nonempty?(Δ)) HAS_TYPE (ktheory?)
+  % decl_interp: JUDGEMENT decl(σ | nonempty?(σ)) HAS_TYPE (kinterp?)
   
 
-  % Function kind as informally defined at the begining of chapter 2.
-  % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
-  % among CONSTANT, TYPE, VARIABLE, THEORY
-  kind(d: decl): kind =
-    COND
-      ktype_decl(d) -> KTYPE,
-      kvar_decl(d) -> KVAR,
-      kconst_decl(d) -> KCONST,
-      ktheory_decl(d) -> KTHEORY
-    ENDCOND
-  AUTO_REWRITE+ kind
+  % % Function kind as informally defined at the begining of chapter 2.
+  % % Meant to be used as kind(Γ(s)), to give the kind of the symbol s
+  % % among CONSTANT, TYPE, VARIABLE, THEORY
+  % kind(d: decl): kind =
+  %   COND
+  %     ktype_decl(d) -> KTYPE,
+  %     kvar_decl(d) -> KVAR,
+  %     kconst_decl(d) -> KCONST,
+  %     ktheory_decl(d) -> KTHEORY
+  %   ENDCOND
+  % AUTO_REWRITE+ kind
 
-  % Checks if the first element of M is a definition (not a declaration)
-  % Used as definition?(Γ(s)) it checks that s has a definition in Γ
-  % (such as s: TYPE = def_type, or s: T = def_term)
-  definition?(d: decl): bool =
-    dtype_def?(d) OR dconst_def?(d) OR dtheory?(d) OR dtype_interp?(d) OR dconst_interp?(d)
-  definition: TYPE = (definition?)
+  % % Checks if the first element of M is a definition (not a declaration)
+  % % Used as definition?(Γ(s)) it checks that s has a definition in Γ
+  % % (such as s: TYPE = def_type, or s: T = def_term)
+  % definition?(d: decl): bool =
+  %   dtype_def?(d) OR dconst_def?(d) OR dtheory?(d) OR dtype_interp?(d) OR dconst_interp?(d)
+  % definition: TYPE = (definition?)
   
-  % Function definition as informally defined at the begining of section 2.5
-  % Meant to be used as definition(Γ(s)), to give the definition of the symbol s
-  % (if it exists, see definition?), i.e a type, a term or a theory.
-  % Built-in decl DATATYPE
+  % % Function definition as informally defined at the begining of section 2.5
+  % % Meant to be used as definition(Γ(s)), to give the definition of the symbol s
+  % % (if it exists, see definition?), i.e a type, a term or a theory.
+  % % Built-in decl DATATYPE
 
-  % Checks if the first element of M has a type (i.e is a preterm).
-  % Used as typed?(Γ(s)) it checks that s is a preterm in Γ,
-  % i.e appears of the form s: T or s: T = a
-  typed?(d: decl): bool =
-    dvar?(d) OR dconst_def?(d) OR dconst_decl?(d)
-  AUTO_REWRITE+ typed?
+  % % Checks if the first element of M has a type (i.e is a preterm).
+  % % Used as typed?(Γ(s)) it checks that s is a preterm in Γ,
+  % % i.e appears of the form s: T or s: T = a
+  % typed?(d: decl): bool =
+  %   dvar?(d) OR dconst_def?(d) OR dconst_decl?(d)
+  % AUTO_REWRITE+ typed?
 
-  % Function type as informally defined at the begining of chapter 2.
-  % Meant to be used as type(Γ(s)), to give the type of s
-  % (if it exists, see typed?), i.e type(s: T = def_term, Γ) = T
-  % Built-in decl DATATYPE
+  % % Function type as informally defined at the begining of chapter 2.
+  % % Meant to be used as type(Γ(s)), to give the type of s
+  % % (if it exists, see typed?), i.e type(s: T = def_term, Γ) = T
+  % % Built-in decl DATATYPE
 END decl

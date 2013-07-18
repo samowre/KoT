@@ -1,6 +1,7 @@
 subst: THEORY
 BEGIN
-  IMPORTING decl
+  IMPORTING inductions
+%  IMPORTING decl
 
   e, f: VAR expr
   T, A, B: VAR pretype
@@ -73,37 +74,37 @@ BEGIN
   AUTO_REWRITE+ shift_plus
 
   % Shift defined over decls
-  ;↑(d: decl, n: nat): decl =
-    CASES d OF
-      dtype_decl: dtype_decl,
-      dtype_def(T): dtype_def(T ↑ n),
-      dvar(T): dvar(T ↑ n),
-      dconst_decl(T): dconst_decl(T ↑ n),
-      dconst_def(T, a): dconst_def(T ↑ n, a ↑ n),
-      dtheory(Θ): dtheory(Θ ↑ n),
-      dtype_interp(T): dtype_interp(T ↑ n),
-      dconst_interp(a): dconst_interp(a ↑ n)
-    ENDCASES
-  d: VAR decl
+  % ;↑(d: decl, n: nat): decl =
+  %   CASES d OF
+  %     dtype_decl: dtype_decl,
+  %     dtype_def(T): dtype_def(T ↑ n),
+  %     dvar(T): dvar(T ↑ n),
+  %     dconst_decl(T): dconst_decl(T ↑ n),
+  %     dconst_def(T, a): dconst_def(T ↑ n, a ↑ n),
+  %     dtheory(Θ): dtheory(Θ ↑ n),
+  %     dtype_interp(T): dtype_interp(T ↑ n),
+  %     dconst_interp(a): dconst_interp(a ↑ n)
+  %   ENDCASES
+  % d: VAR decl
 
-  shift_decl_zero: THEOREM
-    d ↑ 0 = d
-  AUTO_REWRITE+ shift_decl_zero
-  shift_decl_plus: THEOREM
-    (d ↑ i) ↑ j = d ↑ (i + j)
+  % shift_decl_zero: THEOREM
+  %   d ↑ 0 = d
+  % AUTO_REWRITE+ shift_decl_zero
+  % shift_decl_plus: THEOREM
+  %   (d ↑ i) ↑ j = d ↑ (i + j)
 
 
-  shift_kind: THEOREM
-    kind(d ↑ n) = kind(d)
-  shift_definition?: THEOREM
-    definition?(d ↑ n) IFF definition?(d)
-  shift_definition: THEOREM
-    definition?(d) IMPLIES definition(d ↑ n) = definition(d) ↑ n
-  shift_typed?: THEOREM
-    typed?(d ↑ n) IFF typed?(d)
-  shift_type: THEOREM
-    typed?(d) IMPLIES type_(d ↑ n) = type_(d) ↑ n
-  AUTO_REWRITE+ shift_kind, shift_definition?, shift_definition, shift_typed?, shift_type
+  % shift_kind: THEOREM
+  %   kind(d ↑ n) = kind(d)
+  % shift_definition?: THEOREM
+  %   definition?(d ↑ n) IFF definition?(d)
+  % shift_definition: THEOREM
+  %   definition?(d) IMPLIES definition(d ↑ n) = definition(d) ↑ n
+  % shift_typed?: THEOREM
+  %   typed?(d ↑ n) IFF typed?(d)
+  % shift_type: THEOREM
+  %   typed?(d) IMPLIES type_(d ↑ n) = type_(d) ↑ n
+  % AUTO_REWRITE+ shift_kind, shift_definition?, shift_definition, shift_typed?, shift_type
 
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
