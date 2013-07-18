@@ -1485,22 +1485,14 @@
                   (("5" (inst - "Γ!1")
                     (("5" (expand "-")
                       (("5" (assert)
-                        (("5" (expand "+")
+                        (("5" (expand "union")
                           (("5" (assert)
-                            (("5" (expand "union")
+                            (("5" (rewrite -4 :dont-delete? t)
                               (("5"
                                 (assert)
                                 (("5"
-                                  (rewrite -4 :dont-delete? t)
-                                  (("5"
-                                    (assert)
-                                    (("5"
-                                      (grind-with-ext :if-match nil)
-                                      (("1" (postpone) nil nil)
-                                       ("2" (postpone) nil nil)
-                                       ("3" (postpone) nil nil))
-                                      nil))
-                                    nil))
+                                  (grind-with-ext :if-match nil)
+                                  nil
                                   nil))
                                 nil))
                               nil))
@@ -1521,12 +1513,27 @@
             (pretheory type-eq-decl nil language nil)
             (preterm? const-decl "[semantic -> bool]" language nil)
             (preterm type-eq-decl nil language nil)
-            (posint_plus_nnint_is_posint application-judgement "posint"
-             integers nil)
-            (pretype? const-decl "[semantic -> bool]" language nil)
+            (+ const-decl "set[nat]" syntaxic_sets nil)
+            (int_plus_int_is_int application-judgement "int" integers
+             nil)
+            (real_ge_is_total_order name-judgement
+             "(total_order?[real])" real_props nil)
+            (Δ!1 skolem-const-decl "context" context nil)
+            (Γ!1 skolem-const-decl "context" context nil)
+            (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+            (dvars_concat formula-decl nil context nil)
+            (OR const-decl "[bool, bool -> bool]" booleans nil)
             (pretype type-eq-decl nil language nil)
+            (pretype? const-decl "[semantic -> bool]" language nil)
+            (emptyset const-decl "set" sets nil)
+            (finite_emptyset name-judgement "finite_set" finite_sets
+             nil)
+            (member const-decl "bool" sets nil)
             (NOT const-decl "[bool -> bool]" booleans nil)
             (context_induction formula-decl nil inductions nil)
+            (dvars def-decl "nat" syntaxic_sets nil)
+            (- const-decl "set[nat]" syntaxic_sets nil)
+            (union const-decl "set" sets nil)
             (++ def-decl
              "{Θ | weight(F)(Θ) = weight(F)(Γ) + weight(F)(Δ) - F(ord_empty) - 1}"
              context nil)
@@ -1583,6 +1590,11 @@
             (AND const-decl "[bool, bool -> bool]" booleans nil)
             (weight def-decl "nat" language nil)
             (ord type-decl nil language nil)
+            (vars def-decl "set[nat]" syntaxic_sets nil)
+            (syntaxic type-eq-decl nil language nil)
+            (syntaxic? const-decl "[semantic -> bool]" language nil)
+            (= const-decl "[T, T -> boolean]" equalities nil)
+            (set type-eq-decl nil sets nil)
             (nat nonempty-type-eq-decl nil naturalnumbers nil)
             (>= const-decl "bool" reals nil)
             (int nonempty-type-eq-decl nil integers nil)
@@ -1598,7 +1610,6 @@
              nil)
             (number_field_pred const-decl "[number -> boolean]"
              number_fields nil)
-            (= const-decl "[T, T -> boolean]" equalities nil)
             (number nonempty-type-decl nil numbers nil)
             (context type-eq-decl nil language nil)
             (context? const-decl "[semantic -> bool]" language nil)
