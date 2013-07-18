@@ -13,6 +13,7 @@ BEGIN
   S, U: VAR syntaxic
   M: VAR map
   i, j: VAR nat
+  e, E: VAR expr
   
   size(T): RECURSIVE nat =
     CASES T OF
@@ -26,14 +27,13 @@ BEGIN
   AUTO_REWRITE+ size
   
   % Shift: classical shift operator for De Bruijn indices
-% TODO: expr
-  ;↑(S, (nb: [nat, nat] | nb`2 >= dvars(S))): RECURSIVE
-    { U | (pretype?(S) => pretype?(U)) AND
-          (preterm?(S) => preterm?(U)) AND
-	  (interp?(S)  => interp?(U)) AND
-	  (pretheory?(S) => pretheory?(U)) AND
-	  w(U) = w(S) } =
-    CASES S OF
+  ;↑(e, (nb: [nat, nat])): RECURSIVE
+    { E | (pretype?(e) => pretype?(E)) AND
+          (preterm?(e) => preterm?(E)) AND
+	  (interp?(e)  => interp?(E)) AND
+	  (pretheory?(e) => pretheory?(E)) AND
+	  w(e) = w(E) } =
+    CASES e OF
       % Names
       symbol(s): symbol(s),
       dot(m, σ, s): dot(m, σ ↑ nb, s),
@@ -65,20 +65,21 @@ BEGIN
       itype(s, T, σ): itype(s, T ↑ nb, σ ↑ nb),
       iconst(s, a, σ): iconst(s, a ↑ nb, σ ↑ nb)
     ENDCASES
-  MEASURE w(S)
+  MEASURE w(e)
   AUTO_REWRITE+ ↑
   dsymbols_shift: THEOREM
-    j >= dvars(Γ) IMPLIES dsymbols(Γ ↑ (i, j)) = dsymbols(Γ)
+    pretheory?(Γ) IMPLIES
+      dsymbols(Γ ↑ (i, j)) = dsymbols(Γ)
   symbols_shift: THEOREM
-    j >= dvars(S) IMPLIES symbols(S ↑ (i, j)) = symbols(S)
+    symbols(e ↑ (i, j)) = symbols(S)
   dvars_shift: THEOREM
-    j >= dvars(Γ) IMPLIES dvars(Γ ↑ (i, j)) = dvars(Γ)
+    pretheory?(Γ) IMPLIES
+      dvars(Γ ↑ (i, j)) = dvars(Γ)
   vars_shift: THEOREM
-    j >= dvars(S) IMPLIES
-      vars(S ↑ (i, j)) =
-        { k: nat | k < j AND k ∈ vars(S) OR k >= i + j AND (k - i) ∈ vars(S) }
-  nonrecursive_shift: THEOREM
-    j >= dvars(Γ) IMPLIES nonrecursive?(Γ ↑ (i, j)) IFF nonrecursive?(Γ)
+      vars(e ↑ (i, j)) =
+        { k: nat | k < j AND k ∈ vars(e) OR k >= i + j AND (k - i) ∈ vars(e) }
+  uniques_shift: THEOREM
+    uniques?(Γ ↑ (i, j)) IFF uniques?(Γ)
 
   ;↑(S, i): MACRO semantic = S ↑ (i, 0)
 

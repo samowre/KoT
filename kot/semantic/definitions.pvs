@@ -14,25 +14,26 @@ BEGIN
 
   % η function, as informally defined just before definition 5.5
   % + some modification for the theory interpretations extension
-  η(Γ, (m | m ∈ Γ AND KTHEORY?(kind(Γ(m)))), σ)
-   (e | well_formed?(Γ ++ definition(Γ(m)))(e)): RECURSIVE semantic =
+  η(Γ, (m | m ∈ Γ AND kind(Γ)(m) = KTHEORY), (Δ | well_formed?(Γ(m))(Δ) AND dsymbols(Δ) ⊂ dsymbol(definition(Γ)(m))), (σ | well_formed?(Γ)(σ)))
+   (e | well_formed?(rest(Γ(m)) ++ Δ)(e)): RECURSIVE
+    { E | well_formed?(Γ)(E) } =
     CASES e OF
       symbol(s):
-        IF s ∈ σ THEN definition(σ(s))
-	ELSIF s ∈ definition(Γ(m)) THEN  dot(m, σ, s)
+        IF s ∈ σ THEN definition(σ)(s)
+	ELSIF s ∈ Δ THEN dot(m, σ, s)
 	ELSE symbol(s) ENDIF,
       dot(m_, τ, s_): dot(m_, η(Γ, m, σ)(τ), s_),
 
-      fun(A, B): fun(η(Γ, m, σ)(A), η(kvar(A, Γ), m, σ)(B)),
-      prod(A, B): prod(η(Γ, m, σ)(A), η(kvar(A, Γ), m, σ)(B)),
-      subtype(T, a): subtype(η(Γ, m, σ)(T), η(kvar(T, Γ), m, σ)(a)),
+      fun(A, B): fun(η(Γ, m, Δ, σ)(A), η(Γ, m, kvar(A, Δ), σ)(B)),
+      prod(A, B): prod(η(Γ, m, Δ, σ)(A), η(Γ, m, kvar(A, Δ), σ)(B)),
+      subtype(T, a): subtype(η(Γ, m, Δ, σ)(T), η(Γ, m, kvar(T, Δ), σ)(a)),
 
       v(i): v(i),
-      app(f, a): app(η(Γ, m, σ)(f), η(Γ, m, σ)(a)),
-      lam(T, a): lam(η(Γ, m, σ)(T), η(kvar(T, Γ), m, σ)(a)),
-      pair(a, b): pair(η(Γ, m, σ)(a), η(Γ, m, σ)(b)),
-      lproj(a): lproj(η(Γ, m, σ)(a)),
-      rproj(a): rproj(η(Γ, m, σ)(a)),
+      app(f, a): app(η(Γ, m, Δ, σ)(f), η(Γ, m, Δ, σ)(a)),
+      lam(T, a): lam(η(Γ, m, Δ, σ)(T), η(Γ, m, kvar(T, Δ), σ)(a)),
+      pair(a, b): pair(η(Γ, m, Δ, σ)(a), η(Γ, m, Δ, σ)(b)),
+      lproj(a): lproj(η(Γ, m, Δ, σ)(a)),
+      rproj(a): rproj(η(Γ, m, Δ, σ)(a)),
 
       〈〉: 〈〉,
       ktype_decl(s, Δ): ktype_decl(s, η(Γ, m, σ)(Δ)),
@@ -59,7 +60,7 @@ BEGIN
     CASES T OF
       symbol(s):
         IF definition?(Γ(s)) THEN
-	  δ(Γ)(definition(Γ(s)))
+	  δ(rest(Γ(s)))(definition(Γ(s)))
   	ELSE symbol(s) ENDIF,
       dot(m, σ, s):
         IF s ∈ σ THEN
@@ -67,7 +68,7 @@ BEGIN
   	ELSE
   	  LET Δ = definition(Γ(m)) IN
   	  IF definition?(Δ(s)) THEN
-  	    δ(Γ)(η(Γ, m, σ)(definition(Δ(s))))
+  	    δ(Γ)(η(Γ, rest(Δ(s)), m, σ)(definition(Δ(s))))
    	  ELSE dot(m, δ(Γ)(σ), s) ENDIF
   	ENDIF,
       fun(A, B): fun(δ(Γ)(A), δ(Γ)(B)),

@@ -21,7 +21,7 @@ BEGIN
     CASES S OF
       symbol(s): s ∈ Γ AND kind(Γ(s)) /= KTHEORY,
       dot(m, σ, s):
-        m ∈ Γ AND kind(Γ(m)) = KTHEORY AND s ∈ definition(Γ(m)) AND
+        m ∈ Γ AND kind(Γ)(m) = KTHEORY AND s ∈ definition(Γ)(m) AND
   	well_formed?(Γ)(σ), % AND interp_for?(definition(Γ(m)))(σ),
 
       fun(A, B): well_formed?(Γ)(A) AND well_formed?(kvar(A, Γ))(B),

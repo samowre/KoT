@@ -1,0 +1,69 @@
+test: THEORY
+BEGIN
+  IMPORTING well_formed
+  
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s, m: VAR symbol
+  n: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  σ, τ: VAR interp
+  S: VAR syntaxic
+  Th: VAR pretheory
+  e: VAR expr
+  d: VAR decl
+  i, j, k, l: VAR nat
+
+    % Is Δ a subword of Γ?
+  ;≺(Δ, Γ): RECURSIVE bool =
+    CASES Γ OF
+      〈〉: empty?(Δ)
+    , ktype_decl(s, Θ):
+      CASES Δ OF
+        ktype_decl(t, rest): t = s AND rest = Θ OR Δ ≺ Θ
+        ELSE Δ ≺ Θ
+      ENDCASES
+    , ktype_def(s, T, Θ):
+      CASES Δ OF
+        ktype_def(t, A, rest): t = s AND T = A AND rest = Θ OR Δ ≺ Θ
+        ELSE Δ ≺ Θ
+      ENDCASES
+    , ktype_ext(s, Θ):
+      CASES Δ OF
+        ktype_ext(t, rest): t = s AND rest = Θ OR Δ ≺ Θ
+        ELSE Δ ≺ Θ
+      ENDCASES
+    , kvar(T, Θ):
+      CASES Δ OF
+        kvar(A, rest): T = A AND rest = Θ OR Δ ≺ Θ
+	ELSE Δ ≺ Θ
+      ENDCASES
+    , kconst_decl(s, T, Θ):
+      CASES Δ OF
+        kconst_decl(t, A, rest):  t = s AND A = T AND rest = Θ OR Δ ≺ Θ
+        ELSE Δ ≺ Θ
+      ENDCASES
+    , kconst_def(s, T, a, Θ):
+      CASES Δ OF
+        kconst_def(t, A, b, rest):  t = s AND A = T AND b = a AND rest = Θ OR Δ ≺ Θ
+        ELSE Δ ≺ Θ
+      ENDCASES
+    , kconst_ext(s, T, Θ):
+      CASES Δ OF
+        kconst_ext(t, A, rest):  t = s AND A = T AND rest = Θ OR Δ ≺ Θ
+        ELSE Δ ≺ Θ
+      ENDCASES
+    , ktheory(s, Th, Θ):
+      CASES Δ OF
+        ktheory(t, Uh, rest):  t = s AND Uh = Th AND rest = Θ OR Δ ≺ Θ
+        ELSE Δ ≺ Θ
+      ENDCASES
+   ENDCASES
+  MEASURE w(Γ)
+  AUTO_REWRITE ≺
+
+  well_formed_increasing: THEOREM
+    Δ ≺ Γ IMPLIES (well_formed?(Δ)(e) IMPLIES well_formed?(Γ)(e ↑ (vars(Γ) - vars(Δ))))
+
+END test

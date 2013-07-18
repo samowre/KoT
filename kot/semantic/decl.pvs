@@ -15,50 +15,29 @@ BEGIN
   
   find(Γ)(s: (dsymbols(Γ))): RECURSIVE context	 =
     COND
-      kvar?(Γ) -> find(rest(Γ))(s) ↑ 1
-    , ELSE -> IF s = s(Γ) THEN Γ ELSE find(rest(Γ))(s) ENDIF
+      kvar?(Γ) -> find(rest(Γ))(s)
+    , ELSE -> IF s = s(Γ) THEN rest(Γ) ELSE find(rest(Γ))(s) ENDIF
     ENDCOND
   MEASURE w(Γ)
+  CONVERSION+ find
 
-  definition?(Γ)(s: (dsymbols(Γ))): bool =
-    ktype_def?(find(Γ)(s)) OR
-    kconst_def?(find(Γ)(s))
+  symbols_definition: THEOREM
+    s ∈ Γ AND definition?(Γ)(s) IMPLIES
+      symbols(definition(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
+  vars_definition: THEOREM
+    s ∈ Γ AND definition?(Γ)(s) IMPLIES
+      vars(definition(Γ)(s)) ⊂ { x | x < dvars(Γ) }
+  dvars_definition: THEOREM
+    s ∈ Γ AND definition?(Γ)(s) AND kind(Γ)(s) = KTHEORY IMPLIES
+      dvars(definition(Γ)(s)) = 0
+  uniques_definition: THEOREM
+    s ∈ Γ AND definition?(Γ)(s) AND kind(Γ)(s) = KTHEORY IMPLIES
+      uniques?(Γ) IMPLIES uniques?(definition(Γ)(s))
 
-  definition(Γ)(s: (definition?(Γ))): expr =
-    CASES find(Γ)(s) OF
-      ktype_def(s, T, Δ): T
-    , kconst_def(s, T, a, Δ): a
-    ENDCASES
-  symbols_definition: THEOREM FORALL (s: (definition?(Γ))):
-    symbols(definition(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
-  vars_definition: THEOREM FORALL (s: (definition?(Γ))):
-    vars(definition(Γ)(s)) ⊂ { x | x < dvars(Γ) }
-
-  typed?(Γ)(s: (dsymbols(Γ))): bool =
-    kconst_decl?(find(Γ)(s)) OR
-    kconst_def?(find(Γ)(s)) OR
-    kconst_ext?(find(Γ)(s))
-
-  type_(Γ)(s: (typed?(Γ))): pretype =
-    dtype(find(Γ)(s))
   symbols_type: THEOREM FORALL (s: (typed?(Γ))):
     symbols(type_(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
   vars_type: THEOREM FORALL (s: (typed?(Γ))):
     vars(type_(Γ)(s)) ⊂ (vars(Γ) ∪ { x | x < dvars(Γ) })
-
-  theory?(Γ)(s: (dsymbols(Γ))): bool =
-    ktheory?(find(Γ)(s))
-
-  body(Γ)(s: (theory?(Γ))): pretheory =
-    dtheory(find(Γ)(s))
-  symbols_body: THEOREM FORALL (s: (theory?(Γ))):
-    symbols(body(Γ)(s)) ⊂ ((dsymbols(Γ) ∪ symbols(Γ)) - dsymbols(body(Γ)(s)))
-  dvars_body: THEOREM FORALL (s: (theory?(Γ))):
-    dvars(body(Γ)(s)) = 0
-  vars_body: THEOREM FORALL (s: (theory?(Γ))):
-    vars(body(Γ)(s)) ⊂ ((vars(Γ) ∪ { x | x < dvars(Γ) }) - dvars(body(Γ)(s)))
-  nonrecursive_body: THEOREM FORALL (s: (theory?(Γ))):
-    nonrecursive?(Γ) IMPLIES nonrecursive?(body(Γ)(s))
 
   length(Γ): RECURSIVE nat =
     CASES Γ OF
@@ -74,16 +53,12 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   pos_definition: THEOREM FORALL (s: (definition?(Γ))):
-    nonrecursive?(Γ) IMPLIES
+    uniques?(Γ) IMPLIES
       FORALL (t: (symbols(definition(Γ)(s)))):
         t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
   pos_type: THEOREM FORALL (s: (typed?(Γ))):
-    nonrecursive?(Γ) IMPLIES
+    uniques?(Γ) IMPLIES
       FORALL (t: (symbols(type_(Γ)(s)))):
-        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
-  pos_body: THEOREM FORALL (s: (theory?(Γ))):
-    nonrecursive?(Γ) IMPLIES
-      FORALL (t: (symbols(body(Γ)(s)))):
         t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
 
   pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
@@ -94,10 +69,8 @@ BEGIN
   MEASURE w(Γ)
 
   closed?(Γ)(S): bool =
-    FORALL (x: (vars(S))): x < dvars(Γ)
-
-  defined?(Γ)(S): bool =
-    FORALL (s: (symbols(S))): s ∈ dsymbols(Γ)
+    vars(S) ⊂ { x | x < dvars(Γ) } AND
+    symbols(S) ⊂ dsymbols(Γ)
 
   % % Datatype decl = context of size one
   % decl: DATATYPE WITH SUBTYPES ktype_decl, kvar_decl, kconst_decl, ktheory_decl

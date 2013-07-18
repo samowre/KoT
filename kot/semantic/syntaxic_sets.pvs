@@ -37,8 +37,8 @@ BEGIN
     % { x + i | x ∈ vars }, j = x + i
     { j: nat | j >= i AND member(j - i, vars) }
 
-  dvars(S): RECURSIVE nat =
-    CASES S OF
+  dvars(Γ): RECURSIVE nat =
+    CASES Γ OF
       〈〉: 0
     , ktype_decl(s, Δ): dvars(Δ)
     , ktype_def(s, T, Δ): dvars(Δ)
@@ -48,18 +48,11 @@ BEGIN
     , kconst_def(s, T, a, Δ): dvars(Δ)
     , kconst_ext(s, T, Δ): dvars(Δ)
     , ktheory(s, Θ, Δ): dvars(Δ)
-    ELSE 0
     ENDCASES
-  MEASURE w(S)
+  MEASURE w(Γ)
   dvars_pretheory: THEOREM
     pretheory?(Γ) IMPLIES dvars(Γ) = 0
-  dvars_pretype: THEOREM
-    dvars(T) = 0
-  dvars_preterm: THEOREM
-    dvars(a) = 0
-  dvars_interp: THEOREM
-    dvars(σ) = 0
-  AUTO_REWRITE dvars_pretheory, dvars_pretype, dvars_preterm, dvars_interp
+  AUTO_REWRITE dvars_pretheory, dvars
 
   dsymbols(Γ): RECURSIVE set[symbol] =
     CASES Γ OF
@@ -74,6 +67,7 @@ BEGIN
     , ktheory(s, Θ, Δ): add(s, dsymbols(Δ))
     ENDCASES
   MEASURE w(Γ)
+  AUTO_REWRITE dsymbols
 
   vars(S): RECURSIVE set[nat] =
     CASES S OF
@@ -106,6 +100,7 @@ BEGIN
     , iconst(s, a, σ): union(vars(a), vars(σ))
     ENDCASES
   MEASURE w(S)
+  AUTO_REWRITE vars
 
   symbols(S): RECURSIVE set[symbol] =
     CASES S OF
@@ -138,20 +133,20 @@ BEGIN
     , iconst(s, a, σ): union(symbols(a), symbols(σ))
     ENDCASES
   MEASURE w(S)
+  AUTO_REWRITE symbols
 
-  nonrecursive?(Γ): RECURSIVE bool =
+  uniques?(Γ): RECURSIVE bool =
     CASES Γ OF
       〈〉: TRUE
-    , ktype_decl(s, Δ): s ∉ dsymbols(Δ) AND nonrecursive?(Δ)
-    , ktype_def(s, T, Δ): s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND nonrecursive?(Δ)
-    , ktype_ext(s, Δ): s ∉ dsymbols(Δ) AND nonrecursive?(Δ)
-    , kvar(T, Δ): nonrecursive?(Δ)
-    , kconst_decl(s, T, Δ): s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND nonrecursive?(Δ)
-    , kconst_def(s, T, a, Δ):
-        s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND s ∉ symbols(a) AND nonrecursive?(Δ)
-    , kconst_ext(s, T, Δ): s ∉ dsymbols(Δ) AND s ∉ symbols(T) AND nonrecursive?(Δ)
-    , ktheory(s, Θ, Δ):
-        s ∉ dsymbols(Δ) AND s ∉ symbols(Θ) AND nonrecursive?(Θ) AND nonrecursive?(Δ)
+    , ktype_decl(s, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
+    , ktype_def(s, T, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
+    , ktype_ext(s, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
+    , kvar(T, Δ): uniques?(Δ)
+    , kconst_decl(s, T, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
+    , kconst_def(s, T, a, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
+    , kconst_ext(s, T, Δ): s ∉ dsymbols(Δ) AND uniques?(Δ)
+    , ktheory(s, Θ, Δ): s ∉ dsymbols(Δ) AND uniques?(Θ) AND uniques?(Δ)
     ENDCASES
   MEASURE w(Γ)
+  AUTO_REWRITE uniques?
 END syntaxic_sets
