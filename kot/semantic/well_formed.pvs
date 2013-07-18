@@ -84,8 +84,6 @@ BEGIN
   well_formed(Γ): TYPE = (well_formed?(Γ))
   well_formed_context: TYPE = { Γ | well_formed?(〈〉)(Γ) }
 
-  ;==(Γ, Δ): bool = FORALL S: well_formed?(Γ)(S) IFF well_formed?(Δ)(S)
-
   well_formed_decl?(Γ)(d): bool =
     CASES d OF
       dtype_decl: TRUE,
@@ -112,8 +110,4 @@ BEGIN
   % well_formed_kvar: THEOREM
   %   j <= vars(Γ) IMPLIES
   %     (well_formed?(Γ)(e ↑ (i, j)) IFF well_formed?(kvar(T, Γ))(e ↑ (i + 1, j)))
-  well_formed_rest: THEOREM FORALL (Γ: well_formed_context):
-    nonempty?(Γ) AND well_formed?(rest(Γ))(e) IMPLIES well_formed?(Γ)(e)
-  well_formed_app_symbol: RECURSIVE JUDGEMENT
-    app_symbol(Γ: well_formed_context)(s | s ∈ Γ) HAS_TYPE (well_formed_decl?(Γ))
 END well_formed

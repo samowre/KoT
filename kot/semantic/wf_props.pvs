@@ -6,9 +6,9 @@ BEGIN
   Θ: VAR context
   r, s: VAR symbol
 
-  well_formed_definition: THEOREM
-    well_formed?(Γ)(Θ) AND s ∈ Θ AND definition?(Θ(s))
-      IMPLIES well_formed?(Γ ++ Θ)(definition(Θ(s)))
+  well_formed_app_symbol: JUDGEMENT
+    app_symbol(Γ: well_formed_context)(s | s ∈ Γ) HAS_TYPE (well_formed_decl?(Γ))
+
 
   % weight_definition: THEOREM
   %   s ∈ Γ AND definition?(Γ(s)) IMPLIES w(Γ, definition(Γ(s))) <= w(Γ, s)

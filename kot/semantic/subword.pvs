@@ -13,7 +13,13 @@ BEGIN
   σ, τ: VAR interp
   e: VAR expr
 
-
+  decls(S): RECURSIVE set[symbol] =
+    COND
+      kvar?(S) -> decls(rest(S)),
+      NOT kvar?(S) AND nonempty_context?(S) -> add(s(S), decls(rest(S))),
+      ELSE -> emptyset
+    ENDCOND
+  MEASURE w(S)
 
   % Is Δ a subword of Γ?
   ;≺(Δ, Γ): RECURSIVE bool =
@@ -87,12 +93,6 @@ BEGIN
   subword_var: THEOREM
     Δ ≺ Γ AND x ∈ Δ IMPLIES Δ(x) = Γ(x)
   AUTO_REWRITE+ subword_symbol, subword_var
- 
-
-  well_formed_subword: THEOREM 
-    Δ ≺ Γ AND well_formed?(Δ)(e) AND 
-    (preterm?(e) OR pretype?(e) OR interp?(e))
-    IMPLIES well_formed?(Γ)(e)
 
   subword_concat: THEOREM
       well_formed?(Γ)(Θ) AND vars(Θ) = 0 IMPLIES
@@ -100,4 +100,19 @@ BEGIN
   both_sides_concat_subword: THEOREM
     well_formed?(Δ)(Θ) AND well_formed?(Γ)(Θ) AND Δ ≺ Γ IMPLIES
       Δ ++ Θ ≺ Γ ++ Θ
+
+
+  decls_pretype: THEOREM
+    decls(T) = emptyset
+  decls_preterm: THEOREM
+    decls(a) = emptyset
+  decls_interp: THEOREM
+    decls(σ) = emptyset
+  decls_context: THEOREM
+    decls(Θ) = { s | s ∈ Θ }
+  AUTO_REWRITE+ decls_pretype, decls_preterm, decls_interp, decls_context
+  well_formed_subword: THEOREM 
+    Δ ≺ Γ AND well_formed?(Δ)(e) AND disjoint?(decls(Γ), decls(e))
+      IMPLIES well_formed?(Γ)(e)
+
 END subword
