@@ -1,6 +1,24 @@
+set_props[T: TYPE]: THEORY
+BEGIN
+  x: VAR T
+  a, b: VAR set[T]
+
+  ;∅: MACRO set[T] = emptyset
+  ;∈(x, a): MACRO bool = member(x, a)
+  ;∉(x, a): MACRO bool = NOT member(x, a)
+  ;⊂(a, b): MACRO bool = subset?(a, b)
+  ;∪(a, b): MACRO set[T] = union(a, b)
+  ;∪(a, x): MACRO set[T] = add(x, a)
+  ;∪(x, a): MACRO set[T] = add(x, a)
+  ;-(a, b): MACRO set[T] = difference(a, b)
+  ;∩(a, b): MACRO set[T] = intersection(a, b)
+  ;Δ(a, b): MACRO set[T] = symmetric_difference(a, b)
+END set_props
+
 decl: THEORY
 BEGIN
   IMPORTING language, subtype, inductions
+  IMPORTING set_props
 
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
@@ -15,9 +33,6 @@ BEGIN
   ;-(vars: set[nat], i: nat): set[nat] =
     % { x - i | x ∈ vars }, j = x - i
     { j: nat | member(j + i, vars) }
-
-  ;-(a, b: set[symbol]): set[symbol] =
-    { s: symbol | member(s, a) AND NOT member(s, b) }
 
   dvars(Γ): RECURSIVE nat =
     CASES Γ OF
