@@ -1,7 +1,7 @@
 decl: THEORY
 BEGIN
   IMPORTING language, subtype, inductions
-
+  IMPORTING subst
 
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
@@ -13,6 +13,89 @@ BEGIN
   S: VAR syntaxic
   M: VAR map
 
+  definition?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
+    CASES
+      kvar?(Γ) -> definition?(rest(Γ))(s)
+    , ELSE -> IF s = s(Γ) THEN (ktype_def?(Γ) OR kconst_def?(Γ) OR ktheory?(Γ))
+              ELSE definition?(rest(Γ))(s) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+
+  typed?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
+    CASES
+      kvar?(Γ) -> typed?(rest(Γ))(s)
+    , ELSE -> IF s = s(Γ) THEN (ktype_def?(Γ) OR ktype_decl?(Γ) OR ktype_ext?(Γ))
+              ELSE typed?(rest(Γ))(s) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+
+  theory?(Γ)(s: (definition?(Γ))): RECURSIVE bool =
+    CASES
+      kvar?(Γ) -> theory?(rest(Γ))(s)
+    , ELSE -> IF s = s(Γ) THEN ktheory?(Γ)
+              ELSE theory?(rest(Γ))(s) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+
+  
+  find(Γ)(s: (dsymbols(Γ))): RECURSIVE context	 =
+    COND
+      kvar?(Γ) -> find(rest(Γ))(s)
+    , ELSE -> IF s = s(Γ) THEN rest(Γ) ELSE find(rest(Γ))(s) ENDIF
+    ENDCOND
+  MEASURE w(Γ)
+  CONVERSION+ find
+
+  symbols_definition: THEOREM FORALL (s: (definition?(\Gamma))):
+      symbols(definition(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
+  vars_definition: THEOREM FORALL (s: (definition?
+    s ∈ Γ AND definition?(Γ)(s) IMPLIES
+      vars(definition(Γ)(s)) ⊂ { x | x < dvars(Γ) }
+  dvars_definition: THEOREM
+    s ∈ Γ AND definition?(Γ)(s) AND kind(Γ)(s) = KTHEORY IMPLIES
+      dvars(definition(Γ)(s)) = 0
+  uniques_definition: THEOREM
+    s ∈ Γ AND definition?(Γ)(s) AND kind(Γ)(s) = KTHEORY IMPLIES
+      uniques?(Γ) IMPLIES uniques?(definition(Γ)(s))
+
+  symbols_type: THEOREM FORALL (s: (typed?(Γ))):
+    symbols(type_(Γ)(s)) ⊂ (dsymbols(Γ) ∪ symbols(Γ))
+  vars_type: THEOREM FORALL (s: (typed?(Γ))):
+    vars(type_(Γ)(s)) ⊂ (vars(Γ) ∪ { x | x < dvars(Γ) })
+
+  length(Γ): RECURSIVE nat =
+    CASES Γ OF
+      〈〉: 0
+      ELSE 1 + length(rest(Γ))
+    ENDCASES
+  MEASURE w(Γ)
+
+  pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[length(Γ)] =
+    CASES Γ OF
+      kvar(T, Δ): pos(Δ, s)
+      ELSE IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+  pos_definition: THEOREM FORALL (s: (definition?(Γ))):
+    uniques?(Γ) IMPLIES
+      FORALL (t: (symbols(definition(Γ)(s)))):
+        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  pos_type: THEOREM FORALL (s: (typed?(Γ))):
+    uniques?(Γ) IMPLIES
+      FORALL (t: (symbols(type_(Γ)(s)))):
+        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+
+  pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
+    CASES Γ OF
+      kvar(T, Δ): IF x = 0 THEN length(Δ) ELSE pos(Δ, x - 1) ENDIF
+      ELSE pos(rest(Γ), x)
+    ENDCASES
+  MEASURE w(Γ)
+
+  closed?(Γ)(S): bool =
+    vars(S) ⊂ { x | x < dvars(Γ) } AND
+    symbols(S) ⊂ dsymbols(Γ)
+  
 
   % Datatype decl = context of size one
   decl: DATATYPE WITH SUBTYPES ktype_decl, kvar_decl, kconst_decl, ktheory_decl

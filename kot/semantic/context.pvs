@@ -62,6 +62,17 @@ BEGIN
   concat_assoc: THEOREM
     Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
   AUTO_REWRITE+ concat_assoc
+  member_symbol_rest: THEOREM
+    NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES s ∈ rest(Γ)
+  member_symbol_when_member_rest: THEOREM
+    nonempty?(Γ) AND s ∈ rest(Γ) IMPLIES s ∈ Γ
+  member_symbol_rest_kvar: THEOREM
+    kvar?(Γ) AND s ∈ Γ IMPLIES s ∈ rest(Γ)
+  apply_symbol_rest: THEOREM
+    NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES rest(Γ)(s) = Γ(s)
+  apply_symbol_rest_kvar: THEOREM
+    kvar?(Γ) AND s ∈ Γ IMPLIES rest(Γ)(s) ↑ 1 = Γ(s)
+
 
   length(Γ: context): RECURSIVE nat =
     COND
