@@ -30,8 +30,8 @@ BEGIN
     symbols(find(Γ)(s)) ⊂ symbols(Γ)
   vars_find: THEOREM FORALL (s: (dsymbols(Γ))):
     vars(find(Γ)(s)) ⊂ { x | (x + dvars(Γ) - dvars(find(Γ)(s))) ∈ vars(Γ) }
-  find_is_closed: JUDGEMENT
-    find(Δ | closed?(Γ)(Δ))(s: (dsymbols(Δ))) HAS_TYPE (closed?(Γ))
+  find_is_closed: THEOREM FORALL (Δ | closed?(Γ)(Δ)), (s: (dsymbols(Δ))):
+    closed?(Γ)(find(Δ)(s))
   find_is_uniques: JUDGEMENT
     find(Γ | uniques?(Γ))(s: (dsymbols(Γ))) HAS_TYPE (uniques?)
 
@@ -112,14 +112,14 @@ BEGIN
   % If Γ is closed (ie uses only symbols declared in Γ) then
   % definition(Γ)(s) only uses symbols that have been previously
   % declared in Γ
-  symbols_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
-    symbols(definition(Γ)(s)) ⊂ dsymbols(find(Γ)(s))
+  symbols_definition: THEOREM FORALL (Δ: (closed?(Γ)), s: (definition?(Δ))):
+    symbols(definition(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
   % Same for vars
-  vars_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
-    vars(definition(Γ)(s)) ⊂ { x | x < dvars(find(Γ)(s)) }
+  vars_definition: THEOREM FORALL (Δ: (closed?(Γ)), s: (definition?(Δ))):
+    vars(definition(Δ)(s)) ⊂ { x | x < dvars(find(Δ)(s)) + dvars(Γ) }
   % closed_definition = symbols_definition AND vars_definition
-  closed_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
-    closed?(find(Γ)(s))(definition(Γ)(s))
+  closed_definition: THEOREM FORALL (Δ: (closed?(Γ)), s: (definition?(Δ))):
+    closed?(Γ ++ find(Δ)(s))(definition(Δ)(s))
     
   % A theory does not define variables
   dvars_definition: THEOREM FORALL (s: (dtheory?(Γ))):
@@ -183,26 +183,17 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE pos
-  pos_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
-    FORALL (t: (symbols(definition(Γ)(s)))):
-      t ∈ dsymbols(find(Γ)(s)) IMPLIES pos(find(Γ)(s), t) < pos(Γ, s)
-  pos_type: THEOREM FORALL (Γ: (uniques?), s: (typed?(Γ))):
-    FORALL (t: (symbols(type_(Γ)(s)))):
-      t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
-
 
   % If the symbol t is used in the definition of symbol s
   % then t is defined before s, 
   % hence pos(Γ)(t) < pos(Γ)(s)
-  pos_definition: THEOREM FORALL (s: (definition?(Γ))):
-    uniques?(Γ) IMPLIES
-      FORALL (t: (symbols(definition(Γ)(s)))):
-        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  pos_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
+    FORALL (t: (symbols(definition(Γ)(s)))):
+      t ∈ dsymbols(find(Γ)(s)) IMPLIES pos(find(Γ)(s), t) < pos(Γ, s)  
   % Same in the type of symbol s
-  pos_type: THEOREM FORALL (s: (typed?(Γ))):
-    uniques?(Γ) IMPLIES
-      FORALL (t: (symbols(type_(Γ)(s)))):
-        t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  pos_type: THEOREM FORALL (Γ: (uniques?), s: (typed?(Γ))):
+    FORALL (t: (symbols(type_(Γ)(s)))):
+      t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
   % Returns the position of a variable in a context
   pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
     CASES Γ OF

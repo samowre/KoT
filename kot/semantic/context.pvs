@@ -1,6 +1,6 @@
 context: THEORY
 BEGIN
-  IMPORTING map
+  IMPORTING subst
 
   S: VAR syntaxic
   Γ, Δ, Θ: VAR context
@@ -12,91 +12,60 @@ BEGIN
   σ, τ: VAR interp
   i: VAR nat
 
-  vars(Γ): RECURSIVE nat =
-    COND
-      empty?(Γ) -> 0,
-      kvar?(Γ) -> 1 + vars(rest(Γ)),
-      ELSE -> vars(rest(Γ))
-    ENDCOND
-  MEASURE w(Γ)
-  vars_pretheory: THEOREM
-    pretheory?(Γ) IMPLIES vars(Γ) = 0
-  vars_member: THEOREM
-    x ∈ Γ IFF x < vars(Γ)
-
   % Γ ++ Δ = Γ; Δ
   ;++(Γ, Δ): RECURSIVE
     { Θ | w(Θ) = w(Γ) + w(Δ) - F(ord_empty) - 1 } =
     CASES Δ OF
       % Γ; {} = Γ
-      〈〉: Γ,
+      〈〉: Γ
       % Γ; (Δ, s: TYPE) = (Γ; Δ), s: TYPE
-      ktype_decl(s, Δ): ktype_decl(s, Γ ++ Δ),
-      ktype_def(s, T, Δ): ktype_def(s, T, Γ ++ Δ),
-      ktype_ext(s, Δ): ktype_ext(s, Γ ++ Δ),
-      kvar(T, Δ): kvar(T, Γ ++ Δ),
-      kconst_decl(s, T, Δ): kconst_decl(s, T, Γ ++ Δ),
-      kconst_def(s, T, a, Δ): kconst_def(s, T, a, Γ ++ Δ),
-      kconst_ext(s, T, Δ): kconst_ext(s, T, Γ ++ Δ),
-      ktheory(s, Θ, Δ): ktheory(s, Θ, Γ ++ Δ)
+    , ktype_decl(s, Δ): ktype_decl(s, Γ ++ Δ)
+    , ktype_def(s, T, Δ): ktype_def(s, T, Γ ++ Δ)
+    , ktype_ext(s, Δ): ktype_ext(s, Γ ++ Δ)
+    , kvar(T, Δ): kvar(T, Γ ++ Δ)
+    , kconst_decl(s, T, Δ): kconst_decl(s, T, Γ ++ Δ)
+    , kconst_def(s, T, a, Δ): kconst_def(s, T, a, Γ ++ Δ)
+    , kconst_ext(s, T, Δ): kconst_ext(s, T, Γ ++ Δ)
+    , ktheory(s, Θ, Δ): ktheory(s, Θ, Γ ++ Δ)
     ENDCASES
   MEASURE w(Δ)
   AUTO_REWRITE+ ++
-  doubleplus_theory: RECURSIVE JUDGEMENT
-    ++(Γ, Δ: pretheory) HAS_TYPE pretheory
-  concat_empty: LEMMA 
-    〈〉 ++ Θ = Θ
-  AUTO_REWRITE+ concat_empty
+  dsymbols_concat: THEOREM
+    dsymbols(Γ ++ Δ) = dsymbols(Γ) ∪ dsymbols(Δ)
+  symbols_concat: THEOREM
+    symbols(Γ ++ Δ) = symbols(Γ) ∪ (symbols(Δ) - dsymbols(Γ))
+  dvars_concat: THEOREM
+    dvars(Γ ++ Δ) = dvars(Γ) + dvars(Δ)
   vars_concat: THEOREM
-    vars(Γ ++ Δ) = vars(Γ) + vars(Δ)
-  member_symbol_concat: THEOREM
-    s ∈ Γ ++ Δ IFF s ∈ Γ OR s ∈ Δ
-  apply_symbol__concat: THEOREM
-    s ∈ Δ IMPLIES (Γ ++ Δ)(s) = Δ(s)
-  member_var_concat: THEOREM
-    x ∈ Γ IMPLIES x + vars(Δ) ∈ Γ ++ Δ
-  member_var__concat: THEOREM
-    x ∈ Δ IMPLIES x ∈ Γ ++ Δ
-  apply_var__concat: THEOREM
-    x ∈ Δ IMPLIES (Γ ++ Δ)(x) = Δ(x)
-  concat_assoc: THEOREM
-    Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
-  AUTO_REWRITE+ concat_assoc
-  member_symbol_rest: THEOREM
-    NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES s ∈ rest(Γ)
-  member_symbol_when_member_rest: THEOREM
-    nonempty?(Γ) AND s ∈ rest(Γ) IMPLIES s ∈ Γ
-  member_symbol_rest_kvar: THEOREM
-    kvar?(Γ) AND s ∈ Γ IMPLIES s ∈ rest(Γ)
-  apply_symbol_rest: THEOREM
-    NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES rest(Γ)(s) = Γ(s)
-  apply_symbol_rest_kvar: THEOREM
-    kvar?(Γ) AND s ∈ Γ IMPLIES rest(Γ)(s) ↑ 1 = Γ(s)
-
-
-  length(Γ: context): RECURSIVE nat =
-    COND
-      empty?(Γ) -> 0,
-      ktheory?(Γ) -> 1 + length(dtheory(Γ)) + length(rest(Γ)),
-      ELSE -> 1 + length(rest(Γ))
-    ENDCOND
-  MEASURE w(Γ)
-  length_concat: THEOREM
-    length(Γ ++ Δ) = length(Γ) + length(Δ)
-
-  pos(Γ, (s | s ∈ Γ)): RECURSIVE below[length(Γ)] =
-    COND
-      kvar?(Γ) -> pos(rest(Γ), s),
-      ELSE -> IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
-    ENDCOND
-  MEASURE w(Γ)
-
-  pos(Γ, (x | x ∈ Γ)): RECURSIVE below[length(Γ)] =
-    COND
-      kvar?(Γ) -> IF x = 0 THEN length(rest(Γ)) ELSE pos(rest(Γ), x - 1) ENDIF,
-      ELSE -> IF TRUE THEN pos(rest(Γ), x) ELSE 0 ENDIF % PVS bug
-    ENDCOND
-  MEASURE w(Γ)
-  pos_var_lt: THEOREM
-    x <= y AND y ∈ Γ IMPLIES pos(Γ, y) <= pos(Γ, x)
+    vars(Γ ++ Δ) = (vars(Γ) + dvars(Δ)) ∪ (vars(Δ) - dvars(Γ))
+  % doubleplus_theory: RECURSIVE JUDGEMENT
+  %   ++(Γ, Δ: pretheory) HAS_TYPE pretheory
+  % concat_empty: LEMMA 
+  %   〈〉 ++ Θ = Θ
+  % AUTO_REWRITE+ concat_empty
+  % vars_concat: THEOREM
+  %   vars(Γ ++ Δ) = vars(Γ) + vars(Δ)
+  % member_symbol_concat: THEOREM
+  %   s ∈ Γ ++ Δ IFF s ∈ Γ OR s ∈ Δ
+  % apply_symbol__concat: THEOREM
+  %   s ∈ Δ IMPLIES (Γ ++ Δ)(s) = Δ(s)
+  % member_var_concat: THEOREM
+  %   x ∈ Γ IMPLIES x + vars(Δ) ∈ Γ ++ Δ
+  % member_var__concat: THEOREM
+  %   x ∈ Δ IMPLIES x ∈ Γ ++ Δ
+  % apply_var__concat: THEOREM
+  %   x ∈ Δ IMPLIES (Γ ++ Δ)(x) = Δ(x)
+  % concat_assoc: THEOREM
+  %   Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
+  % AUTO_REWRITE+ concat_assoc
+  % member_symbol_rest: THEOREM
+  %   NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES s ∈ rest(Γ)
+  % member_symbol_when_member_rest: THEOREM
+  %   nonempty?(Γ) AND s ∈ rest(Γ) IMPLIES s ∈ Γ
+  % member_symbol_rest_kvar: THEOREM
+  %   kvar?(Γ) AND s ∈ Γ IMPLIES s ∈ rest(Γ)
+  % apply_symbol_rest: THEOREM
+  %   NOT kvar?(Γ) AND s ∈ Γ AND s /= s(Γ) IMPLIES rest(Γ)(s) = Γ(s)
+  % apply_symbol_rest_kvar: THEOREM
+  %   kvar?(Γ) AND s ∈ Γ IMPLIES rest(Γ)(s) ↑ 1 = Γ(s)
 END context
