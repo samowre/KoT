@@ -17,14 +17,23 @@ BEGIN
   % Returns the kind of the symbol s
   % among CONSTANT, TYPE, THEORY
   kind(Γ)(s: (dsymbols(Γ))): RECURSIVE kind =
-    COND
-      (ktype_decl?(Γ) OR ktype_def?(Γ) OR ktype_ext?(Γ)) AND s(Γ) = s -> KTYPE
-    , (kconst_decl?(Γ) OR kconst_def?(Γ) OR kconst_ext?(Γ)) AND s(Γ) = s -> KCONST
-    , pretheory?(Γ) AND s(Γ) = s -> KTHEORY
-    , ELSE -> kind(rest(Γ))(s)
-    ENDCOND
+    CASES Γ OF
+      ktype_decl(r, Δ): IF s = r THEN KTYPE ELSE kind(Δ)(s) ENDIF
+   ,  ktype_def(r, T, Δ): IF s = r THEN KTYPE ELSE kind(Δ)(s) ENDIF
+   ,  ktype_ext(r, Δ): IF s = r THEN KTYPE ELSE kind(Δ)(s) ENDIF
+   ,  kconst_decl(r, T, Δ): IF s = r THEN KCONST ELSE kind(Δ)(s) ENDIF
+   ,  kconst_def(r, T, a, Δ): IF s = r THEN KCONST ELSE kind(Δ)(s) ENDIF
+   ,  kconst_ext(r, T, Δ): IF s = r THEN KCONST ELSE kind(Δ)(s) ENDIF
+   ,  ktheory(r, Θ, Δ): IF s = r THEN KTHEORY ELSE kind(Δ)(s) ENDIF
+   ,  kvar(T, Δ): kind(Δ)(s)
+    ENDCASES
   MEASURE w(Γ)
-
+  AUTO_REWRITE kind
+  kind_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+    kind(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN kind(Δ)(s)
+    	      	      ELSE kind(Γ)(s) ENDIF
+  kind_extract: THEOREM FORALL (s | s ∈ dsymbols(Γ)):
+   kind(Γ)(s) = kind(extract(Γ, s))(s)
 
 
   % Checks that s has a definition in Γ
@@ -46,7 +55,7 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
   dtheory_is_definition: THEOREM FORALL (s: (dsymbols(Γ))):
-    dtheory?(Γ)(s) IMPLIES definition?(Γ)(s)
+    dtheory?(Γ)(s) IFF definition?(Γ)(s) AND KTHEORY?(kind(Γ)(s))
 
   % dtype?(Γ, s: TYPE = ..., Δ)(s) = TRUE
   dtype?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
@@ -57,7 +66,7 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
   dtype_is_definition: THEOREM FORALL (s: (dsymbols(Γ))):
-    dtype?(Γ)(s) IMPLIES definition?(Γ)(s)
+    dtype?(Γ)(s) IFF definition?(Γ)(s) AND KTYPE?(kind(Γ)(s))
 
   % dconst?(Γ, s: T = ..., Δ)(s) = TRUE
   dconst?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
@@ -68,12 +77,12 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
   dconst_is_definition: THEOREM FORALL (s: (dsymbols(Γ))):
-    dconst?(Γ)(s) IMPLIES definition?(Γ)(s)
+    dconst?(Γ)(s) IFF definition?(Γ)(s) AND KCONST?(kind(Γ)(s))
 
 
   AUTO_REWRITE definition?, dtheory?, dtype?, dconst?
   AUTO_REWRITE dtheory_is_definition, dtype_is_definition, dconst_is_definition
-%  AUTO_REWRITE+ kind
+
 
   % Function definition as informally defined at the begining of section 2.5
   % definition(Γ, s: TYPE = T, Δ)(s) = T
@@ -94,24 +103,29 @@ BEGIN
     definition(Γ)(s: (dconst?(Γ))) HAS_TYPE preterm
   definition_dtheory: RECURSIVE JUDGEMENT
     definition(Γ)(s: (dtheory?(Γ))) HAS_TYPE pretheory
+  definition_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+    definition(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN definition(Δ)(s) 
+    		    	    ELSE definition(Γ)(s) ENDIF
+  definition_extract: THEOREM FORALL (s | s ∈ dsymbols(Γ)):
+    definition(Γ)(s) = definition(extract(Γ, s))(s)
 
-  % If Γ is closed (ie uses only symbols declared in Γ) then
-  % definition(Γ)(s) only uses symbols that have been previously
+  % If Γ is closed (ie uses only symbols/vars declared in Γ) then
+  % definition(Γ)(s) only uses symbols/vars that have been previously
   % declared in Γ
   symbols_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
     symbols(definition(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
-  % Same for vars
   vars_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
-    vars(definition(Δ)(s)) ⊂ { x | x < dvars(find(Δ)(s)) + dvars(Γ) }
-  % closed_definition = symbols_definition AND vars_definition
+    vars(definition(Δ)(s)) ⊂ vars(Δ)
   closed_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
     closed?(Γ ++ find(Δ)(s))(definition(Δ)(s))
     
-  % A theory does not define variables
+  % A theory does not define variables, and defines
+  % symbols only once
   dvars_definition: THEOREM FORALL (s: (dtheory?(Γ))):
     dvars(definition(Γ)(s)) = 0
   uniques_definition: THEOREM FORALL (s: (dtheory?(Γ))):
     uniques?(Γ) IMPLIES uniques?(definition(Γ)(s))
+
 
   % Checks that s is a preterm in Γ,
   % i.e appears of the form s: T or s: T = a
@@ -136,17 +150,21 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE type_
+  type_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+    type_(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN type_(Δ)(s)
+     	       	       ELSE type_(Γ)(s) ENDIF
+  type_extract: THEOREM FORALL (s | s ∈ dsymbols(Γ)): 
+    type_(Γ)(s) = type_(extract(Γ, s))(s)
 
-  % If Γ is closed, then type(Γ)(s) only uses symbols
+  % If Γ is closed, then type(Γ)(s) only uses symbols/vars
   % that have been previously declared in Γ
   symbols_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
     symbols(type_(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
-  % same for vars
   vars_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
     vars(type_(Δ)(s)) ⊂ { x | x < dvars(find(Δ)(s)) + dvars(Γ) }
-  % closed_type = symbols_type AND vars_type
   closed_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
     closed?(Γ ++ find(Δ)(s))(type_(Δ)(s))
+
 
 
   % If the symbol t is used in the definition of symbol s
