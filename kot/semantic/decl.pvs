@@ -82,16 +82,16 @@ BEGIN
   % Function kind as informally defined at the begining of chapter 2.
   % Returns the kind of the symbol s
   % among CONSTANT, TYPE, THEORY
-  kind(Γ)(s: (dsymbols(Γ))): kind =
-    COND
-      dtype?(Γ)(s) -> KTYPE
-    ,  dconst?(Γ)(s) -> KCONST
-    ,  dtheory?(Γ)(s) -> KTHEORY
-    ENDCOND 
+  % kind(Γ)(s: (dsymbols(Γ))): kind =
+  %   COND
+  %     dtype?(Γ)(s) -> KTYPE
+  %   , dconst?(Γ)(s) -> KCONST
+  %   , dtheory?(Γ)(s) -> KTHEORY
+  %   ENDCOND 
 
   AUTO_REWRITE definition?, dtheory?, dtype?, dconst?
   AUTO_REWRITE dtheory_is_definition, dtype_is_definition, dconst_is_definition
-  AUTO_REWRITE+ kind
+%  AUTO_REWRITE+ kind
 
   % Function definition as informally defined at the begining of section 2.5
   % definition(Γ, s: TYPE = T, Δ)(s) = T
@@ -116,13 +116,13 @@ BEGIN
   % If Γ is closed (ie uses only symbols declared in Γ) then
   % definition(Γ)(s) only uses symbols that have been previously
   % declared in Γ
-  symbols_definition: THEOREM FORALL (Δ: (closed?(Γ)), s: (definition?(Δ))):
+  symbols_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
     symbols(definition(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
   % Same for vars
-  vars_definition: THEOREM FORALL (Δ: (closed?(Γ)), s: (definition?(Δ))):
+  vars_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
     vars(definition(Δ)(s)) ⊂ { x | x < dvars(find(Δ)(s)) + dvars(Γ) }
   % closed_definition = symbols_definition AND vars_definition
-  closed_definition: THEOREM FORALL (Δ: (closed?(Γ)), s: (definition?(Δ))):
+  closed_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
     closed?(Γ ++ find(Δ)(s))(definition(Δ)(s))
     
   % A theory does not define variables
@@ -157,36 +157,15 @@ BEGIN
 
   % If Γ is closed, then type(Γ)(s) only uses symbols
   % that have been previously declared in Γ
-  symbols_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
-    symbols(type_(Γ)(s)) ⊂ dsymbols(find(Γ)(s))
+  symbols_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
+    symbols(type_(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
   % same for vars
-  vars_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
-    vars(type_(Γ)(s)) ⊂ { x | x < dvars(find(Γ)(s)) }
+  vars_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
+    vars(type_(Δ)(s)) ⊂ { x | x < dvars(find(Δ)(s)) + dvars(Γ) }
   % closed_type = symbols_type AND vars_type
-  closed_type: THEOREM FORALL (Γ: (closed?(〈〉)), s: (typed?(Γ))):
-    closed?(find(Γ)(s))(type_(Γ)(s))
+  closed_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
+    closed?(Γ ++ find(Δ)(s))(type_(Δ)(s))
 
-
-  % Length of a context (as a list)
-  length(Γ): RECURSIVE nat =
-    CASES Γ OF
-      〈〉: 0
-      ELSE 1 + length(rest(Γ))
-    ENDCASES
-  MEASURE w(Γ)
-  AUTO_REWRITE length
-
-  % pos(Γ)(s) returns the position of s in Γ 
-  % where contexts are seen as reversed lists
-  % ie pos(Γ, s: ...)(s) = length(Γ)
-  % and nth(s: ..., Γ)(s) = 0
-  pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[length(Γ)] =
-    CASES Γ OF
-      kvar(T, Δ): pos(Δ, s)
-      ELSE IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
-    ENDCASES
-  MEASURE w(Γ)
-  AUTO_REWRITE pos
 
   % If the symbol t is used in the definition of symbol s
   % then t is defined before s, 
@@ -198,11 +177,4 @@ BEGIN
   pos_type: THEOREM FORALL (Γ: (uniques?), s: (typed?(Γ))):
     FORALL (t: (symbols(type_(Γ)(s)))):
       t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
-  % Returns the position of a variable in a context
-  pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
-    CASES Γ OF
-      kvar(T, Δ): IF x = 0 THEN length(Δ) ELSE pos(Δ, x - 1) ENDIF
-      ELSE pos(rest(Γ), x)
-    ENDCASES
-  MEASURE w(Γ)
 END decl

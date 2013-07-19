@@ -42,4 +42,33 @@ BEGIN
     closed?(Γ)(Δ) AND closed?(Γ ++ Δ)(Θ) IFF closed?(Γ)(Δ ++ Θ)
   uniques_concat: THEOREM
     uniques?(Γ ++ Δ) IFF uniques?(Γ) AND uniques?(Δ) AND disjoint?(dsymbols(Γ), dsymbols(Δ))
+
+  % Length of a context (as a list)
+  length(Γ): RECURSIVE nat =
+    CASES Γ OF
+      〈〉: 0
+      ELSE 1 + length(rest(Γ))
+    ENDCASES
+  MEASURE w(Γ)
+  AUTO_REWRITE length
+
+  % pos(Γ)(s) returns the position of s in Γ 
+  % where contexts are seen as reversed lists
+  % ie pos(Γ, s: ...)(s) = length(Γ)
+  % and nth(s: ..., Γ)(s) = 0
+  pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[length(Γ)] =
+    CASES Γ OF
+      kvar(T, Δ): pos(Δ, s)
+      ELSE IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+  AUTO_REWRITE pos
+
+  % Returns the position of a variable in a context
+  pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
+    CASES Γ OF
+      kvar(T, Δ): IF x = 0 THEN length(Δ) ELSE pos(Δ, x - 1) ENDIF
+      ELSE pos(rest(Γ), x)
+    ENDCASES
+  MEASURE w(Γ)
 END context
