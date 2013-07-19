@@ -164,6 +164,7 @@ BEGIN
       iconst(s, a, σ): iconst(s, subst(a, x, t), subst(σ, x, t))
     ENDCASES
   MEASURE w(e)
+  AUTO_REWRITE subst
 
   % Judgements
   subst_pretype: THEOREM pretype?(subst(T, x, t))
@@ -182,13 +183,22 @@ BEGIN
     dsymbols(subst(Θ, x, t)) = dsymbols(Θ)
   AUTO_REWRITE dsymbols_subst
   symbols_subst: THEOREM
-    symbols(subst(e, x, t)) = symbols(e) ∪ symbols(t)
+    pretype?(e) OR preterm?(e) OR interp?(e) 
+    IMPLIES
+    symbols(subst(e, x, t)) = 
+      IF x ∈ vars(e) THEN symbols(e) ∪ symbols(t)
+		     ELSE symbols(e) ENDIF
   AUTO_REWRITE symbols_subst
 
   dvars_subst: THEOREM
     dvars(subst(Θ, x, t)) = dvars(Θ) % = 0
+  AUTO_REWRITE dvars_subst
   vars_subst: THEOREM
-    vars(subst(e, x, t)) = (vars(e) - { n | n = x }) ∪ vars(t)
+    pretype?(e) OR preterm?(e) OR interp?(e)
+    IMPLIES
+    vars(subst(e, x, t)) = { n | (n < x AND n ∈ vars(e)) OR
+    		     	       	 (n >= x AND n + 1 ∈ vars(e)) OR 
+			     	 (x ∈ vars(e) AND n ∈ vars(t)) } 
     
 
 
