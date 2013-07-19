@@ -124,8 +124,9 @@ BEGIN
   % declared in Γ
   symbols_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
     symbols(definition(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
-  vars_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
-    vars(definition(Δ)(s)) ⊂ vars(Δ)
+  vars_definition: THEOREM 
+    s ∈ dsymbols(Δ) AND definition?(Δ)(s) IMPLIES
+    (vars(definition(Δ)(s)) - dvars(find(Δ)(s))) ⊂ vars(Δ)
   closed_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
     closed?(Γ ++ find(Δ)(s))(definition(Δ)(s))
     
@@ -177,8 +178,9 @@ BEGIN
   % that have been previously declared in Γ
   symbols_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
     symbols(type_(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
-  vars_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
-    vars(type_(Δ)(s)) ⊂ { x | x < dvars(find(Δ)(s)) + dvars(Γ) }
+  vars_type: THEOREM 
+    s ∈ dsymbols(Δ) AND typed?(Δ)(s) IMPLIES
+    (vars(type_(Δ)(s)) - dvars(find(Δ)(s))) ⊂ vars(Δ)
   closed_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
     closed?(Γ ++ find(Δ)(s))(type_(Δ)(s))
 
