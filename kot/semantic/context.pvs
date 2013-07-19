@@ -5,7 +5,7 @@ BEGIN
   S: VAR syntaxic
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
-  r, s: VAR symbol
+  r, s, t: VAR symbol
   n, m: VAR name
   x, y: VAR nat
   a, b, f, g: VAR preterm
@@ -30,6 +30,12 @@ BEGIN
     ENDCASES
   MEASURE w(Δ)
   AUTO_REWRITE+ ++
+  concat_is_associative: THEOREM
+    Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
+  concat_empty: THEOREM
+    〈〉 ++ Γ = Γ
+  concat__empty: THEOREM
+    Γ ++ 〈〉 = Γ
   dsymbols_concat: THEOREM
     dsymbols(Γ ++ Δ) = dsymbols(Γ) ∪ dsymbols(Δ)
   symbols_concat: THEOREM
@@ -37,11 +43,13 @@ BEGIN
   dvars_concat: THEOREM
     dvars(Γ ++ Δ) = dvars(Γ) + dvars(Δ)
   vars_concat: THEOREM
-    vars(Γ ++ Δ) = (vars(Γ) + dvars(Δ)) ∪ (vars(Δ) - dvars(Γ))
+    vars(Γ ++ Δ) = vars(Γ) ∪ (vars(Δ) - dvars(Γ))
   closed_concat: THEOREM
     closed?(Γ)(Δ) AND closed?(Γ ++ Δ)(Θ) IFF closed?(Γ)(Δ ++ Θ)
   uniques_concat: THEOREM
     uniques?(Γ ++ Δ) IFF uniques?(Γ) AND uniques?(Δ) AND disjoint?(dsymbols(Γ), dsymbols(Δ))
+  AUTO_REWRITE+ concat_is_associative, concat_empty, concat__empty
+  AUTO_REWRITE+ dsymbols_concat, symbols_concat, dvars_concat, vars_concat, closed_concat, uniques_concat
 
   % Length of a context (as a list)
   length(Γ): RECURSIVE nat =
@@ -51,6 +59,9 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE length
+  length_concat: THEOREM
+    length(Γ ++ Δ) = length(Γ) + length(Δ)
+  AUTO_REWRITE length_concat
 
   % pos(Γ)(s) returns the position of s in Γ 
   % where contexts are seen as reversed lists
@@ -63,6 +74,10 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE pos
+  pos_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+    pos(Γ ++ Δ, s) = IF s ∈ dsymbols(Δ) THEN length(Γ) + pos(Δ, s)
+                     ELSE pos(Γ, s) ENDIF
+  AUTO_REWRITE pos_concat
 
   % Returns the position of a variable in a context
   pos(Γ, (x | x < dvars(Γ))): RECURSIVE below[length(Γ)] =
@@ -71,4 +86,64 @@ BEGIN
       ELSE pos(rest(Γ), x)
     ENDCASES
   MEASURE w(Γ)
+
+
+  % find(Γ, s: ..., Δ)(s) = Γ
+  % It is the context in which s is declared
+  % (hence in which defintion(s) and type(s) are defined)
+  find(Γ)(s: (dsymbols(Γ))): RECURSIVE context =
+    COND
+      kvar?(Γ) -> find(rest(Γ))(s)
+    , ELSE -> IF s = s(Γ) THEN rest(Γ) ELSE find(rest(Γ))(s) ENDIF
+    ENDCOND
+  MEASURE w(Γ)
+  dsymbols_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    dsymbols(find(Γ)(s)) ⊂ dsymbols(Γ)
+  dvars_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    dvars(find(Γ)(s)) <= dvars(Γ)
+  symbols_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    symbols(find(Γ)(s)) ⊂ symbols(Γ)
+  vars_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    vars(find(Γ)(s)) ⊂ vars(Γ)
+  find_is_closed: THEOREM FORALL (Δ | closed?(Γ)(Δ)), (s: (dsymbols(Δ))):
+    closed?(Γ)(find(Δ)(s))
+  find_is_uniques: JUDGEMENT
+    find(Γ | uniques?(Γ))(s: (dsymbols(Γ))) HAS_TYPE (uniques?)
+  dsymbols_find_when_uniques: THEOREM FORALL ((Γ | uniques?(Γ)), s: (dsymbols(Γ))):
+    s ∉ dsymbols(find(Γ)(s))
+  after(Γ, (s | s ∈ dsymbols(Γ))): RECURSIVE context =
+    CASES Γ OF
+      ktype_decl(t, Δ): IF t = s THEN 〈〉 ELSE ktype_decl(t, after(Δ, s)) ENDIF
+    , ktype_def(t, T, Δ): IF t = s THEN 〈〉 ELSE ktype_def(t, T, after(Δ, s)) ENDIF
+    , ktype_ext(t, Δ): IF t = s THEN 〈〉 ELSE ktype_ext(t, after(Δ, s)) ENDIF
+    , kvar(T, Δ): kvar(T, after(Δ, s))
+    , kconst_decl(t, T, Δ): IF t = s THEN 〈〉 ELSE kconst_decl(t, T, after(Δ, s)) ENDIF
+    , kconst_def(t, T, a, Δ): IF t = s THEN 〈〉 ELSE kconst_def(t, T, a, after(Δ, s)) ENDIF
+    , kconst_ext(t, T, Δ): IF t = s THEN 〈〉 ELSE kconst_ext(t, T, after(Δ, s)) ENDIF
+    , ktheory(t, Θ, Δ): IF t = s THEN 〈〉 ELSE ktheory(t, Θ, after(Δ, s)) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+  extract(Γ, (s | s ∈ dsymbols(Γ))): RECURSIVE context =
+    CASES Γ OF
+      ktype_decl(t, Δ): IF t = s THEN ktype_decl(t, 〈〉) ELSE extract(Δ, s) ENDIF
+    , ktype_def(t, T, Δ): IF t = s THEN ktype_decl(t, 〈〉) ELSE extract(Δ, s) ENDIF
+    , ktype_ext(t, Δ): IF t = s THEN ktype_decl(t, 〈〉) ELSE extract(Δ, s) ENDIF
+    , kvar(T, Δ): extract(Δ, s)
+    , kconst_decl(t, T, Δ): IF t = s THEN ktype_decl(t, 〈〉) ELSE extract(Δ, s) ENDIF
+    , kconst_def(t, T, a, Δ): IF t = s THEN ktype_decl(t, 〈〉) ELSE extract(Δ, s) ENDIF
+    , kconst_ext(t, T, Δ): IF t = s THEN ktype_decl(t, 〈〉) ELSE extract(Δ, s) ENDIF
+    , ktheory(t, Θ, Δ): IF t = s THEN ktype_decl(t, 〈〉) ELSE extract(Δ, s) ENDIF
+    ENDCASES
+  MEASURE w(Γ)
+  find_as_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ)):
+    EXISTS (Δ | s ∉ dsymbols(Δ)), (D: context | length(D) = 1 AND s ∈ dsymbols(D)):
+    Γ = find(Γ)(s) ++ D ++ Δ
+  length_find: THEOREM FORALL (s: (dsymbols(Γ))):
+    length(find(Γ)(s)) = pos(Γ, s)
+  dsymbols_find_pos: THEOREM FORALL (s | s ∈ dsymbols(Γ)), (t | t ∈ dsymbols(Γ)):
+    pos(Γ, t) < pos(Γ, s) IMPLIES t ∈ dsymbols(find(Γ)(s))
+  pos_find: THEOREM FORALL (s | s ∈ dsymbols(Γ)), (t | t ∈ dsymbols(Γ)):
+    pos(Γ, t) < pos(Γ, s) IMPLIES pos(find(Γ)(s), t) = pos(Γ, t)
+  find_find: THEOREM FORALL (s | s ∈ dsymbols(Γ)), (t | t ∈ dsymbols(Γ)):
+    pos(Γ, t) < pos(Γ, s) IMPLIES find(find(Γ)(s))(t) = find(Γ)(t)
 END context

@@ -5,37 +5,13 @@ BEGIN
 
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
-  r, s: VAR symbol
+  r, s, t: VAR symbol
   n, m: VAR name
   x, y: VAR nat
   a, b, f, g: VAR preterm
   σ, τ: VAR interp
   S: VAR syntaxic
   M: VAR map
-
-  % find(Γ, s: ..., Δ)(s) = Γ
-  % It is the context in which s is declared
-  % (hence in which defintion(s) and type(s) are defined)
-  find(Γ)(s: (dsymbols(Γ))): RECURSIVE context =
-    COND
-      kvar?(Γ) -> find(rest(Γ))(s)
-    , ELSE -> IF s = s(Γ) THEN rest(Γ) ELSE find(rest(Γ))(s) ENDIF
-    ENDCOND
-  MEASURE w(Γ)
-  dsymbols_find: THEOREM FORALL (s: (dsymbols(Γ))):
-    dsymbols(find(Γ)(s)) ⊂ dsymbols(Γ)
-  dvars_find: THEOREM FORALL (s: (dsymbols(Γ))):
-    dvars(find(Γ)(s)) <= dvars(Γ)
-  symbols_find: THEOREM FORALL (s: (dsymbols(Γ))):
-    symbols(find(Γ)(s)) ⊂ symbols(Γ)
-  vars_find: THEOREM FORALL (s: (dsymbols(Γ))):
-    vars(find(Γ)(s)) ⊂ { x | (x + dvars(Γ) - dvars(find(Γ)(s))) ∈ vars(Γ) }
-  find_is_closed: THEOREM FORALL (Δ | closed?(Γ)(Δ)), (s: (dsymbols(Δ))):
-    closed?(Γ)(find(Δ)(s))
-  find_is_uniques: JUDGEMENT
-    find(Γ | uniques?(Γ))(s: (dsymbols(Γ))) HAS_TYPE (uniques?)
-
-
 
   % Function kind as informally defined at the begining of chapter 2.
   % Returns the kind of the symbol s
@@ -176,11 +152,11 @@ BEGIN
   % If the symbol t is used in the definition of symbol s
   % then t is defined before s, 
   % hence pos(Γ)(t) < pos(Γ)(s)
-  pos_definition: THEOREM FORALL (Γ: (closed?(〈〉)), s: (definition?(Γ))):
-    FORALL (t: (symbols(definition(Γ)(s)))):
-      t ∈ dsymbols(find(Γ)(s)) IMPLIES pos(find(Γ)(s), t) < pos(Γ, s)  
+  pos_definition: THEOREM FORALL (Δ | (closed?(Γ)(Δ)), s: (definition?(Δ))):
+    FORALL (t: (symbols(definition(Δ)(s)))):
+      t ∈ dsymbols(find(Δ)(s)) IMPLIES pos(find(Δ)(s), t) < pos(Δ, s)  
   % Same in the type of symbol s
-  pos_type: THEOREM FORALL (Γ: (uniques?), s: (typed?(Γ))):
-    FORALL (t: (symbols(type_(Γ)(s)))):
-      t ∈ dsymbols(Γ) IMPLIES pos(Γ, t) < pos(Γ, s)
+  pos_type: THEOREM FORALL (Δ | (closed?(Γ)(Δ)), s: (typed?(Δ))):
+    FORALL (t: (symbols(type_(Δ)(s)))):
+      t ∈ dsymbols(find(Δ)(s)) IMPLIES pos(find(Δ)(s), t) < pos(Δ, s)
 END decl

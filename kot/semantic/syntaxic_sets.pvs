@@ -5,14 +5,11 @@ BEGIN
 
   ;∅: MACRO set[T] = emptyset
   ;∈(x, a): MACRO bool = member(x, a)
-  ;∉(x, a): MACRO bool = NOT member(x, a)
+  ;∉(x, a): MACRO bool = NOT x ∈ a
   ;⊂(a, b): MACRO bool = subset?(a, b)
   ;∪(a, b): MACRO set[T] = union(a, b)
-  ;∪(a, x): MACRO set[T] = add(x, a)
-  ;∪(x, a): MACRO set[T] = add(x, a)
   ;-(a, b): MACRO set[T] = difference(a, b)
   ;∩(a, b): MACRO set[T] = intersection(a, b)
-  ;Δ(a, b): MACRO set[T] = symmetric_difference(a, b)
 END set_props
 
 syntaxic_sets: THEORY
@@ -102,7 +99,7 @@ BEGIN
     , ktype_decl(s, Δ): vars(Δ)
     , ktype_def(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , ktype_ext(s, Δ): vars(Δ)
-    , kvar(T, Δ): union((vars(T) - dvars(Δ)) + 1, vars(Δ) + 1)
+    , kvar(T, Δ): union((vars(T) - dvars(Δ)), vars(Δ))
     , kconst_decl(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
     , kconst_def(s, T, a, Δ): union(vars(T) - dvars(Δ), union(vars(a) - dvars(Δ), vars(Δ)))
     , kconst_ext(s, T, Δ): union(vars(T) - dvars(Δ), vars(Δ))
@@ -170,6 +167,6 @@ BEGIN
   AUTO_REWRITE uniques?
 
   closed?(Γ)(S): bool =
-    vars(S) ⊂ { x | x < dvars(Γ) } AND
+    (FORALL (x | x ∈ vars(S)): x < dvars(Γ)) AND
     symbols(S) ⊂ dsymbols(Γ)
 END syntaxic_sets
