@@ -114,6 +114,7 @@ BEGIN
     symbols(find(Γ)(s)) ⊂ symbols(Γ)
   vars_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
     vars(find(Γ)(s)) ⊂ vars(Γ)
+  AUTO_REWRITE find_concat, length_find
 
   extract(Γ, (s | s ∈ dsymbols(Γ))): RECURSIVE context =
     CASES Γ OF
@@ -192,7 +193,7 @@ BEGIN
     find(find(Γ)(s))(t) = find(Γ)(t)
   AUTO_REWRITE find_find_before, find_find_when_uniques
   extract_find_before: THEOREM s ∈ dsymbols(Γ) AND t ∈ dsymbols(Γ) IMPLIES
-    pos(Γ, t) < pos(Γ, s) IMPLIES extract(find(Γ)(s), t) = find(Γ)(t)
+    pos(Γ, t) < pos(Γ, s) IMPLIES extract(find(Γ)(s), t) = extract(Γ, t)
   extract_find_when_uniques: THEOREM uniques?(Γ) AND s ∈ dsymbols(Γ) AND t ∈ dsymbols(find(Γ)(s)) IMPLIES
     extract(find(Γ)(s), t) = extract(Γ, t)
   AUTO_REWRITE extract_find_before, extract_find_when_uniques
