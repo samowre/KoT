@@ -110,32 +110,6 @@ BEGIN
     definition(Γ)(s: (dconst?(Γ))) HAS_TYPE preterm
   definition_dtheory: RECURSIVE JUDGEMENT
     definition(Γ)(s: (dtheory?(Γ))) HAS_TYPE pretheory
-  definition_concat: THEOREM 
-    s ∈ dsymbols(Γ ++ Δ) AND definition?(Γ ++ Δ)(s) IMPLIES
-    definition(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN definition(Δ)(s) 
-    		    	    ELSE definition(Γ)(s) ENDIF
-  AUTO_REWRITE definition_concat
-  definition_extract: THEOREM 
-    s ∈ dsymbols(Γ) AND definition?(Γ)(s) IMPLIES
-    definition(Γ)(s) = definition(extract(Γ, s))(s)
-
-  % If Γ is closed (ie uses only symbols/vars declared in Γ) then
-  % definition(Γ)(s) only uses symbols/vars that have been previously
-  % declared in Γ
-  symbols_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
-    symbols(definition(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
-  vars_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
-    vars(definition(Δ)(s)) ⊂ vars(Δ)
-  closed_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
-    closed?(Γ ++ find(Δ)(s))(definition(Δ)(s))
-    
-  % A theory does not define variables, and defines
-  % symbols only once
-  dvars_definition: THEOREM FORALL (s: (dtheory?(Γ))):
-    dvars(definition(Γ)(s)) = 0
-  uniques_definition: THEOREM FORALL (s: (dtheory?(Γ))):
-    uniques?(Γ) IMPLIES uniques?(definition(Γ)(s))
-
 
   % Checks that s is a preterm in Γ,
   % i.e appears of the form s: T or s: T = a
@@ -165,6 +139,37 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE type_
+
+
+  % *_concat
+  definition_concat: THEOREM 
+    s ∈ dsymbols(Γ ++ Δ) AND definition?(Γ ++ Δ)(s) IMPLIES
+    definition(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN definition(Δ)(s) 
+    		    	    ELSE definition(Γ)(s) ENDIF
+  AUTO_REWRITE definition_concat
+  definition_extract: THEOREM 
+    s ∈ dsymbols(Γ) AND definition?(Γ)(s) IMPLIES
+    definition(Γ)(s) = definition(extract(Γ, s))(s)
+
+  % If Γ is closed (ie uses only symbols/vars declared in Γ) then
+  % definition(Γ)(s) only uses symbols/vars that have been previously
+  % declared in Γ
+  symbols_definition: THEOREM 
+    s ∈ symbols(Δ) AND definition?(Δ)(s) IMPLIES
+    symbols(definition(Δ)(s)) ⊂ symbols(Δ) ∪ dsymbols(find(Δ)(s)) 
+  vars_definition: THEOREM 
+    s ∈ dsymbols(Δ) AND definition?(Δ)(s) IMPLIES
+    (vars(definition(Δ)(s)) - dvars(find(Δ)(s))) ⊂ vars(Δ)
+  closed_definition: THEOREM FORALL ((Δ | closed?(Γ)(Δ)), s: (definition?(Δ))):
+    closed?(Γ ++ find(Δ)(s))(definition(Δ)(s))
+    
+  % A theory does not define variables, and defines
+  % symbols only once
+  dvars_definition: THEOREM FORALL (s: (dtheory?(Γ))):
+    dvars(definition(Γ)(s)) = 0
+  uniques_definition: THEOREM FORALL (s: (dtheory?(Γ))):
+    uniques?(Γ) IMPLIES uniques?(definition(Γ)(s))
+
   type_concat: THEOREM 
     s ∈ dsymbols(Γ ++ Δ) AND typed?(Γ ++ Δ)(s) IMPLIES
     type_(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN type_(Δ)(s)
@@ -177,8 +182,9 @@ BEGIN
   % that have been previously declared in Γ
   symbols_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
     symbols(type_(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
-  vars_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
-    vars(type_(Δ)(s)) ⊂ { x | x < dvars(find(Δ)(s)) + dvars(Γ) }
+  vars_type: THEOREM 
+    s ∈ dsymbols(Δ) AND typed?(Δ)(s) IMPLIES
+    (vars(type_(Δ)(s)) - dvars(find(Δ)(s))) ⊂ vars(Δ)
   closed_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
     closed?(Γ ++ find(Δ)(s))(type_(Δ)(s))
 
