@@ -1,6 +1,6 @@
 context: THEORY
 BEGIN
-  IMPORTING subst
+  IMPORTING syntaxic_sets
 
   S: VAR syntaxic
   Γ, Δ, Θ: VAR context
@@ -13,6 +13,7 @@ BEGIN
   i: VAR nat
 
   % Γ ++ Δ = Γ; Δ
+  % This should be the *base* operation on contexts
   ;++(Γ, Δ): RECURSIVE
     { Θ | w(Θ) = w(Γ) + w(Δ) - F(ord_empty) - 1 } =
     CASES Δ OF
@@ -30,12 +31,15 @@ BEGIN
     ENDCASES
   MEASURE w(Δ)
   AUTO_REWRITE+ ++
+
   concat_is_associative: THEOREM
     Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
   concat_empty: THEOREM
     〈〉 ++ Γ = Γ
   concat__empty: THEOREM
     Γ ++ 〈〉 = Γ
+  AUTO_REWRITE+ concat_is_associative, concat_empty, concat__empty
+
   dsymbols_concat: THEOREM
     dsymbols(Γ ++ Δ) = dsymbols(Γ) ∪ dsymbols(Δ)
   symbols_concat: THEOREM
@@ -45,10 +49,9 @@ BEGIN
   vars_concat: THEOREM
     vars(Γ ++ Δ) = vars(Γ) ∪ (vars(Δ) - dvars(Γ))
   closed_concat: THEOREM
-    closed?(Γ)(Δ) AND closed?(Γ ++ Δ)(Θ) IFF closed?(Γ)(Δ ++ Θ)
+    closed?(Γ)(Δ ++ Θ) IFF closed?(Γ)(Δ) AND closed?(Γ ++ Δ)(Θ)
   uniques_concat: THEOREM
     uniques?(Γ ++ Δ) IFF uniques?(Γ) AND uniques?(Δ) AND disjoint?(dsymbols(Γ), dsymbols(Δ))
-  AUTO_REWRITE+ concat_is_associative, concat_empty, concat__empty
   AUTO_REWRITE+ dsymbols_concat, symbols_concat, dvars_concat, vars_concat, closed_concat, uniques_concat
 
   % Length of a context (as a list)
@@ -59,6 +62,7 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE length
+
   length_concat: THEOREM
     length(Γ ++ Δ) = length(Γ) + length(Δ)
   length_zero: THEOREM
@@ -76,7 +80,8 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE pos
-  pos_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+
+  pos_concat: THEOREM s ∈ dsymbols(Γ ++ Δ) IMPLIES
     pos(Γ ++ Δ, s) = IF s ∈ dsymbols(Δ) THEN length(Γ) + pos(Δ, s)
                      ELSE pos(Γ, s) ENDIF
   AUTO_REWRITE pos_concat
@@ -98,9 +103,17 @@ BEGIN
     , ELSE -> IF s = s(Γ) THEN rest(Γ) ELSE find(rest(Γ))(s) ENDIF
     ENDCOND
   MEASURE w(Γ)
+  AUTO_REWRITE find
+
   find_concat: THEOREM s ∈ dsymbols(Γ ++ Δ) IMPLIES
     find(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN Γ ++ find(Δ)(s)
                       ELSE find(Γ)(s) ENDIF
+  length_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    length(find(Γ)(s)) = pos(Γ, s)
+  symbols_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    symbols(find(Γ)(s)) ⊂ symbols(Γ)
+  vars_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    vars(find(Γ)(s)) ⊂ vars(Γ)
 
   extract(Γ, (s | s ∈ dsymbols(Γ))): RECURSIVE context =
     CASES Γ OF
@@ -114,6 +127,8 @@ BEGIN
     , ktheory(t, Θ, Δ): IF t = s THEN ktheory(t, Θ, 〈〉) ELSE extract(Δ, s) ENDIF
     ENDCASES
   MEASURE w(Γ)
+  AUTO_REWRITE extract
+
   extract_concat: THEOREM s ∈ dsymbols(Γ ++ Δ) IMPLIES
     extract(Γ ++ Δ, s) = IF s ∈ dsymbols(Δ) THEN extract(Δ, s)
                          ELSE extract(Γ, s) ENDIF
@@ -123,7 +138,11 @@ BEGIN
     dsymbols(extract(Γ, s)) = singleton(s)
   dvars_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
     dvars(extract(Γ, s)) = 0
-  AUTO_REWRITE+ length_extract, dsymbols_extract, dvars_extract
+  vars_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    vars(extract(Γ, s)) - dvars(find(Γ)(s)) ⊂ vars(Γ)
+  symbols_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    symbols(extract(Γ, s)) ⊂ symbols(Γ) ∪ dsymbols(find(Γ)(s))
+  AUTO_REWRITE+ extract_concat, length_extract, dsymbols_extract, dvars_extract
 
   after(Γ, (s | s ∈ dsymbols(Γ))): RECURSIVE context =
     CASES Γ OF
@@ -137,38 +156,54 @@ BEGIN
     , ktheory(t, Θ, Δ): IF t = s THEN 〈〉 ELSE ktheory(t, Θ, after(Δ, s)) ENDIF
     ENDCASES
   MEASURE w(Γ)
+  AUTO_REWRITE after
+
   after_concat: THEOREM s ∈ dsymbols(Γ ++ Δ) IMPLIES
     after(Γ ++ Δ, s) = IF s ∈ dsymbols(Δ) THEN after(Δ, s)
                        ELSE after(Γ, s) ++ Δ ENDIF
   dsymbols_after: THEOREM s ∈ dsymbols(Γ) IMPLIES
     dsymbols(after(Γ, s)) = { t | t ∈ dsymbols(Γ) AND pos(Γ, t) > pos(Γ, s) }
-  AUTO_REWRITE dsymbols_after
+  AUTO_REWRITE after_concat, dsymbols_after
 
   find_extract_after: THEOREM s ∈ dsymbols(Γ) IMPLIES
     Γ = find(Γ)(s) ++ extract(Γ, s) ++ after(Γ, s)
 
-  length_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
-    length(find(Γ)(s)) = pos(Γ, s)
+  % Deducible stuff with find_extract_after
+  length_after: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    length(after(Γ, s)) = length(Γ) - pos(Γ, s) - 1
   dsymbols_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
     dsymbols(find(Γ)(s)) ⊂ dsymbols(Γ)
-  dvars_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
-    dvars(find(Γ)(s)) <= dvars(Γ)
-  symbols_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
-    symbols(find(Γ)(s)) ⊂ symbols(Γ)
-  vars_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
-    vars(find(Γ)(s)) ⊂ vars(Γ)
-
-  dsymbols_find_when_pos_lt: THEOREM FORALL (s | s ∈ dsymbols(Γ)), (t | t ∈ dsymbols(Γ)):
+  dsymbols_find_before: THEOREM s ∈ dsymbols(Γ) AND t ∈ dsymbols(Γ) IMPLIES
     pos(Γ, t) < pos(Γ, s) IMPLIES t ∈ dsymbols(find(Γ)(s))
-  pos_find_when_pos_lt: THEOREM FORALL (s | s ∈ dsymbols(Γ)), (t | t ∈ dsymbols(Γ)):
-    pos(Γ, t) < pos(Γ, s) IMPLIES pos(find(Γ)(s), t) = pos(Γ, t)
-  find_find_when_pos_lt: THEOREM FORALL (s | s ∈ dsymbols(Γ)), (t | t ∈ dsymbols(Γ)):
-    pos(Γ, t) < pos(Γ, s) IMPLIES find(find(Γ)(s))(t) = find(Γ)(t)
-  dsymbols_find_when_uniques: THEOREM FORALL (Γ | uniques?(Γ)): s ∈ dsymbols(Γ) IMPLIES
+  dsymbols_find_when_uniques: THEOREM uniques?(Γ) AND s ∈ dsymbols(Γ) IMPLIES
     dsymbols(find(Γ)(s)) = { t | t ∈ dsymbols(Γ) AND pos(Γ, t) < pos(Γ, s) }
+  symbols_after: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    symbols(after(Γ, s)) ⊂ symbols(Γ) ∪ dsymbols(find(Γ)(s)) ∪ singleton(s)
+  AUTO_REWRITE length_after, dsymbols_find_when_uniques
 
-  find_is_closed: THEOREM FORALL (Δ | closed?(Γ)(Δ)): s ∈ dsymbols(Δ) IMPLIES
+  pos_find_before: THEOREM s ∈ dsymbols(Γ) AND t ∈ dsymbols(Γ) IMPLIES
+    pos(Γ, t) < pos(Γ, s) IMPLIES pos(find(Γ)(s), t) = pos(Γ, t)
+  pos_find_when_uniques: THEOREM uniques?(Γ) AND s ∈ dsymbols(Γ) AND t ∈ dsymbols(find(Γ)(s)) IMPLIES
+    pos(find(Γ)(s), t) = pos(Γ, t)
+  AUTO_REWRITE pos_find_before, pos_find_when_uniques
+  find_find_before: THEOREM s ∈ dsymbols(Γ) AND t ∈ dsymbols(Γ) IMPLIES
+    pos(Γ, t) < pos(Γ, s) IMPLIES find(find(Γ)(s))(t) = find(Γ)(t)
+  find_find_when_uniques: THEOREM uniques?(Γ) AND s ∈ dsymbols(Γ) AND t ∈ dsymbols(find(Γ)(s)) IMPLIES
+    find(find(Γ)(s))(t) = find(Γ)(t)
+  AUTO_REWRITE find_find_before, find_find_when_uniques
+  extract_find_before: THEOREM s ∈ dsymbols(Γ) AND t ∈ dsymbols(Γ) IMPLIES
+    pos(Γ, t) < pos(Γ, s) IMPLIES extract(find(Γ)(s), t) = find(Γ)(t)
+  extract_find_when_uniques: THEOREM uniques?(Γ) AND s ∈ dsymbols(Γ) AND t ∈ dsymbols(find(Γ)(s)) IMPLIES
+    extract(find(Γ)(s), t) = extract(Γ, t)
+  AUTO_REWRITE extract_find_before, extract_find_when_uniques
+
+  find_is_closed: THEOREM closed?(Γ)(Δ) AND s ∈ dsymbols(Δ) IMPLIES
     closed?(Γ)(find(Δ)(s))
-  find_is_uniques: JUDGEMENT
-    find(Γ | uniques?(Γ))(s: (dsymbols(Γ))) HAS_TYPE (uniques?)
+  extract_is_closed: THEOREM closed?(Γ)(Δ) AND s ∈ dsymbols(Δ) IMPLIES
+    closed?(Γ ++ find(Δ)(s))(extract(Δ, s))
+  AUTO_REWRITE find_is_closed, extract_is_closed
+
+  find_is_uniques: THEOREM uniques?(Γ) AND s ∈ dsymbols(Γ) IMPLIES
+    uniques?(find(Γ)(s))
+  AUTO_REWRITE find_is_uniques
 END context
