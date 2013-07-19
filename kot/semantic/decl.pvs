@@ -29,10 +29,11 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE kind
-  kind_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+  kind_concat: THEOREM s ∈ dsymbols(Γ ++ Δ) IMPLIES
     kind(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN kind(Δ)(s)
     	      	      ELSE kind(Γ)(s) ENDIF
-  kind_extract: THEOREM FORALL (s | s ∈ dsymbols(Γ)):
+  AUTO_REWRITE kind_concat
+  kind_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
    kind(Γ)(s) = kind(extract(Γ, s))(s)
 
 
@@ -45,6 +46,12 @@ BEGIN
               ELSE definition?(rest(Γ))(s) ENDIF
     ENDCOND
   MEASURE w(Γ)
+  definition?_concat: THEOREM
+    s ∈ dsymbols(Γ ++ Δ) IMPLIES
+    definition?(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN definition?(Δ)(s)
+    		     	     ELSE definition?(Γ)(s) ENDIF
+  AUTO_REWRITE definition?_concat
+    
 
   % dtheory?(Γ, s: THEORY ..., Δ)(s) = TRUE
   dtheory?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
@@ -103,10 +110,13 @@ BEGIN
     definition(Γ)(s: (dconst?(Γ))) HAS_TYPE preterm
   definition_dtheory: RECURSIVE JUDGEMENT
     definition(Γ)(s: (dtheory?(Γ))) HAS_TYPE pretheory
-  definition_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+  definition_concat: THEOREM 
+    s ∈ dsymbols(Γ ++ Δ) AND definition?(Γ ++ Δ)(s) IMPLIES
     definition(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN definition(Δ)(s) 
     		    	    ELSE definition(Γ)(s) ENDIF
-  definition_extract: THEOREM FORALL (s | s ∈ dsymbols(Γ)):
+  AUTO_REWRITE definition_concat
+  definition_extract: THEOREM 
+    s ∈ dsymbols(Γ) AND definition?(Γ)(s) IMPLIES
     definition(Γ)(s) = definition(extract(Γ, s))(s)
 
   % If Γ is closed (ie uses only symbols/vars declared in Γ) then
@@ -137,6 +147,11 @@ BEGIN
     ENDCOND
   MEASURE w(Γ)
   AUTO_REWRITE typed?
+  typed_concat: THEOREM
+    s ∈ dsymbols(Γ ++ Δ) IMPLIES
+    typed?(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN typed?(Δ)(s)
+    	     	      	ELSE typed?(Γ)(s) ENDIF
+    AUTO_REWRITE typed_concat
 
   % Function type as informally defined at the begining of chapter 2.
   % type(Γ, s: T, Δ) = T
@@ -150,10 +165,12 @@ BEGIN
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE type_
-  type_concat: THEOREM FORALL (s | s ∈ dsymbols(Γ ++ Δ)):
+  type_concat: THEOREM 
+    s ∈ dsymbols(Γ ++ Δ) AND typed?(Γ ++ Δ)(s) IMPLIES
     type_(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN type_(Δ)(s)
      	       	       ELSE type_(Γ)(s) ENDIF
-  type_extract: THEOREM FORALL (s | s ∈ dsymbols(Γ)): 
+  type_extract: THEOREM 
+    s ∈ dsymbols(Γ) AND typed?(Γ)(s) IMPLIES 
     type_(Γ)(s) = type_(extract(Γ, s))(s)
 
   % If Γ is closed, then type(Γ)(s) only uses symbols/vars
