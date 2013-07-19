@@ -36,6 +36,21 @@ BEGIN
     find(Γ | uniques?(Γ))(s: (dsymbols(Γ))) HAS_TYPE (uniques?)
 
 
+
+  % Function kind as informally defined at the begining of chapter 2.
+  % Returns the kind of the symbol s
+  % among CONSTANT, TYPE, THEORY
+  kind(Γ)(s: (dsymbols(Γ))): RECURSIVE kind =
+    COND
+      (ktype_decl?(Γ) OR ktype_def?(Γ) OR ktype_ext?(Γ)) AND s(Γ) = s -> KTYPE
+    , (kconst_decl?(Γ) OR kconst_def?(Γ) OR kconst_ext?(Γ)) AND s(Γ) = s -> KCONST
+    , pretheory?(Γ) AND s(Γ) = s -> KTHEORY
+    , ELSE -> kind(rest(Γ))(s)
+    ENDCOND
+  MEASURE w(Γ)
+
+
+
   % Checks that s has a definition in Γ
   % (such as s: TYPE = def_type, or s: T = def_term)
   definition?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
@@ -79,15 +94,6 @@ BEGIN
   dconst_is_definition: THEOREM FORALL (s: (dsymbols(Γ))):
     dconst?(Γ)(s) IMPLIES definition?(Γ)(s)
 
-  % Function kind as informally defined at the begining of chapter 2.
-  % Returns the kind of the symbol s
-  % among CONSTANT, TYPE, THEORY
-  % kind(Γ)(s: (dsymbols(Γ))): kind =
-  %   COND
-  %     dtype?(Γ)(s) -> KTYPE
-  %   , dconst?(Γ)(s) -> KCONST
-  %   , dtheory?(Γ)(s) -> KTHEORY
-  %   ENDCOND 
 
   AUTO_REWRITE definition?, dtheory?, dtype?, dconst?
   AUTO_REWRITE dtheory_is_definition, dtype_is_definition, dconst_is_definition
