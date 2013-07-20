@@ -1,0 +1,104 @@
+language: THEORY
+BEGIN
+  symbol: TYPE = nat
+
+  calculus: DATATYPE
+  BEGIN
+    kvar(kindex: nat): kvar?
+    klam(kbody: calculus): klam?
+    kapp(kop: calculus, karg: calculus): kapp?
+  END
+
+  k, l: VAR calculus
+
+  koccurs(x, k): RECURSIVE nat =
+    CASES k OF
+      kvar(i): IF i = x THEN 1 ELSE 0 ENDIF
+    , klam(body): koccurs(x + 1, body)
+    , kapp(op, arg): koccurs(x, op) + koccurs(x, arg)
+    ENDCASES
+  MEASURE k BY <<
+
+  kapps(k): RECURSIVE nat =
+    CASES k OF
+      kvar(i): 0
+    , klam(body): kapps(body)
+    , kapp(op, arg):
+        1 + kapps(op) + kapps(arg) * (1 + koccurs(0, op))
+    ENDCASES
+  MEASURE k BY <<
+
+  kshift(k, n): RECURSIVE calculus =
+    CASES k OF
+      kvar(i): IF i < n THEN kvar(i) ELSE kvar(i + n) ENDIF
+    , klam(body): klam(kshift(body, n + 1))
+    , kapp(op, arg): kapp(kshift(op, n), kshift(arg, n))
+    ENDCASES
+  MEASURE k BY <<
+  kapps_kshift: THEOREM
+    kapps(kshift(k, n)) = kapps(k)
+
+  ksubst(k, n, t): RECURSIVE calculus =
+    CASES k OF
+      kvar(i):
+        IF i = n THEN t ELSIF i > n THEN v(i - 1) ELSE v(i) ENDIF
+    , klam(body): klam(ksubst(body, n + 1, kshift(t, 0)))
+    , kapp(op, arg): kapp(ksubst(op, n, t), ksubst(arg, n, t))
+    ENDCASES
+  MEASURE k BY <<
+  kapps_ksubst: THEOREM
+    kapps(ksubst(k, n, t)) = kapps(k) + kapps(t) * koccurs(n, k)
+
+  kbeta(k): RECURSIVE calculus =
+    CASES k OF
+      kvar(i): k
+    , klam(body): klam(kbeta(body))
+    , kapp(op, arg):
+        LET bop = kbeta(op), barg = kbeta(arg) IN
+        IF klam?(bop) THEN ksubst(kbody(bop), 0, barg) ELSE k ENDIF
+    ENDCASES
+  MEASURE kapps(k)
+END language
+%   syntaxic: DATATYPE WITH SUBTYPES pretype, preterm, decl
+%   BEGIN
+%     base(calc: calculus): base?: pretype
+%     fun(dom: pretype, range: pretype): fun?: pretype
+%     prod(left: pretype, right: pretype): prod?: pretype
+%     subtype(supertype: pretype, pred: preterm): subtype?: pretype
+
+%     symbol(calc: calculus): symbol?: preterm
+%     app(op: preterm, arg: preterm): preterm
+%     lam(type_: pretype, body: preterm): lam?: preterm
+
+%     type_decl: type_decl?: decl
+%     type_ext: type_ext?: decl
+%     type_def(def: pretype): type_def?: decl
+%     const_decl(type_: pretype): const_decl?: decl
+%     const_ext(type_: pretype): const_ext?: decl
+%     const_def(type_: pretype, def: preterm): const_def?: decl
+%     const_var(type_: pretype): const_var?: decl
+%     theory_def(def: finseq[decl]): theory_def?: decl
+%   END syntaxic
+
+%   context: TYPE = finseq[decl]
+
+%   subst(t, x, s):
+%     CASES t OF
+%       V(INDEX):
+%         IF INDEX = x THEN s
+% 	ELSIF INDEX > x THEN V(INDEX - 1)
+% 	ELSE V(INDEX) ENDIF
+%     , LAM(BODY): LAM(subst(t, x + 1, s))
+%     , APP(OP, ARG): APP(subst(OP, x, s), subst(ARG, x, s))
+%     ENDCASES
+    
+% % calculus -> [finseq[decl] -> decl]
+%   β(
+%   reduce(t) = 
+%     CASES t OF
+%       V(INDEX): V(INDEX)
+%     , LAM(BODY): LAM(BODY)
+%     , APP(OP, ARG):
+%         CASES reduce(OP) OF
+% 	  LAM(BODY): subst(BODY, ARG)
+% 	, APP(a, b): FALSE
