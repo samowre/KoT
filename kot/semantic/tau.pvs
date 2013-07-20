@@ -51,7 +51,7 @@ BEGIN
   % TCC141: w on ktheory
 
   % Variable declaration
-  Γ, Δ, Θ: VAR well_formed_context
+  Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
   r, s, c: VAR symbol
   n, m: VAR name
@@ -71,14 +71,6 @@ BEGIN
   
 
 
-  % Termination of τ : the only constraint is 
-  % w(interp(Δ, σ))  < w(dot(m, σ, s))
-  % And we have : w(interp(Δ, σ)) ≤ w(Δ) + w(σ)
-  % 	   	: w(dot(m, σ, s)) = F(dot) + w(σ) + 1
-  % So we must prove : w(Δ) < F(dot)  ( ∀ Δ ). It s not going to happen
-  % I let you find an appropriate order for this ****
-  % Good luck.
-
 
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
   τ(Θ)(S): RECURSIVE 
@@ -88,19 +80,19 @@ BEGIN
 	(KCONTEXT?(k) IMPLIES context?(S)) AND
 	(KTHEORY?(k) IMPLIES pretheory?(S)) AND
 	(KTYPE?(k) IMPLIES pretype?(S)) AND
-	(KTERM?(k) IMPLIES preterm?(S)) AND
-	(k /= ⊥ IMPLIES well_formed?(Θ)(S)) } = 
+	(KTERM?(k) IMPLIES preterm?(S)) } = % AND
+	%(k /= ⊥ IMPLIES well_formed?(Θ)(S)) } = 
   CASES S OF
 
   %% Names
     % τ(Γ)(s) = TYPE if kind(Γ(s)) = TYPE
     % τ(Γ)(s) = δ(Γ)(type(Γ)(s) if kind(Γ(s)) = CONSTANT
     symbol(s): 
-      IF s ∈ Θ
-        THEN IF kind(Θ(s)) = KTYPE
+      IF s ∈ dsymbols(Θ)
+        THEN IF kind(Θ)(s) = KTYPE
 	  THEN (KTYPE, null)
-	ELSIF kind(Θ(s)) = KCONST
-	  THEN (KTERM(δ(Θ)(type_(Θ(s)))), null)
+	ELSIF kind(Θ)(s) = KCONST
+	  THEN (KTERM(δ(find(Θ)(s))(type_(Θ)(s))) ↑ (dvars(after(Θ, s)))), null)
 	  ELSE fail
 	ENDIF
 	ELSE fail
@@ -116,15 +108,15 @@ BEGIN
     % check τ(Θ)(interp(Δ, σ)). Hence we don't have to define τ over the
     % interpretations.
     dot(m, σ, s): 
-      IF m ∈ Θ AND kind(Θ(m)) = KTHEORY
-	THEN LET Δ = definition(Θ(m)) IN
+      IF m ∈ dsymbols(Θ) AND kind(Θ)(m) = KTHEORY
+	THEN LET Δ = definition(Θ)(m) IN
 	  IF interp?(σ) AND interp_for?(Δ)(σ) 
 	    THEN LET (kwi, tccsi) = τ(Θ)(interp(Δ, σ)) IN
-	     IF KTHEORY?(kwi) AND s ∈ Δ 
-	        THEN IF kind(Δ(s)) = KTYPE
+	     IF KTHEORY?(kwi) AND s ∈ dsymbols(Δ) 
+	        THEN IF kind(Δ)(s) = KTYPE
 		  THEN (KTYPE, null)
-		ELSIF kind(Δ(s)) = KCONST
-		  THEN ( KTERM( δ(Θ)( η(Θ, m, σ)( type_(Δ(s)) ) )),
+		ELSIF kind(Δ)(s) = KCONST
+		  THEN ( KTERM( δ(find(Θ)(s))( η(Θ, m, σ)( type_(Δ(s)) ) ) ↑ (dvars(after(Θ, s))),
 		         tccsi )
 		  ELSE fail
 		ENDIF
@@ -181,8 +173,8 @@ BEGIN
 
   %% Terms
     % τ(Γ)(s) = δ(Γ)(type(Γ(s)))  if  kind(Γ(s)) = variable 
-    v(i): IF i ∈ Θ AND kind(Θ(i)) = KVAR 
-    	    THEN (KTERM( δ(Θ)(type_(Θ(i))) ), null)
+    v(i): IF i ∈ dsymbols(Θ)
+    	    THEN (KTERM( δ(find(Θ)(i))(type_(Θ)(i)) ↑ (dvars(after(Θ, i)(i)))), null)
 	    ELSE fail
 	  ENDIF, 
     % τ(Γ)(f a) = B' where μ0(τ(Γ)(f)) = [x: A -> B]
@@ -264,7 +256,7 @@ BEGIN
     % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
     ktype_decl(s, Γ): 
       LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-      IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
+      IF CONTEXT?(kwΓ) AND s ∉ dsymbols(Γ) AND s ∉ dsymbols(Θ)
         THEN (kwΓ, tccsΓ)
 	ELSE fail
       ENDIF,
@@ -273,7 +265,7 @@ BEGIN
     %				     and τ(Θ, Γ)(T) = TYPE
     ktype_def(s, T, Γ): 
       LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-      IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
+      IF CONTEXT?(kwΓ) AND s ∉ dsymbols(Γ) AND s ∉ dsymbols(Θ)
         THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
 	  IF kwT = KTYPE
 	    THEN (kwΓ, tccsΓ ++ tccsT)
@@ -286,7 +278,7 @@ BEGIN
     % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
     ktype_ext(s, Γ): 
       LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-        IF CONTEXT?(kwΓ) AND s ∉ Γ AND s ∉ Θ
+        IF CONTEXT?(kwΓ) AND s ∉ dsymbols(Γ) AND s ∉ dsymbols(Θ)
 	  THEN (kwΓ, tccsΓ)
 	  ELSE fail
 	ENDIF,
@@ -307,7 +299,7 @@ BEGIN
     %			      and τ(Θ)(T) = TYPE
     kconst_decl(c, T, Γ): 
       LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-        IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
+        IF CONTEXT?(kwΓ) AND c ∉ dsymbols(Γ) AND c ∉ dsymbols(Θ)
 	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
 	    IF kwT = KTYPE
 	      THEN (kwΓ, tccsΓ ++ tccsT) 
@@ -323,7 +315,7 @@ BEGIN
 %%%%%				  and Γ ⊢ π(T)(a)    
     kconst_def(c, T, a, Γ): 
       LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-    	IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
+    	IF CONTEXT?(kwΓ) AND c ∉ dsymbols(Γ) AND c ∉ dsymbols(Θ)
 	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
 	    IF kwT = KTYPE
 	      THEN LET (kwa, tccsa) = τ(Θ ++ Γ)(a) IN
@@ -343,7 +335,7 @@ BEGIN
     %			      and τ(Θ)(T) = TYPE
     kconst_ext(c, T, Γ): 
       LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-        IF CONTEXT?(kwΓ) AND c ∉ Γ AND c ∉ Θ
+        IF CONTEXT?(kwΓ) AND c ∉ dsymbols(Γ) AND c ∉ dsymbols(Θ)
 	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
 	    IF kwT = KTYPE
 	      THEN (kwΓ, tccsΓ ++ tccsT) 
@@ -357,7 +349,7 @@ BEGIN
     %	(THEORY = context without var and theory declarations)
     ktheory(m, Δ, Γ): 
       LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-        IF CONTEXT?(kwΓ) AND m ∉ Γ AND m ∉ Θ 
+        IF CONTEXT?(kwΓ) AND m ∉ dsymbols(Γ) AND m ∉ dsymbols(Θ) 
 	  THEN LET (kwΔ, tccsΔ) = τ(Θ ++ Γ)(Δ) IN
 	    IF KTHEORY?(kwΔ)
 	      THEN (KCONTEXT, tccsΓ ++ tccsΔ)

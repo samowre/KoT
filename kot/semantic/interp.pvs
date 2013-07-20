@@ -3,8 +3,8 @@ BEGIN
   IMPORTING decl
   
   S: VAR syntaxic
-  Γ, Θ: VAR context
-  Δ: VAR pretheory
+  Γ, Δ: VAR context
+  Θ: VAR pretheory
   A, B, T: VAR pretype
   r, s: VAR symbol
   n, m: VAR name
@@ -28,8 +28,8 @@ BEGIN
       
   % Checks that σ is a correct interpretation for Γ, i.e:
   %  for every s ∈ σ, s ∈ Γ and s is a decl in Γ
-  interp_for?(Γ: pretheory)(σ): RECURSIVE bool =
-    CASES Γ OF
+  interp_for?(Θ)(σ): RECURSIVE bool =
+    CASES Θ OF
       〈〉: null?(σ),
       ktype_decl(s, Δ):
         IF s ∈ isymbols(σ) THEN
@@ -45,14 +45,14 @@ BEGIN
       kconst_ext(s, T, Δ): s ∉ isymbols(σ) AND interp_for?(Δ)(σ),
       ktheory(s, Θ, Δ): s ∉ isymbols(σ) AND interp_for?(Δ)(σ)
     ENDCASES
-  MEASURE w(Γ)
+  MEASURE w(Θ)
   AUTO_REWRITE+ interp_for?
 
   % Actually computes the interpretation, that is, creates the
   % theory equivalent to Γ{{σ}}
-  interp(Γ: pretheory, σ: (interp_for?(Γ))): RECURSIVE
-    { Δ: pretheory | w(Δ) <= w(Γ) + w(σ) } =
-    CASES Γ OF
+  interp(Θ, σ: (interp_for?(Θ))): RECURSIVE
+    { Δ: pretheory | w(Δ) <= w(Θ) + w(σ) } =
+    CASES Θ OF
       〈〉: 〈〉,
       ktype_decl(s, Δ):
         IF s ∈ isymbols(σ) THEN
@@ -72,7 +72,7 @@ BEGIN
       kconst_ext(s, T, Δ): kconst_ext(s, T, interp(Δ, σ)),
       ktheory(s, Θ, Δ): ktheory(s, Θ, interp(Δ, σ))
     ENDCASES
-  MEASURE w(Γ)
+  MEASURE w(Θ)
   AUTO_REWRITE+ interp
 
 
@@ -85,16 +85,16 @@ BEGIN
     r ∈ isymbols(σ) AND r /= s IMPLIES r ∈ isymbols(σ - s)
 
   member_interp_for: THEOREM
-    interp_for?(Δ)(σ) AND s ∈ isymbols(σ) 
-    IMPLIES s ∈ dsymbols(Δ)
+    interp_for?(Θ)(σ) AND s ∈ isymbols(σ) 
+    IMPLIES s ∈ dsymbols(Θ)
 
   member_interp: THEOREM 
-    interp_for?(Δ)(σ) IMPLIES 
-    (s ∈ dsymbols(Δ) IFF s ∈ dsymbols(interp(Δ, σ)))
+    interp_for?(Θ)(σ) IMPLIES 
+    (s ∈ dsymbols(Θ) IFF s ∈ dsymbols(interp(Θ, σ)))
  
   definition_interp: THEOREM  
-    interp_for?(Δ)(σ) AND s ∈ dsymbols(Δ) IMPLIES
-    (definition?(interp(Δ, σ))(s) IFF definition?(Δ)(s) OR s ∈ isymbols(σ))
+    interp_for?(Θ)(σ) AND s ∈ dsymbols(Θ) IMPLIES
+    (definition?(interp(Θ, σ))(s) IFF definition?(Θ)(s) OR s ∈ isymbols(σ))
 
   %well_formed_interp_l: THEOREM
   %  FORALL (Γ: well_formed_context, Δ: pretheory, σ | interp_for?(Δ)(σ)):
