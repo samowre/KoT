@@ -143,7 +143,10 @@ BEGIN
     vars(extract(Γ, s)) - dvars(find(Γ)(s)) ⊂ vars(Γ)
   symbols_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
     symbols(extract(Γ, s)) ⊂ symbols(Γ) ∪ dsymbols(find(Γ)(s))
+  rest_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES rest(extract(Γ, s)) = 〈〉
+  s_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES s(extract(Γ, s)) = s
   AUTO_REWRITE+ extract_concat, length_extract, dsymbols_extract, dvars_extract
+  AUTO_REWRITE+ rest_extract, s_extract
 
   after(Γ, (s | s ∈ dsymbols(Γ))): RECURSIVE context =
     CASES Γ OF

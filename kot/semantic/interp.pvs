@@ -1,6 +1,6 @@
 interp: THEORY
 BEGIN
-  IMPORTING well_formed
+  IMPORTING decl
   
   S: VAR syntaxic
   Γ, Θ: VAR context
@@ -13,7 +13,7 @@ BEGIN
   σ, τ: VAR interp
 
   % {{ σ1, s := _, σ2 }} - s = {{ σ1, σ2 }}  
-  ;-(σ, (s | s ∈ σ)): RECURSIVE
+  ;-(σ, (s | s ∈ isymbols(σ))): RECURSIVE
     { τ | w(τ) < w(σ) } =
     CASES σ OF
       nil: nil,
@@ -23,27 +23,27 @@ BEGIN
   MEASURE w(σ)
   AUTO_REWRITE+ -
   difference_apply_weight: THEOREM
-    FORALL (s | s ∈ σ):
-      w(σ - s) + w(definition(σ(s))) < w(σ)
+    FORALL (s | s ∈ isymbols(σ)):
+      w(σ - s) + w(definition(σ)(s)) < w(σ)
       
   % Checks that σ is a correct interpretation for Γ, i.e:
-  %  - for every s ∈ σ, s ∈ Γ and s is a decl in Γ
+  %  for every s ∈ σ, s ∈ Γ and s is a decl in Γ
   interp_for?(Γ: pretheory)(σ): RECURSIVE bool =
     CASES Γ OF
       〈〉: null?(σ),
       ktype_decl(s, Δ):
-        IF s ∈ σ THEN
-	  kind(σ(s)) = KTYPE AND interp_for?(Δ)(σ - s)
+        IF s ∈ isymbols(σ) THEN
+	  KTYPE?(kind(σ)(s)) AND interp_for?(Δ)(σ - s)
 	ELSE interp_for?(Δ)(σ) ENDIF,
-      ktype_def(s, T, Δ): s ∉ σ AND interp_for?(Δ)(σ),
-      ktype_ext(s, Δ): s ∉ σ AND interp_for?(Δ)(σ),
+      ktype_def(s, T, Δ): s ∉ isymbols(σ) AND interp_for?(Δ)(σ),
+      ktype_ext(s, Δ): s ∉ isymbols(σ) AND interp_for?(Δ)(σ),
       kconst_decl(s, T, Δ):
-        IF s ∈ σ THEN
-	  kind(σ(s)) = KCONST AND interp_for?(Δ)(σ - s)
+        IF s ∈ isymbols(σ) THEN
+	  KCONST?(kind(σ)(s)) AND interp_for?(Δ)(σ - s)
 	ELSE interp_for?(Δ)(σ) ENDIF,
-      kconst_def(s, T, a, Δ): s ∉ σ AND interp_for?(Δ)(σ),
-      kconst_ext(s, T, Δ): s ∉ σ AND interp_for?(Δ)(σ),
-      ktheory(s, Θ, Δ): s ∉ σ AND interp_for?(Δ)(σ)
+      kconst_def(s, T, a, Δ): s ∉ isymbols(σ) AND interp_for?(Δ)(σ),
+      kconst_ext(s, T, Δ): s ∉ isymbols(σ) AND interp_for?(Δ)(σ),
+      ktheory(s, Θ, Δ): s ∉ isymbols(σ) AND interp_for?(Δ)(σ)
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE+ interp_for?
@@ -55,16 +55,16 @@ BEGIN
     CASES Γ OF
       〈〉: 〈〉,
       ktype_decl(s, Δ):
-        IF s ∈ σ THEN
-	  ktype_def(s, definition(σ(s)), interp(Δ, σ - s))
+        IF s ∈ isymbols(σ) THEN
+	  ktype_def(s, definition(σ)(s), interp(Δ, σ - s))
 	ELSE
 	  ktype_decl(s, interp(Δ, σ))
 	ENDIF,
       ktype_def(s, T, Δ): ktype_def(s, T, interp(Δ, σ)),
       ktype_ext(s, Δ): ktype_ext(s, interp(Δ, σ)),
       kconst_decl(s, T, Δ):
-        IF s ∈ σ THEN
-	  kconst_def(s, T, definition(σ(s)), interp(Δ, σ - s))
+        IF s ∈ isymbols(σ) THEN
+	  kconst_def(s, T, definition(σ)(s), interp(Δ, σ - s))
 	ELSE
 	  kconst_decl(s, T, interp(Δ, σ))
 	ENDIF,
@@ -78,31 +78,31 @@ BEGIN
 
 
   member_difference: THEOREM
-    FORALL (s | s ∈ σ):
-    r ∈ σ - s IMPLIES r ∈ σ
+    FORALL (s | s ∈ isymbols(σ)):
+    r ∈ isymbols(σ - s) IMPLIES r ∈ isymbols(σ)
   member_difference_when: THEOREM
-    FORALL (s | s ∈ σ):
-    r ∈ σ AND r /= s IMPLIES r ∈ σ - s
+    FORALL (s | s ∈ isymbols(σ)):
+    r ∈ isymbols(σ) AND r /= s IMPLIES r ∈ isymbols(σ - s)
 
   member_interp_for: THEOREM
-    interp_for?(Δ)(σ) AND s ∈ σ 
-    IMPLIES s ∈ Δ
+    interp_for?(Δ)(σ) AND s ∈ isymbols(σ) 
+    IMPLIES s ∈ dsymbols(Δ)
 
   member_interp: THEOREM 
     interp_for?(Δ)(σ) IMPLIES 
-    (s ∈ Δ IFF s ∈ interp(Δ, σ))
+    (s ∈ dsymbols(Δ) IFF s ∈ dsymbols(interp(Δ, σ)))
  
   definition_interp: THEOREM  
-    interp_for?(Δ)(σ) AND s ∈ Δ IMPLIES
-    (definition?(interp(Δ, σ)(s)) IFF definition?(Δ(s)) OR s ∈ σ)
+    interp_for?(Δ)(σ) AND s ∈ dsymbols(Δ) IMPLIES
+    (definition?(interp(Δ, σ))(s) IFF definition?(Δ)(s) OR s ∈ isymbols(σ))
 
-  well_formed_interp_l: THEOREM
-    FORALL (Γ: well_formed_context, Δ: pretheory, σ | interp_for?(Δ)(σ)):
-    well_formed?(Γ)(interp(Δ, σ)) IMPLIES well_formed?(Γ)(Δ)  
+  %well_formed_interp_l: THEOREM
+  %  FORALL (Γ: well_formed_context, Δ: pretheory, σ | interp_for?(Δ)(σ)):
+  %  well_formed?(Γ)(interp(Δ, σ)) IMPLIES well_formed?(Γ)(Δ)  
 
-  well_formed_interp: THEOREM
-    FORALL (Γ: well_formed_context, Δ: pretheory | interp_for?(Δ)(σ)):
-    well_formed?(Γ)(interp(Δ, σ)) IMPLIES well_formed?(Γ)(σ)  
+  %well_formed_interp: THEOREM
+  %  FORALL (Γ: well_formed_context, Δ: pretheory | interp_for?(Δ)(σ)):
+  %  well_formed?(Γ)(interp(Δ, σ)) IMPLIES well_formed?(Γ)(σ)  
 
 END interp
 

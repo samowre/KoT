@@ -36,6 +36,17 @@ BEGIN
   kind_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
    kind(Γ)(s) = kind(extract(Γ, s))(s)
 
+  % Same for interpretations
+  ikind(σ)(s: (isymbols(σ))): RECURSIVE kind = 
+    CASES σ OF
+      itype(r, T, τ): IF s = r THEN KTYPE ELSE ikind(τ)(s) ENDIF
+    ,  iconst(r, a, τ): IF s = r THEN KCONST ELSE ikind(τ)(s) ENDIF
+    ENDCASES
+  MEASURE w(σ)
+  AUTO_REWRITE ikind
+  % TODO : see if ikind_concat and ikind_extract are needed
+  % PS : extract does not even exist for interp 
+
 
   % Checks that s has a definition in Γ
   % (such as s: TYPE = def_type, or s: T = def_term)
@@ -111,6 +122,16 @@ BEGIN
   definition_dtheory: RECURSIVE JUDGEMENT
     definition(Γ)(s: (dtheory?(Γ))) HAS_TYPE pretheory
 
+  % The same for interpretations
+  idefinition(σ)(s: (isymbols(σ))): RECURSIVE expr = 
+    CASES σ OF
+      itype(r, T, τ): IF s = r THEN T ELSE idefinition(τ)(s) ENDIF
+    , iconst(r, a, τ): IF s = r THEN a ELSE idefinition(τ)(s) ENDIF
+    ENDCASES
+  MEASURE w(σ)
+  AUTO_REWRITE idefinition
+  % TODO : see if we need idefinition_concat
+
   % Checks that s is a preterm in Γ,
   % i.e appears of the form s: T or s: T = a
   typed?(Γ)(s: (dsymbols(Γ))): RECURSIVE bool =
@@ -140,8 +161,22 @@ BEGIN
   MEASURE w(Γ)
   AUTO_REWRITE type_
 
-
-  % *_concat
+  % Theorems on definition and type
+  % extract = (〈〉, type, definition)
+  symbols_definition_extract: THEOREM 
+    s ∈ dsymbols(Γ) AND definition?(Γ)(s) IMPLIES
+    symbols(definition(extract(Γ, s))(s)) ⊂ symbols(extract(Γ, s))  
+  vars_definition_extract: THEOREM 
+    s ∈ dsymbols(Γ) AND definition?(Γ)(s) IMPLIES
+    vars(definition(extract(Γ, s))(s)) ⊂ vars(extract(Γ, s))
+  symbols_type_extract: THEOREM
+    s ∈ dsymbols(Γ) AND typed?(Γ)(s) IMPLIES
+    symbols(type_(extract(Γ, s))(s)) ⊂ symbols(extract(Γ, s))
+  vars_type_extract: THEOREM
+    s ∈ dsymbols(Γ) AND typed?(Γ)(s) IMPLIES
+    vars(type_(extract(Γ, s))(s)) ⊂ vars(extract(Γ, s))
+      
+  % definition and type with concat
   definition_concat: THEOREM 
     s ∈ dsymbols(Γ ++ Δ) AND definition?(Γ ++ Δ)(s) IMPLIES
     definition(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN definition(Δ)(s) 
@@ -155,7 +190,7 @@ BEGIN
   % definition(Γ)(s) only uses symbols/vars that have been previously
   % declared in Γ
   symbols_definition: THEOREM 
-    s ∈ symbols(Δ) AND definition?(Δ)(s) IMPLIES
+    s ∈ dsymbols(Δ) AND definition?(Δ)(s) IMPLIES
     symbols(definition(Δ)(s)) ⊂ symbols(Δ) ∪ dsymbols(find(Δ)(s)) 
   vars_definition: THEOREM 
     s ∈ dsymbols(Δ) AND definition?(Δ)(s) IMPLIES
@@ -180,8 +215,9 @@ BEGIN
 
   % If Γ is closed, then type(Γ)(s) only uses symbols/vars
   % that have been previously declared in Γ
-  symbols_type: THEOREM FORALL (Δ | closed?(Γ)(Δ), s: (typed?(Δ))):
-    symbols(type_(Δ)(s)) ⊂ dsymbols(find(Δ)(s)) ∪ dsymbols(Γ)
+  symbols_type: THEOREM
+    s ∈ dsymbols(Δ) AND typed?(Δ)(s) IMPLIES
+    symbols(type_(Δ)(s)) ⊂ symbols(Δ) ∪ dsymbols(find(Δ)(s))
   vars_type: THEOREM 
     s ∈ dsymbols(Δ) AND typed?(Δ)(s) IMPLIES
     (vars(type_(Δ)(s)) - dvars(find(Δ)(s))) ⊂ vars(Δ)
@@ -190,14 +226,14 @@ BEGIN
 
 
 
-  % If the symbol t is used in the definition of symbol s
+  % If the symbol t is used in the definition/type of symbol s
   % then t is defined before s, 
   % hence pos(Γ)(t) < pos(Γ)(s)
-  pos_definition: THEOREM FORALL (Δ | (closed?(Γ)(Δ)), s: (definition?(Δ))):
-    FORALL (t: (symbols(definition(Δ)(s)))):
-      t ∈ dsymbols(find(Δ)(s)) IMPLIES pos(find(Δ)(s), t) < pos(Δ, s)  
-  % Same in the type of symbol s
-  pos_type: THEOREM FORALL (Δ | (closed?(Γ)(Δ)), s: (typed?(Δ))):
-    FORALL (t: (symbols(type_(Δ)(s)))):
-      t ∈ dsymbols(find(Δ)(s)) IMPLIES pos(find(Δ)(s), t) < pos(Δ, s)
+
+  %pos_definition: THEOREM FORALL (Δ | (closed?(Γ)(Δ)), s: (definition?(Δ))):
+  %  FORALL (t: (symbols(definition(Δ)(s)))):
+  %    t ∈ dsymbols(find(Δ)(s)) IMPLIES pos(find(Δ)(s), t) < pos(Δ, s)  
+  %pos_type: THEOREM FORALL (Δ | (closed?(Γ)(Δ)), s: (typed?(Δ))):
+  %  FORALL (t: (symbols(type_(Δ)(s)))):
+  %    t ∈ dsymbols(find(Δ)(s)) IMPLIES pos(find(Δ)(s), t) < pos(Δ, s)
 END decl
