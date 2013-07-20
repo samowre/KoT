@@ -69,20 +69,32 @@ BEGIN
     length(Γ) = 0 IMPLIES Γ = 〈〉
   AUTO_REWRITE length_concat
 
+  nsymbols(Γ): RECURSIVE upto[length(Γ)] =
+    CASES Γ OF
+      〈〉: 0
+    , kvar(T, Δ): nsymbols(Δ)
+      ELSE 1 + nsymbols(rest(Γ))
+    ENDCASES
+  MEASURE w(Γ)
+  AUTO_REWRITE nsymbols
+  nsymbols_concat: THEOREM
+    nsymbols(Γ ++ Δ) = nsymbols(Γ) + nsymbols(Δ)
+  AUTO_REWRITE nsymbols_concat
+
   % pos(Γ)(s) returns the position of s in Γ 
   % where contexts are seen as reversed lists
   % ie pos(Γ, s: ...)(s) = length(Γ)
   % and nth(s: ..., Γ)(s) = 0
-  pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[length(Γ)] =
+  pos(Γ, (s: (dsymbols(Γ)))): RECURSIVE below[nsymbols(Γ)] =
     CASES Γ OF
       kvar(T, Δ): pos(Δ, s)
-      ELSE IF s = s(Γ) THEN length(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
+      ELSE IF s = s(Γ) THEN nsymbols(rest(Γ)) ELSE pos(rest(Γ), s) ENDIF
     ENDCASES
   MEASURE w(Γ)
   AUTO_REWRITE pos
 
   pos_concat: THEOREM s ∈ dsymbols(Γ ++ Δ) IMPLIES
-    pos(Γ ++ Δ, s) = IF s ∈ dsymbols(Δ) THEN length(Γ) + pos(Δ, s)
+    pos(Γ ++ Δ, s) = IF s ∈ dsymbols(Δ) THEN nsymbols(Γ) + pos(Δ, s)
                      ELSE pos(Γ, s) ENDIF
   AUTO_REWRITE pos_concat
 
@@ -108,13 +120,13 @@ BEGIN
   find_concat: THEOREM s ∈ dsymbols(Γ ++ Δ) IMPLIES
     find(Γ ++ Δ)(s) = IF s ∈ dsymbols(Δ) THEN Γ ++ find(Δ)(s)
                       ELSE find(Γ)(s) ENDIF
-  length_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
-    length(find(Γ)(s)) = pos(Γ, s)
+  nsymbols_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    nsymbols(find(Γ)(s)) = pos(Γ, s)
   symbols_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
     symbols(find(Γ)(s)) ⊂ symbols(Γ)
   vars_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
     vars(find(Γ)(s)) ⊂ vars(Γ)
-  AUTO_REWRITE find_concat, length_find
+  AUTO_REWRITE find_concat, nsymbols_find
 
   extract(Γ, (s | s ∈ dsymbols(Γ))): RECURSIVE context =
     CASES Γ OF
@@ -135,10 +147,12 @@ BEGIN
                          ELSE extract(Γ, s) ENDIF
   length_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
     length(extract(Γ, s)) = 1
-  dsymbols_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
-    dsymbols(extract(Γ, s)) = singleton(s)
+  nsymbols_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    nsymbols(extract(Γ, s)) = 1
   dvars_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
     dvars(extract(Γ, s)) = 0
+  dsymbols_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    dsymbols(extract(Γ, s)) = singleton(s)
   vars_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
     vars(extract(Γ, s)) - dvars(find(Γ)(s)) ⊂ vars(Γ)
   symbols_extract: THEOREM s ∈ dsymbols(Γ) IMPLIES
@@ -173,8 +187,8 @@ BEGIN
     Γ = find(Γ)(s) ++ extract(Γ, s) ++ after(Γ, s)
 
   % Deducible stuff with find_extract_after
-  length_after: THEOREM s ∈ dsymbols(Γ) IMPLIES
-    length(after(Γ, s)) = length(Γ) - pos(Γ, s) - 1
+  nsymbols_after: THEOREM s ∈ dsymbols(Γ) IMPLIES
+    nsymbols(after(Γ, s)) = nsymbols(Γ) - pos(Γ, s) - 1
   dsymbols_find: THEOREM s ∈ dsymbols(Γ) IMPLIES
     dsymbols(find(Γ)(s)) ⊂ dsymbols(Γ)
   dsymbols_find_before: THEOREM s ∈ dsymbols(Γ) AND t ∈ dsymbols(Γ) IMPLIES
@@ -183,7 +197,7 @@ BEGIN
     dsymbols(find(Γ)(s)) = { t | t ∈ dsymbols(Γ) AND pos(Γ, t) < pos(Γ, s) }
   symbols_after: THEOREM s ∈ dsymbols(Γ) IMPLIES
     symbols(after(Γ, s)) ⊂ symbols(Γ) ∪ dsymbols(find(Γ)(s)) ∪ singleton(s)
-  AUTO_REWRITE length_after, dsymbols_find_when_uniques
+  AUTO_REWRITE nsymbols_after, dsymbols_find_when_uniques
 
   pos_find_before: THEOREM s ∈ dsymbols(Γ) AND t ∈ dsymbols(Γ) IMPLIES
     pos(Γ, t) < pos(Γ, s) IMPLIES pos(find(Γ)(s), t) = pos(Γ, t)

@@ -1,6 +1,6 @@
 well_formed: THEORY
 BEGIN
-  IMPORTING context
+  IMPORTING decl
 
   Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
@@ -12,8 +12,9 @@ BEGIN
   S: VAR syntaxic
   Th: VAR pretheory
   e: VAR expr
-  d: VAR decl
   i, j, k, l: VAR nat
+
+% TODO: change ∈ to ∈ dsymbols( ) if we want to use it.
 
 
   % Checks that a syntaxic is well formed in a given context, 
@@ -83,18 +84,6 @@ BEGIN
   AUTO_REWRITE well_formed?
   well_formed(Γ): TYPE = (well_formed?(Γ))
   well_formed_context: TYPE = { Γ | well_formed?(〈〉)(Γ) }
-
-  well_formed_decl?(Γ)(d): bool =
-    CASES d OF
-      dtype_decl: TRUE,
-      dtype_def(T): well_formed?(Γ)(T),
-      dvar(T): well_formed?(Γ)(T),
-      dconst_decl(T): well_formed?(Γ)(T),
-      dconst_def(T, a): well_formed?(Γ)(T) AND well_formed?(Γ)(a),
-      dtheory(Θ): well_formed?(Γ)(Θ),
-      dtype_interp(T): well_formed?(Γ)(T),
-      dconst_interp(a): well_formed?(Γ)(a)
-    ENDCASES
 
   well_formed_concat: THEOREM
     well_formed?(Γ)(Θ) AND well_formed?(Γ ++ Θ)(Δ) IFF well_formed?(Γ)(Θ ++ Δ)
