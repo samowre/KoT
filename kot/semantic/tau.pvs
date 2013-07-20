@@ -4,6 +4,23 @@ BEGIN
   IMPORTING compare
   IMPORTING definitions
 
+
+  % Variable declaration
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s, c: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  S: VAR semantic
+
+  % TODO LIST
+
+  find(Θ)(x): context
+  after(Θ, x): context
+  definition(Θ)(x): expr
+  type_(Θ)(x): pretype
+
   % TCC4: well_formed(Γ)(Θ) AND s ∈ Θ IMPLIES well_formed(Γ)(Θ(s))
   % TCC5: δ(Θ)(T: pretype) HAS_TYPE pretype
   % 	  type_(_) HAS_TYPE pretype
@@ -50,14 +67,7 @@ BEGIN
   % TCC137: w on ktheory
   % TCC141: w on ktheory
 
-  % Variable declaration
-  Γ, Δ, Θ: VAR context
-  A, B, T: VAR pretype
-  r, s, c: VAR symbol
-  n, m: VAR name
-  x, y: VAR nat
-  a, b, f, g: VAR preterm
-  S: VAR semantic
+
 
 
   %% Type TCCS 
@@ -92,7 +102,7 @@ BEGIN
         THEN IF kind(Θ)(s) = KTYPE
 	  THEN (KTYPE, null)
 	ELSIF kind(Θ)(s) = KCONST
-	  THEN (KTERM(δ(find(Θ)(s))(type_(Θ)(s))) ↑ (dvars(after(Θ, s)))), null)
+	  THEN (KTERM(δ(find(Θ)(s))(type_(Θ)(s)) ↑ (dvars(after(Θ, s)))), null)
 	  ELSE fail
 	ENDIF
 	ELSE fail
@@ -116,7 +126,7 @@ BEGIN
 	        THEN IF kind(Δ)(s) = KTYPE
 		  THEN (KTYPE, null)
 		ELSIF kind(Δ)(s) = KCONST
-		  THEN ( KTERM( δ(find(Θ)(s))( η(Θ, m, σ)( type_(Δ(s)) ) ) ↑ (dvars(after(Θ, s))),
+		  THEN ( KTERM( δ(find(Θ)(s))( η(Θ, m, σ)( type_(Δ)(s) )) ↑ (dvars(after(Θ, s)))),
 		         tccsi )
 		  ELSE fail
 		ENDIF
@@ -173,8 +183,8 @@ BEGIN
 
   %% Terms
     % τ(Γ)(s) = δ(Γ)(type(Γ(s)))  if  kind(Γ(s)) = variable 
-    v(i): IF i ∈ dsymbols(Θ)
-    	    THEN (KTERM( δ(find(Θ)(i))(type_(Θ)(i)) ↑ (dvars(after(Θ, i)(i)))), null)
+    v(i): IF i < dvars(Θ)
+    	    THEN (KTERM( δ(find(Θ)(i))(type_(Θ)(i)) ↑ (dvars(after(Θ, i)))), null)
 	    ELSE fail
 	  ENDIF, 
     % τ(Γ)(f a) = B' where μ0(τ(Γ)(f)) = [x: A -> B]
@@ -359,7 +369,7 @@ BEGIN
 	ENDIF
     ELSE fail
   ENDCASES
-  MEASURE extend[semantic, well_formed(Θ), ordinal, zero](LAMBDA (s: well_formed(Θ)): w(Θ, s))(S)
+  MEASURE extend[semantic, syntaxic, ordinal, zero](LAMBDA (s: syntaxic): w(Θ, s))(S)
 
 
   % Important invariants of τ to prove :

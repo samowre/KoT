@@ -3,7 +3,7 @@ BEGIN
   IMPORTING weight
   
   e: VAR expr
-  Γ, Δ, Θ: VAR well_formed_context
+  Γ, Δ, Θ: VAR context
   A, B, T: VAR pretype
   r, s, m: VAR symbol
   n: VAR name
@@ -14,12 +14,11 @@ BEGIN
 
   % η function, as informally defined just before definition 5.5
   % + some modification for the theory interpretations extension
-  η(Γ, (m | m ∈ Γ AND KTHEORY?(kind(Γ(m)))), σ)
-   (e | well_formed?(Γ ++ definition(Γ(m)))(e)): RECURSIVE semantic =
+  η(Γ, (m | m ∈ dsymbols(Γ) AND KTHEORY?(kind(Γ)(m))), σ)(e): RECURSIVE semantic =
     CASES e OF
       symbol(s):
-        IF s ∈ σ THEN definition(σ(s))
-	ELSIF s ∈ definition(Γ(m)) THEN  dot(m, σ, s)
+        IF s ∈ isymbols(σ) THEN idefinition(σ)(s)
+	ELSIF s ∈ dsymbols(definition(Γ)(m)) THEN  dot(m, σ, s)
 	ELSE symbol(s) ENDIF,
       dot(m_, τ, s_): dot(m_, η(Γ, m, σ)(τ), s_),
 
@@ -55,19 +54,19 @@ BEGIN
 
   % Expanded Type : 2.16, 3.9, 5.5, 5.16
   % + some modification for the theory interpretations extension
-  δ(Γ)(T | well_formed?(Γ)(T)): RECURSIVE semantic =
+  δ(Γ)(T): RECURSIVE semantic =
     CASES T OF
       symbol(s):
-        IF definition?(Γ(s)) THEN
-	  δ(Γ)(definition(Γ(s)))
+        IF definition?(Γ)(s) THEN
+	  δ(Γ)(definition(Γ)(s))
   	ELSE symbol(s) ENDIF,
       dot(m, σ, s):
-        IF s ∈ σ THEN
-  	  δ(Γ)(definition(σ(s)))
+        IF s ∈ isymbols(σ) THEN
+  	  δ(Γ)(definition(σ)(s))
   	ELSE
-  	  LET Δ = definition(Γ(m)) IN
-  	  IF definition?(Δ(s)) THEN
-  	    δ(Γ)(η(Γ, m, σ)(definition(Δ(s))))
+  	  LET Δ = definition(Γ)(m) IN
+  	  IF definition?(Δ)(s) THEN
+  	    δ(Γ)(η(Γ, m, σ)(definition(Δ)(s)))
    	  ELSE dot(m, δ(Γ)(σ), s) ENDIF
   	ENDIF,
       fun(A, B): fun(δ(Γ)(A), δ(Γ)(B)),

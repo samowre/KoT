@@ -50,7 +50,7 @@ BEGIN
 
   % Actually computes the interpretation, that is, creates the
   % theory equivalent to Γ{{σ}}
-  interp(Θ, σ: (interp_for?(Θ))): RECURSIVE
+  interp(Θ, (σ: (interp_for?(Θ)))): RECURSIVE
     { Δ: pretheory | w(Δ) <= w(Θ) + w(σ) } =
     CASES Θ OF
       〈〉: 〈〉,
