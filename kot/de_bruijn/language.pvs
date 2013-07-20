@@ -1,104 +1,174 @@
 language: THEORY
 BEGIN
   symbol: TYPE = nat
-
-  calculus: DATATYPE
+  syntaxic: DATATYPE WITH SUBTYPES name, pretype, preterm, precontext, precontext, preinterp
   BEGIN
-    kvar(kindex: nat): kvar?
-    klam(kbody: calculus): klam?
-    kapp(kop: calculus, karg: calculus): kapp?
-  END
+    v(i: nat): v?: name
+    dot(map: preinterp, i: nat, rest: name): dot?: name
+  
+    base(path: name): base?: pretype
+    fun(dom: pretype, range: pretype): fun?: pretype
+    prod(left: pretype, right: pretype): prod?: pretype
+    subtype(supertype: pretype, pred: preterm): subtype?: pretype
 
-  k, l: VAR calculus
+    symbol(path: name): symbol?: preterm
+    app(op: preterm, arg: preterm): preterm
+    lam(type_: pretype, body: preterm): lam?: preterm
+    pair(left: preterm, right: preterm): pair: preterm
+    lproj(arg: preterm): lproj?: preterm
+    rproj(arg: preterm): rproj?: preterm
 
-  koccurs(x, k): RECURSIVE nat =
-    CASES k OF
-      kvar(i): IF i = x THEN 1 ELSE 0 ENDIF
-    , klam(body): koccurs(x + 1, body)
-    , kapp(op, arg): koccurs(x, op) + koccurs(x, arg)
+    empty: empty?: precontext
+    type_decl(rest: precontext): type_decl?: precontext
+    type_var(rest: precontext): type_var?: precontext
+    type_def(rest: precontext, def: pretype): type_def?: precontext
+    const_decl(rest: precontext, type_: pretype): const_decl?: precontext
+    const_var(rest: precontext, type_: pretype): const_var?: precontext
+    const_def(rest: precontext, type_: pretype, def: preterm): const_def?: precontext
+    theory_def(rest: precontext, def: precontext): theory_def?: precontext
+
+    nil: nil?: preinterp
+    ikeep(rest: preinterp): ikeep?: preinterp
+    ideep(rest: preinterp, map: preinterp): ideep?: preinterp
+    itype(rest: preinterp, def: pretype): itype?: preinterp
+    iconst(rest: preinterp, def: preterm): iconst?: preinterp
+    itheory(rest: preinterp, def: preinterp): itheory?: preinterp
+  END syntaxic
+
+  U, V: VAR syntaxic
+  i: VAR nat
+
+  length(U): RECURSIVE nat =
+    CASES U OF
+    , type_decl(Γ): 1 + length(Γ)
+    , type_var(Γ): 1 + length(Γ)
+    , type_def(Γ, T): 1 + length(Γ)
+    , const_decl(Γ, T): 1 + length(Γ)
+    , const_var(Γ, T): 1 + length(Γ)
+    , const_def(Γ, T, a): 1 + length(Γ)
+    , theory_def(Γ, Θ): 1 + length(Γ) + length(Θ)
+
+    , ikeep(σ): 1 + length(σ)
+    , ideep(σ, τ): 1 + length(σ) + length(τ)
+    , itype(σ, T): 1 + length(σ)
+    , iconst(σ, a): 1 + length(σ)
+    , itheory(σ, Θ): 1 + length(σ) + length(Θ)
+
+    ELSE 0
     ENDCASES
-  MEASURE k BY <<
+  MEASURE U BY <<
 
-  kapps(k): RECURSIVE nat =
-    CASES k OF
-      kvar(i): 0
-    , klam(body): kapps(body)
-    , kapp(op, arg):
-        1 + kapps(op) + kapps(arg) * (1 + koccurs(0, op))
-    ENDCASES
-  MEASURE k BY <<
+  nth(U, (i | i < length(U))): RECURSIVE syntaxic =
+    IF i = 0 THEN U ELSE
+    CASES U OF
+      theory_def(Γ, Θ):
+        IF i < length(Θ) THEN nth(Θ, i)
+	ELSE nth(Γ, i - length(Θ)) ENDIF
+    , ideep(σ, τ):
+        IF i < length(τ) THEN nth(τ, i)
+	ELSE nth(σ, i - length(τ)) ENDIF
+    , itheory(σ, Θ):
+        IF i < length(Θ) THEN nth(Θ, i)
+	ELSE nth(σ, i - length(Θ)) ENDIF
+    ELSE nth(rest(U), i - 1) ENDIF
+  MEASURE i
 
-  kshift(k, n): RECURSIVE calculus =
-    CASES k OF
-      kvar(i): IF i < n THEN kvar(i) ELSE kvar(i + n) ENDIF
-    , klam(body): klam(kshift(body, n + 1))
-    , kapp(op, arg): kapp(kshift(op, n), kshift(arg, n))
-    ENDCASES
-  MEASURE k BY <<
-  kapps_kshift: THEOREM
-    kapps(kshift(k, n)) = kapps(k)
+  ;++(U, V): RECURSIVE syntaxic =
+    CASES V OF
+      type_decl(Γ): type_decl(U ++ Γ)
+    , type_var(Γ): type_var(U ++ Γ)
+    , type_def(Γ, T): type_def(U ++ Γ, T)
+    , const_decl(Γ, T): const_decl(U ++ Γ, T)
+    , const_var(Γ, T): const_var(U ++ Γ, T)
+    , const_def(Γ, T, a): const_def(U ++ Γ, T, a)
+    , theory_def(Γ, Θ): theory_def(U ++ Γ, Θ)
 
-  ksubst(k, n, t): RECURSIVE calculus =
-    CASES k OF
-      kvar(i):
-        IF i = n THEN t ELSIF i > n THEN v(i - 1) ELSE v(i) ENDIF
-    , klam(body): klam(ksubst(body, n + 1, kshift(t, 0)))
-    , kapp(op, arg): kapp(ksubst(op, n, t), ksubst(arg, n, t))
-    ENDCASES
-  MEASURE k BY <<
-  kapps_ksubst: THEOREM
-    kapps(ksubst(k, n, t)) = kapps(k) + kapps(t) * koccurs(n, k)
+    , ikeep(σ): ikeep(U ++ σ)
+    , ideep(σ, τ): ideep(U ++ σ, τ)
+    , itype(σ, T): itype(U ++ σ, T)
+    , iconst(σ, a): iconst(U ++ σ, a)
+    , itheory(σ, Θ): itheory(U ++ σ, Θ)
 
-  kbeta(k): RECURSIVE calculus =
-    CASES k OF
-      kvar(i): k
-    , klam(body): klam(kbeta(body))
-    , kapp(op, arg):
-        LET bop = kbeta(op), barg = kbeta(arg) IN
-        IF klam?(bop) THEN ksubst(kbody(bop), 0, barg) ELSE k ENDIF
+    ELSE U
     ENDCASES
-  MEASURE kapps(k)
+  MEASURE length(V)
+  length_concat: THEOREM
+    length(U ++ V) = length(U) + length(V)
+  nth_concat: THEOREM i < length(U ++ V) IMPLIES
+    nth(U ++ V, i) =
+      IF i < length(V) THEN nth(V, i) ELSE nth(U, i - length(V)) ENDIF
+
+  prekeyword: TYPE =
+    { PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
+  k: VAR prekeyword
+
+  semantic?(U, V, k): RECURSIVE bool =
+    CASES V OF
+      v(i): i < length(U) AND kind(U, i) = k
+    , dot(σ, i, x):
+        semantic?(U, σ, PREINTERP) AND i < length(U) AND
+	semantic?(apply(U, i), x, k)
+	
+      base(x): k = PRETYPE AND semantic?(U, x, PRETYPE)
+    , fun(A, B):
+        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
+	semantic?(const_var(U, A), B, PRETYPE)
+    , prod(A, B):
+        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
+	semantic?(const_var(U, A), B, PRETYPE)
+    , subtype(T, a):
+        k = PRETYPE AND semantic?(U, T, PRETYPE) AND
+	semantic?(const_var(U, T), a, PRETERM)
+
+    , symbol(x): k = PRETERM AND semantic?(U, x, PRETERM)
+    , app(f, a):
+        k = PRETERM AND semantic?(U, f, PRETERM) AND semantic?(U, x, PRETERM)
+    , lam(T, a):
+        k = PRETERM AND semantic?(U, T, PRETYPE) AND
+	semantic?(const_var(U, T), a, PRETERM)
+    , lproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
+    , rproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
+
+    , empty: k = PRECONTEXT
+    , type_decl(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
+    , type_ext(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
+    , type_def(Γ, T):
+        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+	semantic?(U ++ Γ, T, PRETYPE)
+    , const_decl(Γ, T):
+        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+	semantic?(U ++ Γ, T, PRETYPE)
+    , const_ext(Γ, T):
+        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+	semantic?(U ++ Γ, T, PRETYPE)
+    , const_def(Γ, T, a):
+        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+	semantic?(U ++ Γ, T, PRETYPE) AND semantic?(U ++ Γ, T, PRETERM)
+    , const_var(Γ, T):
+        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+	semantic?(U ++ Γ, T, PRETYPE)
+    , theory_def(Γ, Θ):
+        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+	semantic?(U ++ Γ, Θ, PRECONTEXT)
+
+    , nil: k = PREINTERP AND empty?(U)
+    , ikeep(σ):
+        k = PREINTERP AND NOT empty?(U) AND precontext(U) AND
+	semantic?(rest(u), σ, PREINTERP)
+    , ideep(σ, τ):
+        k = PREINTERP AND theory_def?(U) AND
+	semantic?(rest(U) ++ def(U), σ ++ τ, PREINTERP)
+    , itype(σ, T):
+        k = PREINTERP AND type_decl?(U) AND
+	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), T, PRETYPE)
+    , iconst(σ, a):
+        k = PREINTERP AND const_decl?(U) AND
+	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), a, PRETERM)
+    , itheory(σ, Θ):
+        k = PREINTERP AND theory_def?(U) AND
+	semantic?(rest(U), σ, PREINTERP) AND
+	semantic?(rest(U), Θ, PRECONTEXT)
+    ENDCASES
+  MEASURE length(U) + length(V)
+  
 END language
-%   syntaxic: DATATYPE WITH SUBTYPES pretype, preterm, decl
-%   BEGIN
-%     base(calc: calculus): base?: pretype
-%     fun(dom: pretype, range: pretype): fun?: pretype
-%     prod(left: pretype, right: pretype): prod?: pretype
-%     subtype(supertype: pretype, pred: preterm): subtype?: pretype
-
-%     symbol(calc: calculus): symbol?: preterm
-%     app(op: preterm, arg: preterm): preterm
-%     lam(type_: pretype, body: preterm): lam?: preterm
-
-%     type_decl: type_decl?: decl
-%     type_ext: type_ext?: decl
-%     type_def(def: pretype): type_def?: decl
-%     const_decl(type_: pretype): const_decl?: decl
-%     const_ext(type_: pretype): const_ext?: decl
-%     const_def(type_: pretype, def: preterm): const_def?: decl
-%     const_var(type_: pretype): const_var?: decl
-%     theory_def(def: finseq[decl]): theory_def?: decl
-%   END syntaxic
-
-%   context: TYPE = finseq[decl]
-
-%   subst(t, x, s):
-%     CASES t OF
-%       V(INDEX):
-%         IF INDEX = x THEN s
-% 	ELSIF INDEX > x THEN V(INDEX - 1)
-% 	ELSE V(INDEX) ENDIF
-%     , LAM(BODY): LAM(subst(t, x + 1, s))
-%     , APP(OP, ARG): APP(subst(OP, x, s), subst(ARG, x, s))
-%     ENDCASES
-    
-% % calculus -> [finseq[decl] -> decl]
-%   β(
-%   reduce(t) = 
-%     CASES t OF
-%       V(INDEX): V(INDEX)
-%     , LAM(BODY): LAM(BODY)
-%     , APP(OP, ARG):
-%         CASES reduce(OP) OF
-% 	  LAM(BODY): subst(BODY, ARG)
-% 	, APP(a, b): FALSE
