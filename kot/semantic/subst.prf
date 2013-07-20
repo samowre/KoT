@@ -3665,8 +3665,7 @@
                   ("9" (grind) nil nil) ("10" (grind) nil nil)
                   ("11" (grind) nil nil) ("12" (grind) nil nil))
                  nil)
-                ((pretheory_is_context judgement-tcc nil subtype nil)
-                 (preterm type-eq-decl nil language nil)
+                ((preterm type-eq-decl nil language nil)
                  (shift_size application-judgement
                   "{B | size(B) = size(A)}" subst nil)
                  (pretype type-eq-decl nil language nil)
@@ -3675,7 +3674,7 @@
                   "(total_order?[real])" real_props nil)
                  (NOT const-decl "[bool -> bool]" booleans nil)
                  (dvars_pretheory formula-decl nil syntaxic_sets nil)
-                 (context formula-decl nil language nil)
+                 (pretheory_is_context judgement-tcc nil subtype nil)
                  (pretheory formula-decl nil language nil)
                  (pretheory type-eq-decl nil language nil)
                  (context_induction formula-decl nil inductions nil)
@@ -3791,7 +3790,8 @@
      (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
       integers nil)
      (real_ge_is_total_order name-judgement "(total_order?[real])"
-      real_props nil))
+      real_props nil)
+     (member const-decl "bool" sets nil))
     nil)) (vars_shift 0
            (vars_shift-1 nil 3583163486
             ("" (induct "e" :name "expr_induction")
@@ -3899,15 +3899,12 @@
              (posint_plus_nnint_is_posint application-judgement
               "posint" integers nil)
              (union const-decl "set" sets nil)
-             (member const-decl "bool" sets nil)
              (preterm type-eq-decl nil language nil)
              (a!1 skolem-const-decl "preterm" subst nil)
              (f!1 skolem-const-decl "preterm" subst nil)
              (j!1 skolem-const-decl "nat" subst nil)
              (i!1 skolem-const-decl "nat" subst nil)
              (singleton const-decl "(singleton?)" sets nil)
-             (real_ge_is_total_order name-judgement
-              "(total_order?[real])" real_props nil)
              (real_lt_is_strict_total_order name-judgement
               "(strict_total_order?[real])" real_props nil)
              (nonempty_singleton_finite application-judgement
@@ -3919,6 +3916,12 @@
              (j!1 skolem-const-decl "nat" subst nil)
              (i!2 skolem-const-decl "nat" subst nil)
              (interp type-eq-decl nil language nil)
+             (emptyset const-decl "set" sets nil)
+             (real_ge_is_total_order name-judgement
+              "(total_order?[real])" real_props nil)
+             (finite_emptyset name-judgement "finite_set" finite_sets
+              nil)
+             (FALSE const-decl "bool" booleans nil)
              (expr_induction formula-decl nil inductions nil)
              (OR const-decl "[bool, bool -> bool]" booleans nil)
              (↑ def-decl
@@ -3997,9 +4000,10 @@
                 number_fields nil)
              (NOT const-decl "[bool -> bool]" booleans nil)
              (< const-decl "bool" reals nil)
+             (set type-eq-decl nil sets nil)
+             (member const-decl "bool" sets nil)
              (syntaxic? const-decl "[semantic -> bool]" language nil)
              (syntaxic type-eq-decl nil language nil)
-             (set type-eq-decl nil sets nil)
              (vars def-decl "set[nat]" syntaxic_sets nil)
              (- const-decl "[numfield, numfield -> numfield]"
                 number_fields nil)
@@ -4030,15 +4034,17 @@
                nil)
               ("12" (grind) nil nil))
              nil)
-            ((context_is_map judgement-tcc nil subtype nil)
+            ((interp_is_map judgement-tcc nil subtype nil)
              (pretheory_is_context judgement-tcc nil subtype nil)
              (shift_pretheory formula-decl nil subst nil)
+             (context_is_map judgement-tcc nil subtype nil)
              (preterm type-eq-decl nil language nil)
              (pretype type-eq-decl nil language nil)
              (NOT const-decl "[bool -> bool]" booleans nil)
              (dsymbols_shift formula-decl nil subst nil)
              (real_ge_is_total_order name-judgement
               "(total_order?[real])" real_props nil)
+             (member const-decl "bool" sets nil)
              (pretheory formula-decl nil language nil)
              (pretheory type-eq-decl nil language nil)
              (context_induction formula-decl nil inductions nil)
@@ -6816,22 +6822,27 @@
                  (subst_size application-judgement
                   "{A: pretype | size(A) = size(T)}" subst nil)
                  (pretype type-eq-decl nil language nil)
-                 (union const-decl "set" sets nil)
                  (singleton const-decl "(singleton?)" sets nil)
+                 (finite_emptyset name-judgement "finite_set"
+                  finite_sets nil)
                  (real_gt_is_strict_total_order name-judgement
                   "(strict_total_order?[real])" real_props nil)
-                 (member const-decl "bool" sets nil)
-                 (add const-decl "(nonempty?)" sets nil)
                  (real_ge_is_total_order name-judgement
                   "(total_order?[real])" real_props nil)
+                 (add const-decl "(nonempty?)" sets nil)
                  (nonempty? const-decl "bool" sets nil)
+                 (nonempty_union1 application-judgement "(nonempty?)"
+                  sets nil)
                  (NOT const-decl "[bool -> bool]" booleans nil)
                  (interp type-eq-decl nil language nil)
                  (pretype formula-decl nil language nil)
                  (preterm formula-decl nil language nil)
                  (interp formula-decl nil language nil)
+                 (emptyset const-decl "set" sets nil)
                  (expr_induction formula-decl nil inductions nil)
+                 (union const-decl "set" sets nil)
                  (vars def-decl "set[nat]" syntaxic_sets nil)
+                 (member const-decl "bool" sets nil)
                  (IF const-decl "[boolean, T, T -> T]" if_def nil)
                  (subst def-decl
                         "{f | (pretype?(e) IMPLIES pretype?(f)) AND (preterm?(e) IMPLIES preterm?(f)) AND (interp?(e) IMPLIES interp?(f)) AND (pretheory?(e) IMPLIES pretheory?(f))}"
@@ -6892,8 +6903,7 @@
       ("10" (grind) nil nil) ("11" (grind) nil nil)
       ("12" (grind) nil nil))
      nil)
-    ((pretheory_is_context judgement-tcc nil subtype nil)
-     (subst_size application-judgement
+    ((subst_size application-judgement
       "{A: pretype | size(A) = size(T)}" subst nil)
      (pretype type-eq-decl nil language nil)
      (subst_pretheory formula-decl nil subst nil)
@@ -6901,7 +6911,7 @@
       real_props nil)
      (NOT const-decl "[bool -> bool]" booleans nil)
      (dvars_pretheory formula-decl nil syntaxic_sets nil)
-     (context formula-decl nil language nil)
+     (pretheory_is_context judgement-tcc nil subtype nil)
      (pretheory formula-decl nil language nil)
      (pretheory type-eq-decl nil language nil)
      (context_induction formula-decl nil inductions nil)
@@ -7031,7 +7041,6 @@
                  (weight def-decl "nat" language nil)
                  (ord type-decl nil language nil)
                  (pretype type-eq-decl nil language nil)
-                 (member const-decl "bool" sets nil)
                  (union const-decl "set" sets nil)
                  (singleton const-decl "(singleton?)" sets nil)
                  (real_ge_is_total_order name-judgement
@@ -7054,17 +7063,22 @@
                     number_fields nil)
                  (int_minus_int_is_int application-judgement "int"
                   integers nil)
+                 (interp type-eq-decl nil language nil)
                  (posint_plus_nnint_is_posint application-judgement
                   "posint" integers nil)
-                 (NOT const-decl "[bool -> bool]" booleans nil)
-                 (interp type-eq-decl nil language nil)
                  (pretype formula-decl nil language nil)
                  (preterm formula-decl nil language nil)
                  (interp formula-decl nil language nil)
+                 (emptyset const-decl "set" sets nil)
+                 (FALSE const-decl "bool" booleans nil)
+                 (finite_emptyset name-judgement "finite_set"
+                  finite_sets nil)
+                 (NOT const-decl "[bool -> bool]" booleans nil)
                  (expr_induction formula-decl nil inductions nil)
                  (+ const-decl "[numfield, numfield -> numfield]"
                     number_fields nil)
                  (numfield nonempty-type-eq-decl nil number_fields nil)
+                 (member const-decl "bool" sets nil)
                  (< const-decl "bool" reals nil)
                  (subst def-decl
                         "{f | (pretype?(e) IMPLIES pretype?(f)) AND (preterm?(e) IMPLIES preterm?(f)) AND (interp?(e) IMPLIES interp?(f)) AND (pretheory?(e) IMPLIES pretheory?(f))}"
