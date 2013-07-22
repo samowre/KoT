@@ -1,10 +1,9 @@
 language: THEORY
 BEGIN
-  symbol: TYPE = nat
   syntaxic: DATATYPE
   BEGIN
     v(i: nat): v?
-    dot(map: syntaxic, i: nat, rest: syntaxic): dot?
+    dot(i: nat, map: syntaxic, rest: syntaxic): dot?
   
     fun(dom: syntaxic, range: syntaxic): fun?
     prod(left: syntaxic, right: syntaxic): prod?
@@ -16,176 +15,178 @@ BEGIN
     lproj(arg: syntaxic): lproj?
     rproj(arg: syntaxic): rproj?
 
-    empty: empty?
-    type_decl(rest: syntaxic): type_decl?
-    type_var(rest: syntaxic): type_var?
-    type_def(rest: syntaxic, def: syntaxic): type_def?
-    const_decl(rest: syntaxic, type_: syntaxic): const_decl?
-    const_var(rest: syntaxic, type_: syntaxic): const_var?
-    const_def(rest: syntaxic, type_: syntaxic, def: syntaxic): const_def?
-    theory_def(rest: syntaxic, def: syntaxic): theory_def?
+    type_decl: type_decl?
+    type_var: type_var?
+    type_def(def: syntaxic): type_def?
+    const_decl(type_: syntaxic): const_decl?
+    const_var(type_: syntaxic): const_var?
+    const_def(type_: syntaxic, def: syntaxic): const_def?
+    theory_def(def: syntaxic): theory_def?
 
-    nil: nil?
-    ikeep(rest: syntaxic): ikeep?
-    itype(rest: syntaxic, def: syntaxic): itype?
-    iconst(rest: syntaxic, def: syntaxic): iconst?
-    itheory(rest: syntaxic, def: syntaxic): itheory?
+    map(length: nat, decls: [below[length] -> syntaxic]): map?
+
+    ikeep: ikeep?
+    itype(def: syntaxic): itype?
+    iconst(def: syntaxic): iconst?
+%    itheory(def: syntaxic): itheory?
   END syntaxic
 
   U, V, W: VAR syntaxic
   i: VAR nat
 
-  nonempty?(U): bool =
-    type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
-    const_var?(U) OR const_def?(U) OR theory_def?(U) OR
-    ikeep?(U) OR itype?(U) OR iconst?(U) OR itheory?(U)
-  rest_nonempty: JUDGEMENT
-    rest(U | nonempty?(U)) HAS_TYPE syntaxic
+  ;++(U, V): 
 
-  length(U): RECURSIVE nat =
-    CASES U OF
-      type_decl(Γ): 1 + length(Γ)
-    , type_var(Γ): 1 + length(Γ)
-    , type_def(Γ, T): 1 + length(Γ)
-    , const_decl(Γ, T): 1 + length(Γ)
-    , const_var(Γ, T): 1 + length(Γ)
-    , const_def(Γ, T, a): 1 + length(Γ)
-    , theory_def(Γ, Θ): 1 + length(Γ) + length(Θ)
+  % nonempty?(U): bool =
+  %   type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
+  %   const_var?(U) OR const_def?(U) OR theory_def?(U) OR
+  %   ikeep?(U) OR itype?(U) OR iconst?(U) OR itheory?(U)
+  % rest_nonempty: JUDGEMENT
+  %   rest(U | nonempty?(U)) HAS_TYPE syntaxic
 
-    , ikeep(σ): 1 + length(σ)
-    , itype(σ, T): 1 + length(σ)
-    , iconst(σ, a): 1 + length(σ)
-    , itheory(σ, Θ): 1 + length(σ) + length(Θ)
+  % length(U): RECURSIVE nat =
+  %   CASES U OF
+  %     type_decl(Γ): 1 + length(Γ)
+  %   , type_var(Γ): 1 + length(Γ)
+  %   , type_def(Γ, T): 1 + length(Γ)
+  %   , const_decl(Γ, T): 1 + length(Γ)
+  %   , const_var(Γ, T): 1 + length(Γ)
+  %   , const_def(Γ, T, a): 1 + length(Γ)
+  %   , theory_def(Γ, Θ): 1 + length(Γ) + length(Θ)
 
-    ELSE 0
-    ENDCASES
-  MEASURE U BY <<
-  AUTO_REWRITE length
+  %   , ikeep(σ): 1 + length(σ)
+  %   , itype(σ, T): 1 + length(σ)
+  %   , iconst(σ, a): 1 + length(σ)
+  %   , itheory(σ, Θ): 1 + length(σ) + length(Θ)
 
-  ;++(U, V): RECURSIVE syntaxic =
-    CASES V OF
-      type_decl(Γ): type_decl(U ++ Γ)
-    , type_var(Γ): type_var(U ++ Γ)
-    , type_def(Γ, T): type_def(U ++ Γ, T)
-    , const_decl(Γ, T): const_decl(U ++ Γ, T)
-    , const_var(Γ, T): const_var(U ++ Γ, T)
-    , const_def(Γ, T, a): const_def(U ++ Γ, T, a)
-    , theory_def(Γ, Θ): theory_def(U ++ Γ, Θ)
+  %   ELSE 0
+  %   ENDCASES
+  % MEASURE U BY <<
+  % AUTO_REWRITE length
 
-    , ikeep(σ): ikeep(U ++ σ)
-    , itype(σ, T): itype(U ++ σ, T)
-    , iconst(σ, a): iconst(U ++ σ, a)
-    , itheory(σ, Θ): itheory(U ++ σ, Θ)
+  % ;++(U, V): RECURSIVE syntaxic =
+  %   CASES V OF
+  %     type_decl(Γ): type_decl(U ++ Γ)
+  %   , type_var(Γ): type_var(U ++ Γ)
+  %   , type_def(Γ, T): type_def(U ++ Γ, T)
+  %   , const_decl(Γ, T): const_decl(U ++ Γ, T)
+  %   , const_var(Γ, T): const_var(U ++ Γ, T)
+  %   , const_def(Γ, T, a): const_def(U ++ Γ, T, a)
+  %   , theory_def(Γ, Θ): theory_def(U ++ Γ, Θ)
 
-    ELSE U
-    ENDCASES
-  MEASURE length(V)
-  AUTO_REWRITE ++
-  length_concat: THEOREM
-    length(U ++ V) = length(U) + length(V)
-  concat_assoc: THEOREM
-    U ++ (V ++ W) = (U ++ V) ++ W
-  AUTO_REWRITE length_concat, concat_assoc
+  %   , ikeep(σ): ikeep(U ++ σ)
+  %   , itype(σ, T): itype(U ++ σ, T)
+  %   , iconst(σ, a): iconst(U ++ σ, a)
+  %   , itheory(σ, Θ): itheory(U ++ σ, Θ)
 
-  nth(U, (i | i < length(U))): RECURSIVE syntaxic =
-    CASES U OF
-      theory_def(Γ, Θ):
-        IF i < length(Θ) THEN Γ ++ nth(Θ, i)
-	ELSIF i = length(Θ) THEN U
-	ELSE nth(Γ, i - length(Θ) - 1) ENDIF
-    , itheory(σ, Θ):
-        IF i < length(Θ) THEN σ ++ nth(Θ, i)
-	ELSIF i = length(Θ) THEN U
-	ELSE nth(σ, i - length(Θ) - 1) ENDIF
-    ELSE IF i = 0 THEN U ELSE nth(rest(U), i - 1) ENDIF
-    ENDCASES
-  MEASURE length(U)
-  AUTO_REWRITE nth
+  %   ELSE U
+  %   ENDCASES
+  % MEASURE length(V)
+  % AUTO_REWRITE ++
+  % length_concat: THEOREM
+  %   length(U ++ V) = length(U) + length(V)
+  % concat_assoc: THEOREM
+  %   U ++ (V ++ W) = (U ++ V) ++ W
+  % AUTO_REWRITE length_concat, concat_assoc
 
-  nth_concat: THEOREM i < length(U ++ V) IMPLIES
-    nth(U ++ V, i) =
-      IF i < length(V) THEN U ++ nth(V, i) ELSE nth(U, i - length(V)) ENDIF
-  AUTO_REWRITE nth_concat
+  % nth(U, (i | i < length(U))): RECURSIVE syntaxic =
+  %   CASES U OF
+  %     theory_def(Γ, Θ):
+  %       IF i < length(Θ) THEN Γ ++ nth(Θ, i)
+  % 	ELSIF i = length(Θ) THEN U
+  % 	ELSE nth(Γ, i - length(Θ) - 1) ENDIF
+  %   , itheory(σ, Θ):
+  %       IF i < length(Θ) THEN σ ++ nth(Θ, i)
+  % 	ELSIF i = length(Θ) THEN U
+  % 	ELSE nth(σ, i - length(Θ) - 1) ENDIF
+  %   ELSE IF i = 0 THEN U ELSE nth(rest(U), i - 1) ENDIF
+  %   ENDCASES
+  % MEASURE length(U)
+  % AUTO_REWRITE nth
 
-  prekeyword: TYPE =
-    { PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
-  k: VAR prekeyword
+  % nth_concat: THEOREM i < length(U ++ V) IMPLIES
+  %   nth(U ++ V, i) =
+  %     IF i < length(V) THEN U ++ nth(V, i) ELSE nth(U, i - length(V)) ENDIF
+  % AUTO_REWRITE nth_concat
 
-  kind?(U, k): bool =
-    CASES U OF
-      type_decl(Γ): k = PRETYPE
-    , type_var(Γ): k = PRETYPE
-    , type_def(Γ, T): k = PRETYPE
-    , const_decl(Γ, T): k = PRETERM
-    , const_var(Γ, T): k = PRETERM
-    , const_def(Γ, T, a): k = PRETERM
-    , theory_def(Γ, Θ): k = PRECONTEXT
+  % prekeyword: TYPE =
+  %   { PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
+  % k: VAR prekeyword
 
-    ELSE FALSE
-    ENDCASES
-  AUTO_REWRITE kind?
+  % kind?(U, k): bool =
+  %   CASES U OF
+  %     type_decl(Γ): k = PRETYPE
+  %   , type_var(Γ): k = PRETYPE
+  %   , type_def(Γ, T): k = PRETYPE
+  %   , const_decl(Γ, T): k = PRETERM
+  %   , const_var(Γ, T): k = PRETERM
+  %   , const_def(Γ, T, a): k = PRETERM
+  %   , theory_def(Γ, Θ): k = PRECONTEXT
 
-  semantic?(U, V, k): RECURSIVE bool =
-    CASES V OF
-      v(i): i < length(U) AND kind?(nth(U, i), k)
-    , dot(σ, i, x):
-        semantic?(U, σ, PREINTERP) AND i < length(U) AND
-	semantic?(nth(U, i), x, k)
+  %   ELSE FALSE
+  %   ENDCASES
+  % AUTO_REWRITE kind?
+
+  % semantic?(U, V, k): RECURSIVE bool =
+  %   CASES V OF
+  %     v(i): i < length(U) AND kind?(nth(U, i), k)
+  %   , dot(σ, i, x):
+  %       semantic?(U, σ, PREINTERP) AND i < length(U) AND
+  % 	semantic?(nth(U, i), x, k)
 	
-    , fun(A, B):
-        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
-	semantic?(const_var(U, A), B, PRETYPE)
-    , prod(A, B):
-        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
-	semantic?(const_var(U, A), B, PRETYPE)
-    , subtype(T, a):
-        k = PRETYPE AND semantic?(U, T, PRETYPE) AND
-	semantic?(const_var(U, T), a, PRETERM)
+  %   , fun(A, B):
+  %       k = PRETYPE AND semantic?(U, A, PRETYPE) AND
+  % 	semantic?(const_var(U, A), B, PRETYPE)
+  %   , prod(A, B):
+  %       k = PRETYPE AND semantic?(U, A, PRETYPE) AND
+  % 	semantic?(const_var(U, A), B, PRETYPE)
+  %   , subtype(T, a):
+  %       k = PRETYPE AND semantic?(U, T, PRETYPE) AND
+  % 	semantic?(const_var(U, T), a, PRETERM)
 
-    , app(f, a):
-        k = PRETERM AND semantic?(U, f, PRETERM) AND semantic?(U, a, PRETERM)
-    , lam(T, a):
-        k = PRETERM AND semantic?(U, T, PRETYPE) AND
-	semantic?(const_var(U, T), a, PRETERM)
-    , pair(a, b):
-        k = PRETERM AND semantic?(U, a, PRETERM) AND semantic?(U, b, PRETERM)
-    , lproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
-    , rproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
+  %   , app(f, a):
+  %       k = PRETERM AND semantic?(U, f, PRETERM) AND semantic?(U, a, PRETERM)
+  %   , lam(T, a):
+  %       k = PRETERM AND semantic?(U, T, PRETYPE) AND
+  % 	semantic?(const_var(U, T), a, PRETERM)
+  %   , pair(a, b):
+  %       k = PRETERM AND semantic?(U, a, PRETERM) AND semantic?(U, b, PRETERM)
+  %   , lproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
+  %   , rproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
 
-    , empty: k = PRECONTEXT
-    , type_decl(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
-    , type_var(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
-    , type_def(Γ, T):
-        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-	semantic?(U ++ Γ, T, PRETYPE)
-    , const_decl(Γ, T):
-        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-	semantic?(U ++ Γ, T, PRETYPE)
-    , const_var(Γ, T):
-        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-	semantic?(U ++ Γ, T, PRETYPE)
-    , const_def(Γ, T, a):
-        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-	semantic?(U ++ Γ, T, PRETYPE) AND semantic?(U ++ Γ, T, PRETERM)
-    , theory_def(Γ, Θ):
-        k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-	semantic?(U ++ Γ, Θ, PRECONTEXT)
+  %   , empty: k = PRECONTEXT
+  %   , type_decl(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
+  %   , type_var(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
+  %   , type_def(Γ, T):
+  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+  % 	semantic?(U ++ Γ, T, PRETYPE)
+  %   , const_decl(Γ, T):
+  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+  % 	semantic?(U ++ Γ, T, PRETYPE)
+  %   , const_var(Γ, T):
+  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+  % 	semantic?(U ++ Γ, T, PRETYPE)
+  %   , const_def(Γ, T, a):
+  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+  % 	semantic?(U ++ Γ, T, PRETYPE) AND semantic?(U ++ Γ, T, PRETERM)
+  %   , theory_def(Γ, Θ):
+  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
+  % 	semantic?(U ++ Γ, Θ, PRECONTEXT)
 
-    , nil: k = PREINTERP AND empty?(U)
-    , ikeep(σ):
-        k = PREINTERP AND nonempty?(U) AND
-	semantic?(rest(U), σ, PREINTERP)
-    , itype(σ, T):
-        k = PREINTERP AND type_decl?(U) AND
-	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), T, PRETYPE)
-    , iconst(σ, a):
-        k = PREINTERP AND const_decl?(U) AND
-	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), a, PRETERM)
-    , itheory(σ, Θ):
-        k = PREINTERP AND theory_def?(U) AND
-	semantic?(rest(U), σ, PREINTERP) AND
-	semantic?(rest(U), Θ, PRECONTEXT)
-    ENDCASES
-  MEASURE V BY <<
+  %   , nil: k = PREINTERP AND empty?(U)
+  %   , ikeep(σ):
+  %       k = PREINTERP AND nonempty?(U) AND
+  % 	semantic?(rest(U), σ, PREINTERP)
+  %   , itype(σ, T):
+  %       k = PREINTERP AND type_decl?(U) AND
+  % 	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), T, PRETYPE)
+  %   , iconst(σ, a):
+  %       k = PREINTERP AND const_decl?(U) AND
+  % 	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), a, PRETERM)
+  %   , itheory(σ, Θ):
+  %       k = PREINTERP AND theory_def?(U) AND
+  % 	semantic?(rest(U), σ, PREINTERP) AND
+  % 	semantic?(rest(U), Θ, PRECONTEXT)
+  %   ENDCASES
+  % MEASURE V BY <<
   
 END language
