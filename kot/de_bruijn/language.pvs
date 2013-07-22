@@ -23,170 +23,145 @@ BEGIN
     const_def(type_: syntaxic, def: syntaxic): const_def?
     theory_def(def: syntaxic): theory_def?
 
-    map(length: nat, decls: [below[length] -> syntaxic]): map?
-
     ikeep: ikeep?
     itype(def: syntaxic): itype?
     iconst(def: syntaxic): iconst?
 %    itheory(def: syntaxic): itheory?
+
+    map(run_map: finseq[syntaxic]): map?
   END syntaxic
 
+  〈〉: syntaxic = map(empty_seq)
+
   U, V, W: VAR syntaxic
-  i: VAR nat
+  x: VAR nat
 
-  ;++(U, V): 
+  length(U): nat =
+    IF map?(U) THEN run_map(U)`length ELSE 1 ENDIF
 
-  % nonempty?(U): bool =
-  %   type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
-  %   const_var?(U) OR const_def?(U) OR theory_def?(U) OR
-  %   ikeep?(U) OR itype?(U) OR iconst?(U) OR itheory?(U)
-  % rest_nonempty: JUDGEMENT
-  %   rest(U | nonempty?(U)) HAS_TYPE syntaxic
+  ;∈(x, U): MACRO bool =
+    x < length(U)
 
-  % length(U): RECURSIVE nat =
-  %   CASES U OF
-  %     type_decl(Γ): 1 + length(Γ)
-  %   , type_var(Γ): 1 + length(Γ)
-  %   , type_def(Γ, T): 1 + length(Γ)
-  %   , const_decl(Γ, T): 1 + length(Γ)
-  %   , const_var(Γ, T): 1 + length(Γ)
-  %   , const_def(Γ, T, a): 1 + length(Γ)
-  %   , theory_def(Γ, Θ): 1 + length(Γ) + length(Θ)
+  decls(U)(x | x ∈ U): syntaxic =
+    IF map?(U) THEN run_map(U)`seq(x) ELSE U ENDIF
 
-  %   , ikeep(σ): 1 + length(σ)
-  %   , itype(σ, T): 1 + length(σ)
-  %   , iconst(σ, a): 1 + length(σ)
-  %   , itheory(σ, Θ): 1 + length(σ) + length(Θ)
+  apply(U)(x | x ∈ U): syntaxic =
+    map((# length := length(U) - x
+         , seq := LAMBDA (y: below[length(U) - x]): decls(U)(y)
+	 #))
+  CONVERSION apply
 
-  %   ELSE 0
-  %   ENDCASES
-  % MEASURE U BY <<
-  % AUTO_REWRITE length
+  ;++(U, V): syntaxic =
+    map((# length := length(U) + length(V)
+         , seq := LAMBDA (x: below[length(U) + length(V)]):
+             IF x < length(U)
+	       THEN decls(U)(x)
+	       ELSE decls(V)(x - length(U))
+	     ENDIF
+	 #))
 
-  % ;++(U, V): RECURSIVE syntaxic =
-  %   CASES V OF
-  %     type_decl(Γ): type_decl(U ++ Γ)
-  %   , type_var(Γ): type_var(U ++ Γ)
-  %   , type_def(Γ, T): type_def(U ++ Γ, T)
-  %   , const_decl(Γ, T): const_decl(U ++ Γ, T)
-  %   , const_var(Γ, T): const_var(U ++ Γ, T)
-  %   , const_def(Γ, T, a): const_def(U ++ Γ, T, a)
-  %   , theory_def(Γ, Θ): theory_def(U ++ Γ, Θ)
+  first(U | length(U) > 0): syntaxic =
+    decls(U)(length(U) - 1)
 
-  %   , ikeep(σ): ikeep(U ++ σ)
-  %   , itype(σ, T): itype(U ++ σ, T)
-  %   , iconst(σ, a): iconst(U ++ σ, a)
-  %   , itheory(σ, Θ): itheory(U ++ σ, Θ)
+  rest(U | length(U) > 0): syntaxic =
+    map((# length := length(U) - 1
+         , seq := LAMBDA (x: below[length(U) - 1]): decls(U)(x)
+	 #))
 
-  %   ELSE U
-  %   ENDCASES
-  % MEASURE length(V)
-  % AUTO_REWRITE ++
-  % length_concat: THEOREM
-  %   length(U ++ V) = length(U) + length(V)
-  % concat_assoc: THEOREM
-  %   U ++ (V ++ W) = (U ++ V) ++ W
-  % AUTO_REWRITE length_concat, concat_assoc
+  prekeyword: TYPE =
+    { PREBOTTOM, PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
+  k: VAR prekeyword
 
-  % nth(U, (i | i < length(U))): RECURSIVE syntaxic =
-  %   CASES U OF
-  %     theory_def(Γ, Θ):
-  %       IF i < length(Θ) THEN Γ ++ nth(Θ, i)
-  % 	ELSIF i = length(Θ) THEN U
-  % 	ELSE nth(Γ, i - length(Θ) - 1) ENDIF
-  %   , itheory(σ, Θ):
-  %       IF i < length(Θ) THEN σ ++ nth(Θ, i)
-  % 	ELSIF i = length(Θ) THEN U
-  % 	ELSE nth(σ, i - length(Θ) - 1) ENDIF
-  %   ELSE IF i = 0 THEN U ELSE nth(rest(U), i - 1) ENDIF
-  %   ENDCASES
-  % MEASURE length(U)
-  % AUTO_REWRITE nth
+  kind(U): prekeyword = 
+    CASES U OF
+      type_decl: PRETYPE
+    , type_var: PRETYPE
+    , type_def(T): PRETYPE
+    , const_decl(T): PRETERM
+    , const_var(T): PRETERM
+    , const_def(T, a): PRETERM
+    , theory_def(Θ): PRECONTEXT
 
-  % nth_concat: THEOREM i < length(U ++ V) IMPLIES
-  %   nth(U ++ V, i) =
-  %     IF i < length(V) THEN U ++ nth(V, i) ELSE nth(U, i - length(V)) ENDIF
-  % AUTO_REWRITE nth_concat
+    ELSE PREBOTTOM
+    ENDCASES
+  AUTO_REWRITE kind
 
-  % prekeyword: TYPE =
-  %   { PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
-  % k: VAR prekeyword
+  compatible?(U, V): RECURSIVE bool =
+    length(U) = length(V) AND
+    CASES V OF
+      ikeep: TRUE
+    , itype(T): type_decl?(U)
+    , iconst(a): const_decl?(U)
 
-  % kind?(U, k): bool =
-  %   CASES U OF
-  %     type_decl(Γ): k = PRETYPE
-  %   , type_var(Γ): k = PRETYPE
-  %   , type_def(Γ, T): k = PRETYPE
-  %   , const_decl(Γ, T): k = PRETERM
-  %   , const_var(Γ, T): k = PRETERM
-  %   , const_def(Γ, T, a): k = PRETERM
-  %   , theory_def(Γ, Θ): k = PRECONTEXT
+    , map(f): FORALL (x: below[f`length]): compatible?(first(U(x)), f`seq(x))
+    ELSE FALSE
+    ENDCASES
+  MEASURE V BY <<
+  AUTO_REWRITE compatible?
 
-  %   ELSE FALSE
-  %   ENDCASES
-  % AUTO_REWRITE kind?
+  interp(U, (V | compatible?(U, V))): RECURSIVE syntaxic =
+    CASES V OF
+      ikeep: U
+    , itype(T): type_def(T)
+    , iconst(a): const_def(type_(U), a)
 
-  % semantic?(U, V, k): RECURSIVE bool =
-  %   CASES V OF
-  %     v(i): i < length(U) AND kind?(nth(U, i), k)
-  %   , dot(σ, i, x):
-  %       semantic?(U, σ, PREINTERP) AND i < length(U) AND
-  % 	semantic?(nth(U, i), x, k)
+    , map(f): map(f WITH [ `seq := LAMBDA (x: below[f`length]): interp(first(U(x)), f`seq(x)) ])
+    ENDCASES
+  MEASURE V BY <<
+
+  semantic?(U, V, k): RECURSIVE bool =
+    CASES V OF
+      v(i): i ∈ U AND kind(first(U(i))) = k
+    , dot(i, σ, x):
+        i ∈ U AND kind(first(U(i))) = PRECONTEXT AND
+	semantic?(U, σ, PREINTERP) AND compatible?(first(U(i)), σ) AND
+	semantic?(U ++ first(U(i)),x, k) AND v?(x)
 	
-  %   , fun(A, B):
-  %       k = PRETYPE AND semantic?(U, A, PRETYPE) AND
-  % 	semantic?(const_var(U, A), B, PRETYPE)
-  %   , prod(A, B):
-  %       k = PRETYPE AND semantic?(U, A, PRETYPE) AND
-  % 	semantic?(const_var(U, A), B, PRETYPE)
-  %   , subtype(T, a):
-  %       k = PRETYPE AND semantic?(U, T, PRETYPE) AND
-  % 	semantic?(const_var(U, T), a, PRETERM)
+    , fun(A, B):
+        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
+  	semantic?(U ++ const_var(A), B, PRETYPE)
+    , prod(A, B):
+        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
+  	semantic?(U ++ const_var(A), B, PRETYPE)
+    , subtype(T, a):
+        k = PRETYPE AND semantic?(U, T, PRETYPE) AND
+  	semantic?(U ++ const_var(T), a, PRETERM)
 
-  %   , app(f, a):
-  %       k = PRETERM AND semantic?(U, f, PRETERM) AND semantic?(U, a, PRETERM)
-  %   , lam(T, a):
-  %       k = PRETERM AND semantic?(U, T, PRETYPE) AND
-  % 	semantic?(const_var(U, T), a, PRETERM)
-  %   , pair(a, b):
-  %       k = PRETERM AND semantic?(U, a, PRETERM) AND semantic?(U, b, PRETERM)
-  %   , lproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
-  %   , rproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
+    , app(f, a):
+        k = PRETERM AND semantic?(U, f, PRETERM) AND semantic?(U, a, PRETERM)
+    , lam(T, a):
+        k = PRETERM AND semantic?(U, T, PRETYPE) AND
+  	semantic?(U ++ const_var(T), a, PRETERM)
+    , pair(a, b):
+        k = PRETERM AND semantic?(U, a, PRETERM) AND semantic?(U, b, PRETERM)
+    , lproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
+    , rproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
 
-  %   , empty: k = PRECONTEXT
-  %   , type_decl(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
-  %   , type_var(Γ): k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT)
-  %   , type_def(Γ, T):
-  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-  % 	semantic?(U ++ Γ, T, PRETYPE)
-  %   , const_decl(Γ, T):
-  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-  % 	semantic?(U ++ Γ, T, PRETYPE)
-  %   , const_var(Γ, T):
-  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-  % 	semantic?(U ++ Γ, T, PRETYPE)
-  %   , const_def(Γ, T, a):
-  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-  % 	semantic?(U ++ Γ, T, PRETYPE) AND semantic?(U ++ Γ, T, PRETERM)
-  %   , theory_def(Γ, Θ):
-  %       k = PRECONTEXT AND semantic?(U, Γ, PRECONTEXT) AND
-  % 	semantic?(U ++ Γ, Θ, PRECONTEXT)
+    , type_decl: k = PRECONTEXT
+    , type_var: k = PRECONTEXT
+    , type_def(T): k = PRECONTEXT AND semantic?(U, T, PRETYPE)
+    , const_decl(T): k = PRECONTEXT AND semantic?(U, T, PRETYPE)
+    , const_var(T): k = PRECONTEXT AND semantic?(U, T, PRETYPE)
+    , const_def(T, a):
+        k = PRECONTEXT AND semantic?(U, T, PRETYPE) AND semantic?(U, a, PRETERM)
+    , theory_def(Θ):
+        k = PRECONTEXT AND semantic?(U, Θ, PRECONTEXT)
 
-  %   , nil: k = PREINTERP AND empty?(U)
-  %   , ikeep(σ):
-  %       k = PREINTERP AND nonempty?(U) AND
-  % 	semantic?(rest(U), σ, PREINTERP)
-  %   , itype(σ, T):
-  %       k = PREINTERP AND type_decl?(U) AND
-  % 	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), T, PRETYPE)
-  %   , iconst(σ, a):
-  %       k = PREINTERP AND const_decl?(U) AND
-  % 	semantic?(rest(U), σ, PREINTERP) AND semantic?(rest(U), a, PRETERM)
-  %   , itheory(σ, Θ):
-  %       k = PREINTERP AND theory_def?(U) AND
-  % 	semantic?(rest(U), σ, PREINTERP) AND
-  % 	semantic?(rest(U), Θ, PRECONTEXT)
-  %   ENDCASES
-  % MEASURE V BY <<
-  
+    , ikeep:
+        k = PREINTERP
+    , itype(T):
+        k = PREINTERP AND semantic?(U, T, PRETYPE)
+    , iconst(a):
+        k = PREINTERP AND semantic?(U, a, PRETERM)
+
+    , map(f): FORALL (x: below[f`length]): semantic?(U, f`seq(x), k)
+    ENDCASES
+  MEASURE V BY <<
+
+  pretype?(U, V): bool = semantic?(U, V, PRETYPE)
+  pretype(U): TYPE = { V | pretype?(U, V) }
+  preterm?(U, V): bool = semantic?(U, V, PRETERM)
+  preterm(U): TYPE = { V | preterm?(U, V) }
+  precontext?(U, V): bool = semantic?(U, V, PRECONTEXT)
+  precontext(U): TYPE = { V | precontext?(U, V) }
 END language
