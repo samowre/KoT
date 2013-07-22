@@ -3,7 +3,7 @@ BEGIN
   syntaxic: DATATYPE
   BEGIN
     v(i: nat): v?
-    dot(i: nat, map: syntaxic, rest: syntaxic): dot?
+    dot(m: nat, map: syntaxic, s: syntaxic): dot?
   
     fun(dom: syntaxic, range: syntaxic): fun?
     prod(left: syntaxic, right: syntaxic): prod?
@@ -69,22 +69,22 @@ BEGIN
 	 #))
 
   prekeyword: TYPE =
-    { PREBOTTOM, PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
+    { PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
   k: VAR prekeyword
 
-  kind(U): prekeyword = 
+  kind?(U, k): bool = 
     CASES U OF
-      type_decl: PRETYPE
-    , type_var: PRETYPE
-    , type_def(T): PRETYPE
-    , const_decl(T): PRETERM
-    , const_var(T): PRETERM
-    , const_def(T, a): PRETERM
-    , theory_def(Θ): PRECONTEXT
+      type_decl: k = PRETYPE
+    , type_var: k = PRETYPE
+    , type_def(T): k = PRETYPE
+    , const_decl(T): k = PRETERM
+    , const_var(T): k = PRETERM
+    , const_def(T, a): k = PRETERM
+    , theory_def(Θ): k = PRECONTEXT
 
-    ELSE PREBOTTOM
+    ELSE FALSE
     ENDCASES
-  AUTO_REWRITE kind
+  AUTO_REWRITE kind?
 
   compatible?(U, V): RECURSIVE bool =
     length(U) = length(V) AND
@@ -109,59 +109,98 @@ BEGIN
     ENDCASES
   MEASURE V BY <<
 
-  semantic?(U, V, k): RECURSIVE bool =
+  prekind?(U, V, k): RECURSIVE bool =
     CASES V OF
-      v(i): i ∈ U AND kind(first(U(i))) = k
+      v(i): i ∈ U AND kind?(first(U(i)), k)
     , dot(i, σ, x):
-        i ∈ U AND kind(first(U(i))) = PRECONTEXT AND
-	semantic?(U, σ, PREINTERP) AND compatible?(first(U(i)), σ) AND
-	semantic?(U ++ first(U(i)),x, k) AND v?(x)
+        i ∈ U AND kind?(first(U(i)), PRECONTEXT) AND
+	compatible?(def(first(U(i))), σ) AND
+	prekind?(U, σ, PREINTERP) AND
+	prekind?(interp(def(first(U(i))), σ),x, k) AND v?(x)
 	
     , fun(A, B):
-        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
-  	semantic?(U ++ const_var(A), B, PRETYPE)
+        k = PRETYPE AND prekind?(U, A, PRETYPE) AND
+  	prekind?(U ++ const_var(A), B, PRETYPE)
     , prod(A, B):
-        k = PRETYPE AND semantic?(U, A, PRETYPE) AND
-  	semantic?(U ++ const_var(A), B, PRETYPE)
+        k = PRETYPE AND prekind?(U, A, PRETYPE) AND
+  	prekind?(U ++ const_var(A), B, PRETYPE)
     , subtype(T, a):
-        k = PRETYPE AND semantic?(U, T, PRETYPE) AND
-  	semantic?(U ++ const_var(T), a, PRETERM)
+        k = PRETYPE AND prekind?(U, T, PRETYPE) AND
+  	prekind?(U ++ const_var(T), a, PRETERM)
 
     , app(f, a):
-        k = PRETERM AND semantic?(U, f, PRETERM) AND semantic?(U, a, PRETERM)
+        k = PRETERM AND prekind?(U, f, PRETERM) AND prekind?(U, a, PRETERM)
     , lam(T, a):
-        k = PRETERM AND semantic?(U, T, PRETYPE) AND
-  	semantic?(U ++ const_var(T), a, PRETERM)
+        k = PRETERM AND prekind?(U, T, PRETYPE) AND
+  	prekind?(U ++ const_var(T), a, PRETERM)
     , pair(a, b):
-        k = PRETERM AND semantic?(U, a, PRETERM) AND semantic?(U, b, PRETERM)
-    , lproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
-    , rproj(a): k = PRETERM AND semantic?(U, a, PRETERM)
+        k = PRETERM AND prekind?(U, a, PRETERM) AND prekind?(U, b, PRETERM)
+    , lproj(a): k = PRETERM AND prekind?(U, a, PRETERM)
+    , rproj(a): k = PRETERM AND prekind?(U, a, PRETERM)
 
     , type_decl: k = PRECONTEXT
     , type_var: k = PRECONTEXT
-    , type_def(T): k = PRECONTEXT AND semantic?(U, T, PRETYPE)
-    , const_decl(T): k = PRECONTEXT AND semantic?(U, T, PRETYPE)
-    , const_var(T): k = PRECONTEXT AND semantic?(U, T, PRETYPE)
+    , type_def(T): k = PRECONTEXT AND prekind?(U, T, PRETYPE)
+    , const_decl(T): k = PRECONTEXT AND prekind?(U, T, PRETYPE)
+    , const_var(T): k = PRECONTEXT AND prekind?(U, T, PRETYPE)
     , const_def(T, a):
-        k = PRECONTEXT AND semantic?(U, T, PRETYPE) AND semantic?(U, a, PRETERM)
+        k = PRECONTEXT AND prekind?(U, T, PRETYPE) AND prekind?(U, a, PRETERM)
     , theory_def(Θ):
-        k = PRECONTEXT AND semantic?(U, Θ, PRECONTEXT)
+        k = PRECONTEXT AND prekind?(U, Θ, PRECONTEXT)
 
     , ikeep:
         k = PREINTERP
     , itype(T):
-        k = PREINTERP AND semantic?(U, T, PRETYPE)
+        k = PREINTERP AND prekind?(U, T, PRETYPE)
     , iconst(a):
-        k = PREINTERP AND semantic?(U, a, PRETERM)
+        k = PREINTERP AND prekind?(U, a, PRETERM)
 
-    , map(f): FORALL (x: below[f`length]): semantic?(U, f`seq(x), k)
+    , map(f):
+        FORALL (x: below[f`length]):
+	  prekind?(U ++ rest(V(x)), f`seq(x), k)
     ENDCASES
   MEASURE V BY <<
 
-  pretype?(U, V): bool = semantic?(U, V, PRETYPE)
+  pretype?(U, V): bool = prekind?(U, V, PRETYPE)
   pretype(U): TYPE = { V | pretype?(U, V) }
-  preterm?(U, V): bool = semantic?(U, V, PRETERM)
+  preterm?(U, V): bool = prekind?(U, V, PRETERM)
   preterm(U): TYPE = { V | preterm?(U, V) }
-  precontext?(U, V): bool = semantic?(U, V, PRECONTEXT)
+  precontext?(U, V): bool = prekind?(U, V, PRECONTEXT)
   precontext(U): TYPE = { V | precontext?(U, V) }
+  preinterp?(U, V): bool = prekind?(U, V, PREINTERP)
+  preinterp(U): TYPE = { V | preinterp?(U, V) }
+  semantic?(U, V): bool =
+    pretype?(U, V) OR preterm?(U, V) OR precontext?(U, V) OR
+    preinterp?(U, V)
+  semantic(U): TYPE = { V | prekind?(U, V) }
+
+  weight(U, (V | semantic?(U, V))): RECURSIVE nat =
+    CASES V OF
+      v(i): length(U) - i
+    , dot(i, σ, x):
+        length(U) - i + length(σ) - i(x)
+
+    , fun(A, B): weight(U, A) + weight(U ++ const_var(A), B)
+    , prod(A, B): weight(U, A) + weight(U ++ const_var(A), B)
+    , subtype(T, a): weight(U, T) + weight(U ++ const_var(T), a)
+
+    , app(f, a): weight(U, f) + weight(U, a)
+    , lam(T, a): weight(U, T) + weight(U ++ const_var(T), a)
+    , pair(a, b): weight(U, a) + weight(U, b)
+    , lproj(a): weight(U, a)
+    , rproj(a): weight(U, a)
+
+    , type_decl
+    , type_var
+    , type_def(T)
+    , const_decl(T)
+    , const_var(T)
+    , const_def(T, a)
+    , theory_def(Θ)
+
+    , ikeep
+    , itype(T)
+    , iconst(a)
+
+    , map(f)
 END language
