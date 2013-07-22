@@ -108,71 +108,87 @@ BEGIN
     , map(f): map(f WITH [ `seq := LAMBDA (x: below[f`length]): interp(first(U(x)), f`seq(x)) ])
     ENDCASES
   MEASURE V BY <<
+  length_interp: THEOREM compatible?(U, V) IMPLIES
+    length(interp(U, V)) = length(U)
+  AUTO_REWRITE length_interp
 
-  prekind?(U, V, k): RECURSIVE bool =
+  prekind(U, V)(k): RECURSIVE bool =
     CASES V OF
       v(i): i ∈ U AND kind?(first(U(i)), k)
     , dot(i, σ, x):
         i ∈ U AND kind?(first(U(i)), PRECONTEXT) AND
 	compatible?(def(first(U(i))), σ) AND
-	prekind?(U, σ, PREINTERP) AND
-	prekind?(interp(def(first(U(i))), σ),x, k) AND v?(x)
+	prekind(U, σ)(PREINTERP) AND
+	prekind(interp(def(first(U(i))), σ), x)(k) AND v?(x)
 	
     , fun(A, B):
-        k = PRETYPE AND prekind?(U, A, PRETYPE) AND
-  	prekind?(U ++ const_var(A), B, PRETYPE)
+        k = PRETYPE AND prekind(U, A)(PRETYPE) AND
+  	prekind(U ++ const_var(A), B)(PRETYPE)
     , prod(A, B):
-        k = PRETYPE AND prekind?(U, A, PRETYPE) AND
-  	prekind?(U ++ const_var(A), B, PRETYPE)
+        k = PRETYPE AND prekind(U, A)(PRETYPE) AND
+  	prekind(U ++ const_var(A), B)(PRETYPE)
     , subtype(T, a):
-        k = PRETYPE AND prekind?(U, T, PRETYPE) AND
-  	prekind?(U ++ const_var(T), a, PRETERM)
+        k = PRETYPE AND prekind(U, T)(PRETYPE) AND
+  	prekind(U ++ const_var(T), a)(PRETERM)
 
     , app(f, a):
-        k = PRETERM AND prekind?(U, f, PRETERM) AND prekind?(U, a, PRETERM)
+        k = PRETERM AND prekind(U, f)(PRETERM) AND prekind(U, a)(PRETERM)
     , lam(T, a):
-        k = PRETERM AND prekind?(U, T, PRETYPE) AND
-  	prekind?(U ++ const_var(T), a, PRETERM)
+        k = PRETERM AND prekind(U, T)(PRETYPE) AND
+  	prekind(U ++ const_var(T), a)(PRETERM)
     , pair(a, b):
-        k = PRETERM AND prekind?(U, a, PRETERM) AND prekind?(U, b, PRETERM)
-    , lproj(a): k = PRETERM AND prekind?(U, a, PRETERM)
-    , rproj(a): k = PRETERM AND prekind?(U, a, PRETERM)
+        k = PRETERM AND prekind(U, a)(PRETERM) AND prekind(U, b)(PRETERM)
+    , lproj(a): k = PRETERM AND prekind(U, a)(PRETERM)
+    , rproj(a): k = PRETERM AND prekind(U, a)(PRETERM)
 
     , type_decl: k = PRECONTEXT
     , type_var: k = PRECONTEXT
-    , type_def(T): k = PRECONTEXT AND prekind?(U, T, PRETYPE)
-    , const_decl(T): k = PRECONTEXT AND prekind?(U, T, PRETYPE)
-    , const_var(T): k = PRECONTEXT AND prekind?(U, T, PRETYPE)
+    , type_def(T): k = PRECONTEXT AND prekind(U, T)(PRETYPE)
+    , const_decl(T): k = PRECONTEXT AND prekind(U, T)(PRETYPE)
+    , const_var(T): k = PRECONTEXT AND prekind(U, T)(PRETYPE)
     , const_def(T, a):
-        k = PRECONTEXT AND prekind?(U, T, PRETYPE) AND prekind?(U, a, PRETERM)
+        k = PRECONTEXT AND prekind(U, T)(PRETYPE) AND prekind(U, a)(PRETERM)
     , theory_def(Θ):
-        k = PRECONTEXT AND prekind?(U, Θ, PRECONTEXT)
+        k = PRECONTEXT AND prekind(U, Θ)(PRECONTEXT)
 
     , ikeep:
         k = PREINTERP
     , itype(T):
-        k = PREINTERP AND prekind?(U, T, PRETYPE)
+        k = PREINTERP AND prekind(U, T)(PRETYPE)
     , iconst(a):
-        k = PREINTERP AND prekind?(U, a, PRETERM)
+        k = PREINTERP AND prekind(U, a)(PRETERM)
 
-    , map(f):
+    , map(f): k = PRECONTEXT OR k = PREINTERP AND
         FORALL (x: below[f`length]):
-	  prekind?(U ++ rest(V(x)), f`seq(x), k)
+	  prekind(U ++ rest(V(x)), first(V(x)))(k)
     ENDCASES
   MEASURE V BY <<
+  AUTO_REWRITE prekind
 
-  pretype?(U, V): bool = prekind?(U, V, PRETYPE)
+  pretype?(U, V): bool = prekind(U, V)(PRETYPE)
   pretype(U): TYPE = { V | pretype?(U, V) }
-  preterm?(U, V): bool = prekind?(U, V, PRETERM)
+  preterm?(U, V): bool = prekind(U, V)(PRETERM)
   preterm(U): TYPE = { V | preterm?(U, V) }
-  precontext?(U, V): bool = prekind?(U, V, PRECONTEXT)
+  precontext?(U, V): bool = prekind(U, V)(PRECONTEXT)
   precontext(U): TYPE = { V | precontext?(U, V) }
-  preinterp?(U, V): bool = prekind?(U, V, PREINTERP)
+  preinterp?(U, V): bool = prekind(U, V)(PREINTERP)
   preinterp(U): TYPE = { V | preinterp?(U, V) }
   semantic?(U, V): bool =
-    pretype?(U, V) OR preterm?(U, V) OR precontext?(U, V) OR
-    preinterp?(U, V)
-  semantic(U): TYPE = { V | prekind?(U, V) }
+    EXISTS k: prekind(U, V)(k)
+  semantic(U): TYPE = { V | semantic?(U, V) }
+
+  length_pretype: THEOREM pretype?(U, V) IMPLIES
+    length(V) = 1
+  length_preterm: THEOREM preterm?(U, V) IMPLIES
+    length(V) = 1
+  empty_prekind: THEOREM length(U) = 0 IMPLIES
+    NOT prekind(U, V)(PRETYPE) AND NOT prekind(U, V)(PRETERM)
+
+  fold(len: nat, pos: upto[len], acc: nat, f: [nat, below[len] -> nat]):
+    RECURSIVE nat =
+    IF pos = len THEN acc
+    ELSE fold(len, pos + 1, f(acc, pos), f) ENDIF
+  MEASURE len - pos
 
   weight(U, (V | semantic?(U, V))): RECURSIVE nat =
     CASES V OF
@@ -180,27 +196,70 @@ BEGIN
     , dot(i, σ, x):
         length(U) - i + length(σ) - i(x)
 
-    , fun(A, B): weight(U, A) + weight(U ++ const_var(A), B)
-    , prod(A, B): weight(U, A) + weight(U ++ const_var(A), B)
-    , subtype(T, a): weight(U, T) + weight(U ++ const_var(T), a)
+    , fun(A, B): max(weight(U, A), weight(U ++ const_var(A), B))
+    , prod(A, B): max(weight(U, A), weight(U ++ const_var(A), B))
+    , subtype(T, a): max(weight(U, T), weight(U ++ const_var(T), a))
 
-    , app(f, a): weight(U, f) + weight(U, a)
-    , lam(T, a): weight(U, T) + weight(U ++ const_var(T), a)
-    , pair(a, b): weight(U, a) + weight(U, b)
+    , app(f, a): max(weight(U, f), weight(U, a))
+    , lam(T, a): max(weight(U, T), weight(U ++ const_var(T), a))
+    , pair(a, b): max(weight(U, a), weight(U, b))
     , lproj(a): weight(U, a)
     , rproj(a): weight(U, a)
 
-    , type_decl
-    , type_var
-    , type_def(T)
-    , const_decl(T)
-    , const_var(T)
-    , const_def(T, a)
-    , theory_def(Θ)
+    , type_decl: 0
+    , type_var: 0
+    , type_def(T): weight(U, T)
+    , const_decl(T): weight(U, T)
+    , const_var(T): weight(U, T)
+    , const_def(T, a): max(weight(U, T), weight(U, a))
+    , theory_def(Θ): weight(U, Θ)
 
-    , ikeep
-    , itype(T)
-    , iconst(a)
+    , ikeep: 0
+    , itype(T): weight(U, T)
+    , iconst(a): weight(U, a)
 
-    , map(f)
+    , map(f):
+        fold(f`length, 0, 0,
+	     LAMBDA (res: nat, (x | x ∈ V)):
+	       max(res, weight(U ++ rest(V(x)), first(V(x)))))
+    ENDCASES
+  MEASURE V BY <<
+
+  size(U): RECURSIVE nat =
+    CASES U OF
+      v(i): 1
+    , dot(i, σ, x): 1
+
+    , fun(A, B): size(A) + size(B) + 1
+    , prod(A, B): size(A) + size(B) + 1
+    , subtype(T, a): size(T) + size(a) + 1
+
+    , app(f, a): size(f) + size(a) + 1
+    , lam(T, a): size(T) + size(a) + 1
+    , pair(a, b): size(a) + size(b) + 1
+    , lproj(a): size(a) + 1
+    , rproj(a): size(a) + 1
+
+    , type_decl: 1
+    , type_var: 1
+    , type_def(T): size(T) + 1
+    , const_decl(T): size(T) + 1
+    , const_var(T): size(T) + 1
+    , const_def(T, a): size(T) + size(a) + 1
+    , theory_def(Θ): size(Θ) + 1
+
+    , ikeep: 1
+    , itype(T): size(T) + 1
+    , iconst(a): size(a) + 1
+
+    , map(f):
+        fold(f`length, 0, 0,
+	     LAMBDA (res: nat, (x | x ∈ U)):
+	       res + size(first(U(x))))
+    ENDCASES
+  MEASURE U BY <<
+
+  weight_definition: THEOREM
+    x ∈ U AND type_def?(first(U(x))) AND pretype?(rest(U(x)), V) IMPLIES
+      weight(rest(U(x)), V) < weight(U, v(x))
 END language
