@@ -11,36 +11,42 @@ BEGIN
   σ, τ: VAR preinterp
   S: VAR semantic
   M: VAR premap
+  i: VAR nat
 
-  length(M): RECURSIVE nat =
-    CASES M OF
+  length(Γ): RECURSIVE nat =
+    CASES Γ OF
       type_decl(Δ): 1 + length(Δ) 
     , type_var(Δ): 1 + length(Δ)
     , type_def(Δ, T): 1 + length(Δ)
     , const_decl(Δ, T): 1 + length(Δ)
     , const_var(Δ, T): 1 + length(Δ)
     , const_def(Δ, T, a): 1 + length(Δ)
-    , theory_def(Δ, Θ): 1 + length(Δ)
-
-    , ikeep(σ): 1 + length(σ)
-    , itype(σ, T): 1 + length(σ)
-    , iconst(σ, a): 1 + length(σ)
+    , theory_def(Δ, Θ): 1 + length(Δ) + length(Θ)
     ELSE 0
     ENDCASES
-  MEASURE size(M)
+  MEASURE size(Γ)
   AUTO_REWRITE length
 
-  ;∈(x, M): MACRO bool =
-    x < length(M)
+  ;∈(x, Γ): MACRO bool =
+    x < length(Γ)
 
-  apply(Γ)(x | length(Γ) >= x): RECURSIVE precontext =
-    IF x = 0 THEN Γ ELSE apply(rest(Γ))(x - 1) ENDIF
+  apply(Γ)(x | x ∈ Γ): RECURSIVE precontext =
+    COND
+      theory_def?(Γ) ->
+        IF x < length(def(Γ))
+	  THEN apply(def(Γ))(x)
+	  ELSIF x = length(def(Γ)) THEN Γ
+	  ELSE apply(rest(Γ))(x - length(def(Γ)) - 1)
+	ENDIF
+    , x = 0 -> Γ
+    , ELSE -> apply(rest(Γ))(x - 1)
+    ENDCOND
   MEASURE length(Γ)
   CONVERSION apply
   AUTO_REWRITE+ apply
   length_apply: THEOREM x ∈ Γ IMPLIES
-    length(apply(Γ)(x)) = length(Γ) - x
-  size_apply: THEOREM x <= length(Γ) IMPLIES
+    length(apply(Γ)(x)) <= length(Γ)
+  size_apply: THEOREM x ∈ Γ IMPLIES
     size(apply(Γ)(x)) <= size(Γ)
 
   ;++(Γ, Δ): RECURSIVE precontext =
@@ -68,38 +74,36 @@ BEGIN
     (Γ ++ Δ)(x) = IF x ∈ Δ THEN Γ ++ Δ(x) ELSE Γ(x - length(Δ)) ENDIF
   AUTO_REWRITE+ ++, concat_assoc, length_concat, concat_empty, apply_concat, size_concat
 
+  interpret?(σ, i): RECURSIVE bool =
+    CASES σ OF
+      nil: FALSE
+    , itype(τ, j, T): i = j OR interpret?(τ, i)
+    , iconst(τ, j, a): i = j OR interpret?(τ, j)
+    ENDCASES
+  MEASURE size(σ)
 
   compatible?(Γ, σ): RECURSIVE bool =
     CASES σ OF
-      nil: empty?(Γ)
-    , ikeep(τ): NOT empty?(Γ) AND compatible?(rest(Γ), τ)
-    , itype(τ, T): type_decl?(Γ) AND compatible?(rest(Γ), τ)
-    , iconst(τ, a): const_decl?(Γ) AND compatible?(rest(Γ), τ)
+      nil: TRUE
+    , itype(τ, i, T):
+        i ∈ Γ AND type_decl?(Γ(i)) AND compatible?(Γ, τ) AND NOT interpret?(τ, i)
+    , iconst(τ, i, a):
+        i ∈ Γ AND const_decl?(Γ(i)) AND compatible?(Γ, τ) AND NOT interpret?(τ, i)
     ENDCASES
-  MEASURE length(σ)
+  MEASURE size(σ)
   AUTO_REWRITE compatible?
   compatible_length: THEOREM
-    compatible?(Γ, σ) IMPLIES length(Γ) = length(σ)
+    compatible?(Γ, σ) IMPLIES length(σ) <= length(Γ)
 
   interp(Γ, (σ | compatible?(Γ, σ))): RECURSIVE precontext =
     CASES σ OF
       nil: empty
-    , ikeep(τ):
-        CASES Γ OF
-	  type_decl(Δ): type_decl(interp(Δ, τ))
-	, type_def(Δ, T): type_def(interp(Δ, τ), T)
-	, type_var(Δ): type_var(interp(Δ, τ))
-	, const_decl(Δ, T): const_decl(interp(Δ, τ), T)
-	, const_def(Δ, T, a): const_def(interp(Δ, τ), T, a)
-	, const_var(Δ, T): const_var(interp(Δ, τ), T)
-	, theory_def(Δ, Θ): theory_def(interp(Δ, τ), Θ)
-	ENDCASES
-    , itype(τ, T): type_def(interp(rest(Γ), τ), T)
-    , iconst(τ, a): const_def(interp(rest(Γ), τ), type_(Γ), a)
+    , itype(τ, i, T): type_def(interp(rest(Γ), τ), T)
+    , iconst(τ, i, a): const_def(interp(rest(Γ), τ), type_(Γ), a)
     ENDCASES
   MEASURE length(σ)
   length_interp: THEOREM compatible?(Γ, σ) IMPLIES
-    length(interp(Γ, σ)) = length(σ)
+    length(interp(Γ, σ)) = length(Γ)
   size_interp: THEOREM compatible?(Γ, σ) IMPLIES
     size(interp(Γ, σ)) < size(Γ) + size(σ)
   AUTO_REWRITE length_interp
