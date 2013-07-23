@@ -208,4 +208,7 @@ BEGIN
   pretheory_is_map: JUDGEMENT pretheory(Γ) SUBTYPE_OF (map?)
   precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF (scontext?)
   pretheory_is_scontext: JUDGEMENT pretheory(Γ) SUBTYPE_OF (scontext?)
+
+  pretheory_as_precontext: THEOREM
+    pretheory?(Γ)(U) IMPLIES precontext?(Γ ++ U)
 END language
