@@ -52,7 +52,7 @@ BEGIN
     , lam(T, a): k = PRETERM AND parsed?(T)(PRETYPE) AND parsed?(a)(PRETERM)
     , pair(a, b): k = PRETERM AND parsed?(a)(PRETERM) AND parsed?(a)(PRETERM)
     , lproj(a): k = PRETERM AND parsed?(a)(k)
-    , rproj(a): k = PRETERM AND prekind(a)(k)
+    , rproj(a): k = PRETERM AND parsed?(a)(k)
 
     , empty: k = PRECONTEXT
     , type_decl(Γ): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT)
@@ -61,7 +61,7 @@ BEGIN
     , const_decl(Γ, T): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT) AND parsed?(T)(PRETYPE)
     , const_var(Γ,T): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT) AND parsed?(T)(PRETYPE)
     , const_def(Γ, T, a) : k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT) AND parsed?(T)(PRETYPE) AND parsed?(a)(PRETERM)
-    , theory_def(Γ, Θ): k = PRECONTEXT AND parsed?(Θ)(PRECONTEXT)
+    , theory_def(Γ, Θ): k = PRECONTEXT AND parsed?(Θ)(PRECONTEXT) AND parsed?(Γ)(PRECONTEXT)
 
     , nil: k = PREINTERP
     , ikeep(σ): k = PREINTERP AND parsed?(σ)(PREINTERP)
@@ -69,35 +69,37 @@ BEGIN
     , iconst(σ, a): k = PREINTERP AND parsed?(σ)(PREINTERP) AND parsed?(a)(PRETERM)
     ENDCASES
   MEASURE U BY <<
-  AUTO_REWRITE prekind
+  AUTO_REWRITE parsed?
 
-  precontext?(U): bool = parsed?(U)(PRECONTEXT)
-  pretype?(U): bool = parsed?(U)(PRETYPE)
-  preterm?(U): bool = parsed?(U)(PRETERM)
-  preinterp?(U): bool = parsed?(U)(PREINTERP)
-  premap?(U): bool = parsed?(U)(PRECONTEXT) OR parsed?(U)(PREINTERP)
+  precontext?(U): MACRO bool = parsed?(U)(PRECONTEXT)
+  pretype?(U): MACRO bool = parsed?(U)(PRETYPE)
+  preterm?(U): MACRO bool = parsed?(U)(PRETERM)
+  preinterp?(U): MACRO bool = parsed?(U)(PREINTERP)
+  premap?(U): MACRO bool = parsed?(U)(PRECONTEXT) OR parsed?(U)(PREINTERP)
 
   precontext: TYPE = (precontext?)
   pretype: TYPE = (pretype?)
   preterm: TYPE = (preterm?)
+  preinterp: TYPE = (preinterp?)
   premap: TYPE = (premap?)
 
   Γ, Δ, Θ: VAR precontext
+  T, A, B: VAR pretype
+  a, b, f: VAR preterm
+  σ, τ: VAR preinterp
   M: VAR premap
 
   type_decl: precontext = type_decl(empty)
   type_var: precontext = type_var(empty)
-  type_def(U): precontext = 
-  const_decl(rest: syntaxic, type_: syntaxic): const_decl?
-  const_var(rest: syntaxic, type_: syntaxic): const_var?
-  const_def(rest: syntaxic, type_: syntaxic, def: syntaxic): const_def?
-  theory_def(rest: syntaxic, def: syntaxic): theory_def?
+  type_def(T): precontext = type_def(empty, T)
+  const_decl(T): precontext = const_decl(empty, T)
+  const_var(T): precontext = const_var(empty, T)
+  const_def(T, a): precontext = const_def(empty, T, a)
+  theory_def(Θ): precontext = theory_def(empty, Θ)
 
-
-  length(M): RECURSIVE nat =
-    CASES M OF
-      empty: 0
-    , type_decl(Δ): 1 + length(Δ) 
+  length(U): RECURSIVE nat =
+    CASES U OF
+      type_decl(Δ): 1 + length(Δ) 
     , type_var(Δ): 1 + length(Δ)
     , type_def(Δ, T): 1 + length(Δ)
     , const_decl(Δ, T): 1 + length(Δ)
@@ -105,20 +107,26 @@ BEGIN
     , const_def(Δ, T, a): 1 + length(Δ)
     , theory_def(Δ, Θ): 1 + length(Δ)
 
-    , nil: 0
     , ikeep(σ): 1 + length(σ)
     , itype(σ, T): 1 + length(σ)
     , iconst(σ, a): 1 + length(σ)
+    ELSE 0
     ENDCASES
-  MEASURE M BY <<
+  MEASURE U BY <<
+  AUTO_REWRITE length
 
   ;∈(x, M): MACRO bool =
     x < length(M)
 
-  apply(Γ)(x | x ∈ Γ): RECURSIVE syntaxic =
+  apply(Γ)(x | x ∈ Γ): RECURSIVE precontext =
     IF x = 0 THEN Γ ELSE apply(rest(Γ))(x - 1) ENDIF
-  MEASURE length(Γ) BY <<
+  MEASURE length(Γ)
   CONVERSION apply
+  AUTO_REWRITE+ apply
+  length_apply: THEOREM x ∈ Γ IMPLIES
+    length(apply(Γ)(x)) = length(Γ) - x
+  length_rest: THEOREM length(Γ) > 0 IMPLIES
+    length(rest(Γ)) = length(Γ) - 1
 
   ;++(Γ, Δ): RECURSIVE precontext =
     CASES Δ OF
@@ -131,7 +139,7 @@ BEGIN
     , const_def(Δ, T, a): const_def(Γ ++ Δ, T, a)
     , theory_def(Δ, Θ): theory_def(Γ ++ Δ, Θ)
     ENDCASES
-  MEASURE Δ BY <<
+  MEASURE length(Δ)
 
   concat_assoc: THEOREM
     Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
@@ -196,66 +204,60 @@ BEGIN
     , lproj(a): weight(n, Γ, a)
     , rproj(a): weight(n, Γ, a)
 
-    , type_decl: 0
-    , type_var: 0
-    , type_def(T): weight(n, Γ, T)
-    , const_decl(T): weight(n, Γ, T)
-    , const_var(T): weight(n, Γ, T)
-    , const_def(T, a): max(weight(n, Γ, T), weight(n, Γ, a))
-    , theory_def(Θ): weight(n, Γ, Θ)
+    , empty: 0
+    , type_decl(Δ): weight(n, Γ, Δ)
+    , type_var(Δ): weight(n, Γ, Δ)
+    , type_def(Δ, T): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, T))
+    , const_decl(Δ, T): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, T))
+    , const_var(Δ, T): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, T))
+    , const_def(Δ, T, a): max(weight(n, Γ, Δ), max(weight(n, Γ ++ Δ, T), weight(n, Γ ++ Δ, a)))
+    , theory_def(Δ, Θ): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, Θ))
 
-    , ikeep: 0
-    , itype(T): weight(n, Γ, T)
-    , iconst(a): weight(n, Γ, a)
-
-    , map(f):
-        fold(f`length, 0, 0,
-	     LAMBDA (res: nat, (x | x ∈ U)):
-	       max(res, weight(n + x, U ++ rest(U(x)), first(U(x)))))
+    , nil: 0
+    , ikeep(σ): weight(n, Γ, σ)
+    , itype(σ, T): max(weight(n, Γ, σ), weight(n, Γ, T))
+    , iconst(σ, a): max(weight(n, Γ, σ), weight(n, Γ, a))
     ENDCASES
   MEASURE U BY <<
-  f: VAR finseq[syntaxic]
   n: VAR nat
-
-  weight_map: THEOREM 
-    EXISTS (x: below[f`length]): weight(n, Γ, map(f)) = weight(n + x, Γ ++ rest(map(f)(x)), first(Γ(x)))
-
-  size(U): RECURSIVE nat =
-    CASES U OF
-      v(i): 1
-    , dot(i, σ, x): 1
-
-    , fun(A, B): size(A) + size(B) + 1
-    , prod(A, B): size(A) + size(B) + 1
-    , subtype(T, a): size(T) + size(a) + 1
-
-    , app(f, a): size(f) + size(a) + 1
-    , lam(T, a): size(T) + size(a) + 1
-    , pair(a, b): size(a) + size(b) + 1
-    , lproj(a): size(a) + 1
-    , rproj(a): size(a) + 1
-
-    , type_decl: 1
-    , type_var: 1
-    , type_def(T): size(T) + 1
-    , const_decl(T): size(T) + 1
-    , const_var(T): size(T) + 1
-    , const_def(T, a): size(T) + size(a) + 1
-    , theory_def(Θ): size(Θ) + 1
-
-    , ikeep: 1
-    , itype(T): size(T) + 1
-    , iconst(a): size(a) + 1
-
-    , map(f):
-        fold(f`length, 0, 0,
-	     LAMBDA (res: nat, (x | x ∈ U)):
-	       res + size(first(U(x))))
-    ENDCASES
-  MEASURE U BY <<
-
-  Δ: VAR syntaxic
-  weight_definition: THEOREM
-    x ∈ Γ AND semantic?(rest(Γ(x)) ++ Δ, U) AND x >= n IMPLIES
+  weight_definition: THEOREM x ∈ Γ AND x >= n IMPLIES
       weight(n + length(Δ), rest(Γ(x)) ++ Δ, U) < weight(n, Γ, v(x))
+
+  % n: VAR nat
+
+  % size(U): RECURSIVE nat =
+  %   CASES U OF
+  %     v(i): 1
+  %   , dot(i, σ, x): 1
+
+  %   , fun(A, B): size(A) + size(B) + 1
+  %   , prod(A, B): size(A) + size(B) + 1
+  %   , subtype(T, a): size(T) + size(a) + 1
+
+  %   , app(f, a): size(f) + size(a) + 1
+  %   , lam(T, a): size(T) + size(a) + 1
+  %   , pair(a, b): size(a) + size(b) + 1
+  %   , lproj(a): size(a) + 1
+  %   , rproj(a): size(a) + 1
+
+  %   , type_decl: 1
+  %   , type_var: 1
+  %   , type_def(T): size(T) + 1
+  %   , const_decl(T): size(T) + 1
+  %   , const_var(T): size(T) + 1
+  %   , const_def(T, a): size(T) + size(a) + 1
+  %   , theory_def(Θ): size(Θ) + 1
+
+  %   , ikeep: 1
+  %   , itype(T): size(T) + 1
+  %   , iconst(a): size(a) + 1
+
+  %   , map(f):
+  %       fold(f`length, 0, 0,
+  % 	     LAMBDA (res: nat, (x | x ∈ U)):
+  % 	       res + size(first(U(x))))
+  %   ENDCASES
+  % MEASURE U BY <<
+
+  % Δ: VAR syntaxic
 END language
