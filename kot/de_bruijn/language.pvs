@@ -51,9 +51,12 @@ BEGIN
   sdecl?(U): bool =
     type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
     const_var?(U) OR const_def?(U) OR theory_def?(U)
-    
+
   scontext?(U): bool =
-    map?(U) AND FORALL (x: below[run_map(U)`length]): sdecl?(U)
+    map?(U) AND FORALL (x: below[run_map(U)`length]): sdecl?(run_map(U)`seq(x))
+
+  k(d: (sdecl?)): (scontext?) =
+    map((# length := 1, seq := LAMBDA (x: below[1]): d #))
 
   M, N: VAR (scontext?)
   empty: (scontext?) = map(empty_seq)
@@ -149,8 +152,8 @@ BEGIN
       v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
     , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
         i < length(M) AND prekind?(M)(σ)(PREINTERP) AND v?(x) AND
-	compatible?(def(M(i)), σ) AND
-  	kind?(M(i), PRECONTEXT) AND prekind?(def(M(i)))(x)(k)
+	kind?(M(i), PRECONTEXT) AND (type_def?(M(i)) OR const_def?(M(i))) AND
+	compatible?(def(M(i)), σ) AND prekind?(def(M(i)))(x)(k)
 
     , fun(A, B): k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M)(B)(PRETYPE)
     , prod(A, B): k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M)(B)(PRETYPE)
