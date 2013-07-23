@@ -115,10 +115,10 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE compatible?
 
-  rest(M, (x | x < length(M))): (map?) =
+  rest(M: (scontext?), (x | x < length(M))): (scontext?) =
     map(run_map(M) ^^ (0, length(M) - x))
 
-  ;++(M, N: (map?)): (map?) = map(run_map(N) o run_map(M))
+  ;++(M, N: (scontext?)): (scontext?) = map(run_map(N) o run_map(M))
 
   prekind?(M: (scontext?))(V)(k): RECURSIVE bool =
     CASES V OF
