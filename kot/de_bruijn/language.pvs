@@ -66,39 +66,59 @@ BEGIN
 
   U, V, W: VAR syntaxic
   x, y: VAR nat
-  k: VAR prekeyword  
+  k: VAR prekeyword
 
-  parsed?(U)(k): RECURSIVE bool =
+  map?(U): RECURSIVE bool =
     CASES U OF
-      v(i): k = PRETYPE OR k = PRETERM
-    , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
-        parsed?(σ)(PREINTERP) AND v?(x)
-
-    , fun(A, B): k = PRETYPE AND parsed?(A)(PRETYPE) AND parsed?(B)(PRETYPE)
-    , prod(A, B): k = PRETYPE AND parsed?(A)(PRETYPE) AND parsed?(B)(PRETYPE)
-    , subtype(T, a): k = PRETYPE AND parsed?(T)(PRETYPE) AND parsed?(a)(PRETERM)
-
-    , app(f, a): k = PRETERM AND parsed?(f)(PRETERM) AND parsed?(a)(PRETERM)
-    , lam(T, a): k = PRETERM AND parsed?(T)(PRETYPE) AND parsed?(a)(PRETERM)
-    , pair(a, b): k = PRETERM AND parsed?(a)(PRETERM) AND parsed?(b)(PRETERM)
-    , lproj(a): k = PRETERM AND parsed?(a)(k)
-    , rproj(a): k = PRETERM AND parsed?(a)(k)
-
-    , empty: k = PRECONTEXT
-    , type_decl(Γ): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT)
-    , type_var(Γ): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT)
-    , type_def(Γ, T): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT) AND parsed?(T)(PRETYPE)
-    , const_decl(Γ, T): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT) AND parsed?(T)(PRETYPE)
-    , const_var(Γ,T): k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT) AND parsed?(T)(PRETYPE)
-    , const_def(Γ, T, a) : k = PRECONTEXT AND parsed?(Γ)(PRECONTEXT) AND parsed?(T)(PRETYPE) AND parsed?(a)(PRETERM)
-    , theory_def(Γ, Θ): k = PRECONTEXT AND parsed?(Θ)(PRECONTEXT) AND parsed?(Γ)(PRECONTEXT)
-
-    , nil: k = PREINTERP
-    , itype(σ, i, T): k = PREINTERP AND parsed?(σ)(PREINTERP) AND parsed?(T)(PRETYPE)
-    , iconst(σ, i, a): k = PREINTERP AND parsed?(σ)(PREINTERP) AND parsed?(a)(PRETERM)
+      emtpy: TRUE
+    , type_decl(Δ): context?(Δ)
+    , type_var(Δ): context?(Δ)
+    , type_def(Δ, T): context?(Δ)
+    , const_decl(Δ, T): context?(Δ)
+    , const_var(Δ, T): context?(Δ)
+    , const_def(Δ, T, a): context?(Δ)
+    , theory_def(Δ, Θ): context?(Δ)
+    ELSE FALSE
     ENDCASES
   MEASURE size(U)
-  AUTO_REWRITE parsed?
+  M: VAR (map?)
+
+  prekind?(M)(V)(k): RECURSIVE bool =
+    CASES V OF
+      v(i): (k = PRETYPE OR k = PRETERM) AND i ∈ U AND kind?(U(i), k)
+    , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
+        i ∈ U AND prekind?(U)(σ)(PREINTERP) AND v?(x) AND
+	compatible?(def(U(i)), σ) AND
+	kind?(U(i), PRECONTEXT) AND prekind?(def(U(i)))(x)(k)
+
+    , fun(A, B): k = PRETYPE AND prekind?(U)(A)(PRETYPE) AND prekind?(U)(B)(PRETYPE)
+    , prod(A, B): k = PRETYPE AND prekind?(U)(A)(PRETYPE) AND prekind?(U)(B)(PRETYPE)
+    , subtype(T, a): k = PRETYPE AND prekind?(U)(T)(PRETYPE) AND prekind?(U)(a)(PRETERM)
+
+    , app(f, a): k = PRETERM AND prekind?(U)(f)(PRETERM) AND prekind?(U)(a)(PRETERM)
+    , lam(T, a): k = PRETERM AND prekind?(U)(T)(PRETYPE) AND prekind?(U)(a)(PRETERM)
+    , pair(a, b): k = PRETERM AND prekind?(U)(a)(PRETERM) AND prekind?(U)(b)(PRETERM)
+    , lproj(a): k = PRETERM AND prekind?(U)(a)(k)
+    , rproj(a): k = PRETERM AND prekind?(U)(a)(k)
+
+    , empty: k = PRECONTEXT
+    , type_decl(Γ): k = PRECONTEXT AND prekind?(U)(Γ)(PRECONTEXT)
+    , type_var(Γ): k = PRECONTEXT AND prekind?(U)(Γ)(PRECONTEXT)
+    , type_def(Γ, T): k = PRECONTEXT AND prekind?(U)(Γ)(PRECONTEXT) AND prekind?(U ++ Γ)(T)(PRETYPE)
+    , const_decl(Γ, T): k = PRECONTEXT AND prekind?(U)(Γ)(PRECONTEXT) AND prekind?(U ++ Γ)(T)(PRETYPE)
+    , const_var(Γ,T): k = PRECONTEXT AND prekind?(U)(Γ)(PRECONTEXT) AND prekind?(U ++ Γ)(T)(PRETYPE)
+    , const_def(Γ, T, a) :
+        k = PRECONTEXT AND prekind?(U)(Γ)(PRECONTEXT) AND
+	prekind?(U ++ Γ)(T)(PRETYPE) AND prekind?(U ++ Γ)(a)(PRETERM)
+    , theory_def(Γ, Θ):
+        k = PRECONTEXT AND prekind?(U)(Γ)(PRECONTEXT) AND prekind?(U ++ Γ)(Θ)(PRECONTEXT)
+
+    , nil: k = PREINTERP
+    , itype(σ, i, T): k = PREINTERP AND prekind?(U)(σ)(PREINTERP) AND prekind?(U)(T)(PRETYPE)
+    , iconst(σ, i, a): k = PREINTERP AND prekind?(U)(σ)(PREINTERP) AND prekind?(U)(a)(PRETERM)
+    ENDCASES
+  MEASURE size(V)
+  AUTO_REWRITE prekind?
 
   precontext?(U): MACRO bool = parsed?(U)(PRECONTEXT)
   pretype?(U): MACRO bool = parsed?(U)(PRETYPE)

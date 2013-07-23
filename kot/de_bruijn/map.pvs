@@ -11,7 +11,7 @@ BEGIN
   σ, τ: VAR preinterp
   S: VAR semantic
   M: VAR premap
-  i: VAR nat
+  i, j: VAR nat
 
   length(Γ): RECURSIVE nat =
     CASES Γ OF
@@ -21,7 +21,7 @@ BEGIN
     , const_decl(Δ, T): 1 + length(Δ)
     , const_var(Δ, T): 1 + length(Δ)
     , const_def(Δ, T, a): 1 + length(Δ)
-    , theory_def(Δ, Θ): 1 + length(Δ) + length(Θ)
+    , theory_def(Δ, Θ): 1 + length(Δ)
     ELSE 0
     ENDCASES
   MEASURE size(Γ)
@@ -31,21 +31,16 @@ BEGIN
     x < length(Γ)
 
   apply(Γ)(x | x ∈ Γ): RECURSIVE precontext =
-    COND
-      theory_def?(Γ) ->
-        IF x < length(def(Γ))
-	  THEN apply(def(Γ))(x)
-	  ELSIF x = length(def(Γ)) THEN Γ
-	  ELSE apply(rest(Γ))(x - length(def(Γ)) - 1)
-	ENDIF
-    , x = 0 -> Γ
-    , ELSE -> apply(rest(Γ))(x - 1)
-    ENDCOND
+    IF x = 0 THEN Γ ELSE apply(rest(Γ))(x - 1) ENDIF
   MEASURE length(Γ)
   CONVERSION apply
   AUTO_REWRITE+ apply
   length_apply: THEOREM x ∈ Γ IMPLIES
-    length(apply(Γ)(x)) <= length(Γ)
+    length(apply(Γ)(x)) = length(Γ) - x
+  rest_apply: THEOREM i + 1 ∈ Γ IMPLIES
+    rest(Γ)(i) = Γ(i + 1)
+  apply_apply: THEOREM i + j ∈ Γ IMPLIES
+    Γ(i)(j) = Γ(i + j)
   size_apply: THEOREM x ∈ Γ IMPLIES
     size(apply(Γ)(x)) <= size(Γ)
 
@@ -70,15 +65,13 @@ BEGIN
     size(Γ ++ Δ) = size(Γ) + size(Δ)
   concat_empty: THEOREM
     empty ++ Γ = Γ
-  apply_concat: THEOREM x ∈ Γ ++ Δ IMPLIES
-    (Γ ++ Δ)(x) = IF x ∈ Δ THEN Γ ++ Δ(x) ELSE Γ(x - length(Δ)) ENDIF
-  AUTO_REWRITE+ ++, concat_assoc, length_concat, concat_empty, apply_concat, size_concat
+  AUTO_REWRITE+ ++, concat_assoc, length_concat, concat_empty, size_concat
 
   interpret?(σ, i): RECURSIVE bool =
     CASES σ OF
       nil: FALSE
     , itype(τ, j, T): i = j OR interpret?(τ, i)
-    , iconst(τ, j, a): i = j OR interpret?(τ, j)
+    , iconst(τ, j, a): i = j OR interpret?(τ, i)
     ENDCASES
   MEASURE size(σ)
 
@@ -92,16 +85,45 @@ BEGIN
     ENDCASES
   MEASURE size(σ)
   AUTO_REWRITE compatible?
-  compatible_length: THEOREM
-    compatible?(Γ, σ) IMPLIES length(σ) <= length(Γ)
+
+  interp_type(Γ, (i | i ∈ Γ AND type_decl?(Γ(i))), T): RECURSIVE precontext =
+    CASES Γ OF
+      type_decl(Δ): IF i = 0 THEN type_def(Δ, T) ELSE type_decl(interp_type(Δ, i - 1, T)) ENDIF
+    , type_var(Δ): type_var(interp_type(Δ, i - 1, T))
+    , type_def(Δ, A): type_def(interp_type(Δ, i - 1, T), A)
+    , const_decl(Δ, A): const_decl(interp_type(Δ, i - 1, T), A)
+    , const_var(Δ, A): const_var(interp_type(Δ, i - 1, T), A)
+    , const_def(Δ, A, a): const_def(interp_type(Δ, i - 1, T), A, a)
+    , theory_def(Δ, Θ): theory_def(interp_type(Δ, i - 1, T), Θ)
+    ENDCASES
+  MEASURE length(Γ)
+  length_interp_type: THEOREM i ∈ Γ AND type_decl?(Γ(i)) IMPLIES
+    length(interp_type(Γ, i, T)) = length(Γ)
+  apply_interp_type: THEOREM i ∈ Γ AND j ∈ Γ AND type_decl?(Γ(i)) IMPLIES
+    interp_type(Γ, i, T)(j) = IF i < j THEN Γ(j) ELSE interp_type(Γ(j), i - j, T) ENDIF
+  compatible_interp_type: THEOREM
+    i ∈ Γ AND type_decl?(Γ(i)) AND compatible?(Γ, τ) AND NOT interpret?(τ, i) IMPLIES
+      compatible?(interp_type(Γ, i, T), τ)
+
+  interp_const(Γ, (i | i ∈ Γ AND const_decl?(Γ(i))), a): RECURSIVE precontext =
+    CASES Γ OF
+      type_decl(Δ): type_decl(interp_const(Δ, i - 1, a))
+    , type_var(Δ): type_var(interp_const(Δ, i - 1, a))
+    , type_def(Δ, T): type_def(interp_const(Δ, i - 1, a), T)
+    , const_decl(Δ, T): IF i = 0 THEN const_def(Δ, T, a) ELSE const_decl(interp_const(Δ, i - 1, a), T) ENDIF
+    , const_var(Δ, T): const_var(interp_const(Δ, i - 1, a), T)
+    , const_def(Δ, T, b): const_def(interp_const(Δ, i - 1, a), T, b)
+    , theory_def(Δ, Θ): theory_def(interp_const(Δ, i - 1, a), Θ)
+    ENDCASES
+  MEASURE length(Γ)
 
   interp(Γ, (σ | compatible?(Γ, σ))): RECURSIVE precontext =
     CASES σ OF
       nil: empty
-    , itype(τ, i, T): type_def(interp(rest(Γ), τ), T)
-    , iconst(τ, i, a): const_def(interp(rest(Γ), τ), type_(Γ), a)
+    , itype(τ, i, T): interp(interp_type(Γ, i, T), τ)
+    , iconst(τ, i, a): interp(interp_const(Γ, i, a), τ)
     ENDCASES
-  MEASURE length(σ)
+  MEASURE size(σ)
   length_interp: THEOREM compatible?(Γ, σ) IMPLIES
     length(interp(Γ, σ)) = length(Γ)
   size_interp: THEOREM compatible?(Γ, σ) IMPLIES
