@@ -6,6 +6,7 @@ BEGIN
   i, j, n, x: VAR nat
   U, t: VAR syntaxic
   nb: VAR [nat, nat]
+  M: VAR (scontext?)
 
   
   % Special size function defined for termination
@@ -70,20 +71,6 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE+ ↑
 
-  % Subtype judgements
-  shift_pretype: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    pretype?(Γ ++ Θ)(U) IFF pretype?(Γ ++ Δ ++ Θ)(U ↑ (length(Δ), length(Θ)))
-  shift_preterm: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    preterm?(Γ ++ Θ)(U) IFF preterm?(Γ ++ Δ ++ Θ)(U ↑ (length(Δ), length(Θ)))
-  shift_printerp: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    preinterp?(Γ ++ Θ)(U) IFF preinterp?(Γ ++ Δ ++ Θ)(U ↑ (length(Δ), length(Θ)))
-  shift_pretheory: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    pretheory?(Γ ++ Θ)(U) IFF pretheory?(Γ ++ Δ ++ Θ)(U ↑ (length(Δ), length(Θ)))
-  shift_semantic: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    semantic?(Γ ++ Θ)(U) IFF semantic?(Γ ++ Δ ++ Θ)(U ↑ (length(Δ), length(Θ)))
-  % Shift preserves size
-  shift_size: THEOREM size(U ↑ nb) = size(U)
-  
   % Handy rewrite
   shift_zero: THEOREM
     U ↑ (0, n) = U
@@ -92,10 +79,26 @@ BEGIN
   ;↑(U, (n: nat)): MACRO syntaxic =
     (U ↑ (n, 0))
   length_shift: THEOREM
-    length(Γ ↑ nb) = length(Γ)
+    length(M ↑ nb) = length(M)
   shift_plus: THEOREM
     (U ↑ (i, n)) ↑ (j, n) = U ↑ (i + j, n)
   AUTO_REWRITE+ shift_plus
+
+  % Subtype judgements
+  shift_pretype: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
+    pretype?(Γ ++ Θ)(U) IFF pretype?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
+  shift_preterm: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
+    preterm?(Γ ++ Θ)(U) IFF preterm?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
+  shift_printerp: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
+    preinterp?(Γ ++ Θ)(U) IFF preinterp?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
+  shift_pretheory: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
+    pretheory?(Γ ++ Θ)(U) IFF pretheory?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
+  shift_semantic: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
+    semantic?(Γ ++ Θ)(U) IFF semantic?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
+  % Shift preserves size
+  shift_size: THEOREM size(U ↑ nb) = size(U)
+  
+
 
 
   % This is a "true" substitution - this really removes the bound variable.
