@@ -77,6 +77,7 @@ BEGIN
   U, V, W: VAR syntaxic
   x, y: VAR nat
   k: VAR prekeyword
+  i: VAR nat
   M: VAR (map?)
 
   length(M): nat = run_map(M)`length
@@ -103,13 +104,21 @@ BEGIN
   scontext?(U): bool =
     map?(U) AND FORALL (x: below[length(U)]): sdecl?(U)
 
+  interpret?(U, i): RECURSIVE bool =
+    CASES U OF
+      itype(τ, j, T): i = j OR interpret?(τ, i)
+    , iconst(τ, j, a): i = j OR interpret?(τ, i)
+    ELSE FALSE
+    ENDCASES
+  MEASURE U BY <<
+
   compatible?(M, U): RECURSIVE bool =
     CASES U OF
       nil: TRUE
     , itype(τ, i, T):
-        i < length(M) AND type_decl?(M(i)) %AND NOT interpret?(τ, i)
+        i < length(M) AND type_decl?(M(i)) AND NOT interpret?(τ, i)
     , iconst(τ, i, a):
-        i < length(M) AND const_decl?(M(i)) %AND NOT interpret?(τ, i)
+        i < length(M) AND const_decl?(M(i)) AND NOT interpret?(τ, i)
     ELSE FALSE
     ENDCASES
   MEASURE U BY <<

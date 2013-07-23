@@ -53,14 +53,6 @@ BEGIN
     empty ++ Γ = Γ
   AUTO_REWRITE+ ++, concat_assoc, length_concat, concat_empty, size_concat
 
-  interpret?(σ, i): RECURSIVE bool =
-    CASES σ OF
-      nil: FALSE
-    , itype(τ, j, T): i = j OR interpret?(τ, i)
-    , iconst(τ, j, a): i = j OR interpret?(τ, i)
-    ENDCASES
-  MEASURE size(σ)
-
   interp_type(Γ, (i | i ∈ Γ AND type_decl?(Γ(i))), T): RECURSIVE precontext =
     CASES Γ OF
       type_decl(Δ): IF i = 0 THEN type_def(Δ, T) ELSE type_decl(interp_type(Δ, i - 1, T)) ENDIF
