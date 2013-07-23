@@ -1,0 +1,104 @@
+supertype: THEORY
+BEGIN
+  IMPORTING subst
+
+  S: VAR syntaxic
+  Γ, Δ, Θ: VAR context
+  A, B, T: VAR pretype
+  r, s: VAR symbol
+  n, m: VAR name
+  x, y: VAR nat
+  a, b, f, g: VAR preterm
+  σ, τ: VAR interp
+  
+  % Direct Supertype : 3.2
+  μ0(T): RECURSIVE pretype =
+    CASES T OF
+      subtype(T, a): μ0(T)
+      ELSE T
+    ENDCASES
+  MEASURE w(T)
+
+  % Adding subtype contraints : 4.4
+  ;/(T, a): RECURSIVE pretype =
+    CASES T OF
+      v(i): v(i)
+      dot(m, σ, s): dot(m, σ, s),
+      subtype(T, b): subtype(T, b ∧ (a ↑ 1)),
+      fun(A, B): fun(A/a, B/(a ↑ 1)),
+      prod(A, B): prod(A/a, B/(a ↑ 1))
+    ENDCASES
+  MEASURE w(T)
+  %divide_size: RECURSIVE JUDGEMENT
+  %  /(T, a) HAS_TYPE { A | size(A) = size(T) }
+
+  % Function μ and π as one recursive function,
+  % in order to deal with the mutual recursion
+  mubody(T): RECURSIVE [pretype, preterm] =
+    CASES T OF
+      v(s): (v(s), TRUE_),
+      dot(m, σ, s): (dot(m, σ, s), TRUE_), % TODO
+      subtype(T, a):
+        LET (muT, bodyT) = mubody(T) IN
+	LET piT = Λ(muT)(bodyT) IN
+	(muT, app(piT ↑ 1, v(0)) ∧ a),
+      fun(A, B):
+        LET (muB, bodyB) = mubody(B) IN
+	LET piB = Λ(muB)(bodyB) IN
+	(fun(A, muB), forall_(A, app((piB ↑ 1), app(v(1), v(0))))),
+      prod(A, B):
+        LET (muA, bodyA) = mubody(A),
+	    (muB, bodyB) = mubody(B) IN
+	LET piA = Λ(muA)(bodyA),
+	    piB = Λ(muB)(bodyB) IN
+	(prod(muA, muB / (app((piA ↑ 1), v(0)))),
+	 app((piA ↑ 1), lproj(v(0))) ∧
+	 app(subst(piB ↑ 1, 1, lproj(v(0))), rproj(v(0))))
+    ENDCASES
+  MEASURE w(T)
+  mubody_size: RECURSIVE JUDGEMENT
+    mubody(T) HAS_TYPE { x: [pretype, preterm] | size(x`1) = size(T) }
+
+  % Maximal supertype : 3.1, 4.5
+  μ(T): pretype =
+    mubody(T)`1
+  mu_size: JUDGEMENT
+    μ(T) HAS_TYPE { A | size(A) = size(T) }
+
+  % Subtype constraints : 3.4, 4.6
+  π(T): preterm =
+    LET (muT, bodyT) = mubody(T) IN
+    Λ(muT)(bodyT)
+
+
+  mu: THEOREM
+    μ(T) = CASES T OF
+      fun(A, B): fun(A, μ(B)),
+      prod(A, B): prod(μ(A), (μ(B) / (app((π(A) ↑ 1), v(0))))),
+      subtype(T, a): μ(T)
+      ELSE T
+    ENDCASES
+
+  pi: THEOREM
+    π(T) = CASES T OF
+      % { x:  T | a } ↦ λ(x: μ(T)): π(T)      (  x ) ∧ a
+      %                   ^————————\____/ additional λ
+      subtype(T,  a):   Λ(   μ(T)) ((π(T) ↑ 1)(v(0)) ∧ a),
+
+      % [i: A → B] ↦ λ(x: [i: A → μ(B)]):  ∀  (i: A): π(B)     (  x (  i ))
+      %                ^—————————————————————————————\____/ additional λ
+      fun(  A,  B):  Λ(   ⌈   A → μ(B)⌉)(forall_(A, (π(B) ↑ 1)(v(1)(v(0))))),
+
+      % [i: A, B]  ↦ λ(x: [i: μ(A   ), μ(B   )\π(A)(   i)      ]): π(A)     ( p₁     x  ) ∧       π(B)[ i ← (p₁    x)] ( p₂     x)
+      %                ^——————————————————————————————————————————\____/ additional λ
+      prod( A, B):   Λ(   ⌈   μ(A), μ(B)/((π(A) ↑ 1)(v(0)))⌉)((π(A) ↑ 1)(lproj(v(0))) ∧ subst(π(B) ↑ 1, 1, lproj(v(0)))(rproj(v(0))))
+
+      ELSE Λ(T)(TRUE_)
+    ENDCASES
+
+
+
+  AUTO_REWRITE- μ, π
+  AUTO_REWRITE+ mu, pi
+
+END supertype
