@@ -25,9 +25,8 @@ BEGIN
     theory_def(rest: syntaxic, def: syntaxic): theory_def?
 
     nil: nil?
-    ikeep(rest: syntaxic): ikeep?
-    itype(rest: syntaxic, def: syntaxic): itype?
-    iconst(rest: syntaxic, def: syntaxic): iconst?
+    itype(rest: syntaxic, i: nat, def: syntaxic): itype?
+    iconst(rest: syntaxic, i: nat, def: syntaxic): iconst?
 %    itheory(def: syntaxic): itheory?
   END syntaxic
 
@@ -56,9 +55,8 @@ BEGIN
     , theory_def(Γ, Θ): size(Γ) + size(Θ) + 1
 
     , nil: 1
-    , ikeep(σ): size(σ) + 2
-    , itype(σ, T): size(σ) + size(T) + 2
-    , iconst(σ, a): size(σ) + size(a) + 2
+    , itype(σ, i, T): size(σ) + size(T) + 4
+    , iconst(σ, i, a): size(σ) + size(a) + 4
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE size
@@ -96,9 +94,8 @@ BEGIN
     , theory_def(Γ, Θ): k = PRECONTEXT AND parsed?(Θ)(PRECONTEXT) AND parsed?(Γ)(PRECONTEXT)
 
     , nil: k = PREINTERP
-    , ikeep(σ): k = PREINTERP AND parsed?(σ)(PREINTERP)
-    , itype(σ, T): k = PREINTERP AND parsed?(σ)(PREINTERP) AND parsed?(T)(PRETYPE)
-    , iconst(σ, a): k = PREINTERP AND parsed?(σ)(PREINTERP) AND parsed?(a)(PRETERM)
+    , itype(σ, i, T): k = PREINTERP AND parsed?(σ)(PREINTERP) AND parsed?(T)(PRETYPE)
+    , iconst(σ, i, a): k = PREINTERP AND parsed?(σ)(PREINTERP) AND parsed?(a)(PRETERM)
     ENDCASES
   MEASURE size(U)
   AUTO_REWRITE parsed?
