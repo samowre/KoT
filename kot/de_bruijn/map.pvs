@@ -10,22 +10,8 @@ BEGIN
   a, b, f: VAR preterm
   σ, τ: VAR preinterp
   S: VAR semantic
-  M: VAR premap
+  M: VAR (map?)
   i, j: VAR nat
-
-  length(Γ): RECURSIVE nat =
-    CASES Γ OF
-      type_decl(Δ): 1 + length(Δ) 
-    , type_var(Δ): 1 + length(Δ)
-    , type_def(Δ, T): 1 + length(Δ)
-    , const_decl(Δ, T): 1 + length(Δ)
-    , const_var(Δ, T): 1 + length(Δ)
-    , const_def(Δ, T, a): 1 + length(Δ)
-    , theory_def(Δ, Θ): 1 + length(Δ)
-    ELSE 0
-    ENDCASES
-  MEASURE size(Γ)
-  AUTO_REWRITE length
 
   ;∈(x, Γ): MACRO bool =
     x < length(Γ)
@@ -74,17 +60,6 @@ BEGIN
     , iconst(τ, j, a): i = j OR interpret?(τ, i)
     ENDCASES
   MEASURE size(σ)
-
-  compatible?(Γ, σ): RECURSIVE bool =
-    CASES σ OF
-      nil: TRUE
-    , itype(τ, i, T):
-        i ∈ Γ AND type_decl?(Γ(i)) AND compatible?(Γ, τ) AND NOT interpret?(τ, i)
-    , iconst(τ, i, a):
-        i ∈ Γ AND const_decl?(Γ(i)) AND compatible?(Γ, τ) AND NOT interpret?(τ, i)
-    ENDCASES
-  MEASURE size(σ)
-  AUTO_REWRITE compatible?
 
   interp_type(Γ, (i | i ∈ Γ AND type_decl?(Γ(i))), T): RECURSIVE precontext =
     CASES Γ OF

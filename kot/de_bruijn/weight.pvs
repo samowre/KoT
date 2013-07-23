@@ -6,18 +6,6 @@ BEGIN
   S: VAR semantic
   x: VAR nat
 
-  kind(Γ | 0 ∈ Γ): prekeyword = 
-    CASES Γ OF
-      type_decl(Δ): PRETYPE
-    , type_var(Δ): PRETYPE
-    , type_def(Δ, T): PRETYPE
-    , const_decl(Δ, T): PRETERM
-    , const_var(Δ, T): PRETERM
-    , const_def(Δ, T, a): PRETERM
-    , theory_def(Δ, Θ): PRECONTEXT
-    ENDCASES
-  AUTO_REWRITE kind
-
   weight(Γ, S): RECURSIVE nat =
     CASES S OF
       v(i):
