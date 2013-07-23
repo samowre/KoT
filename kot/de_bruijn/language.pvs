@@ -58,7 +58,7 @@ BEGIN
   k(d: (sdecl?)): (scontext?) =
     map((# length := 1, seq := LAMBDA (x: below[1]): d #))
 
-  M, N: VAR (scontext?)
+  M, N, P: VAR (scontext?)
   empty: (scontext?) = map(empty_seq)
 
   length(M): MACRO nat =
@@ -69,9 +69,22 @@ BEGIN
     run_map(M)`seq(x)
   CONVERSION+ apply
   rest(M, (x | x < length(M))): (scontext?) =
-    map(run_map(M) ^^ (0, length(M) - x))
+    map(run_map(M) ^^ (x + 1, length(M)))
   ;++(M, N): (scontext?) =
     map(run_map(N) o run_map(M))
+  concat_empty: THEOREM
+    empty ++ M = M
+  concat__empty: THEOREM
+    M ++ empty = M
+  concat_assoc: THEOREM
+    M ++ (N ++ P) = (M ++ N) ++ P
+  rest_concat: THEOREM x < length(M) + length(N) IMPLIES
+    rest(M ++ N, x) =
+      IF x < length(N)
+        THEN M ++ rest(N, x)
+	ELSE rest(M, x - length(N))
+      ENDIF
+  AUTO_REWRITE+ concat_empty, concat__empty, concat_assoc, rest_concat
 
   % TODO: move
   sum(len: nat, f: [below[len] -> nat]): RECURSIVE nat =

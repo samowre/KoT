@@ -3,19 +3,23 @@ BEGIN
   IMPORTING language
 
   Γ: VAR precontext
-  S: VAR semantic
   x: VAR nat
 
-  weight(Γ, S): RECURSIVE nat =
+  sum(len: nat, f: [below[len] -> nat]): RECURSIVE nat =
+    IF len = 0 THEN 0
+    ELSE max(f(len - 1), max(len - 1, LAMBDA (x: below[len - 1]): f(x))) ENDIF
+  MEASURE len
+
+  weight(Γ, (S: semantic(Γ))): RECURSIVE nat =
     CASES S OF
       v(i):
         IF i ∈ Γ
-	  THEN 1 + IF (type_def?(Γ(i)) OR const_def?(Γ(i))) THEN weight(rest(Γ(i)), def(Γ(i))) ELSE 0 ENDIF
+	  THEN 1 + size(Γ(i))
 	  ELSE 0
 	ENDIF
     , dot(i, σ, x):
         IF i ∈ Γ AND theory_def?(Γ(i)) AND compatible?(def(Γ(i)), σ) AND i(x) ∈ σ
-	  THEN max(weight(Γ, σ), weight(Γ ++ interp(i, σ), x)) + 1
+	  THEN max(weight(Γ, σ), weight(Γ ++ interp(def(Γ(i)), σ), x)) + 1
 	  ELSE 0 ENDIF
 
     , fun(A, B): max(weight(Γ, A), weight(Γ ++ k(const_var(A)), B))
@@ -37,11 +41,12 @@ BEGIN
     , theory_def(Θ): weight(Γ, Θ)
 
     , nil: 0
-    , ikeep(σ): weight(Γ, σ)
-    , itype(σ, T): max(weight(Γ, σ), weight(Γ, T))
-    , iconst(σ, a): max(weight(Γ, σ), weight(Γ, a))
+    , itype(σ, i, T): max(weight(Γ, σ), weight(Γ, T))
+    , iconst(σ, i, a): max(weight(Γ, σ), weight(Γ, a))
+
+    , map(f): max(f`length, LAMBDA (x: below[f`length]): weight(Γ ++ rest(S, x), f`seq(x)))
     ENDCASES
-  MEASURE sizde(S)
+  MEASURE size(S)
 
   weight_definition: THEOREM x ∈ Γ AND (type_def?(Γ(x)) OR const_def?(Γ(x))) IMPLIES
     weight(rest(Γ(x)), def(Γ(x))) < weight(Γ, v(x))
