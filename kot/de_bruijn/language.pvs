@@ -31,12 +31,52 @@ BEGIN
     map(run_map: finseq[syntaxic]): map?
   END syntaxic
 
+  prekeyword: TYPE =
+    { PRETYPE, PRETERM, PRECONTEXT, PREINTERP, PREDECL }
+
+  U: VAR syntaxic
+  x, y: VAR nat
+  i, j, n: VAR nat
+  k: VAR prekeyword
+
+  sinterp?(U): RECURSIVE bool =
+    CASES U OF
+      nil: TRUE
+    , itype(τ, i, T): sinterp?(τ)
+    , iconst(τ, i, a): sinterp?(τ)
+      ELSE FALSE
+    ENDCASES
+  MEASURE U BY <<
+
+  sdecl?(U): bool =
+    type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
+    const_var?(U) OR const_def?(U) OR theory_def?(U)
+    
+  scontext?(U): bool =
+    map?(U) AND FORALL (x: below[run_map(U)`length]): sdecl?(U)
+
+  M, N: VAR (scontext?)
+  empty: (scontext?) = map(empty_seq)
+
+  length(M): MACRO nat =
+    run_map(M)`length
+  ;∈(x, M): MACRO bool =
+    x < length(M)
+  apply(M)(x | x ∈ M): (sdecl?) =
+    run_map(M)`seq(x)
+  CONVERSION+ apply
+  rest(M, (x | x < length(M))): (scontext?) =
+    map(run_map(M) ^^ (0, length(M) - x))
+  ;++(M, N): (scontext?) =
+    map(run_map(N) o run_map(M))
+
+  % TODO: move
   sum(len: nat, f: [below[len] -> nat]): RECURSIVE nat =
     IF len = 0 THEN 0
     ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
   MEASURE len
 
-  size(U: syntaxic): RECURSIVE nat =
+  size(U): RECURSIVE nat =
     CASES U OF
       v(i): 2
     , dot(i, σ, x): size(σ) + 2
@@ -71,19 +111,6 @@ BEGIN
     f`length < g`length AND (FORALL (x: below[f`length]): f`seq(x) = g`seq(g`length - f`length + x)) IMPLIES
       sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x))) < sum(g`length, LAMBDA (x: below[g`length]): 1 + size(g(x)))
 
-  prekeyword: TYPE =
-    { PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
-
-  U, V, W: VAR syntaxic
-  x, y: VAR nat
-  k: VAR prekeyword
-  i: VAR nat
-  M: VAR (map?)
-
-  length(M): nat = run_map(M)`length
-  apply(M)(x | x < length(M)): syntaxic = run_map(M)`seq(x)
-  CONVERSION+ apply
-
   kind?(U, k): bool = 
     CASES U OF
       type_decl: k = PRETYPE
@@ -96,13 +123,6 @@ BEGIN
     ELSE FALSE
     ENDCASES
   AUTO_REWRITE kind?
-
-  sinterp?(U): bool = itype?(U) OR iconst?(U)
-  sdecl?(U): bool =
-    type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
-    const_var?(U) OR const_def?(U) OR theory_def?(U)
-  scontext?(U): bool =
-    map?(U) AND FORALL (x: below[length(U)]): sdecl?(U)
 
   interpret?(U, i): RECURSIVE bool =
     CASES U OF
@@ -124,13 +144,8 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE compatible?
 
-  rest(M: (scontext?), (x | x < length(M))): (scontext?) =
-    map(run_map(M) ^^ (0, length(M) - x))
-
-  ;++(M, N: (scontext?)): (scontext?) = map(run_map(N) o run_map(M))
-
-  prekind?(M: (scontext?))(V)(k): RECURSIVE bool =
-    CASES V OF
+  prekind?(M: (scontext?))(U)(k): RECURSIVE bool =
+    CASES U OF
       v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
     , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
         i < length(M) AND prekind?(M)(σ)(PREINTERP) AND v?(x) AND
@@ -147,45 +162,47 @@ BEGIN
     , lproj(a): k = PRETERM AND prekind?(M)(a)(k)
     , rproj(a): k = PRETERM AND prekind?(M)(a)(k)
 
-    , type_decl: k = PRECONTEXT
-    , type_var: k = PRECONTEXT
-    , type_def(T): k = PRECONTEXT AND prekind?(M)(T)(PRETYPE)
-    , const_decl(T): k = PRECONTEXT AND prekind?(M)(T)(PRETYPE)
-    , const_var(T): k = PRECONTEXT AND prekind?(M)(T)(PRETYPE)
+    , type_decl: k = PREDECL
+    , type_var: k = PREDECL
+    , type_def(T): k = PREDECL AND prekind?(M)(T)(PRETYPE)
+    , const_decl(T): k = PREDECL AND prekind?(M)(T)(PRETYPE)
+    , const_var(T): k = PREDECL AND prekind?(M)(T)(PRETYPE)
     , const_def(T, a) :
-        k = PRECONTEXT AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(a)(PRETERM)
+        k = PREDECL AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(a)(PRETERM)
     , theory_def(Θ):
-        k = PRECONTEXT AND prekind?(M)(Θ)(PRECONTEXT)
+        k = PREDECL AND prekind?(M)(Θ)(PRECONTEXT)
 
     , nil: k = PREINTERP
     , itype(σ, i, T): k = PREINTERP AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(σ)(PREINTERP)
     , iconst(σ, i, a): k = PREINTERP AND prekind?(M)(a)(PRETERM) AND prekind?(M)(σ)(PREINTERP)
 
     , map(f):
-        (k = PRECONTEXT AND scontext?(V) AND
-	 FORALL (x: below[f`length]): prekind?(M ++ rest(V, x))(f`seq(x))(k))
+        k = PRECONTEXT AND scontext?(U) AND
+	FORALL (x: below[f`length]): prekind?(M ++ rest(U, x))(f`seq(x))(PREDECL)
     ENDCASES
-  MEASURE V BY <<
+  MEASURE U BY <<
   AUTO_REWRITE prekind?
 
-  % precontext?(U): MACRO bool = parsed?(U)(PRECONTEXT)
-  % pretype?(U): MACRO bool = parsed?(U)(PRETYPE)
-  % preterm?(U): MACRO bool = parsed?(U)(PRETERM)
-  % preinterp?(U): MACRO bool = parsed?(U)(PREINTERP)
-  % premap?(U): MACRO bool = parsed?(U)(PRECONTEXT) OR parsed?(U)(PREINTERP)
-  % semantic?(U): MACRO bool = parsed?(U)(PRECONTEXT) OR parsed?(U)(PREINTERP) OR parsed?(U)(PRETYPE) OR parsed?(U)(PRETERM)
+  precontext?(U): MACRO bool = prekind?(empty)(U)(PRECONTEXT)
+  precontext: TYPE = (precontext?)
 
-  % precontext: TYPE = (precontext?)
-  % pretype: TYPE = (pretype?)
-  % preterm: TYPE = (preterm?)
-  % preinterp: TYPE = (preinterp?)
-  % premap: TYPE = (premap?)
-  % semantic: TYPE = (semantic?)
+  Γ: VAR precontext
 
-  % Γ, Δ, Θ: VAR precontext
-  % T, A, B: VAR pretype
-  % a, b, f: VAR preterm
-  % σ, τ: VAR preinterp
-  % S: VAR semantic
-  % M: VAR premap
+  pretheory?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PRECONTEXT)
+  pretype?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PRETYPE)
+  preterm?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PRETERM)
+  preinterp?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PREINTERP)
+  semantic?(Γ)(U): bool =
+    pretheory?(Γ)(U) OR pretype?(Γ)(U) OR preterm?(Γ)(U) OR preinterp?(Γ)(U)
+
+  pretheory(Γ): TYPE = (pretheory?(Γ))
+  pretype(Γ): TYPE = (pretype?(Γ))
+  preterm(Γ): TYPE = (preterm?(Γ))
+  preinterp(Γ): TYPE = (preinterp?(Γ))
+  semantic(Γ): TYPE = (semantic?(Γ))
+
+  precontext_is_map: JUDGEMENT precontext SUBTYPE_OF (map?)
+  pretheory_is_map: JUDGEMENT pretheory(Γ) SUBTYPE_OF (map?)
+  precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF (scontext?)
+  pretheory_is_scontext: JUDGEMENT pretheory(Γ) SUBTYPE_OF (scontext?)
 END language

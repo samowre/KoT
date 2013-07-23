@@ -13,9 +13,6 @@ BEGIN
   M: VAR (map?)
   i, j: VAR nat
 
-  ;∈(x, Γ): MACRO bool =
-    x < length(Γ)
-
   apply(Γ)(x | x ∈ Γ): RECURSIVE precontext =
     IF x = 0 THEN Γ ELSE apply(rest(Γ))(x - 1) ENDIF
   MEASURE length(Γ)
