@@ -34,7 +34,7 @@ BEGIN
   prekeyword: TYPE =
     { PRETYPE, PRETERM, PRECONTEXT, PREINTERP, PREDECL }
 
-  U: VAR syntaxic
+  U, V: VAR syntaxic
   x, y: VAR nat
   i, j, n: VAR nat
   k: VAR prekeyword
@@ -139,13 +139,26 @@ BEGIN
     CASES U OF
       nil: TRUE
     , itype(τ, i, T):
-        i < length(M) AND type_decl?(M(i)) AND NOT interpret?(τ, i)
+        i < length(M) AND type_decl?(M(i)) AND NOT interpret?(τ, i) AND compatible?(M, τ)
     , iconst(τ, i, a):
-        i < length(M) AND const_decl?(M(i)) AND NOT interpret?(τ, i)
+        i < length(M) AND const_decl?(M(i)) AND NOT interpret?(τ, i) AND compatible?(M, τ)
     ELSE FALSE
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE compatible?
+  compatible_interp: THEOREM
+    length(M) = length(N) AND
+    (FORALL (x: below[length(M)]): x /= i => M(x) = N(x)) AND
+    (compatible?(M, itype(U, i, V)) OR compatible?(M, iconst(U, i, V)))
+      IMPLIES compatible?(N, U)
+
+  interp(M, (U | compatible?(M, U))): RECURSIVE (scontext?) =
+    CASES U OF
+      nil: M
+    , itype(τ, i, T): interp(map(run_map(M) WITH [ `seq(i) := type_def(T) ]), τ)
+    , iconst(τ, i, a): interp(map(run_map(M) WITH [ `seq(i) := const_def(type_(M(i)), a) ]), τ)
+    ENDCASES
+  MEASURE U BY <<
 
   prekind?(M: (scontext?))(U)(k): RECURSIVE bool =
     CASES U OF
