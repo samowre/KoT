@@ -23,8 +23,9 @@ BEGIN
     const_def(type_: syntaxic, def: syntaxic): const_def?
     theory_def(def: syntaxic): theory_def?
 
-    itype(i: nat, def: syntaxic): itype?
-    iconst(i: nat, def: syntaxic): iconst?
+    nil: nil?
+    itype(rest: syntaxic, i: nat, def: syntaxic): itype?
+    iconst(rest: syntaxic, i: nat, def: syntaxic): iconst?
 %    itheory(def: syntaxic): itheory?
 
     map(run_map: finseq[syntaxic]): map?
@@ -58,8 +59,9 @@ BEGIN
     , const_def(T, a): size(T) + size(a) + 1
     , theory_def(Θ): size(Θ) + 1
 
-    , itype(i, T): size(T) + 4
-    , iconst(i, a): size(a) + 4
+    , nil: 0
+    , itype(τ, i, T): size(τ) + size(T) + 4
+    , iconst(τ, i, a): size(τ) + size(a) + 4
 
     , map(f): sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x)))
     ENDCASES
@@ -77,8 +79,8 @@ BEGIN
   k: VAR prekeyword
   M: VAR (map?)
 
-  length(M): MACRO nat = run_map(M)`length
-  apply(M)(x | x < length(M)): MACRO syntaxic = run_map(M)`seq(x)
+  length(M): nat = run_map(M)`length
+  apply(M)(x | x < length(M)): syntaxic = run_map(M)`seq(x)
   CONVERSION+ apply
 
   kind?(U, k): bool = 
@@ -95,19 +97,20 @@ BEGIN
   AUTO_REWRITE kind?
 
   sinterp?(U): bool = itype?(U) OR iconst?(U)
+  sdecl?(U): bool =
+    type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
+    const_var?(U) OR const_def?(U) OR theory_def?(U)
+  scontext?(U): bool =
+    map?(U) AND FORALL (x: below[length(U)]): sdecl?(U)
 
   compatible?(M, U): RECURSIVE bool =
     CASES U OF
-      itype(i, T):
-        i < length(M) AND type_decl?(M(i))
-    , iconst(i, a):
-        i < length(M) AND const_decl?(M(i))
-
-    , map(f):
-        FORALL (x: below[f`length]): compatible?(M, f`seq(x))
-	AND FORALL (x, y: below[f`length]):
-	  sinterp?(f`seq(x)) AND sinterp?(f`seq(y)) AND
-	    (i(f`seq(x)) = i(f`seq(y)) IFF x = y)
+      nil: TRUE
+    , itype(τ, i, T):
+        i < length(M) AND type_decl?(M(i)) %AND NOT interpret?(τ, i)
+    , iconst(τ, i, a):
+        i < length(M) AND const_decl?(M(i)) %AND NOT interpret?(τ, i)
+    ELSE FALSE
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE compatible?
@@ -117,12 +120,12 @@ BEGIN
 
   ;++(M, N: (map?)): (map?) = map(run_map(N) o run_map(M))
 
-  prekind?(M: (map?))(V)(k): RECURSIVE bool =
+  prekind?(M: (scontext?))(V)(k): RECURSIVE bool =
     CASES V OF
       v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
     , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
         i < length(M) AND prekind?(M)(σ)(PREINTERP) AND v?(x) AND
-  	compatible?(def(M(i)), σ) AND
+	compatible?(def(M(i)), σ) AND
   	kind?(M(i), PRECONTEXT) AND prekind?(def(M(i)))(x)(k)
 
     , fun(A, B): k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M)(B)(PRETYPE)
@@ -145,11 +148,13 @@ BEGIN
     , theory_def(Θ):
         k = PRECONTEXT AND prekind?(M)(Θ)(PRECONTEXT)
 
-    , itype(i, T): k = PREINTERP AND prekind?(M)(T)(PRETYPE)
-    , iconst(i, a): k = PREINTERP AND prekind?(M)(a)(PRETERM)
+    , nil: k = PREINTERP
+    , itype(σ, i, T): k = PREINTERP AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(σ)(PREINTERP)
+    , iconst(σ, i, a): k = PREINTERP AND prekind?(M)(a)(PRETERM) AND prekind?(M)(σ)(PREINTERP)
 
     , map(f):
-        (k = PRECONTEXT OR k = PREINTERP) AND FORALL (x: below[f`length]): prekind?(M ++ rest(V, x))(f`seq(x))(k)
+        (k = PRECONTEXT AND scontext?(V) AND
+	 FORALL (x: below[f`length]): prekind?(M ++ rest(V, x))(f`seq(x))(k))
     ENDCASES
   MEASURE V BY <<
   AUTO_REWRITE prekind?
@@ -174,17 +179,4 @@ BEGIN
   % σ, τ: VAR preinterp
   % S: VAR semantic
   % M: VAR premap
-
-  % type_decl: MACRO precontext = type_decl(empty)
-  % type_var: MACRO precontext = type_var(empty)
-  % type_def(U): MACRO syntaxic = type_def(empty, U)
-  % const_decl(U): MACRO syntaxic = const_decl(empty, U)
-  % const_var(U): MACRO syntaxic = const_var(empty, U)
-  % const_def(U, V): MACRO syntaxic = const_def(empty, U, V)
-  % theory_def(U): MACRO syntaxic = theory_def(empty, U)
-  % type_def_is_precontext: JUDGEMENT type_def(T) HAS_TYPE precontext
-  % const_decl_is_precontext: JUDGEMENT const_decl(T) HAS_TYPE precontext
-  % const_var_is_precontext: JUDGEMENT const_var(T) HAS_TYPE precontext
-  % const_def_is_precontext: JUDGEMENT const_def(T, a) HAS_TYPE precontext
-  % theory_def_is_precontext: JUDGEMENT theory_def(Θ) HAS_TYPE precontext
 END language
