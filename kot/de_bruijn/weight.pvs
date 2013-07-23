@@ -1,0 +1,61 @@
+weight: THEORY
+BEGIN
+  IMPORTING map
+
+  Γ: VAR precontext
+  S: VAR semantic
+  x: VAR nat
+
+  kind(Γ | 0 ∈ Γ): prekeyword = 
+    CASES Γ OF
+      type_decl(Δ): PRETYPE
+    , type_var(Δ): PRETYPE
+    , type_def(Δ, T): PRETYPE
+    , const_decl(Δ, T): PRETERM
+    , const_var(Δ, T): PRETERM
+    , const_def(Δ, T, a): PRETERM
+    , theory_def(Δ, Θ): PRECONTEXT
+    ENDCASES
+  AUTO_REWRITE kind
+
+  weight(Γ, S): RECURSIVE nat =
+    CASES S OF
+      v(i):
+        IF i ∈ Γ
+	  THEN 1 + IF (type_def?(Γ(i)) OR const_def?(Γ(i))) THEN weight(rest(Γ(i)), def(Γ(i))) ELSE 0 ENDIF
+	  ELSE 0
+	ENDIF
+    , dot(i, σ, x):
+        IF i ∈ Γ AND theory_def?(Γ(i)) AND compatible?(def(Γ(i)), σ) AND i(x) ∈ σ
+	  THEN max(weight(Γ, σ), weight(Γ ++ interp(i, σ), x)) + 1
+	  ELSE 0 ENDIF
+
+    , fun(A, B): max(weight(Γ, A), weight(Γ ++ const_var(A), B))
+    , prod(A, B): max(weight(Γ, A), weight(Γ ++ const_var(A), B))
+    , subtype(T, a): max(weight(Γ, T), weight(Γ ++ const_var(T), a))
+
+    , app(f, a): max(weight(Γ, f), weight(Γ, a))
+    , lam(T, a): max(weight(Γ, T), weight(Γ ++ const_var(T), a))
+    , pair(a, b): max(weight(Γ, a), weight(Γ, b))
+    , lproj(a): weight(Γ, a)
+    , rproj(a): weight(Γ, a)
+
+    , empty: 0
+    , type_decl(Δ): weight(Γ, Δ)
+    , type_var(Δ): weight(Γ, Δ)
+    , type_def(Δ, T): max(weight(Γ, Δ), weight(Γ ++ Δ, T))
+    , const_decl(Δ, T): max(weight(Γ, Δ), weight(Γ ++ Δ, T))
+    , const_var(Δ, T): max(weight(Γ, Δ), weight(Γ ++ Δ, T))
+    , const_def(Δ, T, a): max(weight(Γ, Δ), max(weight(Γ ++ Δ, T), weight(Γ ++ Δ, a)))
+    , theory_def(Δ, Θ): max(weight(Γ, Δ), weight(Γ ++ Δ, Θ))
+
+    , nil: 0
+    , ikeep(σ): weight(Γ, σ)
+    , itype(σ, T): max(weight(Γ, σ), weight(Γ, T))
+    , iconst(σ, a): max(weight(Γ, σ), weight(Γ, a))
+    ENDCASES
+  MEASURE size(Γ) + size(S)
+
+  weight_definition: THEOREM x ∈ Γ AND (type_def?(Γ(x)) OR const_def?(Γ(x))) IMPLIES
+    weight(rest(Γ(x)), def(Γ(x))) < weight(Γ, v(x))
+END weight

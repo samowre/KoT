@@ -33,20 +33,20 @@ BEGIN
 
   size(U: syntaxic): RECURSIVE nat =
     CASES U OF
-      v(i): 1
-    , dot(i, σ, x): size(σ)
+      v(i): 2
+    , dot(i, σ, x): size(σ) + 2
 
-    , fun(A, B): size(A) + size(B) + 1
-    , prod(A, B): size(A) + size(B) + 1
-    , subtype(T, a): size(T) + size(a) + 1
+    , fun(A, B): size(A) + size(B) + 2
+    , prod(A, B): size(A) + size(B) + 2
+    , subtype(T, a): size(T) + size(a) + 2
 
-    , app(f, a): size(f) + size(a) + 1
-    , lam(T, a): size(T) + size(a) + 1
-    , pair(a, b): size(a) + size(b) + 1
-    , lproj(a): size(a) + 1
-    , rproj(a): size(a) + 1
+    , app(f, a): size(f) + size(a) + 2
+    , lam(T, a): size(T) + size(a) + 2
+    , pair(a, b): size(a) + size(b) + 2
+    , lproj(a): size(a) + 2
+    , rproj(a): size(a) + 2
 
-    , empty: 1
+    , empty: 0
     , type_decl(Γ): size(Γ) + 1
     , type_var(Γ): size(Γ) + 1
     , type_def(Γ, T): size(Γ) + size(T) + 1
@@ -56,11 +56,12 @@ BEGIN
     , theory_def(Γ, Θ): size(Γ) + size(Θ) + 1
 
     , nil: 1
-    , ikeep(σ): size(σ) + 1
-    , itype(σ, T): size(σ) + size(T) + 1
-    , iconst(σ, a): size(σ) + size(a) + 1
+    , ikeep(σ): size(σ) + 2
+    , itype(σ, T): size(σ) + size(T) + 2
+    , iconst(σ, a): size(σ) + size(a) + 2
     ENDCASES
   MEASURE U BY <<
+  AUTO_REWRITE size
 
   prekeyword: TYPE =
     { PRETYPE, PRETERM, PRECONTEXT, PREINTERP }
@@ -72,7 +73,7 @@ BEGIN
   parsed?(U)(k): RECURSIVE bool =
     CASES U OF
       v(i): k = PRETYPE OR k = PRETERM
-    , dot(i, σ, x):
+    , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
         parsed?(σ)(PREINTERP) AND v?(x)
 
     , fun(A, B): k = PRETYPE AND parsed?(A)(PRETYPE) AND parsed?(B)(PRETYPE)
@@ -81,7 +82,7 @@ BEGIN
 
     , app(f, a): k = PRETERM AND parsed?(f)(PRETERM) AND parsed?(a)(PRETERM)
     , lam(T, a): k = PRETERM AND parsed?(T)(PRETYPE) AND parsed?(a)(PRETERM)
-    , pair(a, b): k = PRETERM AND parsed?(a)(PRETERM) AND parsed?(a)(PRETERM)
+    , pair(a, b): k = PRETERM AND parsed?(a)(PRETERM) AND parsed?(b)(PRETERM)
     , lproj(a): k = PRETERM AND parsed?(a)(k)
     , rproj(a): k = PRETERM AND parsed?(a)(k)
 
@@ -123,152 +124,16 @@ BEGIN
   S: VAR semantic
   M: VAR premap
 
-  type_decl: precontext = type_decl(empty)
-  type_var: precontext = type_var(empty)
-  type_def(T): precontext = type_def(empty, T)
-  const_decl(T): precontext = const_decl(empty, T)
-  const_var(T): precontext = const_var(empty, T)
-  const_def(T, a): precontext = const_def(empty, T, a)
-  theory_def(Θ): precontext = theory_def(empty, Θ)
-
-  length(M): RECURSIVE nat =
-    CASES M OF
-      type_decl(Δ): 1 + length(Δ) 
-    , type_var(Δ): 1 + length(Δ)
-    , type_def(Δ, T): 1 + length(Δ)
-    , const_decl(Δ, T): 1 + length(Δ)
-    , const_var(Δ, T): 1 + length(Δ)
-    , const_def(Δ, T, a): 1 + length(Δ)
-    , theory_def(Δ, Θ): 1 + length(Δ)
-
-    , ikeep(σ): 1 + length(σ)
-    , itype(σ, T): 1 + length(σ)
-    , iconst(σ, a): 1 + length(σ)
-    ELSE 0
-    ENDCASES
-  MEASURE size(M)
-  AUTO_REWRITE length
-
-  ;∈(x, M): MACRO bool =
-    x < length(M)
-
-  apply(Γ)(x | length(Γ) >= x): RECURSIVE precontext =
-    IF x = 0 THEN Γ ELSE apply(rest(Γ))(x - 1) ENDIF
-  MEASURE length(Γ)
-  CONVERSION apply
-  AUTO_REWRITE+ apply
-  rest_as_apply: THEOREM length(Γ) > 0 IMPLIES
-    rest(Γ) = apply(Γ)(1)
-  length_apply: THEOREM x ∈ Γ IMPLIES
-    length(apply(Γ)(x)) = length(Γ) - x
-  apply_apply: THEOREM length(Γ) > x + y IMPLIEs
-    apply(apply(Γ)(x))(y) = apply(Γ)(x + y)
-  rest_apply: THEOREM length(Γ) > x IMPLIES
-    rest(apply(Γ)(x)) = apply(Γ)(x + 1)
-  apply_length: THEOREM
-    apply(Γ)(length(Γ)) = empty
-
-  ;++(Γ, Δ): RECURSIVE precontext =
-    CASES Δ OF
-      empty: Γ
-    , type_decl(Δ): type_decl(Γ ++ Δ)
-    , type_var(Δ): type_var(Γ ++ Δ)
-    , type_def(Δ, T): type_def(Γ ++ Δ, T)
-    , const_decl(Δ, T): const_decl(Γ ++ Δ, T)
-    , const_var(Δ, T): const_var(Γ ++ Δ, T)
-    , const_def(Δ, T, a): const_def(Γ ++ Δ, T, a)
-    , theory_def(Δ, Θ): theory_def(Γ ++ Δ, Θ)
-    ENDCASES
-  MEASURE length(Δ)
-
-  concat_assoc: THEOREM
-    Γ ++ (Δ ++ Θ) = (Γ ++ Δ) ++ Θ
-  length_concat: THEOREM
-    length(Γ ++ Δ) = length(Γ) + length(Δ)
-  concat_empty: THEOREM
-    empty ++ Γ = Γ
-  apply_concat: THEOREM x ∈ Γ ++ Δ IMPLIES
-    (Γ ++ Δ)(x) = IF x ∈ Δ THEN Γ ++ Δ(x) ELSE Γ(x) ENDIF
-  AUTO_REWRITE+ ++, concat_assoc, length_concat, concat_empty, apply_concat
-
-  kind(Γ | 0 ∈ Γ): prekeyword = 
-    CASES Γ OF
-      type_decl(Δ): PRETYPE
-    , type_var(Δ): PRETYPE
-    , type_def(Δ, T): PRETYPE
-    , const_decl(Δ, T): PRETERM
-    , const_var(Δ, T): PRETERM
-    , const_def(Δ, T, a): PRETERM
-    , theory_def(Δ, Θ): PRECONTEXT
-    ENDCASES
-  AUTO_REWRITE kind
-
-  compatible?(Γ, σ): RECURSIVE bool =
-    CASES σ OF
-      nil: empty?(Γ)
-    , ikeep(τ): NOT empty?(Γ) AND compatible?(rest(Γ), τ)
-    , itype(τ, T): type_decl?(Γ) AND compatible?(rest(Γ), τ)
-    , iconst(τ, a): const_decl?(Γ) AND compatible?(rest(Γ), τ)
-    ENDCASES
-  MEASURE length(σ)
-  AUTO_REWRITE compatible?
-  compatible_length: THEOREM
-    compatible?(Γ, σ) IMPLIES length(Γ) = length(σ)
-
-  interp(Γ, (σ | compatible?(Γ, σ))): RECURSIVE precontext =
-    CASES σ OF
-      nil: empty
-    , ikeep(τ): Γ WITH [ rest := interp(rest(Γ), τ) ]
-    , itype(τ, T): type_def(interp(rest(Γ), τ), T)
-    , iconst(τ, a): const_def(interp(rest(Γ), τ), type_(Γ), a)
-    ENDCASES
-  MEASURE length(σ)
-  length_interp: THEOREM compatible?(Γ, σ) IMPLIES
-    length(interp(Γ, σ)) = length(σ)
-  AUTO_REWRITE length_interp
-
-  weight(Γ, S): RECURSIVE nat =
-    CASES S OF
-      v(i):
-        IF i ∈ Γ
-	  THEN 1 + (IF type_def?(Γ(i)) OR const_def?(Γ(i)) OR theory_def?(Γ(i)) THEN weight(rest(Γ(i)), def(Γ(i))) ELSE 0 ENDIF)
-	  ELSE 0
-	ENDIF
-    , dot(i, σ, x):
-        IF i ∈ Γ AND theory_def?(Γ(i)) AND compatible?(def(Γ(i)), σ)
-	  THEN weight(Γ, interp(def(Γ(i)), σ)(i(x)))
-	  ELSE 0 ENDIF
-
-    , fun(A, B): max(weight(n, Γ, A), weight(n + 1, Γ ++ const_var(A), B))
-    , prod(A, B): max(weight(n, Γ, A), weight(n + 1, Γ ++ const_var(A), B))
-    , subtype(T, a): max(weight(n, Γ, T), weight(n + 1, Γ ++ const_var(T), a))
-
-    , app(f, a): max(weight(n, Γ, f), weight(n, Γ, a))
-    , lam(T, a): max(weight(n, Γ, T), weight(n + 1, Γ ++ const_var(T), a))
-    , pair(a, b): max(weight(n, Γ, a), weight(n, Γ, b))
-    , lproj(a): weight(n, Γ, a)
-    , rproj(a): weight(n, Γ, a)
-
-    , empty: 0
-    , type_decl(Δ): weight(n, Γ, Δ)
-    , type_var(Δ): weight(n, Γ, Δ)
-    , type_def(Δ, T): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, T))
-    , const_decl(Δ, T): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, T))
-    , const_var(Δ, T): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, T))
-    , const_def(Δ, T, a): max(weight(n, Γ, Δ), max(weight(n, Γ ++ Δ, T), weight(n, Γ ++ Δ, a)))
-    , theory_def(Δ, Θ): max(weight(n, Γ, Δ), weight(n, Γ ++ Δ, Θ))
-
-    , nil: 0
-    , ikeep(σ): weight(n, Γ, σ)
-    , itype(σ, T): max(weight(n, Γ, σ), weight(n, Γ, T))
-    , iconst(σ, a): max(weight(n, Γ, σ), weight(n, Γ, a))
-    ENDCASES
-  MEASURE size(S)
-  n: VAR nat
-  weight_definition: THEOREM x ∈ Γ AND x >= n IMPLIES
-      weight(n + length(Δ), rest(Γ(x)) ++ Δ, S) < weight(n, Γ, v(x))
-
-  % n: VAR nat
-
-  % Δ: VAR syntaxic
+  type_decl: MACRO precontext = type_decl(empty)
+  type_var: MACRO precontext = type_var(empty)
+  type_def(U): MACRO syntaxic = type_def(empty, U)
+  const_decl(U): MACRO syntaxic = const_decl(empty, U)
+  const_var(U): MACRO syntaxic = const_var(empty, U)
+  const_def(U, V): MACRO syntaxic = const_def(empty, U, V)
+  theory_def(U): MACRO syntaxic = theory_def(empty, U)
+  type_def_is_precontext: JUDGEMENT type_def(T) HAS_TYPE precontext
+  const_decl_is_precontext: JUDGEMENT const_decl(T) HAS_TYPE precontext
+  const_var_is_precontext: JUDGEMENT const_var(T) HAS_TYPE precontext
+  const_def_is_precontext: JUDGEMENT const_def(T, a) HAS_TYPE precontext
+  theory_def_is_precontext: JUDGEMENT theory_def(Θ) HAS_TYPE precontext
 END language
