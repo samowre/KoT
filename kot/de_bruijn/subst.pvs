@@ -1,0 +1,164 @@
+subst: THEORY
+BEGIN
+  IMPORTING language
+
+
+  T, A, B: VAR pretype
+  i, j, n, x: VAR nat
+  a, t: VAR preterm
+  σ: VAR preinterp
+  Γ: VAR precontext
+  S, R: VAR semantic
+  nb: VAR [nat, nat]
+
+  
+  size(T): RECURSIVE nat =
+    CASES T OF
+      fun(A, B): size(A) + size(B) + 1,
+      prod(A, B): size(A) + size(B) + 1,
+      subtype(T, a): size(T),
+      v(s): 1, 
+      dot(m, σ, s): 1
+    ENDCASES
+  MEASURE T BY <<
+  AUTO_REWRITE+ size
+
+  
+  % Shift: classical shift operator for De Bruijn indices
+  ;↑(S, nb): RECURSIVE
+    { R | (pretype?(S) IMPLIES pretype?(R)) AND
+      	  (preterm?(S) IMPLIES preterm?(R)) AND
+	  (preinterp?(S) IMPLIES preinterp?(R)) AND
+	  (precontext?(S) IMPLIES precontext?(R)) %AND
+	  %w(R) = w(S) 
+	  } =
+    CASES S OF
+      % Names
+      v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
+    , dot(m, σ, s): IF m < nb`2 THEN dot(m, σ ↑ nb, s) ELSE dot(m + nb`1, σ ↑ nb, s) ENDIF
+
+      % Types
+    , subtype(T, a): subtype(T ↑ nb, a ↑ (nb`1, nb`2 + 1))
+    , fun(A, B): fun(A ↑ nb, B ↑ (nb`1, nb`2 + 1))
+    , prod(A, B): prod(A ↑ nb, B ↑ (nb`1, nb`2 + 1))
+
+      % Terms
+
+    , app(f, a): app(f ↑ nb, a ↑ nb)
+    , lam(T, a): lam(T ↑ nb, a ↑ (nb`1, nb`2 + 1))
+    , pair(a, b): pair(a ↑ nb, b ↑ nb)
+    , lproj(a): lproj(a ↑ nb)
+    , rproj(a): rproj(a ↑ nb)
+
+      % Contexts
+    , empty: empty
+    , type_decl(Γ): type_decl(Γ ↑ nb)
+    , type_var(Γ): type_var(Γ ↑ nb)
+    , type_def(Γ, T): type_def(Γ ↑ nb, T ↑ (nb`1, nb`2 + length(Γ)))
+    , const_decl(Γ, T): const_decl(Γ ↑ nb, T ↑ (nb`1, nb`2 + length(Γ)))
+    , const_var(Γ, T): const_var(Γ ↑ nb, T ↑ (nb`1, nb`2 + length(Γ)))
+    , const_def(Γ, T, a): const_def(Γ ↑ nb, T ↑ (nb`1, nb`2 + length(Γ)), a ↑ (nb`1, nb`2 + length(Γ)))
+    , theory_def(Γ, Θ): theory_def(Γ ↑ nb, Θ ↑ (nb`1, nb`2 + length(Γ)))
+
+      % Interpretations
+    , nil: nil
+    , ikeep(σ): ikeep(σ ↑ nb)
+    , itype(σ, T): itype(σ ↑ nb, T ↑ (nb`1, nb`2 + length(σ)))
+    , iconst(σ, a): iconst(σ ↑ nb, a ↑ (nb`1, nb`2 + length(σ)))
+    ENDCASES
+  MEASURE S BY <<
+  AUTO_REWRITE+ ↑
+
+  % Judgements
+  shift_pretype: THEOREM  
+   pretype?(T ↑ nb)
+  shift_preterm: THEOREM  
+    preterm?(a ↑ nb)
+  shift_interp: THEOREM  
+    preinterp?(σ ↑ nb)
+  shift_precontext: THEOREM  
+    precontext?(Γ ↑ nb)
+  shift_size: JUDGEMENT
+    ↑(A, (nb: [nat, nat])) HAS_TYPE { B | size(B) = size(A) }
+  AUTO_REWRITE shift_pretype, shift_preterm, shift_interp, shift_precontext, shift_size
+
+
+  % Handy rewrite
+  shift_zero: THEOREM
+    S ↑ (0, n) = S
+  AUTO_REWRITE+ shift_zero
+
+  ;↑(S, (n: nat)): MACRO syntaxic =
+    (S ↑ (n, 0))
+  length_shift: THEOREM
+    length(Γ ↑ nb) = length(Γ)
+  shift_plus: THEOREM
+    (S ↑ (i, n)) ↑ (j, n) = S ↑ (i + j, n)
+  AUTO_REWRITE+ shift_plus
+
+  % This is a "true" substitution - this really removes the bound variable.
+  % Outer variables see their index decreased.
+  % Definition 2.15, 4.3, modified for the De Bruijn index
+  subst(S, x, t): RECURSIVE 
+    { R | (pretype?(S) IMPLIES pretype?(R)) AND
+      	  (preterm?(S) IMPLIES preterm?(R)) AND
+	  (preinterp?(S) IMPLIES preinterp?(R)) AND
+	  (precontext?(S) IMPLIES precontext?(R)) } =
+    CASES S OF
+      % n ↦ t
+      % x ↦ x where the λ-binder for n has been removed
+      v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF
+      % /!\ Case x = m not handled
+    , dot(m, σ, s): dot(m, subst(σ, x, t), s)
+
+      % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
+      %                        λ——————————————————————\___________/
+    , subtype(T,  a): subtype(subst(T, x,  t), subst(a, x + 1, t ↑ 1))
+      % [i: A → B] ↦ [ i:   A[ x ← t] →      B[   x  ←   t  ]]
+      %                λ——————————————————————\_____________/
+    , fun(  A,  B):  fun(subst(A, x,  t), subst(B, x + 1, t ↑ 1))
+      % [i: A, B] ↦ [i:    A[ x ← t],       B[   x  ←   t  ]]
+      %              λ———————————————————————\_____________/
+    , prod( A, B):  prod(subst(A, x,  t), subst(B, x + 1, t ↑ 1))
+
+      %   f  a ↦           f[ x ← t]        a[ x ← t]
+    , app(f, a): app(subst(f, x,  t), subst(a, x,  t))
+      % λ(y: T): a ↦ λ(y:      T[ x ← t]):      a[   x  ←   t  ]
+      %                λ————————————————————————–\_____________/
+    , lam(   T,  a): lam(subst(T, x,  t), subst(a, x + 1, t ↑ 1))
+      %   (a, b) ↦ (       a[ x ← t],       b[ x ← t] )
+    , pair(a, b):  pair(subst(a, x,  t), subst(b, x,  t))
+      %  p₁ a ↦ p₁          a[ x ← t]
+    , lproj(a): lproj(subst(a, x,  t))
+      %  p₂ a ↦ p₂          a[ x ← t]
+    , rproj(a): rproj(subst(a, x,  t))
+
+      % Decls
+    , empty: empty
+    , type_decl(Γ): type_decl(subst(Γ, x, t))
+    , type_var(Γ): type_var(subst(Γ, x, t))
+    , type_def(Γ, T): type_def(subst(Γ, x, t), subst(T, x + length(Γ), t ↑ length(Γ)))
+    , const_decl(Γ, T): const_decl(subst(Γ, x, t), subst(T, x + length(Γ), t ↑ length(Γ)))
+    , const_var(Γ, T): const_var(subst(Γ, x, t), subst(T, x + length(Γ), t ↑ length(Γ)))
+    , const_def(Γ, T, a): const_def(subst(Γ, x, t), subst(T, x + length(Γ), t ↑ length(Γ)), subst(a, x + length(Γ), t ↑ length(Γ)))
+    , theory_def(Γ, Θ): theory_def(subst(Γ, x, t), subst(Θ, x + length(Γ), t ↑ length(Γ)))
+
+      % Interpretations
+    , nil: nil
+    , ikeep(σ): ikeep(subst(σ, x, t))
+    , itype(σ, T): itype(subst(σ, x, t), subst(T, x + length(σ), t ↑ length(σ)))
+    , iconst(σ, a): iconst(subst(σ, x, t), subst(a, x + length(σ), t ↑ length(σ)))
+    ENDCASES
+  MEASURE S BY <<
+  AUTO_REWRITE subst
+
+  % Judgements
+  subst_pretype: THEOREM pretype?(subst(T, x, t))
+  subst_preterm: THEOREM preterm?(subst(a, x, t))
+  subst_interp: THEOREM preinterp?(subst(σ, x, t))
+  subst_precontext: THEOREM precontext?(subst(Γ, x, t))
+  subst_size: JUDGEMENT
+    subst(T, (x: nat), (t: preterm)) HAS_TYPE { A: pretype | size(A) = size(T) }
+  AUTO_REWRITE subst_pretype, subst_preterm, subst_interp, subst_precontext, subst_size
+
+END subst
