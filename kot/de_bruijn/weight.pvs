@@ -1,27 +1,51 @@
 weight: THEORY
 BEGIN
   IMPORTING language
+  IMPORTING ordinals_props
 
   M: VAR (scontext?)
+  U: VAR syntaxic
   x: VAR nat
+% weight(Γ, η(Γ, m, σ)(def(def(Γ(m)))(x))
+%     = weight(Γ ++ rest(interp(def(Γ(m)) ↑ (m + 1), σ), x), def(Γ(m))(x)
 
-  max(len: nat, f: [below[len] -> nat]): RECURSIVE
-    { x | len = 0 AND x = 0 OR EXISTS (i: below[len]): x = f(i) } =
-    IF len = 0 THEN 0
+  
+% Contraintes:
+%  - weight(rest(Γ, i), def(Γ(i))) < weight(Γ, v(i))
+%  - weight(Γ, σ(x)) < weight(Γ, dot(m, σ, x))
+%  - weight(Γ, η(Γ, m, σ)(def(def(Γ(m))(x))) < weight(Γ, dot(m, σ, x))
+%       ~= weight(Γ ++ interp(def(Γ(m)), σ)
+%
+%
+%
+%
+%
+%
+
+  ;*(x: ordinal, n: nat): ordinal =
+    CASES x OF
+      zero: zero
+    , add(i, u, v): IF n = 0 THEN zero ELSE add(i * n, u, v) ENDIF
+    ENDCASES
+
+  max(len: nat, f: [below[len] -> ordinal]): RECURSIVE
+    { x: ordinal | len = 0 AND x = zero OR EXISTS (i: below[len]): x = f(i) } =
+    IF len = 0 THEN zero
     ELSE max(f(len - 1), max(len - 1, LAMBDA (x: below[len - 1]): f(x))) ENDIF
   MEASURE len
 
-  weight(M, (S: semantic(M))): RECURSIVE nat =
+  weight(M, (S: semantic(M))): RECURSIVE ordinal =
     CASES S OF
-      v(i):
-        IF i ∈ M
-	  THEN 1 + size(M(i))
-	  ELSE 0
+      v(i): % ω ^ (length(M) - i)
+        IF i ∈ M AND (const_def?(M(i)) OR type_def?(M(i)))
+	  THEN
+	    add(length(M) - i, add(1, zero, zero), zero)
+	  ELSE zero
 	ENDIF
-    , dot(i, σ, x):
-        IF i ∈ M AND theory_def?(M(i)) AND compatible?(def(M(i)), σ) AND i(x) ∈ σ
-	  THEN max(weight(M, σ), weight(M ++ interp(def(M(i)), σ), x)) + 1
-	  ELSE 0 ENDIF
+    , dot(i, σ, x): % weight(M, σ) * (length(M) - i) + length(def(M(i)) - i(x))
+        IF i ∈ M AND theory_def?(M(i)) AND scontext?(def(M(i))) AND compatible?(def(M(i)), σ)
+	  THEN weight(M, σ) * (length(M) - i) + (run_map(def(M(i)))`length - i(x))
+	  ELSE zero ENDIF
 
     , fun(A, B): max(weight(M, A), weight(M ++ k(const_var(A)), B))
     , prod(A, B): max(weight(M, A), weight(M ++ k(const_var(A)), B))
@@ -33,15 +57,15 @@ BEGIN
     , lproj(a): weight(M, a)
     , rproj(a): weight(M, a)
 
-    , type_decl: 0
-    , type_var: 0
+    , type_decl: zero
+    , type_var: zero
     , type_def(T): weight(M, T)
     , const_decl(T): weight(M, T)
     , const_var(T): weight(M, T)
     , const_def(T, a): max(weight(M, T), weight(M, a))
     , theory_def(Θ): weight(M, Θ)
 
-    , nil: 0
+    , nil: zero
     , itype(σ, i, T): max(weight(M, σ), weight(M, T))
     , iconst(σ, i, a): max(weight(M, σ), weight(M, a))
 
@@ -49,6 +73,16 @@ BEGIN
     ENDCASES
   MEASURE size(S)
 
-  weight_definition: THEOREM x ∈ M AND (type_def?(M(x)) OR const_def?(M(x))) IMPLIES
-    weight(rest(M, x), def(M(x))) < weight(M, v(x))
+  Γ: VAR precontext
+
+  weight_length: THEOREM FORALL (Δ: pretheory(Γ)):
+    semantic?(Γ ++ Δ)(U) AND (FORALL (x: below[run_map(Δ)`length]): const_var?(Δ(x)) OR type_var?(Δ(x))) AND NOT map?(U) IMPLIES
+      weight(Γ ++ Δ, U) <= IF length(Γ) > 0 THEN add(length(Γ), 1, zero) ELSE zero ENDIF
+
+  % precontext?(Γ) => precontext(rest(Γ, x))
+  % precontext?(Γ) => pretype?(rest(Γ, x), type_(Γ(x)))
+  % precontext?(Γ) => pre{stuff}?(rest(Γ, x), def(Γ(x)))
+
+  weight_definition: THEOREM x ∈ Γ AND (type_def?(Γ(x)) OR const_def?(Γ(x))) IMPLIES
+    weight(rest(Γ, x), Γ(x)) < weight(Γ, v(x))
 END weight

@@ -1,0 +1,209 @@
+ordinals_props: THEORY
+BEGIN
+  IMPORTING ordstruct, ordinals
+  nzordinal: TYPE = { x: ordinal | x /= zero }
+  i, j: VAR posnat
+  n, p: VAR nat
+  x, y, z, t, w: VAR ordinal
+  a, b, c: VAR ordinal
+  n0x, n0y: VAR { z | nonzero?(z) }
+
+  % 0 = 0 and if n > 0, n = ω^0 * n + 0
+  ordinal_of_nat(n: nat): ordinal =
+    IF n = 0 THEN zero ELSE add(n, zero, zero) ENDIF
+  CONVERSION+ ordinal_of_nat
+  ordinal_of_nat_lt: THEOREM
+    n < p IFF ordinal_of_nat(n) < ordinal_of_nat(p)
+  ordinal_of_nat_le: THEOREM
+    n <= p IFF ordinal_of_nat(n) <= ordinal_of_nat(p)
+    
+  % ω = ω^1 * 1 + 0
+  omega: nzordinal = add(1, 1, zero)
+
+  lt_exp: THEOREM exp(n0x) < n0x
+  lt_rest: THEOREM rest(n0x) < n0x
+  exp_lt: THEOREM exp(n0x) < exp(n0y) IMPLIES n0x < n0y
+  
+  ;max(x, y): { z | z >= x AND z >= y } =
+    IF x < y THEN y ELSE x ENDIF
+  ;min(x, y): { z | z <= x AND z <= y } =
+    IF x < y THEN x ELSE y ENDIF
+
+  nzordinal_max: JUDGEMENT
+    max(x, y: nzordinal) HAS_TYPE { z: nzordinal | z >= x AND z >= y }
+  nzordinal_min: JUDGEMENT
+    min(x, y: nzordinal) HAS_TYPE { z: nzordinal | z <= x AND z <= y }
+
+  % Facts about maximum and minimum
+  min_le : LEMMA min(a,b) <= c IFF (a <= c OR b <= c)
+  min_lt : LEMMA min(a,b) < c IFF (a < c OR b < c)
+  min_ge : LEMMA min(a,b) >= c IFF (a >= c AND b >= c)
+  min_gt : LEMMA min(a,b) > c IFF (a > c AND b > c)
+  le_min : LEMMA a <= min(b,c) IFF (a <= b AND a <= c)
+  lt_min : LEMMA a < min(b,c) IFF (a < b AND a < c)
+  ge_min : LEMMA a >= min(b,c) IFF (a >= b OR a >= c)
+  gt_min : LEMMA a > min(b,c) IFF (a > b OR a > c)
+
+  max_le : LEMMA max(a,b) <= c IFF (a <= c AND b <= c)
+  max_lt : LEMMA max(a,b) < c IFF (a < c AND b < c)
+  max_ge : LEMMA max(a,b) >= c IFF (a >= c OR b >= c)
+  max_gt : LEMMA max(a,b) > c IFF (a > c OR b > c)
+  le_max : LEMMA a <= max(b,c) IFF (a <= b OR a <= c)
+  lt_max : LEMMA a < max(b,c) IFF (a < b OR a < c)
+  ge_max : LEMMA a >= max(b,c) IFF (a >= b AND a >= c)
+  gt_max : LEMMA a > max(b,c) IFF (a > b AND a > c)
+
+  % Order lemmas
+  strict_lt: LEMMA strict_total_order?[ordinal](<)
+  total_le: LEMMA total_order?[ordinal](<=)
+  strict_gt: LEMMA strict_total_order?[ordinal](>)
+  total_ge: LEMMA total_order?[ordinal](>=)
+
+  % Direct use of transitivity
+  lt_cut: LEMMA x < y AND y < z IMPLIES x < z
+  le_cut: LEMMA x <= y AND y <= z IMPLIES x <= z
+  gt_cut: LEMMA x > y AND y > z IMPLIES x > z
+  ge_cut: LEMMA x >= y AND y >= z IMPLIES x >= z
+
+  ;+(x, y): RECURSIVE
+    { z | (z >= x) AND (z >= y) AND
+          (zero?(x) IMPLIES z = y) AND (zero?(y) IMPLIES z = x) AND
+          (nonzero?(x) AND nonzero?(y) IMPLIES
+	    exp(z) = max(exp(x), exp(y))) } =
+    CASES x OF
+      % 0 + y = y
+      zero: y,
+      add(i, u, v):
+        CASES y OF
+	  % x + 0 = x
+	  zero: add(i, u, v),
+	  add(j, z, w):
+	    % (ω^u * i + v) + (ω^z * j + w) = ω^z * j + w if u < z
+	    % every ordinal in the rhs has an exp() < z
+	    IF u < z THEN
+	      add(j, z, w)
+	    % (ω^u * i + v) + (ω^u * j + w) = ω^u * (i+j) + w
+	    % every ordinal in v has an exp() < u = z
+	    ELSIF u = z THEN
+	      add(i + j, u, w)
+	    % (ω^u * i + v) + (ω^z * j + w) = ω^u * i + (v + (ω^z * j + w)) if u > z
+	    ELSE % u > z
+	      add(i, u, v + add(j, z, w))
+	    ENDIF
+	ENDCASES
+    ENDCASES
+  MEASURE size(x)
+  plus_zero: THEOREM
+    zero + x = x
+  plus__zero: THEOREM
+    x + zero = x
+  zero_plus: THEOREM
+    x + y = zero IMPLIES x = zero AND y = zero
+  exp_plus: THEOREM
+    exp(n0x + n0y) = max(exp(n0x), exp(n0y))
+  AUTO_REWRITE+ plus_zero, plus__zero, exp_plus
+  plus_add: THEOREM
+    exp(n0y) < x AND ordinal?(add(i, x, z)) IMPLIES
+      add(i, x, z) + n0y = add(i, x, z + n0y)
+  plus_lt: THEOREM
+    exp(n0x) < exp(n0y) IMPLIES n0x + n0y = n0y
+  plus_add_add: THEOREM
+    ordinal?(add(i, x, n0x)) AND ordinal?(add(j, x, n0y)) IMPLIES
+      add(i, x, n0x) + add(j, x, n0y) = add(i + j, x, n0y)
+
+  lt__plus: THEOREM
+    zero < y IFF x < x + y
+
+  both_sides_plus: THEOREM
+    (x + y = x + z) IFF y = z
+  idem_add_is_zero: THEOREM
+    x + x = x IMPLIES x = zero
+  both_sides_plus_lt1: THEOREM
+    x + z < y + z IMPLIES x < y
+  both_sides_plus_lt2: THEOREM
+    x < y IFF z + x < z + y
+  both_sides_plus_le1: THEOREM
+    x <= y IMPLIES x + z <= y + z
+  both_sides_plus_le2: THEOREM
+    z + x <= z + y IFF x <= y
+  lt_plus_lt: THEOREM
+    x <= y AND z < w IMPLIES x + z < y + w
+  le_plus_le: THEOREM
+    x <= y AND z <= w IMPLIES x + z <= y + w
+
+  plus_plus_plus: THEOREM
+    (x + y) + z = x + (y + z)
+
+  plus_has_identity: JUDGEMENT
+    + HAS_TYPE (has_identity?[ordinal])
+  plus_is_associative: JUDGEMENT
+    + HAS_TYPE (associative?[ordinal])
+
+  ;-(x, (y | y <= x)): RECURSIVE ordinal =
+    CASES x OF
+      zero: zero,
+      add(i, u, v):
+        CASES y OF
+	  zero: x,
+	  add(j, z, w):
+	    IF z = u THEN
+	      IF i = j THEN % ω^u * i + w + (v - w) = ω^u * i + v
+	        v - w
+	      ELSE % ω^u * j + w + ω^u * (i - j) + v = ω^u * i + v
+	        add(i - j, u, v)
+	      ENDIF
+	    ELSE x
+	  ENDIF
+	ENDCASES
+    ENDCASES
+  MEASURE size(x)
+  plus__minus: THEOREM
+    y <= x IMPLIES y + (x - y) = x
+  AUTO_REWRITE+ plus__minus
+
+  %% TODO: exp(x * y) = exp(x) + exp(y)
+  ;*(x, y): RECURSIVE ordinal =
+    CASES x OF
+      % 0 * y = 0
+      zero: zero,
+      add(i, u, v):
+        CASES y OF
+	  % (ω^u * i + v) * 0 = 0
+	  zero: zero,
+	  % (ω^u * i + v) * (ω^z * j + w) =
+	  %   (ω^u * i + v) * (ω^z * j) + (ω^u * i + v) * w =
+	  add(j, z, w):
+	    (COND
+	      % (ω^u * i + v) * j = ω^u * (i*j) + v
+	      zero?(z) -> add(i * j, u, v),
+	      % ((ω^u * i + v) * ω^z) * j = ω^(u + z) * j
+	      nonzero?(z) -> add(j, u + z, zero)
+	     ENDCOND) + add(i, u, v) * w
+	 ENDCASES
+    ENDCASES
+  MEASURE size(y)
+  ordinal_mult_zero: JUDGEMENT
+    zero HAS_TYPE (zero?[ordinal](*))
+  ordinal_mult_no_zero_divisors: THEOREM
+    x * y = zero IMPLIES x = zero OR y = zero
+  ordinal_mult_one: THEOREM
+    identity?(*)(add(1, zero, zero))
+  ordinal_mult_has_zero: JUDGEMENT
+    * HAS_TYPE (has_zero?[ordinal])
+  ordinal_mult_has_identity: JUDGEMENT
+    * HAS_TYPE (has_identity?[ordinal])
+  mult_zero: THEOREM zero * x = zero
+  mult__zero: THEOREM x * zero = zero
+  ordinal_mult_right_increasing: THEOREM
+    x < y AND z > zero IMPLIES z * x < z * y
+  ordinal_mult_left_increasing: THEOREM
+    x < y IMPLIES x * z <= y * z
+  ordinal_mult_left_cancel: THEOREM
+    z > zero AND z * x = z * y IMPLIES x = y
+  ordinal_plus_mult_associative: JUDGEMENT
+    * HAS_TYPE (associative?[ordinal])
+  ordinal_plus_mult_distributive: THEOREM
+    distributive?[ordinal](*, +)
+  % TODO: left division
+
+END ordinals_props
