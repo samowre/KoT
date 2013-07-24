@@ -2,7 +2,7 @@ weight: THEORY
 BEGIN
   IMPORTING language
 
-  Γ: VAR (scontext?)
+  M: VAR (scontext?)
   x: VAR nat
 
   max(len: nat, f: [below[len] -> nat]): RECURSIVE
@@ -11,44 +11,44 @@ BEGIN
     ELSE max(f(len - 1), max(len - 1, LAMBDA (x: below[len - 1]): f(x))) ENDIF
   MEASURE len
 
-  weight(Γ, (S: semantic(Γ))): RECURSIVE nat =
+  weight(M, (S: semantic(M))): RECURSIVE nat =
     CASES S OF
       v(i):
-        IF i ∈ Γ
-	  THEN 1 + size(Γ(i))
+        IF i ∈ M
+	  THEN 1 + size(M(i))
 	  ELSE 0
 	ENDIF
     , dot(i, σ, x):
-        IF i ∈ Γ AND theory_def?(Γ(i)) AND compatible?(def(Γ(i)), σ) AND i(x) ∈ σ
-	  THEN max(weight(Γ, σ), weight(Γ ++ interp(def(Γ(i)), σ), x)) + 1
+        IF i ∈ M AND theory_def?(M(i)) AND compatible?(def(M(i)), σ) AND i(x) ∈ σ
+	  THEN max(weight(M, σ), weight(M ++ interp(def(M(i)), σ), x)) + 1
 	  ELSE 0 ENDIF
 
-    , fun(A, B): max(weight(Γ, A), weight(Γ ++ k(const_var(A)), B))
-    , prod(A, B): max(weight(Γ, A), weight(Γ ++ k(const_var(A)), B))
-    , subtype(T, a): max(weight(Γ, T), weight(Γ ++ k(const_var(T)), a))
+    , fun(A, B): max(weight(M, A), weight(M ++ k(const_var(A)), B))
+    , prod(A, B): max(weight(M, A), weight(M ++ k(const_var(A)), B))
+    , subtype(T, a): max(weight(M, T), weight(M ++ k(const_var(T)), a))
 
-    , app(f, a): max(weight(Γ, f), weight(Γ, a))
-    , lam(T, a): max(weight(Γ, T), weight(Γ ++ k(const_var(T)), a))
-    , pair(a, b): max(weight(Γ, a), weight(Γ, b))
-    , lproj(a): weight(Γ, a)
-    , rproj(a): weight(Γ, a)
+    , app(f, a): max(weight(M, f), weight(M, a))
+    , lam(T, a): max(weight(M, T), weight(M ++ k(const_var(T)), a))
+    , pair(a, b): max(weight(M, a), weight(M, b))
+    , lproj(a): weight(M, a)
+    , rproj(a): weight(M, a)
 
     , type_decl: 0
     , type_var: 0
-    , type_def(T): weight(Γ, T)
-    , const_decl(T): weight(Γ, T)
-    , const_var(T): weight(Γ, T)
-    , const_def(T, a): max(weight(Γ, T), weight(Γ, a))
-    , theory_def(Θ): weight(Γ, Θ)
+    , type_def(T): weight(M, T)
+    , const_decl(T): weight(M, T)
+    , const_var(T): weight(M, T)
+    , const_def(T, a): max(weight(M, T), weight(M, a))
+    , theory_def(Θ): weight(M, Θ)
 
     , nil: 0
-    , itype(σ, i, T): max(weight(Γ, σ), weight(Γ, T))
-    , iconst(σ, i, a): max(weight(Γ, σ), weight(Γ, a))
+    , itype(σ, i, T): max(weight(M, σ), weight(M, T))
+    , iconst(σ, i, a): max(weight(M, σ), weight(M, a))
 
-    , map(f): max(f`length, LAMBDA (x: below[f`length]): weight(Γ ++ rest(S, x), f`seq(x)))
+    , map(f): max(f`length, LAMBDA (x: below[f`length]): weight(M ++ rest(S, x), f`seq(x)))
     ENDCASES
   MEASURE size(S)
 
-  weight_definition: THEOREM x ∈ Γ AND (type_def?(Γ(x)) OR const_def?(Γ(x))) IMPLIES
-    weight(rest(Γ(x)), def(Γ(x))) < weight(Γ, v(x))
+  weight_definition: THEOREM x ∈ M AND (type_def?(M(x)) OR const_def?(M(x))) IMPLIES
+    weight(rest(M, x), def(M(x))) < weight(M, v(x))
 END weight
