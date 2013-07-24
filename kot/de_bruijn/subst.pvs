@@ -83,18 +83,21 @@ BEGIN
     length(M ↑ nb) = length(M)
   shift_plus: THEOREM
     (U ↑ (i, n)) ↑ (j, n) = U ↑ (i + j, n)
-  AUTO_REWRITE+ shift_plus
+  AUTO_REWRITE+ shift_plus, length_shift
+
   shift_k: THEOREM FORALL (d: (sdecl?)):
     k(d) ↑ nb = k(d ↑ nb)
   shift_concat: THEOREM
     (M ++ N) ↑ nb = (M ↑ nb) ++ (N ↑ (nb`1, nb`2 + length(M)))
+  kind_shift: THEOREM
+    kind?(U ↑ nb, k) IFF kind?(U, k)
   AUTO_REWRITE shift_k, shift_concat
     
   
 
   % Subtype judgements
   shift_prekind: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    prekind?(Γ ++ Θ)(U)(k) IMPLIES 
+    prekind?(Γ ++ Θ)(U)(k) IFF 
     prekind?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))(k)
     
   shift_pretype: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
