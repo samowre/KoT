@@ -10,19 +10,19 @@ BEGIN
   k: VAR prekeyword
 
   
-  % Special size function defined for termination
+  % Special type_size function defined for termination
   % of functions defined in supertype
-  size(U): RECURSIVE nat =
+  type_size(U): RECURSIVE nat =
     CASES U OF
-      fun(A, B): size(A) + size(B) + 1,
-      prod(A, B): size(A) + size(B) + 1,
-      subtype(T, a): size(T),
+      fun(A, B): type_size(A) + type_size(B) + 1,
+      prod(A, B): type_size(A) + type_size(B) + 1,
+      subtype(T, a): type_size(T),
       v(s): 1, 
       dot(m, σ, s): 1
       ELSE 0
     ENDCASES
   MEASURE U BY <<
-  AUTO_REWRITE+ size
+  AUTO_REWRITE+ type_size
 
 
 
@@ -107,8 +107,8 @@ BEGIN
     pretheory?(Γ ++ Θ)(U) IFF pretheory?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
   shift_semantic: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
     semantic?(Γ ++ Θ)(U) IFF semantic?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
-  % Shift preserves size
-  shift_size: THEOREM size(U ↑ nb) = size(U)
+  % Shift preserves type_size
+  shift_type_size: THEOREM type_size(U ↑ nb) = type_size(U)
   
 
 
@@ -199,8 +199,8 @@ BEGIN
     preterm?(Γ ++ Δ)(t) IMPLIES 
     semantic?(Γ ++ subst(Δ, x, t))(subst(U, length(Δ), t))
 
-  subst_size: THEOREM
-    size(subst(U, x, t)) = size(U)
-  AUTO_REWRITE subst_size
+  subst_type_size: THEOREM
+    type_size(subst(U, x, t)) = type_size(U)
+  AUTO_REWRITE subst_type_size
 
 END subst

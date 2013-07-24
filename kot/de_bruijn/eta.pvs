@@ -1,9 +1,43 @@
 eta: THEORY
 BEGIN
-  IMPORTING language
+  IMPORTING subst
 
-  η(Γ, (m | m ∈ Γ AND kind?(Γ(m), PRECONTEXT)), σ)(e):
-    RECURSIVE semantic =
-    CASES e OF
-      sym
+  Γ: VAR precontext
+  m: VAR nat
+
+  η(Γ)(Δ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ)))
+   (S: semantic(Γ ++ def(Γ(m)) ++ Δ) | NOT map?(S)):
+    RECURSIVE semantic(Γ ++ Δ) =
+    CASES S OF
+      v(i):
+        IF interpret?(σ, i) THEN interpret(σ, i)
+	ELSIF i ∈ def(Γ(m)) THEN dot(m + length(Δ), σ ↑ length(Δ), v(i))
+	ELSE v(i - length(def(Γ(m)))) ENDIF
+    , dot(p, τ, x): dot(p - length(def(Γ(m))), η(Γ)(Δ, m, σ ↑ length(Δ))(τ), x)
+
+    , fun(A, B):
+        fun(η(Γ)(Δ, m, σ)(A), η(Γ)(Δ ++ k(const_var(A)), m, σ)(B))
+    , prod(A, B): prod(η(Γ)(Δ, m, σ)(A), η(Γ)(Δ ++ k(const_var(A)), m, σ)(B))
+    , subtype(T, a):
+        subtype(η(Γ)(Δ, m, σ)(T), η(Γ)(Δ ++ k(const_var(T)), m, σ)(a))
+
+    , app(f, a): app(η(Γ)(Δ, m, σ)(f), η(Γ)(Δ, m, σ)(a))
+    , lam(T, a): lam(η(Γ)(Δ, m, σ)(T), η(Γ)(Δ ++ k(const_var(T)), m, σ)(a))
+    , pair(a, b): pair(η(Γ)(Δ, m, σ)(a), η(Γ)(Δ, m, σ)(b))
+    , lproj(a): lproj(η(Γ)(Δ, m, σ)(a))
+    , rproj(a): rproj(η(Γ)(Δ, m, σ)(a))
+
+    , type_decl: type_decl
+    , type_var: type_var
+    , type_def(T): type_def(η(Γ)(Δ, m, σ)(T))
+    , const_decl(T): const_decl(η(Γ)(Δ, m, σ)(T))
+    , const_var(T): const_var(η(Γ)(Δ, m, σ)(T))
+    , const_def(T, a): const_def(η(Γ)(Δ, m, σ)(T), η(Γ)(Δ, m, σ)(a))
+    , theory_def(Θ): theory_def(η(Γ)(Δ, m, σ)(Θ))
+
+    , nil: nil
+    , itype(τ, i, T): itype(η(Γ)(Δ, m, σ)(τ), i, η(Γ)(Δ, m, σ)(T))
+    , iconst(τ, i, a): iconst(η(Γ)(Δ, m, σ)(τ), i, η(Γ)(Δ, m, σ)(a))
+    ENDCASES
+  MEASURE size(S)
 END eta

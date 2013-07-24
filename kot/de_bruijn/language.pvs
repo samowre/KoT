@@ -192,7 +192,7 @@ BEGIN
       v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
     , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
         i < length(M) AND prekind?(M)(σ)(PREINTERP) AND v?(x) AND
-	kind?(M(i), PRECONTEXT) AND (type_def?(M(i)) OR const_def?(M(i))) AND
+	kind?(M(i), PRECONTEXT) AND theory_def?(M(i)) AND
 	compatible?(def(M(i)), σ) AND prekind?(def(M(i)))(x)(k)
 
     , fun(A, B):
