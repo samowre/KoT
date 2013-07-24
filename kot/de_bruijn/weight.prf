@@ -1,39 +1,128 @@
 (weight
- (kind_TCC1 0
-  (kind_TCC1-1 nil 3583526969 ("" (cases-tcc) nil nil) nil nil))
- (kind_TCC2 0
-  (kind_TCC2-1 nil 3583586075 ("" (cases-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
+ (max_TCC1 0
+  (max_TCC1-1 nil 3583612677 ("" (subtype-tcc) nil nil)
+   ((nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (>= const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (max_TCC2 0
+  (max_TCC2-1 nil 3583612677 ("" (subtype-tcc) nil nil)
+   ((real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (>= const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (max_TCC3 0
+  (max_TCC3-1 nil 3583612677 ("" (subtype-tcc) nil nil)
+   ((real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (>= const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil))
+   nil))
+ (max_TCC4 0
+  (max_TCC4-1 nil 3583612677 ("" (subtype-tcc) nil nil) nil nil))
+ (max_TCC5 0
+  (max_TCC5-1 nil 3583612677 ("" (termination-tcc) nil nil) nil nil))
+ (max_TCC6 0
+  (max_TCC6-1 nil 3583612677
+   ("" (skosimp* :preds? t)
+    (("" (assert)
+      (("" (hide 2)
+        ((""
+          (inst - "(len!1 - 1, LAMBDA (x: below[len!1 - 1]): f!1(x))")
+          (("" (assert)
+            (("" (split -)
+              (("1" (flatten)
+                (("1" (assert)
+                  (("1" (inst 2 "len!1 - 1")
+                    (("1" (assert) (("1" (grind) nil nil)) nil)) nil))
+                  nil))
+                nil)
+               ("2" (skosimp* :preds? t)
+                (("2" (case "f!1(i!1) < f!1(len!1 - 1)")
+                  (("1" (inst + "len!1 - 1")
+                    (("1" (assert) (("1" (grind) nil nil)) nil)) nil)
+                   ("2" (assert) (("2" (grind) nil nil)) nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (nonneg_rat_max application-judgement
+     "{s: nonneg_rat | s >= q AND s >= r}" real_defs nil)
+    (nat_max application-judgement "{k: nat | i <= k AND j <= k}"
+     real_defs nil)
+    (max const-decl "{p: real | p >= m AND p >= n}" real_defs nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (precontext type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
     (number_field nonempty-type-from-decl nil number_fields nil)
     (real_pred const-decl "[number_field -> boolean]" reals nil)
     (real nonempty-type-from-decl nil reals nil)
-    (< const-decl "bool" reals nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (premap type-eq-decl nil language nil)
+    (>= const-decl "bool" reals nil)
     (rational_pred const-decl "[real -> boolean]" rationals nil)
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
-    (>= const-decl "bool" reals nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (length def-decl "nat" map nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+    (< const-decl "bool" reals nil)
+    (below type-eq-decl nil nat_types nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil))
    nil))
  (weight_TCC1 0
   (weight_TCC1-1 nil 3583526969 ("" (subtype-tcc) nil nil)
@@ -41,22 +130,15 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -70,11 +152,7 @@
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (int_minus_int_is_int application-judgement "int" integers nil))
+    (apply const-decl "(sdecl?)" language nil))
    nil))
  (weight_TCC2 0
   (weight_TCC2-1 nil 3583526969
@@ -88,21 +166,13 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -116,10 +186,14 @@
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+    (apply const-decl "(sdecl?)" language nil)
+    (sdecl? const-decl "bool" language nil)
+    (scontext? const-decl "bool" language nil))
    nil))
  (weight_TCC3 0
   (weight_TCC3-1 nil 3583526969
@@ -129,22 +203,15 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -157,7 +224,13 @@
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil))
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (apply const-decl "(sdecl?)" language nil))
    nil))
  (weight_TCC4 0
   (weight_TCC4-1 nil 3583526969
@@ -168,33 +241,18 @@
       nil)
      ("3" (typepred "apply(Γ!1)(i!1)") (("3" (grind) nil nil)) nil))
     nil)
-   ((premap type-eq-decl nil language nil)
-    (length def-decl "nat" map nil)
-    (apply def-decl "precontext" map nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (boolean nonempty-type-decl nil booleans nil)
+   ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -207,7 +265,15 @@
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil))
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (apply const-decl "(sdecl?)" language nil)
+    (sdecl? const-decl "bool" language nil)
+    (scontext? const-decl "bool" language nil))
    nil))
  (weight_TCC5 0
   (weight_TCC5-1 nil 3583526969
@@ -221,22 +287,14 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -250,10 +308,14 @@
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (kind? const-decl "bool" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+    (apply const-decl "(sdecl?)" language nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC6 0
   (weight_TCC6-1 nil 3583526969 ("" (subtype-tcc) nil nil)
@@ -261,22 +323,15 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -290,49 +345,57 @@
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (apply const-decl "(sdecl?)" language nil))
    nil))
  (weight_TCC7 0
   (weight_TCC7-1 nil 3583526969
    ("" (skosimp* :preds? t)
     (("" (typepred "apply(Γ!1)(i!1)") (("" (grind) nil nil)) nil)) nil)
-   ((premap type-eq-decl nil language nil)
-    (length def-decl "nat" map nil)
-    (apply def-decl "precontext" map nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
+   ((apply const-decl "(sdecl?)" language nil)
+    (run_map adt-accessor-decl "[(map?) -> finseq[syntaxic]]" language
+     nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (below type-eq-decl nil nat_types nil)
+    (map? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (< const-decl "bool" reals nil)
+    (sdecl? const-decl "bool" language nil)
+    (kind? const-decl "bool" language nil)
+    (rest const-decl "(scontext?)" language nil)
+    (^^ const-decl "finseq" finite_sequences nil)
+    (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
+    (++ const-decl "(scontext?)" language nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (size def-decl "nat" language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
     (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -365,22 +428,14 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -394,10 +449,18 @@
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (kind? const-decl "bool" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil))
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (apply const-decl "(sdecl?)" language nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (++ const-decl "(scontext?)" language nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC9 0
   (weight_TCC9-1 nil 3583526969
@@ -413,56 +476,19 @@
         nil))
       nil))
     nil)
-   ((size_interp formula-decl nil map nil)
-    (real_le_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (size_apply formula-decl nil map nil)
-    (type_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-     nil)
-    (const_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-     nil)
-    (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-     nil)
-    (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-    (iconst? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-    (def shared-adt-accessor-decl
-     "[{x: syntaxic |     type_def?(x) OR const_def?(x) OR theory_def?(x) OR itype?(x) OR iconst?(x)} -> syntaxic]"
-     language nil)
-    (premap type-eq-decl nil language nil)
-    (length def-decl "nat" map nil)
-    (apply def-decl "precontext" map nil)
-    (preinterp type-eq-decl nil language nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (size def-decl "nat" language nil)
-    (boolean nonempty-type-decl nil booleans nil)
+   ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
@@ -475,30 +501,34 @@
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil))
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (apply const-decl "(sdecl?)" language nil))
    nil))
  (weight_TCC10 0
   (weight_TCC10-1 nil 3583526969 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC11 0
   (weight_TCC11-1 nil 3583526969 ("" (termination-tcc) nil nil)
@@ -506,92 +536,343 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (size def-decl "nat" language nil))
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC12 0
   (weight_TCC12-1 nil 3583526969
    ("" (skosimp* :preds? t) (("" (grind) nil nil)) nil)
-   ((boolean nonempty-type-decl nil booleans nil)
+   ((empty_seq const-decl "finseq" finite_sequences nil)
+    (sdecl? const-decl "bool" language nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil))
    nil))
  (weight_TCC13 0
   (weight_TCC13-1 nil 3583526969
-   ("" (termination-tcc)
-    (("" (typepred "apply(Γ!1)(i!1)") (("" (grind) nil nil)) nil)) nil)
-   ((boolean nonempty-type-decl nil booleans nil)
+   ("" (skosimp* :preds? t)
+    (("" (assert)
+      (("" (expand "semantic?" -2)
+        (("" (assert)
+          (("" (flatten)
+            (("" (assert)
+              (("" (typepred "++")
+                (("" (inst?)
+                  (("" (expand "scontext?")
+                    (("" (flatten)
+                      (("" (assert)
+                        (("" (skosimp* :preds? t)
+                          (("" (assert)
+                            (("" (expand "++" -1)
+                              ((""
+                                (assert)
+                                ((""
+                                  (expand "o" -1)
+                                  ((""
+                                    (assert)
+                                    ((""
+                                      (inst - "x!1")
+                                      ((""
+                                        (assert)
+                                        ((""
+                                          (rewrite "rest_concat")
+                                          ((""
+                                            (assert)
+                                            ((""
+                                              (bddsimp)
+                                              (("1"
+                                                (assert)
+                                                (("1"
+                                                  (expand "k" -1)
+                                                  (("1"
+                                                    (assert)
+                                                    (("1"
+                                                      (expand
+                                                       "rest"
+                                                       1
+                                                       1)
+                                                      (("1"
+                                                        (expand
+                                                         "k"
+                                                         1
+                                                         1)
+                                                        (("1"
+                                                          (assert)
+                                                          (("1"
+                                                            (grind)
+                                                            (("1"
+                                                              (grind)
+                                                              (("1"
+                                                                (invoke
+                                                                 (case
+                                                                  "Γ!1 = %1")
+                                                                 (~
+                                                                  +
+                                                                  "prekind?(%1)(%)(%)"))
+                                                                (("1"
+                                                                  (assert)
+                                                                  nil
+                                                                  nil)
+                                                                 ("2"
+                                                                  (decompose-equality
+                                                                   1)
+                                                                  (("2"
+                                                                    (decompose-equality
+                                                                     1)
+                                                                    (("2"
+                                                                      (decompose-equality
+                                                                       1)
+                                                                      nil
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil)
+                                               ("2"
+                                                (assert)
+                                                (("2"
+                                                  (rewrite -7)
+                                                  (("2"
+                                                    (assert)
+                                                    (("2"
+                                                      (expand "k" 1)
+                                                      (("2"
+                                                        (assert)
+                                                        (("2"
+                                                          (expand
+                                                           "++"
+                                                           -3)
+                                                          (("2"
+                                                            (assert)
+                                                            (("2"
+                                                              (expand
+                                                               "o"
+                                                               -3)
+                                                              (("2"
+                                                                (assert)
+                                                                (("2"
+                                                                  (expand
+                                                                   "k"
+                                                                   -3)
+                                                                  (("2"
+                                                                    (assert)
+                                                                    (("2"
+                                                                      (expand
+                                                                       "k"
+                                                                       +)
+                                                                      (("2"
+                                                                        (assert)
+                                                                        (("2"
+                                                                          (expand
+                                                                           "++"
+                                                                           2)
+                                                                          (("2"
+                                                                            (assert)
+                                                                            (("2"
+                                                                              (expand
+                                                                               "o"
+                                                                               +)
+                                                                              (("2"
+                                                                                (assert)
+                                                                                (("2"
+                                                                                  (use
+                                                                                   "precontext_is_scontext")
+                                                                                  (("2"
+                                                                                    (assert)
+                                                                                    (("2"
+                                                                                      (expand
+                                                                                       "scontext?")
+                                                                                      (("2"
+                                                                                        (flatten)
+                                                                                        (("2"
+                                                                                          (assert)
+                                                                                          (("2"
+                                                                                            (inst
+                                                                                             -6
+                                                                                             "x!1 - 1")
+                                                                                            nil
+                                                                                            nil))
+                                                                                          nil))
+                                                                                        nil))
+                                                                                      nil))
+                                                                                    nil))
+                                                                                  nil))
+                                                                                nil))
+                                                                              nil))
+                                                                            nil))
+                                                                          nil))
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((sdecl? const-decl "bool" language nil)
+    (k const-decl "(scontext?)" language nil)
+    (const_var? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (const_var adt-constructor-decl "[syntaxic -> (const_var?)]"
+     language nil)
+    (run_map adt-accessor-decl "[(map?) -> finseq[syntaxic]]" language
+     nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (below type-eq-decl nil nat_types nil)
+    (map? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (< const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (rest_concat formula-decl nil language nil)
+    (rest const-decl "(scontext?)" language nil)
+    (syntaxic_map_extensionality formula-decl nil language nil)
+    (map adt-constructor-decl "[finseq[syntaxic] -> (map?)]" language
+         nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (odd_minus_odd_is_even application-judgement "even_int" integers
+     nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_min application-judgement "{k: int | k <= i AND k <= j}"
+     real_defs nil)
+    (^^ const-decl "finseq" finite_sequences nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (precontext_is_scontext judgement-tcc nil language nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (concat_empty formula-decl nil language nil)
+    (++ const-decl "(scontext?)" language nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil))
    nil))
  (weight_TCC14 0
   (weight_TCC14-1 nil 3583526969
-   ("" (termination-tcc)
-    (("" (use "size_apply") (("" (grind) nil nil)) nil)) nil)
+   ("" (skosimp* :preds? t)
+    (("" (assert)
+      (("" (expand "semantic?" -2)
+        (("" (assert)
+          (("" (flatten)
+            (("" (assert)
+              (("" (rewrite -4)
+                (("" (assert)
+                  (("" (expand "k")
+                    (("" (assert)
+                      (("" (expand "++")
+                        (("" (assert)
+                          (("" (expand "o")
+                            (("" (assert) (("" (postpone) nil nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -613,8 +894,7 @@
      integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (++ def-decl "precontext" map nil)
-    (size def-decl "nat" language nil)
+    nil (size def-decl "nat" language nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil))
    nil))
@@ -623,23 +903,27 @@
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC16 0
   (weight_TCC16-1 nil 3583526969 ("" (termination-tcc) nil nil)
@@ -647,87 +931,55 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC17 0
   (weight_TCC17-1 nil 3583526969 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
-    (parsed? def-decl "bool" language nil))
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC18 0
   (weight_TCC18-1 nil 3583526969 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
+   ((sdecl? const-decl "bool" language nil)) nil))
  (weight_TCC19 0
   (weight_TCC19-1 nil 3583526969 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -749,8 +1001,7 @@
      integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (++ def-decl "precontext" map nil)
-    (size def-decl "nat" language nil)
+    nil (size def-decl "nat" language nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil))
    nil))
@@ -761,8 +1012,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -783,113 +1033,75 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (size def-decl "nat" language nil))
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC22 0
   (weight_TCC22-1 nil 3583526969 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (precontext type-eq-decl nil language nil)
     (semantic type-eq-decl nil language nil)
-    (parsed? def-decl "bool" language nil))
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC23 0
   (weight_TCC23-1 nil 3583526969 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC24 0
-  (weight_TCC24-1 nil 3583526969 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (++ def-decl "precontext" map nil)
-    (size def-decl "nat" language nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil))
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
+ (weight_TCC24 0
+  (weight_TCC24-1 nil 3583526969 ("" (termination-tcc) nil nil)
+   ((sdecl? const-decl "bool" language nil)) nil))
  (weight_TCC25 0
   (weight_TCC25-1 nil 3583526969 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
@@ -897,8 +1109,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -920,8 +1131,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -952,23 +1162,27 @@
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC28 0
   (weight_TCC28-1 nil 3583526969 ("" (termination-tcc) nil nil)
@@ -976,32 +1190,17 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC29 0
   (weight_TCC29-1 nil 3583526969
@@ -1009,23 +1208,27 @@
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC30 0
   (weight_TCC30-1 nil 3583526969 ("" (termination-tcc) nil nil)
@@ -1033,78 +1236,62 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC31 0
   (weight_TCC31-1 nil 3583526969 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
-    (parsed? def-decl "bool" language nil))
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC32 0
   (weight_TCC32-1 nil 3583526969 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC33 0
   (weight_TCC33-1 nil 3583526969 ("" (termination-tcc) nil nil)
@@ -1112,57 +1299,30 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (++ def-decl "precontext" map nil)
-    (size def-decl "nat" language nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil))
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC34 0
   (weight_TCC34-1 nil 3583526969 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
+   ((sdecl? const-decl "bool" language nil)) nil))
  (weight_TCC35 0
   (weight_TCC35-1 nil 3583528441
    ("" (subtype-tcc)
@@ -1176,8 +1336,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -1210,8 +1369,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -1232,55 +1390,44 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (size def-decl "nat" language nil))
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC38 0
   (weight_TCC38-1 nil 3583528441 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC39 0
   (weight_TCC39-1 nil 3583528441
@@ -1291,55 +1438,44 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (size def-decl "nat" language nil))
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC40 0
   (weight_TCC40-1 nil 3583528441 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC41 0
   (weight_TCC41-1 nil 3583528441 ("" (subtype-tcc) nil nil)
@@ -1347,55 +1483,44 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (size def-decl "nat" language nil))
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC42 0
   (weight_TCC42-1 nil 3583528441 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC43 0
   (weight_TCC43-1 nil 3583528441
@@ -1406,32 +1531,22 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC44 0
   (weight_TCC44-1 nil 3583528441
@@ -1439,23 +1554,18 @@
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC45 0
   (weight_TCC45-1 nil 3583528441 ("" (termination-tcc) nil nil)
@@ -1463,32 +1573,22 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
      integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC46 0
   (weight_TCC46-1 nil 3583528441
@@ -1496,23 +1596,18 @@
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC47 0
   (weight_TCC47-1 nil 3583528441 ("" (termination-tcc) nil nil)
@@ -1520,32 +1615,17 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC48 0
   (weight_TCC48-1 nil 3583528441
@@ -1553,46 +1633,36 @@
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC49 0
   (weight_TCC49-1 nil 3583528441 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC50 0
   (weight_TCC50-1 nil 3583528441 ("" (termination-tcc) nil nil)
@@ -1600,56 +1670,35 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil)
-    (size_concat formula-decl nil map nil))
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC51 0
   (weight_TCC51-1 nil 3583528441 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC52 0
   (weight_TCC52-1 nil 3583528441 ("" (termination-tcc) nil nil)
@@ -1657,78 +1706,53 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC53 0
   (weight_TCC53-1 nil 3583528441 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC54 0
   (weight_TCC54-1 nil 3583528441 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC55 0
   (weight_TCC55-1 nil 3583528441 ("" (termination-tcc) nil nil)
@@ -1736,56 +1760,35 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil)
-    (size_concat formula-decl nil map nil))
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC56 0
   (weight_TCC56-1 nil 3583528441 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC57 0
   (weight_TCC57-1 nil 3583528441 ("" (termination-tcc) nil nil)
@@ -1793,78 +1796,90 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC58 0
   (weight_TCC58-1 nil 3583528441 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC59 0
   (weight_TCC59-1 nil 3583528441 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC60 0
   (weight_TCC60-1 nil 3583528441 ("" (termination-tcc) nil nil)
@@ -1872,56 +1887,72 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil)
-    (size_concat formula-decl nil map nil))
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC61 0
   (weight_TCC61-1 nil 3583585168 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC62 0
   (weight_TCC62-1 nil 3583585168 ("" (subtype-tcc) nil nil)
@@ -1929,78 +1960,104 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC63 0
   (weight_TCC63-1 nil 3583585168 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
+    (precontext type-eq-decl nil language nil)
+    (semantic? const-decl "bool" language nil)
+    (semantic type-eq-decl nil language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (size def-decl "nat" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC64 0
   (weight_TCC64-1 nil 3583585168 ("" (termination-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
+    (precontext type-eq-decl nil language nil)
+    (semantic type-eq-decl nil language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (semantic? const-decl "bool" language nil))
    nil))
  (weight_TCC65 0
   (weight_TCC65-1 nil 3583585168 ("" (subtype-tcc) nil nil)
@@ -2008,33 +2065,40 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
     (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (size def-decl "nat" language nil)
-    (size_concat formula-decl nil map nil))
+    (empty_seq const-decl "finseq" finite_sequences nil))
    nil))
  (weight_TCC66 0
   (weight_TCC66-1 nil 3583585168 ("" (termination-tcc) nil nil)
@@ -2043,8 +2107,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -2065,33 +2128,38 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
     (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekind? def-decl "bool" language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
+    (semantic? const-decl "bool" language nil)
     (semantic type-eq-decl nil language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil)
-    (size_concat formula-decl nil map nil))
+    (++ const-decl "(scontext?)" language nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (rest const-decl "(scontext?)" language nil)
+    (sdecl? const-decl "bool" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (below type-eq-decl nil nat_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (< const-decl "bool" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number nonempty-type-decl nil numbers nil))
    nil))
  (weight_TCC68 0
   (weight_TCC68-1 nil 3583585168 ("" (termination-tcc) nil nil)
@@ -2100,8 +2168,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -2122,8 +2189,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -2156,8 +2222,7 @@
     (NOT const-decl "[bool -> bool]" booleans nil)
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
+    (prekeyword type-decl nil language nil) nil
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
@@ -2171,343 +2236,6 @@
      nil)
     (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
     (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC71 0
-  (weight_TCC71-1 nil 3583585168 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC72 0
-  (weight_TCC72-1 nil 3583585168 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil)
-    (size_concat formula-decl nil map nil))
-   nil))
- (weight_TCC73 0
-  (weight_TCC73-1 nil 3583585168 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC74 0
-  (weight_TCC74-1 nil 3583585168 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
-   nil))
- (weight_TCC75 0
-  (weight_TCC75-1 nil 3583585168 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC76 0
-  (weight_TCC76-1 nil 3583585168 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
-   nil))
- (weight_TCC77 0
-  (weight_TCC77-1 nil 3583585168 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC78 0
-  (weight_TCC78-1 nil 3583585168 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
-   nil))
- (weight_TCC79 0
-  (weight_TCC79-1 nil 3583585168 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC80 0
-  (weight_TCC80-1 nil 3583585168 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
-   nil))
- (weight_TCC81 0
-  (weight_TCC81-1 nil 3583585168 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil))
-   nil))
- (weight_TCC82 0
-  (weight_TCC82-1 nil 3583586075 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (syntaxic type-decl nil language nil)
-    (prekeyword type-decl nil language nil)
-    (parsed? def-decl "bool" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (precontext type-eq-decl nil language nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (PRETYPE? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETYPE adt-constructor-decl "(PRETYPE?)" language nil)
-    (PRETERM? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PRETERM adt-constructor-decl "(PRETERM?)" language nil)
-    (semantic type-eq-decl nil language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil))
    nil))
  (weight_definition_TCC1 0
   (weight_definition_TCC1-1 nil 3583586237 ("" (subtype-tcc) nil nil)
@@ -2519,8 +2247,7 @@
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
-    (parsed? def-decl "bool" language nil)
-    (prekeyword type-decl nil language nil)
+    nil (prekeyword type-decl nil language nil)
     (syntaxic type-decl nil language nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (int nonempty-type-eq-decl nil integers nil)
@@ -2544,8 +2271,7 @@
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
-    (parsed? def-decl "bool" language nil)
-    (prekeyword type-decl nil language nil)
+    nil (prekeyword type-decl nil language nil)
     (syntaxic type-decl nil language nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (int nonempty-type-eq-decl nil integers nil)
@@ -2573,8 +2299,7 @@
     (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
-    (parsed? def-decl "bool" language nil)
-    (prekeyword type-decl nil language nil)
+    nil (prekeyword type-decl nil language nil)
     (syntaxic type-decl nil language nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil)
     (int nonempty-type-eq-decl nil integers nil)
@@ -2598,79 +2323,44 @@
     (OR const-decl "[bool, bool -> bool]" booleans nil)
     (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (premap type-eq-decl nil language nil)
-    (length def-decl "nat" map nil)
-    (apply def-decl "precontext" map nil))
+    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil) nil
+    nil nil)
    nil))
  (weight_definition_TCC4 0
   (weight_definition_TCC4-1 nil 3583586237 ("" (subtype-tcc) nil nil)
-   ((precontext type-eq-decl nil language nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
-    (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (parsed? def-decl "bool" language nil)
-    (prekeyword type-decl nil language nil)
-    (syntaxic type-decl nil language nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (>= const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
     (number_field_pred const-decl "[number -> boolean]" number_fields
      nil)
-    (number nonempty-type-decl nil numbers nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (weight_definition_TCC5 0
-  (weight_definition_TCC5-1 nil 3583586237
-   ("" (subtype-tcc)
-    (("1" (typepred "apply(Γ!1)(x!1)") (("1" (grind) nil nil)) nil)
-     ("2" (typepred "apply(Γ!1)(x!1)") (("2" (grind) nil nil)) nil))
-    nil)
-   ((precontext type-eq-decl nil language nil)
-    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (syntaxic type-decl nil language nil)
+    (scontext? const-decl "bool" language nil)
+    (prekeyword type-decl nil language nil)
+    (empty const-decl "(scontext?)" language nil)
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
-    (parsed? def-decl "bool" language nil)
-    (prekeyword type-decl nil language nil)
-    (syntaxic type-decl nil language nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (>= const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil)
+    (PRECONTEXT adt-constructor-decl "(PRECONTEXT?)" language nil)
+    (precontext type-eq-decl nil language nil)
+    (kind? const-decl "bool" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil)
-    (PREINTERP? adt-recognizer-decl "[prekeyword -> boolean]" language
-     nil)
-    (PREINTERP adt-constructor-decl "(PREINTERP?)" language nil)
-    (premap type-eq-decl nil language nil)
-    (length def-decl "nat" map nil)
-    (apply def-decl "precontext" map nil))
+    (apply const-decl "(sdecl?)" language nil)
+    (prekind? def-decl "bool" language nil)
+    (semantic? const-decl "bool" language nil))
    nil))
- (weight_definition_TCC6 0
-  (weight_definition_TCC6-1 nil 3583586237 ("" (subtype-tcc) nil nil)
-   ((parsed? def-decl "bool" language nil)) nil))
  (weight_definition 0
   (weight_definition-1 nil 3583586289 ("" (postpone) nil nil) nil
    shostak)))

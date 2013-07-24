@@ -181,12 +181,15 @@ BEGIN
 	kind?(M(i), PRECONTEXT) AND (type_def?(M(i)) OR const_def?(M(i))) AND
 	compatible?(def(M(i)), σ) AND prekind?(def(M(i)))(x)(k)
 
-    , fun(A, B): k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M)(B)(PRETYPE)
-    , prod(A, B): k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M)(B)(PRETYPE)
-    , subtype(T, a): k = PRETYPE AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(a)(PRETERM)
+    , fun(A, B):
+        k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M ++ k(const_var(A)))(B)(PRETYPE)
+    , prod(A, B):
+        k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M ++ k(const_var(A)))(B)(PRETYPE)
+    , subtype(T, a):
+        k = PRETYPE AND prekind?(M)(T)(PRETYPE) AND prekind?(M ++ k(const_var(T)))(a)(PRETERM)
 
     , app(f, a): k = PRETERM AND prekind?(M)(f)(PRETERM) AND prekind?(M)(a)(PRETERM)
-    , lam(T, a): k = PRETERM AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(a)(PRETERM)
+    , lam(T, a): k = PRETERM AND prekind?(M)(T)(PRETYPE) AND prekind?(M ++ k(const_var(T)))(a)(PRETERM)
     , pair(a, b): k = PRETERM AND prekind?(M)(a)(PRETERM) AND prekind?(M)(b)(PRETERM)
     , lproj(a): k = PRETERM AND prekind?(M)(a)(k)
     , rproj(a): k = PRETERM AND prekind?(M)(a)(k)

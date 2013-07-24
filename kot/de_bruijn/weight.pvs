@@ -5,7 +5,8 @@ BEGIN
   Γ: VAR precontext
   x: VAR nat
 
-  sum(len: nat, f: [below[len] -> nat]): RECURSIVE nat =
+  max(len: nat, f: [below[len] -> nat]): RECURSIVE
+    { x | len = 0 AND x = 0 OR EXISTS (i: below[len]): x = f(i) } =
     IF len = 0 THEN 0
     ELSE max(f(len - 1), max(len - 1, LAMBDA (x: below[len - 1]): f(x))) ENDIF
   MEASURE len
