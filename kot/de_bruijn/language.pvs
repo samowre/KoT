@@ -155,6 +155,13 @@ BEGIN
     ENDCASES
   MEASURE U BY <<
 
+  interpret(U, (i | interpret?(U, i))): RECURSIVE syntaxic =
+    CASES U OF
+      itype(τ, j, T): IF i = j THEN T ELSE interpret(τ, i) ENDIF
+    , iconst(τ, j, a): IF i = j THEN a ELSE interpret(τ, i) ENDIF
+    ENDCASES
+  MEASURE U BY <<
+
   compatible?(M, U): RECURSIVE bool =
     CASES U OF
       nil: TRUE
@@ -185,7 +192,7 @@ BEGIN
       v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
     , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
         i < length(M) AND prekind?(M)(σ)(PREINTERP) AND v?(x) AND
-	kind?(M(i), PRECONTEXT) AND (type_def?(M(i)) OR const_def?(M(i))) AND
+	kind?(M(i), PRECONTEXT) AND theory_def?(M(i)) AND
 	compatible?(def(M(i)), σ) AND prekind?(def(M(i)))(x)(k)
 
     , fun(A, B):
@@ -247,7 +254,6 @@ BEGIN
 
   Γ: VAR precontext
 
-
   prekind_concat: THEOREM
     prekind?(M)(N ++ P)(PRECONTEXT) IFF 
     prekind?(M)(N)(PRECONTEXT) AND prekind?(M ++ N)(P)(PRECONTEXT)
@@ -255,5 +261,9 @@ BEGIN
   pretheory_as_precontext: THEOREM
     pretheory?(Γ)(U) IMPLIES precontext?(Γ ++ U)
   precontext_as_pretheory: THEOREM
-    precontext?(Γ ++ M) IMPLIES pretheory?(Γ)(M)  
+    precontext?(Γ ++ M) IMPLIES pretheory?(Γ)(M)
+
+  semantic_pretheory: THEOREM
+    pretheory?(M)(N) AND i ∈ N IMPLIES
+      semantic?(M ++ rest(N, i))(N(i))
 END language
