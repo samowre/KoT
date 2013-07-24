@@ -4,7 +4,7 @@ BEGIN
 
   Γ, Δ, Θ: VAR precontext
   i, j, n, x: VAR nat
-  U, t: VAR syntaxic
+  U, V, t: VAR syntaxic
   nb: VAR [nat, nat]
   M, N, P: VAR (scontext?)
   k: VAR prekeyword
@@ -32,7 +32,11 @@ BEGIN
 
   
   % Shift: classical shift operator for De Bruijn indices
-  ;↑(U, nb): RECURSIVE syntaxic = 
+  ;↑(U, nb): RECURSIVE 
+   { V | (sexpr?(U) IMPLIES sexpr?(V)) AND 
+	 (sdecl?(U) IMPLIES sdecl?(V)) AND
+         (sinterp?(U) IMPLIES sinterp?(V)) AND
+	 (scontext?(U) IMPLIES scontext?(V)) } = 
     CASES U OF
       % Names
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
@@ -96,9 +100,14 @@ BEGIN
   
 
   % Subtype judgements
-  shift_prekind: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
+  strong_shift_prekind: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
     prekind?(Γ ++ Θ)(U)(k) IFF 
     prekind?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))(k)
+  shift_prekind: THEOREM FORALL (Δ: pretheory(Γ)):
+    prekind?(Γ)(U)(k) IFF 
+    prekind?(Γ ++ Δ)(U ↑ length(Δ))(k)
+
+
     
   shift_pretype: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
     pretype?(Γ ++ Θ)(U) IFF pretype?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))

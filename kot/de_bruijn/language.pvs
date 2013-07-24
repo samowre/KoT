@@ -30,6 +30,8 @@ BEGIN
 
     map(run_map: finseq[(sdecl?)]): map?: scontext?
   END syntaxic
+  AUTO_REWRITE- sexpr?
+  AUTO_REWRITE+ scontext?
 
   prekeyword: TYPE =
     { PRETYPE, PRETERM, PRECONTEXT, PREINTERP, PREDECL }
@@ -39,22 +41,22 @@ BEGIN
   i, j, n: VAR nat
   k: VAR prekeyword
 
-  k(d: sdecl?): scontext? =
+  k(d: (sdecl?)): (scontext?) =
     map((# length := 1, seq := LAMBDA (x: below[1]): d #))
 
-  M, N, P: VAR scontext?
-  empty: MACRO scontext? = map(empty_seq)
+  M, N, P: VAR (scontext?)
+  empty: MACRO (scontext?) = map(empty_seq)
 
   length(M): MACRO nat =
     run_map(M)`length
   ;∈(x, M): MACRO bool =
     x < length(M)
-  apply(M)(x | x ∈ M): sdecl? =
+  apply(M)(x | x ∈ M): (sdecl?) =
     run_map(M)`seq(x)
   CONVERSION+ apply
-  rest(M, (x | x < length(M))): scontext? =
+  rest(M, (x | x < length(M))): (scontext?) =
     map(run_map(M) ^^ (x + 1, length(M)))
-  ;++(M, N): scontext? =
+  ;++(M, N): (scontext?) =
     map(run_map(N) o run_map(M))
   concat_empty: THEOREM
     empty ++ M = M
@@ -72,7 +74,7 @@ BEGIN
 
   length_concat: THEOREM
     length(M ++ N) = length(M) + length(N)
-  length_k: THEOREM FORALL (d: sdecl?):
+  length_k: THEOREM FORALL (d: (sdecl?)):
     length(k(d)) = 1
   AUTO_REWRITE length_concat, length_k
 
@@ -163,7 +165,7 @@ BEGIN
     (compatible?(M, itype(U, i, V)) OR compatible?(M, iconst(U, i, V)))
       IMPLIES compatible?(N, U)
 
-  interp(M, (U | compatible?(M, U))): RECURSIVE scontext? =
+  interp(M, (U | compatible?(M, U))): RECURSIVE (scontext?) =
     CASES U OF
       nil: M
     , itype(τ, i, T): interp(map(run_map(M) WITH [ `seq(i) := type_def(T) ]), τ)
@@ -171,7 +173,7 @@ BEGIN
     ENDCASES
   MEASURE U BY <<
 
-  prekind?(M: scontext?)(U)(k): RECURSIVE bool =
+  prekind?(M: (scontext?))(U)(k): RECURSIVE bool =
     CASES U OF
       v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
     , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
@@ -207,7 +209,7 @@ BEGIN
     , iconst(σ, i, a): k = PREINTERP AND prekind?(M)(a)(PRETERM) AND prekind?(M)(σ)(PREINTERP)
 
     , map(f):
-        k = PRECONTEXT AND scontext?(U) AND
+        k = PRECONTEXT AND (scontext?)(U) AND
 	FORALL (x: below[f`length]): prekind?(M ++ rest(U, x))(f`seq(x))(PREDECL)
     ENDCASES
   MEASURE U BY <<
@@ -233,8 +235,8 @@ BEGIN
 
   precontext_is_map: JUDGEMENT precontext SUBTYPE_OF (map?)
   pretheory_is_map: JUDGEMENT pretheory(M) SUBTYPE_OF (map?)
-  precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF scontext?
-  pretheory_is_scontext: JUDGEMENT pretheory(M) SUBTYPE_OF scontext?
+  precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF (scontext?)
+  pretheory_is_scontext: JUDGEMENT pretheory(M) SUBTYPE_OF (scontext?)
 
   Γ: VAR precontext
 
