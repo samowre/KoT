@@ -88,8 +88,8 @@ BEGIN
 
   % TODO: move
   sum(len: nat, f: [below[len] -> nat]):
-    RECURSIVE { n: nat | n > 0 AND FORALL (x: below[len]): f(x) < n } =
-    IF len = 0 THEN 1
+    RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
+    IF len = 0 THEN 0
     ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
   MEASURE len
 
