@@ -6,7 +6,8 @@ BEGIN
   i, j, n, x: VAR nat
   U, t: VAR syntaxic
   nb: VAR [nat, nat]
-  M: VAR (scontext?)
+  M, N, P: VAR (scontext?)
+  k: VAR prekeyword
 
   
   % Special size function defined for termination
@@ -75,16 +76,27 @@ BEGIN
   shift_zero: THEOREM
     U ↑ (0, n) = U
   AUTO_REWRITE+ shift_zero
-
   ;↑(U, (n: nat)): MACRO syntaxic =
     (U ↑ (n, 0))
+
   length_shift: THEOREM
     length(M ↑ nb) = length(M)
   shift_plus: THEOREM
     (U ↑ (i, n)) ↑ (j, n) = U ↑ (i + j, n)
   AUTO_REWRITE+ shift_plus
+  shift_k: THEOREM FORALL (d: (sdecl?)):
+    k(d) ↑ nb = k(d ↑ nb)
+  shift_concat: THEOREM
+    (M ++ N) ↑ nb = (M ↑ nb) ++ (N ↑ (nb`1, nb`2 + length(M)))
+  AUTO_REWRITE shift_k, shift_concat
+    
+  
 
   % Subtype judgements
+  shift_prekind: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
+    prekind?(Γ ++ Θ)(U)(k) IMPLIES 
+    prekind?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))(k)
+    
   shift_pretype: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
     pretype?(Γ ++ Θ)(U) IFF pretype?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))
   shift_preterm: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
@@ -155,6 +167,17 @@ BEGIN
   AUTO_REWRITE subst
 
   % Judgements
+  subst_subtype: THEOREM FORALL (Δ: pretheory(Γ), Tx: pretype(Γ)):
+    preterm?(Γ ++ Δ)(t) IMPLIES
+    (pretype?(Γ ++ k(const_var(Tx)) ++ Δ)(U) IMPLIES
+     pretype?(Γ ++ subst(Δ, length(Δ), t))(subst(U, length(Δ), t))) AND
+    (preterm?(Γ ++ k(const_var(Tx)) ++ Δ)(U) IMPLIES
+     preterm?(Γ ++ subst(Δ, x, t))(subst(U, length(Δ), t))) AND
+    (preinterp?(Γ ++ k(const_var(Tx)) ++ Δ)(U) IMPLIES
+     preinterp?(Γ ++ subst(Δ, x, t))(subst(U, length(Δ), t))) AND
+    (preinterp?(Γ ++ k(const_var(Tx)) ++ Δ)(U) IMPLIES
+     pretheory?(Γ ++ subst(Δ, x, t))(subst(U, length(Δ), t)))
+
   subst_pretype: THEOREM FORALL (Δ: pretheory(Γ), Tx: pretype(Γ)):
     pretype?(Γ ++ k(const_var(Tx)) ++ Δ)(U) AND
     preterm?(Γ ++ Δ)(t) IMPLIES 

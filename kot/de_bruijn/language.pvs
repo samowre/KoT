@@ -86,6 +86,12 @@ BEGIN
       ENDIF
   AUTO_REWRITE+ concat_empty, concat__empty, concat_assoc, rest_concat
 
+  length_concat: THEOREM
+    length(M ++ N) = length(M) + length(N)
+  length_k: THEOREM FORALL (d: (sdecl?)):
+    length(k(d)) = 1
+  AUTO_REWRITE length_concat, length_k
+
   % TODO: move
   sum(len: nat, f: [below[len] -> nat]):
     RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
@@ -240,6 +246,11 @@ BEGIN
   pretheory_is_scontext: JUDGEMENT pretheory(M) SUBTYPE_OF (scontext?)
 
   Γ: VAR precontext
+
+
+  prekind_concat: THEOREM
+    prekind?(M)(N ++ P)(PRECONTEXT) IFF 
+    prekind?(M)(N)(PRECONTEXT) AND prekind?(M ++ N)(P)(PRECONTEXT)
 
   pretheory_as_precontext: THEOREM
     pretheory?(Γ)(U) IMPLIES precontext?(Γ ++ U)
