@@ -87,8 +87,9 @@ BEGIN
   AUTO_REWRITE+ concat_empty, concat__empty, concat_assoc, rest_concat
 
   % TODO: move
-  sum(len: nat, f: [below[len] -> nat]): RECURSIVE nat =
-    IF len = 0 THEN 0
+  sum(len: nat, f: [below[len] -> nat]):
+    RECURSIVE { n: nat | n > 0 AND FORALL (x: below[len]): f(x) < n } =
+    IF len = 0 THEN 1
     ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
   MEASURE len
 
@@ -222,13 +223,15 @@ BEGIN
   pretype?(M)(U): MACRO bool = prekind?(M)(U)(PRETYPE)
   preterm?(M)(U): MACRO bool = prekind?(M)(U)(PRETERM)
   preinterp?(M)(U): MACRO bool = prekind?(M)(U)(PREINTERP)
+  predecl?(M)(U): MACRO bool = prekind?(M)(U)(PREDECL)
   semantic?(M)(U): bool =
-    pretheory?(M)(U) OR pretype?(M)(U) OR preterm?(M)(U) OR preinterp?(M)(U)
+    pretheory?(M)(U) OR pretype?(M)(U) OR preterm?(M)(U) OR preinterp?(M)(U) OR predecl?(M)(U)
 
   pretheory(M): TYPE = (pretheory?(M))
   pretype(M): TYPE = (pretype?(M))
   preterm(M): TYPE = (preterm?(M))
   preinterp(M): TYPE = (preinterp?(M))
+  predecl(M): TYPE = (predecl?(M))
   semantic(M): TYPE = (semantic?(M))
 
   precontext_is_map: JUDGEMENT precontext SUBTYPE_OF (map?)
