@@ -215,26 +215,28 @@ BEGIN
   precontext?(U): MACRO bool = prekind?(empty)(U)(PRECONTEXT)
   precontext: TYPE = (precontext?)
 
-  Γ: VAR precontext
+  pretheory?(M)(U): MACRO bool = prekind?(M)(U)(PRECONTEXT)
+  pretype?(M)(U): MACRO bool = prekind?(M)(U)(PRETYPE)
+  preterm?(M)(U): MACRO bool = prekind?(M)(U)(PRETERM)
+  preinterp?(M)(U): MACRO bool = prekind?(M)(U)(PREINTERP)
+  semantic?(M)(U): bool =
+    pretheory?(M)(U) OR pretype?(M)(U) OR preterm?(M)(U) OR preinterp?(M)(U)
 
-  pretheory?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PRECONTEXT)
-  pretype?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PRETYPE)
-  preterm?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PRETERM)
-  preinterp?(Γ)(U): MACRO bool = prekind?(Γ)(U)(PREINTERP)
-  semantic?(Γ)(U): bool =
-    pretheory?(Γ)(U) OR pretype?(Γ)(U) OR preterm?(Γ)(U) OR preinterp?(Γ)(U)
-
-  pretheory(Γ): TYPE = (pretheory?(Γ))
-  pretype(Γ): TYPE = (pretype?(Γ))
-  preterm(Γ): TYPE = (preterm?(Γ))
-  preinterp(Γ): TYPE = (preinterp?(Γ))
-  semantic(Γ): TYPE = (semantic?(Γ))
+  pretheory(M): TYPE = (pretheory?(M))
+  pretype(M): TYPE = (pretype?(M))
+  preterm(M): TYPE = (preterm?(M))
+  preinterp(M): TYPE = (preinterp?(M))
+  semantic(M): TYPE = (semantic?(M))
 
   precontext_is_map: JUDGEMENT precontext SUBTYPE_OF (map?)
-  pretheory_is_map: JUDGEMENT pretheory(Γ) SUBTYPE_OF (map?)
+  pretheory_is_map: JUDGEMENT pretheory(M) SUBTYPE_OF (map?)
   precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF (scontext?)
-  pretheory_is_scontext: JUDGEMENT pretheory(Γ) SUBTYPE_OF (scontext?)
+  pretheory_is_scontext: JUDGEMENT pretheory(M) SUBTYPE_OF (scontext?)
+
+  Γ: VAR precontext
 
   pretheory_as_precontext: THEOREM
     pretheory?(Γ)(U) IMPLIES precontext?(Γ ++ U)
+  precontext_as_pretheory: THEOREM
+    precontext?(Γ ++ M) IMPLIES pretheory?(Γ)(M)  
 END language
