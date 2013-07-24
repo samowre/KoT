@@ -1,34 +1,34 @@
 language: THEORY
 BEGIN
-  syntaxic: DATATYPE
+  syntaxic: DATATYPE WITH SUBTYPES sexpr?, sdecl?, scontext?, sinterp?
   BEGIN
-    v(i: nat): v?
-    dot(m: nat, map: syntaxic, s: syntaxic): dot?
+    v(i: nat): v?: sexpr?
+    dot(m: nat, map: (sinterp?), s: (sexpr?)): dot?: sexpr?
   
-    fun(dom: syntaxic, range: syntaxic): fun?
-    prod(left: syntaxic, right: syntaxic): prod?
-    subtype(supertype: syntaxic, pred: syntaxic): subtype?
+    fun(dom: (sexpr?), range: (sexpr?)): fun?: sexpr?
+    prod(left: (sexpr?), right: (sexpr?)): prod?: sexpr?
+    subtype(supertype: (sexpr?), pred: (sexpr?)): subtype?: sexpr?
 
-    app(op: syntaxic, arg: syntaxic): app?
-    lam(type_: syntaxic, body: syntaxic): lam?
-    pair(left: syntaxic, right: syntaxic): pair?
-    lproj(arg: syntaxic): lproj?
-    rproj(arg: syntaxic): rproj?
+    app(op: (sexpr?), arg: (sexpr?)): app?: sexpr?
+    lam(type_: (sexpr?), body: (sexpr?)): lam?: sexpr?
+    pair(left: (sexpr?), right: (sexpr?)): pair?: sexpr?
+    lproj(arg: (sexpr?)): lproj?: sexpr?
+    rproj(arg: (sexpr?)): rproj?: sexpr?
 
-    type_decl: type_decl?
-    type_var: type_var?
-    type_def(def: syntaxic): type_def?
-    const_decl(type_: syntaxic): const_decl?
-    const_var(type_: syntaxic): const_var?
-    const_def(type_: syntaxic, def: syntaxic): const_def?
-    theory_def(def: syntaxic): theory_def?
+    type_decl: type_decl?: sdecl?
+    type_var: type_var?: sdecl?
+    type_def(def: (sexpr?)): type_def?: sdecl?
+    const_decl(type_: (sexpr?)): const_decl?: sdecl?
+    const_var(type_: (sexpr?)): const_var?: sdecl?
+    const_def(type_: (sexpr?), def: (sexpr?)): const_def?: sdecl?
+    theory_def(def: (scontext?)): theory_def?: sdecl?
 
-    nil: nil?
-    itype(rest: syntaxic, i: nat, def: syntaxic): itype?
-    iconst(rest: syntaxic, i: nat, def: syntaxic): iconst?
+    nil: nil?: sinterp?
+    itype(rest: (sinterp?), i: nat, def: (sexpr?)): itype?: sinterp?
+    iconst(rest: (sinterp?), i: nat, def: (sexpr?)): iconst?: sinterp?
 %    itheory(def: syntaxic): itheory?
 
-    map(run_map: finseq[syntaxic]): map?
+    map(run_map: finseq[(sdecl?)]): map?: scontext?
   END syntaxic
 
   prekeyword: TYPE =
@@ -39,38 +39,22 @@ BEGIN
   i, j, n: VAR nat
   k: VAR prekeyword
 
-  sinterp?(U): RECURSIVE bool =
-    CASES U OF
-      nil: TRUE
-    , itype(τ, i, T): sinterp?(τ)
-    , iconst(τ, i, a): sinterp?(τ)
-      ELSE FALSE
-    ENDCASES
-  MEASURE U BY <<
-
-  sdecl?(U): bool =
-    type_decl?(U) OR type_var?(U) OR type_def?(U) OR const_decl?(U) OR
-    const_var?(U) OR const_def?(U) OR theory_def?(U)
-
-  scontext?(U): bool =
-    map?(U) AND FORALL (x: below[run_map(U)`length]): sdecl?(run_map(U)`seq(x))
-
-  k(d: (sdecl?)): (scontext?) =
+  k(d: sdecl?): scontext? =
     map((# length := 1, seq := LAMBDA (x: below[1]): d #))
 
-  M, N, P: VAR (scontext?)
-  empty: (scontext?) = map(empty_seq)
+  M, N, P: VAR scontext?
+  empty: MACRO scontext? = map(empty_seq)
 
   length(M): MACRO nat =
     run_map(M)`length
   ;∈(x, M): MACRO bool =
     x < length(M)
-  apply(M)(x | x ∈ M): (sdecl?) =
+  apply(M)(x | x ∈ M): sdecl? =
     run_map(M)`seq(x)
   CONVERSION+ apply
-  rest(M, (x | x < length(M))): (scontext?) =
+  rest(M, (x | x < length(M))): scontext? =
     map(run_map(M) ^^ (x + 1, length(M)))
-  ;++(M, N): (scontext?) =
+  ;++(M, N): scontext? =
     map(run_map(N) o run_map(M))
   concat_empty: THEOREM
     empty ++ M = M
@@ -88,7 +72,7 @@ BEGIN
 
   length_concat: THEOREM
     length(M ++ N) = length(M) + length(N)
-  length_k: THEOREM FORALL (d: (sdecl?)):
+  length_k: THEOREM FORALL (d: sdecl?):
     length(k(d)) = 1
   AUTO_REWRITE length_concat, length_k
 
@@ -174,12 +158,12 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE compatible?
   compatible_interp: THEOREM
-    length(M) = length(N) AND
+    length(M) = length(N) AND sinterp?(U) AND sexpr?(V) AND
     (FORALL (x: below[length(M)]): x /= i => M(x) = N(x)) AND
     (compatible?(M, itype(U, i, V)) OR compatible?(M, iconst(U, i, V)))
       IMPLIES compatible?(N, U)
 
-  interp(M, (U | compatible?(M, U))): RECURSIVE (scontext?) =
+  interp(M, (U | compatible?(M, U))): RECURSIVE scontext? =
     CASES U OF
       nil: M
     , itype(τ, i, T): interp(map(run_map(M) WITH [ `seq(i) := type_def(T) ]), τ)
@@ -187,7 +171,7 @@ BEGIN
     ENDCASES
   MEASURE U BY <<
 
-  prekind?(M: (scontext?))(U)(k): RECURSIVE bool =
+  prekind?(M: scontext?)(U)(k): RECURSIVE bool =
     CASES U OF
       v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
     , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
@@ -249,8 +233,8 @@ BEGIN
 
   precontext_is_map: JUDGEMENT precontext SUBTYPE_OF (map?)
   pretheory_is_map: JUDGEMENT pretheory(M) SUBTYPE_OF (map?)
-  precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF (scontext?)
-  pretheory_is_scontext: JUDGEMENT pretheory(M) SUBTYPE_OF (scontext?)
+  precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF scontext?
+  pretheory_is_scontext: JUDGEMENT pretheory(M) SUBTYPE_OF scontext?
 
   Γ: VAR precontext
 
