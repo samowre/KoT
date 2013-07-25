@@ -42,7 +42,10 @@ BEGIN
 	    add(length(M) - i, add(1, zero, zero), zero)
 	  ELSE zero
 	ENDIF
-    , dot(i, σ, x): % weight(M, σ) * (length(M) - i) + length(def(M(i)) - i(x))
+    , dot(m, σ, x):
+        weight(M, m) * weight(M, σ)
+
+% weight(M, σ) * (length(M) - i) + length(def(M(i)) - i(x))
         IF i ∈ M AND theory_def?(M(i)) AND scontext?(def(M(i))) AND compatible?(def(M(i)), σ)
 	  THEN weight(M, σ) * (length(M) - i) + (run_map(def(M(i)))`length - i(x))
 	  ELSE zero ENDIF

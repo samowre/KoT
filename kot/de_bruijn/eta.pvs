@@ -57,4 +57,7 @@ BEGIN
         map(f WITH [ `seq := LAMBDA (x: below[f`length]): η(Γ)(Δ ++ rest(S, x), m, σ)(f(x)) ])
     ENDCASES
   MEASURE size(S)
+
+  prekind_eta: THEOREM m ∈ Γ AND kind?(Γ(m), PRECONTEXT) AND compatible?(def(Γ(m)), σ) AND prekind?(Γ)(σ)(PREINTERP) IMPLIES
+    prekind?(Γ ++ Δ)(η(Γ)(Δ, m, σ)(S)) = prekind?(Γ ++ def(Γ(m)) ++ Δ)(S)
 END eta

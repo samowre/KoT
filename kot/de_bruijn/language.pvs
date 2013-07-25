@@ -1,11 +1,43 @@
 language: THEORY
 BEGIN
-  syntaxic: DATATYPE WITH SUBTYPES sexpr?, sdecl?, scontext?, sinterp?
+
+  signature: DATATYPE
+  BEGIN
+    stype_decl: stype_decl?
+    stype_def: stype_def?
+    sconst_decl: sconst_decl?
+    sconst_def: sconst_def?
+    stheory(sig: finseq[signature]): stheory?
+  END signature
+
+  s: VAR signature
+  Sig: VAR finseq[signature]
+
+  prekeyword: DATATYPE
+  BEGIN
+    PRETYPE: PRETYPE?
+    PRETERM: PRETERM?
+    PRECONTEXT(SIG: finseq[signature]): PRECONTEXT?
+  END prekeyword
+
+  k: VAR prekeyword
+
+  kw(s): prekeyword =
+    CASES s OF
+      stype_decl: PRETYPE
+    , stype_def: PRETYPE
+    , sconst_decl: PRETERM
+    , sconst_def: PRETERM
+    , stheory(Sig): PRECONTEXT(Sig)
+    ENDCASES
+
+  syntaxic: DATATYPE WITH SUBTYPES sexpr?, scontext?, sinterp?
   BEGIN
     v(i: nat): v?: sexpr?
     % Update this with finseq for nested theories:
-    % finseq[ (nat, sinterp?) ], nat
-    dot(m: (sexpr?), map: (sinterp?), i: nat): dot?: sexpr?
+    % finseq[ (sinterp?) ], nat
+    dot(m: (sexpr?), sig: finseq[signature], x: (sexpr?)): dot?: sexpr?
+    interp(m: (sexpr?), map: finseq[(sinterp?)]): interp?: sexpr?
   
     fun(dom: (sexpr?), range: (sexpr?)): fun?: sexpr?
     prod(left: (sexpr?), right: (sexpr?)): prod?: sexpr?
@@ -17,49 +49,62 @@ BEGIN
     lproj(arg: (sexpr?)): lproj?: sexpr?
     rproj(arg: (sexpr?)): rproj?: sexpr?
 
-    type_decl: type_decl?: sdecl?
-    type_var: type_var?: sdecl?
-    type_def(def: (sexpr?)): type_def?: sdecl?
-    const_decl(type_: (sexpr?)): const_decl?: sdecl?
-    const_var(type_: (sexpr?)): const_var?: sdecl?
-    const_def(type_: (sexpr?), def: (sexpr?)): const_def?: sdecl?
-    theory_def(def: (scontext?)): theory_def?: sdecl?
+    type_decl: type_decl?: scontext?
+    type_var: type_var?: scontext?
+    type_def(def: (sexpr?)): type_def?: scontext?
+    const_decl(type_: (sexpr?)): const_decl?: scontext?
+    const_var(type_: (sexpr?)): const_var?: scontext?
+    const_def(type_: (sexpr?), def: (sexpr?)): const_def?: scontext?
+    theory_def(def: finseq[(scontext?)]): theory_def?: scontext?
 
-    nil: nil?: sinterp?
-    itype(rest: (sinterp?), i: nat, def: (sexpr?)): itype?: sinterp?
-    iconst(rest: (sinterp?), i: nat, def: (sexpr?)): iconst?: sinterp?
+%    map(run_map: finseq[(scontext?)]): map?: scontext?
+
+    ikeep: ikeep?: sinterp?
+    itype(def: (sexpr?)): itype?: sinterp?
+    iterm(def: (sexpr?)): iterm?: sinterp?
 %    itheory(def: syntaxic): itheory?
 
-    map(run_map: finseq[(sdecl?)]): map?: scontext?
   END syntaxic
   AUTO_REWRITE- sexpr?
   AUTO_REWRITE+ scontext?
 
-  prekeyword: TYPE =
-    { PRETYPE, PRETERM, PRECONTEXT, PREINTERP, PREDECL }
-
-  U, V: VAR syntaxic
+  U, V, S: VAR syntaxic
   x, y: VAR nat
   i, j, n: VAR nat
-  k: VAR prekeyword
 
-  k(d: (sdecl?)): (scontext?) =
-    map((# length := 1, seq := LAMBDA (x: below[1]): d #))
+  signature(ctx: (scontext?)): RECURSIVE signature =
+    CASES ctx OF
+      type_decl: stype_decl
+    , type_var: stype_def
+    , type_def(T): stype_def
+    , const_decl(T): sconst_decl
+    , const_var(T): sconst_def
+    , const_def(T, a): sconst_def
+    , theory_def(f):
+        stheory((# length := f`length
+	         , seq := LAMBDA (x: below[f`length]): signature(f(x))
+	        #))
+    ENDCASES
+  MEASURE ctx BY <<
+
+  k(d: (scontext?)): (theory_def?) =
+    theory_def((# length := 1, seq := LAMBDA (x: below[1]): d #))
 
   M, N, P: VAR (scontext?)
-  empty: MACRO (scontext?) = map(empty_seq)
+  empty: MACRO (scontext?) = theory_def(empty_seq)
 
-  length(M): MACRO nat =
-    run_map(M)`length
+  length(M): nat =
+    def(M)`length
+  AUTO_REWRITE+ length
   ;∈(x, M): MACRO bool =
     x < length(M)
-  apply(M)(x | x ∈ M): (sdecl?) =
-    run_map(M)`seq(x)
+  apply(M)(x | x ∈ M): (scontext?) =
+    def(M)`seq(x)
   CONVERSION+ apply
-  rest(M, (x | x < length(M))): (scontext?) =
-    map(run_map(M) ^^ (x + 1, length(M)))
-  ;++(M, N): (scontext?) =
-    map(run_map(N) o run_map(M))
+  rest(M, (x | x < length(M))): (theory_def?) =
+    theory_def(def(M) ^^ (x + 1, length(M)))
+  ;++(M, N): (theory_def?) =
+    theory_def(def(N) o def(M))
   concat_empty: THEOREM
     empty ++ M = M
   concat__empty: THEOREM
@@ -76,7 +121,7 @@ BEGIN
 
   length_concat: THEOREM
     length(M ++ N) = length(M) + length(N)
-  length_k: THEOREM FORALL (d: (sdecl?)):
+  length_k: THEOREM FORALL (d: (scontext?)):
     length(k(d)) = 1
   AUTO_REWRITE length_concat, length_k
 
@@ -89,8 +134,9 @@ BEGIN
 
   size(U): RECURSIVE nat =
     CASES U OF
-      v(i): 2
-    , dot(m, σ, x): size(m) + size(σ) + 2
+      v(x): 2
+    , dot(m, S, x): size(m) + size(x) + 2
+    , interp(m, σ): size(m) + sum(σ`length, LAMBDA (x: below[σ`length]): size(σ)) + 2
 
     , fun(A, B): size(A) + size(B) + 2
     , prod(A, B): size(A) + size(B) + 2
@@ -108,13 +154,12 @@ BEGIN
     , const_decl(T): size(T) + 1
     , const_var(T): size(T) + 1
     , const_def(T, a): size(T) + size(a) + 1
-    , theory_def(Θ): size(Θ) + 1
 
-    , nil: 0
-    , itype(τ, i, T): size(τ) + size(T) + 4
-    , iconst(τ, i, a): size(τ) + size(a) + 4
+    , ikeep: 1
+    , itype(T): size(T) + 4
+    , iterm(a): size(a) + 4
 
-    , map(f): sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x)))
+    , theory_def(f): sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x)))
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE size
@@ -122,126 +167,57 @@ BEGIN
     f`length < g`length AND (FORALL (x: below[f`length]): f`seq(x) = g`seq(g`length - f`length + x)) IMPLIES
       sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x))) < sum(g`length, LAMBDA (x: below[g`length]): 1 + size(g(x)))
 
-  kind?(U, k): bool = 
-    CASES U OF
-      type_decl: k = PRETYPE
-    , type_var: k = PRETYPE
-    , type_def(T): k = PRETYPE
-    , const_decl(T): k = PRETERM
-    , const_var(T): k = PRETERM
-    , const_def(T, a): k = PRETERM
-    , theory_def(Θ): k = PRECONTEXT
-    ELSE FALSE
-    ENDCASES
-  AUTO_REWRITE kind?
+  seq1(s): finseq[signature] =
+    (# length := 1, seq := LAMBDA (x: below[1]): s #)
 
-  interpret?(U, i): RECURSIVE bool =
+  pretau(Sig: finseq[signature])(U)(s): RECURSIVE bool =
     CASES U OF
-      itype(τ, j, T): i = j OR interpret?(τ, i)
-    , iconst(τ, j, a): i = j OR interpret?(τ, i)
-    ELSE FALSE
-    ENDCASES
-  MEASURE U BY <<
-
-  interpret(U, (i | interpret?(U, i))): RECURSIVE (sexpr?) =
-    CASES U OF
-      itype(τ, j, T): IF i = j THEN T ELSE interpret(τ, i) ENDIF
-    , iconst(τ, j, a): IF i = j THEN a ELSE interpret(τ, i) ENDIF
-    ENDCASES
-  MEASURE U BY <<
-
-  compatible?(M, U): RECURSIVE bool =
-    CASES U OF
-      nil: TRUE
-    , itype(τ, i, T):
-        i < length(M) AND type_decl?(M(i)) AND NOT interpret?(τ, i) AND compatible?(M, τ)
-    , iconst(τ, i, a):
-        i < length(M) AND const_decl?(M(i)) AND NOT interpret?(τ, i) AND compatible?(M, τ)
-    ELSE FALSE
-    ENDCASES
-  MEASURE U BY <<
-  AUTO_REWRITE compatible?
-  compatible_interp: THEOREM
-    length(M) = length(N) AND sinterp?(U) AND sexpr?(V) AND
-    (FORALL (x: below[length(M)]): x /= i => M(x) = N(x)) AND
-    (compatible?(M, itype(U, i, V)) OR compatible?(M, iconst(U, i, V)))
-      IMPLIES compatible?(N, U)
-
-  interp(M, (U | compatible?(M, U))): RECURSIVE (scontext?) =
-    CASES U OF
-      nil: M
-    , itype(τ, i, T): interp(map(run_map(M) WITH [ `seq(i) := type_def(T) ]), τ)
-    , iconst(τ, i, a): interp(map(run_map(M) WITH [ `seq(i) := const_def(type_(M(i)), a) ]), τ)
-    ENDCASES
-  MEASURE U BY <<
-
-  prekind?(M: (scontext?))(U)(k): RECURSIVE bool =
-    CASES U OF
-      v(i):
-        (k = PRETYPE OR k = PRETERM OR k = PRECONTEXT)
-	AND i < length(M) AND kind?(M(i), k)
-    , dot(m, σ, i):
-        (k = PRETYPE OR k = PRETERM OR k = PRECONTEXT) AND
-	prekind?(M)(σ)(PREINTERP) AND
-	% prekind?(M)(m)(PRECONTEXT) AND
-	v?(m) AND i(m) ∈ M AND kind?(M(i(m)), PRECONTEXT) AND
-	compatible?(def(M(i(m))), σ) AND
-	i ∈ def(M(i(m))) AND kind?(def(M(i(m)))(i), k)
+      v(x): x < Sig`length AND kw(s) = kw(Sig`seq(x))
+    , dot(m, S, x):
+        pretau(Sig)(m)(stheory(S)) AND
+	pretau(S)(x)(s)
+    , interp(m, σ):
+        stheory?(s) AND
+        pretau(Sig)(m)(s) AND
+	σ`length = sig(s)`length AND
+	FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(sig(s)`seq(x))
 
     , fun(A, B):
-        k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M ++ k(const_var(A)))(B)(PRETYPE)
+        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(seq1(stype_def) o Sig)(B)(s)
+        
     , prod(A, B):
-        k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M ++ k(const_var(A)))(B)(PRETYPE)
+        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(seq1(stype_def) o Sig)(B)(s)
     , subtype(T, a):
-        k = PRETYPE AND prekind?(M)(T)(PRETYPE) AND prekind?(M ++ k(const_var(T)))(a)(PRETERM)
+        kw(s) = PRETYPE AND pretau(Sig)(T)(s) AND pretau(seq1(stype_def) o Sig)(a)(sconst_def)
 
-    , app(f, a): k = PRETERM AND prekind?(M)(f)(PRETERM) AND prekind?(M)(a)(PRETERM)
-    , lam(T, a): k = PRETERM AND prekind?(M)(T)(PRETYPE) AND prekind?(M ++ k(const_var(T)))(a)(PRETERM)
-    , pair(a, b): k = PRETERM AND prekind?(M)(a)(PRETERM) AND prekind?(M)(b)(PRETERM)
-    , lproj(a): k = PRETERM AND prekind?(M)(a)(k)
-    , rproj(a): k = PRETERM AND prekind?(M)(a)(k)
+    , app(f, a):
+        kw(s) = PRETERM AND pretau(Sig)(f)(s) AND pretau(Sig)(a)(s)
+    , lam(T, a):
+        kw(s) = PRETERM AND pretau(Sig)(T)(stype_def) AND pretau(seq1(stype_def) o Sig)(a)(s)
+    , pair(a, b):
+        kw(s) = PRETERM AND pretau(Sig)(a)(s) AND pretau(Sig)(b)(s)
+    , lproj(a):
+        kw(s) = PRETERM AND pretau(Sig)(a)(s)
+    , rproj(a):
+        kw(s) = PRETERM AND pretau(Sig)(a)(s)
 
-    , type_decl: k = PREDECL
-    , type_var: k = PREDECL
-    , type_def(T): k = PREDECL AND prekind?(M)(T)(PRETYPE)
-    , const_decl(T): k = PREDECL AND prekind?(M)(T)(PRETYPE)
-    , const_var(T): k = PREDECL AND prekind?(M)(T)(PRETYPE)
+    , ikeep: TRUE
+    , itype(T): stype_decl?(s) AND pretau(Sig)(T)(s)
+    , iterm(a): sconst_decl?(s) AND pretau(Sig)(a)(s)
+
+    , type_decl: stype_decl?(s)
+    , type_var: stype_def?(s)
+    , type_def(T): stype_def?(s) AND pretau(Sig)(T)(s)
+    , const_decl(T): sconst_decl?(s) AND pretau(Sig)(T)(stype_def)
+    , const_var(T): sconst_def?(s) AND pretau(Sig)(T)(stype_def)
     , const_def(T, a) :
-        k = PREDECL AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(a)(PRETERM)
-    , theory_def(Θ):
-        k = PREDECL AND prekind?(M)(Θ)(PRECONTEXT)
-
-    , nil: k = PREINTERP
-    , itype(σ, i, T): k = PREINTERP AND prekind?(M)(T)(PRETYPE) AND prekind?(M)(σ)(PREINTERP)
-    , iconst(σ, i, a): k = PREINTERP AND prekind?(M)(a)(PRETERM) AND prekind?(M)(σ)(PREINTERP)
-
-    , map(f):
-        k = PRECONTEXT AND (scontext?)(U) AND
-	FORALL (x: below[f`length]): prekind?(M ++ rest(U, x))(f`seq(x))(PREDECL)
+        sconst_def?(s) AND pretau(Sig)(T)(stype_def) AND pretau(Sig)(a)(s)
+    , theory_def(f):
+        LET fsig = (# length := f`length, seq := LAMBDA (x: below[f`length]): signature(f`seq(x)) #) IN
+        FORALL (x: below[f`length]): pretau(fsig ^^ (x + 1, f`length) o Sig)(f`seq(x))(fsig`seq(x))
     ENDCASES
   MEASURE U BY <<
-  AUTO_REWRITE prekind?
-
-  precontext?(U): MACRO bool = prekind?(empty)(U)(PRECONTEXT)
-  precontext: TYPE = (precontext?)
-
-  pretheory?(M)(U): MACRO bool = prekind?(M)(U)(PRECONTEXT)
-  pretype?(M)(U): MACRO bool = prekind?(M)(U)(PRETYPE)
-  preterm?(M)(U): MACRO bool = prekind?(M)(U)(PRETERM)
-  preinterp?(M)(U): MACRO bool = prekind?(M)(U)(PREINTERP)
-  predecl?(M)(U): MACRO bool = prekind?(M)(U)(PREDECL)
-  semantic?(M)(U): bool =
-    pretheory?(M)(U) OR pretype?(M)(U) OR preterm?(M)(U) OR preinterp?(M)(U) OR predecl?(M)(U)
-
-  pretheory(M): TYPE = (pretheory?(M))
-  pretype(M): TYPE = (pretype?(M))
-  preterm(M): TYPE = (preterm?(M))
-  preinterp(M): TYPE = (preinterp?(M))
-  predecl(M): TYPE = (predecl?(M))
-  semantic(M): TYPE = (semantic?(M))
-
-  precontext_is_map: JUDGEMENT precontext SUBTYPE_OF (map?)
-  precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF (scontext?)
+  AUTO_REWRITE pretau
 
   Γ: VAR precontext
 
@@ -257,4 +233,13 @@ BEGIN
   semantic_pretheory: THEOREM
     pretheory?(M)(N) AND i ∈ N IMPLIES
       semantic?(M ++ rest(N, i))(N(i))
+
+  kind_equiv: THEOREM
+    U ≡ V IMPLIES kind?(U, k) = kind?(V, k)
+  length_equiv: THEOREM
+    M ≡ N IMPLIES length(M) = length(N)
+  apply_equiv: THEOREM
+    M ≡ N AND i ∈ M IMPLIES M(i) ≡ N(i)
+  prekind_equiv: THEOREM
+    M ≡ N IMPLIES prekind?(M)(U) = prekind?(N)(U)
 END language
