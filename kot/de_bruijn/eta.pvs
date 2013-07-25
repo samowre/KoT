@@ -2,62 +2,63 @@ eta: THEORY
 BEGIN
   IMPORTING subst
 
-  Γ, Δ: VAR (scontext?)
-  σ: VAR (sinterp?)
+  σ: VAR finseq[(sinterp?)]
   m: VAR nat
   S: VAR syntaxic
+  Sig, ρ: VAR (stheory?)
+  U, V: VAR syntaxic
 
-
-
-%  η(Γ)(Δ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
-%   (S: semantic(Γ ++ def(Γ(m)) ++ Δ) | NOT map?(S)): RECURSIVE
-  η(Γ)(Δ, (m | m ∈ Γ AND kind?(Γ(m), PRECONTEXT)), σ)(S):
-    RECURSIVE { U: syntaxic | (sexpr?(S) => sexpr?(U)) AND
-                              (sdecl?(S) => sdecl?(U)) AND
-			      (sinterp?(S) => sinterp?(U)) AND
-			      (scontext?(S) => scontext?(U)) } =
-%    { U: syntaxic | prekind?(Γ ++ Δ)(U) = prekind?(Γ ++ def(Γ(m)) ++ Δ)(S) } =
-    CASES S OF
+%  η(Γ)(ρ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
+%   (S: semantic(Γ ++ def(Γ(m)) ++ ρ) | NOT map?(S)): RECURSIVE
+  η(Sig)(ρ, (m | m ∈ Sig AND stheory?(Sig(m))), (σ | σ`length = length(Sig(m))))(U):
+    RECURSIVE { V: syntaxic | (sexpr?(U) => sexpr?(V)) AND
+			      (sinterp?(U) => sinterp?(V)) AND
+			      (scontext?(U) => scontext?(V)) } =
+%    { U: syntaxic | prekind?(Γ ++ ρ)(U) = prekind?(Γ ++ def(Γ(m)) ++ ρ)(S) } =
+    CASES U OF
       v(i):
-        IF i ∈ Δ THEN v(i)
-	ELSIF (i - length(Δ)) ∈ def(Γ(m)) THEN
-	  IF interpret?(σ, i - length(Δ))
-	    THEN interpret(σ, i - length(Δ)) ↑ length(Δ)
-	    ELSE dot(v(m + length(Δ)), σ ↑ length(Δ), i - length(Δ))
+        IF i ∈ ρ THEN v(i)
+	ELSIF (i - length(ρ)) ∈ Sig(m) THEN
+	  IF ikeep?(σ`seq(i - length(ρ)))
+	    THEN dot(interp(v(m + length(ρ)),
+	                    σ WITH [ `seq := LAMBDA (x: below[σ`length]): σ`seq(i) ↑ length(ρ) ]),
+		     Sig(m),
+		     v(i - length(ρ)))
+	    ELSE σ`seq(i - length(ρ)) ↑ length(ρ)
 	  ENDIF
-	ELSE v(i - length(def(Γ(m)))) ENDIF
-    , dot(p, τ, x):
-        dot(η(Γ)(Δ, m, σ)(p), η(Γ)(Δ, m, σ)(τ), x)
+	ELSE v(i - length(Sig(m))) ENDIF
+    , dot(p, Sp, x):
+        dot(η(Sig)(ρ, m, σ)(p), Sp, η(Sig)(ρ, m, σ)(x))
+    , interp(p, τ):
+        interp(η(Sig)(ρ, m, σ)(p), τ WITH [ `seq := LAMBDA (x: below[τ`length]): η(Sig)(ρ, m, σ)(τ`seq(x)) ])
 
     , fun(A, B):
-        fun(η(Γ)(Δ, m, σ)(A), η(Γ)(Δ ++ k(const_var(A)), m, σ)(B))
-    , prod(A, B): prod(η(Γ)(Δ, m, σ)(A), η(Γ)(Δ ++ k(const_var(A)), m, σ)(B))
+        fun(η(Sig)(ρ, m, σ)(A), η(Sig)(ρ ++ k(sconst_def), m, σ)(B))
+    , prod(A, B): prod(η(Sig)(ρ, m, σ)(A), η(Sig)(ρ ++ k(sconst_def), m, σ)(B))
     , subtype(T, a):
-        subtype(η(Γ)(Δ, m, σ)(T), η(Γ)(Δ ++ k(const_var(T)), m, σ)(a))
+        subtype(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ ++ k(sconst_def), m, σ)(a))
 
-    , app(f, a): app(η(Γ)(Δ, m, σ)(f), η(Γ)(Δ, m, σ)(a))
-    , lam(T, a): lam(η(Γ)(Δ, m, σ)(T), η(Γ)(Δ ++ k(const_var(T)), m, σ)(a))
-    , pair(a, b): pair(η(Γ)(Δ, m, σ)(a), η(Γ)(Δ, m, σ)(b))
-    , lproj(a): lproj(η(Γ)(Δ, m, σ)(a))
-    , rproj(a): rproj(η(Γ)(Δ, m, σ)(a))
+    , app(f, a): app(η(Sig)(ρ, m, σ)(f), η(Sig)(ρ, m, σ)(a))
+    , lam(T, a): lam(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ ++ k(sconst_def), m, σ)(a))
+    , pair(a, b): pair(η(Sig)(ρ, m, σ)(a), η(Sig)(ρ, m, σ)(b))
+    , lproj(a): lproj(η(Sig)(ρ, m, σ)(a))
+    , rproj(a): rproj(η(Sig)(ρ, m, σ)(a))
 
     , type_decl: type_decl
     , type_var: type_var
-    , type_def(T): type_def(η(Γ)(Δ, m, σ)(T))
-    , const_decl(T): const_decl(η(Γ)(Δ, m, σ)(T))
-    , const_var(T): const_var(η(Γ)(Δ, m, σ)(T))
-    , const_def(T, a): const_def(η(Γ)(Δ, m, σ)(T), η(Γ)(Δ, m, σ)(a))
-    , theory_def(Θ): theory_def(η(Γ)(Δ, m, σ)(Θ))
+    , type_def(T): type_def(η(Sig)(ρ, m, σ)(T))
+    , const_decl(T): const_decl(η(Sig)(ρ, m, σ)(T))
+    , const_var(T): const_var(η(Sig)(ρ, m, σ)(T))
+    , const_def(T, a): const_def(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ, m, σ)(a))
+    , theory_def(f):
+        theory_def(f WITH [ `seq := LAMBDA (x: below[f`length]): η(Sig)(ρ ++ rest(signature(U), x), m, σ)(f`seq(x)) ])
 
-    , nil: nil
-    , itype(τ, i, T): itype(η(Γ)(Δ, m, σ)(τ), i, η(Γ)(Δ, m, σ)(T))
-    , iconst(τ, i, a): iconst(η(Γ)(Δ, m, σ)(τ), i, η(Γ)(Δ, m, σ)(a))
-
-    , map(f):
-        map(f WITH [ `seq := LAMBDA (x: below[f`length]): η(Γ)(Δ ++ rest(S, x), m, σ)(f(x)) ])
+    , ikeep: ikeep
+    , itype(T): itype(η(Sig)(ρ, m, σ)(T))
+    , iterm(a): iterm(η(Sig)(ρ, m, σ)(a))
     ENDCASES
-  MEASURE size(S)
+  MEASURE size(U)
 
-  prekind_eta: THEOREM m ∈ Γ AND kind?(Γ(m), PRECONTEXT) AND compatible?(def(Γ(m)), σ) AND prekind?(Γ)(σ)(PREINTERP) IMPLIES
-    prekind?(Γ ++ Δ)(η(Γ)(Δ, m, σ)(S)) = prekind?(Γ ++ def(Γ(m)) ++ Δ)(S)
+  % prekind_eta: THEOREM m ∈ Sig AND kind?(Sig(m), PRECONTEXT) AND compatible?(def(Sig(m)), σ) AND prekind?(Sig)(σ)(PREINTERP) IMPLIES
+  %   prekind?(Sig ++ ρ)(η(Sig)(ρ, m, σ)(S)) = prekind?(Sig ++ def(Sig(m)) ++ ρ)(S)
 END eta
