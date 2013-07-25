@@ -103,12 +103,12 @@ BEGIN
   
 
   % Subtype judgements
-  strong_shift_prekind: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    prekind?(Γ ++ Θ)(U)(k) IFF 
-    prekind?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))(k)
-  shift_prekind: THEOREM FORALL (Δ: pretheory(Γ)):
-    prekind?(Γ)(U)(k) IFF 
-    prekind?(Γ ++ Δ)(U ↑ length(Δ))(k)
+  strong_shift_prekind: THEOREM
+    prekind?(M ++ N)(U)(k) IFF 
+    prekind?(M ++ P ++ (N ↑ length(P)))(U ↑ (length(P), length(N)))(k)
+  shift_prekind: THEOREM
+    prekind?(M)(U)(k) IFF 
+    prekind?(M ++ P)(U ↑ length(P))(k)
 
 
     
