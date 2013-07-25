@@ -249,20 +249,23 @@ BEGIN
     , const_def(T, a) :
         sconst_def?(s) AND pretau(Sig)(T)(stype_def) AND pretau(Sig)(a)(s)
     , theory_def(f):
-        LET Usig = signature(U) IN
-        FORALL (x: below[f`length]): pretau(Sig ++ rest(Usig, x))(f`seq(x))(Usig(x))
+	stheory?(s) AND length(s) = f`length AND
+	FORALL (x: below[f`length]): pretau(Sig ++ rest(s, x))(f`seq(x))(s(x))
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE pretau
 
-  Γ, Δ: VAR (theory_def?)
-  S1, S2: VAR (stheory?)
+  Γ, Δ: VAR (scontext?)
+  S1, S2: VAR signature
 
-  pretau_concat: THEOREM
-    pretau(Sig)(Γ ++ Δ)(S1 ++ S2) IFF
-      pretau(Sig)(Γ)(S1) AND pretau(Sig ++ S1)(Δ)(S2)
+  signature_pretau: THEOREM
+    pretau(Sig)(Γ)(S1) IMPLIES S1 = signature(Γ)
 
-  pretau_apply: THEOREM
-    pretau(Sig)(Γ)(S1) AND i ∈ Γ IMPLIES
-      pretau(Sig ++ rest(S1, i))(Γ(i))(S1(i))
+  % pretau_concat: THEOREM stheory?(S1) AND stheory?(S2) AND theory_def?(Γ) AND theory_def?(Δ) AND length(S1) = length(Γ) AND length(S2) = length(Δ) IMPLIES
+  %   (pretau(Sig)(Γ ++ Δ)(S1 ++ S2) IFF
+  %      pretau(Sig)(Γ)(S1) AND pretau(Sig ++ S1)(Δ)(S2))
+
+  % pretau_apply: THEOREM theory_def?(Γ) AND stheory?(S1) IMPLIES
+  %   pretau(Sig)(Γ)(S1) AND i ∈ Γ IMPLIES
+  %     pretau(Sig ++ rest(S1, i))(Γ(i))(S1(i))
 END language
