@@ -12,6 +12,10 @@ BEGIN
 
   s: VAR signature
   Sig: VAR (stheory?)
+<<<<<<< HEAD
+=======
+  
+>>>>>>> e6eafde6253e6f8319f808a56ebe5a7dfa1bf381
 
   prekeyword: DATATYPE
   BEGIN
@@ -109,9 +113,9 @@ BEGIN
     x < length(Sig)
   apply(M)(x | x ∈ M): (scontext?) =
     def(M)`seq(x)
-  sapply(Sig)(x | x ∈ Sig): (stheory?) = 
+  apply(Sig)(x | x ∈ Sig): (stheory?) = 
     sig(Sig)`seq(x)
-  CONVERSION+ apply, sapply
+  CONVERSION+ apply
   rest(M, (x | x ∈ M)): (theory_def?) =
     theory_def(def(M) ^^ (x + 1, length(M)))
   rest(Sig, (x | x ∈ Sig)): (stheory?) = 
@@ -135,7 +139,7 @@ BEGIN
   AUTO_REWRITE+ concat_empty, concat__empty, concat_assoc, rest_concat
 
   sconcat_sempty: THEOREM
-    sempty ++ Sig = Sig
+    empty ++ Sig = Sig
   sconcat__sempty: THEOREM
     Sig ++ sempty = Sig
   sconcat_assoc: THEOREM FORALL (Sig, S1, S2: (stheory?)):
@@ -146,7 +150,6 @@ BEGIN
       IF x < length(S2)
         THEN S1 ++ rest(S2, x)
 	ELSE rest(S1, x - length(N))
-      ENDIF
   AUTO_REWRITE+ sconcat_sempty, sconcat__sempty, sconcat_assoc, srest_concat
 
 
@@ -252,13 +255,12 @@ BEGIN
         sconst_def?(s) AND pretau(Sig)(T)(stype_def) AND pretau(Sig)(a)(s)
     , theory_def(f):
         LET Usig = signature(U) IN
-        FORALL (x: below[f`length]): pretau(Sig ++ rest(Usig, x))(f`seq(x))(Usig(x))
+        FORALL (x: below[f`length]): pretau(Sig ++ rest(Usig, i))(f`seq(x))(Usig(x))
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE pretau
 
   Γ, Δ: VAR (theory_def?)
-  S1, S2: VAR (stheory?)
 
   pretau_concat: THEOREM
     pretau(Sig)(Γ ++ Δ)(S1 ++ S2) IFF
