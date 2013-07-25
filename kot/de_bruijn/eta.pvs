@@ -2,19 +2,35 @@ eta: THEORY
 BEGIN
   IMPORTING subst
 
-  Γ: VAR precontext
+  Γ, Δ: VAR (scontext?)
+  σ: VAR (sinterp?)
   m: VAR nat
+  S: VAR syntaxic
 
-  η(Γ)(Δ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
-   (S: semantic(Γ ++ def(Γ(m)) ++ Δ) | NOT map?(S)): RECURSIVE
-    { U: syntaxic | prekind?(Γ ++ Δ)(U) = prekind?(Γ ++ def(Γ(m)) ++ Δ)(S) } =
+
+
+%  η(Γ)(Δ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
+%   (S: semantic(Γ ++ def(Γ(m)) ++ Δ) | NOT map?(S)): RECURSIVE
+  η(Γ)(Δ, (m | m ∈ Γ AND kind?(Γ(m), PRECONTEXT)), σ)(S | NOT scontext?(S)):
+    RECURSIVE { U: syntaxic | (sexpr?(S) => sexpr?(U)) AND
+                              (sdecl?(S) => sdecl?(U)) AND
+			      (sinterp?(S) => sinterp?(U)) AND
+			      (scontext?(S) => scontext?(U)) } =
+%    { U: syntaxic | prekind?(Γ ++ Δ)(U) = prekind?(Γ ++ def(Γ(m)) ++ Δ)(S) } =
     CASES S OF
       v(i):
-        IF i < length(Δ) THEN v(i)
-	ELSIF interpret?(σ, i - length(Δ)) THEN interpret(σ, i - length(Δ)) ↑ length(Δ)
-	ELSIF (i - length(Δ)) ∈ def(Γ(m)) THEN dot(m + length(Δ), σ ↑ length(Δ), v(i - length(Δ)))
-	ELSE v(i - length(def(Γ(m)))) ENDIF
-    , dot(p, τ, x): dot(p - length(def(Γ(m))), η(Γ)(Δ, m, σ ↑ length(Δ))(τ), x)
+        IF i ∈ Δ THEN v(i)
+	ELSIF (i - length(Δ)) ∈ def(Γ(m)) THEN
+	  IF interpret?(σ, i - length(Δ))
+	    THEN interpret(σ, i - length(Δ)) ↑ length(Δ)
+	    ELSE dot(m + length(Δ), σ ↑ length(Δ), v(i - length(Δ)))
+	  ENDIF
+	ELSE v(i - length(def(Γ(m))) ENDIF
+    , dot(p, τ, x):
+        dot(η(Γ)(Δ, m, σ)(v(p)), η(Γ)(Δ, m, σ)(τ), x)
+        IF p ∈ Δ THEN dot(p, η(Γ)(Δ, m, σ)(τ), x)
+	ELSIF (p - length(Δ)) ∈ def(Γ(m)) THEN dot(p, τ, x) % Never happens
+	ELSE dot(p - length(def(Γ(m))), η(Γ)(Δ, m, σ)(τ), x) ENDIF
 
     , fun(A, B):
         fun(η(Γ)(Δ, m, σ)(A), η(Γ)(Δ ++ k(const_var(A)), m, σ)(B))

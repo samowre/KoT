@@ -3,7 +3,9 @@ BEGIN
   syntaxic: DATATYPE WITH SUBTYPES sexpr?, sdecl?, scontext?, sinterp?
   BEGIN
     v(i: nat): v?: sexpr?
-    dot(m: nat, map: (sinterp?), s: (sexpr?)): dot?: sexpr?
+    % Update this with finseq for nested theories:
+    % finseq[ (nat, sinterp?) ], nat
+    dot(m: (sexpr?), map: (sinterp?), i: nat): dot?: sexpr?
   
     fun(dom: (sexpr?), range: (sexpr?)): fun?: sexpr?
     prod(left: (sexpr?), right: (sexpr?)): prod?: sexpr?
@@ -88,7 +90,7 @@ BEGIN
   size(U): RECURSIVE nat =
     CASES U OF
       v(i): 2
-    , dot(i, σ, x): size(σ) + 2
+    , dot(m, σ, x): size(m) + size(σ) + 2
 
     , fun(A, B): size(A) + size(B) + 2
     , prod(A, B): size(A) + size(B) + 2
@@ -141,7 +143,7 @@ BEGIN
     ENDCASES
   MEASURE U BY <<
 
-  interpret(U, (i | interpret?(U, i))): RECURSIVE syntaxic =
+  interpret(U, (i | interpret?(U, i))): RECURSIVE (sexpr?) =
     CASES U OF
       itype(τ, j, T): IF i = j THEN T ELSE interpret(τ, i) ENDIF
     , iconst(τ, j, a): IF i = j THEN a ELSE interpret(τ, i) ENDIF
@@ -175,11 +177,16 @@ BEGIN
 
   prekind?(M: (scontext?))(U)(k): RECURSIVE bool =
     CASES U OF
-      v(i): (k = PRETYPE OR k = PRETERM) AND i < length(M) AND kind?(M(i), k)
-    , dot(i, σ, x): (k = PRETYPE OR k = PRETERM) AND
-        i < length(M) AND prekind?(M)(σ)(PREINTERP) AND v?(x) AND
-	kind?(M(i), PRECONTEXT) AND theory_def?(M(i)) AND
-	compatible?(def(M(i)), σ) AND prekind?(def(M(i)))(x)(k)
+      v(i):
+        (k = PRETYPE OR k = PRETERM OR k = PRECONTEXT)
+	AND i < length(M) AND kind?(M(i), k)
+    , dot(m, σ, i):
+        (k = PRETYPE OR k = PRETERM OR k = PRECONTEXT) AND
+	prekind?(M)(σ)(PREINTERP) AND
+	% prekind?(M)(m)(PRECONTEXT) AND
+	v?(m) AND i(m) ∈ M AND kind?(M(i(m)), PRECONTEXT) AND
+	compatible?(def(M(i(m))), σ) AND
+	i ∈ def(M(i(m))) AND kind?(def(M(i(m)))(i), k)
 
     , fun(A, B):
         k = PRETYPE AND prekind?(M)(A)(PRETYPE) AND prekind?(M ++ k(const_var(A)))(B)(PRETYPE)
@@ -234,9 +241,7 @@ BEGIN
   semantic(M): TYPE = (semantic?(M))
 
   precontext_is_map: JUDGEMENT precontext SUBTYPE_OF (map?)
-  pretheory_is_map: JUDGEMENT pretheory(M) SUBTYPE_OF (map?)
   precontext_is_scontext: JUDGEMENT precontext SUBTYPE_OF (scontext?)
-  pretheory_is_scontext: JUDGEMENT pretheory(M) SUBTYPE_OF (scontext?)
 
   Γ: VAR precontext
 
@@ -245,7 +250,7 @@ BEGIN
     prekind?(M)(N)(PRECONTEXT) AND prekind?(M ++ N)(P)(PRECONTEXT)
 
   pretheory_as_precontext: THEOREM
-    pretheory?(Γ)(U) IMPLIES precontext?(Γ ++ U)
+    pretheory?(Γ)(M) IMPLIES precontext?(Γ ++ M)
   precontext_as_pretheory: THEOREM
     precontext?(Γ ++ M) IMPLIES pretheory?(Γ)(M)
 
