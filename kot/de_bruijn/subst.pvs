@@ -96,7 +96,10 @@ BEGIN
   kind_shift: THEOREM
     kind?(U ↑ nb, k) IFF kind?(U, k)
   AUTO_REWRITE shift_k, shift_concat
-    
+  interpret_shift: THEOREM
+    interpret?(U, i) IFF interpret?(U ↑ nb, i)
+  compatible_shift: THEOREM
+    compatible?(M, U) IFF compatible?(M, U ↑ nb)
   
 
   % Subtype judgements
