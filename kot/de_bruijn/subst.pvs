@@ -40,7 +40,7 @@ BEGIN
     CASES U OF
       % Names
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
-    , dot(m, σ, s): IF m < nb`2 THEN dot(m, σ ↑ nb, s) ELSE dot(m + nb`1, σ ↑ nb, s) ENDIF
+    , dot(m, σ, s): dot(m ↑ nb, σ ↑ nb, s)
 
       % Types
     , subtype(T, a): subtype(T ↑ nb, a ↑ (nb`1, nb`2 + 1))
