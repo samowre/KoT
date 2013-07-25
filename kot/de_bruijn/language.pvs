@@ -28,7 +28,7 @@ BEGIN
     , stype_def: PRETYPE
     , sconst_decl: PRETERM
     , sconst_def: PRETERM
-    , stheory(Sig): PRECONTEXT(Sig)
+    , stheory(Sig): PRECONTEXT(stheory(Sig))
     ENDCASES
 
   syntaxic: DATATYPE WITH SUBTYPES sexpr?, scontext?, sinterp?
@@ -36,7 +36,7 @@ BEGIN
     v(i: nat): v?: sexpr?
     % Update this with finseq for nested theories:
     % finseq[ (sinterp?) ], nat
-    dot(m: (sexpr?), sig: signature, x: (sexpr?)): dot?: sexpr?
+    dot(m: (sexpr?), sig: (stheory?), x: (sexpr?)): dot?: sexpr?
     interp(m: (sexpr?), map: finseq[(sinterp?)]): interp?: sexpr?
   
     fun(dom: (sexpr?), range: (sexpr?)): fun?: sexpr?
@@ -71,8 +71,46 @@ BEGIN
   U, V, S: VAR syntaxic
   x, y: VAR nat
   i, j, n: VAR nat
-  M, N, P: VAR (scontext?)
+  M, N, P: VAR (theory_def?)
 
+  % TODO: move
+  sum(len: nat, f: [below[len] -> nat]):
+    RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
+    IF len = 0 THEN 0
+    ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
+  MEASURE len
+
+  size(U): RECURSIVE nat =
+    CASES U OF
+      v(x): 2
+    , dot(m, S, x): size(m) + size(x) + 2
+    , interp(m, σ): size(m) + sum(σ`length, LAMBDA (x: below[σ`length]): size(σ`seq(x))) + 2
+
+    , fun(A, B): size(A) + size(B) + 2
+    , prod(A, B): size(A) + size(B) + 2
+    , subtype(T, a): size(T) + size(a) + 2
+
+    , app(f, a): size(f) + size(a) + 2
+    , lam(T, a): size(T) + size(a) + 2
+    , pair(a, b): size(a) + size(b) + 2
+    , lproj(a): size(a) + 2
+    , rproj(a): size(a) + 2
+
+    , type_decl: 1
+    , type_var: 1
+    , type_def(T): size(T) + 1
+    , const_decl(T): size(T) + 1
+    , const_var(T): size(T) + 1
+    , const_def(T, a): size(T) + size(a) + 1
+
+    , ikeep: 1
+    , itype(T): size(T) + 4
+    , iterm(a): size(a) + 4
+
+    , theory_def(f): sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x)))
+    ENDCASES
+  MEASURE U BY <<
+  AUTO_REWRITE+ size
 
   signature(ctx: (scontext?)): RECURSIVE signature =
     CASES ctx OF
@@ -87,13 +125,12 @@ BEGIN
 	         , seq := LAMBDA (x: below[f`length]): signature(f(x))
 	        #))
     ENDCASES
-  MEASURE ctx BY <<
+  MEASURE size(ctx)
 
   k(d: (scontext?)): (theory_def?) =
     theory_def((# length := 1, seq := LAMBDA (x: below[1]): d #))
   k(s): (stheory?) = 
     stheory((# length := 1, seq := LAMBDA (x: below[1]): s #))
-
 
   empty: MACRO (scontext?) = theory_def(empty_seq)
   sempty: MACRO (stheory?) = stheory(empty_seq)
@@ -109,7 +146,7 @@ BEGIN
     x < length(Sig)
   apply(M)(x | x ∈ M): (scontext?) =
     def(M)`seq(x)
-  sapply(Sig)(x | x ∈ Sig): (stheory?) = 
+  sapply(Sig)(x | x ∈ Sig): signature = 
     sig(Sig)`seq(x)
   CONVERSION+ apply, sapply
   rest(M, (x | x ∈ M)): (theory_def?) =
@@ -140,14 +177,14 @@ BEGIN
     Sig ++ sempty = Sig
   sconcat_assoc: THEOREM FORALL (Sig, S1, S2: (stheory?)):
     Sig ++ (S1 ++ S2) = (Sig ++ S1) ++ S2
-  srest_concat: THEOREM FORALL (S1, S2: (stheory?)):
+  srest_sconcat: THEOREM FORALL (S1, S2: (stheory?)):
     x < length(S1) + length(S2) IMPLIES
     rest(S1 ++ S2, x) = 
       IF x < length(S2)
         THEN S1 ++ rest(S2, x)
-	ELSE rest(S1, x - length(N))
+	ELSE rest(S1, x - length(S2))
       ENDIF
-  AUTO_REWRITE+ sconcat_sempty, sconcat__sempty, sconcat_assoc, srest_concat
+  AUTO_REWRITE+ sconcat_sempty, sconcat__sempty, sconcat_assoc, srest_sconcat
 
 
   length_concat: THEOREM
@@ -162,45 +199,6 @@ BEGIN
     length(k(s)) = 1
   AUTO_REWRITE slength_concat, slength_k
     
-
-  % TODO: move
-  sum(len: nat, f: [below[len] -> nat]):
-    RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
-    IF len = 0 THEN 0
-    ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
-  MEASURE len
-
-  size(U): RECURSIVE nat =
-    CASES U OF
-      v(x): 2
-    , dot(m, S, x): size(m) + size(x) + 2
-    , interp(m, σ): size(m) + sum(σ`length, LAMBDA (x: below[σ`length]): size(σ)) + 2
-
-    , fun(A, B): size(A) + size(B) + 2
-    , prod(A, B): size(A) + size(B) + 2
-    , subtype(T, a): size(T) + size(a) + 2
-
-    , app(f, a): size(f) + size(a) + 2
-    , lam(T, a): size(T) + size(a) + 2
-    , pair(a, b): size(a) + size(b) + 2
-    , lproj(a): size(a) + 2
-    , rproj(a): size(a) + 2
-
-    , type_decl: 1
-    , type_var: 1
-    , type_def(T): size(T) + 1
-    , const_decl(T): size(T) + 1
-    , const_var(T): size(T) + 1
-    , const_def(T, a): size(T) + size(a) + 1
-
-    , ikeep: 1
-    , itype(T): size(T) + 4
-    , iterm(a): size(a) + 4
-
-    , theory_def(f): sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x)))
-    ENDCASES
-  MEASURE U BY <<
-  AUTO_REWRITE size
   prefix_size: THEOREM FORALL (f, g: finseq[syntaxic]):
     f`length < g`length AND (FORALL (x: below[f`length]): f`seq(x) = g`seq(g`length - f`length + x)) IMPLIES
       sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x))) < sum(g`length, LAMBDA (x: below[g`length]): 1 + size(g(x)))
@@ -251,20 +249,23 @@ BEGIN
     , const_def(T, a) :
         sconst_def?(s) AND pretau(Sig)(T)(stype_def) AND pretau(Sig)(a)(s)
     , theory_def(f):
-        LET Usig = signature(U) IN
-        FORALL (x: below[f`length]): pretau(Sig ++ rest(Usig, x))(f`seq(x))(Usig(x))
+	stheory?(s) AND length(s) = f`length AND
+	FORALL (x: below[f`length]): pretau(Sig ++ rest(s, x))(f`seq(x))(s(x))
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE pretau
 
-  Γ, Δ: VAR (theory_def?)
-  S1, S2: VAR (stheory?)
+  Γ, Δ: VAR (scontext?)
+  S1, S2: VAR signature
 
-  pretau_concat: THEOREM
-    pretau(Sig)(Γ ++ Δ)(S1 ++ S2) IFF
-      pretau(Sig)(Γ)(S1) AND pretau(Sig ++ S1)(Δ)(S2)
+  signature_pretau: THEOREM
+    pretau(Sig)(Γ)(S1) IMPLIES S1 = signature(Γ)
 
-  pretau_apply: THEOREM
-    pretau(Sig)(Γ)(S1) AND i ∈ Γ IMPLIES
-      pretau(Sig ++ rest(S1, i))(Γ(i))(S1(i))
+  % pretau_concat: THEOREM stheory?(S1) AND stheory?(S2) AND theory_def?(Γ) AND theory_def?(Δ) AND length(S1) = length(Γ) AND length(S2) = length(Δ) IMPLIES
+  %   (pretau(Sig)(Γ ++ Δ)(S1 ++ S2) IFF
+  %      pretau(Sig)(Γ)(S1) AND pretau(Sig ++ S1)(Δ)(S2))
+
+  % pretau_apply: THEOREM theory_def?(Γ) AND stheory?(S1) IMPLIES
+  %   pretau(Sig)(Γ)(S1) AND i ∈ Γ IMPLIES
+  %     pretau(Sig ++ rest(S1, i))(Γ(i))(S1(i))
 END language
