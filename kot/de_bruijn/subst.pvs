@@ -5,7 +5,7 @@ BEGIN
   Γ, Δ, Θ: VAR precontext
   i, j, n, x: VAR nat
   U, V, t: VAR syntaxic
-  nb: VAR [nat, nat]
+  nb, c: VAR [nat, nat]
   M, N, P: VAR (scontext?)
   k: VAR prekeyword
 
@@ -95,20 +95,19 @@ BEGIN
     (M ++ N) ↑ nb = (M ↑ nb) ++ (N ↑ (nb`1, nb`2 + length(M)))
   kind_shift: THEOREM
     kind?(U ↑ nb, k) IFF kind?(U, k)
-  AUTO_REWRITE shift_k, shift_concat
   interpret_shift: THEOREM
-    interpret?(U, i) IFF interpret?(U ↑ nb, i)
+    interpret?(U ↑ nb, i) IFF interpret?(U, i)
   compatible_shift: THEOREM
-    compatible?(M, U) IFF compatible?(M, U ↑ nb)
+    compatible?(M ↑ c, U ↑ nb) IFF compatible?(M, U)
+  AUTO_REWRITE shift_k, shift_concat, kind_shift, interpret_shift, compatible_shift 
   
 
   % Subtype judgements
-  strong_shift_prekind: THEOREM FORALL (Θ, Δ: pretheory(Γ)):
-    prekind?(Γ ++ Θ)(U)(k) IFF 
-    prekind?(Γ ++ Δ ++ (Θ ↑ length(Δ)))(U ↑ (length(Δ), length(Θ)))(k)
-  shift_prekind: THEOREM FORALL (Δ: pretheory(Γ)):
-    prekind?(Γ)(U)(k) IFF 
-    prekind?(Γ ++ Δ)(U ↑ length(Δ))(k)
+  strong_shift_prekind: THEOREM
+    prekind?(M ++ N)(U)(k) IFF 
+    prekind?(M ++ P ++ (N ↑ length(P)))(U ↑ (length(P), length(N)))(k)
+  shift_prekind: THEOREM
+    prekind?(M ++ P)(U ↑ length(P)) = prekind?(M)(U)
 
 
     
