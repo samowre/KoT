@@ -136,7 +136,7 @@ BEGIN
       % x ↦ x where the λ-binder for n has been removed
       v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF
       % /!\ Case x = m not handled
-    , dot(m, σ, s): dot(m, subst(σ, x, t), s)
+    , dot(m, σ, s): dot(subst(m, x, t), subst(σ, x, t), s)
 
       % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
       %                        λ——————————————————————\___________/

@@ -11,7 +11,8 @@ BEGIN
   END signature
 
   s: VAR signature
-  Sig: VAR finseq[signature]
+  Sig: VAR (stheory?)
+  
 
   prekeyword: DATATYPE
   BEGIN
@@ -71,6 +72,8 @@ BEGIN
   U, V, S: VAR syntaxic
   x, y: VAR nat
   i, j, n: VAR nat
+  M, N, P: VAR (scontext?)
+
 
   signature(ctx: (scontext?)): RECURSIVE signature =
     CASES ctx OF
@@ -89,22 +92,35 @@ BEGIN
 
   k(d: (scontext?)): (theory_def?) =
     theory_def((# length := 1, seq := LAMBDA (x: below[1]): d #))
+  k(s): (stheory?) = 
+    stheory((# length := 1, seq := LAMBDA (x: below[1]): s #))
 
-  M, N, P: VAR (scontext?)
+
   empty: MACRO (scontext?) = theory_def(empty_seq)
+  sempty: MACRO (stheory?) = stheory(empty_seq)
 
   length(M): nat =
     def(M)`length
+  length(Sig): nat = 
+    sig(Sig)`length
   AUTO_REWRITE+ length
   ;∈(x, M): MACRO bool =
     x < length(M)
+  ;∈(x, Sig): MACRO bool = 
+    x < length(Sig)
   apply(M)(x | x ∈ M): (scontext?) =
     def(M)`seq(x)
+  apply(Sig)(x | x ∈ Sig): (stheory?) = 
+    sig(Sig)`seq(x)
   CONVERSION+ apply
-  rest(M, (x | x < length(M))): (theory_def?) =
+  rest(M, (x | x ∈ M)): (theory_def?) =
     theory_def(def(M) ^^ (x + 1, length(M)))
+  rest(Sig, (x | x ∈ Sig)): (stheory?) = 
+    stheory(sig(Sig) ^^ (x + 1, length(Sig)))
   ;++(M, N): (theory_def?) =
     theory_def(def(N) o def(M))
+  ;++(S1, S2: (stheory?)): (stheory?) = 
+    stheory(sig(S2) o sig(S1))
   concat_empty: THEOREM
     empty ++ M = M
   concat__empty: THEOREM
@@ -119,11 +135,33 @@ BEGIN
       ENDIF
   AUTO_REWRITE+ concat_empty, concat__empty, concat_assoc, rest_concat
 
+  sconcat_sempty: THEOREM
+    empty ++ Sig = Sig
+  sconcat__sempty: THEOREM
+    Sig ++ sempty = Sig
+  sconcat_assoc: THEOREM FORALL (Sig, S1, S2: (stheory?)):
+    Sig ++ (S1 ++ S2) = (Sig ++ S1) ++ S2
+  srest_concat: THEOREM FORALL (S1, S2: (stheory?)):
+    x < length(S1) + length(S2) IMPLIES
+    rest(S1 ++ S2, x) = 
+      IF x < length(S2)
+        THEN S1 ++ rest(S2, x)
+	ELSE rest(S1, x - length(N))
+  AUTO_REWRITE+ sconcat_sempty, sconcat__sempty, sconcat_assoc, srest_concat
+
+
   length_concat: THEOREM
     length(M ++ N) = length(M) + length(N)
   length_k: THEOREM FORALL (d: (scontext?)):
     length(k(d)) = 1
   AUTO_REWRITE length_concat, length_k
+
+  slength_concat: THEOREM FORALL (S1, S2: (stheory?)):
+    length(S1 ++ S2) = length(S1) + length(S2)
+  slength_k: THEOREM
+    length(k(s)) = 1
+  AUTO_REWRITE slength_concat, slength_k
+    
 
   % TODO: move
   sum(len: nat, f: [below[len] -> nat]):
