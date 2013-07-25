@@ -5,13 +5,14 @@ BEGIN
   Γ: VAR precontext
   m: VAR nat
 
-  η(Γ)(Δ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ)))
-   (S: semantic(Γ ++ def(Γ(m)) ++ Δ) | NOT map?(S)):
-    RECURSIVE semantic(Γ ++ Δ) =
+  η(Γ)(Δ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
+   (S: semantic(Γ ++ def(Γ(m)) ++ Δ) | NOT map?(S)): RECURSIVE
+    { U: syntaxic | prekind?(Γ ++ Δ)(U) = prekind?(Γ ++ def(Γ(m)) ++ Δ)(S) } =
     CASES S OF
       v(i):
-        IF interpret?(σ, i) THEN interpret(σ, i)
-	ELSIF i ∈ def(Γ(m)) THEN dot(m + length(Δ), σ ↑ length(Δ), v(i))
+        IF i < length(Δ) THEN v(i)
+	ELSIF interpret?(σ, i - length(Δ)) THEN interpret(σ, i - length(Δ)) ↑ length(Δ)
+	ELSIF (i - length(Δ)) ∈ def(Γ(m)) THEN dot(m + length(Δ), σ ↑ length(Δ), v(i - length(Δ)))
 	ELSE v(i - length(def(Γ(m)))) ENDIF
     , dot(p, τ, x): dot(p - length(def(Γ(m))), η(Γ)(Δ, m, σ ↑ length(Δ))(τ), x)
 
