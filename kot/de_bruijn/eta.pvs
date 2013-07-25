@@ -11,7 +11,7 @@ BEGIN
 
 %  η(Γ)(Δ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
 %   (S: semantic(Γ ++ def(Γ(m)) ++ Δ) | NOT map?(S)): RECURSIVE
-  η(Γ)(Δ, (m | m ∈ Γ AND kind?(Γ(m), PRECONTEXT)), σ)(S | NOT scontext?(S)):
+  η(Γ)(Δ, (m | m ∈ Γ AND kind?(Γ(m), PRECONTEXT)), σ)(S):
     RECURSIVE { U: syntaxic | (sexpr?(S) => sexpr?(U)) AND
                               (sdecl?(S) => sdecl?(U)) AND
 			      (sinterp?(S) => sinterp?(U)) AND
@@ -52,6 +52,9 @@ BEGIN
     , nil: nil
     , itype(τ, i, T): itype(η(Γ)(Δ, m, σ)(τ), i, η(Γ)(Δ, m, σ)(T))
     , iconst(τ, i, a): iconst(η(Γ)(Δ, m, σ)(τ), i, η(Γ)(Δ, m, σ)(a))
+
+    , map(f):
+        map(f WITH [ `seq := LAMBDA (x: below[f`length]): η(Γ)(Δ ++ rest(S, x), m, σ)(f(x)) ])
     ENDCASES
   MEASURE size(S)
 END eta
