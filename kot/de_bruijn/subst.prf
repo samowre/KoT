@@ -109,6 +109,9 @@
      (NOT const-decl "[bool -> bool]" booleans nil)
      (syntaxic type-decl nil language nil)
      (sexpr? adt-def-decl "boolean" language nil)
+     (signature type-decl nil language nil)
+     (stheory? adt-recognizer-decl "[signature -> boolean]" language
+      nil)
      (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil))
     nil)) (uparrow_TCC4 0
            (uparrow_TCC4-1 nil 3583528800 ("" (grind) nil nil)
@@ -116,32 +119,39 @@
              (bool nonempty-type-eq-decl nil booleans nil)
              (NOT const-decl "[bool -> bool]" booleans nil)
              (syntaxic type-decl nil language nil)
-             (sexpr? adt-def-decl "boolean" language nil)
+             (number nonempty-type-decl nil numbers nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number_field nonempty-type-from-decl nil number_fields
+              nil)
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (>= const-decl "bool" reals nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (pred type-eq-decl nil defined_types nil)
+             (strict_well_founded? const-decl "bool" orders nil)
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil))
+              language nil)
+             (AND const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
+             (signature type-decl nil language nil)
+             (stheory? adt-recognizer-decl "[signature -> boolean]"
+              language nil)
+             (sexpr? adt-def-decl "boolean" language nil)
+             (sinterp? adt-def-decl "boolean" language nil)
+             (scontext? adt-def-decl "boolean" language nil))
             nil))
   (uparrow_TCC5 0
    (uparrow_TCC5-1 nil 3583528800 ("" (grind :rewrites sexpr?) nil nil)
-    ((scontext? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
+    ((<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
      (sexpr? adt-def-decl "boolean" language nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-     (strict_well_founded? const-decl "bool" orders nil)
-     (pred type-eq-decl nil defined_types nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (>= const-decl "bool" reals nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
-      nil)
-     (number nonempty-type-decl nil numbers nil)
      (syntaxic type-decl nil language nil)
      (NOT const-decl "[bool -> bool]" booleans nil)
      (bool nonempty-type-eq-decl nil booleans nil)
@@ -154,7 +164,32 @@
              (syntaxic type-decl nil language nil)
              (sexpr? adt-def-decl "boolean" language nil)
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil))
+              language nil)
+             nil
+             (real_lt_is_strict_total_order name-judgement
+              "(strict_total_order?[real])" real_props nil)
+             (finseq type-eq-decl nil finite_sequences nil)
+             (sinterp? adt-def-decl "boolean" language nil)
+             (below type-eq-decl nil nat_types nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (>= const-decl "bool" reals nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (< const-decl "bool" reals nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (number_field nonempty-type-from-decl nil number_fields
+              nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number nonempty-type-decl nil numbers nil)
+             (finseq_appl const-decl "[below[length(fs)] -> T]"
+                          finite_sequences nil))
             nil))
   (uparrow_TCC7 0
    (uparrow_TCC7-1 nil 3583528800 ("" (termination-tcc) nil nil)
@@ -162,38 +197,72 @@
      (bool nonempty-type-eq-decl nil booleans nil)
      (NOT const-decl "[bool -> bool]" booleans nil)
      (syntaxic type-decl nil language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-     (subterm adt-def-decl "boolean" language nil)
-     (real_lt_is_strict_total_order name-judgement
-      "(strict_total_order?[real])" real_props nil)
-     (finseq type-eq-decl nil finite_sequences nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (below type-eq-decl nil nat_types nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (>= const-decl "bool" reals nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (< const-decl "bool" reals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
+     (number nonempty-type-decl nil numbers nil)
      (number_field_pred const-decl "[number -> boolean]" number_fields
       nil)
-     (number nonempty-type-decl nil numbers nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (>= const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (pred type-eq-decl nil defined_types nil)
+     (strict_well_founded? const-decl "bool" orders nil)
+     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (sexpr? adt-def-decl "boolean" language nil)
      (finseq_appl const-decl "[below[length(fs)] -> T]"
-                  finite_sequences nil))
+                  finite_sequences nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (scontext? adt-def-decl "boolean" language nil))
     nil)) (uparrow_TCC8 0
            (uparrow_TCC8-1 nil 3583528800
             ("" (grind :rewrites sexpr?) nil nil)
+            ((<< adt-def-decl "(strict_well_founded?[syntaxic])"
+              language nil)
+             (sexpr? adt-def-decl "boolean" language nil)
+             (syntaxic type-decl nil language nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (boolean nonempty-type-decl nil booleans nil))
+            nil))
+  (uparrow_TCC9 0
+   (uparrow_TCC9-1 nil 3583528800 ("" (grind) nil nil)
+    ((boolean nonempty-type-decl nil booleans nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (syntaxic type-decl nil language nil)
+     (number nonempty-type-decl nil numbers nil)
+     (number_field_pred const-decl "[number -> boolean]" number_fields
+      nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (>= const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (pred type-eq-decl nil defined_types nil)
+     (strict_well_founded? const-decl "bool" orders nil)
+     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (scontext? adt-def-decl "boolean" language nil))
+    nil)) (uparrow_TCC10 0
+           (uparrow_TCC10-1 nil 3583528800
+            ("" (grind :rewrites sexpr?) nil nil)
             ((scontext? adt-def-decl "boolean" language nil)
              (sinterp? adt-def-decl "boolean" language nil)
-             (finseq_appl const-decl "[below[length(fs)] -> T]"
-                          finite_sequences nil)
              (sexpr? adt-def-decl "boolean" language nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
              (AND const-decl "[bool, bool -> bool]" booleans nil)
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
               language nil)
@@ -220,32 +289,13 @@
              (bool nonempty-type-eq-decl nil booleans nil)
              (boolean nonempty-type-decl nil booleans nil))
             nil))
-  (uparrow_TCC9 0
-   (uparrow_TCC9-1 nil 3583528800 ("" (grind) nil nil)
-    ((boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil))
-    nil)) (uparrow_TCC10 0
-           (uparrow_TCC10-1 nil 3583528800
-            ("" (grind :rewrites sexpr?) nil nil)
-            ((<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil)
-             (sexpr? adt-def-decl "boolean" language nil)
-             (syntaxic type-decl nil language nil)
-             (NOT const-decl "[bool -> bool]" booleans nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
-             (boolean nonempty-type-decl nil booleans nil))
-            nil))
   (uparrow_TCC11 0
    (uparrow_TCC11-1 nil 3583528800
     ("" (grind :rewrites sexpr?) nil nil)
     ((scontext? adt-def-decl "boolean" language nil)
      (sinterp? adt-def-decl "boolean" language nil)
      (sexpr? adt-def-decl "boolean" language nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
      (AND const-decl "[bool, bool -> bool]" booleans nil)
      (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
      (strict_well_founded? const-decl "bool" orders nil)
@@ -291,7 +341,7 @@
             ((scontext? adt-def-decl "boolean" language nil)
              (sinterp? adt-def-decl "boolean" language nil)
              (sexpr? adt-def-decl "boolean" language nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
              (AND const-decl "[bool, bool -> bool]" booleans nil)
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
               language nil)
@@ -343,7 +393,7 @@
     ((scontext? adt-def-decl "boolean" language nil)
      (sinterp? adt-def-decl "boolean" language nil)
      (sexpr? adt-def-decl "boolean" language nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
      (AND const-decl "[bool, bool -> bool]" booleans nil)
      (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
      (strict_well_founded? const-decl "bool" orders nil)
@@ -388,7 +438,7 @@
             ((scontext? adt-def-decl "boolean" language nil)
              (sinterp? adt-def-decl "boolean" language nil)
              (sexpr? adt-def-decl "boolean" language nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
              (AND const-decl "[bool, bool -> bool]" booleans nil)
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
               language nil)
@@ -430,50 +480,34 @@
              (bool nonempty-type-eq-decl nil booleans nil)
              (NOT const-decl "[bool -> bool]" booleans nil)
              (syntaxic type-decl nil language nil)
-             (sexpr? adt-def-decl "boolean" language nil)
+             (number nonempty-type-decl nil numbers nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number_field nonempty-type-from-decl nil number_fields
+              nil)
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (>= const-decl "bool" reals nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (pred type-eq-decl nil defined_types nil)
+             (strict_well_founded? const-decl "bool" orders nil)
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil))
+              language nil)
+             (AND const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
+             (sexpr? adt-def-decl "boolean" language nil)
+             (sinterp? adt-def-decl "boolean" language nil)
+             (scontext? adt-def-decl "boolean" language nil))
             nil))
   (uparrow_TCC23 0
    (uparrow_TCC23-1 nil 3583528800
-    ("" (grind :rewrites sexpr?) nil nil)
-    ((scontext? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-     (strict_well_founded? const-decl "bool" orders nil)
-     (pred type-eq-decl nil defined_types nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (>= const-decl "bool" reals nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
-      nil)
-     (number nonempty-type-decl nil numbers nil)
-     (syntaxic type-decl nil language nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (boolean nonempty-type-decl nil booleans nil))
-    nil)) (uparrow_TCC24 0
-           (uparrow_TCC24-1 nil 3583686669
-            ("" (termination-tcc) nil nil)
-            ((boolean nonempty-type-decl nil booleans nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
-             (NOT const-decl "[bool -> bool]" booleans nil)
-             (syntaxic type-decl nil language nil)
-             (sexpr? adt-def-decl "boolean" language nil)
-             (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil))
-            nil))
-  (uparrow_TCC25 0
-   (uparrow_TCC25-1 nil 3583686669
     ("" (grind :rewrites sexpr?) nil nil)
     ((<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
      (sexpr? adt-def-decl "boolean" language nil)
@@ -481,8 +515,8 @@
      (NOT const-decl "[bool -> bool]" booleans nil)
      (bool nonempty-type-eq-decl nil booleans nil)
      (boolean nonempty-type-decl nil booleans nil))
-    nil)) (uparrow_TCC26 0
-           (uparrow_TCC26-1 nil 3583686669
+    nil)) (uparrow_TCC24 0
+           (uparrow_TCC24-1 nil 3583686669
             ("" (termination-tcc) nil nil)
             ((boolean nonempty-type-decl nil booleans nil)
              (bool nonempty-type-eq-decl nil booleans nil)
@@ -509,8 +543,21 @@
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
               language nil)
              (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
              (sexpr? adt-def-decl "boolean" language nil)
+             (sinterp? adt-def-decl "boolean" language nil)
+             (scontext? adt-def-decl "boolean" language nil))
+            nil))
+  (uparrow_TCC25 0
+   (uparrow_TCC25-1 nil 3583686669
+    ("" (grind :rewrites sexpr?) nil nil)
+    ((sexpr? adt-def-decl "boolean" language nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (scontext? adt-def-decl "boolean" language nil))
+    nil)) (uparrow_TCC26 0
+           (uparrow_TCC26-1 nil 3583686669
+            ("" (termination-tcc) nil nil)
+            ((sexpr? adt-def-decl "boolean" language nil)
              (sinterp? adt-def-decl "boolean" language nil)
              (scontext? adt-def-decl "boolean" language nil))
             nil))
@@ -551,7 +598,7 @@
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
               language nil)
              (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
              (sexpr? adt-def-decl "boolean" language nil)
              (sinterp? adt-def-decl "boolean" language nil)
              (scontext? adt-def-decl "boolean" language nil))
@@ -593,7 +640,7 @@
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
               language nil)
              (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
              (sexpr? adt-def-decl "boolean" language nil)
              (sinterp? adt-def-decl "boolean" language nil)
              (scontext? adt-def-decl "boolean" language nil))
@@ -601,13 +648,42 @@
   (uparrow_TCC31 0
    (uparrow_TCC31-1 nil 3583694874
     ("" (grind :rewrites sexpr?) nil nil)
-    ((sexpr? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (scontext? adt-def-decl "boolean" language nil))
+    ((<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (syntaxic type-decl nil language nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (boolean nonempty-type-decl nil booleans nil))
     nil)) (uparrow_TCC32 0
            (uparrow_TCC32-1 nil 3583694874
             ("" (termination-tcc) nil nil)
-            ((sexpr? adt-def-decl "boolean" language nil)
+            ((boolean nonempty-type-decl nil booleans nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (syntaxic type-decl nil language nil)
+             (number nonempty-type-decl nil numbers nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number_field nonempty-type-from-decl nil number_fields
+              nil)
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (>= const-decl "bool" reals nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (pred type-eq-decl nil defined_types nil)
+             (strict_well_founded? const-decl "bool" orders nil)
+             (<< adt-def-decl "(strict_well_founded?[syntaxic])"
+              language nil)
+             (AND const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
+             (sexpr? adt-def-decl "boolean" language nil)
              (sinterp? adt-def-decl "boolean" language nil)
              (scontext? adt-def-decl "boolean" language nil))
             nil))
@@ -626,163 +702,39 @@
              (bool nonempty-type-eq-decl nil booleans nil)
              (NOT const-decl "[bool -> bool]" booleans nil)
              (syntaxic type-decl nil language nil)
-             (number nonempty-type-decl nil numbers nil)
-             (number_field_pred const-decl "[number -> boolean]"
-              number_fields nil)
-             (number_field nonempty-type-from-decl nil number_fields
-              nil)
-             (real_pred const-decl "[number_field -> boolean]" reals
-                        nil)
-             (real nonempty-type-from-decl nil reals nil)
-             (rational_pred const-decl "[real -> boolean]" rationals
-                            nil)
-             (rational nonempty-type-from-decl nil rationals nil)
-             (integer_pred const-decl "[rational -> boolean]" integers
-                           nil)
-             (int nonempty-type-eq-decl nil integers nil)
-             (>= const-decl "bool" reals nil)
-             (nat nonempty-type-eq-decl nil naturalnumbers nil)
-             (pred type-eq-decl nil defined_types nil)
-             (strict_well_founded? const-decl "bool" orders nil)
-             (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil)
-             (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
              (sexpr? adt-def-decl "boolean" language nil)
-             (sinterp? adt-def-decl "boolean" language nil)
-             (scontext? adt-def-decl "boolean" language nil))
+             (<< adt-def-decl "(strict_well_founded?[syntaxic])"
+              language nil))
             nil))
   (uparrow_TCC35 0
    (uparrow_TCC35-1 nil 3583694874
     ("" (grind :rewrites sexpr?) nil nil)
-    ((<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
+    ((scontext? adt-def-decl "boolean" language nil)
+     (sinterp? adt-def-decl "boolean" language nil)
      (sexpr? adt-def-decl "boolean" language nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
+     (strict_well_founded? const-decl "bool" orders nil)
+     (pred type-eq-decl nil defined_types nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (>= const-decl "bool" reals nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (number_field_pred const-decl "[number -> boolean]" number_fields
+      nil)
+     (number nonempty-type-decl nil numbers nil)
      (syntaxic type-decl nil language nil)
      (NOT const-decl "[bool -> bool]" booleans nil)
      (bool nonempty-type-eq-decl nil booleans nil)
      (boolean nonempty-type-decl nil booleans nil))
     nil)) (uparrow_TCC36 0
            (uparrow_TCC36-1 nil 3583694874 ("" (grind) nil nil)
-            ((boolean nonempty-type-decl nil booleans nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
-             (NOT const-decl "[bool -> bool]" booleans nil)
-             (syntaxic type-decl nil language nil)
-             (number nonempty-type-decl nil numbers nil)
-             (number_field_pred const-decl "[number -> boolean]"
-              number_fields nil)
-             (number_field nonempty-type-from-decl nil number_fields
-              nil)
-             (real_pred const-decl "[number_field -> boolean]" reals
-                        nil)
-             (real nonempty-type-from-decl nil reals nil)
-             (rational_pred const-decl "[real -> boolean]" rationals
-                            nil)
-             (rational nonempty-type-from-decl nil rationals nil)
-             (integer_pred const-decl "[rational -> boolean]" integers
-                           nil)
-             (int nonempty-type-eq-decl nil integers nil)
-             (>= const-decl "bool" reals nil)
-             (nat nonempty-type-eq-decl nil naturalnumbers nil)
-             (pred type-eq-decl nil defined_types nil)
-             (strict_well_founded? const-decl "bool" orders nil)
-             (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil)
-             (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-             (sexpr? adt-def-decl "boolean" language nil)
-             (sinterp? adt-def-decl "boolean" language nil)
-             (scontext? adt-def-decl "boolean" language nil))
-            nil))
-  (uparrow_TCC37 0
-   (uparrow_TCC37-1 nil 3583694874
-    ("" (grind :rewrites sexpr?) nil nil)
-    ((<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (syntaxic type-decl nil language nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (boolean nonempty-type-decl nil booleans nil))
-    nil)) (uparrow_TCC38 0
-           (uparrow_TCC38-1 nil 3583694874
-            ("" (grind :rewrites sexpr?) nil nil)
-            ((scontext? adt-def-decl "boolean" language nil)
-             (sinterp? adt-def-decl "boolean" language nil)
-             (sexpr? adt-def-decl "boolean" language nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-             (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil)
-             (strict_well_founded? const-decl "bool" orders nil)
-             (pred type-eq-decl nil defined_types nil)
-             (nat nonempty-type-eq-decl nil naturalnumbers nil)
-             (>= const-decl "bool" reals nil)
-             (int nonempty-type-eq-decl nil integers nil)
-             (integer_pred const-decl "[rational -> boolean]" integers
-                           nil)
-             (rational nonempty-type-from-decl nil rationals nil)
-             (rational_pred const-decl "[real -> boolean]" rationals
-                            nil)
-             (real nonempty-type-from-decl nil reals nil)
-             (real_pred const-decl "[number_field -> boolean]" reals
-                        nil)
-             (number_field nonempty-type-from-decl nil number_fields
-              nil)
-             (number_field_pred const-decl "[number -> boolean]"
-              number_fields nil)
-             (number nonempty-type-decl nil numbers nil)
-             (syntaxic type-decl nil language nil)
-             (NOT const-decl "[bool -> bool]" booleans nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
-             (boolean nonempty-type-decl nil booleans nil))
-            nil))
-  (uparrow_TCC39 0
-   (uparrow_TCC39-1 nil 3583694874 ("" (grind) nil nil)
-    ((boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil))
-    nil)) (uparrow_TCC40 0
-           (uparrow_TCC40-1 nil 3583694874
-            ("" (grind :rewrites sexpr?) nil nil)
-            ((<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil)
-             (sexpr? adt-def-decl "boolean" language nil)
-             (syntaxic type-decl nil language nil)
-             (NOT const-decl "[bool -> bool]" booleans nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
-             (boolean nonempty-type-decl nil booleans nil))
-            nil))
-  (uparrow_TCC41 0
-   (uparrow_TCC41-1 nil 3583694874 ("" (termination-tcc) nil nil)
-    ((boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (number nonempty-type-decl nil numbers nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
-      nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (>= const-decl "bool" reals nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (pred type-eq-decl nil defined_types nil)
-     (strict_well_founded? const-decl "bool" orders nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (scontext? adt-def-decl "boolean" language nil))
-    nil)) (uparrow_TCC42 0
-           (uparrow_TCC42-1 nil 3583694874
-            ("" (termination-tcc) nil nil)
             ((int_plus_int_is_int application-judgement "int" integers
               nil)
              (real_ge_is_total_order name-judgement
@@ -816,8 +768,8 @@
              (int_minus_int_is_int application-judgement "int" integers
               nil))
             nil))
-  (uparrow_TCC43 0
-   (uparrow_TCC43-1 nil 3583694874
+  (uparrow_TCC37 0
+   (uparrow_TCC37-1 nil 3583694874
     ("" (grind :rewrites sexpr?) nil nil)
     ((finseq_appl const-decl "[below[length(fs)] -> T]"
                   finite_sequences nil)
@@ -843,89 +795,89 @@
      (finseq type-eq-decl nil finite_sequences nil)
      (real_lt_is_strict_total_order name-judgement
       "(strict_total_order?[real])" real_props nil)
-     (subterm adt-def-decl "boolean" language nil)
+     nil
      (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil))
-    nil)) (uparrow_TCC44 0
-           (uparrow_TCC44-1 nil 3583694874
-            ("" (termination-tcc) nil nil)
-            ((boolean nonempty-type-decl nil booleans nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
-             (NOT const-decl "[bool -> bool]" booleans nil)
-             (syntaxic type-decl nil language nil)
-             (number nonempty-type-decl nil numbers nil)
-             (number_field_pred const-decl "[number -> boolean]"
-              number_fields nil)
-             (number_field nonempty-type-from-decl nil number_fields
+    nil)) (uparrow_TCC38 0
+           (uparrow_TCC38-1 nil 3583694874
+            ("" (grind :rewrites sexpr?) nil nil)
+            ((int_minus_int_is_int application-judgement "int" integers
               nil)
-             (real_pred const-decl "[number_field -> boolean]" reals
-                        nil)
-             (real nonempty-type-from-decl nil reals nil)
-             (rational_pred const-decl "[real -> boolean]" rationals
-                            nil)
-             (rational nonempty-type-from-decl nil rationals nil)
-             (integer_pred const-decl "[rational -> boolean]" integers
-                           nil)
-             (int nonempty-type-eq-decl nil integers nil)
-             (>= const-decl "bool" reals nil)
-             (nat nonempty-type-eq-decl nil naturalnumbers nil)
-             (pred type-eq-decl nil defined_types nil)
-             (strict_well_founded? const-decl "bool" orders nil)
-             (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil)
-             (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-             (sexpr? adt-def-decl "boolean" language nil)
+             (scontext? adt-def-decl "boolean" language nil)
+             (sinterp? adt-def-decl "boolean" language nil)
              (finseq_appl const-decl "[below[length(fs)] -> T]"
                           finite_sequences nil)
-             (sinterp? adt-def-decl "boolean" language nil)
-             (scontext? adt-def-decl "boolean" language nil)
-             (int_minus_int_is_int application-judgement "int" integers
-              nil))
-            nil))
-  (uparrow_TCC45 0
-   (uparrow_TCC45-1 nil 3583781922 ("" (subtype-tcc) nil nil)
-    ((sexpr? adt-def-decl "boolean" language nil)
-     (scontext? adt-def-decl "boolean" language nil))
-    nil)) (uparrow_TCC46 0
-           (uparrow_TCC46-1 nil 3583781922
-            ("" (termination-tcc) nil nil)
-            ((boolean nonempty-type-decl nil booleans nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
-             (NOT const-decl "[bool -> bool]" booleans nil)
-             (syntaxic type-decl nil language nil)
              (sexpr? adt-def-decl "boolean" language nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
+             (AND const-decl "[bool, bool -> bool]" booleans nil)
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
-              language nil))
+              language nil)
+             (strict_well_founded? const-decl "bool" orders nil)
+             (pred type-eq-decl nil defined_types nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (>= const-decl "bool" reals nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (number_field nonempty-type-from-decl nil number_fields
+              nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number nonempty-type-decl nil numbers nil)
+             (syntaxic type-decl nil language nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (boolean nonempty-type-decl nil booleans nil))
             nil))
-  (uparrow_TCC47 0
-   (uparrow_TCC47-1 nil 3583781922
-    ("" (grind :rewrites sexpr?) nil nil)
-    ((scontext? adt-def-decl "boolean" language nil)
+  (uparrow_TCC39 0
+   (uparrow_TCC39-1 nil 3583694874 ("" (grind) nil nil)
+    ((sexpr? adt-def-decl "boolean" language nil)
      (sinterp? adt-def-decl "boolean" language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-     (strict_well_founded? const-decl "bool" orders nil)
-     (pred type-eq-decl nil defined_types nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (>= const-decl "bool" reals nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
+     (scontext? adt-def-decl "boolean" language nil))
+    nil)) (uparrow_TCC40 0
+           (uparrow_TCC40-1 nil 3583694874
+            ("" (grind :rewrites sexpr?) nil nil)
+            ((<< adt-def-decl "(strict_well_founded?[syntaxic])"
+              language nil)
+             (sexpr? adt-def-decl "boolean" language nil)
+             (syntaxic type-decl nil language nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (boolean nonempty-type-decl nil booleans nil))
+            nil))
+  (uparrow_TCC41 0
+   (uparrow_TCC41-1 nil 3583694874 ("" (termination-tcc) nil nil)
+    ((boolean nonempty-type-decl nil booleans nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (syntaxic type-decl nil language nil)
+     (number nonempty-type-decl nil numbers nil)
      (number_field_pred const-decl "[number -> boolean]" number_fields
       nil)
-     (number nonempty-type-decl nil numbers nil)
-     (syntaxic type-decl nil language nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (boolean nonempty-type-decl nil booleans nil))
-    nil)) (uparrow_TCC48 0
-           (uparrow_TCC48-1 nil 3583781922
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (>= const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (pred type-eq-decl nil defined_types nil)
+     (strict_well_founded? const-decl "bool" orders nil)
+     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (scontext? adt-def-decl "boolean" language nil))
+    nil)) (uparrow_TCC42 0
+           (uparrow_TCC42-1 nil 3583694874
             ("" (termination-tcc) nil nil)
             ((boolean nonempty-type-decl nil booleans nil)
              (bool nonempty-type-eq-decl nil booleans nil)
@@ -935,13 +887,13 @@
              (<< adt-def-decl "(strict_well_founded?[syntaxic])"
               language nil))
             nil))
-  (uparrow_TCC49 0
-   (uparrow_TCC49-1 nil 3583781922
+  (uparrow_TCC43 0
+   (uparrow_TCC43-1 nil 3583694874
     ("" (grind :rewrites sexpr?) nil nil)
     ((scontext? adt-def-decl "boolean" language nil)
      (sinterp? adt-def-decl "boolean" language nil)
      (sexpr? adt-def-decl "boolean" language nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
      (AND const-decl "[bool, bool -> bool]" booleans nil)
      (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
      (strict_well_founded? const-decl "bool" orders nil)
@@ -1007,75 +959,480 @@
               ("19" (grind) nil nil) ("20" (grind) nil nil)
               ("21" (grind) nil nil))
              nil)
-            ((int_plus_int_is_int application-judgement "int" integers
+            ((syntaxic type-decl nil language nil)
+             (boolean nonempty-type-decl nil booleans nil)
+             (number nonempty-type-decl nil numbers nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number_field nonempty-type-from-decl nil number_fields
               nil)
-             (- const-decl "[numfield, numfield -> numfield]"
-                number_fields nil)
-             (n!1 skolem-const-decl "nat" subst nil)
-             (theory_def1_var!1 skolem-const-decl "finseq[(scontext?)]"
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (>= const-decl "bool" reals nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (= const-decl "[T, T -> boolean]" equalities nil)
+             (AND const-decl "[bool, bool -> bool]" booleans nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
+             (sexpr? adt-def-decl "boolean" language nil)
+             (sinterp? adt-def-decl "boolean" language nil)
+             (scontext? adt-def-decl "boolean" language nil)
+             (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
               subst nil)
-             (syntaxic_theory_def_extensionality formula-decl nil
+             (syntaxic_induction formula-decl nil language nil)
+             (stheory? adt-recognizer-decl "[signature -> boolean]"
               language nil)
-             (theory_def adt-constructor-decl
-              "[finseq[(scontext?)] -> (theory_def?)]" language nil)
-             (int_minus_int_is_int application-judgement "int" integers
+             (signature type-decl nil language nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (real_ge_is_total_order name-judgement
+              "(total_order?[real])" real_props nil)
+             nil
+             (interp? adt-recognizer-decl "[syntaxic -> boolean]"
+              language nil)
+             (syntaxic_interp_extensionality formula-decl nil language
               nil)
-             (nnint_plus_nnint_is_nnint application-judgement
-              "nonneg_int" integers nil)
-             (numfield nonempty-type-eq-decl nil number_fields nil)
-             (+ const-decl "[numfield, numfield -> numfield]"
-                number_fields nil)
-             (posint_plus_nnint_is_posint application-judgement
-              "posint" integers nil)
-             (below type-eq-decl nil nat_types nil)
-             (finseq type-eq-decl nil finite_sequences nil)
+             (finseq_appl const-decl "[below[length(fs)] -> T]"
+                          finite_sequences nil)
+             (< const-decl "bool" reals nil)
              (interp adt-constructor-decl
                      "[[(sexpr?), finseq[(sinterp?)]] -> (interp?)]"
                      language nil)
-             (< const-decl "bool" reals nil)
-             (finseq_appl const-decl "[below[length(fs)] -> T]"
-                          finite_sequences nil)
-             (syntaxic_interp_extensionality formula-decl nil language
+             (finseq type-eq-decl nil finite_sequences nil)
+             (below type-eq-decl nil nat_types nil)
+             (posint_plus_nnint_is_posint application-judgement
+              "posint" integers nil)
+             (+ const-decl "[numfield, numfield -> numfield]"
+                number_fields nil)
+             (numfield nonempty-type-eq-decl nil number_fields nil)
+             (nnint_plus_nnint_is_nnint application-judgement
+              "nonneg_int" integers nil)
+             (int_minus_int_is_int application-judgement "int" integers
               nil)
-             (interp? adt-recognizer-decl "[syntaxic -> boolean]"
-              language nil)
-             (n!1 skolem-const-decl "nat" subst nil)
-             (real_lt_is_strict_total_order name-judgement
-              "(strict_total_order?[real])" real_props nil)
-             (interp2_var!1 skolem-const-decl "finseq[(sinterp?)]"
-              subst nil)
-             (OR const-decl "[bool, bool -> bool]" booleans nil)
-             (type_decl? adt-recognizer-decl "[syntaxic -> boolean]"
-              language nil)
-             (type_var? adt-recognizer-decl "[syntaxic -> boolean]"
-              language nil)
-             (type_def? adt-recognizer-decl "[syntaxic -> boolean]"
-              language nil)
-             (const_decl? adt-recognizer-decl "[syntaxic -> boolean]"
-              language nil)
-             (const_var? adt-recognizer-decl "[syntaxic -> boolean]"
-              language nil)
-             (const_def? adt-recognizer-decl "[syntaxic -> boolean]"
+             (theory_def adt-constructor-decl
+              "[finseq[(scontext?)] -> (theory_def?)]" language nil)
+             (syntaxic_theory_def_extensionality formula-decl nil
               language nil)
              (theory_def? adt-recognizer-decl "[syntaxic -> boolean]"
               language nil)
-             (real_ge_is_total_order name-judgement
-              "(total_order?[real])" real_props nil)
+             nil
+             (- const-decl "[numfield, numfield -> numfield]"
+                number_fields nil)
+             (int_plus_int_is_int application-judgement "int" integers
+              nil))
+            shostak))
+  (length_shift_TCC1 0
+   (length_shift_TCC1-1 nil 3583588165 ("" (subtype-tcc) nil nil)
+    ((finseq_appl const-decl "[below[length(fs)] -> T]"
+                  finite_sequences nil)
+     (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+      subst nil)
+     (int_minus_int_is_int application-judgement "int" integers nil))
+    nil)) (length_shift 0
+           (length_shift-1 nil 3583530058
+            ("" (skosimp* :preds? t) (("" (assert) nil nil)) nil)
+            ((theory_def? adt-recognizer-decl "[syntaxic -> boolean]"
+              language nil)
+             (syntaxic type-decl nil language nil)
              (NOT const-decl "[bool -> bool]" booleans nil)
-             (syntaxic_induction formula-decl nil language nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (boolean nonempty-type-decl nil booleans nil)
              (↑ def-decl "{V |
-         (sexpr?(U) IMPLIES sexpr?(V)) AND
-          (sinterp?(U) IMPLIES sinterp?(V)) AND
-           (scontext?(U) IMPLIES scontext?(V))}" subst nil)
-             (scontext? adt-def-decl "boolean" language nil)
-             (sinterp? adt-def-decl "boolean" language nil)
-             (sexpr? adt-def-decl "boolean" language nil)
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+              subst nil))
+            shostak))
+  (shift_plus 0
+   (shift_plus-1 nil 3583529119
+    ("" (induct U)
+     (("1" (grind) nil nil) ("2" (grind) nil nil)
+      ("3" (skosimp* :preds? t)
+       (("3" (assert)
+         (("3" (decompose-equality 1)
+           (("1" (inst? :polarity? t) nil nil)
+            ("2" (decompose-equality 1)
+             (("2" (decompose-equality 1)
+               (("1" (hide -5)
+                 (("1" (inst - x!1)
+                   (("1" (inst - i!1 j!1 n!1) (("1" (grind) nil nil))
+                     nil))
+                   nil))
+                 nil)
+                ("2" (skosimp* :preds? t)
+                 (("2" (expand finseq_appl)
+                   (("2" (invoke (typepred "%1") (~ + "sexpr?(%1)"))
+                     (("2"
+                       (invoke (typepred "%1")
+                        (~ + "% IFF sexpr?(%1)"))
+                       (("2" (grind) nil nil)) nil))
+                     nil))
+                   nil))
+                 nil))
+               nil))
+             nil))
+           nil))
+         nil))
+       nil)
+      ("4" (grind) nil nil) ("5" (grind) nil nil) ("6" (grind) nil nil)
+      ("7" (grind) nil nil) ("8" (grind) nil nil) ("9" (grind) nil nil)
+      ("10" (grind) nil nil) ("11" (grind) nil nil)
+      ("12" (grind) nil nil) ("13" (grind) nil nil)
+      ("14" (grind) nil nil) ("15" (grind) nil nil)
+      ("16" (grind) nil nil) ("17" (grind) nil nil)
+      ("18" (skosimp* :preds? t)
+       (("18" (assert)
+         (("18" (decompose-equality 1)
+           (("18" (decompose-equality 1)
+             (("18" (decompose-equality 1)
+               (("1" (grind) nil nil)
+                ("2" (skosimp* :preds? t)
+                 (("2" (assert)
+                   (("2" (expand finseq_appl)
+                     (("2" (assert)
+                       (("2"
+                         (invoke (typepred "%1") (~ + "sexpr?(%1)"))
+                         (("2"
+                           (invoke (typepred "%1")
+                            (~ + "% IFF sexpr?(%1)"))
+                           (("2" (grind) nil nil)) nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil))
+               nil))
+             nil))
+           nil))
+         nil))
+       nil)
+      ("19" (grind) nil nil) ("20" (grind) nil nil)
+      ("21" (grind) nil nil))
+     nil)
+    ((nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+      integers nil)
+     (syntaxic type-decl nil language nil)
+     (boolean nonempty-type-decl nil booleans nil)
+     (number nonempty-type-decl nil numbers nil)
+     (number_field_pred const-decl "[number -> boolean]" number_fields
+      nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (>= const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (= const-decl "[T, T -> boolean]" equalities nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (scontext? adt-def-decl "boolean" language nil)
+     (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+      subst nil)
+     (numfield nonempty-type-eq-decl nil number_fields nil)
+     (+ const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (syntaxic_induction formula-decl nil language nil)
+     (real_ge_is_total_order name-judgement "(total_order?[real])"
+      real_props nil)
+     (real_lt_is_strict_total_order name-judgement
+      "(strict_total_order?[real])" real_props nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (stheory? adt-recognizer-decl "[signature -> boolean]" language
+      nil)
+     (signature type-decl nil language nil)
+     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+     (interp? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+     (syntaxic_interp_extensionality formula-decl nil language nil)
+     (below type-eq-decl nil nat_types nil)
+     (finseq type-eq-decl nil finite_sequences nil)
+     (interp adt-constructor-decl
+             "[[(sexpr?), finseq[(sinterp?)]] -> (interp?)]" language
+             nil)
+     (< const-decl "bool" reals nil)
+     (finseq_appl const-decl "[below[length(fs)] -> T]"
+                  finite_sequences nil)
+     (posint_plus_nnint_is_posint application-judgement "posint"
+      integers nil)
+     (int_minus_int_is_int application-judgement "int" integers nil)
+     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (syntaxic_theory_def_extensionality formula-decl nil language nil)
+     (theory_def adt-constructor-decl
+      "[finseq[(scontext?)] -> (theory_def?)]" language nil)
+     (- const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (int_plus_int_is_int application-judgement "int" integers nil))
+    shostak)) (shift_k 0
+               (shift_k-1 nil 3583679383
+                ("" (skosimp* :preds? t)
+                 (("" (expand scontext?)
+                   (("" (bddsimp)
+                     (("1" (grind) nil nil) ("2" (grind) nil nil)
+                      ("3" (grind-with-ext)
+                       (("1" (case "nb!1 = (nb!1`1, nb!1`2 - x!1)")
+                         (("1" (grind) nil nil) ("2" (grind) nil nil))
+                         nil)
+                        ("2" (grind :rewrites sexpr?) nil nil)
+                        ("3" (grind :rewrites sexpr?) nil nil)
+                        ("4" (grind :rewrites sexpr?) nil nil)
+                        ("5" (grind :rewrites sexpr?) nil nil))
+                       nil)
+                      ("4" (grind-with-ext)
+                       (("1" (case "nb!1 = (nb!1`1, nb!1`2 - x!1)")
+                         (("1" (grind) nil nil) ("2" (grind) nil nil))
+                         nil)
+                        ("2" (grind :rewrites sexpr?) nil nil)
+                        ("3" (grind :rewrites sexpr?) nil nil)
+                        ("4" (grind :rewrites sexpr?) nil nil)
+                        ("5" (grind :rewrites sexpr?) nil nil))
+                       nil)
+                      ("5" (grind-with-ext)
+                       (("1" (case "nb!1 = (nb!1`1, nb!1`2 - x!1)")
+                         (("1" (grind) nil nil) ("2" (grind) nil nil))
+                         nil)
+                        ("2" (grind :rewrites sexpr?) nil nil)
+                        ("3" (grind :rewrites sexpr?) nil nil)
+                        ("4" (grind :rewrites sexpr?) nil nil)
+                        ("5" (grind :rewrites sexpr?) nil nil))
+                       nil)
+                      ("6" (grind-with-ext)
+                       (("1" (case "nb!1 = (nb!1`1, nb!1`2 - x!1)")
+                         (("1" (grind) nil nil) ("2" (grind) nil nil))
+                         nil)
+                        ("2" (case "nb!1 = (nb!1`1, nb!1`2 - x!1)")
+                         (("1" (grind) nil nil) ("2" (grind) nil nil))
+                         nil)
+                        ("3" (grind :rewrites sexpr?) nil nil)
+                        ("4" (grind :rewrites sexpr?) nil nil)
+                        ("5" (grind :rewrites sexpr?) nil nil)
+                        ("6" (grind :rewrites sexpr?) nil nil))
+                       nil)
+                      ("7" (grind-with-ext)
+                       (("1" (grind :rewrites sexpr?) nil nil)
+                        ("2" (grind :rewrites sexpr?) nil nil)
+                        ("3" (grind :rewrites sexpr?) nil nil)
+                        ("4" (grind :rewrites sexpr?) nil nil))
+                       nil))
+                     nil))
+                   nil))
+                 nil)
+                ((scontext? adt-def-decl "boolean" language nil)
+                 (syntaxic type-decl nil language nil)
+                 (NOT const-decl "[bool -> bool]" booleans nil)
+                 (bool nonempty-type-eq-decl nil booleans nil)
+                 (boolean nonempty-type-decl nil booleans nil)
+                 (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+                  subst nil)
+                 (finseq_appl const-decl "[below[length(fs)] -> T]"
+                              finite_sequences nil)
+                 (k const-decl "(theory_def?)" language nil)
+                 (= const-decl "[T, T -> boolean]" equalities nil)
+                 (nnint_times_nnint_is_nnint application-judgement
+                  "nonneg_int" integers nil)
+                 (even_times_int_is_even application-judgement
+                  "even_int" integers nil)
+                 (mult_divides1 application-judgement "(divides(n))"
+                  divides nil)
+                 (mult_divides2 application-judgement "(divides(m))"
+                  divides nil)
+                 (syntaxic_type_def_extensionality formula-decl nil
+                  language nil)
+                 (nonneg_int nonempty-type-eq-decl nil integers nil)
+                 (> const-decl "bool" reals nil)
+                 (posint nonempty-type-eq-decl nil integers nil)
+                 (real_lt_is_strict_total_order name-judgement
+                  "(strict_total_order?[real])" real_props nil)
+                 (real_ge_is_total_order name-judgement
+                  "(total_order?[real])" real_props nil)
+                 (- const-decl "[numfield, numfield -> numfield]"
+                    number_fields nil)
+                 (numfield nonempty-type-eq-decl nil number_fields nil)
+                 (below type-eq-decl nil nat_types nil)
+                 (< const-decl "bool" reals nil)
+                 (nat nonempty-type-eq-decl nil naturalnumbers nil)
+                 (>= const-decl "bool" reals nil)
+                 (int nonempty-type-eq-decl nil integers nil)
+                 (integer_pred const-decl "[rational -> boolean]"
+                               integers nil)
+                 (rational nonempty-type-from-decl nil rationals nil)
+                 (rational_pred const-decl "[real -> boolean]"
+                                rationals nil)
+                 (real nonempty-type-from-decl nil reals nil)
+                 (real_pred const-decl "[number_field -> boolean]"
+                            reals nil)
+                 (number_field nonempty-type-from-decl nil
+                  number_fields nil)
+                 (number_field_pred const-decl "[number -> boolean]"
+                  number_fields nil)
+                 (number nonempty-type-decl nil numbers nil)
+                 (finseq type-eq-decl nil finite_sequences nil)
+                 (theory_def adt-constructor-decl
+                  "[finseq[(scontext?)] -> (theory_def?)]" language
+                  nil)
+                 (sexpr? adt-def-decl "boolean" language nil)
+                 (type_def? adt-recognizer-decl "[syntaxic -> boolean]"
+                  language nil)
+                 (type_def adt-constructor-decl
+                  "[(sexpr?) -> (type_def?)]" language nil)
+                 (AND const-decl "[bool, bool -> bool]" booleans nil)
+                 (IFF const-decl "[bool, bool -> bool]" booleans nil)
+                 (sinterp? adt-def-decl "boolean" language nil)
+                 (OR const-decl "[bool, bool -> bool]" booleans nil)
+                 (iterm? adt-recognizer-decl "[syntaxic -> boolean]"
+                  language nil)
+                 (itype? adt-recognizer-decl "[syntaxic -> boolean]"
+                  language nil)
+                 (const_def? adt-recognizer-decl
+                  "[syntaxic -> boolean]" language nil)
+                 (def shared-adt-accessor-decl
+                  "[{x: syntaxic | iterm?(x) OR itype?(x) OR const_def?(x) OR type_def?(x)} ->
+   (sexpr?)]" language nil)
+                 (syntaxic_theory_def_extensionality formula-decl nil
+                  language nil)
+                 (theory_def? adt-recognizer-decl
+                  "[syntaxic -> boolean]" language nil)
+                 (int_minus_int_is_int application-judgement "int"
+                  integers nil)
+                 (nnint_plus_posint_is_posint application-judgement
+                  "posint" integers nil)
+                 (syntaxic_const_decl_extensionality formula-decl nil
+                  language nil)
+                 (const_decl? adt-recognizer-decl
+                  "[syntaxic -> boolean]" language nil)
+                 (const_decl adt-constructor-decl
+                  "[(sexpr?) -> (const_decl?)]" language nil)
+                 (const_var? adt-recognizer-decl
+                  "[syntaxic -> boolean]" language nil)
+                 (lam? adt-recognizer-decl "[syntaxic -> boolean]"
+                  language nil)
+                 (type_ shared-adt-accessor-decl "[{x: syntaxic |
+          const_def?(x) OR const_var?(x) OR const_decl?(x) OR lam?(x)} ->
+   (sexpr?)]" language nil)
+                 (syntaxic_const_var_extensionality formula-decl nil
+                  language nil)
+                 (const_var adt-constructor-decl
+                  "[(sexpr?) -> (const_var?)]" language nil)
+                 (syntaxic_const_def_extensionality formula-decl nil
+                  language nil)
+                 (const_def adt-constructor-decl
+                  "[[(sexpr?), (sexpr?)] -> (const_def?)]" language
+                  nil)
+                 (int_plus_int_is_int application-judgement "int"
+                  integers nil)
+                 (+ const-decl "[numfield, numfield -> numfield]"
+                    number_fields nil)
+                 (def adt-accessor-decl
+                  "[(theory_def?) -> finseq[(scontext?)]]" language
+                  nil)
+                 (nnint_plus_nnint_is_nnint application-judgement
+                  "nonneg_int" integers nil))
+                shostak))
+  (shift_concat_TCC1 0
+   (shift_concat_TCC1-1 nil 3583781663 ("" (subtype-tcc) nil nil)
+    (nil
+     (finseq_appl const-decl "[below[length(fs)] -> T]"
+                  finite_sequences nil)
+     (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+      subst nil)
+     (int_minus_int_is_int application-judgement "int" integers nil)
+     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+      integers nil))
+    nil)) (shift_concat 0
+           (shift_concat-1 nil 3583678716
+            ("" (skosimp* :preds? t)
+             (("" (expand ++)
+               (("" (expand o)
+                 (("" (assert)
+                   (("" (decompose-equality 1)
+                     (("1" (decompose-equality 1)
+                       (("1" (expand finseq_appl)
+                         (("1" (grind-with-ext) nil nil)) nil)
+                        ("2" (skeep)
+                         (("2" (split 2)
+                           (("1" (flatten)
+                             (("1" (grind :rewrites sexpr?) nil nil))
+                             nil)
+                            ("2" (flatten)
+                             (("2" (expand finseq_appl)
+                               (("2"
+                                 (all-typepreds)
+                                 (("2" (assert) nil nil))
+                                 nil))
+                               nil))
+                             nil)
+                            ("3" (grind) nil nil)
+                            ("4" (flatten)
+                             (("4" (expand finseq_appl)
+                               (("4"
+                                 (all-typepreds)
+                                 (("4" (assert) nil nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil)
+                        ("3" (grind) nil nil) ("4" (grind) nil nil)
+                        ("5" (skosimp* :preds? t)
+                         (("5" (assert)
+                           (("5" (all-typepreds)
+                             (("5" (expand finseq_appl)
+                               (("5" (grind) nil nil)) nil))
+                             nil))
+                           nil))
+                         nil)
+                        ("6" (grind) nil nil) ("7" (grind) nil nil))
+                       nil)
+                      ("2" (grind) nil nil) ("3" (grind) nil nil)
+                      ("4" (grind) nil nil) ("5" (grind) nil nil))
+                     nil))
+                   nil))
+                 nil))
+               nil))
+             nil)
+            ((theory_def? adt-recognizer-decl "[syntaxic -> boolean]"
+              language nil)
+             (syntaxic type-decl nil language nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (boolean nonempty-type-decl nil booleans nil)
+             (O const-decl "finseq" finite_sequences nil)
+             (int_plus_int_is_int application-judgement "int" integers
+              nil)
+             (- const-decl "[numfield, numfield -> numfield]"
+                number_fields nil)
              (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-             (AND const-decl "[bool, bool -> bool]" booleans nil)
-             (= const-decl "[T, T -> boolean]" equalities nil)
+             (def adt-accessor-decl
+              "[(theory_def?) -> finseq[(scontext?)]]" language nil)
+             (finseq type-eq-decl nil finite_sequences nil)
+             (scontext? adt-def-decl "boolean" language nil)
+             (below type-eq-decl nil nat_types nil)
+             (+ const-decl "[numfield, numfield -> numfield]"
+                number_fields nil)
+             (numfield nonempty-type-eq-decl nil number_fields nil)
+             (< const-decl "bool" reals nil)
              (nat nonempty-type-eq-decl nil naturalnumbers nil)
              (>= const-decl "bool" reals nil)
-             (bool nonempty-type-eq-decl nil booleans nil)
              (int nonempty-type-eq-decl nil integers nil)
              (integer_pred const-decl "[rational -> boolean]" integers
                            nil)
@@ -1090,65 +1447,450 @@
              (number_field_pred const-decl "[number -> boolean]"
               number_fields nil)
              (number nonempty-type-decl nil numbers nil)
-             (boolean nonempty-type-decl nil booleans nil)
-             (syntaxic type-decl nil language nil))
+             (sinterp? adt-def-decl "boolean" language nil)
+             (sexpr? adt-def-decl "boolean" language nil)
+             (IFF const-decl "[bool, bool -> bool]" booleans nil)
+             (AND const-decl "[bool, bool -> bool]" booleans nil)
+             (theory_def adt-constructor-decl
+              "[finseq[(scontext?)] -> (theory_def?)]" language nil)
+             (finseq_appl const-decl "[below[length(fs)] -> T]"
+                          finite_sequences nil)
+             (IF const-decl "[boolean, T, T -> T]" if_def nil)
+             (syntaxic_theory_def_extensionality formula-decl nil
+              language nil)
+             (strict_total_order? const-decl "bool" orders nil)
+             (pred type-eq-decl nil defined_types nil)
+             (odd? const-decl "bool" integers nil)
+             (> const-decl "bool" reals nil)
+             (real_ge_is_total_order name-judgement
+              "(total_order?[real])" real_props nil)
+             (real_gt_is_strict_total_order name-judgement
+              "(strict_total_order?[real])" real_props nil)
+             (real_lt_is_strict_total_order name-judgement
+              "(strict_total_order?[real])" real_props nil)
+             (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+              subst nil)
+             (nnint_plus_nnint_is_nnint application-judgement
+              "nonneg_int" integers nil)
+             (int_minus_int_is_int application-judgement "int" integers
+              nil)
+             (++ const-decl "(theory_def?)" language nil))
             shostak))
-  (length_shift_TCC1 0
-   (length_shift_TCC1-1 nil 3583588165 ("" (subtype-tcc) nil nil)
-    ((finseq_appl const-decl "[below[length(fs)] -> T]"
-                  finite_sequences nil)
-     (↑ def-decl "{V |
-         (sexpr?(U) IMPLIES sexpr?(V)) AND
-          (sinterp?(U) IMPLIES sinterp?(V)) AND
-           (scontext?(U) IMPLIES scontext?(V))}" subst nil)
-     (scontext? adt-def-decl "boolean" language nil)
-     (int_minus_int_is_int application-judgement "int" integers nil))
-    nil)) (length_shift_TCC2 0
-           (length_shift_TCC2-1 nil 3583609445
-            ("" (subtype-tcc) nil nil)
-            ((scontext? adt-def-decl "boolean" language nil)) nil))
-  (length_shift 0
-   (length_shift-1 nil 3583530058
-    ("" (skosimp* :preds? t) (("" (assert) nil nil)) nil)
-    ((↑ def-decl "{V |
-         (sexpr?(U) IMPLIES sexpr?(V)) AND
-          (sinterp?(U) IMPLIES sinterp?(V)) AND
-           (scontext?(U) IMPLIES scontext?(V))}" subst nil)
-     (length const-decl "nat" language nil)
-     (boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil))
-    shostak)) (shift_plus 0
-               (shift_plus-1 nil 3583529119
-                ("" (induct U)
-                 (("1" (grind) nil nil) ("2" (grind) nil nil)
-                  ("3" (skosimp* :preds? t)
-                   (("3" (assert)
-                     (("3" (decompose-equality 1)
-                       (("1" (inst? :polarity? t) nil nil)
-                        ("2" (decompose-equality 1)
-                         (("2" (decompose-equality 1)
-                           (("1" (hide -5)
-                             (("1" (inst - x!1)
+  (signature_shift 0
+   (signature_shift-1 nil 3583784567
+    ("" (induct M)
+     (("1" (grind) nil nil) ("2" (grind) nil nil) ("3" (grind) nil nil)
+      ("4" (grind) nil nil) ("5" (grind) nil nil) ("6" (grind) nil nil)
+      ("7" (grind) nil nil) ("8" (grind) nil nil) ("9" (grind) nil nil)
+      ("10" (grind) nil nil) ("11" (grind) nil nil)
+      ("12" (grind) nil nil) ("13" (grind) nil nil)
+      ("14" (grind) nil nil) ("15" (grind) nil nil)
+      ("16" (grind) nil nil) ("17" (grind) nil nil)
+      ("18" (grind) nil nil)
+      ("19" (skosimp* :preds? t)
+       (("19" (assert)
+         (("19" (expand signature)
+           (("19" (decompose-equality 1)
+             (("1" (decompose-equality 1)
+               (("1" (expand finseq_appl)
+                 (("1" (inst - x!1)
+                   (("1"
+                     (inst -
+                      "(nb!1`1, theory_def1_var!1`length - 1 - x!1 + nb!1`2)")
+                     (("1" (grind)
+                       (("1" (decompose-equality -1)
+                         (("1" (decompose-equality -2)
+                           (("1" (expand signature 1)
+                             (("1" (assert)
                                (("1"
-                                 (inst - i!1 j!1 n!1)
-                                 (("1" (grind) nil nil))
+                                 (lift-if)
+                                 (("1"
+                                   (assert)
+                                   (("1"
+                                     (lift-if)
+                                     (("1" (assert) nil nil))
+                                     nil))
+                                   nil))
                                  nil))
                                nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil)
+                      ("2" (assert) nil nil))
+                     nil))
+                   nil))
+                 nil)
+                ("2" (grind) nil nil))
+               nil)
+              ("2" (grind) nil nil))
+             nil))
+           nil))
+         nil))
+       nil)
+      ("20" (grind) nil nil) ("21" (grind) nil nil)
+      ("22" (grind) nil nil) ("23" (grind) nil nil))
+     nil)
+    ((def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
+      language nil)
+     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (sig adt-accessor-decl "[(stheory?) -> finseq[signature]]"
+          language nil)
+     (real_ge_is_total_order name-judgement "(total_order?[real])"
+      real_props nil)
+     (real_lt_is_strict_total_order name-judgement
+      "(strict_total_order?[real])" real_props nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (signature_stheory_extensionality formula-decl nil language nil)
+     (stheory? adt-recognizer-decl "[signature -> boolean]" language
+      nil)
+     (stheory adt-constructor-decl "[finseq[signature] -> (stheory?)]"
+      language nil)
+     (< const-decl "bool" reals nil)
+     (below type-eq-decl nil nat_types nil)
+     (finseq type-eq-decl nil finite_sequences nil)
+     (numfield nonempty-type-eq-decl nil number_fields nil)
+     (+ const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (- const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (int_plus_int_is_int application-judgement "int" integers nil)
+     (int_minus_int_is_int application-judgement "int" integers nil)
+     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+      integers nil)
+     (finseq_appl const-decl "[below[length(fs)] -> T]"
+                  finite_sequences nil)
+     (syntaxic_induction formula-decl nil language nil)
+     (signature def-decl "signature" language nil)
+     (= const-decl "[T, T -> boolean]" equalities nil)
+     (signature type-decl nil language nil)
+     (syntaxic type-decl nil language nil)
+     (boolean nonempty-type-decl nil booleans nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+     (scontext? adt-def-decl "boolean" language nil)
+     (number nonempty-type-decl nil numbers nil)
+     (number_field_pred const-decl "[number -> boolean]" number_fields
+      nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (>= const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+      subst nil))
+    shostak)) (strong_prektau_shift 0
+               (strong_prektau_shift-1 nil 3583785664
+                ("" (induct U)
+                 (("1" (grind) nil nil)
+                  ("2" (skosimp* :preds? t)
+                   (("2" (assert)
+                     (("2" (inst - S1!1 S2!1 Sig!1 dot2_var!1)
+                       (("2" (inst - S1!1 S2!1 Sig!1 s!1)
+                         (("2" (grind) nil nil)) nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("3" (skosimp* :preds? t)
+                   (("3" (assert)
+                     (("3" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("3" (grind) nil nil)) nil))
+                     nil))
+                   nil)
+                  ("4" (skosimp* :preds? t)
+                   (("4" (assert)
+                     (("4" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("4"
+                         (inst - S1!1 "S2!1 ++ k(sconst_def)" Sig!1
+                          s!1)
+                         (("4" (assert) (("4" (grind) nil nil)) nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("5" (skosimp* :preds? t)
+                   (("5" (assert)
+                     (("5" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("5"
+                         (inst - S1!1 "S2!1 ++ k(sconst_def)" Sig!1
+                          s!1)
+                         (("5" (assert) (("5" (grind) nil nil)) nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("6" (skosimp* :preds? t)
+                   (("6" (assert)
+                     (("6" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("6"
+                         (inst - S1!1 "S2!1 ++ k(sconst_def)" Sig!1
+                          sconst_def)
+                         (("6" (assert) (("6" (grind) nil nil)) nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("7" (skosimp* :preds? t)
+                   (("7" (assert)
+                     (("7" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("7" (inst - S1!1 S2!1 Sig!1 s!1)
+                         (("7" (grind) nil nil)) nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("8" (skosimp* :preds? t)
+                   (("8" (assert)
+                     (("8" (inst - S1!1 S2!1 Sig!1 stype_def)
+                       (("8"
+                         (inst - S1!1 "S2!1 ++ k(sconst_def)" Sig!1
+                          s!1)
+                         (("8" (assert) (("8" (grind) nil nil)) nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("9" (skosimp* :preds? t)
+                   (("9" (assert)
+                     (("9" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("9" (inst - S1!1 S2!1 Sig!1 s!1)
+                         (("9" (grind) nil nil)) nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("10" (skosimp* :preds? t)
+                   (("10" (assert)
+                     (("10" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("10" (grind) nil nil)) nil))
+                     nil))
+                   nil)
+                  ("11" (skosimp* :preds? t)
+                   (("11" (inst - S1!1 S2!1 Sig!1 s!1)
+                     (("11" (assert) (("11" (grind) nil nil)) nil))
+                     nil))
+                   nil)
+                  ("12" (skosimp* :preds? t) (("12" (assert) nil nil))
+                   nil)
+                  ("13" (skosimp* :preds? t) (("13" (assert) nil nil))
+                   nil)
+                  ("14" (skosimp* :preds? t)
+                   (("14" (assert)
+                     (("14" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("14" (grind) nil nil)) nil))
+                     nil))
+                   nil)
+                  ("15" (skosimp* :preds? t)
+                   (("15" (assert)
+                     (("15" (inst - S1!1 S2!1 Sig!1 stype_def)
+                       (("15" (grind) nil nil)) nil))
+                     nil))
+                   nil)
+                  ("16" (skosimp* :preds? t)
+                   (("16" (assert)
+                     (("16" (inst - S1!1 S2!1 Sig!1 stype_def)
+                       (("16" (grind) nil nil)) nil))
+                     nil))
+                   nil)
+                  ("17" (skosimp* :preds? t)
+                   (("17" (assert)
+                     (("17" (inst - S1!1 S2!1 Sig!1 stype_def)
+                       (("17" (inst - S1!1 S2!1 Sig!1 s!1)
+                         (("17" (grind) nil nil)) nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("18" (skosimp* :preds? t)
+                   (("18" (assert)
+                     (("18" (split 1)
+                       (("1" (flatten)
+                         (("1" (split 1)
+                           (("1" (propax) nil nil)
+                            ("2" (propax) nil nil)
+                            ("3" (use signature_shift :polarity? t)
+                             (("3"
+                               (inst
+                                -
+                                "theory_def(theory_def1_var!1)"
+                                "(sig(Sig!1)`length, sig(S2!1)`length)")
+                               (("3" (assert) nil nil)) nil))
                              nil)
-                            ("2" (grind)
-                             (("2"
-                               (invoke
-                                (typepred "%1")
-                                (~ + "sexpr?(%1)"))
-                               (("2"
-                                 (hide -3)
-                                 (("2"
-                                   (assert)
-                                   (("2" (postpone) nil nil))
+                            ("4" (skosimp* :preds? t)
+                             (("4" (inst - x!1)
+                               (("4"
+                                 (inst - x!1)
+                                 (("4"
+                                   (inst
+                                    -
+                                    S1!1
+                                    "S2!1 ++ rest(s!1, x!1)"
+                                    Sig!1
+                                    "sapply(s!1)(x!1)")
+                                   (("4"
+                                     (assert)
+                                     (("4"
+                                       (expand finseq_appl)
+                                       (("4"
+                                         (expand ++)
+                                         (("4"
+                                           (expand o 2 4)
+                                           (("4"
+                                             (expand rest 2 2)
+                                             (("4"
+                                               (hide -4)
+                                               (("4"
+                                                 (assert)
+                                                 (("4"
+                                                   (expand ^^ 2)
+                                                   (("4"
+                                                     (lift-if)
+                                                     (("4"
+                                                       (rewrite
+                                                        -3
+                                                        :dont-delete?
+                                                        t)
+                                                       (("4"
+                                                         (bddsimp 2)
+                                                         (("1"
+                                                           (rewrite
+                                                            -3
+                                                            :dont-delete?
+                                                            t)
+                                                           (("1"
+                                                             (case
+                                                              "theory_def1_var!1`length = x!1 + 1")
+                                                             (("1"
+                                                               (assert)
+                                                               (("1"
+                                                                 (grind)
+                                                                 nil
+                                                                 nil))
+                                                               nil)
+                                                              ("2"
+                                                               (assert)
+                                                               nil
+                                                               nil))
+                                                             nil))
+                                                           nil)
+                                                          ("2"
+                                                           (grind)
+                                                           nil
+                                                           nil))
+                                                         nil))
+                                                       nil))
+                                                     nil))
+                                                   nil))
+                                                 nil))
+                                               nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil)
+                        ("2" (flatten)
+                         (("2" (split 1)
+                           (("1" (propax) nil nil)
+                            ("2" (propax) nil nil)
+                            ("3" (use signature_shift :polarity? t)
+                             (("3"
+                               (inst
+                                -
+                                "theory_def(theory_def1_var!1)"
+                                "(sig(Sig!1)`length, sig(S2!1)`length)")
+                               (("3" (assert) nil nil)) nil))
+                             nil)
+                            ("4" (skosimp* :preds? t)
+                             (("4" (inst - x!1)
+                               (("4"
+                                 (inst - x!1)
+                                 (("4"
+                                   (inst
+                                    -
+                                    S1!1
+                                    "S2!1 ++ rest(s!1, x!1)"
+                                    Sig!1
+                                    "sapply(s!1)(x!1)")
+                                   (("4"
+                                     (assert)
+                                     (("4"
+                                       (assert)
+                                       (("4"
+                                         (expand finseq_appl)
+                                         (("4"
+                                           (expand ++)
+                                           (("4"
+                                             (expand o -9 4)
+                                             (("4"
+                                               (expand rest -9 2)
+                                               (("4"
+                                                 (expand ^^ -9)
+                                                 (("4"
+                                                   (assert)
+                                                   (("4"
+                                                     (lift-if)
+                                                     (("4"
+                                                       (bddsimp -9)
+                                                       (("1"
+                                                         (rewrite
+                                                          -5
+                                                          :dont-delete?
+                                                          t)
+                                                         (("1"
+                                                           (assert)
+                                                           (("1"
+                                                             (case
+                                                              "theory_def1_var!1`length = x!1 + 1")
+                                                             (("1"
+                                                               (assert)
+                                                               (("1"
+                                                                 (rewrite
+                                                                  -1)
+                                                                 (("1"
+                                                                   (grind)
+                                                                   nil
+                                                                   nil))
+                                                                 nil))
+                                                               nil)
+                                                              ("2"
+                                                               (assert)
+                                                               nil
+                                                               nil))
+                                                             nil))
+                                                           nil))
+                                                         nil)
+                                                        ("2"
+                                                         (assert)
+                                                         (("2"
+                                                           (grind)
+                                                           nil
+                                                           nil))
+                                                         nil))
+                                                       nil))
+                                                     nil))
+                                                   nil))
+                                                 nil))
+                                               nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
                                    nil))
                                  nil))
                                nil))
@@ -1158,267 +1900,30 @@
                        nil))
                      nil))
                    nil)
-                  ("4" (grind) nil nil) ("5" (grind) nil nil)
-                  ("6" (grind) nil nil) ("7" (grind) nil nil)
-                  ("8" (grind) nil nil) ("9" (grind) nil nil)
-                  ("10" (grind) nil nil) ("11" (grind) nil nil)
-                  ("12" (grind) nil nil) ("13" (grind) nil nil)
-                  ("14" (grind) nil nil) ("15" (grind) nil nil)
-                  ("16" (grind) nil nil) ("17" (grind) nil nil)
-                  ("18" (postpone) nil nil) ("19" (grind) nil nil)
-                  ("20" (grind) nil nil) ("21" (grind) nil nil))
-                 nil)
-                ((int_plus_int_is_int application-judgement "int"
-                  integers nil)
-                 (- const-decl "[numfield, numfield -> numfield]"
-                    number_fields nil)
-                 (< const-decl "bool" reals nil)
-                 (finseq type-eq-decl nil finite_sequences nil)
-                 (below type-eq-decl nil nat_types nil)
-                 (finseq_appl const-decl "[below[length(fs)] -> T]"
-                              finite_sequences nil)
-                 (int_minus_int_is_int application-judgement "int"
-                  integers nil)
-                 (posint_plus_nnint_is_posint application-judgement
-                  "posint" integers nil)
-                 (NOT const-decl "[bool -> bool]" booleans nil)
-                 (real_lt_is_strict_total_order name-judgement
-                  "(strict_total_order?[real])" real_props nil)
-                 (real_ge_is_total_order name-judgement
-                  "(total_order?[real])" real_props nil)
-                 (syntaxic_induction formula-decl nil language nil)
-                 (+ const-decl "[numfield, numfield -> numfield]"
-                    number_fields nil)
-                 (numfield nonempty-type-eq-decl nil number_fields nil)
-                 (↑ def-decl "{V |
-         (sexpr?(U) IMPLIES sexpr?(V)) AND
-          (sinterp?(U) IMPLIES sinterp?(V)) AND
-           (scontext?(U) IMPLIES scontext?(V))}" subst nil)
-                 (scontext? adt-def-decl "boolean" language nil)
-                 (sinterp? adt-def-decl "boolean" language nil)
-                 (sexpr? adt-def-decl "boolean" language nil)
-                 (IMPLIES const-decl "[bool, bool -> bool]" booleans
-                  nil)
-                 (AND const-decl "[bool, bool -> bool]" booleans nil)
-                 (= const-decl "[T, T -> boolean]" equalities nil)
-                 (nat nonempty-type-eq-decl nil naturalnumbers nil)
-                 (>= const-decl "bool" reals nil)
-                 (bool nonempty-type-eq-decl nil booleans nil)
-                 (int nonempty-type-eq-decl nil integers nil)
-                 (integer_pred const-decl "[rational -> boolean]"
-                               integers nil)
-                 (rational nonempty-type-from-decl nil rationals nil)
-                 (rational_pred const-decl "[real -> boolean]"
-                                rationals nil)
-                 (real nonempty-type-from-decl nil reals nil)
-                 (real_pred const-decl "[number_field -> boolean]"
-                            reals nil)
-                 (number_field nonempty-type-from-decl nil
-                  number_fields nil)
-                 (number_field_pred const-decl "[number -> boolean]"
-                  number_fields nil)
-                 (number nonempty-type-decl nil numbers nil)
-                 (boolean nonempty-type-decl nil booleans nil)
-                 (syntaxic type-decl nil language nil)
-                 (nnint_plus_nnint_is_nnint application-judgement
-                  "nonneg_int" integers nil))
-                shostak))
-  (shift_k 0
-   (shift_k-1 nil 3583679383
-    ("" (skosimp* :preds? t)
-     (("" (expand "↑" 1 1)
-       (("" (assert)
-         (("" (expand "k")
-           (("" (assert)
-             (("" (decompose-equality 1)
-               (("1" (decompose-equality 1)
-                 (("1" (decompose-equality 1)
-                   (("1" (expand "finseq_appl")
-                     (("1" (assert)
-                       (("1" (typepred "x!1")
-                         (("1" (assert)
-                           (("1" (case "nb!1 = (nb!1`1, nb!1`2 - x!1)")
-                             (("1" (rewrite -1)
-                               (("1" (assert) nil nil)) nil)
-                              ("2" (assert) nil nil))
-                             nil))
-                           nil))
-                         nil))
-                       nil))
-                     nil)
-                    ("2" (grind)
-                     (("1" (grind)
-                       (("1" (grind)
-                         (("1" (expand "sexpr?")
-                           (("1" (propax) nil nil)) nil))
-                         nil))
-                       nil)
-                      ("2" (expand "sexpr?") (("2" (propax) nil nil))
-                       nil)
-                      ("3" (expand "sexpr?") (("3" (propax) nil nil))
-                       nil)
-                      ("4" (expand "sexpr?") (("4" (propax) nil nil))
-                       nil)
-                      ("5" (expand "sexpr?") (("5" (propax) nil nil))
-                       nil))
-                     nil)
-                    ("3" (grind) nil nil))
+                  ("19" (skosimp* :preds? t) (("19" (assert) nil nil))
                    nil)
-                  ("2" (grind) nil nil))
-                 nil)
-                ("2" (grind) nil nil))
-               nil))
-             nil))
-           nil))
-         nil))
-       nil))
-     nil)
-    ((↑ def-decl "{V |
-         (sexpr?(U) IMPLIES sexpr?(V)) AND
-          (sinterp?(U) IMPLIES sinterp?(V)) AND
-           (scontext?(U) IMPLIES scontext?(V))}" subst nil)
-     (int_minus_int_is_int application-judgement "int" integers nil)
-     (- const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (numfield nonempty-type-eq-decl nil number_fields nil)
-     (below type-eq-decl nil nat_types nil)
-     (< const-decl "bool" reals nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (>= const-decl "bool" reals nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
-      nil)
-     (number nonempty-type-decl nil numbers nil)
-     (finseq type-eq-decl nil finite_sequences nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (scontext? adt-def-decl "boolean" language nil)
-     (finseq_appl const-decl "[below[length(fs)] -> T]"
-                  finite_sequences nil)
-     (real_lt_is_strict_total_order name-judgement
-      "(strict_total_order?[real])" real_props nil)
-     (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
-      integers nil)
-     (even_times_int_is_even application-judgement "even_int" integers
-      nil)
-     (mult_divides1 application-judgement "(divides(n))" divides nil)
-     (mult_divides2 application-judgement "(divides(m))" divides nil)
-     (= const-decl "[T, T -> boolean]" equalities nil)
-     (real_ge_is_total_order name-judgement "(total_order?[real])"
-      real_props nil)
-     (posint nonempty-type-eq-decl nil integers nil)
-     (> const-decl "bool" reals nil)
-     (nonneg_int nonempty-type-eq-decl nil integers nil)
-     (boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil))
-    shostak)) (shift_concat_TCC1 0
-               (shift_concat_TCC1-1 nil 3583781663
-                ("" (subtype-tcc) nil nil)
-                ((length const-decl "nat" language nil)
-                 (finseq_appl const-decl "[below[length(fs)] -> T]"
-                              finite_sequences nil)
-                 (↑ def-decl "{V |
-         (sexpr?(U) IMPLIES sexpr?(V)) AND
-          (sinterp?(U) IMPLIES sinterp?(V)) AND
-           (scontext?(U) IMPLIES scontext?(V))}" subst nil)
-                 (scontext? adt-def-decl "boolean" language nil)
-                 (int_minus_int_is_int application-judgement "int"
-                  integers nil)
-                 (nnint_plus_nnint_is_nnint application-judgement
-                  "nonneg_int" integers nil))
-                nil))
-  (shift_concat 0
-   (shift_concat-1 nil 3583678716
-    ("" (skosimp* :preds? t)
-     (("" (expand ++)
-       (("" (expand o)
-         (("" (assert)
-           (("" (decompose-equality 1)
-             (("1" (decompose-equality 1)
-               (("1" (grind) nil nil)
-                ("2" (skosimp* :preds? t)
-                 (("2" (assert)
-                   (("2" (split 2)
-                     (("1" (flatten)
-                       (("1" (grind :rewrites sexpr?) nil nil)) nil)
-                      ("2" (flatten) (("2" (grind) nil nil)) nil)
-                      ("3" (grind) nil nil))
+                  ("20" (skosimp* :preds? t)
+                   (("20" (assert)
+                     (("20" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("20" (grind) nil nil)) nil))
+                     nil))
+                   nil)
+                  ("21" (skosimp* :preds? t)
+                   (("21" (assert)
+                     (("21" (inst - S1!1 S2!1 Sig!1 s!1)
+                       (("21" (grind) nil nil)) nil))
                      nil))
                    nil))
                  nil)
-                ("3" (grind) nil nil) ("4" (grind) nil nil)
-                ("5" (grind) (("5" (grind :rewrites sexpr?) nil nil))
-                 nil)
-                ("6" (grind) nil nil) ("7" (grind) nil nil))
-               nil)
-              ("2" (grind) nil nil) ("3" (grind) nil nil)
-              ("4" (grind) nil nil) ("5" (grind) nil nil))
-             nil))
-           nil))
-         nil))
-       nil))
-     nil)
-    ((int_minus_int_is_int application-judgement "int" integers nil)
-     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-      integers nil)
-     (↑ def-decl "{V |
-         (sexpr?(U) IMPLIES sexpr?(V)) AND
-          (sinterp?(U) IMPLIES sinterp?(V)) AND
-           (scontext?(U) IMPLIES scontext?(V))}" subst nil)
-     (real_lt_is_strict_total_order name-judgement
-      "(strict_total_order?[real])" real_props nil)
-     (real_ge_is_total_order name-judgement "(total_order?[real])"
-      real_props nil)
-     (IF const-decl "[boolean, T, T -> T]" if_def nil)
-     (finseq_appl const-decl "[below[length(fs)] -> T]"
-                  finite_sequences nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (number nonempty-type-decl nil numbers nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
-      nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (>= const-decl "bool" reals nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (< const-decl "bool" reals nil)
-     (numfield nonempty-type-eq-decl nil number_fields nil)
-     (+ const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (scontext? type-eq-decl nil language nil)
-     (below type-eq-decl nil nat_types nil)
-     (finseq type-eq-decl nil finite_sequences nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-     (- const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (int_plus_int_is_int application-judgement "int" integers nil)
-     (O const-decl "finseq" finite_sequences nil)
-     (boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (scontext? adt-def-decl "boolean" language nil))
-    shostak)) (subst_TCC1 0
-               (subst_TCC1-1 nil 3583528800 ("" (subtype-tcc) nil nil)
-                ((boolean nonempty-type-decl nil booleans nil)
+                ((syntaxic type-decl nil language nil)
+                 (boolean nonempty-type-decl nil booleans nil)
+                 (signature type-decl nil language nil)
+                 (stheory? adt-recognizer-decl "[signature -> boolean]"
+                  language nil)
                  (bool nonempty-type-eq-decl nil booleans nil)
-                 (NOT const-decl "[bool -> bool]" booleans nil)
+                 (IFF const-decl "[bool, bool -> bool]" booleans nil)
+                 (pretau def-decl "bool" language nil)
+                 (++ const-decl "(stheory?)" language nil)
                  (number nonempty-type-decl nil numbers nil)
                  (number_field_pred const-decl "[number -> boolean]"
                   number_fields nil)
@@ -1427,23 +1932,82 @@
                  (real_pred const-decl "[number_field -> boolean]"
                             reals nil)
                  (real nonempty-type-from-decl nil reals nil)
-                 (>= const-decl "bool" reals nil)
                  (rational_pred const-decl "[real -> boolean]"
                                 rationals nil)
                  (rational nonempty-type-from-decl nil rationals nil)
                  (integer_pred const-decl "[rational -> boolean]"
                                integers nil)
                  (int nonempty-type-eq-decl nil integers nil)
+                 (>= const-decl "bool" reals nil)
                  (nat nonempty-type-eq-decl nil naturalnumbers nil)
+                 (AND const-decl "[bool, bool -> bool]" booleans nil)
+                 (sexpr? adt-def-decl "boolean" language nil)
+                 (sinterp? adt-def-decl "boolean" language nil)
+                 (scontext? adt-def-decl "boolean" language nil)
+                 (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+                  subst nil)
+                 (length const-decl "nat" language nil)
+                 (syntaxic_induction formula-decl nil language nil)
+                 (real_ge_is_total_order name-judgement
+                  "(total_order?[real])" real_props nil)
+                 (real_lt_is_strict_total_order name-judgement
+                  "(strict_total_order?[real])" real_props nil)
+                 (NOT const-decl "[bool -> bool]" booleans nil)
+                 (sapply const-decl "signature" language nil)
+                 (kw const-decl "prekeyword" language nil)
+                 (O const-decl "finseq" finite_sequences nil)
+                 (nnint_plus_nnint_is_nnint application-judgement
+                  "nonneg_int" integers nil)
                  (int_minus_int_is_int application-judgement "int"
                   integers nil)
-                 (real_gt_is_strict_total_order name-judgement
-                  "(strict_total_order?[real])" real_props nil)
-                 (real_ge_is_total_order name-judgement
-                  "(total_order?[real])" real_props nil))
-                nil))
-  (subst_TCC2 0
-   (subst_TCC2-1 nil 3583528800 ("" (grind) nil nil)
+                 (sig adt-accessor-decl
+                      "[(stheory?) -> finseq[signature]]" language nil)
+                 (minus_odd_is_odd application-judgement "odd_int"
+                  integers nil)
+                 (< const-decl "bool" reals nil)
+                 (below type-eq-decl nil nat_types nil)
+                 (finseq type-eq-decl nil finite_sequences nil)
+                 (finseq_appl const-decl "[below[length(fs)] -> T]"
+                              finite_sequences nil)
+                 (posint_plus_nnint_is_posint application-judgement
+                  "posint" integers nil)
+                 (nnint_plus_posint_is_posint application-judgement
+                  "posint" integers nil)
+                 (sconst_def adt-constructor-decl "(sconst_def?)"
+                  language nil)
+                 (sconst_def? adt-recognizer-decl
+                  "[signature -> boolean]" language nil)
+                 (k const-decl "(stheory?)" language nil)
+                 (sconcat_assoc formula-decl nil language nil)
+                 (stype_def? adt-recognizer-decl
+                  "[signature -> boolean]" language nil)
+                 (stype_def adt-constructor-decl "(stype_def?)"
+                  language nil)
+                 (+ const-decl "[numfield, numfield -> numfield]"
+                    number_fields nil)
+                 (numfield nonempty-type-eq-decl nil number_fields nil)
+                 (= const-decl "[T, T -> boolean]" equalities nil)
+                 (empty_seq const-decl "finseq" finite_sequences nil)
+                 (int_plus_int_is_int application-judgement "int"
+                  integers nil)
+                 (int_min application-judgement
+                  "{k: int | k <= i AND k <= j}" real_defs nil)
+                 (min const-decl "{p: real | p <= m AND p <= n}"
+                      real_defs nil)
+                 (^^ const-decl "finseq" finite_sequences nil)
+                 (rest const-decl "(stheory?)" language nil)
+                 (∈ const-decl "bool" language nil)
+                 (signature_shift formula-decl nil subst nil)
+                 (theory_def? adt-recognizer-decl
+                  "[syntaxic -> boolean]" language nil)
+                 (theory_def adt-constructor-decl
+                  "[finseq[(scontext?)] -> (theory_def?)]" language
+                  nil))
+                shostak))
+  (subst_TCC1 0
+   (subst_TCC1-1 nil 3583528800 ("" (subtype-tcc) nil nil)
     ((boolean nonempty-type-decl nil booleans nil)
      (bool nonempty-type-eq-decl nil booleans nil)
      (NOT const-decl "[bool -> bool]" booleans nil)
@@ -1459,155 +2023,112 @@
      (integer_pred const-decl "[rational -> boolean]" integers nil)
      (int nonempty-type-eq-decl nil integers nil)
      (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (syntaxic type-decl nil language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
+     (int_minus_int_is_int application-judgement "int" integers nil)
+     (real_gt_is_strict_total_order name-judgement
+      "(strict_total_order?[real])" real_props nil)
      (real_ge_is_total_order name-judgement "(total_order?[real])"
-      real_props nil)
-     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil))
-    nil)) (subst_TCC3 0
-           (subst_TCC3-1 nil 3583528800 ("" (subtype-tcc) nil nil)
-            ((nnint_plus_nnint_is_nnint application-judgement
-              "nonneg_int" integers nil)
-             (int_minus_int_is_int application-judgement "int" integers
-              nil))
+      real_props nil))
+    nil)) (subst_TCC2 0
+           (subst_TCC2-1 nil 3583528800 ("" (grind) nil nil)
+            ((boolean nonempty-type-decl nil booleans nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (number nonempty-type-decl nil numbers nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number_field nonempty-type-from-decl nil number_fields
+              nil)
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (>= const-decl "bool" reals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (real_ge_is_total_order name-judgement
+              "(total_order?[real])" real_props nil)
+             (real_gt_is_strict_total_order name-judgement
+              "(strict_total_order?[real])" real_props nil)
+             (sexpr? adt-def-decl "boolean" language nil)
+             (sinterp? adt-def-decl "boolean" language nil)
+             (scontext? adt-def-decl "boolean" language nil))
             nil))
-  (subst_TCC4 0
-   (subst_TCC4-1 nil 3583528800 ("" (subtype-tcc) nil nil)
-    ((int_minus_int_is_int application-judgement "int" integers nil))
-    nil)) (subst_TCC5 0
-           (subst_TCC5-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil
-            nil))
-  (subst_TCC6 0
-   (subst_TCC6-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC7
-                                                                      0
-                                                                      (subst_TCC7-1
-                                                                       nil
-                                                                       3583694874
-                                                                       (""
-                                                                        (subtype-tcc)
-                                                                        nil
-                                                                        nil)
-                                                                       nil
-                                                                       nil))
-  (subst_TCC8 0
-   (subst_TCC8-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC9
-                                                                      0
-                                                                      (subst_TCC9-1
-                                                                       nil
-                                                                       3583694874
-                                                                       (""
-                                                                        (subtype-tcc)
-                                                                        nil
-                                                                        nil)
-                                                                       nil
-                                                                       nil))
-  (subst_TCC10 0
-   (subst_TCC10-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC11
-                                                                       0
-                                                                       (subst_TCC11-1
-                                                                        nil
-                                                                        3583694874
-                                                                        (""
-                                                                         (subtype-tcc)
-                                                                         nil
-                                                                         nil)
-                                                                        nil
-                                                                        nil))
-  (subst_TCC12 0
-   (subst_TCC12-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC13
-                                                                       0
-                                                                       (subst_TCC13-1
-                                                                        nil
-                                                                        3583694874
-                                                                        (""
-                                                                         (subtype-tcc)
-                                                                         nil
-                                                                         nil)
-                                                                        nil
-                                                                        nil))
-  (subst_TCC14 0
-   (subst_TCC14-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC15
-                                                                       0
-                                                                       (subst_TCC15-1
-                                                                        nil
-                                                                        3583694874
-                                                                        (""
-                                                                         (subtype-tcc)
-                                                                         nil
-                                                                         nil)
-                                                                        nil
-                                                                        nil))
-  (subst_TCC16 0
-   (subst_TCC16-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC17
-                                                                       0
-                                                                       (subst_TCC17-1
-                                                                        nil
-                                                                        3583694874
-                                                                        (""
-                                                                         (subtype-tcc)
-                                                                         nil
-                                                                         nil)
-                                                                        nil
-                                                                        nil))
-  (subst_TCC18 0
-   (subst_TCC18-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC19
-                                                                       0
-                                                                       (subst_TCC19-1
-                                                                        nil
-                                                                        3583694874
-                                                                        (""
-                                                                         (subtype-tcc)
-                                                                         nil
-                                                                         nil)
-                                                                        nil
-                                                                        nil))
-  (subst_TCC20 0
-   (subst_TCC20-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC21
-                                                                       0
-                                                                       (subst_TCC21-1
-                                                                        nil
-                                                                        3583694874
-                                                                        (""
-                                                                         (subtype-tcc)
-                                                                         nil
-                                                                         nil)
-                                                                        nil
-                                                                        nil))
-  (subst_TCC22 0
-   (subst_TCC22-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC23
-                                                                       0
-                                                                       (subst_TCC23-1
-                                                                        nil
-                                                                        3583694874
-                                                                        (""
-                                                                         (subtype-tcc)
-                                                                         nil
-                                                                         nil)
-                                                                        nil
-                                                                        nil))
-  (subst_TCC24 0
-   (subst_TCC24-1 nil 3583694874 ("" (subtype-tcc) nil nil)
+  (subst_TCC3 0
+   (subst_TCC3-1 nil 3583528800 ("" (subtype-tcc) nil nil)
     ((nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
       integers nil)
      (int_minus_int_is_int application-judgement "int" integers nil))
-    nil)) (subst_TCC25 0
-           (subst_TCC25-1 nil 3583694874 ("" (subtype-tcc) nil nil)
-            ((nnint_plus_nnint_is_nnint application-judgement
-              "nonneg_int" integers nil)
-             (int_minus_int_is_int application-judgement "int" integers
-              nil))
+    nil)) (subst_TCC4 0
+           (subst_TCC4-1 nil 3583528800 ("" (subtype-tcc) nil nil)
+            ((boolean nonempty-type-decl nil booleans nil)
+             (bool nonempty-type-eq-decl nil booleans nil)
+             (NOT const-decl "[bool -> bool]" booleans nil)
+             (number nonempty-type-decl nil numbers nil)
+             (number_field_pred const-decl "[number -> boolean]"
+              number_fields nil)
+             (number_field nonempty-type-from-decl nil number_fields
+              nil)
+             (real_pred const-decl "[number_field -> boolean]" reals
+                        nil)
+             (real nonempty-type-from-decl nil reals nil)
+             (>= const-decl "bool" reals nil)
+             (rational_pred const-decl "[real -> boolean]" rationals
+                            nil)
+             (rational nonempty-type-from-decl nil rationals nil)
+             (integer_pred const-decl "[rational -> boolean]" integers
+                           nil)
+             (int nonempty-type-eq-decl nil integers nil)
+             (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             (real_ge_is_total_order name-judgement
+              "(total_order?[real])" real_props nil)
+             (real_gt_is_strict_total_order name-judgement
+              "(strict_total_order?[real])" real_props nil)
+             (sexpr? adt-def-decl "boolean" language nil))
             nil))
-  (subst_TCC26 0
-   (subst_TCC26-1 nil 3583694874 ("" (subtype-tcc) nil nil)
-    ((int_minus_int_is_int application-judgement "int" integers nil))
-    nil)) (subst_TCC27 0
-           (subst_TCC27-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil
-            nil))
-  (subst_TCC28 0
-   (subst_TCC28-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC29
+  (subst_TCC5 0
+   (subst_TCC5-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC6
+                                                                      0
+                                                                      (subst_TCC6-1
+                                                                       nil
+                                                                       3583694874
+                                                                       (""
+                                                                        (subtype-tcc)
+                                                                        nil
+                                                                        nil)
+                                                                       nil
+                                                                       nil))
+  (subst_TCC7 0
+   (subst_TCC7-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC8
+                                                                      0
+                                                                      (subst_TCC8-1
+                                                                       nil
+                                                                       3583694874
+                                                                       (""
+                                                                        (subtype-tcc)
+                                                                        nil
+                                                                        nil)
+                                                                       nil
+                                                                       nil))
+  (subst_TCC9 0
+   (subst_TCC9-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC10
+                                                                      0
+                                                                      (subst_TCC10-1
+                                                                       nil
+                                                                       3583694874
+                                                                       (""
+                                                                        (subtype-tcc)
+                                                                        nil
+                                                                        nil)
+                                                                       nil
+                                                                       nil))
+  (subst_TCC11 0
+   (subst_TCC11-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC12
                                                                        0
-                                                                       (subst_TCC29-1
+                                                                       (subst_TCC12-1
                                                                         nil
                                                                         3583694874
                                                                         (""
@@ -1615,5 +2136,67 @@
                                                                          nil
                                                                          nil)
                                                                         nil
-                                                                        nil)))
+                                                                        nil))
+  (subst_TCC13 0
+   (subst_TCC13-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC14
+                                                                       0
+                                                                       (subst_TCC14-1
+                                                                        nil
+                                                                        3583694874
+                                                                        (""
+                                                                         (subtype-tcc)
+                                                                         nil
+                                                                         nil)
+                                                                        nil
+                                                                        nil))
+  (subst_TCC15 0
+   (subst_TCC15-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC16
+                                                                       0
+                                                                       (subst_TCC16-1
+                                                                        nil
+                                                                        3583694874
+                                                                        (""
+                                                                         (subtype-tcc)
+                                                                         nil
+                                                                         nil)
+                                                                        nil
+                                                                        nil))
+  (subst_TCC17 0
+   (subst_TCC17-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC18
+                                                                       0
+                                                                       (subst_TCC18-1
+                                                                        nil
+                                                                        3583694874
+                                                                        (""
+                                                                         (subtype-tcc)
+                                                                         nil
+                                                                         nil)
+                                                                        nil
+                                                                        nil))
+  (subst_TCC19 0
+   (subst_TCC19-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC20
+                                                                       0
+                                                                       (subst_TCC20-1
+                                                                        nil
+                                                                        3583694874
+                                                                        (""
+                                                                         (subtype-tcc)
+                                                                         nil
+                                                                         nil)
+                                                                        nil
+                                                                        nil))
+  (subst_TCC21 0
+   (subst_TCC21-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)) (subst_TCC22
+                                                                       0
+                                                                       (subst_TCC22-1
+                                                                        nil
+                                                                        3583694874
+                                                                        (""
+                                                                         (subtype-tcc)
+                                                                         nil
+                                                                         nil)
+                                                                        nil
+                                                                        nil))
+  (subst_TCC23 0
+   (subst_TCC23-1 nil 3583694874 ("" (subtype-tcc) nil nil) nil nil)))
 

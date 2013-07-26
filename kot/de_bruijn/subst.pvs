@@ -32,13 +32,13 @@ BEGIN
   AUTO_REWRITE+ sexpr?
   % Shift: classical shift operator for De Bruijn indices
   ;↑(U, nb): RECURSIVE 
-   { V | (sexpr?(U) IMPLIES sexpr?(V)) AND 
-         (sinterp?(U) IMPLIES sinterp?(V)) AND
-	 (scontext?(U) IMPLIES scontext?(V)) } = 
+   { V | (sexpr?(U) IFF sexpr?(V)) AND 
+         (sinterp?(U) IFF sinterp?(V)) AND
+	 (scontext?(U) IFF scontext?(V)) } = 
     CASES U OF
       % Names
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
-    , dot(m, s, e): dot(m ↑ nb, s, e ↑ nb)
+    , dot(m, s, e): dot(m ↑ nb, s, e)
     , interp(m, σ): interp(m ↑ nb, σ WITH [`seq := LAMBDA (x: below[σ`length]): σ(x) ↑ nb])
 
       % Types
@@ -112,13 +112,16 @@ BEGIN
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
   % Definition 2.15, 4.3, modified for the De Bruijn index
-  subst(U, x, t): RECURSIVE syntaxic =
+  subst(U, x, t): RECURSIVE 
+  { V | (sexpr?(U) IFF sexpr?(V)) AND 
+         (sinterp?(U) IFF sinterp?(V)) AND
+	 (scontext?(U) IFF scontext?(V)) } = 
     CASES U OF
       % n ↦ t
       % x ↦ x where the λ-binder for n has been removed
       v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF
       % /!\ Case x = m not handled
-    , dot(m, s, e): dot(subst(m, x, t), s, subst(e, x, t))
+    , dot(m, s, e): dot(subst(m, x, t), s, e)
     , interp(m, σ): interp(subst(m, x, t), σ WITH [`seq := LAMBDA (y: below[σ`length]): 
       		    		       	     	  subst(σ(y), x, t)])
 
@@ -141,7 +144,7 @@ BEGIN
     , pair(a, b):  pair(subst(a, x,  t), subst(b, x,  t))
       %  p₁ a ↦ p₁          a[ x ← t]
     , lproj(a): lproj(subst(a, x,  t))
-      %  p₂ a ↦ p₂          a[ x ← t]
+      %  p₂ a ↦ p₂          a[ x ← t]x
     , rproj(a): rproj(subst(a, x,  t))
 
       % Decls
