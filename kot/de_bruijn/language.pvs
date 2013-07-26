@@ -249,7 +249,7 @@ BEGIN
     , const_def(T, a) :
         sconst_def?(s) AND pretau(Sig)(T)(stype_def) AND pretau(Sig)(a)(s)
     , theory_def(f):
-	stheory?(s) AND length(s) = f`length AND
+	stheory?(s) AND length(s) = f`length AND s = signature(U) AND
 	FORALL (x: below[f`length]): pretau(Sig ++ rest(s, x))(f`seq(x))(s(x))
     ENDCASES
   MEASURE U BY <<
