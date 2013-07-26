@@ -1,6 +1,7 @@
 eta: THEORY
 BEGIN
   IMPORTING subst
+  CONVERSION- extract1
 
   σ: VAR finseq[(sinterp?)]
   m: VAR nat
@@ -18,13 +19,13 @@ BEGIN
     CASES U OF
       v(i):
         IF i ∈ ρ THEN v(i)
-	ELSIF (i - length(ρ)) ∈ Sig(m) THEN
+	ELSIF (i - length(ρ)) < σ`length THEN
 	  IF ikeep?(σ`seq(i - length(ρ)))
 	    THEN dot(interp(v(m + length(ρ)),
-	                    σ WITH [ `seq := LAMBDA (x: below[σ`length]): σ`seq(i) ↑ length(ρ) ]),
+	                    σ WITH [ `seq := LAMBDA (x: below[σ`length]): σ`seq(x) ↑ length(ρ) ]),
 		     Sig(m),
 		     v(i - length(ρ)))
-	    ELSE σ`seq(i - length(ρ)) ↑ length(ρ)
+	    ELSE def(σ`seq(i - length(ρ))) ↑ length(ρ)
 	  ENDIF
 	ELSE v(i - length(Sig(m))) ENDIF
     , dot(p, Sp, x):
@@ -59,6 +60,7 @@ BEGIN
     ENDCASES
   MEASURE size(U)
 
-  % prekind_eta: THEOREM m ∈ Sig AND kind?(Sig(m), PRECONTEXT) AND compatible?(def(Sig(m)), σ) AND prekind?(Sig)(σ)(PREINTERP) IMPLIES
-  %   prekind?(Sig ++ ρ)(η(Sig)(ρ, m, σ)(S)) = prekind?(Sig ++ def(Sig(m)) ++ ρ)(S)
+  pretau_eta: THEOREM m ∈ Sig AND stheory?(Sig(m)) AND σ`length = length(Sig(m))
+    AND (FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(Sig(m)(x))) IMPLIES
+    pretau(Sig ++ ρ)(η(Sig)(ρ, m, σ)(U)) = pretau(Sig ++ Sig(m) ++ ρ)(U)
 END eta

@@ -140,10 +140,11 @@ BEGIN
   length(Sig): nat = 
     sig(Sig)`length
   AUTO_REWRITE+ length
-  ;∈(x, M): MACRO bool =
+  ;∈(x, M): bool =
     x < length(M)
-  ;∈(x, Sig): MACRO bool = 
+  ;∈(x, Sig): bool = 
     x < length(Sig)
+  AUTO_REWRITE+ ∈
   apply(M)(x | x ∈ M): (scontext?) =
     def(M)`seq(x)
   sapply(Sig)(x | x ∈ Sig): signature = 
@@ -221,17 +222,17 @@ BEGIN
 	FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(s(x))
 
     , fun(A, B):
-        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(stype_def))(B)(s)
+        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)
         
     , prod(A, B):
-        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(stype_def))(B)(s)
+        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)
     , subtype(T, a):
-        kw(s) = PRETYPE AND pretau(Sig)(T)(s) AND pretau(Sig ++ k(stype_def))(a)(sconst_def)
+        kw(s) = PRETYPE AND pretau(Sig)(T)(s) AND pretau(Sig ++ k(sconst_def))(a)(sconst_def)
 
     , app(f, a):
         kw(s) = PRETERM AND pretau(Sig)(f)(s) AND pretau(Sig)(a)(s)
     , lam(T, a):
-        kw(s) = PRETERM AND pretau(Sig)(T)(stype_def) AND pretau(Sig ++ k(stype_def))(a)(s)
+        kw(s) = PRETERM AND pretau(Sig)(T)(stype_def) AND pretau(Sig ++ k(sconst_def))(a)(s)
     , pair(a, b):
         kw(s) = PRETERM AND pretau(Sig)(a)(s) AND pretau(Sig)(b)(s)
     , lproj(a):
