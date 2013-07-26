@@ -211,19 +211,16 @@ BEGIN
     CASES U OF
       v(x): x < length(Sig) AND kw(s) = kw(Sig(x))
     , dot(m, S, x):
-        interp?(m) AND
         pretau(Sig)(m)(S) AND
 	pretau(S)(x)(s)
     , interp(m, σ):
-        v?(m) AND
         stheory?(s) AND
         pretau(Sig)(m)(s) AND
 	σ`length = length(s) AND
 	FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(s(x))
 
     , fun(A, B):
-        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)
-        
+        kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)        
     , prod(A, B):
         kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)
     , subtype(T, a):
