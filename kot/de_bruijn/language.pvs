@@ -127,6 +127,17 @@ BEGIN
     ENDCASES
   MEASURE size(ctx)
 
+  %signature(Sig)(σ: (interp?)): signature = 
+  %  FORALL (x: below[map(σ)`length]):
+  %     CASES map(σ)(x) OF
+  %       ikeep: Sig(m(σ))(x)
+  %     , itype(T): stype_def
+  %     , iterm(a): sconst_def
+  %     ENDCASES
+  %signature_length: THEOREM FORALL (σ: (interp?)):
+  %  length(signature(Sig)(σ)) = map(σ)`length
+    
+
   k(d: (scontext?)): (theory_def?) =
     theory_def((# length := 1, seq := LAMBDA (x: below[1]): d #))
   k(s): (stheory?) = 
@@ -199,6 +210,10 @@ BEGIN
   slength_k: THEOREM
     length(k(s)) = 1
   AUTO_REWRITE slength_concat, slength_k
+
+  length_signature: THEOREM
+    length(signature(M)) = length(M)
+  AUTO_REWRITE length_signature
     
   prefix_size: THEOREM FORALL (f, g: finseq[syntaxic]):
     f`length < g`length AND (FORALL (x: below[f`length]): f`seq(x) = g`seq(g`length - f`length + x)) IMPLIES
@@ -216,6 +231,7 @@ BEGIN
     , interp(m, σ):
         stheory?(s) AND
         pretau(Sig)(m)(s) AND
+	%s = signature(Sig)(σ) AND
 	σ`length = length(s) AND
 	FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(s(x))
 
@@ -249,18 +265,24 @@ BEGIN
     , const_def(T, a) :
         sconst_def?(s) AND pretau(Sig)(T)(stype_def) AND pretau(Sig)(a)(s)
     , theory_def(f):
-	stheory?(s) AND length(s) = f`length AND s = signature(U) AND
-	FORALL (x: below[f`length]): pretau(Sig ++ rest(s, x))(f`seq(x))(s(x))
+	stheory?(s) AND length(s) = f`length AND % s = signature(U) AND
+	FORALL (x: below[f`length]): pretau(Sig ++ rest(signature(U), x))(f`seq(x))(s(x))
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE pretau
 
   Γ, Δ: VAR (scontext?)
   S1, S2: VAR signature
+  e: VAR (sexpr?)
 
-  kw_pretau: THEOREM
-    pretau(Sig)(U)(S1) AND pretau(Sig)(U)(S2) IMPLIES kw(S1) = kw(S2)
+  % This theorem is false because of the case ikeep
+  %kw_pretau: THEOREM
+  %  pretau(Sig)(U)(S1) AND pretau(Sig)(U)(S2) IMPLIES kw(S1) = kw(S2)
 
+  kw_pretau_expr: THEOREM
+    pretau(Sig)(e)(S1) IMPLIES 
+    (pretau(Sig)(e)(S2) IFF kw(S1) = kw(S2))
+    
   signature_pretau: THEOREM
     pretau(Sig)(Γ)(S1) IMPLIES S1 = signature(Γ)
 

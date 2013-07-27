@@ -5,7 +5,8 @@ BEGIN
   Γ, Δ, Θ: VAR (theory_def?)
   M, N, P: VAR (scontext?)
   i, j, n, x: VAR nat
-  U, V, t: VAR syntaxic
+  U, V: VAR syntaxic
+  t: VAR (sexpr?)
   nb, c: VAR [nat, nat]
   Sig, S1, S2: VAR (stheory?)
   s: VAR signature
@@ -164,6 +165,19 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE subst
   AUTO_REWRITE- sexpr?
+
+  signature_subst: THEOREM
+    signature(subst(M, x, t)) = signature(M)
+
+  % Subtype judgements
+  strong_pretau_subst: THEOREM
+    pretau(S1 ++ S2)(t)(sconst_def) IMPLIES
+    (pretau(S1 ++ S2)(subst(U, length(S2), t))(s) IFF 
+     pretau(S1 ++ k(sconst_def) ++ S2)(U)(s))
+  pretau_subst: THEOREM
+    pretau(S1)(t)(sconst_def) IMPLIES
+    pretau(S1)(subst(U, 0, t)) = pretau(S1 ++ k(sconst_def))(U)
+
 
   subst_type_size: THEOREM
     type_size(subst(U, x, t)) = type_size(U)
