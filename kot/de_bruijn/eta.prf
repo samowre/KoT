@@ -400,8 +400,10 @@
     (even? const-decl "bool" integers nil)
     (< const-decl "bool" reals nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (↑ def-decl
-     "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (sinterp?(U) IMPLIES sinterp?(V)) AND (scontext?(U) IMPLIES scontext?(V))}"
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
      subst nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
@@ -415,8 +417,8 @@
     (type_def? adt-recognizer-decl "[syntaxic -> boolean]" language
      nil)
     (def shared-adt-accessor-decl
-     "[{x: syntaxic | iterm?(x) OR itype?(x) OR const_def?(x) OR type_def?(x)} -> (sexpr?)]"
-     language nil)
+     "[{x: syntaxic | iterm?(x) OR itype?(x) OR const_def?(x) OR type_def?(x)} ->
+   (sexpr?)]" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
@@ -2264,7 +2266,7 @@
       nil))
     nil)
    ((finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil)
+                 nil)
     (signature def-decl "signature" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
@@ -2304,9 +2306,8 @@
     (("" (invoke (rewrite $1n) (~ "% = %"))
       (("" (assert) (("" (grind) nil nil)) nil)) nil))
     nil)
-   ((finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil)
-    (signature def-decl "signature" language nil)
+   ((length_signature formula-decl nil language nil)
+    (length const-decl "nat" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (scontext? adt-def-decl "boolean" language nil)
@@ -2359,7 +2360,7 @@
      "(strict_total_order?[real])" real_props nil)
     (size def-decl "nat" language nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil)
+                 nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
@@ -2653,6 +2654,144 @@
     (sexpr? adt-def-decl "boolean" language nil)
     (scontext? adt-def-decl "boolean" language nil))
    nil))
+ (signature_eta_TCC1 0
+  (signature_eta_TCC1-1 nil 3584104942 ("" (subtype-tcc) nil nil)
+   ((boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (signature type-decl nil language nil)
+    (stheory? adt-recognizer-decl "[signature -> boolean]" language
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (sapply const-decl "signature" language nil)
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
+   nil))
+ (signature_eta 0
+  (signature_eta-1 nil 3584104943
+   ("" (induct M)
+    (("1" (grind) nil nil)
+     ("2" (skosimp* :preds? t) (("2" (grind) nil nil)) nil)
+     ("3" (grind) nil nil)
+     ("4" (skosimp* :preds? t) (("4" (grind) nil nil)) nil)
+     ("5" (grind :exclude eta) nil nil)
+     ("6" (grind :exclude eta) nil nil)
+     ("7" (grind :exclude eta) nil nil)
+     ("8" (grind :exclude eta) nil nil)
+     ("9" (grind :exclude eta) nil nil)
+     ("10" (grind :exclude eta) nil nil)
+     ("11" (grind :exclude eta) nil nil)
+     ("12" (grind :exclude eta) nil nil)
+     ("13" (grind :exclude eta) nil nil)
+     ("14" (grind :exclude eta) nil nil)
+     ("15" (grind :exclude eta) nil nil)
+     ("16" (grind :exclude eta) nil nil)
+     ("17" (grind :exclude eta) nil nil)
+     ("18" (grind :exclude eta) nil nil)
+     ("19" (skosimp* :preds? t)
+      (("19" (assert)
+        (("19" (expand η 1)
+          (("19" (expand signature +)
+            (("19" (stop-rewrite eta)
+              (("19" (decompose-equality 1)
+                (("19" (grind-with-ext) nil nil)) nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("20" (grind :exclude eta) nil nil)
+     ("21" (grind :exclude eta) nil nil)
+     ("22" (grind :exclude eta) nil nil)
+     ("23" (grind :exclude eta) nil nil)
+     ("24" (grind :exclude eta) nil nil))
+    nil)
+   ((posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
+    (^^ const-decl "finseq" finite_sequences nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (theory_def1_var!1 skolem-const-decl "finseq[(scontext?)]" eta nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (IF const-decl "[boolean, T, T -> T]" if_def nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (ρ!1 skolem-const-decl "(stheory?)" eta nil)
+    (TRUE const-decl "bool" booleans nil)
+    (epsilon const-decl "T" epsilons nil)
+    (pred type-eq-decl nil defined_types nil)
+    (even_minus_odd_is_odd application-judgement "odd_int" integers
+     nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (x!1 skolem-const-decl "below[theory_def1_var!1`length]" eta nil)
+    (signature_stheory_extensionality formula-decl nil language nil)
+    (stheory adt-constructor-decl "[finseq[signature] -> (stheory?)]"
+     language nil)
+    (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
+                 nil)
+    (rest const-decl "(stheory?)" language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (++ const-decl "(stheory?)" language nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (k const-decl "(stheory?)" language nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (syntaxic_induction formula-decl nil language nil)
+    (signature def-decl "signature" language nil)
+    (length const-decl "nat" language nil)
+    (sexpr? adt-def-decl "boolean" language nil)
+    (η def-decl "{V: syntaxic |
+         (sexpr?(U) => sexpr?(V)) AND
+          (sinterp?(U) => sinterp?(V)) AND (scontext?(U) => scontext?(V))}"
+     eta nil)
+    (syntaxic type-decl nil language nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (signature type-decl nil language nil)
+    (stheory? adt-recognizer-decl "[signature -> boolean]" language
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (below type-eq-decl nil nat_types nil)
+    (sinterp? adt-def-decl "boolean" language nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (< const-decl "bool" reals nil)
+    (sig adt-accessor-decl "[(stheory?) -> finseq[signature]]" language
+         nil)
+    (∈ const-decl "bool" language nil)
+    (sapply const-decl "signature" language nil)
+    (= const-decl "[T, T -> boolean]" equalities nil))
+   shostak))
  (pretau_eta_TCC1 0
   (pretau_eta_TCC1-1 nil 3583785539 ("" (subtype-tcc) nil nil)
    ((boolean nonempty-type-decl nil booleans nil)
@@ -2682,79 +2821,476 @@
     (∈ const-decl "bool" language nil)
     (sapply const-decl "signature" language nil))
    nil))
- (pretau_eta_TCC2 0
-  (pretau_eta_TCC2-1 nil 3583786022 ("" (subtype-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (signature type-decl nil language nil)
-    (stheory? adt-recognizer-decl "[signature -> boolean]" language
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (>= const-decl "bool" reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (sapply const-decl "signature" language nil)
-    (length const-decl "nat" language nil)
-    (∈ const-decl "bool" language nil))
-   nil))
  (pretau_eta 0
   (pretau_eta-1 nil 3583785654
-   ("" (induct "U")
-    (("1" (assert)
-      (("1" (skosimp* :preds? t)
-        (("1" (assert)
-          (("1" (expand "η" +)
-            (("1" (assert)
-              (("1" (lift-if)
-                (("1" (bddsimp)
-                  (("1" (assert)
-                    (("1" (expand "pretau" +)
-                      (("1" (assert)
-                        (("1" (decompose-equality 1)
-                          (("1" (grind-with-ext) nil nil)) nil))
-                        nil))
-                      nil))
-                    nil)
-                   ("2" (assert)
-                    (("2" (expand "pretau" +)
-                      (("2" (assert)
-                        (("2" (decompose-equality 2)
-                          (("2" (bddsimp)
-                            (("1" (assert)
-                              (("1" (grind-with-ext) nil nil)) nil)
-                             ("2" (grind-with-ext) nil nil)
-                             ("3" (skosimp* :preds? t)
-                              (("3"
-                                (inst - "x!2")
-                                (("3"
-                                  (assert)
-                                  (("3" (postpone) nil nil))
-                                  nil))
-                                nil))
-                              nil)
-                             ("4" (grind-with-ext) nil nil))
+   ("" (induct U)
+    (("1" (skosimp* :preds? t)
+      (("1" (decompose-equality 1)
+        (("1" (iff)
+          (("1" (split 1)
+            (("1" (flatten)
+              (("1" (expand η -1)
+                (("1" (split 1)
+                  (("1" (split -1)
+                    (("1" (expand ∈)
+                      (("1" (flatten) (("1" (assert) nil nil)) nil))
+                      nil)
+                     ("2" (flatten)
+                      (("2" (split -1)
+                        (("1" (flatten) (("1" (assert) nil nil)) nil)
+                         ("2" (flatten)
+                          (("2" (assert)
+                            (("2" (flatten) (("2" (assert) nil nil))
+                              nil))
                             nil))
                           nil))
                         nil))
                       nil))
                     nil)
-                   ("3" (assert) (("3" (postpone) nil nil)) nil)
-                   ("4" (assert)
-                    (("4" (expand "pretau" +)
-                      (("4" (assert)
-                        (("4" (decompose-equality 3)
-                          (("1" (grind-with-ext) nil nil)
-                           ("2" (grind-with-ext) nil nil)
-                           ("3" (grind-with-ext) nil nil))
+                   ("2" (expand sapply)
+                    (("2" (split -1)
+                      (("1" (expand ++ +)
+                        (("1" (expand o)
+                          (("1" (assert)
+                            (("1" (flatten)
+                              (("1"
+                                (assert)
+                                (("1"
+                                  (expand sapply)
+                                  (("1"
+                                    (assert)
+                                    (("1"
+                                      (expand ++)
+                                      (("1"
+                                        (expand o)
+                                        (("1" (propax) nil nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil)
+                       ("2" (flatten)
+                        (("2" (split -1)
+                          (("1" (flatten)
+                            (("1" (expand ++ +)
+                              (("1"
+                                (expand o)
+                                (("1"
+                                  (expand ∈)
+                                  (("1"
+                                    (expand length 1)
+                                    (("1"
+                                      (lift-if)
+                                      (("1"
+                                        (split 2)
+                                        (("1" (assert) nil nil)
+                                         ("2"
+                                          (flatten)
+                                          (("2"
+                                            (rewrite -9)
+                                            (("2"
+                                              (split 2)
+                                              (("1"
+                                                (flatten)
+                                                (("1"
+                                                  (split -3)
+                                                  (("1"
+                                                    (flatten)
+                                                    (("1"
+                                                      (expand
+                                                       pretau
+                                                       -2)
+                                                      (("1"
+                                                        (flatten)
+                                                        (("1"
+                                                          (expand
+                                                           pretau
+                                                           -3)
+                                                          (("1"
+                                                            (grind
+                                                             :exclude
+                                                             (η eta))
+                                                            nil
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil)
+                                                   ("2"
+                                                    (flatten)
+                                                    (("2"
+                                                      (assert)
+                                                      (("2"
+                                                        (lemma
+                                                         shift_pretau)
+                                                        (("2"
+                                                          (inst
+                                                           -
+                                                           Sig!1
+                                                           ρ!1
+                                                           "def(σ!1`seq(v1_var!1 - sig(ρ!1)`length))")
+                                                          (("2"
+                                                            (expand
+                                                             length)
+                                                            (("2"
+                                                              (rewrite
+                                                               -1)
+                                                              (("2"
+                                                                (inst
+                                                                 -
+                                                                 "v1_var!1 - sig(ρ!1)`length")
+                                                                (("2"
+                                                                  (assert)
+                                                                  (("2"
+                                                                    (invoke
+                                                                     (typepred
+                                                                      "%1")
+                                                                     (~
+                                                                      1
+                                                                      "ikeep?(%1)"))
+                                                                    (("2"
+                                                                      (expand
+                                                                       sinterp?
+                                                                       -1)
+                                                                      (("2"
+                                                                        (split
+                                                                         -1)
+                                                                        (("1"
+                                                                          (assert)
+                                                                          (("1"
+                                                                            (flatten)
+                                                                            (("1"
+                                                                              (use
+                                                                               kw_pretau_expr
+                                                                               :polarity?
+                                                                               t)
+                                                                              (("1"
+                                                                                (invoke
+                                                                                 (inst
+                                                                                  -
+                                                                                  "%1")
+                                                                                 (~
+                                                                                  -13
+                                                                                  "pretau(%)(%)(%1)"))
+                                                                                (("1"
+                                                                                  (assert)
+                                                                                  nil
+                                                                                  nil))
+                                                                                nil))
+                                                                              nil))
+                                                                            nil))
+                                                                          nil)
+                                                                         ("2"
+                                                                          (assert)
+                                                                          (("2"
+                                                                            (flatten)
+                                                                            (("2"
+                                                                              (use
+                                                                               kw_pretau_expr
+                                                                               :polarity?
+                                                                               t)
+                                                                              (("2"
+                                                                                (invoke
+                                                                                 (inst
+                                                                                  -
+                                                                                  "%1")
+                                                                                 (~
+                                                                                  -13
+                                                                                  "pretau(%)(%)(%1)"))
+                                                                                (("2"
+                                                                                  (assert)
+                                                                                  nil
+                                                                                  nil))
+                                                                                nil))
+                                                                              nil))
+                                                                            nil))
+                                                                          nil))
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil)
+                                               ("2"
+                                                (flatten)
+                                                (("2"
+                                                  (assert)
+                                                  nil
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil)
+                           ("2" (flatten)
+                            (("2" (expand ++ +)
+                              (("2"
+                                (expand o)
+                                (("2"
+                                  (assert)
+                                  (("2"
+                                    (flatten)
+                                    (("2"
+                                      (grind :exclude (η eta))
+                                      nil
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("2" (flatten)
+              (("2" (assert)
+                (("2" (expand η 1)
+                  (("2" (split 1)
+                    (("1" (flatten)
+                      (("1" (expand ∈)
+                        (("1" (assert)
+                          (("1" (expand sapply)
+                            (("1" (expand ++)
+                              (("1"
+                                (expand o)
+                                (("1" (propax) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil)
+                     ("2" (flatten)
+                      (("2" (split 2)
+                        (("1" (flatten)
+                          (("1" (split 1)
+                            (("1" (expand ∈)
+                              (("1"
+                                (flatten)
+                                (("1"
+                                  (expand sapply)
+                                  (("1"
+                                    (expand pretau 1)
+                                    (("1"
+                                      (split 1)
+                                      (("1"
+                                        (expand pretau 1)
+                                        (("1"
+                                          (split 1)
+                                          (("1" (propax) nil nil)
+                                           ("2"
+                                            (assert)
+                                            (("2"
+                                              (grind :exclude (η eta))
+                                              nil
+                                              nil))
+                                            nil)
+                                           ("3"
+                                            (grind :exclude (η eta))
+                                            nil
+                                            nil)
+                                           ("4"
+                                            (skosimp* :preds? t)
+                                            (("4"
+                                              (inst - x!2)
+                                              (("4"
+                                                (use
+                                                 shift_pretau
+                                                 :polarity?
+                                                 t)
+                                                (("4"
+                                                  (inst
+                                                   -
+                                                   Sig!1
+                                                   ρ!1
+                                                   "σ!1`seq(x!2)")
+                                                  (("4"
+                                                    (grind
+                                                     :exclude
+                                                     (η eta))
+                                                    nil
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (assert)
+                                        (("2"
+                                          (split 1)
+                                          (("1" (assert) nil nil)
+                                           ("2"
+                                            (grind :exclude (η eta))
+                                            nil
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil)
+                             ("2" (flatten)
+                              (("2"
+                                (invoke
+                                 (typepred "%1")
+                                 (~ 1 "ikeep?(%1)"))
+                                (("1"
+                                  (expand sinterp? -1)
+                                  (("1"
+                                    (split -1)
+                                    (("1" (propax) nil nil)
+                                     ("2"
+                                      (inst - "v1_var!1 - length(ρ!1)")
+                                      (("1"
+                                        (assert)
+                                        (("1"
+                                          (flatten)
+                                          (("1"
+                                            (use
+                                             shift_pretau
+                                             :polarity?
+                                             t)
+                                            (("1"
+                                              (inst
+                                               -
+                                               Sig!1
+                                               ρ!1
+                                               "def(σ!1`seq(v1_var!1 - sig(ρ!1)`length))")
+                                              (("1"
+                                                (expand sapply)
+                                                (("1"
+                                                  (expand length)
+                                                  (("1"
+                                                    (rewrite -1)
+                                                    (("1"
+                                                      (expand ++ -4)
+                                                      (("1"
+                                                        (expand o)
+                                                        (("1"
+                                                          (assert)
+                                                          (("1"
+                                                            (use
+                                                             kw_pretau_expr
+                                                             :polarity?
+                                                             t)
+                                                            (("1"
+                                                              (inst
+                                                               -
+                                                               x!1)
+                                                              (("1"
+                                                                (grind
+                                                                 :exclude
+                                                                 (η
+                                                                  eta))
+                                                                nil
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2" (assert) nil nil))
+                                      nil)
+                                     ("3"
+                                      (inst - "v1_var!1 - length(ρ!1)")
+                                      (("1"
+                                        (assert)
+                                        (("1"
+                                          (flatten)
+                                          (("1"
+                                            (use
+                                             shift_pretau
+                                             :polarity?
+                                             t)
+                                            (("1"
+                                              (inst
+                                               -
+                                               Sig!1
+                                               ρ!1
+                                               "def(σ!1`seq(v1_var!1 - sig(ρ!1)`length))")
+                                              (("1"
+                                                (expand length)
+                                                (("1"
+                                                  (rewrite -1)
+                                                  (("1"
+                                                    (use
+                                                     kw_pretau_expr
+                                                     :polarity?
+                                                     t)
+                                                    (("1"
+                                                      (inst - x!1)
+                                                      (("1"
+                                                        (grind
+                                                         :exclude
+                                                         (η eta))
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2" (assert) nil nil))
+                                      nil))
+                                    nil))
+                                  nil)
+                                 ("2" (assert) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil)
+                         ("2" (flatten)
+                          (("2" (assert)
+                            (("2" (expand sapply)
+                              (("2"
+                                (assert)
+                                (("2"
+                                  (expand ++ +)
+                                  (("2"
+                                    (expand ++ -2)
+                                    (("2"
+                                      (expand o)
+                                      (("2" (propax) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
                           nil))
                         nil))
                       nil))
@@ -2767,21 +3303,16 @@
         nil))
       nil)
      ("2" (skosimp* :preds? t)
-      (("2" (assert)
-        (("2" (expand "η" +)
+      (("2" (decompose-equality 1)
+        (("2" (expand η 1)
           (("2" (assert)
-            (("2" (expand "pretau" +)
-              (("2" (assert)
-                (("2" (decompose-equality +)
-                  (("2" (bddsimp +)
-                    (("1" (assert)
-                      (("1" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                        (("1" (assert) nil nil)) nil))
+            (("2" (hide -8)
+              (("2" (inst - Sig!1 m!1 ρ!1 σ!1)
+                (("2" (assert)
+                  (("2" (split -7)
+                    (("1" (assert) (("1" (grind :exclude eta) nil nil))
                       nil)
-                     ("2" (assert)
-                      (("2" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                        (("2" (assert) nil nil)) nil))
-                      nil))
+                     ("2" (propax) nil nil))
                     nil))
                   nil))
                 nil))
@@ -2791,61 +3322,15 @@
         nil))
       nil)
      ("3" (skosimp* :preds? t)
-      (("3" (assert)
-        (("3" (expand "η" +)
-          (("3" (assert)
-            (("3" (expand "pretau" +)
-              (("3" (assert)
-                (("3" (decompose-equality +)
-                  (("1" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                    (("1" (iff)
-                      (("1" (bddsimp)
-                        (("1" (assert)
-                          (("1" (skosimp* :preds? t)
-                            (("1" (assert)
-                              (("1"
-                                (inst -15 "x!2")
-                                (("1"
-                                  (assert)
-                                  (("1"
-                                    (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                                    (("1"
-                                      (assert)
-                                      (("1" (grind) nil nil))
-                                      nil))
-                                    nil))
-                                  nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil)
-                         ("2" (assert) nil nil)
-                         ("3" (assert)
-                          (("3" (skosimp* :preds? t)
-                            (("3" (assert)
-                              (("3"
-                                (inst -15 "x!2")
-                                (("3"
-                                  (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                                  (("3"
-                                    (bddsimp)
-                                    (("3"
-                                      (assert)
-                                      (("3" (grind) nil nil))
-                                      nil))
-                                    nil))
-                                  nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil)
-                         ("4" (assert) nil nil))
-                        nil))
-                      nil))
-                    nil)
-                   ("2" (skosimp* :preds? t) (("2" (assert) nil nil))
-                    nil)
-                   ("3" (skosimp* :preds? t) (("3" (assert) nil nil))
+      (("3" (decompose-equality 1)
+        (("3" (auto-rewrite η)
+          (("3" (expand η 1)
+            (("3" (expand pretau 1 1)
+              (("3" (inst - Sig!1 m!1 ρ!1 σ!1)
+                (("3" (assert)
+                  (("3" (split -5)
+                    (("1" (lazy-grind :exclude eta) nil nil)
+                     ("2" (propax) nil nil))
                     nil))
                   nil))
                 nil))
@@ -2855,23 +3340,318 @@
         nil))
       nil)
      ("4" (skosimp* :preds? t)
-      (("4" (assert)
-        (("4" (expand "η" +)
+      (("4" (decompose-equality 1)
+        (("4" (expand η 1)
           (("4" (assert)
-            (("4" (expand "pretau" +)
-              (("4" (assert)
-                (("4" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                  (("4"
-                    (inst - "Sig!1" "m!1" "ρ!1 ++ k(sconst_def)" "σ!1")
-                    (("4" (assert)
-                      (("4" (rewrite -11 :dont-delete? t)
-                        (("4" (assert)
-                          (("4" (decompose-equality +)
-                            (("4" (bddsimp)
-                              (("1" (assert) nil nil)
-                               ("2" (assert) nil nil)
-                               ("3" (assert) nil nil)
-                               ("4" (assert) nil nil))
+            (("4" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("4" (inst - Sig!1 m!1 "ρ!1 ++ k(sconst_def)" σ!1)
+                (("4" (assert) (("4" (grind :exclude eta) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("5" (skosimp* :preds? t)
+      (("5" (decompose-equality 1)
+        (("5" (expand η 1)
+          (("5" (assert)
+            (("5" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("5" (inst - Sig!1 m!1 "ρ!1 ++ k(sconst_def)" σ!1)
+                (("5" (assert) (("5" (grind :exclude eta) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("6" (skosimp* :preds? t)
+      (("6" (decompose-equality 1)
+        (("6" (expand η 1)
+          (("6" (assert)
+            (("6" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("6" (inst - Sig!1 m!1 "ρ!1 ++ k(sconst_def)" σ!1)
+                (("6" (assert) (("6" (grind :exclude eta) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("7" (skosimp* :preds? t)
+      (("7" (decompose-equality 1)
+        (("7" (expand η 1)
+          (("7" (assert)
+            (("7" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("7" (inst - Sig!1 m!1 ρ!1 σ!1)
+                (("7" (assert) (("7" (grind :exclude eta) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("8" (skosimp* :preds? t)
+      (("8" (decompose-equality 1)
+        (("8" (expand η 1)
+          (("8" (assert)
+            (("8" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("8" (inst - Sig!1 m!1 "ρ!1 ++ k(sconst_def)" σ!1)
+                (("8" (assert) (("8" (grind :exclude eta) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("9" (skosimp* :preds? t)
+      (("9" (decompose-equality 1)
+        (("9" (expand η 1)
+          (("9" (assert)
+            (("9" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("9" (inst - Sig!1 m!1 ρ!1 σ!1)
+                (("9" (assert) (("9" (grind :exclude eta) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("10" (skosimp* :preds? t)
+      (("10" (decompose-equality 1)
+        (("10" (expand η 1)
+          (("10" (assert)
+            (("10" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("10" (assert) (("10" (grind :exclude eta) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("11" (skosimp* :preds? t)
+      (("11" (decompose-equality 1)
+        (("11" (expand η 1)
+          (("11" (assert)
+            (("11" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("11" (assert) (("11" (grind :exclude eta) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("12" (skosimp* :preds? t)
+      (("12" (decompose-equality 1)
+        (("12" (grind :exclude eta) nil nil)) nil))
+      nil)
+     ("13" (skosimp* :preds? t)
+      (("13" (decompose-equality 1)
+        (("13" (grind :exclude eta) nil nil)) nil))
+      nil)
+     ("14" (skosimp* :preds? t)
+      (("14" (decompose-equality 1)
+        (("14" (expand η 1)
+          (("14" (assert)
+            (("14" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("14" (assert) (("14" (grind :exclude eta) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("15" (skosimp* :preds? t)
+      (("15" (decompose-equality 1)
+        (("15" (expand η 1)
+          (("15" (assert)
+            (("15" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("15" (assert) (("15" (grind :exclude eta) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("16" (skosimp* :preds? t)
+      (("16" (decompose-equality 1)
+        (("16" (expand η 1)
+          (("16" (assert)
+            (("16" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("16" (assert) (("16" (grind :exclude eta) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("17" (skosimp* :preds? t)
+      (("17" (decompose-equality 1)
+        (("17" (expand η 1)
+          (("17" (assert)
+            (("17" (inst - Sig!1 m!1 ρ!1 σ!1)
+              (("17" (inst - Sig!1 m!1 ρ!1 σ!1)
+                (("17" (assert) (("17" (grind :exclude eta) nil nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("18" (skosimp* :preds? t)
+      (("18" (decompose-equality 1)
+        (("18" (expand η 1)
+          (("18" (iff)
+            (("18" (expand pretau 1 1)
+              (("18" (split 1)
+                (("1" (flatten)
+                  (("1" (split 1)
+                    (("1" (propax) nil nil) ("2" (assert) nil nil)
+                     ("3" (skosimp* :preds? t)
+                      (("3" (inst - x!2)
+                        (("3" (inst - x!2)
+                          (("3"
+                            (inst - Sig!1 m!1
+                             "ρ!1 ++ rest(signature(theory_def(theory_def1_var!1)), x!2)"
+                             σ!1)
+                            (("3" (split -8)
+                              (("1"
+                                (stop-rewrite sconcat_assoc)
+                                (("1"
+                                  (stop-rewrite length)
+                                  (("1"
+                                    (simplify -1)
+                                    (("1"
+                                      (use signature_eta :polarity? t)
+                                      (("1"
+                                        (inst
+                                         -
+                                         "theory_def(theory_def1_var!1)"
+                                         "ρ!1"
+                                         σ!1)
+                                        (("1"
+                                          (split -1)
+                                          (("1"
+                                            (expand η -1)
+                                            (("1"
+                                              (rewrite -1)
+                                              (("1"
+                                                (assert)
+                                                (("1"
+                                                  (decompose-equality
+                                                   -1)
+                                                  (("1"
+                                                    (inst
+                                                     -
+                                                     "sapply(x!1)(x!2)")
+                                                    (("1"
+                                                      (assert)
+                                                      (("1"
+                                                        (rewrite*
+                                                         sconcat_assoc)
+                                                        (("1"
+                                                          (assert)
+                                                          nil
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil)
+                                           ("2"
+                                            (hide -5)
+                                            (("2"
+                                              (assert)
+                                              (("2"
+                                                (rewrite length)
+                                                nil
+                                                nil))
+                                              nil))
+                                            nil)
+                                           ("3" (propax) nil nil)
+                                           ("4"
+                                            (hide -5)
+                                            (("4"
+                                              (assert)
+                                              (("4"
+                                                (rewrite* length)
+                                                nil
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2" (propax) nil nil)
+                               ("3" (propax) nil nil)
+                               ("4" (propax) nil nil)
+                               ("5" (propax) nil nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil)
+                 ("2" (flatten)
+                  (("2" (split 1)
+                    (("1" (propax) nil nil) ("2" (assert) nil nil)
+                     ("3" (skosimp* :preds? t)
+                      (("3" (inst - x!2)
+                        (("3" (inst - x!2)
+                          (("3"
+                            (inst - Sig!1 m!1
+                             "ρ!1 ++ rest(signature(theory_def(theory_def1_var!1)), x!2)"
+                             σ!1)
+                            (("3" (split -8)
+                              (("1"
+                                (rewrite* sconcat_assoc)
+                                (("1"
+                                  (rewrite -1 :dir rl)
+                                  (("1"
+                                    (use signature_eta :polarity? t)
+                                    (("1"
+                                      (inst
+                                       -
+                                       "theory_def(theory_def1_var!1)"
+                                       "ρ!1"
+                                       σ!1)
+                                      (("1"
+                                        (split -1)
+                                        (("1"
+                                          (expand η -1)
+                                          (("1" (rewrite -1) nil nil))
+                                          nil)
+                                         ("2"
+                                          (hide 2)
+                                          (("2" (assert) nil nil))
+                                          nil)
+                                         ("3" (propax) nil nil)
+                                         ("4"
+                                          (hide 2)
+                                          (("4" (assert) nil nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2" (propax) nil nil)
+                               ("3" (propax) nil nil)
+                               ("4" (propax) nil nil)
+                               ("5" (propax) nil nil))
                               nil))
                             nil))
                           nil))
@@ -2885,332 +3665,157 @@
           nil))
         nil))
       nil)
-     ("5" (skosimp* :preds? t)
-      (("5" (assert)
-        (("5" (expand "η" +)
-          (("5" (assert)
-            (("5" (expand "pretau" +)
-              (("5" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                (("5"
-                  (inst - "Sig!1" "m!1" "ρ!1 ++ k(sconst_def)" "σ!1")
-                  (("5" (assert)
-                    (("5" (decompose-equality +)
-                      (("5" (iff)
-                        (("5" (bddsimp)
-                          (("1" (assert) nil nil)
-                           ("2" (assert) nil nil)
-                           ("3" (assert) nil nil)
-                           ("4" (assert) nil nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("6" (skosimp* :preds? t)
-      (("6" (assert)
-        (("6" (expand "η" +)
-          (("6" (expand "pretau" +)
-            (("6" (decompose-equality +)
-              (("6" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                (("6"
-                  (inst - "Sig!1" "m!1" "ρ!1 ++ k(sconst_def)" "σ!1")
-                  (("6" (assert)
-                    (("6" (iff)
-                      (("6" (bddsimp)
-                        (("1" (assert) nil nil) ("2" (assert) nil nil)
-                         ("3" (assert) nil nil) ("4" (assert) nil nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("7" (skosimp* :preds? t)
-      (("7" (assert)
-        (("7" (expand "η" +)
-          (("7" (expand "pretau" +)
-            (("7" (assert)
-              (("7" (decompose-equality +)
-                (("7" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                  (("7" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                    (("7" (iff)
-                      (("7" (bddsimp)
-                        (("1" (assert) nil nil) ("2" (assert) nil nil)
-                         ("3" (assert) nil nil) ("4" (assert) nil nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("8" (skosimp* :preds? t)
-      (("8" (assert)
-        (("8" (expand "η" +)
-          (("8" (expand "pretau" +)
-            (("8" (assert)
-              (("8" (decompose-equality +)
-                (("8" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                  (("8"
-                    (inst - "Sig!1" "m!1" "ρ!1 ++ k(sconst_def)" "σ!1")
-                    (("8" (assert)
-                      (("8" (iff)
-                        (("8" (bddsimp)
-                          (("1" (assert) nil nil)
-                           ("2" (assert) nil nil)
-                           ("3" (assert) nil nil)
-                           ("4" (assert) nil nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("9" (skosimp* :preds? t)
-      (("9" (assert)
-        (("9" (expand "η" +)
-          (("9" (expand "pretau" +)
-            (("9" (assert)
-              (("9" (decompose-equality +)
-                (("9" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                  (("9" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                    (("9" (assert)
-                      (("9" (iff)
-                        (("9" (bddsimp)
-                          (("1" (assert) nil nil)
-                           ("2" (assert) nil nil)
-                           ("3" (assert) nil nil)
-                           ("4" (assert) nil nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("10" (skosimp* :preds? t)
-      (("10" (assert)
-        (("10" (expand "η" +)
-          (("10" (expand "pretau" +)
-            (("10" (assert)
-              (("10" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                (("10" (assert)
-                  (("10" (bddsimp)
-                    (("10" (assert)
-                      (("10" (decompose-equality +)
-                        (("10" (iff)
-                          (("10" (bddsimp)
-                            (("1" (assert) nil nil)
-                             ("2" (assert) nil nil))
-                            nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("11" (skosimp* :preds? t)
-      (("11" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-        (("11" (expand "η" +)
-          (("11" (expand "pretau" +)
-            (("11" (decompose-equality +)
-              (("11" (iff)
-                (("11" (bddsimp)
-                  (("1" (assert) nil nil) ("2" (assert) nil nil)) nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("12" (skosimp* :preds? t)
-      (("12" (assert)
-        (("12" (expand "η" +)
-          (("12" (assert)
-            (("12" (expand "pretau" +) (("12" (propax) nil nil)) nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("13" (skosimp* :preds? t)
-      (("13" (expand "η" +)
-        (("13" (expand "pretau" +) (("13" (propax) nil nil)) nil))
-        nil))
-      nil)
-     ("14" (skosimp* :preds? t)
-      (("14" (assert)
-        (("14" (expand "η" +)
-          (("14" (expand "pretau" +)
-            (("14" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-              (("14" (decompose-equality +)
-                (("14" (iff)
-                  (("14" (bddsimp)
-                    (("1" (assert) nil nil) ("2" (assert) nil nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("15" (skosimp* :preds? t)
-      (("15" (expand "η" +)
-        (("15" (expand "pretau" +)
-          (("15" (decompose-equality +)
-            (("15" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-              (("15" (iff)
-                (("15" (bddsimp)
-                  (("1" (assert) nil nil) ("2" (assert) nil nil)) nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("16" (skosimp* :preds? t)
-      (("16" (assert)
-        (("16" (expand "η" +)
-          (("16" (expand "pretau" +)
-            (("16" (decompose-equality +)
-              (("16" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                (("16" (assert)
-                  (("16" (iff)
-                    (("16" (bddsimp)
-                      (("1" (assert) nil nil) ("2" (assert) nil nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("17" (skosimp* :preds? t)
-      (("17" (assert)
-        (("17" (expand "η" +)
-          (("17" (expand "pretau" +)
-            (("17" (assert)
-              (("17" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                (("17" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                  (("17" (decompose-equality +)
-                    (("17" (iff)
-                      (("17" (bddsimp)
-                        (("1" (assert) nil nil) ("2" (assert) nil nil)
-                         ("3" (assert) nil nil) ("4" (assert) nil nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("18" (skosimp* :preds? t)
-      (("18" (assert)
-        (("18" (expand "η" +)
-          (("18" (expand "pretau" +)
-            (("18" (assert)
-              (("18" (decompose-equality +)
-                (("1" (iff)
-                  (("1" (bddsimp)
-                    (("1" (assert)
-                      (("1" (skosimp* :preds? t)
-                        (("1" (expand "signature" -4)
-                          (("1" (postpone) nil nil)) nil))
-                        nil))
-                      nil)
-                     ("2" (postpone) nil nil) ("3" (postpone) nil nil)
-                     ("4" (postpone) nil nil))
-                    nil))
-                  nil)
-                 ("2" (grind) nil nil) ("3" (grind) nil nil)
-                 ("4" (grind) nil nil) ("5" (grind) nil nil)
-                 ("6" (grind) nil nil) ("7" (grind) nil nil)
-                 ("8" (grind) nil nil) ("9" (grind) nil nil)
-                 ("10" (grind) nil nil) ("11" (grind) nil nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
      ("19" (skosimp* :preds? t)
-      (("19" (assert)
-        (("19" (expand "η" +)
-          (("19" (expand "pretau" +) (("19" (propax) nil nil)) nil))
-          nil))
-        nil))
+      (("19" (decompose-equality 1)
+        (("19" (grind :exclude eta) nil nil)) nil))
       nil)
      ("20" (skosimp* :preds? t)
-      (("20" (expand "η" +)
-        (("20" (expand "pretau" +)
-          (("20" (assert)
-            (("20" (decompose-equality +)
-              (("20" (iff)
-                (("20" (bddsimp)
-                  (("1" (assert)
-                    (("1" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                      (("1" (assert) nil nil)) nil))
-                    nil)
-                   ("2" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-                    (("2" (assert) nil nil)) nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
+      (("20" (decompose-equality 1)
+        (("20" (grind :exclude eta) nil nil)) nil))
       nil)
      ("21" (skosimp* :preds? t)
-      (("21" (inst - "Sig!1" "m!1" "ρ!1" "σ!1")
-        (("21" (assert)
-          (("21" (expand "η" +)
-            (("21" (expand "pretau" +)
-              (("21" (decompose-equality +)
-                (("21" (iff)
-                  (("21" (bddsimp)
-                    (("1" (assert) nil nil) ("2" (assert) nil nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
+      (("21" (decompose-equality 1)
+        (("21" (grind :exclude eta) nil nil)) nil))
       nil)
-     ("22" (hide 2) (("22" (grind) nil nil)) nil)
-     ("23" (hide 2) (("23" (grind) nil nil)) nil))
+     ("22" (skosimp* :preds? t) (("22" (assert) nil nil)) nil)
+     ("23" (skosimp* :preds? t) (("23" (assert) nil nil)) nil))
     nil)
-   nil shostak)))
+   ((iterm adt-constructor-decl "[(sexpr?) -> (iterm?)]" language nil)
+    (itype adt-constructor-decl "[(sexpr?) -> (itype?)]" language nil)
+    (ikeep? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (ikeep adt-constructor-decl "(ikeep?)" language nil)
+    (signature_eta formula-decl nil eta nil)
+    (rest const-decl "(stheory?)" language nil)
+    (signature def-decl "signature" language nil)
+    (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (theory_def adt-constructor-decl
+     "[finseq[(scontext?)] -> (theory_def?)]" language nil)
+    (const_def adt-constructor-decl
+     "[[(sexpr?), (sexpr?)] -> (const_def?)]" language nil)
+    (const_var? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (const_var adt-constructor-decl "[(sexpr?) -> (const_var?)]"
+     language nil)
+    (const_decl? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (const_decl adt-constructor-decl "[(sexpr?) -> (const_decl?)]"
+     language nil)
+    (type_def adt-constructor-decl "[(sexpr?) -> (type_def?)]" language
+     nil)
+    (type_var? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (type_var adt-constructor-decl "(type_var?)" language nil)
+    (type_decl? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (type_decl adt-constructor-decl "(type_decl?)" language nil)
+    (rproj? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (rproj adt-constructor-decl "[(sexpr?) -> (rproj?)]" language nil)
+    (lproj? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (lproj adt-constructor-decl "[(sexpr?) -> (lproj?)]" language nil)
+    (pair? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (pair adt-constructor-decl "[[(sexpr?), (sexpr?)] -> (pair?)]"
+     language nil)
+    (lam? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (lam adt-constructor-decl "[[(sexpr?), (sexpr?)] -> (lam?)]"
+         language nil)
+    (app? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (app adt-constructor-decl "[[(sexpr?), (sexpr?)] -> (app?)]"
+     language nil)
+    (subtype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (subtype adt-constructor-decl
+             "[[(sexpr?), (sexpr?)] -> (subtype?)]" language nil)
+    (prod? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (prod adt-constructor-decl "[[(sexpr?), (sexpr?)] -> (prod?)]"
+     language nil)
+    (sconcat_assoc formula-decl nil language nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (k const-decl "(stheory?)" language nil)
+    (sconst_def? adt-recognizer-decl "[signature -> boolean]" language
+     nil)
+    (sconst_def adt-constructor-decl "(sconst_def?)" language nil)
+    (fun? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (fun adt-constructor-decl "[[(sexpr?), (sexpr?)] -> (fun?)]"
+     language nil)
+    (interp? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (interp adt-constructor-decl
+            "[[(sexpr?), finseq[(sinterp?)]] -> (interp?)]" language
+            nil)
+    (dot? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (dot adt-constructor-decl
+     "[[(sexpr?), (stheory?), (sexpr?)] -> (dot?)]" language nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (v1_var!1 skolem-const-decl "nat" eta nil)
+    (ρ!1 skolem-const-decl "(stheory?)" eta nil)
+    (minus_odd_is_odd application-judgement "odd_int" integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (kw const-decl "prekeyword" language nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (def shared-adt-accessor-decl
+     "[{x: syntaxic | iterm?(x) OR itype?(x) OR const_def?(x) OR type_def?(x)} ->
+   (sexpr?)]" language nil)
+    (type_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (const_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+     nil)
+    (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (kw_pretau_expr formula-decl nil language nil)
+    (shift_pretau formula-decl nil subst nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (mult_divides2 application-judgement "(divides(m))" divides nil)
+    (mult_divides1 application-judgement "(divides(n))" divides nil)
+    (v? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (v adt-constructor-decl "[nat -> (v?)]" language nil)
+    (slength_concat formula-decl nil language nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (syntaxic_induction formula-decl nil language nil)
+    (η def-decl "{V: syntaxic |
+         (sexpr?(U) => sexpr?(V)) AND
+          (sinterp?(U) => sinterp?(V)) AND (scontext?(U) => scontext?(V))}"
+     eta nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (sexpr? adt-def-decl "boolean" language nil)
+    (++ const-decl "(stheory?)" language nil)
+    (length const-decl "nat" language nil)
+    (pretau def-decl "bool" language nil)
+    (signature type-decl nil language nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (stheory? adt-recognizer-decl "[signature -> boolean]" language
+     nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (below type-eq-decl nil nat_types nil)
+    (syntaxic type-decl nil language nil)
+    (sinterp? adt-def-decl "boolean" language nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (sig adt-accessor-decl "[(stheory?) -> finseq[signature]]" language
+         nil)
+    (∈ const-decl "bool" language nil)
+    (sapply const-decl "signature" language nil)
+    (< const-decl "bool" reals nil))
+   shostak)))
 

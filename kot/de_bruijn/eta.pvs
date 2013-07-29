@@ -8,6 +8,7 @@ BEGIN
   S: VAR syntaxic
   Sig, ρ: VAR (stheory?)
   U, V: VAR syntaxic
+  M: VAR (scontext?)
 
 %  η(Γ)(ρ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
 %   (S: semantic(Γ ++ def(Γ(m)) ++ ρ) | NOT map?(S)): RECURSIVE
@@ -59,8 +60,16 @@ BEGIN
     , iterm(a): iterm(η(Sig)(ρ, m, σ)(a))
     ENDCASES
   MEASURE size(U)
+  AUTO_REWRITE eta
 
-  pretau_eta: THEOREM m ∈ Sig AND stheory?(Sig(m)) AND σ`length = length(Sig(m))
+  signature_eta: THEOREM
+    m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
+    signature(η(Sig)(ρ, m, σ)(M)) = signature(M)
+
+  % TODO: check if the second line hypothesis is used in the proof, 
+  % because I don't remeber using it.
+  pretau_eta: THEOREM 
+    m ∈ Sig AND stheory?(Sig(m)) AND σ`length = length(Sig(m))
     AND (FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(Sig(m)(x))) IMPLIES
     pretau(Sig ++ ρ)(η(Sig)(ρ, m, σ)(U)) = pretau(Sig ++ Sig(m) ++ ρ)(U)
 END eta
