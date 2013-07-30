@@ -1,6 +1,7 @@
 language: THEORY
 BEGIN
 
+  % A signature can be seen as the type of a theory (or context)
   signature: DATATYPE
   BEGIN
     stype_decl: stype_decl?
@@ -19,7 +20,6 @@ BEGIN
     PRETERM: PRETERM?
     PRECONTEXT(SIG: signature): PRECONTEXT?
   END prekeyword
-
   k: VAR prekeyword
 
   kw(s): prekeyword =
@@ -31,6 +31,7 @@ BEGIN
     , stheory(Sig): PRECONTEXT(stheory(Sig))
     ENDCASES
 
+  % TODO: Paste intro from datatype + modify
   syntaxic: DATATYPE WITH SUBTYPES sexpr?, scontext?, sinterp?
   BEGIN
     v(i: nat): v?: sexpr?
@@ -80,6 +81,7 @@ BEGIN
     ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
   MEASURE len
 
+  % Size function, useful for termination
   size(U): RECURSIVE nat =
     CASES U OF
       v(x): 2
@@ -112,6 +114,7 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE+ size
 
+  % Gives the signature of a context
   signature(ctx: (scontext?)): RECURSIVE signature =
     CASES ctx OF
       type_decl: stype_decl
@@ -127,25 +130,17 @@ BEGIN
     ENDCASES
   MEASURE size(ctx)
 
-  %signature(Sig)(σ: (interp?)): signature = 
-  %  FORALL (x: below[map(σ)`length]):
-  %     CASES map(σ)(x) OF
-  %       ikeep: Sig(m(σ))(x)
-  %     , itype(T): stype_def
-  %     , iterm(a): sconst_def
-  %     ENDCASES
-  %signature_length: THEOREM FORALL (σ: (interp?)):
-  %  length(signature(Sig)(σ)) = map(σ)`length
-    
-
+  % TODO: should it be a conversion ?
+  % Creates a context/signature of length one from a decl  
   k(d: (scontext?)): (theory_def?) =
     theory_def((# length := 1, seq := LAMBDA (x: below[1]): d #))
   k(s): (stheory?) = 
     stheory((# length := 1, seq := LAMBDA (x: below[1]): s #))
-
+  % empty context/signature
   empty: MACRO (scontext?) = theory_def(empty_seq)
   sempty: MACRO (stheory?) = stheory(empty_seq)
 
+  % Basic functions on contexts/signatures
   length(M): nat =
     def(M)`length
   length(Sig): nat = 
@@ -169,6 +164,7 @@ BEGIN
     theory_def(def(N) o def(M))
   ;++(S1, S2: (stheory?)): (stheory?) = 
     stheory(sig(S2) o sig(S1))
+  % Basic theorems about these functions
   concat_empty: THEOREM
     empty ++ M = M
   concat__empty: THEOREM
@@ -198,7 +194,6 @@ BEGIN
       ENDIF
   AUTO_REWRITE+ sconcat_sempty, sconcat__sempty, sconcat_assoc, srest_sconcat
 
-
   length_concat: THEOREM
     length(M ++ N) = length(M) + length(N)
   length_k: THEOREM FORALL (d: (scontext?)):
@@ -214,14 +209,23 @@ BEGIN
   length_signature: THEOREM
     length(signature(M)) = length(M)
   AUTO_REWRITE length_signature
-    
+   
+  % Not used anymore 
   prefix_size: THEOREM FORALL (f, g: finseq[syntaxic]):
     f`length < g`length AND (FORALL (x: below[f`length]): f`seq(x) = g`seq(g`length - f`length + x)) IMPLIES
       sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x))) < sum(g`length, LAMBDA (x: below[g`length]): 1 + size(g(x)))
 
+  % TODO: check if we can remove it
   seq1(s): finseq[signature] =
     (# length := 1, seq := LAMBDA (x: below[1]): s #)
 
+  % Pretau is a weaker tau function.
+  % It checks that: 
+  %    - variables and symbols are indeed declared in the current context
+  %    - terms and types are well_formed (eg fun takes two types as arguments)
+  % The function creating a term of type syntaxic from a real PVS expression
+  % should always return a term verifying pretau. Indeed, if the given expression
+  % does not verify pretau, we can't build the associated De Bruijn representation
   pretau(Sig: (stheory?))(U)(s): RECURSIVE bool =
     CASES U OF
       v(x): x < length(Sig) AND kw(s) = kw(Sig(x))
@@ -279,6 +283,7 @@ BEGIN
   %kw_pretau: THEOREM
   %  pretau(Sig)(U)(S1) AND pretau(Sig)(U)(S2) IMPLIES kw(S1) = kw(S2)
 
+  % Determinism of pretau
   kw_pretau_expr: THEOREM
     pretau(Sig)(e)(S1) IMPLIES 
     (pretau(Sig)(e)(S2) IFF kw(S1) = kw(S2))

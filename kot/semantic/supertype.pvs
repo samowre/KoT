@@ -2,17 +2,14 @@ supertype: THEORY
 BEGIN
   IMPORTING subst
 
-  S: VAR syntaxic
-  Γ, Δ, Θ: VAR context
-  A, B, T: VAR pretype
-  r, s: VAR symbol
-  n, m: VAR name
+  U, V: VAR syntaxic
+  Γ, Δ, Θ: VAR (stheory?)
   x, y: VAR nat
-  a, b, f, g: VAR preterm
-  σ, τ: VAR interp
+  σ, τ: VAR (interp?)
+  T: VAR (sexpr?)
   
   % Direct Supertype : 3.2
-  μ0(T): RECURSIVE pretype =
+  μ0(T): RECURSIVE (sexpr?) =
     CASES T OF
       subtype(T, a): μ0(T)
       ELSE T
@@ -20,24 +17,24 @@ BEGIN
   MEASURE w(T)
 
   % Adding subtype contraints : 4.4
-  ;/(T, a): RECURSIVE pretype =
+  ;/(T, a): RECURSIVE (sexpr?) =
     CASES T OF
-      symbol(s): symbol(s),
-      dot(m, σ, s): dot(m, σ, s),
+      v(x): v(x),
+      dot(m, s, x): dot(m, s, x),
       subtype(T, b): subtype(T, b ∧ (a ↑ 1)),
       fun(A, B): fun(A/a, B/(a ↑ 1)),
       prod(A, B): prod(A/a, B/(a ↑ 1))
     ENDCASES
   MEASURE w(T)
   divide_size: RECURSIVE JUDGEMENT
-    /(T, a) HAS_TYPE { A | size(A) = size(T) }
+    /(T, a) HAS_TYPE { A | type_size(A) = type_size(T) }
 
   % Function μ and π as one recursive function,
   % in order to deal with the mutual recursion
   mubody(T): RECURSIVE [pretype, preterm] =
     CASES T OF
-      symbol(s): (symbol(s), TRUE_),
-      dot(m, σ, s): (dot(m, σ, s), TRUE_), % TODO
+      v(x): (v(x), TRUE_),
+      dot(m, s, x): (dot(m, s, x), TRUE_), % TODO
       subtype(T, a):
         LET (muT, bodyT) = mubody(T) IN
 	LET piT = Λ(muT)(bodyT) IN

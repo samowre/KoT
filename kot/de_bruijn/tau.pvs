@@ -5,13 +5,29 @@ BEGIN
   IMPORTING definitions
 
 
+  % TODO:
+  % note: the function tau is defined only on what can	
+  % be a PVS expression on its own, not on subterms of such.
+  % Therefore tau is not defined on the following constructors
+  %  - interp, that should only occur on a dot left hand side
+  %    (until we handle first-class theory)
+  %  - all constructors of subtype (scontext?) except stheory
+  %    since they can only occur in a stheory itself (i.e a context)
+  %  - all constructors of subtype (sinterp?) since they must occur
+  %    only in the right hand side of a interp constructor.
+
+
   % Variable declaration
-  Γ, Δ, Θ: VAR precontext
-  A, B, T: VAR pretype
-  n, m: VAR name
+  Γ, Δ, Θ: VAR (theory_def?)
+  M, N: VAR (scontext?)
+  U, V: VAR syntaxic
+  s: VAR signature
+  Sig: VAR (stheory?)
+  %A, B, T: VAR pretype
+  %n, m: VAR name
   x, y, z: VAR nat
-  a, b, f, g: VAR preterm
-  S: VAR semantic
+  %a, b, f, g: VAR preterm
+  %S: VAR semantic
 
 
   %% Type TCCS 
@@ -21,16 +37,28 @@ BEGIN
   π(A)(a): list[pretcc] = cons( app(π(A), a), null)
   fail: [keyword, list[pretcc]] = (⊥, null)
   
+  %%% Type keyword
+  keyword: DATATYPE
+  BEGIN
+    ⊥: undefined?
+    KCONTEXT: KCONTEXT?
+    KTHEORY: KTHEORY?
+    KTYPE: KTYPE?
+    KTERM(type_: (expr?)): KTERM?
+  END keyword
+  k: VAR keyword
+
+  pretau(Sig)(U)(k): bool = 
+    pretau(Sig)(U)(s) IMPLIES kw(s) = k
 
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
-  τ(Θ)(S): RECURSIVE 
+  τ(Θ)(U): RECURSIVE 
     { x: [keyword, list[pretcc]] | 
-        LET (k, l) = x IN
- 	(undefined?(k) OR KCONTEXT?(k) OR KTHEORY?(k) OR KTYPE?(k) OR KTERM?(k)) AND
-	(KCONTEXT?(k) IMPLIES context?(S)) AND
-	(KTHEORY?(k) IMPLIES pretheory?(S)) AND
-	(KTYPE?(k) IMPLIES pretype?(S)) AND
-	(KTERM?(k) IMPLIES preterm?(S)) } = % AND
+        LET (k, l) = x, Sig = signature(Θ)  IN
+	(KCONTEXT?(k) IMPLIES pretau(Sig)(U)(PRECONTEXT(signature(U)))) AND
+	(KTHEORY?(k) IMPLIES pretau(Sig)(U)(PRECONTEXT)) AND
+	(KTYPE?(k) IMPLIES pretau(Sig)(U)(PRETYPE)) AND
+	(KTERM?(k) IMPLIES pretau(Sig)(U)(PRETERM)) } = % AND
 	%(k /= ⊥ IMPLIES well_formed?(Θ)(S)) } = 
   CASES S OF
 
@@ -58,27 +86,38 @@ BEGIN
     % Note: there is no need to have a τ(Θ)(σ) = INTERP since we already
     % check τ(Θ)(interp(Δ, σ)). Hence we don't have to define τ over the
     % interpretations.
-    dot(m, σ, v): 
-      LET s = i(v) IN
-      IF m ∈ Θ AND kind(Θ)(m) = KTHEORY
-	THEN LET Δ = definition(Θ)(m) IN
-	  IF interp?(σ) AND interp_for?(Δ)(σ) 
-	    THEN LET (kwi, tccsi) = τ(Θ)(interp(Δ, σ)) IN
-	     IF KTHEORY?(kwi) AND s ∈ Δ 
-	        THEN IF kind(Δ)(s) = KTYPE
-		  THEN (KTYPE, null)
-		ELSIF kind(Δ)(s) = KCONST
-		  THEN ( KTERM( δ(Θ ++ find(Δ)(s))( η(Θ, m, σ)( type_(Δ)(s) )) 
-		                ↑ (length(after(Θ, s)))),
-		         tccsi )
-		  ELSE fail
-		ENDIF
-		ELSE fail
-	      ENDIF
+    dot(i, s, x): 
+      IF interp?(i) AND v?(x)
+        THEN LET (kwi, tccsi) = τ(Θ)(interp(Θ)(s, i)) IN
+	  IF KTHEORY?(kwi) 
+	    THEN τ(Θ ++ rest(Δ, y))(y)
 	    ELSE fail
 	  ENDIF
 	ELSE fail
       ENDIF,
+    % interp(m, σ):
+
+    % dot(m, σ, v): 
+    %   LET s = i(v) IN
+    %   IF m ∈ Θ AND kind(Θ)(m) = KTHEORY
+    % 	THEN LET Δ = definition(Θ)(m) IN
+    % 	  IF interp?(σ) AND interp_for?(Δ)(σ) 
+    % 	    THEN LET (kwi, tccsi) = τ(Θ)(interp(Δ, σ)) IN
+    % 	     IF KTHEORY?(kwi) AND s ∈ Δ 
+    % 	        THEN IF kind(Δ)(s) = KTYPE
+    % 		  THEN (KTYPE, null)
+    % 		ELSIF kind(Δ)(s) = KCONST
+    % 		  THEN ( KTERM( δ(Θ ++ find(Δ)(s))( η(Θ, m, σ)( type_(Δ)(s) )) 
+    % 		                ↑ (length(after(Θ, s)))),
+    % 		         tccsi )
+    % 		  ELSE fail
+    % 		ENDIF
+    % 		ELSE fail
+    % 	      ENDIF
+    % 	    ELSE fail
+    % 	  ENDIF
+    % 	ELSE fail
+    %   ENDIF,
 			        
 		       
   %% Types
@@ -87,7 +126,7 @@ BEGIN
     fun(A, B): 
       LET (kwA, tccsA) = τ(Θ)(A) IN
      	IF KTYPE?(kwA)
-	  THEN LET (kwB, tccsB) = τ(Θ ++ const_var(A))(B) IN
+	  THEN LET (kwB, tccsB) = τ(Θ ++ k(const_var(A)))(B) IN
 	    IF KTYPE?(kwB) 
 	      THEN (KTYPE, tccsA ++ tccsB)
 	      ELSE fail
@@ -99,7 +138,7 @@ BEGIN
     prod(A, B): 
       LET (kwA, tccsA) = τ(Θ)(A) IN
      	IF KTYPE?(kwA)
-	  THEN LET (kwB, tccsB) = τ(Θ ++ const_var(A))(B) IN
+	  THEN LET (kwB, tccsB) = τ(Θ ++ k(const_var(A)))(B) IN
 	    IF KTYPE?(kwB) 
 	      THEN (KTYPE, tccsA ++ tccsB)
 	      ELSE fail
@@ -111,7 +150,7 @@ BEGIN
     subtype(T, a): 
       LET (kwT, tccsT) = τ(Θ)(T) IN
     	IF KTYPE?(kwT)
-	  THEN LET (kwa, tccsa) = τ(Θ ++ const_var(T))(a) IN
+	  THEN LET (kwa, tccsa) = τ(Θ ++ k(const_var(T)))(a) IN
 	    CASES kwa OF
 	      KTERM(A): 
 	        IF A = bool_
@@ -153,7 +192,7 @@ BEGIN
     lam(A, a): 
       LET (kwA, tccsA) = τ(Θ)(A) IN
     	IF KTYPE?(kwA)
-	  THEN LET (kwa, tccsa) = τ(Θ ++ const_var(A))(a) IN
+	  THEN LET (kwa, tccsa) = τ(Θ ++ k(const_var(A)))(a) IN
     	    CASES kwa OF
 	      KTERM(B): (KTERM(fun(A, B)), tccsA ++ tccsa) 
 	      ELSE fail
@@ -199,18 +238,18 @@ BEGIN
     
 	   
   %% contexts
-    map(f): 
-      LET Γ = Rest(map(f)) IN
+    theory_def(f): 
     % τ(Θ)(〈〉) = CONTEXT
       IF f`length = 0 THEN (KTHEORY, null) 
-      ELSE CASES First(map(f)) OF
+      ELSE LET Γ = rest(theory_def(f), 1) IN
+      	   CASES f(0) OF
     % τ(Θ)(Γ, s: TYPE) = CONTEXT if Γ(s) and Θ(s) are undefined (immediate with De Bruijn)
     % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
-    type_decl: τ(Θ)(Γ)
+    type_decl: τ(Θ)(Γ),
     % For τ : var <-> decl
     % τ(Θ)(Γ, s: TYPE = ext) = CONTEXT if Γ(s) and Θ(s) are undefined (immediate with De Bruijn)
     % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
-    type_var: τ(Θ)(Γ)
+    type_var: τ(Θ)(Γ),
     % τ(Θ)(Γ, s: TYPE = T) = CONTEXT if Γ(s) and Θ(s) are undefined (immediate with De Bruijn)
     % 	      	      	     	     and τ(Θ)(Γ) = CONTEXT
     %				     and τ(Θ, Γ)(T) = TYPE
@@ -286,6 +325,8 @@ BEGIN
 	    ENDIF
 	  ELSE fail
 	ENDIF
+    ENDCASES
+    ENDIF
     ELSE fail
   ENDCASES
   MEASURE extend[semantic, syntaxic, ordinal, zero](LAMBDA (s: syntaxic): w(Θ, s))(S)
