@@ -237,96 +237,58 @@ BEGIN
       ENDCASES,		  
     
 	   
-  %% contexts
-    theory_def(f): 
-    % τ(Θ)(〈〉) = CONTEXT
-      IF f`length = 0 THEN (KTHEORY, null) 
-      ELSE LET Γ = rest(theory_def(f), 1) IN
-      	   CASES f(0) OF
-    % τ(Θ)(Γ, s: TYPE) = CONTEXT if Γ(s) and Θ(s) are undefined (immediate with De Bruijn)
-    % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
-    type_decl: τ(Θ)(Γ),
+  %% Contexts: thanks to De Bruijn represntation, we never have to check
+   % that s is not already defined before.
+     
+    % τ(Θ)(s: TYPE) = CONTEXT
+    type_decl: (KTHEORY, null),
     % For τ : var <-> decl
-    % τ(Θ)(Γ, s: TYPE = ext) = CONTEXT if Γ(s) and Θ(s) are undefined (immediate with De Bruijn)
-    % 	      	       	 	 and τ(Θ)(Γ) = CONTEXT
-    type_var: τ(Θ)(Γ),
-    % τ(Θ)(Γ, s: TYPE = T) = CONTEXT if Γ(s) and Θ(s) are undefined (immediate with De Bruijn)
-    % 	      	      	     	     and τ(Θ)(Γ) = CONTEXT
-    %				     and τ(Θ, Γ)(T) = TYPE
+    type_var: (KTHEORY, null),
+    % τ(Θ)(s: TYPE = T) = CONTEXT if τ(Θ)(T) = TYPE
     type_def(T): 
-      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-      IF CONTEXT?(kwΓ)
-        THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
-	  IF kwT = KTYPE
-	    THEN (kwΓ, tccsΓ ++ tccsT)
+      LET (kwT, tccsT) = τ(Θ)(T) IN
+      IF KTYPE?(kwT) THEN (KTHEORY, tccsT) ELSE fail ENDIF, 
+    % τ(Θ)(c: T) = CONTEXT if τ(Θ)(T) = TYPE
+    const_decl(T):
+      LET (kwT, tccsT) = τ(Θ)(T) IN
+      IF KTYPE?(kwT) THEN (KTHEORY, tccsT) ELSE fail ENDIF, 
+    % For τ : var <-> decl
+    const_var(T):
+      LET (kwT, tccsT) = τ(Θ)(T) IN
+      IF KTYPE?(kwT) THEN (KTHEORY, tccsT) ELSE fail ENDIF, 
+    % τ(Θ)(c: T = a) = CONTEXT if τ(Θ, Γ)(T) = TYPE
+    %		       	      and τ(Θ, Γ)(a) = T'
+    %			      and (T ∼ T')_Γ
+%%%%%			      and Γ ⊢ π(T)(a)    
+    const_def(T, a): 
+      LET (kwT, tccsT) = τ(Θ)(T) IN
+      IF kwT = KTYPE
+        THEN LET (kwa, tccsa) = τ(Θ)(a) IN
+ 	  CASES kwa OF
+	    KTERM(Tp):
+	      (KTHEORY, tccsT ++ tccsa ++ (T ≃ Tp) ++ (π(T)(a)))
 	    ELSE fail
-	  ENDIF
+	  ENDCASES
 	ELSE fail
       ENDIF,
-    % τ(Θ)(Γ, c: T) = CONTEXT if Γ(c) and Θ(c) are undefined (immediate with De Bruijn)
-    % 	      	      	      and τ(Θ)(Γ) = CONTEXT
-    %			      and τ(Θ)(T) = TYPE
-    const_decl(T): 
-      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-        IF CONTEXT?(kwΓ)
-	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
-	    IF kwT = KTYPE
-	      THEN (kwΓ, tccsΓ ++ tccsT) 
-	      ELSE fail
-	    ENDIF
-	  ELSE fail
-	ENDIF,
-    % For τ : var <-> decl
-    % τ(Θ)(Γ, c: T = ext) = CONTEXT if Γ(c) and Θ(c) are undefined (immediate with De Bruijn)
-    % 	      	      	      and τ(Θ)(Γ) = CONTEXT
-    %			      and τ(Θ)(T) = TYPE
-    const_var(T): 
-      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-        IF CONTEXT?(kwΓ)
-	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
-	    IF kwT = KTYPE
-	      THEN (kwΓ, tccsΓ ++ tccsT) 
-	      ELSE fail
-	    ENDIF
-	  ELSE fail
-	ENDIF,
-    % τ(Θ)(Γ, c: T = a) = CONTEXT if Γ(c) and Θ(c) are undefined (immediate with De Bruijn)
-    % 	      	     	  	  and τ(Θ)(Γ) = CONTEXT
-    %				  and τ(Θ, Γ)(T) = TYPE
-    %				  and τ(Θ, Γ)(a) = T'
-    %				  and (T ∼ T')_Γ
-%%%%%				  and Γ ⊢ π(T)(a)    
-    const_def(T, a): 
-      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-    	IF CONTEXT?(kwΓ)
-	  THEN LET (kwT, tccsT) = τ(Θ ++ Γ)(T) IN
-	    IF kwT = KTYPE
-	      THEN LET (kwa, tccsa) = τ(Θ ++ Γ)(a) IN
- 	        CASES kwa OF
-		  KTERM(Tp):
-	            (kwΓ, tccsΓ ++ tccsT ++ tccsa ++ (T ≃ Tp) ++ (π(T)(a)))
-		  ELSE fail
-		ENDCASES
-	      ELSE fail
-	    ENDIF
-	  ELSE fail
-	ENDIF,
-    % τ(θ)(Γ, m: THEORY = Δ) = CONTEXT if Θ(m), Γ(m) are undefined (immediate with De Bruijn)
-    % 	      	 	       	       and τ(Θ)(Γ) = CONTEXT
-    %				       and τ(Θ, Γ)(Δ) = THEORY 
-    %	(THEORY = context without var and theory declarations)
-    theory_def(m, Δ, Γ): 
-      LET (kwΓ, tccsΓ) = τ(Θ)(Γ) IN
-        IF CONTEXT?(kwΓ)
-	  THEN LET (kwΔ, tccsΔ) = τ(Θ ++ Γ)(Δ) IN
-	    IF KTHEORY?(kwΔ)
-	      THEN (KCONTEXT, tccsΓ ++ tccsΔ)
-	      ELSE fail
-	    ENDIF
-	  ELSE fail
-	ENDIF
-    ENDCASES
-    ENDIF
+    % τ(θ)(rest(Δ), decl(Δ)) = CONTEXT  τ(Θ)(rest(Δ)) = CONTEXT
+    %				    and τ(Θ, rest(Δ))(decl(Δ)) = THEORY 
+    %	(THEORY = context without theory declarations)
+    theory_def(̣Δ): 
+    % τ(Θ)(〈〉) = CONTEXT
+      IF length(Δ) = 0 
+        THEN (KTHEORY, null) 
+	ELSE
+          LET (kwΔ, tccsΔ) = τ(Θ)(rest(Δ, 1)) IN
+          IF KTHEORY?(kwΔ)
+	    THEN LET (kwD, tccsD) = τ(Θ ++ rest(Δ, 1))(Δ(0)) IN
+	      IF KCONTEXT?(kwD) 
+	        THEN (KCONTEXT, tccsΔ ++ tccsD)
+		ELSE fail
+	      ENDIF
+	    ELSE fail
+	  ENDIF
+      ENDIF
     ELSE fail
   ENDCASES
   MEASURE extend[semantic, syntaxic, ordinal, zero](LAMBDA (s: syntaxic): w(Θ, s))(S)

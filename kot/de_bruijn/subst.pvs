@@ -40,7 +40,8 @@ BEGIN
       % Names
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
     , dot(m, s, e): dot(m ↑ nb, s, e)
-    , interp(m, σ): interp(m ↑ nb, σ WITH [`seq := LAMBDA (x: below[σ`length]): σ(x) ↑ nb])
+    , interp(m, σ): interp(m ↑ nb, σ WITH [`seq := 
+      		    LAMBDA (x: below[σ`length]): σ(x) ↑ (nb`1, nb`2 + σ`length - 1 - x)])
 
       % Types
     , subtype(T, a): subtype(T ↑ nb, a ↑ (nb`1, nb`2 + 1))
@@ -123,8 +124,8 @@ BEGIN
       v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF
       % /!\ Case x = m not handled
     , dot(m, s, e): dot(subst(m, x, t), s, e)
-    , interp(m, σ): interp(subst(m, x, t), σ WITH [`seq := LAMBDA (y: below[σ`length]): 
-      		    		       	     	  subst(σ(y), x, t)])
+    , interp(m, σ): interp(subst(m, x, t), σ WITH [`seq := 
+        LAMBDA (y: below[σ`length]): subst(σ(y), x + σ`length - 1 - y, t ↑ (σ`length - 1 - y))])
 
       % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
       %                        λ——————————————————————\___________/
@@ -155,7 +156,8 @@ BEGIN
     , const_decl(T): const_decl(subst(T, x, t))
     , const_var(T): const_var(subst(T, x, t))
     , const_def(T, a): const_def(subst(T, x, t), subst(a, x, t))
-    , theory_def(Θ): theory_def(Θ WITH [`seq := LAMBDA (y: below[Θ`length]): subst(Θ(y), x + Θ`length - 1 - y, t ↑ (Θ`length - 1 - y))])
+    , theory_def(Θ): theory_def(Θ WITH [`seq := 
+        LAMBDA (y: below[Θ`length]): subst(Θ(y), x + Θ`length - 1 - y, t ↑ (Θ`length - 1 - y))])
 
       % Interpretations
     , ikeep: ikeep
