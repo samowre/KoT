@@ -234,12 +234,14 @@ BEGIN
 	% Additional stuff to remove with nested & first-class theories
 	interp?(m) AND v?(x)
     , interp(m, σ):
+	% Additional stuff to remove with nested & first-class theories
+        v?(m) AND
         stheory?(s) AND
         pretau(Sig)(m)(s) AND
 	σ`length = length(s) AND
-	FORALL (x: below[σ`length]): pretau(Sig ++ rest(s, x))(σ`seq(x))(s(x)) AND
-	% Additional stuff to remove with nested & first-class theories
-	v?(m)
+	FORALL (x: below[σ`length]): pretau(Sig ++ rest(s, x))(σ`seq(x))(s(x))
+
+
 
     , fun(A, B):
         kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)        
