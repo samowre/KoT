@@ -58,8 +58,6 @@ BEGIN
     const_def(type_: (sexpr?), def: (sexpr?)): const_def?: scontext?
     theory_def(def: finseq[(scontext?)]): theory_def?: scontext?
 
-%    map(run_map: finseq[(scontext?)]): map?: scontext?
-
     ikeep: ikeep?: sinterp?
     itype(def: (sexpr?)): itype?: sinterp?
     iterm(def: (sexpr?)): iterm?: sinterp?
@@ -215,10 +213,6 @@ BEGIN
     f`length < g`length AND (FORALL (x: below[f`length]): f`seq(x) = g`seq(g`length - f`length + x)) IMPLIES
       sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x))) < sum(g`length, LAMBDA (x: below[g`length]): 1 + size(g(x)))
 
-  % TODO: check if we can remove it
-  seq1(s): finseq[signature] =
-    (# length := 1, seq := LAMBDA (x: below[1]): s #)
-
   % Pretau is a weaker tau function.
   % It checks that: 
   %    - variables and symbols are indeed declared in the current context
@@ -237,7 +231,7 @@ BEGIN
         pretau(Sig)(m)(s) AND
 	%s = signature(Sig)(σ) AND
 	σ`length = length(s) AND
-	FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(s(x))
+	FORALL (x: below[σ`length]): pretau(Sig ++ rest(s, x))(σ`seq(x))(s(x))
 
     , fun(A, B):
         kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)        
