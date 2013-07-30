@@ -1,0 +1,292 @@
+named: THEORY
+BEGIN
+  IMPORTING language AS l
+  symbol: TYPE+
+
+  signature: DATATYPE WITH SUBTYPES decl?, use?, decls?
+  BEGIN
+    dtype(defined?: bool): dtype?: decl?
+    dconst(defined?: bool): dconst?: decl?
+    dtheory(sig: (decls?)): dtheory?: decl?
+
+    utype: type?: use?
+    uterm: term?: use?
+    utheory(sig: (decls?)): theory?: use?
+
+    snull: snull?: decls?
+    scons(s: symbol, decl: (decl?), rest: (decls?)): scons?: decls?
+  END signature
+
+  use_of_decl: =
+    CASES OF
+      dtype(defined?): utype
+    , dconst(defined?): uterm
+    , dtheory(sig): utheory(sig)
+    ENDCASES
+
+  ;≺(x, y): =lan
+    CASES y OF
+      dtype(defined?): NOT defined? AND x = dtype(true)
+    , dconst(defined?): NOT defined? AND x = dconst(true)
+    , dtheory(sig): dtheory?(x) AND sig(x) ≺ sig
+
+    , utype: FALSE
+    , uterm: FALSE
+    , utheory: FALSE
+
+    , snull: x = snull
+    , scons(s, decl, rest):
+        IF s ∈ x
+	  THEN x(s) ≺ decl AND (x - s) ≺ rest
+	  ELSE x ≺ rest
+	ENDIF
+    ENDCASES
+  MEASURE y BY <<
+  
+  nsyntaxic: DATATYPE WITH SUBTYPES nexpr?, ncontext?, ninterp?
+  BEGIN
+    nv(ns: symbol): nv?: nexpr?
+    ndot(nm: symbol, nmap: (ninterp?), nx: symbol): ndot?: nexpr?
+
+    nfun(ns: symbol, ndom: (nexpr?), nrange: (nexpr?)): nfun?: nexpr?
+    nprod(ns: symbol, nleft: (nexpr?), nright: (nexpr?)): nprod?: nexpr?
+    nsubtype(ns: symbol, nsupertype: (nexpr?), npred: (nexpr?)): nsubtype?: nexpr?
+
+    napp(nop: (nexpr?), narg: (nexpr?)): napp?: nexpr?
+    nlam(ns: symbol, ntype: (nexpr?), nbody: (nexpr?)): nlam?: nexpr?
+    npair(nleft: (nexpr?), nright: (nexpr?)): npair?: nexpr?
+    nlproj(narg: (nexpr?)): nlproj?: nexpr?
+    nrproj(narg: (nexpr?)): nrproj?: nexpr?
+
+    ntype_decl: ntype_decl?: ndecl?
+    ntype_var: ntype_var?: ndecl?
+    ntype_def(ndef: (nexpr?)): ntype_def?: ndecl?
+    nconst_decl(ntype: (nexpr?)): nconst_decl?: ndecl?
+    nconst_var(ntype: (nexpr?)): nconst_var?: ndecl?
+    nconst_def(ntype: (nexpr?), ndef: (nexpr?)): nconst_def?: ndecl?
+    ntheory_def(ndecls: list[[symbol, (ndecl?)]]): ntheory_def?: ndecl?
+
+    nnil: nnil?: ninterp?
+    ntype_interp(nrest: (ninterp?), ns: symbol, ndef: (nexpr?)): ntype_interp?: ninterp?
+    nconst_interp(nrest: (ninterp?), ns: symbol, ndef: (nexpr?)): nconst_interp?: ninterp?
+  END nsyntaxic
+
+  NS: VAR nsyntaxic
+  s: VAR symbol
+  Γ: VAR list[(ncontext?)]
+
+  nuse_of_ndecl(x: (ndecl?)): (nuse?) =
+    CASES x OF
+      nstype_decl: nstype
+    , nstype_def: nstype
+    , nsconst_decl: nsterm
+    , nsconst_def: nsterm
+    , nstheory_def(sig): nstheory(sig)
+    ENDCASES
+
+  ;≺(x, y: nsignature): RECURSIVE bool =
+    CASES y OF
+      nstype_decl: nstype_def?(x)
+    , nstype_def: FALSE
+    , nsconst_decl: nsconst_def?(x)
+    , nstheory_def(sig): FALSE
+
+    , nstype: FALSE
+    , nsterm: FALSE
+    , nstheory(sig):
+        nstheory_def?(x) AND
+        CASES sig OF
+	  null: sig(x) = null
+	, cons(h, t): 
+
+  nsig(NSig, NS): RECURSIVE lift[nsig] =
+    CASES NS OF
+      nv(s):
+        IF s ∈ NSig
+	  THEN up( nuse_of_ndecl(find(Nsig, s)) )
+	  ELSE bottom
+	ENDIF
+    , ndot(m, map, x):
+        LET msig = nsig(NSig, m)
+	  , mapsig = nsig(NSig, map)
+	IN IF up?(msig) AND up?(mapsig) AND mapsig ≺ msig
+	  THEN nsig(msig, x)
+	  ELSE bottom
+	ENDIF
+
+    , nfun(ns, nA, nB):
+      IF nsig(NSig, nA) = up(nstype) AND
+         nsig(NSig ++ (ns, const_def), nB) = up(nstype)
+	THEN up(nstype)
+	ELSE bottom
+      ENDIF
+    , nprod(ns, nA, nB):
+      IF nsig(
+      LET Asig = nsig(Nsig, nA)
+        , Bsig = nsig(cons((ns, const_def), Nsig), nB)
+      IN IF Asig = up(nstype) AND Bsig = up(nstype)
+        THEN up(nstype)
+	ELSE bottom
+      ENDIF
+    , nsubtype(ns, nT, na):
+      LET Tsig = nsig(NSig, nT)
+        , asig = nsig(NSig, na)
+      IN IF Tsig = up(nstype) AND asig = up(
+
+  % Translate in context Γ, Π
+  translate(Γ, Π, NS): 
+    CASES NS OF
+      nv(ns):
+        IF ns ∈ Π
+	  THEN up(v(length(Γ) + pos(Π, ns)))
+	ELSIF ns ∈ Γ
+	  THEN up(v(pos(Γ, ns)))
+	ELSE
+	  bottom
+	ENDIF
+    , ndot(nm, nmap, nx):
+        LET m = translate(Γ, Π, nm)
+	IN IF up?(m) AND nstheory?(Γ(m))
+	  THEN 
+        IF nm ∈ Π
+	  THEN
+	    IF ntheory_def?(Π(nm)) AND nx ∈ Π(nm)
+	      THEN
+	        LET σ = translate(Γ, Π, nmap)
+		IN IF up?(σ) THEN dot( v(length(Γ)
+        IF nm ∈ Γ AND ntheory_def?(Γ(nm)) AND nx ∈ Γ(nm)
+	  THEN
+	    LET σ = translate(Γ, nmap)
+
+    , nfun(ns, nA, nB):
+        LET A = translate(Γ, nA)
+	  , B = translate(nconst_var(Γ, ns, nA), nB)
+	IN IF up?(A) AND up?(B)
+	  THEN up(fun(A, B))
+	  ELSE bottom
+	ENDIF
+    , nprod(ns, nA, nB):
+        LET A = translate(Γ, nA)
+	  , B = translate(nconst_var(Γ, ns, nA), nB)
+	IN IF up?(A) AND up?(B)
+	  THEN up(prod(A, B))
+	  ELSE bottom
+	ENDIF
+    , nsubtype(ns, nT, na):
+        LET T = translate(Γ, nT)
+	  , a = translate(Γ, na)
+	IN IF up?(T) AND up?(a)
+	  THEN up(subtype(T, a))
+	  ELSE bottom
+	ENDIF
+
+    , napp(nf, na):
+        LET f = translate(Γ, nf)
+	  , a = translate(Γ, na)
+	IN IF up?(f) AND up?(a)
+	  THEN up(app(f, a))
+	  ELSE bottom
+	ENDIF
+    , nlam(ns, nT, na):
+        LET T = translate(Γ, nT)
+	  , a = translate(nconst_var(Γ, ns, nT), na)
+	IN IF up?(T) AND up?(a)
+	  THEN up(lam(T, a))
+	  ELSE bottom
+	ENDIF
+    , npair(na, nb):
+        LET a = translate(Γ, na)
+	  , b = translate(Γ, nb)
+	IN IF up?(a) AND up?(b)
+	  THEN up(pair(a, b))
+	  ELSE bottom
+	ENDIF
+    , nlproj(na):
+        LET a = translate(Γ, na) IN
+	IF up?(a)
+	  THEN up(lproj(a))
+	  ELSE bottom
+	ENDIF
+    , nrproj(na):
+        LET a = translate(Γ, na)
+	IN IF up?(a)
+	  THEN up(rproj(a))
+	  ELSE bottom
+	ENDIF
+
+    , nempty:
+        up(theory_def(empty_seq))
+    , ntype_decl(nrest, ns):
+        LET Δ = translate(Γ, nrest)
+	IN IF up?(Δ)
+	  THEN up(Δ ++ k(type_decl))
+	  ELSE bottom
+	ENDIF
+    , ntype_var(nrest, ns):
+        LET Δ = translate(Γ, nrest)
+	IN IF up?(Δ)
+	  THEN up(Δ ++ k(type_var))
+	  ELSE bottom
+	ENDIF
+    , ntype_def(nrest, ns, ndef):
+        LET Δ = translate(Γ, nrest)
+	  , T = translate(Γ ++ nrest, ndef)
+	IN IF up?(Δ) AND up?(T)
+	  THEN up(Δ ++ k(type_def(T)))
+	  ELSE bottom
+	ENDIF
+    , nconst_decl(nrest, ns, ntype):
+        LET Δ = translate(Γ, nrest)
+	  , T = translate(Γ ++ nrest, ntype)
+	IN IF up?(Δ) AND up?(T)
+	  THEN up(Δ ++ k(const_decl(T)))
+	  ELSE bottom
+	ENDIF
+    , nconst_var(nrest, ns, ntype):
+        LET Δ = translate(Γ, nrest)
+	  , T = translate(Γ ++ nrest, ntype)
+	IN IF up?(Δ) AND up?(T)
+	  THEN up(Δ ++ k(const_var(T)))
+	  ELSE bottom
+	ENDIF
+    , nconst_def(nrest, ns, ntype, ndef):
+	LET Δ = translate(Γ, nrest)
+	  , T = translate(Γ ++ nrest, ntype)
+	  , a = translate(Γ ++ nrest, ndef)
+	IN IF up?(Δ) AND up?(T) AND up?(a)
+	  THEN up(Δ ++ k(const_def(T, a)))
+	  ELSE bottom
+	ENDIF
+    , ntheory_def(nrest, ns, ndecls):
+        LET Δ = translate(Γ, nrest)
+	  , Θ = translate(Γ ++ nrest, ndecls)
+	IN IF up?(Δ) AND up?(θ)
+	  THEN up(Δ ++ k(Θ))
+	  ELSE bottom
+	ENDIF
+
+    , nnil: (# length := length(car(Γ))
+             , seq := LAMBDA (x: below[length(car(Γ))]): ikeep #)
+    , ntype_interp(nrest, ns, ndef):
+      IF ns ∈ car(Γ)
+        THEN
+	  LET σ = translate(Γ, nrest)
+	    , T = translate(rest(Γ(ns)), ndef)
+	  IN IF up?(σ) AND up?(T) AND ikeep?(σ`seq(pos(car(Γ), ns)))
+	    THEN up(σ WITH [ `seq(pos(car(Γ), ns)) := itype(T) ])
+	    ELSE bottom
+	  ENDIF
+	ELSE bottom
+      ENDIF
+    , nconst_interp(nrest, ns, ndef):
+      IF ns ∈ car(Γ)
+        THEN
+	  LET σ = translate(Γ, nrest)
+	    , T = translate(rest(Γ(ns)), ndef)
+	  IN IF up?(σ) AND up?(T) AND ikeep?(σ`seq(pos(car(Γ), ns)))
+	    THEN up(σ WITH [ `seq(pos(car(Γ), ns)) := itype(T) ])
+	    ELSE bottom
+	  ENDIF
+	ELSE bottom
+      ENDIF
+END named

@@ -66,7 +66,6 @@ BEGIN
   END syntaxic
   AUTO_REWRITE- sexpr?
 
-
   U, V, S: VAR syntaxic
   x, y: VAR nat
   i, j, n: VAR nat
@@ -268,6 +267,23 @@ BEGIN
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE pretau
+
+  ;∈(U, Sig): RECURSIVE bool =
+    CASES U OF
+      v(i): i ∈ Sig
+    , dot(m, S, x): x ∈ S
+    , interp(m, σ): m ∈ Sig
+      ELSE FALSE
+    ENDCASES
+  MEASURE size(U)
+
+  ;sfollow_name(Sig)(U | U ∈ Sig): RECURSIVE signature =
+    CASES U OF
+      v(i): Sig(i)
+    , dot(m, S, x): sfollow_name(S)(x)
+    , interp(m, σ): sfollow_name(Sig)(m)
+    ENDCASES
+  MEASURE size(U)
 
   Γ, Δ: VAR (scontext?)
   S1, S2: VAR signature
