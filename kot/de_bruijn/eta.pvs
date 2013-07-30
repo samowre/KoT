@@ -1,6 +1,7 @@
 eta: THEORY
 BEGIN
   IMPORTING subst
+  IMPORTING weight
   CONVERSION- extract1
 
   σ: VAR finseq[(sinterp?)]
@@ -72,4 +73,8 @@ BEGIN
     m ∈ Sig AND stheory?(Sig(m)) AND σ`length = length(Sig(m))
     AND (FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(Sig(m)(x))) IMPLIES
     pretau(Sig ++ ρ)(η(Sig)(ρ, m, σ)(U)) = pretau(Sig ++ Sig(m) ++ ρ)(U)
+
+  weight_eta: THEOREM
+    m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
+    
 END eta

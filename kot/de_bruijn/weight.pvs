@@ -3,9 +3,11 @@ BEGIN
   IMPORTING language
   IMPORTING ordinals_props
 
-  M: VAR (scontext?)
+  Γ: VAR (theory_def?)
+  Sig: VAR (stheory?)
   U: VAR syntaxic
   x: VAR nat
+  s: VAR signature
 % weight(Γ, η(Γ, m, σ)(def(def(Γ(m)))(x))
 %     = weight(Γ ++ rest(interp(def(Γ(m)) ↑ (m + 1), σ), x), def(Γ(m))(x)
 
@@ -34,58 +36,56 @@ BEGIN
     ELSE max(f(len - 1), max(len - 1, LAMBDA (x: below[len - 1]): f(x))) ENDIF
   MEASURE len
 
-  weight(M, (S: semantic(M))): RECURSIVE ordinal =
-    CASES S OF
-      v(i): % ω ^ (length(M) - i)
-        IF i ∈ M AND (const_def?(M(i)) OR type_def?(M(i)))
-	  THEN
-	    add(length(M) - i, add(1, zero, zero), zero)
+  weight(Sig, U, (s | pretau(Sig)(U)(s))): RECURSIVE ordinal =
+    CASES U OF
+      v(i):
+        IF (sconst_def?(Sig(i)) OR stype_def?(Sig(i)))
+	  THEN add(length(Sig) - i, add(1, zero, zero), zero)
 	  ELSE zero
 	ENDIF
-    , dot(m, σ, x):
-        weight(M, m) * weight(M, σ)
+    , dot(m, sp, x): weight(Sig, m, sp) + weight(sp, x, s)
+    , interp(m, σ):
+        LET i = i(m), 
+	    w = max(σ`length, LAMBDA (x: below[σ`length]): weight(Sig, σ(x), s(x))) IN % = weght(Sig, σ)
+	w * (length(Sig) - i)
+	
+    , fun(A, B): max(weight(Sig, A, s), weight(Sig ++ k(sconst_def), B, s))
+    , prod(A, B): max(weight(Sig, A, s), weight(Sig ++ k(sconst_def), B, s))
+    , subtype(T, a): max(weight(Sig, T, s), weight(Sig ++ k(sconst_def), a, sconst_def))
 
-% weight(M, σ) * (length(M) - i) + length(def(M(i)) - i(x))
-        IF i ∈ M AND theory_def?(M(i)) AND scontext?(def(M(i))) AND compatible?(def(M(i)), σ)
-	  THEN weight(M, σ) * (length(M) - i) + (run_map(def(M(i)))`length - i(x))
-	  ELSE zero ENDIF
-
-    , fun(A, B): max(weight(M, A), weight(M ++ k(const_var(A)), B))
-    , prod(A, B): max(weight(M, A), weight(M ++ k(const_var(A)), B))
-    , subtype(T, a): max(weight(M, T), weight(M ++ k(const_var(T)), a))
-
-    , app(f, a): max(weight(M, f), weight(M, a))
-    , lam(T, a): max(weight(M, T), weight(M ++ k(const_var(T)), a))
-    , pair(a, b): max(weight(M, a), weight(M, b))
-    , lproj(a): weight(M, a)
-    , rproj(a): weight(M, a)
+    , app(f, a): max(weight(Sig, f, s), weight(Sig, a, s))
+    , lam(T, a): max(weight(Sig, T, stype_def), weight(Sig ++ k(sconst_def), a, s))
+    , pair(a, b): max(weight(Sig, a, s), weight(Sig, b, s))
+    , lproj(a): weight(Sig, a, s)
+    , rproj(a): weight(Sig, a, s)
 
     , type_decl: zero
     , type_var: zero
-    , type_def(T): weight(M, T)
-    , const_decl(T): weight(M, T)
-    , const_var(T): weight(M, T)
-    , const_def(T, a): max(weight(M, T), weight(M, a))
-    , theory_def(Θ): weight(M, Θ)
+    , type_def(T): weight(Sig, T, s)
+    , const_decl(T): weight(Sig, T, stype_def)
+    , const_var(T): weight(Sig, T, stype_def)
+    , const_def(T, a): max(weight(Sig, T, stype_def), weight(Sig, a, s))
+    , theory_def(Θ): max(Θ`length, LAMBDA (x: below[Θ`length]): weight(Sig ++ signature(rest(U, x)), Θ(x), s(x)))
 
-    , nil: zero
-    , itype(σ, i, T): max(weight(M, σ), weight(M, T))
-    , iconst(σ, i, a): max(weight(M, σ), weight(M, a))
-
-    , map(f): max(f`length, LAMBDA (x: below[f`length]): weight(M ++ rest(S, x), f`seq(x)))
+    , ikeep: zero
+    , itype(T): weight(Sig, T, s)
+    , iterm(a): weight(Sig, a, s)
     ENDCASES
-  MEASURE size(S)
+  MEASURE size(U)
 
-  Γ: VAR precontext
 
-  weight_length: THEOREM FORALL (Δ: pretheory(Γ)):
-    semantic?(Γ ++ Δ)(U) AND (FORALL (x: below[run_map(Δ)`length]): const_var?(Δ(x)) OR type_var?(Δ(x))) AND NOT map?(U) IMPLIES
-      weight(Γ ++ Δ, U) <= IF length(Γ) > 0 THEN add(length(Γ), 1, zero) ELSE zero ENDIF
+
+  %weight_length: THEOREM FORALL (Δ: pretheory(Γ)):
+  %  semantic?(Γ ++ Δ)(U) AND (FORALL (x: below[run_map(Δ)`length]): const_var?(Δ(x)) OR type_var?(Δ(x))) AND NOT map?(U) IMPLIES
+  %    weight(Γ ++ Δ, U) <= IF length(Γ) > 0 THEN add(length(Γ), 1, zero) ELSE zero ENDIF
 
   % precontext?(Γ) => precontext(rest(Γ, x))
   % precontext?(Γ) => pretype?(rest(Γ, x), type_(Γ(x)))
   % precontext?(Γ) => pre{stuff}?(rest(Γ, x), def(Γ(x)))
 
-  weight_definition: THEOREM x ∈ Γ AND (type_def?(Γ(x)) OR const_def?(Γ(x))) IMPLIES
-    weight(rest(Γ, x), Γ(x)) < weight(Γ, v(x))
+  weight_definition: THEOREM 
+    LET Sig = signature(Γ) in
+    pretau(sempty)(Γ)(Sig) AND
+    x ∈ Γ AND (type_def?(Γ(x)) OR const_def?(Γ(x))) IMPLIES
+    weight(rest(Sig, x), Γ(x), Sig(x)) < weight(Sig, v(x), Sig(x))
 END weight
