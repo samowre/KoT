@@ -1,25 +1,31 @@
 language: THEORY
 BEGIN
 
-  % A signature can be seen as the type of a theory (or context)
+  % A signature represent the `form' of a declaration
   signature: DATATYPE
   BEGIN
+    % `T: TYPE'
     stype_decl: stype_decl?
+    % `T: TYPE = nat' or `T: TYPE = EXTERN'
     stype_def: stype_def?
+    % `x: nat'
     sconst_decl: sconst_decl?
+    % `x: nat = 3' or `x: nat = EXTERN'
     sconst_def: sconst_def?
+    % `x: THEORY BEGIN ... END' with a recursively compatible signature
     stheory(sig: finseq[signature]): stheory?
   END signature
 
-  s: VAR signature
-  Sig: VAR (stheory?)
-
+  % A prekeyword represent the `form' of an expression
   prekeyword: DATATYPE
   BEGIN
-    PRETYPE: PRETYPE?
-    PRETERM: PRETERM?
-    PRECONTEXT(SIG: signature): PRECONTEXT?
+    PRETYPE: PRETYPE? % A type
+    PRETERM: PRETERM? % A term
+    PRECONTEXT(SIG: signature): PRECONTEXT? % A theory with given signature
   END prekeyword
+
+  s: VAR signature
+  Sig: VAR (stheory?)
   k: VAR prekeyword
 
   kw(s): prekeyword =
@@ -224,13 +230,16 @@ BEGIN
       v(x): x < length(Sig) AND kw(s) = kw(Sig(x))
     , dot(m, S, x):
         pretau(Sig)(m)(S) AND
-	pretau(S)(x)(s)
+	pretau(S)(x)(s) AND
+	% Additional stuff to remove with nested & first-class theories
+	interp?(m) AND v?(x)
     , interp(m, σ):
         stheory?(s) AND
         pretau(Sig)(m)(s) AND
-	%s = signature(Sig)(σ) AND
 	σ`length = length(s) AND
-	FORALL (x: below[σ`length]): pretau(Sig ++ rest(s, x))(σ`seq(x))(s(x))
+	FORALL (x: below[σ`length]): pretau(Sig ++ rest(s, x))(σ`seq(x))(s(x)) AND
+	% Additional stuff to remove with nested & first-class theories
+	v?(m)
 
     , fun(A, B):
         kw(s) = PRETYPE AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)        
@@ -267,23 +276,6 @@ BEGIN
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE pretau
-
-  ;∈(U, Sig): RECURSIVE bool =
-    CASES U OF
-      v(i): i ∈ Sig
-    , dot(m, S, x): x ∈ S
-    , interp(m, σ): m ∈ Sig
-      ELSE FALSE
-    ENDCASES
-  MEASURE size(U)
-
-  ;sfollow_name(Sig)(U | U ∈ Sig): RECURSIVE signature =
-    CASES U OF
-      v(i): Sig(i)
-    , dot(m, S, x): sfollow_name(S)(x)
-    , interp(m, σ): sfollow_name(Sig)(m)
-    ENDCASES
-  MEASURE size(U)
 
   Γ, Δ: VAR (scontext?)
   S1, S2: VAR signature

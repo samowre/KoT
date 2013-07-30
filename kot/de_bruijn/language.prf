@@ -140,7 +140,7 @@
     (syntaxic type-decl nil language nil)
     (sexpr? adt-def-decl "boolean" language nil)
     (<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-    nil
+    (subterm adt-def-decl "boolean" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (finseq type-eq-decl nil finite_sequences nil)
@@ -352,7 +352,7 @@
  (size_TCC26 0
   (size_TCC26-1 nil 3583692220 ("" (termination-tcc) nil nil)
    ((<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-    nil
+    (subterm adt-def-decl "boolean" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (finseq type-eq-decl nil finite_sequences nil)
@@ -403,8 +403,10 @@
      language nil)
     (odd_minus_odd_is_even application-judgement "even_int" integers
      nil)
-    (int_minus_int_is_int application-judgement "int" integers nil) nil
-    nil nil
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (f!1 skolem-const-decl "finseq[(scontext?)]" language nil)
+    (x!1 skolem-const-decl "below[f!1`length]" language nil)
+    (ctx!1 skolem-const-decl "(scontext?)" language nil)
     (real_le_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
@@ -480,10 +482,11 @@
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
     (>= const-decl "bool" reals nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil) nil
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (∈ const-decl "bool" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    nil)
+    (length const-decl "nat" language nil))
    nil))
  (sapply_TCC1 0
   (sapply_TCC1-1 nil 3583780019 ("" (subtype-tcc) nil nil)
@@ -504,10 +507,11 @@
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
     (>= const-decl "bool" reals nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil) nil
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (∈ const-decl "bool" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    nil)
+    (length const-decl "nat" language nil))
    nil))
  (concat_empty_TCC1 0
   (concat_empty_TCC1-1 nil 3583780211 ("" (subtype-tcc) nil nil)
@@ -623,7 +627,9 @@
     (finseq type-eq-decl nil finite_sequences nil)
     (def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
      language nil)
-    nil nil nil
+    (M!1 skolem-const-decl "(theory_def?)" language nil)
+    (N!1 skolem-const-decl "(theory_def?)" language nil)
+    (P!1 skolem-const-decl "(theory_def?)" language nil)
     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
@@ -654,9 +660,11 @@
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil) nil
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (length const-decl "nat" language nil)
     (O const-decl "finseq" finite_sequences nil)
-    (++ const-decl "(theory_def?)" language nil) nil)
+    (++ const-decl "(theory_def?)" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (rest_concat_TCC2 0
   (rest_concat_TCC2-1 nil 3583611672 ("" (subtype-tcc) nil nil)
@@ -677,7 +685,9 @@
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil) nil nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (rest_concat_TCC3 0
   (rest_concat_TCC3-1 nil 3583786514 ("" (subtype-tcc) nil nil)
@@ -706,7 +716,8 @@
      "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    nil nil)
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (rest_concat 0
   (rest_concat-1 nil 3583611672
@@ -957,7 +968,7 @@
      "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    nil
+    (length const-decl "nat" language nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (int_min application-judgement "{k: int | k <= i AND k <= j}"
@@ -976,17 +987,20 @@
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (IF const-decl "[boolean, T, T -> T]" if_def nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil) nil
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (x!1 skolem-const-decl "nat" language nil)
     (below type-eq-decl nil nat_types nil)
     (scontext? adt-def-decl "boolean" language nil)
     (finseq type-eq-decl nil finite_sequences nil)
     (def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
      language nil)
-    nil (empty_seq const-decl "finseq" finite_sequences nil)
+    (N!1 skolem-const-decl "(theory_def?)" language nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (<= const-decl "bool" reals nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    nil (minus_odd_is_odd application-judgement "odd_int" integers nil)
+    (M!1 skolem-const-decl "(theory_def?)" language nil)
+    (minus_odd_is_odd application-judgement "odd_int" integers nil)
     (even_minus_odd_is_odd application-judgement "odd_int" integers
      nil)
     (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
@@ -1120,8 +1134,10 @@
     (signature type-decl nil language nil)
     (stheory? adt-recognizer-decl "[signature -> boolean]" language
      nil)
-    nil (O const-decl "finseq" finite_sequences nil)
-    (++ const-decl "(stheory?)" language nil) nil)
+    (length const-decl "nat" language nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (++ const-decl "(stheory?)" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (srest_sconcat_TCC2 0
   (srest_sconcat_TCC2-1 nil 3583780451 ("" (subtype-tcc) nil nil)
@@ -1143,7 +1159,8 @@
     (signature type-decl nil language nil)
     (stheory? adt-recognizer-decl "[signature -> boolean]" language
      nil)
-    nil nil)
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (srest_sconcat_TCC3 0
   (srest_sconcat_TCC3-1 nil 3583786514 ("" (subtype-tcc) nil nil)
@@ -1172,7 +1189,8 @@
      "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    nil nil)
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (srest_sconcat 0
   (srest_sconcat-1 nil 3583780552
@@ -1226,7 +1244,9 @@
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (IF const-decl "[boolean, T, T -> T]" if_def nil)
-    (OR const-decl "[bool, bool -> bool]" booleans nil) nil nil
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (x!1 skolem-const-decl "nat" language nil)
+    (S2!1 skolem-const-decl "(stheory?)" language nil)
     (below type-eq-decl nil nat_types nil)
     (finseq type-eq-decl nil finite_sequences nil)
     (sig adt-accessor-decl "[(stheory?) -> finseq[signature]]" language
@@ -1234,7 +1254,8 @@
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (<= const-decl "bool" reals nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    nil (FALSE const-decl "bool" booleans nil)
+    (S1!1 skolem-const-decl "(stheory?)" language nil)
+    (FALSE const-decl "bool" booleans nil)
     (int_plus_int_is_int application-judgement "int" integers nil)
     (int_min application-judgement "{k: int | k <= i AND k <= j}"
      real_defs nil)
@@ -1244,7 +1265,7 @@
     (minus_odd_is_odd application-judgement "odd_int" integers nil)
     (even_minus_odd_is_odd application-judgement "odd_int" integers
      nil)
-    nil
+    (length const-decl "nat" language nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_lt_is_strict_total_order name-judgement
@@ -1278,19 +1299,25 @@
  (length_concat 0
   (length_concat-1 nil 3583683847 ("" (grind) nil nil)
    ((O const-decl "finseq" finite_sequences nil)
-    (++ const-decl "(theory_def?)" language nil) nil)
+    (++ const-decl "(theory_def?)" language nil)
+    (length const-decl "nat" language nil))
    shostak))
  (length_k 0
   (length_k-1 nil 3583683851 ("" (grind) nil nil)
-   ((k const-decl "(theory_def?)" language nil) nil) shostak))
+   ((k const-decl "(theory_def?)" language nil)
+    (length const-decl "nat" language nil))
+   shostak))
  (slength_concat 0
   (slength_concat-1 nil 3583780619 ("" (grind-with-ext) nil nil)
    ((O const-decl "finseq" finite_sequences nil)
-    (++ const-decl "(stheory?)" language nil) nil)
+    (++ const-decl "(stheory?)" language nil)
+    (length const-decl "nat" language nil))
    shostak))
  (slength_k 0
   (slength_k-1 nil 3583780625 ("" (grind-with-ext) nil nil)
-   ((k const-decl "(stheory?)" language nil) nil) shostak))
+   ((k const-decl "(stheory?)" language nil)
+    (length const-decl "nat" language nil))
+   shostak))
  (length_signature_TCC1 0
   (length_signature_TCC1-1 nil 3583873616 ("" (grind) nil nil)
    ((scontext? adt-def-decl "boolean" language nil)) nil))
@@ -1304,7 +1331,9 @@
   (length_signature-1 nil 3583873617 ("" (grind) nil nil)
    ((finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
      nil)
-    (signature def-decl "signature" language nil) nil nil)
+    (signature def-decl "signature" language nil)
+    (length const-decl "nat" language nil)
+    (length const-decl "nat" language nil))
    shostak))
  (prefix_size_TCC1 0
   (prefix_size_TCC1-1 nil 3583596761 ("" (subtype-tcc) nil nil)
@@ -1456,7 +1485,9 @@
     (rational nonempty-type-from-decl nil rationals nil)
     (integer_pred const-decl "[rational -> boolean]" integers nil)
     (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil) nil nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (pretau_TCC2 0
   (pretau_TCC2-1 nil 3583780019
@@ -1464,7 +1495,8 @@
     (("" (assert)
       (("" (expand "signature") (("" (grind) nil nil)) nil)) nil))
     nil)
-   (nil nil
+   ((length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (number nonempty-type-decl nil numbers nil)
@@ -1498,7 +1530,8 @@
     nil)
    ((real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
-    nil (boolean nonempty-type-decl nil booleans nil)
+    (length const-decl "nat" language nil)
+    (boolean nonempty-type-decl nil booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (number nonempty-type-decl nil numbers nil)
@@ -1545,7 +1578,8 @@
     (number nonempty-type-decl nil numbers nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil) nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (length const-decl "nat" language nil))
    nil))
  (pretau_TCC5 0
   (pretau_TCC5-1 nil 3583789855 ("" (termination-tcc) nil nil)
@@ -1573,12 +1607,14 @@
     (number nonempty-type-decl nil numbers nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil) nil nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (pretau_TCC6 0
   (pretau_TCC6-1 nil 3583863190 ("" (termination-tcc) nil nil)
    ((<< adt-def-decl "(strict_well_founded?[syntaxic])" language nil)
-    nil
+    (subterm adt-def-decl "boolean" language nil)
     (real_lt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (finseq type-eq-decl nil finite_sequences nil)
@@ -1600,7 +1636,8 @@
     (number nonempty-type-decl nil numbers nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil) nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (length const-decl "nat" language nil))
    nil))
  (pretau_TCC7 0
   (pretau_TCC7-1 nil 3583863190 ("" (subtype-tcc) nil nil)
@@ -1623,136 +1660,9 @@
     (number nonempty-type-decl nil numbers nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
     (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil) nil nil)
-   nil))
- (in_TCC1 0
-  (in_TCC1-1 nil 3584208369 ("" (termination-tcc) nil nil)
-   ((size def-decl "nat" language nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (stheory? adt-recognizer-decl "[signature -> boolean]" language
-     nil)
-    (signature type-decl nil language nil)
-    (sexpr? adt-def-decl "boolean" language nil)
-    (syntaxic type-decl nil language nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (in_TCC2 0
-  (in_TCC2-1 nil 3584208369 ("" (termination-tcc) nil nil)
-   ((size def-decl "nat" language nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (sexpr? adt-def-decl "boolean" language nil)
-    (syntaxic type-decl nil language nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (sfollow_name_TCC1 0
-  (sfollow_name_TCC1-1 nil 3584207590 ("" (subtype-tcc) nil nil)
-   ((∈ const-decl "bool" language nil)
-    (length const-decl "nat" language nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (>= const-decl "bool" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number nonempty-type-decl nil numbers nil)
-    (∈ def-decl "bool" language nil)
-    (syntaxic type-decl nil language nil)
-    (stheory? adt-recognizer-decl "[signature -> boolean]" language
-     nil)
-    (signature type-decl nil language nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (boolean nonempty-type-decl nil booleans nil))
-   nil))
- (sfollow_name_TCC2 0
-  (sfollow_name_TCC2-1 nil 3584207590 ("" (grind) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (signature type-decl nil language nil)
-    (stheory? adt-recognizer-decl "[signature -> boolean]" language
-     nil)
-    (syntaxic type-decl nil language nil)
-    (∈ def-decl "bool" language nil)
-    (sexpr? adt-def-decl "boolean" language nil))
-   nil))
- (sfollow_name_TCC3 0
-  (sfollow_name_TCC3-1 nil 3584207590 ("" (termination-tcc) nil nil)
-   ((boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (signature type-decl nil language nil)
-    (stheory? adt-recognizer-decl "[signature -> boolean]" language
-     nil)
-    (syntaxic type-decl nil language nil) nil
-    (sexpr? adt-def-decl "boolean" language nil)
-    (real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (nnint_plus_posint_is_posint application-judgement "posint"
-     integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (size def-decl "nat" language nil)
-    (pretau def-decl "bool" language nil))
-   nil))
- (sfollow_name_TCC4 0
-  (sfollow_name_TCC4-1 nil 3584207590
-   ("" (skosimp* :preds? t) (("" (lazy-grind) nil nil)) nil)
-   ((real_lt_is_strict_total_order name-judgement
-     "(strict_total_order?[real])" real_props nil)
-    (minus_odd_is_odd application-judgement "odd_int" integers nil)
-    (posint_plus_nnint_is_posint application-judgement "posint"
-     integers nil)
-    (even_minus_odd_is_odd application-judgement "odd_int" integers
-     nil)
-    (odd_minus_odd_is_even application-judgement "even_int" integers
-     nil)
-    nil (empty_seq const-decl "finseq" finite_sequences nil)
-    (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
-    (^^ const-decl "finseq" finite_sequences nil)
-    (rest const-decl "(stheory?)" language nil)
-    (O const-decl "finseq" finite_sequences nil)
-    (++ const-decl "(stheory?)" language nil)
-    (sapply const-decl "signature" language nil)
-    (pretau def-decl "bool" language nil)
-    (int_minus_int_is_int application-judgement "int" integers nil)
     (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (signature type-decl nil language nil)
-    (stheory? adt-recognizer-decl "[signature -> boolean]" language
-     nil)
-    (syntaxic type-decl nil language nil) nil
-    (sexpr? adt-def-decl "boolean" language nil))
+    (length const-decl "nat" language nil)
+    (∈ const-decl "bool" language nil))
    nil))
  (kw_pretau_expr 0
   (measure-induct "measure induct" 3583865009
@@ -2066,7 +1976,8 @@
     (PRECONTEXT? adt-recognizer-decl "[prekeyword -> boolean]" language
      nil)
     (< const-decl "bool" reals nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil) nil
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (∈ const-decl "bool" language nil)
     (rest const-decl "(stheory?)" language nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
@@ -2074,7 +1985,10 @@
     (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
-    nil nil nil nil
+    (S1!1 skolem-const-decl "signature" language nil)
+    (interp2_var!1 skolem-const-decl "finseq[(sinterp?)]" language nil)
+    (x!1 skolem-const-decl "below[interp2_var!1`length]" language nil)
+    (S2!1 skolem-const-decl "signature" language nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (signature_stheory_extensionality formula-decl nil language nil)
     (minus_odd_is_odd application-judgement "odd_int" integers nil)
@@ -2096,7 +2010,8 @@
      nil)
     (number nonempty-type-decl nil numbers nil)
     (NOT const-decl "[bool -> bool]" booleans nil)
-    (sapply const-decl "signature" language nil) nil
+    (sapply const-decl "signature" language nil)
+    (length const-decl "nat" language nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_lt_is_strict_total_order name-judgement
@@ -2306,12 +2221,15 @@
          nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    nil
+    (∈ const-decl "bool" language nil)
     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
      nil)
     (theory_def adt-constructor-decl
      "[finseq[(scontext?)] -> (theory_def?)]" language nil)
-    nil nil (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (S1!1 skolem-const-decl "signature" language nil)
+    (theory_def1_var!1 skolem-const-decl "finseq[(scontext?)]" language
+     nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (signature_stheory_extensionality formula-decl nil language nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
      nil)
@@ -2340,7 +2258,8 @@
     (rest const-decl "(stheory?)" language nil)
     (^^ const-decl "finseq" finite_sequences nil)
     (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
-    (empty_seq const-decl "finseq" finite_sequences nil) nil
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (length const-decl "nat" language nil)
     (sapply const-decl "signature" language nil)
     (kw const-decl "prekeyword" language nil)
     (syntaxic_induction formula-decl nil language nil)
