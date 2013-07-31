@@ -94,10 +94,7 @@ BEGIN
     (Γ ++ Δ) ↑ nb = (Γ ↑ nb) ++ (Δ ↑ (nb`1, nb`2 + length(Γ)))
   AUTO_REWRITE shift_k, shift_concat
  
-  signature_shift: THEOREM
-    signature(M ↑ nb) = signature(M)
-  
-  % Subtype judgements
+    % Subtype judgements
   strong_prektau_shift: THEOREM
     pretau(S1 ++ Sig ++ S2)(U ↑ (length(Sig), length(S2)))(s)
     IFF pretau(S1 ++ S2)(U)(s)
@@ -167,9 +164,6 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE subst
   AUTO_REWRITE- sexpr?
-
-  signature_subst: THEOREM
-    signature(subst(M, x, t)) = signature(M)
 
   % Subtype judgements
   strong_pretau_subst: THEOREM

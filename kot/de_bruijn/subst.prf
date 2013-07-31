@@ -972,66 +972,66 @@
       ("19" (grind) nil nil) ("20" (grind) nil nil)
       ("21" (grind) nil nil))
      nil)
-    ((theory_def adt-constructor-decl
-      "[finseq[(scontext?)] -> (theory_def?)]" language nil)
-     (syntaxic_theory_def_extensionality formula-decl nil language nil)
-     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+    ((syntaxic type-decl nil language nil)
+     (boolean nonempty-type-decl nil booleans nil)
+     (number nonempty-type-decl nil numbers nil)
+     (number_field_pred const-decl "[number -> boolean]" number_fields
       nil)
-     (theory_def1_var!1 skolem-const-decl "finseq[(scontext?)]" subst
-      nil)
-     (posint_plus_nnint_is_posint application-judgement "posint"
-      integers nil)
-     (finseq_appl const-decl "[below[length(fs)] -> T]"
-      finite_sequences nil)
-     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-      integers nil)
-     (int_minus_int_is_int application-judgement "int" integers nil)
-     (int_plus_int_is_int application-judgement "int" integers nil)
-     (- const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (+ const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (numfield nonempty-type-eq-decl nil number_fields nil)
-     (< const-decl "bool" reals nil)
-     (interp adt-constructor-decl
-             "[[(sexpr?), finseq[(sinterp?)]] -> (interp?)]" language
-             nil)
-     (finseq type-eq-decl nil finite_sequences nil)
-     (below type-eq-decl nil nat_types nil)
-     (syntaxic_interp_extensionality formula-decl nil language nil)
-     (interp? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-     (real_ge_is_total_order name-judgement "(total_order?[real])"
-      real_props nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (signature type-decl nil language nil)
-     (stheory? adt-recognizer-decl "[signature -> boolean]" language
-      nil)
-     (syntaxic_induction formula-decl nil language nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (>= const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (= const-decl "[T, T -> boolean]" equalities nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (scontext? adt-def-decl "boolean" language nil)
      (↑ def-decl "{V |
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
       subst nil)
-     (scontext? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (IFF const-decl "[bool, bool -> bool]" booleans nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (= const-decl "[T, T -> boolean]" equalities nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (>= const-decl "bool" reals nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
+     (syntaxic_induction formula-decl nil language nil)
+     (stheory? adt-recognizer-decl "[signature -> boolean]" language
       nil)
-     (number nonempty-type-decl nil numbers nil)
-     (boolean nonempty-type-decl nil booleans nil)
-     (syntaxic type-decl nil language nil))
+     (signature type-decl nil language nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (real_ge_is_total_order name-judgement "(total_order?[real])"
+      real_props nil)
+     (interp? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+     (syntaxic_interp_extensionality formula-decl nil language nil)
+     (below type-eq-decl nil nat_types nil)
+     (finseq type-eq-decl nil finite_sequences nil)
+     (interp adt-constructor-decl
+             "[[(sexpr?), finseq[(sinterp?)]] -> (interp?)]" language
+             nil)
+     (< const-decl "bool" reals nil)
+     (numfield nonempty-type-eq-decl nil number_fields nil)
+     (+ const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (- const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (int_plus_int_is_int application-judgement "int" integers nil)
+     (int_minus_int_is_int application-judgement "int" integers nil)
+     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+      integers nil)
+     (finseq_appl const-decl "[below[length(fs)] -> T]"
+      finite_sequences nil)
+     (posint_plus_nnint_is_posint application-judgement "posint"
+      integers nil)
+     (theory_def1_var!1 skolem-const-decl "finseq[(scontext?)]" subst
+      nil)
+     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (syntaxic_theory_def_extensionality formula-decl nil language nil)
+     (theory_def adt-constructor-decl
+      "[finseq[(scontext?)] -> (theory_def?)]" language nil))
     shostak)) (length_shift_TCC1 0
                (length_shift_TCC1-1 nil 3583588165
                 ("" (subtype-tcc) nil nil)
@@ -1047,17 +1047,17 @@
   (length_shift 0
    (length_shift-1 nil 3583530058
     ("" (skosimp* :preds? t) (("" (assert) nil nil)) nil)
-    ((↑ def-decl "{V |
+    ((theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (syntaxic type-decl nil language nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (boolean nonempty-type-decl nil booleans nil)
+     (length const-decl "nat" language nil)
+     (↑ def-decl "{V |
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
-      subst nil)
-     (length const-decl "nat" language nil)
-     (boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil))
+      subst nil))
     shostak)) (shift_plus 0
                (shift_plus-1 nil 3583529119
                 ("" (induct U)
@@ -1138,88 +1138,88 @@
                   ("19" (grind) nil nil) ("20" (grind) nil nil)
                   ("21" (grind) nil nil))
                  nil)
-                ((theory_def adt-constructor-decl
-                  "[finseq[(scontext?)] -> (theory_def?)]" language
-                  nil)
-                 (syntaxic_theory_def_extensionality formula-decl nil
-                  language nil)
-                 (theory_def? adt-recognizer-decl
-                  "[syntaxic -> boolean]" language nil)
-                 (theory_def1_var!1 skolem-const-decl
-                  "finseq[(scontext?)]" subst nil)
-                 (i!1 skolem-const-decl "nat" subst nil)
-                 (n!1 skolem-const-decl "nat" subst nil)
-                 (j!1 skolem-const-decl "nat" subst nil)
-                 (posint_plus_nnint_is_posint application-judgement
-                  "posint" integers nil)
-                 (int_plus_int_is_int application-judgement "int"
-                  integers nil)
-                 (- const-decl "[numfield, numfield -> numfield]"
-                    number_fields nil)
-                 (finseq_appl const-decl "[below[length(fs)] -> T]"
-                  finite_sequences nil)
-                 (< const-decl "bool" reals nil)
-                 (interp adt-constructor-decl
-                         "[[(sexpr?), finseq[(sinterp?)]] -> (interp?)]"
-                         language nil)
-                 (finseq type-eq-decl nil finite_sequences nil)
-                 (below type-eq-decl nil nat_types nil)
-                 (syntaxic_interp_extensionality formula-decl nil
-                  language nil)
-                 (interp? adt-recognizer-decl "[syntaxic -> boolean]"
-                  language nil)
-                 (interp2_var!1 skolem-const-decl "finseq[(sinterp?)]"
-                  subst nil)
-                 (i!1 skolem-const-decl "nat" subst nil)
-                 (n!1 skolem-const-decl "nat" subst nil)
-                 (j!1 skolem-const-decl "nat" subst nil)
-                 (IMPLIES const-decl "[bool, bool -> bool]" booleans
-                  nil)
-                 (int_minus_int_is_int application-judgement "int"
-                  integers nil)
-                 (signature type-decl nil language nil)
-                 (stheory? adt-recognizer-decl "[signature -> boolean]"
-                  language nil)
-                 (NOT const-decl "[bool -> bool]" booleans nil)
-                 (real_lt_is_strict_total_order name-judgement
-                  "(strict_total_order?[real])" real_props nil)
-                 (real_ge_is_total_order name-judgement
-                  "(total_order?[real])" real_props nil)
-                 (syntaxic_induction formula-decl nil language nil)
-                 (+ const-decl "[numfield, numfield -> numfield]"
-                    number_fields nil)
-                 (numfield nonempty-type-eq-decl nil number_fields nil)
+                ((nnint_plus_nnint_is_nnint application-judgement
+                  "nonneg_int" integers nil)
+                 (syntaxic type-decl nil language nil)
+                 (boolean nonempty-type-decl nil booleans nil)
+                 (number nonempty-type-decl nil numbers nil)
+                 (number_field_pred const-decl "[number -> boolean]"
+                  number_fields nil)
+                 (number_field nonempty-type-from-decl nil
+                  number_fields nil)
+                 (real_pred const-decl "[number_field -> boolean]"
+                            reals nil)
+                 (real nonempty-type-from-decl nil reals nil)
+                 (rational_pred const-decl "[real -> boolean]"
+                                rationals nil)
+                 (rational nonempty-type-from-decl nil rationals nil)
+                 (integer_pred const-decl "[rational -> boolean]"
+                               integers nil)
+                 (int nonempty-type-eq-decl nil integers nil)
+                 (bool nonempty-type-eq-decl nil booleans nil)
+                 (>= const-decl "bool" reals nil)
+                 (nat nonempty-type-eq-decl nil naturalnumbers nil)
+                 (= const-decl "[T, T -> boolean]" equalities nil)
+                 (AND const-decl "[bool, bool -> bool]" booleans nil)
+                 (IFF const-decl "[bool, bool -> bool]" booleans nil)
+                 (sexpr? adt-def-decl "boolean" language nil)
+                 (sinterp? adt-def-decl "boolean" language nil)
+                 (scontext? adt-def-decl "boolean" language nil)
                  (↑ def-decl "{V |
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
                   subst nil)
-                 (scontext? adt-def-decl "boolean" language nil)
-                 (sinterp? adt-def-decl "boolean" language nil)
-                 (sexpr? adt-def-decl "boolean" language nil)
-                 (IFF const-decl "[bool, bool -> bool]" booleans nil)
-                 (AND const-decl "[bool, bool -> bool]" booleans nil)
-                 (= const-decl "[T, T -> boolean]" equalities nil)
-                 (nat nonempty-type-eq-decl nil naturalnumbers nil)
-                 (>= const-decl "bool" reals nil)
-                 (bool nonempty-type-eq-decl nil booleans nil)
-                 (int nonempty-type-eq-decl nil integers nil)
-                 (integer_pred const-decl "[rational -> boolean]"
-                               integers nil)
-                 (rational nonempty-type-from-decl nil rationals nil)
-                 (rational_pred const-decl "[real -> boolean]"
-                                rationals nil)
-                 (real nonempty-type-from-decl nil reals nil)
-                 (real_pred const-decl "[number_field -> boolean]"
-                            reals nil)
-                 (number_field nonempty-type-from-decl nil
-                  number_fields nil)
-                 (number_field_pred const-decl "[number -> boolean]"
-                  number_fields nil)
-                 (number nonempty-type-decl nil numbers nil)
-                 (boolean nonempty-type-decl nil booleans nil)
-                 (syntaxic type-decl nil language nil)
-                 (nnint_plus_nnint_is_nnint application-judgement
-                  "nonneg_int" integers nil))
+                 (numfield nonempty-type-eq-decl nil number_fields nil)
+                 (+ const-decl "[numfield, numfield -> numfield]"
+                    number_fields nil)
+                 (syntaxic_induction formula-decl nil language nil)
+                 (real_ge_is_total_order name-judgement
+                  "(total_order?[real])" real_props nil)
+                 (real_lt_is_strict_total_order name-judgement
+                  "(strict_total_order?[real])" real_props nil)
+                 (NOT const-decl "[bool -> bool]" booleans nil)
+                 (stheory? adt-recognizer-decl "[signature -> boolean]"
+                  language nil)
+                 (signature type-decl nil language nil)
+                 (int_minus_int_is_int application-judgement "int"
+                  integers nil)
+                 (IMPLIES const-decl "[bool, bool -> bool]" booleans
+                  nil)
+                 (j!1 skolem-const-decl "nat" subst nil)
+                 (n!1 skolem-const-decl "nat" subst nil)
+                 (i!1 skolem-const-decl "nat" subst nil)
+                 (interp2_var!1 skolem-const-decl "finseq[(sinterp?)]"
+                  subst nil)
+                 (interp? adt-recognizer-decl "[syntaxic -> boolean]"
+                  language nil)
+                 (syntaxic_interp_extensionality formula-decl nil
+                  language nil)
+                 (below type-eq-decl nil nat_types nil)
+                 (finseq type-eq-decl nil finite_sequences nil)
+                 (interp adt-constructor-decl
+                         "[[(sexpr?), finseq[(sinterp?)]] -> (interp?)]"
+                         language nil)
+                 (< const-decl "bool" reals nil)
+                 (finseq_appl const-decl "[below[length(fs)] -> T]"
+                  finite_sequences nil)
+                 (- const-decl "[numfield, numfield -> numfield]"
+                    number_fields nil)
+                 (int_plus_int_is_int application-judgement "int"
+                  integers nil)
+                 (posint_plus_nnint_is_posint application-judgement
+                  "posint" integers nil)
+                 (j!1 skolem-const-decl "nat" subst nil)
+                 (n!1 skolem-const-decl "nat" subst nil)
+                 (i!1 skolem-const-decl "nat" subst nil)
+                 (theory_def1_var!1 skolem-const-decl
+                  "finseq[(scontext?)]" subst nil)
+                 (theory_def? adt-recognizer-decl
+                  "[syntaxic -> boolean]" language nil)
+                 (syntaxic_theory_def_extensionality formula-decl nil
+                  language nil)
+                 (theory_def adt-constructor-decl
+                  "[finseq[(scontext?)] -> (theory_def?)]" language
+                  nil))
                 shostak))
   (shift_k 0
    (shift_k-1 nil 3583679383
@@ -1270,101 +1270,101 @@
          nil))
        nil))
      nil)
-    ((nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-      integers nil)
-     (def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
-      language nil)
-     (+ const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (int_plus_int_is_int application-judgement "int" integers nil)
-     (const_def adt-constructor-decl
-      "[[(sexpr?), (sexpr?)] -> (const_def?)]" language nil)
-     (syntaxic_const_def_extensionality formula-decl nil language nil)
-     (const_var adt-constructor-decl "[(sexpr?) -> (const_var?)]"
-      language nil)
-     (syntaxic_const_var_extensionality formula-decl nil language nil)
-     (type_ shared-adt-accessor-decl "[{x: syntaxic |
-          const_def?(x) OR const_var?(x) OR const_decl?(x) OR lam?(x)} ->
-   (sexpr?)]" language nil)
-     (lam? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-     (const_var? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil)
-     (const_decl adt-constructor-decl "[(sexpr?) -> (const_decl?)]"
-      language nil)
-     (const_decl? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil)
-     (syntaxic_const_decl_extensionality formula-decl nil language nil)
-     (nnint_plus_posint_is_posint application-judgement "posint"
-      integers nil)
-     (int_minus_int_is_int application-judgement "int" integers nil)
-     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil)
-     (syntaxic_theory_def_extensionality formula-decl nil language nil)
-     (def shared-adt-accessor-decl
-      "[{x: syntaxic | iterm?(x) OR itype?(x) OR const_def?(x) OR type_def?(x)} ->
-   (sexpr?)]" language nil)
-     (const_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil)
-     (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-     (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-     (OR const-decl "[bool, bool -> bool]" booleans nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (IFF const-decl "[bool, bool -> bool]" booleans nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (type_def adt-constructor-decl "[(sexpr?) -> (type_def?)]"
-      language nil)
-     (type_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (theory_def adt-constructor-decl
-      "[finseq[(scontext?)] -> (theory_def?)]" language nil)
-     (finseq type-eq-decl nil finite_sequences nil)
-     (number nonempty-type-decl nil numbers nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
-      nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (>= const-decl "bool" reals nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (< const-decl "bool" reals nil)
-     (below type-eq-decl nil nat_types nil)
-     (numfield nonempty-type-eq-decl nil number_fields nil)
-     (- const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (nb!1 skolem-const-decl "[nat, nat]" subst nil)
-     (real_ge_is_total_order name-judgement "(total_order?[real])"
-      real_props nil)
-     (real_lt_is_strict_total_order name-judgement
-      "(strict_total_order?[real])" real_props nil)
-     (posint nonempty-type-eq-decl nil integers nil)
-     (> const-decl "bool" reals nil)
-     (nonneg_int nonempty-type-eq-decl nil integers nil)
-     (M!1 skolem-const-decl "(scontext?)" subst nil)
-     (syntaxic_type_def_extensionality formula-decl nil language nil)
-     (mult_divides2 application-judgement "(divides(m))" divides nil)
-     (mult_divides1 application-judgement "(divides(n))" divides nil)
-     (even_times_int_is_even application-judgement "even_int" integers
-      nil)
-     (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
-      integers nil)
-     (= const-decl "[T, T -> boolean]" equalities nil)
-     (k const-decl "(theory_def?)" language nil)
-     (finseq_appl const-decl "[below[length(fs)] -> T]"
-      finite_sequences nil)
+    ((scontext? adt-def-decl "boolean" language nil)
+     (syntaxic type-decl nil language nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (boolean nonempty-type-decl nil booleans nil)
      (↑ def-decl "{V |
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
       subst nil)
-     (boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (scontext? adt-def-decl "boolean" language nil))
+     (finseq_appl const-decl "[below[length(fs)] -> T]"
+      finite_sequences nil)
+     (k const-decl "(theory_def?)" language nil)
+     (= const-decl "[T, T -> boolean]" equalities nil)
+     (nnint_times_nnint_is_nnint application-judgement "nonneg_int"
+      integers nil)
+     (even_times_int_is_even application-judgement "even_int" integers
+      nil)
+     (mult_divides1 application-judgement "(divides(n))" divides nil)
+     (mult_divides2 application-judgement "(divides(m))" divides nil)
+     (syntaxic_type_def_extensionality formula-decl nil language nil)
+     (M!1 skolem-const-decl "(scontext?)" subst nil)
+     (nonneg_int nonempty-type-eq-decl nil integers nil)
+     (> const-decl "bool" reals nil)
+     (posint nonempty-type-eq-decl nil integers nil)
+     (real_lt_is_strict_total_order name-judgement
+      "(strict_total_order?[real])" real_props nil)
+     (real_ge_is_total_order name-judgement "(total_order?[real])"
+      real_props nil)
+     (nb!1 skolem-const-decl "[nat, nat]" subst nil)
+     (- const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (numfield nonempty-type-eq-decl nil number_fields nil)
+     (below type-eq-decl nil nat_types nil)
+     (< const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (>= const-decl "bool" reals nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (number_field_pred const-decl "[number -> boolean]" number_fields
+      nil)
+     (number nonempty-type-decl nil numbers nil)
+     (finseq type-eq-decl nil finite_sequences nil)
+     (theory_def adt-constructor-decl
+      "[finseq[(scontext?)] -> (theory_def?)]" language nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (type_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (type_def adt-constructor-decl "[(sexpr?) -> (type_def?)]"
+      language nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (OR const-decl "[bool, bool -> bool]" booleans nil)
+     (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+     (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+     (const_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (def shared-adt-accessor-decl
+      "[{x: syntaxic | iterm?(x) OR itype?(x) OR const_def?(x) OR type_def?(x)} ->
+   (sexpr?)]" language nil)
+     (syntaxic_theory_def_extensionality formula-decl nil language nil)
+     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (int_minus_int_is_int application-judgement "int" integers nil)
+     (nnint_plus_posint_is_posint application-judgement "posint"
+      integers nil)
+     (syntaxic_const_decl_extensionality formula-decl nil language nil)
+     (const_decl? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (const_decl adt-constructor-decl "[(sexpr?) -> (const_decl?)]"
+      language nil)
+     (const_var? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (lam? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+     (type_ shared-adt-accessor-decl "[{x: syntaxic |
+          const_def?(x) OR const_var?(x) OR const_decl?(x) OR lam?(x)} ->
+   (sexpr?)]" language nil)
+     (syntaxic_const_var_extensionality formula-decl nil language nil)
+     (const_var adt-constructor-decl "[(sexpr?) -> (const_var?)]"
+      language nil)
+     (syntaxic_const_def_extensionality formula-decl nil language nil)
+     (const_def adt-constructor-decl
+      "[[(sexpr?), (sexpr?)] -> (const_def?)]" language nil)
+     (int_plus_int_is_int application-judgement "int" integers nil)
+     (+ const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
+      language nil)
+     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+      integers nil))
     shostak)) (shift_concat_TCC1 0
                (shift_concat_TCC1-1 nil 3583781663
                 ("" (subtype-tcc) nil nil)
@@ -1427,70 +1427,70 @@
          nil))
        nil))
      nil)
-    ((++ const-decl "(theory_def?)" language nil)
-     (int_minus_int_is_int application-judgement "int" integers nil)
-     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-      integers nil)
+    ((theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
+      nil)
+     (syntaxic type-decl nil language nil)
+     (NOT const-decl "[bool -> bool]" booleans nil)
+     (bool nonempty-type-eq-decl nil booleans nil)
+     (boolean nonempty-type-decl nil booleans nil)
+     (O const-decl "finseq" finite_sequences nil)
+     (int_plus_int_is_int application-judgement "int" integers nil)
+     (- const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+     (Δ!1 skolem-const-decl "(theory_def?)" subst nil)
+     (Γ!1 skolem-const-decl "(theory_def?)" subst nil)
+     (def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
+      language nil)
+     (finseq type-eq-decl nil finite_sequences nil)
+     (scontext? adt-def-decl "boolean" language nil)
+     (below type-eq-decl nil nat_types nil)
+     (+ const-decl "[numfield, numfield -> numfield]" number_fields
+        nil)
+     (numfield nonempty-type-eq-decl nil number_fields nil)
+     (< const-decl "bool" reals nil)
+     (nat nonempty-type-eq-decl nil naturalnumbers nil)
+     (>= const-decl "bool" reals nil)
+     (int nonempty-type-eq-decl nil integers nil)
+     (integer_pred const-decl "[rational -> boolean]" integers nil)
+     (rational nonempty-type-from-decl nil rationals nil)
+     (rational_pred const-decl "[real -> boolean]" rationals nil)
+     (real nonempty-type-from-decl nil reals nil)
+     (real_pred const-decl "[number_field -> boolean]" reals nil)
+     (number_field nonempty-type-from-decl nil number_fields nil)
+     (number_field_pred const-decl "[number -> boolean]" number_fields
+      nil)
+     (number nonempty-type-decl nil numbers nil)
+     (nb!1 skolem-const-decl "[nat, nat]" subst nil)
+     (sinterp? adt-def-decl "boolean" language nil)
+     (sexpr? adt-def-decl "boolean" language nil)
+     (IFF const-decl "[bool, bool -> bool]" booleans nil)
+     (AND const-decl "[bool, bool -> bool]" booleans nil)
+     (theory_def adt-constructor-decl
+      "[finseq[(scontext?)] -> (theory_def?)]" language nil)
+     (finseq_appl const-decl "[below[length(fs)] -> T]"
+      finite_sequences nil)
+     (IF const-decl "[boolean, T, T -> T]" if_def nil)
+     (syntaxic_theory_def_extensionality formula-decl nil language nil)
+     (strict_total_order? const-decl "bool" orders nil)
+     (pred type-eq-decl nil defined_types nil)
+     (odd? const-decl "bool" integers nil)
+     (> const-decl "bool" reals nil)
+     (real_ge_is_total_order name-judgement "(total_order?[real])"
+      real_props nil)
+     (real_gt_is_strict_total_order name-judgement
+      "(strict_total_order?[real])" real_props nil)
+     (real_lt_is_strict_total_order name-judgement
+      "(strict_total_order?[real])" real_props nil)
+     (length const-decl "nat" language nil)
      (↑ def-decl "{V |
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
       subst nil)
-     (length const-decl "nat" language nil)
-     (real_lt_is_strict_total_order name-judgement
-      "(strict_total_order?[real])" real_props nil)
-     (real_gt_is_strict_total_order name-judgement
-      "(strict_total_order?[real])" real_props nil)
-     (real_ge_is_total_order name-judgement "(total_order?[real])"
-      real_props nil)
-     (> const-decl "bool" reals nil)
-     (odd? const-decl "bool" integers nil)
-     (pred type-eq-decl nil defined_types nil)
-     (strict_total_order? const-decl "bool" orders nil)
-     (syntaxic_theory_def_extensionality formula-decl nil language nil)
-     (IF const-decl "[boolean, T, T -> T]" if_def nil)
-     (finseq_appl const-decl "[below[length(fs)] -> T]"
-      finite_sequences nil)
-     (theory_def adt-constructor-decl
-      "[finseq[(scontext?)] -> (theory_def?)]" language nil)
-     (AND const-decl "[bool, bool -> bool]" booleans nil)
-     (IFF const-decl "[bool, bool -> bool]" booleans nil)
-     (sexpr? adt-def-decl "boolean" language nil)
-     (sinterp? adt-def-decl "boolean" language nil)
-     (nb!1 skolem-const-decl "[nat, nat]" subst nil)
-     (number nonempty-type-decl nil numbers nil)
-     (number_field_pred const-decl "[number -> boolean]" number_fields
-      nil)
-     (number_field nonempty-type-from-decl nil number_fields nil)
-     (real_pred const-decl "[number_field -> boolean]" reals nil)
-     (real nonempty-type-from-decl nil reals nil)
-     (rational_pred const-decl "[real -> boolean]" rationals nil)
-     (rational nonempty-type-from-decl nil rationals nil)
-     (integer_pred const-decl "[rational -> boolean]" integers nil)
-     (int nonempty-type-eq-decl nil integers nil)
-     (>= const-decl "bool" reals nil)
-     (nat nonempty-type-eq-decl nil naturalnumbers nil)
-     (< const-decl "bool" reals nil)
-     (numfield nonempty-type-eq-decl nil number_fields nil)
-     (+ const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (below type-eq-decl nil nat_types nil)
-     (scontext? adt-def-decl "boolean" language nil)
-     (finseq type-eq-decl nil finite_sequences nil)
-     (def adt-accessor-decl "[(theory_def?) -> finseq[(scontext?)]]"
-      language nil)
-     (Γ!1 skolem-const-decl "(theory_def?)" subst nil)
-     (Δ!1 skolem-const-decl "(theory_def?)" subst nil)
-     (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-     (- const-decl "[numfield, numfield -> numfield]" number_fields
-        nil)
-     (int_plus_int_is_int application-judgement "int" integers nil)
-     (O const-decl "finseq" finite_sequences nil)
-     (boolean nonempty-type-decl nil booleans nil)
-     (bool nonempty-type-eq-decl nil booleans nil)
-     (NOT const-decl "[bool -> bool]" booleans nil)
-     (syntaxic type-decl nil language nil)
-     (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
-      nil))
+     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+      integers nil)
+     (int_minus_int_is_int application-judgement "int" integers nil)
+     (++ const-decl "(theory_def?)" language nil))
     shostak)) (signature_shift 0
                (signature_shift-1 nil 3583784567
                 ("" (induct M)
@@ -1556,79 +1556,80 @@
                   ("20" (grind) nil nil) ("21" (grind) nil nil)
                   ("22" (grind) nil nil) ("23" (grind) nil nil))
                  nil)
-                ((sig adt-accessor-decl
-                      "[(stheory?) -> finseq[signature]]" language nil)
-                 (theory_def? adt-recognizer-decl
-                  "[syntaxic -> boolean]" language nil)
+                ((↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
+                  subst nil)
+                 (sinterp? adt-def-decl "boolean" language nil)
+                 (sexpr? adt-def-decl "boolean" language nil)
+                 (IFF const-decl "[bool, bool -> bool]" booleans nil)
+                 (AND const-decl "[bool, bool -> bool]" booleans nil)
+                 (nat nonempty-type-eq-decl nil naturalnumbers nil)
+                 (>= const-decl "bool" reals nil)
+                 (int nonempty-type-eq-decl nil integers nil)
+                 (integer_pred const-decl "[rational -> boolean]"
+                               integers nil)
+                 (rational nonempty-type-from-decl nil rationals nil)
+                 (rational_pred const-decl "[real -> boolean]"
+                                rationals nil)
+                 (real nonempty-type-from-decl nil reals nil)
+                 (real_pred const-decl "[number_field -> boolean]"
+                            reals nil)
+                 (number_field nonempty-type-from-decl nil
+                  number_fields nil)
+                 (number_field_pred const-decl "[number -> boolean]"
+                  number_fields nil)
+                 (number nonempty-type-decl nil numbers nil)
+                 (scontext? adt-def-decl "boolean" language nil)
+                 (IMPLIES const-decl "[bool, bool -> bool]" booleans
+                  nil)
+                 (bool nonempty-type-eq-decl nil booleans nil)
+                 (boolean nonempty-type-decl nil booleans nil)
+                 (syntaxic type-decl nil language nil)
+                 (signature type-decl nil language nil)
+                 (= const-decl "[T, T -> boolean]" equalities nil)
+                 (signature def-decl "signature" language nil)
+                 (syntaxic_induction formula-decl nil language nil)
+                 (int_minus_int_is_int application-judgement "int"
+                  integers nil)
+                 (finseq_appl const-decl "[below[length(fs)] -> T]"
+                  finite_sequences nil)
+                 (nnint_plus_nnint_is_nnint application-judgement
+                  "nonneg_int" integers nil)
+                 (int_plus_int_is_int application-judgement "int"
+                  integers nil)
+                 (< const-decl "bool" reals nil)
+                 (below type-eq-decl nil nat_types nil)
+                 (finseq type-eq-decl nil finite_sequences nil)
+                 (theory_def1_var!1 skolem-const-decl
+                  "finseq[(scontext?)]" subst nil)
+                 (numfield nonempty-type-eq-decl nil number_fields nil)
+                 (+ const-decl "[numfield, numfield -> numfield]"
+                    number_fields nil)
+                 (- const-decl "[numfield, numfield -> numfield]"
+                    number_fields nil)
+                 (nb!1 skolem-const-decl "[nat, nat]" subst nil)
+                 (stheory adt-constructor-decl
+                  "[finseq[signature] -> (stheory?)]" language nil)
+                 (signature_stheory_extensionality formula-decl nil
+                  language nil)
+                 (stheory? adt-recognizer-decl "[signature -> boolean]"
+                  language nil)
+                 (NOT const-decl "[bool -> bool]" booleans nil)
+                 (real_lt_is_strict_total_order name-judgement
+                  "(strict_total_order?[real])" real_props nil)
+                 (real_ge_is_total_order name-judgement
+                  "(total_order?[real])" real_props nil)
+                 (x!1 skolem-const-decl
+                  "below[theory_def1_var!1`length]" subst nil)
                  (def adt-accessor-decl
                   "[(theory_def?) -> finseq[(scontext?)]]" language
                   nil)
-                 (x!1 skolem-const-decl
-                  "below[theory_def1_var!1`length]" subst nil)
-                 (real_ge_is_total_order name-judgement
-                  "(total_order?[real])" real_props nil)
-                 (real_lt_is_strict_total_order name-judgement
-                  "(strict_total_order?[real])" real_props nil)
-                 (NOT const-decl "[bool -> bool]" booleans nil)
-                 (stheory? adt-recognizer-decl "[signature -> boolean]"
-                  language nil)
-                 (signature_stheory_extensionality formula-decl nil
-                  language nil)
-                 (stheory adt-constructor-decl
-                  "[finseq[signature] -> (stheory?)]" language nil)
-                 (nb!1 skolem-const-decl "[nat, nat]" subst nil)
-                 (- const-decl "[numfield, numfield -> numfield]"
-                    number_fields nil)
-                 (+ const-decl "[numfield, numfield -> numfield]"
-                    number_fields nil)
-                 (numfield nonempty-type-eq-decl nil number_fields nil)
-                 (theory_def1_var!1 skolem-const-decl
-                  "finseq[(scontext?)]" subst nil)
-                 (finseq type-eq-decl nil finite_sequences nil)
-                 (below type-eq-decl nil nat_types nil)
-                 (< const-decl "bool" reals nil)
-                 (int_plus_int_is_int application-judgement "int"
-                  integers nil)
-                 (nnint_plus_nnint_is_nnint application-judgement
-                  "nonneg_int" integers nil)
-                 (finseq_appl const-decl "[below[length(fs)] -> T]"
-                  finite_sequences nil)
-                 (int_minus_int_is_int application-judgement "int"
-                  integers nil)
-                 (syntaxic_induction formula-decl nil language nil)
-                 (signature def-decl "signature" language nil)
-                 (= const-decl "[T, T -> boolean]" equalities nil)
-                 (signature type-decl nil language nil)
-                 (syntaxic type-decl nil language nil)
-                 (boolean nonempty-type-decl nil booleans nil)
-                 (bool nonempty-type-eq-decl nil booleans nil)
-                 (IMPLIES const-decl "[bool, bool -> bool]" booleans
-                  nil)
-                 (scontext? adt-def-decl "boolean" language nil)
-                 (number nonempty-type-decl nil numbers nil)
-                 (number_field_pred const-decl "[number -> boolean]"
-                  number_fields nil)
-                 (number_field nonempty-type-from-decl nil
-                  number_fields nil)
-                 (real_pred const-decl "[number_field -> boolean]"
-                            reals nil)
-                 (real nonempty-type-from-decl nil reals nil)
-                 (rational_pred const-decl "[real -> boolean]"
-                                rationals nil)
-                 (rational nonempty-type-from-decl nil rationals nil)
-                 (integer_pred const-decl "[rational -> boolean]"
-                               integers nil)
-                 (int nonempty-type-eq-decl nil integers nil)
-                 (>= const-decl "bool" reals nil)
-                 (nat nonempty-type-eq-decl nil naturalnumbers nil)
-                 (AND const-decl "[bool, bool -> bool]" booleans nil)
-                 (IFF const-decl "[bool, bool -> bool]" booleans nil)
-                 (sexpr? adt-def-decl "boolean" language nil)
-                 (sinterp? adt-def-decl "boolean" language nil)
-                 (↑ def-decl "{V |
-         (sexpr?(U) IFF sexpr?(V)) AND
-          (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
-                  subst nil))
+                 (theory_def? adt-recognizer-decl
+                  "[syntaxic -> boolean]" language nil)
+                 (sig adt-accessor-decl
+                      "[(stheory?) -> finseq[signature]]" language
+                      nil))
                 shostak))
   (strong_prektau_shift 0
    (strong_prektau_shift-1 nil 3583785664
@@ -1637,7 +1638,40 @@
       ("2" (skosimp* :preds? t)
        (("2" (assert)
          (("2" (inst - S1!1 S2!1 Sig!1 dot2_var!1)
-           (("2" (inst - S1!1 S2!1 Sig!1 s!1) (("2" (grind) nil nil))
+           (("2" (inst - S1!1 S2!1 Sig!1 s!1)
+             (("2" (split 1)
+               (("1" (flatten)
+                 (("1" (split 1)
+                   (("1" (assert) nil nil) ("2" (propax) nil nil)
+                    ("3" (expand ↑ -3)
+                     (("3" (lift-if)
+                       (("3" (bddsimp -3)
+                         (("1" (assert) nil nil) ("2" (assert) nil nil)
+                          ("3" (assert) nil nil) ("4" (propax) nil nil)
+                          ("5" (assert) nil nil) ("6" (assert) nil nil)
+                          ("7" (assert) nil nil) ("8" (assert) nil nil)
+                          ("9" (assert) nil nil)
+                          ("10" (assert) nil nil)
+                          ("11" (assert) nil nil)
+                          ("12" (assert) nil nil)
+                          ("13" (assert) nil nil)
+                          ("14" (assert) nil nil)
+                          ("15" (assert) nil nil)
+                          ("16" (assert) nil nil)
+                          ("17" (assert) nil nil)
+                          ("18" (assert) nil nil)
+                          ("19" (assert) nil nil)
+                          ("20" (assert) nil nil)
+                          ("21" (assert) nil nil)
+                          ("22" (assert) nil nil))
+                         nil))
+                       nil))
+                     nil)
+                    ("4" (propax) nil nil))
+                   nil))
+                 nil)
+                ("2" (flatten) (("2" (grind) nil nil)) nil))
+               nil))
              nil))
            nil))
          nil))
@@ -1648,48 +1682,68 @@
            (("3" (split 1)
              (("1" (flatten)
                (("1" (split 1)
-                 (("1" (propax) nil nil) ("2" (assert) nil nil)
-                  ("3" (propax) nil nil)
-                  ("4" (skosimp* :preds? t)
-                   (("4" (inst - x!1)
-                     (("4" (inst - x!1)
-                       (("4"
+                 (("1" (assert)
+                   (("1" (expand ↑ -1)
+                     (("1" (lift-if)
+                       (("1" (bddsimp -1)
+                         (("1" (propax) nil nil) ("2" (propax) nil nil)
+                          ("3" (assert) nil nil) ("4" (assert) nil nil)
+                          ("5" (assert) nil nil) ("6" (assert) nil nil)
+                          ("7" (assert) nil nil) ("8" (assert) nil nil)
+                          ("9" (assert) nil nil)
+                          ("10" (assert) nil nil)
+                          ("11" (assert) nil nil)
+                          ("12" (assert) nil nil)
+                          ("13" (assert) nil nil)
+                          ("14" (assert) nil nil)
+                          ("15" (assert) nil nil)
+                          ("16" (assert) nil nil)
+                          ("17" (assert) nil nil)
+                          ("18" (assert) nil nil)
+                          ("19" (assert) nil nil)
+                          ("20" (assert) nil nil)
+                          ("21" (assert) nil nil)
+                          ("22" (assert) nil nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("2" (propax) nil nil) ("3" (assert) nil nil)
+                  ("4" (propax) nil nil)
+                  ("5" (skosimp* :preds? t)
+                   (("5" (inst - x!1)
+                     (("5" (inst - x!1)
+                       (("5"
                          (inst - S1!1 "S2!1 ++ rest(s!1, x!1)" Sig!1
                           "sapply(s!1)(x!1)")
-                         (("4" (expand finseq_appl)
-                           (("4" (assert)
-                             (("4" (expand ++ 2 4)
-                               (("4"
+                         (("5" (expand finseq_appl)
+                           (("5" (assert)
+                             (("5" (expand ++ 2 4)
+                               (("5"
                                  (expand o)
-                                 (("4"
+                                 (("5"
                                    (expand rest 2 2)
-                                   (("4"
+                                   (("5"
                                      (expand ^^)
-                                     (("4"
+                                     (("5"
                                        (assert)
-                                       (("4"
+                                       (("5"
                                          (lift-if)
-                                         (("4"
+                                         (("5"
                                            (split 2)
                                            (("1"
                                              (flatten)
                                              (("1"
-                                               (rewrite -5)
+                                               (case
+                                                "sig(s!1)`length = 1 + x!1")
                                                (("1"
-                                                 (case
-                                                  "sig(s!1)`length = 1 + x!1")
+                                                 (assert)
                                                  (("1"
-                                                   (assert)
-                                                   (("1"
-                                                     (grind)
-                                                     nil
-                                                     nil))
-                                                   nil)
-                                                  ("2"
-                                                   (assert)
+                                                   (grind)
                                                    nil
                                                    nil))
-                                                 nil))
+                                                 nil)
+                                                ("2" (assert) nil nil))
                                                nil))
                                              nil)
                                             ("2"
@@ -1716,36 +1770,72 @@
                nil)
               ("2" (flatten)
                (("2" (split 1)
-                 (("1" (propax) nil nil) ("2" (assert) nil nil)
-                  ("3" (propax) nil nil)
-                  ("4" (skosimp* :preds? t)
-                   (("4" (inst - x!1)
-                     (("4" (inst - x!1)
-                       (("4"
+                 (("1" (assert)
+                   (("1" (expand ↑ 1) (("1" (grind) nil nil)) nil))
+                   nil)
+                  ("2" (propax) nil nil)
+                  ("3" (assert) (("3" (grind) nil nil)) nil)
+                  ("4" (propax) nil nil)
+                  ("5" (skosimp* :preds? t)
+                   (("5" (inst - x!1)
+                     (("5" (inst - x!1)
+                       (("5"
                          (inst - S1!1 "S2!1 ++ rest(s!1, x!1)" Sig!1
                           "sapply(s!1)(x!1)")
-                         (("4" (assert)
-                           (("4" (expand finseq_appl)
-                             (("4" (expand ++ -12 4)
-                               (("4"
+                         (("5" (assert)
+                           (("5" (expand finseq_appl)
+                             (("5" (expand ++ -13 4)
+                               (("5"
                                  (expand o)
-                                 (("4"
-                                   (expand rest -12 2)
-                                   (("4"
+                                 (("5"
+                                   (expand rest -13 2)
+                                   (("5"
                                      (expand ^^)
-                                     (("4"
+                                     (("5"
                                        (assert)
-                                       (("4"
+                                       (("5"
                                          (lift-if)
-                                         (("4"
+                                         (("5"
                                            (split -12)
                                            (("1"
+                                             (split -13)
+                                             (("1"
+                                               (split -13)
+                                               (("1"
+                                                 (case
+                                                  "sig(s!1)`length = 1 + x!1")
+                                                 (("1" (grind) nil nil)
+                                                  ("2"
+                                                   (assert)
+                                                   nil
+                                                   nil))
+                                                 nil)
+                                                ("2" (grind) nil nil))
+                                               nil)
+                                              ("2" (grind) nil nil))
+                                             nil)
+                                            ("2"
+                                             (flatten)
+                                             (("2"
+                                               (case
+                                                "sig(s!1)`length = 1 + x!1")
+                                               (("1" (grind) nil nil)
+                                                ("2"
+                                                 (assert)
+                                                 (("2"
+                                                   (grind)
+                                                   nil
+                                                   nil))
+                                                 nil))
+                                               nil))
+                                             nil)
+                                            ("3"
                                              (case
                                               "sig(s!1)`length = 1 + x!1")
                                              (("1" (grind) nil nil)
                                               ("2" (assert) nil nil))
                                              nil)
-                                            ("2" (grind) nil nil))
+                                            ("4" (grind) nil nil))
                                            nil))
                                          nil))
                                        nil))
@@ -1957,7 +2047,8 @@
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
       subst nil)
-     nil (syntaxic_induction formula-decl nil language nil)
+     (length const-decl "nat" language nil)
+     (syntaxic_induction formula-decl nil language nil)
      (real_ge_is_total_order name-judgement "(total_order?[real])"
       real_props nil)
      (real_lt_is_strict_total_order name-judgement
@@ -1969,29 +2060,31 @@
      (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
       integers nil)
      (int_minus_int_is_int application-judgement "int" integers nil)
-     nil (rest const-decl "(stheory?)" language nil)
-     (sconcat_assoc formula-decl nil language nil)
-     (^^ const-decl "finseq" finite_sequences nil)
+     (finseq_appl const-decl "[below[length(fs)] -> T]"
+      finite_sequences nil)
+     (empty_seq const-decl "finseq" finite_sequences nil)
      (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
+     (^^ const-decl "finseq" finite_sequences nil)
+     (rest const-decl "(stheory?)" language nil)
+     (nnint_plus_posint_is_posint application-judgement "posint"
+      integers nil)
+     (∈ const-decl "bool" language nil)
+     (sconcat_assoc formula-decl nil language nil)
      (+ const-decl "[numfield, numfield -> numfield]" number_fields
         nil)
      (numfield nonempty-type-eq-decl nil number_fields nil)
      (sig adt-accessor-decl "[(stheory?) -> finseq[signature]]"
           language nil)
      (= const-decl "[T, T -> boolean]" equalities nil)
-     (nnint_plus_posint_is_posint application-judgement "posint"
-      integers nil)
-     (empty_seq const-decl "finseq" finite_sequences nil)
      (int_plus_int_is_int application-judgement "int" integers nil)
      (int_min application-judgement "{k: int | k <= i AND k <= j}"
       real_defs nil)
      (posint_plus_nnint_is_posint application-judgement "posint"
       integers nil)
-     (finseq_appl const-decl "[below[length(fs)] -> T]"
-      finite_sequences nil)
-     (< const-decl "bool" reals nil)
-     (below type-eq-decl nil nat_types nil)
      (finseq type-eq-decl nil finite_sequences nil)
+     (below type-eq-decl nil nat_types nil)
+     (< const-decl "bool" reals nil)
+     (minus_odd_is_odd application-judgement "odd_int" integers nil)
      (sconst_def adt-constructor-decl "(sconst_def?)" language nil)
      (sconst_def? adt-recognizer-decl "[signature -> boolean]" language
       nil)
@@ -2000,7 +2093,9 @@
       nil)
      (stype_def adt-constructor-decl "(stype_def?)" language nil)
      (signature_shift formula-decl nil subst nil)
-     (signature def-decl "signature" language nil) nil
+     (signature def-decl "signature" language nil)
+     (theory_def1_var!1 skolem-const-decl "finseq[(scontext?)]" subst
+      nil)
      (theory_def adt-constructor-decl
       "[finseq[(scontext?)] -> (theory_def?)]" language nil)
      (theory_def? adt-recognizer-decl "[syntaxic -> boolean]" language
@@ -2044,7 +2139,8 @@
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
                   subst nil)
-                 nil (sconcat__sempty formula-decl nil language nil)
+                 (length const-decl "nat" language nil)
+                 (sconcat__sempty formula-decl nil language nil)
                  (O const-decl "finseq" finite_sequences nil)
                  (nnint_plus_nnint_is_nnint application-judgement
                   "nonneg_int" integers nil)
@@ -3029,10 +3125,10 @@
               finite_sequences nil)
              (sinterp? adt-def-decl "boolean" language nil)
              (scontext? adt-def-decl "boolean" language nil)
-             (nnint_plus_nnint_is_nnint application-judgement
-              "nonneg_int" integers nil)
              (int_minus_int_is_int application-judgement "int" integers
-              nil))
+              nil)
+             (nnint_plus_nnint_is_nnint application-judgement
+              "nonneg_int" integers nil))
             nil))
   (subst_TCC30 0
    (subst_TCC30-1 nil 3584208432 ("" (grind) nil nil)
@@ -3186,8 +3282,560 @@
      (signature_stheory_extensionality formula-decl nil language nil)
      (stheory? adt-recognizer-decl "[signature -> boolean]" language
       nil)
-     nil nil nil (NOT const-decl "[bool -> bool]" booleans nil))
+     (t!1 skolem-const-decl "(sexpr?)" subst nil)
+     (theory_def1_var!1 skolem-const-decl "finseq[(scontext?)]" subst
+      nil)
+     (x!2 skolem-const-decl "below[theory_def1_var!1`length]" subst
+      nil)
+     (NOT const-decl "[bool -> bool]" booleans nil))
     shostak)) (strong_pretau_subst 0
+               (strong_pretau_subst-3 "tmp" 3584219549
+                ("" (induct U)
+                 (("1" (skosimp* :preds? t)
+                   (("1" (assert)
+                     (("1" (split 1)
+                       (("1" (flatten)
+                         (("1" (split -1)
+                           (("1" (flatten)
+                             (("1" (split 1)
+                               (("1"
+                                 (assert)
+                                 (("1"
+                                   (expand ++)
+                                   (("1"
+                                     (expand o)
+                                     (("1"
+                                       (assert)
+                                       (("1"
+                                         (expand k)
+                                         (("1" (assert) nil nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil)
+                                ("2"
+                                 (expand (++ sapply))
+                                 (("2"
+                                   (expand o +)
+                                   (("2"
+                                     (assert)
+                                     (("2"
+                                       (expand o -3)
+                                       (("2"
+                                         (assert)
+                                         (("2"
+                                           (lift-if)
+                                           (("2"
+                                             (bddsimp 1)
+                                             (("1"
+                                               (expand o -3)
+                                               (("1"
+                                                 (assert)
+                                                 (("1"
+                                                   (expand k -1)
+                                                   (("1"
+                                                     (assert)
+                                                     nil
+                                                     nil))
+                                                   nil))
+                                                 nil))
+                                               nil)
+                                              ("2"
+                                               (expand k 2)
+                                               (("2" (propax) nil nil))
+                                               nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil)
+                            ("2" (flatten)
+                             (("2" (split -1)
+                               (("1"
+                                 (flatten)
+                                 (("1"
+                                   (split 2)
+                                   (("1"
+                                     (expand ++ +)
+                                     (("1"
+                                       (expand k +)
+                                       (("1"
+                                         (expand o +)
+                                         (("1" (assert) nil nil))
+                                         nil))
+                                       nil))
+                                     nil)
+                                    ("2"
+                                     (expand (k sapply ++) 1)
+                                     (("2"
+                                       (expand o)
+                                       (("2"
+                                         (assert)
+                                         (("2"
+                                           (lemma kw_pretau_expr)
+                                           (("2"
+                                             (inst
+                                              -
+                                              sconst_def
+                                              s!1
+                                              "S1!1 ++ S2!1"
+                                              t!1)
+                                             (("2" (assert) nil nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil)
+                                ("2"
+                                 (split 2)
+                                 (("1"
+                                   (expand (k sapply ++) 1)
+                                   (("1"
+                                     (expand o 1)
+                                     (("1"
+                                       (flatten)
+                                       (("1"
+                                         (expand ++ -1)
+                                         (("1"
+                                           (expand o -1)
+                                           (("1" (assert) nil nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil)
+                                  ("2"
+                                   (flatten)
+                                   (("2"
+                                     (expand (sapply k ++) 1)
+                                     (("2"
+                                       (expand (sapply k ++) -2)
+                                       (("2"
+                                         (expand o 1)
+                                         (("2"
+                                           (assert)
+                                           (("2"
+                                             (expand o -2)
+                                             (("2" (propax) nil nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil)
+                        ("2" (flatten)
+                         (("2" (split 1)
+                           (("1" (flatten)
+                             (("1" (expand (k sapply ++) 1)
+                               (("1"
+                                 (expand o 1)
+                                 (("1"
+                                   (assert)
+                                   (("1"
+                                     (expand (k sapply ++) -2)
+                                     (("1"
+                                       (expand o -2)
+                                       (("1"
+                                         (expand (k sapply ++) -3)
+                                         (("1"
+                                           (expand o -3)
+                                           (("1" (assert) nil nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil)
+                            ("2" (flatten)
+                             (("2" (split 2)
+                               (("1"
+                                 (flatten)
+                                 (("1"
+                                   (expand (k sapply ++) -3)
+                                   (("1"
+                                     (expand o -3)
+                                     (("1"
+                                       (assert)
+                                       (("1"
+                                         (lemma kw_pretau_expr)
+                                         (("1"
+                                           (inst
+                                            -
+                                            sconst_def
+                                            s!1
+                                            "S1!1 ++ S2!1"
+                                            t!1)
+                                           (("1" (assert) nil nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil)
+                                ("2"
+                                 (flatten)
+                                 (("2"
+                                   (expand (k sapply ++) 2)
+                                   (("2"
+                                     (expand (k sapply ++) -2)
+                                     (("2"
+                                       (expand o)
+                                       (("2"
+                                         (assert)
+                                         (("2" (assert) nil nil))
+                                         nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("2" (skosimp* :preds? t)
+                   (("2" (assert)
+                     (("2" (hide -8)
+                       (("2" (inst - S1!1 S2!1 dot2_var!1 t!1)
+                         (("2" (split 1)
+                           (("1" (flatten)
+                             (("1" (split 1)
+                               (("1" (assert) nil nil)
+                                ("2" (propax) nil nil)
+                                ("3"
+                                 (expand subst -3)
+                                 (("3"
+                                   (lift-if)
+                                   (("3"
+                                     (bddsimp -3)
+                                     (("1" (assert) nil nil)
+                                      ("2" (assert) nil nil)
+                                      ("3" (assert) nil nil)
+                                      ("4" (assert) nil nil)
+                                      ("5" (propax) nil nil)
+                                      ("6" (assert) nil nil)
+                                      ("7" (assert) nil nil)
+                                      ("8" (assert) nil nil)
+                                      ("9" (assert) nil nil)
+                                      ("10" (assert) nil nil)
+                                      ("11" (assert) nil nil)
+                                      ("12" (assert) nil nil)
+                                      ("13" (assert) nil nil)
+                                      ("14" (assert) nil nil)
+                                      ("15" (assert) nil nil)
+                                      ("16" (assert) nil nil)
+                                      ("17" (assert) nil nil)
+                                      ("18" (assert) nil nil)
+                                      ("19" (assert) nil nil)
+                                      ("20" (assert) nil nil)
+                                      ("21" (assert) nil nil)
+                                      ("22" (assert) nil nil)
+                                      ("23" (assert) nil nil))
+                                     nil))
+                                   nil))
+                                 nil)
+                                ("4" (propax) nil nil))
+                               nil))
+                             nil)
+                            ("2" (flatten)
+                             (("2" (split 1)
+                               (("1"
+                                 (assert)
+                                 (("1"
+                                   (flatten)
+                                   (("1"
+                                     (assert)
+                                     (("1"
+                                       (split 1)
+                                       (("1" (propax) nil nil)
+                                        ("2" (assert) nil nil)
+                                        ("3" (propax) nil nil)
+                                        ("4" (propax) nil nil))
+                                       nil))
+                                     nil))
+                                   nil))
+                                 nil)
+                                ("2" (propax) nil nil)
+                                ("3"
+                                 (assert)
+                                 (("3"
+                                   (expand subst 1)
+                                   (("3" (propax) nil nil))
+                                   nil))
+                                 nil)
+                                ("4" (propax) nil nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("3" (skosimp* :preds? t)
+                   (("3" (assert)
+                     (("3" (split 1)
+                       (("1" (flatten)
+                         (("1" (split 1)
+                           (("1" (expand subst -1)
+                             (("1" (lift-if)
+                               (("1"
+                                 (bddsimp -1)
+                                 (("1" (propax) nil nil)
+                                  ("2" (propax) nil nil)
+                                  ("3" (propax) nil nil)
+                                  ("4" (assert) nil nil)
+                                  ("5" (assert) nil nil)
+                                  ("6" (assert) nil nil)
+                                  ("7" (assert) nil nil)
+                                  ("8" (assert) nil nil)
+                                  ("9" (assert) nil nil)
+                                  ("10" (assert) nil nil)
+                                  ("11" (assert) nil nil)
+                                  ("12" (assert) nil nil)
+                                  ("13" (assert) nil nil)
+                                  ("14" (assert) nil nil)
+                                  ("15" (assert) nil nil)
+                                  ("16" (assert) nil nil)
+                                  ("17" (assert) nil nil)
+                                  ("18" (assert) nil nil)
+                                  ("19" (assert) nil nil)
+                                  ("20" (assert) nil nil)
+                                  ("21" (assert) nil nil)
+                                  ("22" (assert) nil nil)
+                                  ("23" (assert) nil nil))
+                                 nil))
+                               nil))
+                             nil)
+                            ("2" (propax) nil nil)
+                            ("3" (inst - S1!1 S2!1 s!1 t!1)
+                             (("3" (assert) nil nil)) nil)
+                            ("4" (propax) nil nil)
+                            ("5" (skosimp* :preds? t)
+                             (("5" (inst - x!1)
+                               (("5"
+                                 (inst - x!1)
+                                 (("5"
+                                   (inst
+                                    -11
+                                    S1!1
+                                    "S2!1 ++ rest(s!1, x!1)"
+                                    "sapply(s!1)(x!1)"
+                                    "t!1 ↑ (interp2_var!1`length - 1 - x!1)")
+                                   (("1"
+                                     (assert)
+                                     (("1"
+                                       (split -11)
+                                       (("1"
+                                         (expand finseq_appl)
+                                         (("1"
+                                           (expand ++ 1 3)
+                                           (("1"
+                                             (expand o)
+                                             (("1"
+                                               (expand rest 1 2)
+                                               (("1"
+                                                 (expand ^^)
+                                                 (("1"
+                                                   (assert)
+                                                   (("1"
+                                                     (flatten)
+                                                     (("1"
+                                                       (case
+                                                        "sig(s!1)`length = 1 + x!1")
+                                                       (("1"
+                                                         (postpone)
+                                                         nil
+                                                         nil)
+                                                        ("2"
+                                                         (assert)
+                                                         (("2"
+                                                           (postpone)
+                                                           nil
+                                                           nil))
+                                                         nil))
+                                                       nil))
+                                                     nil))
+                                                   nil))
+                                                 nil))
+                                               nil))
+                                             nil))
+                                           nil))
+                                         nil)
+                                        ("2"
+                                         (lemma shift_pretau)
+                                         (("2"
+                                           (inst
+                                            -
+                                            "S1!1 ++ S2!1"
+                                            "rest(s!1, x!1)"
+                                            t!1)
+                                           (("2"
+                                             (expand rest -1 2)
+                                             (("2"
+                                               (expand ^^)
+                                               (("2"
+                                                 (assert)
+                                                 (("2"
+                                                   (lift-if)
+                                                   (("2"
+                                                     (split -1)
+                                                     (("1"
+                                                       (flatten)
+                                                       (("1"
+                                                         (case
+                                                          "interp2_var!1`length = 1 + x!1")
+                                                         (("1"
+                                                           (rewrite -9)
+                                                           (("1"
+                                                             (grind)
+                                                             nil
+                                                             nil))
+                                                           nil)
+                                                          ("2"
+                                                           (assert)
+                                                           nil
+                                                           nil))
+                                                         nil))
+                                                       nil)
+                                                      ("2"
+                                                       (flatten)
+                                                       (("2"
+                                                         (grind)
+                                                         nil
+                                                         nil))
+                                                       nil))
+                                                     nil))
+                                                   nil))
+                                                 nil))
+                                               nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil))
+                                     nil)
+                                    ("2" (grind) nil nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil)
+                        ("2" (flatten)
+                         (("2" (split 1)
+                           (("1" (assert) (("1" (postpone) nil nil))
+                             nil)
+                            ("2" (propax) nil nil)
+                            ("3" (assert)
+                             (("3" (inst - S1!1 S2!1 s!1 t!1)
+                               (("3"
+                                 (assert)
+                                 (("3" (grind) nil nil))
+                                 nil))
+                               nil))
+                             nil)
+                            ("4" (propax) nil nil)
+                            ("5" (skosimp* :preds? t)
+                             (("5" (inst - x!1)
+                               (("5"
+                                 (inst - x!1)
+                                 (("5"
+                                   (hide -11)
+                                   (("5"
+                                     (inst
+                                      -
+                                      S1!1
+                                      "S2!1 ++ rest(s!1, x!1)"
+                                      "sapply(s!1)(x!1)"
+                                      "t!1 ↑ (interp2_var!1`length - 1 - x!1)")
+                                     (("1"
+                                       (assert)
+                                       (("1"
+                                         (bddsimp -11)
+                                         (("1"
+                                           (assert)
+                                           (("1" (grind) nil nil))
+                                           nil)
+                                          ("2"
+                                           (lemma shift_pretau)
+                                           (("2"
+                                             (inst
+                                              -
+                                              "S1!1 ++ S2!1"
+                                              "rest(s!1, x!1)"
+                                              t!1)
+                                             (("2"
+                                               (expand rest -1 2)
+                                               (("2"
+                                                 (expand ^^)
+                                                 (("2"
+                                                   (lift-if)
+                                                   (("2"
+                                                     (split -1)
+                                                     (("1"
+                                                       (case
+                                                        "interp2_var!1`length = 1 + x!1")
+                                                       (("1"
+                                                         (rewrite -7)
+                                                         (("1"
+                                                           (grind)
+                                                           nil
+                                                           nil))
+                                                         nil)
+                                                        ("2"
+                                                         (assert)
+                                                         nil
+                                                         nil))
+                                                       nil)
+                                                      ("2"
+                                                       (grind)
+                                                       nil
+                                                       nil))
+                                                     nil))
+                                                   nil))
+                                                 nil))
+                                               nil))
+                                             nil))
+                                           nil))
+                                         nil))
+                                       nil)
+                                      ("2" (grind) nil nil))
+                                     nil))
+                                   nil))
+                                 nil))
+                               nil))
+                             nil))
+                           nil))
+                         nil))
+                       nil))
+                     nil))
+                   nil)
+                  ("4" (postpone) nil nil) ("5" (postpone) nil nil)
+                  ("6" (postpone) nil nil) ("7" (postpone) nil nil)
+                  ("8" (postpone) nil nil) ("9" (postpone) nil nil)
+                  ("10" (postpone) nil nil) ("11" (postpone) nil nil)
+                  ("12" (postpone) nil nil) ("13" (postpone) nil nil)
+                  ("14" (postpone) nil nil) ("15" (postpone) nil nil)
+                  ("16" (postpone) nil nil) ("17" (postpone) nil nil)
+                  ("18" (postpone) nil nil) ("19" (postpone) nil nil)
+                  ("20" (postpone) nil nil) ("21" (postpone) nil nil))
+                 nil)
+                nil shostak)
                (strong_pretau_subst-2 nil 3583867235
                 ("" (induct U)
                  (("1" (skosimp* :preds? t)
@@ -4172,7 +4820,7 @@
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
                         subst
                    nil)
-                 nil (k const-decl "(stheory?)" language nil)
+                 (k const-decl "(stheory?)" language nil)
                  (syntaxic_induction formula-decl nil language nil)
                  (real_lt_is_strict_total_order name-judgement
                   "(strict_total_order?[real])" real_props nil)
@@ -4194,7 +4842,7 @@
                  (NOT const-decl "[bool -> bool]" booleans nil)
                  (minus_odd_is_odd application-judgement "odd_int"
                   integers nil)
-                 nil (< const-decl "bool" reals nil)
+                 (< const-decl "bool" reals nil)
                  (below type-eq-decl nil nat_types nil)
                  (finseq type-eq-decl nil finite_sequences nil)
                  (sconcat_assoc formula-decl nil language nil)
@@ -4215,16 +4863,15 @@
                     number_fields nil)
                  (int_min application-judgement
                   "{k: int | k <= i AND k <= j}" real_defs nil)
-                 (rest const-decl "(stheory?)" language nil) nil
+                 (rest const-decl "(stheory?)" language nil)
                  (↑ def-decl "{V |
          (sexpr?(U) IFF sexpr?(V)) AND
           (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V))}"
                   subst nil)
-                 nil
                  (numfield nonempty-type-eq-decl nil number_fields nil)
                  (- const-decl "[numfield, numfield -> numfield]"
                     number_fields nil)
-                 nil nil (kw const-decl "prekeyword" language nil)
+                 (kw const-decl "prekeyword" language nil)
                  (stype_def? adt-recognizer-decl
                   "[signature -> boolean]" language nil)
                  (stype_def adt-constructor-decl "(stype_def?)"
@@ -4235,8 +4882,7 @@
                   "[syntaxic -> boolean]" language nil)
                  (theory_def adt-constructor-decl
                   "[finseq[(scontext?)] -> (theory_def?)]" language
-                  nil)
-                 nil nil nil)
+                  nil))
                 nil)
                (strong_pretau_subst-1 nil 3583867012
                 ("" (postpone) nil nil) nil shostak))
