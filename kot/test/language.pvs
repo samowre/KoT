@@ -1,0 +1,68 @@
+language: THEORY
+BEGIN
+  syntaxic: DATATYPE WITH SUBTYPES
+  BEGIN
+    v(i: nat): v?: sexpr?
+    dot(m: (sexpr?), sig: (scontext?), x: (sexpr?)): dot?: sexpr?
+    interp(m: (sexpr?), map: finseq[(sinterp?)]): interp?: sexpr?
+    theory_(map: finseq[(scontext?)]): theory_?: sexpr?
+
+    theory_decl: theory_decl?: scontext?
+    theory_ext: theory_ext?: scontext?
+    theory_var(def: (sexpr?)): theory_var?: scontext?
+    theory_def(def: (sexpr?)): theory_def?: scontext?
+
+    ikeep: ikeep?: sinterp?
+    ideep(sub: (sinterp?)): ideep?: sinterp?
+    itheory(def: (sexpr?)): itheory?: sinterp?
+  END syntaxic
+
+  Γ: VAR (scontext?)
+  σ: VAR (sinterp?)
+
+  interpret?(Γ, σ): RECURSIVE bool =
+    CASES Γ OF
+      theory_decl: ikeep?(σ) OR itheory?(σ)
+    , theory_ext: ikeep?(σ)
+    , theory_var(e):
+        ikeep?(σ) OR (
+	  ideep?(σ) AND
+	  length(def(e)) = length(sub(σ)) AND
+	  FORALL (x: below[length(e)]): interpret?(def(e)(x), sub(σ)(x))
+	)
+    , theory_def(e):
+        ikeep?(σ) OR (
+	  ideep?(σ) AND
+          length(def(e)) = length(sub(σ)) AND
+	  FORALL (x: below[length(e)]): interpret?(def(e)(x), sub(σ)(x))
+	)
+    ENDCASES
+
+  δ(Γ): =
+    CASES OF
+      v(i):
+        IF def?(Γ(i))
+	  THEN δ(rest(Γ, i))(def(Γ(i)))
+	  ELSE v(i)
+	ENDIF
+    , dot(m, Σ, x):
+        LET M = δ(Γ)(m) IN
+	IF v?(x)
+	  THEN dot(M, Σ, x)
+	  ELSE δ(Γ)(η(Γ)(Σ, M, δ(M)(x)))
+	ENDIF
+    , interp(m, σ):
+        LET M = δ(Γ)(m) IN
+	IF v?(M)
+	  THEN interp(M, σ)
+	  ELSE δ(Γ)(interpret(M, σ))
+	ENDIF
+    , theory_(Θ): theory_(Θ WITH [ `seq := LAMBDA (x: below[length(Θ)]): δ(Γ ++ rest(Θ, x))(Θ(x)) ])
+    
+    , theory_decl: theory_decl
+    , theory_var(e): theory_var(δ(Γ)(e))
+    , theory_def(e): theory_def(δ(Γ)(e))
+
+    , ikeep: ikeep
+    , itheory(e): itheory(δ(Γ)(e))
+END language

@@ -61,7 +61,7 @@ BEGIN
     , iterm(a): iterm(η(Sig)(ρ, m, σ)(a))
     ENDCASES
   MEASURE size(U)
-  AUTO_REWRITE eta
+  AUTO_REWRITE η
 
   signature_eta: THEOREM
     m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
@@ -74,7 +74,7 @@ BEGIN
     AND (FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(Sig(m)(x))) IMPLIES
     pretau(Sig ++ ρ)(η(Sig)(ρ, m, σ)(U)) = pretau(Sig ++ Sig(m) ++ ρ)(U)
 
-  weight_eta: THEOREM
-    m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
+  % weight_eta: THEOREM
+  %   m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
     
 END eta
