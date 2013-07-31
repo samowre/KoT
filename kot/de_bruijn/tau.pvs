@@ -1,6 +1,6 @@
 tau: THEORY
 BEGIN
-  IMPORTING subst
+  IMPORTING subst, interp
 
   w: [finseq[(scontext?)], syntaxic -> ordinal]
 
@@ -57,8 +57,6 @@ BEGIN
   ;η: [(sexpr?), nat, nat -> [syntaxic -> syntaxic]]
   ;η: [(sexpr?), nat, nat -> [keyword -> keyword]]
   ;η: [(sexpr?), nat, nat -> [list[pretcc] -> list[pretcc]]]
-  compatible?: [finseq[(scontext?)], finseq[(sinterp?)] -> bool]
-  interpret: [finseq[(scontext?)], finseq[(sinterp?)] -> finseq[(scontext?)]]
   k: [(scontext?) -> finseq[(scontext?)]]
   forall_: [finseq[(scontext?)], syntaxic -> syntaxic]
   forall_: [finseq[(scontext?)], list[pretcc] -> list[pretcc]]
