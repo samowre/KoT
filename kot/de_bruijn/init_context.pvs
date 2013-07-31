@@ -1,0 +1,85 @@
+init_context: THEORY
+BEGIN
+  IMPORTING subst
+
+  len: VAR nat
+  T, p: VAR (sexpr?)
+  a, b: VAR (sexpr?)
+  t1, t2: VAR (sexpr?)
+
+
+  % A context is admissible if it is of the form Γ, Δ where:
+  % Γ = [ *: TYPE = ext (singleton type), 
+  %	  bool_theory: THEORY BEGIN bool: TYPE ext, TRUE: bool = ext, FALSE: bool = ext END, 
+  %	  equalities: THEORY BEGIN T: TYPE, =: [T, T -> bool] = ext END,
+  %	  ¬: [bool -> bool] = λ(b: bool): b = FALSE,
+  %    	  if_theory: THEORY BEGIN T: TYPE, IF: [bool -> ({c: * | b} -> T) -> ({c: * | ¬b} -> T) -> T] = ext END,
+  %	  and: [[bool, bool] -> bool] = λ(b1, b2): IF b1 THEN b2 ELSE FALSE, 
+  %	  or: [[bool, bool] -> bool] = λ(b1, b2): IF b1 THEN TRUE ELSE b2, 
+  star(len): (sexpr?) = v(len - 1)
+
+  bool_theory: (theory?) = theory_((#
+    length := 3, 
+    seq := LAMBDA (x: below[3]): COND
+      x = 2 -> type_var,	 % bool: TYPE = ext
+      x = 1 -> const_var(v(0)),	 % TRUE: bool = ext
+      x = 0 -> const_var(v(1))	 % FALSE: bool = ext
+    ENDCOND #))
+  bool_(len): (sexpr?) = dot(v(len - 2), v(2))
+  TRUE_(len): (sexpr?) = dot(v(len - 2), v(1))
+  FALSE_(len): (sexpr?) = dot(v(len - 2), v(0))
+
+  equalities: (theory?) = theory_((#
+    length := 2,
+    seq := LAMBDA (x: below[2]): COND
+      % T: TYPE
+      x = 1 -> type_decl,
+      % =:	   [                [  T ,   T ] ->  bool   ] 
+      x = 0 -> const_var( fun( prod( v(0), v(1)) , bool_(4)))	
+    ENDCOND #))
+   
+  % =::[[T -> T] -> bool] ≡ equalities
+  equal(T)(len): (sexpr?) = dot(interp(v(len - 3), list2finseq((: ikeep, itype(T) :))), v(0))
+  ;≐(a, b)(T)(len): (sexpr?) = app(equal(T)(len), pair(a, b))
+
+  not_(len): (sexpr?) = v(len - 4)
+  ¬(b)(len): (sexpr?) = app(not_(len), b)
+  % 	     	 ∀(x: T): p(x) ≡                        (λ(x: T): p(x) = λx TRUE)
+  forall_(T, p)(len): (sexpr?) = app(equal(fun(T, bool_(len)))(len), pair( lam(T, p), lam(T, TRUE_(len + 1))))
+  % 	     	 ∃(x: T): p(x) ≡ ¬ ∀(x: T): ¬p(x)
+  exists_(T, p)(len): (sexpr?) = app(not_(len), forall_(T, app(not_(len + 1), p))(len))
+
+  if_theory: (theory?) = theory_((#
+    length := 2, 
+    seq := LAMBDA (x: below[2]): COND
+      % T: TYPE	       		  	    	  
+      x = 1 -> type_decl,  
+      % IF: 	   [	      bool    ->     (     {   c:  *    |   b } -> T  ) ->      (     {    c: *    |    ¬ b  }    ->   T)  ->  T   ] = ext
+      x = 0 -> const_var( fun(bool_(5), fun( fun(subtype(star(6), v(1)) , v(2)) ,  fun( fun(subtype(star(7), (¬(v(2)))(7)) , v(3)) ,  v(3)))))
+    ENDCOND #))
+  ifte_(T)(len): (sexpr?) = dot(interp(v(len - 5), list2finseq((: ikeep, itype(T) :))), v(0))
+  if_(b, t1, t2)(T)(len): (sexpr?) = app(app(app(ifte_(T)(len), b), lam(subtype(star(len), b ↑ 1), t1 ↑ 1)), lam(subtype(star(len), (¬(b ↑ 1))(len + 1)), t2 ↑ 1))
+
+  and_(len): (sexpr?) = v(len - 6)
+  or_(len): (sexpr?) = v(len -7)
+  ;∧(a, b)(len): (sexpr?) = app(and_(len), pair(a, b))
+  ;∨(a, b)(len): (sexpr?) = app(or_(len), pair(a, b))
+
+
+  init_context: (theory?) = theory_((# 
+    length := 7, 
+    seq := LAMBDA (x: below[7]): COND
+      x = 6 -> theory_def(type_var),
+      x = 5 -> theory_def(bool_theory),
+      x = 4 -> theory_def(equalities),
+      %                ¬:    [ bool   -> bool   ] =  λ  (b: bool) :      b  = FALSE
+      x = 3 -> const_def( fun(bool_(3), bool_(4)) , lam(bool_(3), ≐(v(0), FALSE_(4))(bool_(4))(4))),
+      x = 2 -> theory_def(if_theory),
+      %		       ∧:    [   [  bool   -> bool   ] -> bool   ]:  λ (b: [   bool   ,  bool ] ):   IF    b`1   THEN   b`2    ELSE FALSE   
+      x = 1 -> const_def( fun(prod(bool_(5), bool_(6)), bool_(6)) , lam( prod(bool_(5), bool_(6)) , if_(lproj(v(0)), rproj(v(0)), FALSE_(6))(bool_(6))(6))),
+      %		       ∨:    [   [  bool   -> bool   ] -> bool   ]:  λ (b: [   bool   ,  bool ] ):   IF    b`1   THEN   TRUE    ELSE b`2   
+      x = 0 -> const_def( fun(prod(bool_(5), bool_(6)), bool_(6)) , lam( prod(bool_(5), bool_(6)) , if_(lproj(v(0)), TRUE_(6), rproj(v(0)))(bool_(6))(6)))
+    ENDCOND #))
+
+
+END init_context
