@@ -3,98 +3,116 @@ BEGIN
   IMPORTING subst
 
   U, V: VAR syntaxic
-  Γ, Δ, Θ: VAR (stheory?)
   x, y: VAR nat
   σ, τ: VAR (interp?)
-  T: VAR (sexpr?)
+  T, a: VAR (sexpr?)
+  Γ: VAR finseq[(scontext?)]
+  n: VAR nat
+
+  ;∧: [(sexpr?), (sexpr?) -> [nat -> (sexpr?)]]
+  ;forall_: [(sexpr?), (sexpr?) -> [nat -> (sexpr?)]]
+  ;TRUE_: [nat -> (sexpr?)]
+
+  same(U): TYPE = { V | (sexpr?(U) => sexpr?(V)) AND
+                        (sinterp?(U) => sinterp?(V)) AND
+			(scontext?(U) => scontext?(V)) }
+
+  % Special type_size function defined for termination
+  % of functions defined in supertype
+  type_size(U): RECURSIVE nat =
+    CASES U OF
+      fun(A, B): type_size(A) + type_size(B) + 1
+    , prod(A, B): type_size(A) + type_size(B) + 1
+    , subtype(T, a): type_size(T)
+      ELSE 0
+    ENDCASES
+  MEASURE U BY <<
+  AUTO_REWRITE+ type_size
   
   % Direct Supertype : 3.2
-  μ0(T): RECURSIVE (sexpr?) =
-    CASES T OF
+  μ0(U): RECURSIVE syntaxic =
+    CASES U OF
       subtype(T, a): μ0(T)
-      ELSE T
+      ELSE U
     ENDCASES
-  MEASURE w(T)
+  MEASURE U BY <<
 
   % Adding subtype contraints : 4.4
-  ;/(T, a): RECURSIVE (sexpr?) =
-    CASES T OF
-      v(x): v(x),
-      dot(m, s, x): dot(m, s, x),
-      subtype(T, b): subtype(T, b ∧ (a ↑ 1)),
-      fun(A, B): fun(A/a, B/(a ↑ 1)),
-      prod(A, B): prod(A/a, B/(a ↑ 1))
+  AUTO_REWRITE+ sexpr?, scontext?, sinterp?
+  ;/(U, a)(n): RECURSIVE
+    { V | (sexpr?(U) => sexpr?(V)) AND
+          (sinterp?(U) => sinterp?(V)) AND
+	  (scontext?(U) => scontext?(V)) } =
+    CASES U OF
+      subtype(T, b): subtype(T, (b ∧ (a ↑ 1))(n + 1))
+    , fun(A, B): fun((A/a)(n), (B/(a ↑ 1))(n + 1))
+    , prod(A, B): prod((A/a)(n), (B/(a ↑ 1))(n + 1))
+      ELSE U
     ENDCASES
-  MEASURE w(T)
-  divide_size: RECURSIVE JUDGEMENT
-    /(T, a) HAS_TYPE { A | type_size(A) = type_size(T) }
+  MEASURE type_size(U)
 
   % Function μ and π as one recursive function,
   % in order to deal with the mutual recursion
-  mubody(T): RECURSIVE [pretype, preterm] =
-    CASES T OF
-      v(x): (v(x), TRUE_),
-      dot(m, s, x): (dot(m, s, x), TRUE_), % TODO
+  mubody(U)(n): RECURSIVE [same(U), (sexpr?)] =
+    CASES U OF
       subtype(T, a):
-        LET (muT, bodyT) = mubody(T) IN
-	LET piT = Λ(muT)(bodyT) IN
-	(muT, app(piT ↑ 1, v(0)) ∧ a),
-      fun(A, B):
-        LET (muB, bodyB) = mubody(B) IN
-	LET piB = Λ(muB)(bodyB) IN
-	(fun(A, muB), forall_(A, app((piB ↑ 1), app(v(1), v(0))))),
-      prod(A, B):
-        LET (muA, bodyA) = mubody(A),
-	    (muB, bodyB) = mubody(B) IN
-	LET piA = Λ(muA)(bodyA),
-	    piB = Λ(muB)(bodyB) IN
-	(prod(muA, muB / (app((piA ↑ 1), v(0)))),
-	 app((piA ↑ 1), lproj(v(0))) ∧
-	 app(subst(piB ↑ 1, 1, lproj(v(0))), rproj(v(0))))
+        LET (muT, bodyT) = mubody(T)(n) IN
+  	LET piT = lam(muT, bodyT) IN
+  	(muT, (app(piT ↑ 1, v(0)) ∧ a)(n + 1))
+    , fun(A, B):
+        LET (muB, bodyB) = mubody(B)(n + 1) IN
+  	LET piB = lam(muB, bodyB) IN
+  	(fun(A, muB), forall_(A, app((piB ↑ 1), app(v(1), v(0))))(n + 1))
+    , prod(A, B):
+        LET (muA, bodyA) = mubody(A)(n),
+  	    (muB, bodyB) = mubody(B)(n + 1) IN
+  	LET piA = lam(muA, bodyA),
+  	    piB = lam(muB, bodyB) IN
+  	(prod(muA, (muB / (app((piA ↑ 1), v(0))))(n + 1)),
+  	 (app((piA ↑ 1), lproj(v(0))) ∧
+  	  app(subst(piB ↑ 1, 1, lproj(v(0))), rproj(v(0))))(n + 1))
+      ELSE (U, TRUE_(n + 1))
     ENDCASES
-  MEASURE w(T)
-  mubody_size: RECURSIVE JUDGEMENT
-    mubody(T) HAS_TYPE { x: [pretype, preterm] | size(x`1) = size(T) }
+  MEASURE U BY <<
+  AUTO_REWRITE- sexpr?, sinterp?, scontext?
+
+  divide_size: JUDGEMENT
+    /(U, a)(n) HAS_TYPE { V | type_size(V) = type_size(U) }
 
   % Maximal supertype : 3.1, 4.5
-  μ(T): pretype =
-    mubody(T)`1
-  mu_size: JUDGEMENT
-    μ(T) HAS_TYPE { A | size(A) = size(T) }
+  μ(T)(n): (sexpr?) =
+    mubody(T)(n)`1
 
   % Subtype constraints : 3.4, 4.6
-  π(T): preterm =
-    LET (muT, bodyT) = mubody(T) IN
-    Λ(muT)(bodyT)
+  π(T)(n): (sexpr?) =
+    LET (muT, bodyT) = mubody(T)(n) IN
+    lam(muT, bodyT)
 
-
+  AUTO_REWRITE+ μ, π
   mu: THEOREM
-    μ(T) = CASES T OF
-      fun(A, B): fun(A, μ(B)),
-      prod(A, B): prod(μ(A), (μ(B) / (app((π(A) ↑ 1), v(0))))),
-      subtype(T, a): μ(T)
+    μ(T)(n) = CASES T OF
+      fun(A, B): fun(A, μ(B)(n + 1))
+    , prod(A, B): prod(μ(A)(n), (μ(B)(n + 1) / (app((π(A)(n) ↑ 1), v(0))))(n + 1))
+    , subtype(T, a): μ(T)(n)
       ELSE T
     ENDCASES
 
   pi: THEOREM
-    π(T) = CASES T OF
+    π(T)(n) = CASES T OF
       % { x:  T | a } ↦ λ(x: μ(T)): π(T)      (  x ) ∧ a
       %                   ^————————\____/ additional λ
-      subtype(T,  a):   Λ(   μ(T)) ((π(T) ↑ 1)(v(0)) ∧ a),
+      subtype(T,  a):   lam(μ(T)(n), (app(π(T)(n) ↑ 1, v(0)) ∧ a)(n + 1)),
 
       % [i: A → B] ↦ λ(x: [i: A → μ(B)]):  ∀  (i: A): π(B)     (  x (  i ))
       %                ^—————————————————————————————\____/ additional λ
-      fun(  A,  B):  Λ(   ⌈   A → μ(B)⌉)(forall_(A, (π(B) ↑ 1)(v(1)(v(0))))),
+      fun(  A,  B):  lam(fun(A, μ(B)(n + 1)), forall_(A, app(π(B)(n + 1) ↑ 1, app(v(1), v(0))))(n + 1)),
 
       % [i: A, B]  ↦ λ(x: [i: μ(A   ), μ(B   )\π(A)(   i)      ]): π(A)     ( p₁     x  ) ∧       π(B)[ i ← (p₁    x)] ( p₂     x)
       %                ^——————————————————————————————————————————\____/ additional λ
-      prod( A, B):   Λ(   ⌈   μ(A), μ(B)/((π(A) ↑ 1)(v(0)))⌉)((π(A) ↑ 1)(lproj(v(0))) ∧ subst(π(B) ↑ 1, 1, lproj(v(0)))(rproj(v(0))))
+      prod( A, B):   lam(prod(μ(A)(n), (μ(B)(n + 1)/(app(π(A)(n) ↑ 1, v(0))))(n + 1)), (app(π(A)(n) ↑ 1, lproj(v(0))) ∧ app(subst(π(B)(n + 1) ↑ 1, 1, lproj(v(0))), rproj(v(0))))(n + 1))
 
-      ELSE Λ(T)(TRUE_)
+      ELSE lam(T, TRUE_(n + 1))
     ENDCASES
-
-
-
   AUTO_REWRITE- μ, π
   AUTO_REWRITE+ mu, pi
 
