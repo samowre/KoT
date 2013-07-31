@@ -18,10 +18,6 @@ BEGIN
   ;bool_: [nat -> (sexpr?)]
   ;≐: [(sexpr?), (sexpr?) -> [(sexpr?) -> [nat -> (sexpr?)]]]
 
-  same(U): TYPE = { V | (sexpr?(U) => sexpr?(V)) AND
-                        (sinterp?(U) => sinterp?(V)) AND
-			(scontext?(U) => scontext?(V)) }
-
   % Special type_size function defined for termination
   % of functions defined in supertype
   type_size(U): RECURSIVE nat =

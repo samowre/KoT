@@ -1,27 +1,86 @@
 (supertype (wedge_TCC1 0
             (wedge_TCC1-1 nil 3584291454
              ("" (existence-tcc)
-              (("" (grind)
-                ((""
-                  (inst +
-                   "LAMBDA (x, y: (sexpr?)): LAMBDA (z: finseq[(scontext?)]): x")
-                  nil nil))
-                nil))
+              ((""
+                (inst + "LAMBDA (x, y: (sexpr?)): LAMBDA (n: nat): x")
+                nil nil))
               nil)
-             ((finseq type-eq-decl nil finite_sequences nil)
-              (scontext? adt-def-decl "boolean" language nil)
-              (below type-eq-decl nil nat_types nil)
-              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+             ((nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (>= const-decl "bool" reals nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number nonempty-type-decl nil numbers nil)
               (sexpr? adt-def-decl "boolean" language nil)
               (boolean nonempty-type-decl nil booleans nil)
               (syntaxic type-decl nil language nil))
              nil))
            (TRUE__TCC1 0
-            (TRUE__TCC1-1 nil 3584292541 ("" (existence-tcc) nil nil)
-             nil nil))
+            (TRUE__TCC1-1 nil 3584292541
+             ("" (inst 1 "LAMBDA (x: nat): v(3)")
+              (("" (expand "sexpr?") (("" (propax) nil nil)) nil)) nil)
+             ((v adt-constructor-decl "[nat -> (v?)]" language nil)
+              (v? adt-recognizer-decl "[syntaxic -> boolean]" language
+               nil)
+              (sexpr? adt-def-decl "boolean" language nil)
+              (syntaxic type-decl nil language nil)
+              (nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (>= const-decl "bool" reals nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (boolean nonempty-type-decl nil booleans nil)
+              (number nonempty-type-decl nil numbers nil))
+             nil))
            (doteq_TCC1 0
-            (doteq_TCC1-1 nil 3584295489 ("" (existence-tcc) nil nil)
-             nil nil))
+            (doteq_TCC1-1 nil 3584295489
+             (""
+              (inst +
+               "LAMBDA (x, y: (sexpr?)): LAMBDA (z: (sexpr?)): LAMBDa (n :nat): z")
+              nil nil)
+             ((nat nonempty-type-eq-decl nil naturalnumbers nil)
+              (>= const-decl "bool" reals nil)
+              (bool nonempty-type-eq-decl nil booleans nil)
+              (int nonempty-type-eq-decl nil integers nil)
+              (integer_pred const-decl "[rational -> boolean]" integers
+                            nil)
+              (rational nonempty-type-from-decl nil rationals nil)
+              (rational_pred const-decl "[real -> boolean]" rationals
+                             nil)
+              (real nonempty-type-from-decl nil reals nil)
+              (real_pred const-decl "[number_field -> boolean]" reals
+                         nil)
+              (number_field nonempty-type-from-decl nil number_fields
+               nil)
+              (number_field_pred const-decl "[number -> boolean]"
+               number_fields nil)
+              (number nonempty-type-decl nil numbers nil)
+              (sexpr? adt-def-decl "boolean" language nil)
+              (boolean nonempty-type-decl nil booleans nil)
+              (syntaxic type-decl nil language nil))
+             nil))
            (type_size_TCC1 0
             (type_size_TCC1-1 nil 3584291454
              ("" (termination-tcc) nil nil)

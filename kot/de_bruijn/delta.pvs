@@ -8,32 +8,46 @@ BEGIN
   σ: VAR finseq[(sinterp?)]
   n: VAR nat
   m: VAR (sexpr?)
+  a: VAR (sexpr?)
 
   w: [finseq[(scontext?)], syntaxic -> ordinal]
-  definition?: [syntaxic -> bool]
-  var?: [syntaxic -> bool]
+  definition?(U): bool =
+    theory_def?(U) OR const_def?(U) OR type_def?(U)
+  var?(U): bool =
+    const_var?(U) OR type_var?(U)
   ;rest[T: TYPE]: [finseq[T], nat -> finseq[T]]
   k: [(scontext?) -> finseq[(scontext?)]]
   ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
+
+  wdef: AXIOM x < length(Γ) AND definition?(Γ(x)) IMPLIES
+    w(rest(Γ, x), def(Γ(x))) < w(Γ, v(x))
+  wdot: AXIOM
+    w(Γ, m) < w(Γ, dot(m, a))
 
   η(m, n)(U): RECURSIVE syntaxic =
     IF n = 0 THEN U
     ELSE η(m, n - 1)(subst(U, n - 1, dot(m ↑ (n - 1), v(n - 1)))) ENDIF
   MEASURE n
 
-  δ(Γ)(U): RECURSIVE syntaxic =
+  AUTO_REWRITE+ sexpr?, scontext?, sinterp?
+  δ(Γ)(U): RECURSIVE same(U) =
     CASES U OF
       v(x):
-        IF definition?(Γ(x))
+        IF x < length(Γ) AND definition?(Γ(x))
 	  THEN δ(rest(Γ, x))(def(Γ(x)))
 	  ELSE v(x)
 	ENDIF
     , dot(m, x):
         CASES δ(Γ)(m) OF
 	  theory_(Θ):
-	    IF var?(Θ(i(x)))
-	      THEN dot(m, x)
-	      ELSE δ(Γ)(Θ(i(x)))
+	    IF v?(x) AND i(x) < length(Θ) THEN
+	      IF definition?(Θ(i(x)))
+	        THEN δ(Γ)(η(m, length(Θ) - i(x))(def(Θ(i(x)))))
+	      ELSIF var?(Θ(i(x)))
+	        THEN dot(m, x)
+	      ELSE dot(theory_(Θ), x)
+	      ENDIF
+	    ELSE dot(theory_(Θ), x)
 	    ENDIF
 	  ELSE dot(δ(Γ)(m), x)
 	ENDCASES
@@ -50,4 +64,5 @@ BEGIN
       ELSE U
     ENDCASES
   MEASURE w(Γ, U)
+  AUTO_REWRITE- sexpr?, scontext?, sinterp?
 END delta
