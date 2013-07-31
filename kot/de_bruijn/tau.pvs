@@ -33,7 +33,7 @@ BEGIN
   keyword: DATATYPE
   BEGIN
     ⊥: UNDEFINED?
-    KTHEORY(CTX: finseq[(scontext?)]): KTHEORY?
+    KTHEORY(CTX: (sexpr?)): KTHEORY?
     KDECL: KDECL?
     KTYPE: KTYPE?
     KTERM(TYPEOF: (sexpr?)): KTERM?
@@ -68,7 +68,11 @@ BEGIN
   ;≃: [syntaxic, syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]
   π: [syntaxic -> [syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]]
 
-
+  % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
+  % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
+  % ax3: AXIOM sexpr?(U) IMPLIES sexpr?(δ(Γ)(U))
+  % ax4: AXIOM sexpr?(U) IMPLIES sexpr?(U ↑ (n, b))
+  % ax5: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETHEORY IMPLIES theory_def?(Γ(x))
   %%%%%%%%%%%%%% LIMIT %%%%%%%%%%%%%%
 
 
@@ -85,7 +89,7 @@ BEGIN
       IF s ∈ Γ THEN CASES kind(Γ(s)) OF
 	PRETYPE: (KTYPE, null)
       , PRETERM: (KTERM( δ(rest(Γ, s))(type_(Γ(s))) ↑ s ), null)
-      , PRETHEORY: (KTHEORY( decls(δ(rest(Γ, s))(def(Γ(s))) ↑ s) ), null)
+      , PRETHEORY: (KTHEORY( δ(rest(Γ, s))(def(Γ(s))) ↑ s), null)
       ENDCASES ELSE fail ENDIF
     % τ(Γ)(m{{ σ }}.s) = TYPE if kind(Γ(m)) = THEORY
     % 	       	       	      and σ is a valid interpretation for definition(Γ(m))
@@ -99,23 +103,23 @@ BEGIN
     % interpretations.
   , dot(i, x):
       LET (kwi, tccsi) = τ(Γ)(i)
-      IN IF KTHEORY?(kwi) AND v?(x) AND i(x) < length(CTX(kwi)) THEN
-        LET (kwx, tccsx) = τ(Γ ++ CTX(kwi))(x)
-	IN (η(i, length(CTX(kwi)), 0)(kwx), tccsi ++ η(i, length(CTX(kwi)), 0)(tccsx))
+      IN IF KTHEORY?(kwi) AND v?(x) AND theory?(CTX(kwi)) AND i(x) < length(decls(CTX(kwi))) THEN
+        LET (kwx, tccsx) = τ(Γ ++ decls(CTX(kwi)))(x)
+	IN (η(i, length(decls(CTX(kwi))), 0)(kwx), tccsi ++ η(i, length(decls(CTX(kwi))), 0)(tccsx))
       ELSE fail ENDIF
   , interp(m, σ):
       LET (kwm, tccsm) = τ(Γ)(m)
-      IN IF KTHEORY?(kwm) AND compatible?(CTX(kwm), σ) THEN
-        LET (kwi, tccsi) = τ(Γ)(interpret(CTX(kwm), σ))
+      IN IF KTHEORY?(kwm) AND theory?(CTX(kwm)) AND compatible?(decls(CTX(kwm)), σ) THEN
+        LET (kwi, tccsi) = τ(Γ)(interpret(decls(CTX(kwm)), σ))
 	IN (kwi, tccsm ++ tccsi)
       ELSE fail ENDIF
   , theory_(Θ):
       IF length(Θ) = 0 THEN (KTHEORY(Θ), null) ELSE
       LET (kwΘ, tccsΘ) = τ(Γ)(rest(Θ, 1)) IN
-      IF KTHEORY?(kwΘ) THEN
-        LET (kwD, tccsD) = τ(Γ ++ CTX(kwΘ))(Θ(0))
+      IF KTHEORY?(kwΘ) AND theory?(CTX(kwΘ)) THEN
+        LET (kwD, tccsD) = τ(Γ ++ decls(CTX(kwΘ)))(Θ(0))
 	IN IF KDECL?(kwD) THEN
-	  (KTHEORY(CTX(kwΘ) ++ k(Θ(0))), tccsΘ ++ forall_(CTX(kwΘ), tccsD))
+	  (KTHEORY(theory_(decls(CTX(kwΘ)) ++ k(Θ(0)))), tccsΘ ++ forall_(decls(CTX(kwΘ)), tccsD))
 	ELSE fail ENDIF
       ELSE fail ENDIF ENDIF
 		       
