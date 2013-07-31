@@ -1,20 +1,13 @@
 interp: THEORY
 BEGIN
   IMPORTING subst
-
   Θ: VAR (theory_def?)
-  % Δ: VAR finseq[(scontext?)]
-  % σ: VAR finseq[(sinterp?)]
-  i: VAR (interp?)
-  x: VAR (sexpr?)
+  σ: VAR finseq[(sinterp?)]
   s: VAR signature  
 
-  interp(Θ)(s, (i | pretau(signature(Θ))(i)(s))): (theory_def?) = 
-    LET m = i(m(i)),
-        σ = map(i),
-        Δ = (def :: [syntaxic -> finseq[(scontext?)]])(Θ(m)) IN
-    theory_def(Δ WITH [`seq := LAMBDA (z: below[Δ`length]):
-      CASES Δ(z) OF
+  interp(Θ, (σ | length(σ) = length(Θ))): (theory_def?) =
+    theory_def(def(Θ) WITH [`seq := LAMBDA (z: below[length(Θ)]):
+      CASES Θ(z) OF
         type_decl: IF σ(z) = ikeep THEN type_decl ELSE type_def(def(σ(z))) ENDIF
       , type_var: type_var
       , type_def(T): type_def(T)
