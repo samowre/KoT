@@ -1,8 +1,6 @@
 tau: THEORY
 BEGIN
-  IMPORTING subst, interp, supertype
-
-  w: [finseq[(scontext?)], syntaxic -> ordinal]
+  IMPORTING subst, interp, supertype, delta
 
   % TODO:
   % note: the function tau is defined only on what can	
@@ -42,7 +40,6 @@ BEGIN
 
   ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
   CONVERSION- finseq2list, extract1
-  ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
   π(A)(a)(n): list[(sexpr?)] =
     cons( app(π(A)(n), a), null)
   fail: [keyword, list[pretcc]] = (⊥, null)
@@ -53,13 +50,9 @@ BEGIN
   %%% TODO
   ;∈: [nat, finseq[(scontext?)] -> bool]
   ;kind: [(scontext?) -> prekeyword]
-  ;rest[T: TYPE]: [finseq[T], nat -> finseq[T]]
 
-  ;δ: [finseq[(scontext?)] -> [syntaxic -> syntaxic]]
-  ;η: [(sexpr?), nat, nat -> [syntaxic -> syntaxic]]
-  ;η: [(sexpr?), nat, nat -> [keyword -> keyword]]
-  ;η: [(sexpr?), nat, nat -> [list[pretcc] -> list[pretcc]]]
-  k: [(scontext?) -> finseq[(scontext?)]]
+  ;η: [(sexpr?), nat -> [keyword -> keyword]]
+  ;η: [(sexpr?), nat -> [list[pretcc] -> list[pretcc]]]
   forall_: [finseq[(scontext?)], syntaxic -> syntaxic]
   forall_: [finseq[(scontext?)], list[pretcc] -> list[pretcc]]
   forall_: [(scontext?), syntaxic -> syntaxic]
@@ -111,7 +104,7 @@ BEGIN
       LET (kwi, tccsi) = τ(Γ)(i)
       IN IF KTHEORY?(kwi) AND v?(x) AND theory?(CTX(kwi)) AND i(x) < length(decls(CTX(kwi))) THEN
         LET (kwx, tccsx) = τ(Γ ++ decls(CTX(kwi)))(x)
-	IN (η(i, length(decls(CTX(kwi))), 0)(kwx), tccsi ++ η(i, length(decls(CTX(kwi))), 0)(tccsx))
+	IN (η(i, length(decls(CTX(kwi))))(kwx), tccsi ++ η(i, length(decls(CTX(kwi))))(tccsx))
       ELSE fail ENDIF
   , interp(m, σ):
       LET (kwm, tccsm) = τ(Γ)(m)
