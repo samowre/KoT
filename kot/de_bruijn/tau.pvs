@@ -1,8 +1,6 @@
 tau: THEORY
 BEGIN
-  IMPORTING subst
-
-  w: [finseq[(scontext?)], syntaxic -> ordinal]
+  IMPORTING subst, interp, supertype, delta
 
   % TODO:
   % note: the function tau is defined only on what can	
@@ -25,6 +23,7 @@ BEGIN
   x, y, z: VAR nat
   a, b, f, g: VAR syntaxic
   %S: VAR semantic
+  n: VAR nat
 
   %% Type TCCS 
   pretcc: TYPE = syntaxic
@@ -41,8 +40,8 @@ BEGIN
 
   ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
   CONVERSION- finseq2list, extract1
-  ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
-%  π(A)(a): list[pretcc] = cons( app(π(A), a), null)
+  π(A)(a)(n): list[(sexpr?)] =
+    cons( app(π(A)(n), a), null)
   fail: [keyword, list[pretcc]] = (⊥, null)
   k: VAR keyword
 
@@ -51,24 +50,14 @@ BEGIN
   %%% TODO
   ;∈: [nat, finseq[(scontext?)] -> bool]
   ;kind: [(scontext?) -> prekeyword]
-  ;rest[T: TYPE]: [finseq[T], nat -> finseq[T]]
 
-  ;δ: [finseq[(scontext?)] -> [syntaxic -> syntaxic]]
-  ;η: [(sexpr?), nat, nat -> [syntaxic -> syntaxic]]
-  ;η: [(sexpr?), nat, nat -> [keyword -> keyword]]
-  ;η: [(sexpr?), nat, nat -> [list[pretcc] -> list[pretcc]]]
-  compatible?: [finseq[(scontext?)], finseq[(sinterp?)] -> bool]
-  interpret: [finseq[(scontext?)], finseq[(sinterp?)] -> finseq[(scontext?)]]
-  k: [(scontext?) -> finseq[(scontext?)]]
+  ;η: [(sexpr?), nat -> [keyword -> keyword]]
+  ;η: [(sexpr?), nat -> [list[pretcc] -> list[pretcc]]]
   forall_: [finseq[(scontext?)], syntaxic -> syntaxic]
   forall_: [finseq[(scontext?)], list[pretcc] -> list[pretcc]]
   forall_: [(scontext?), syntaxic -> syntaxic]
   forall_: [(scontext?), list[pretcc] -> list[pretcc]]
   bool_: [finseq[(scontext?)] -> syntaxic]
-  μ0: [syntaxic -> syntaxic]
-  ;≃: [syntaxic, syntaxic -> [syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]]
-  ;≃: [syntaxic, syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]
-  π: [syntaxic -> [syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]]
 
   % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
   % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
@@ -76,8 +65,13 @@ BEGIN
   % ax4: AXIOM sexpr?(U) IMPLIES sexpr?(U ↑ (n, b))
   % ax5: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETHEORY IMPLIES theory_def?(Γ(x))
   % ax6: AXIOM w(Γ ++ SIG(i), x) < w(Γ, dot(i, x))
-  % ax7: AXIOM w(Γ, i) < w(Γ, dot(i, x))
-  % ax8: AXIOM 
+  % ax7: AXIOM U << V IMPLIES w(Γ, U) < w(Γ, V)
+  % ax8: AXIOM w(Γ, theory_(interpret(SIG(m), σ))) < w(Γ, interp(m, σ))
+  % ax9: AXIOM w(Γ ++ rest(Θ, 1), Θ(0)) < w(Γ, Θ)
+  % ax10: AXIOM w(Γ, theory_(rest(Θ, 1))) < w(Γ, Θ)
+  % ax11: AXIOM w(Γ ++ k(const_var(A)), B) < w(Γ, fun(A, B))
+  % ax12: AXIOM w(Γ, A) < w(Γ, fun(A, B))
+  % ax13: AXIOM w(Γ ++ k(const_var(A)), B) < w(Γ, prod(A, B))
   %%%%%%%%%%%%%% LIMIT %%%%%%%%%%%%%%
   % axw: << ⊂ w
 
@@ -110,7 +104,7 @@ BEGIN
       LET (kwi, tccsi) = τ(Γ)(i)
       IN IF KTHEORY?(kwi) AND v?(x) AND theory?(CTX(kwi)) AND i(x) < length(decls(CTX(kwi))) THEN
         LET (kwx, tccsx) = τ(Γ ++ decls(CTX(kwi)))(x)
-	IN (η(i, length(decls(CTX(kwi))), 0)(kwx), tccsi ++ η(i, length(decls(CTX(kwi))), 0)(tccsx))
+	IN (η(i, length(decls(CTX(kwi))))(kwx), tccsi ++ η(i, length(decls(CTX(kwi))))(tccsx))
       ELSE fail ENDIF
   , interp(m, σ):
       LET (kwm, tccsm) = τ(Γ)(m)
@@ -173,7 +167,7 @@ BEGIN
 	  fun(A, B):
 	    LET (kwa, tccsa) = τ(Γ)(a)
 	    IN IF KTERM?(kwa) THEN
-	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ≃ TYPEOF(kwa))(a)(Γ) ++ π(A)(a)(Γ))
+	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ≃ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
 	    ELSE fail ENDIF
 	  ELSE fail
 	ENDCASES
@@ -243,7 +237,7 @@ BEGIN
       LET (kwT, tccsT) = τ(Γ)(T)
         , (kwa, tccsa) = τ(Γ)(a)
       IN IF KTYPE?(kwT) AND KTERM?(kwa) THEN
-        (KDECL, tccsT ++ tccsa ++ (T ≃ TYPEOF(kwa))(Γ) ++ π(T)(a)(Γ))
+        (KDECL, tccsT ++ tccsa ++ (T ≃ TYPEOF(kwa))(length(Γ)) ++ π(T)(a)(length(Γ)))
       ELSE fail ENDIF
     % τ(θ)(rest(Δ), decl(Δ)) = CONTEXT  τ(Θ)(rest(Δ)) = CONTEXT
     %				    and τ(Θ, rest(Δ))(decl(Δ)) = THEORY 

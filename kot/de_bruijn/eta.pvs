@@ -1,17 +1,7 @@
 eta: THEORY
 BEGIN
   IMPORTING subst
-  IMPORTING weight
-  CONVERSION- extract1
 
-  η(m, n, b)(U): RECURSIVE syntaxic =
-    CASES U OF
-      v(i):
-        IF i < b THEN v(i)
-	ELSIF i - b < n THEN dot(m, v(i))
-	ELSE v(i - n) ENDIF
-    , dot(i, x): dot(η(m, n, b)(i), x)
-    , interp(i, σ): interp(η(m, n, b)(i), σ WITH [ `seq := LAMBDA (x: below[length(σ)]): η(m, Δ)(σ(
 
 %   σ: VAR finseq[(sinterp?)]
 %   m: VAR nat
