@@ -40,6 +40,8 @@ BEGIN
   END keyword
 
   ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
+  CONVERSION- finseq2list
+  ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
 %  π(A)(a): list[pretcc] = cons( app(π(A), a), null)
   fail: [keyword, list[pretcc]] = (⊥, null)
   k: VAR keyword
