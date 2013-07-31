@@ -7,23 +7,6 @@ BEGIN
   x, y: VAR nat
   T1, T2: VAR (sexpr?)
   
-  % Type equivalence proof obligations : 3.6
-  ;≃(T1, T2: pretype): RECURSIVE list[preterm] =
-    CASES T1 OF
-      symbol(s): IF T2 = T1 THEN (: :) ELSE (: FALSE_ :) ENDIF,
-      dot(m, σ, s): IF T2 = T1 THEN (: :) ELSE (: FALSE_ :) ENDIF, % TODO
-      fun(A1, B1): CASES T2 OF
-        fun(A2, B2): append(μ(A1) ≃ μ(A2),
-	              cons((π(A1) ≐ π(A2))(fun(μ(A1), bool_)),
-		            forall_(A1, B1 ≃ B2)))
-	ELSE (: FALSE_ :) ENDCASES,
-      prod(A1, B1): CASES T2 OF
-        prod(A2, B2): append(A1 ≃ A2,
-	                     forall_(A1, B1 ≃ B2))
-	ELSE (: FALSE_ :) ENDCASES
-    ELSE (: FALSE_ :) ENDCASES
-  MEASURE size(T1)
-
   % Type equivalence for dependent types (A ≃ B)/a : 4.8
   ;≃(T1, T2: pretype)(a): RECURSIVE list[preterm] =
     CASES T1 OF
@@ -41,10 +24,6 @@ BEGIN
       ELSE (: FALSE_ :)
     ENDCASES
   MEASURE size(T1)
-
-
-
-  
 
   % Compatible types : 3.8
   %;∼(A, B)(Γ): list[tccs] = map(LAMBDA a: (Γ, a))(A ≃ B)

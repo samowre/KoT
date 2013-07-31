@@ -5,13 +5,18 @@ BEGIN
   U, V: VAR syntaxic
   x, y: VAR nat
   σ, τ: VAR (interp?)
-  T, a: VAR (sexpr?)
+  T, a, T1, T2: VAR (sexpr?)
+  A: VAR (sexpr?)
   Γ: VAR finseq[(scontext?)]
   n: VAR nat
 
   ;∧: [(sexpr?), (sexpr?) -> [nat -> (sexpr?)]]
   ;forall_: [(sexpr?), (sexpr?) -> [nat -> (sexpr?)]]
+  ;forall_: [(sexpr?), list[(sexpr?)] -> [nat -> list[(sexpr?)]]]
   ;TRUE_: [nat -> (sexpr?)]
+  ;FALSE_: [nat -> (sexpr?)]
+  ;bool_: [nat -> (sexpr?)]
+  ;≐: [(sexpr?), (sexpr?) -> [(sexpr?) -> [nat -> (sexpr?)]]]
 
   same(U): TYPE = { V | (sexpr?(U) => sexpr?(V)) AND
                         (sinterp?(U) => sinterp?(V)) AND
@@ -76,9 +81,6 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE- sexpr?, sinterp?, scontext?
 
-  divide_size: JUDGEMENT
-    /(U, a)(n) HAS_TYPE { V | type_size(V) = type_size(U) }
-
   % Maximal supertype : 3.1, 4.5
   μ(T)(n): (sexpr?) =
     mubody(T)(n)`1
@@ -115,5 +117,46 @@ BEGIN
     ENDCASES
   AUTO_REWRITE- μ, π
   AUTO_REWRITE+ mu, pi
+
+  divide_size: JUDGEMENT
+    /(U, a)(n) HAS_TYPE { V | type_size(V) = type_size(U) }
+  mubody_size: JUDGEMENT
+    mubody(U)(n) HAS_TYPE [{ V | type_size(V) = type_size(U) }, (sexpr?)]
+  mu_size: JUDGEMENT
+    μ(T)(n) HAS_TYPE { A | type_size(A) = type_size(T) }
+  shift_size: JUDGEMENT
+    ↑(U, (nb: [nat, nat])) HAS_TYPE { V | type_size(V) = type_size(U) }
+  subst_size: JUDGEMENT
+    subst(U, x, (a | type_size(a) = 0)) HAS_TYPE { V | type_size(V) = type_size(U) }
+
+  % Type equivalence proof obligations : 3.6
+  ;≃(T1, T2)(n): RECURSIVE list[(sexpr?)] =
+    CASES T1 OF
+      fun(A1, B1): CASES T2 OF
+        fun(A2, B2): append((μ(A1)(n) ≃ μ(A2)(n))(n),
+	               cons((π(A1)(n) ≐ π(A2)(n))(fun(μ(A1)(n), bool_(n + 1)))(n),
+		            forall_(A1, (B1 ≃ B2)(n + 1))(n)))
+	ELSE (: FALSE_(n) :) ENDCASES,
+      prod(A1, B1): CASES T2 OF
+        prod(A2, B2): append((A1 ≃ A2)(n),
+	                     forall_(A1, (B1 ≃ B2)(n + 1))(n))
+	ELSE (: FALSE_(n) :) ENDCASES
+    ELSE IF T2 = T1 THEN (: :) ELSE (: FALSE_(n) :) ENDIF ENDCASES
+  MEASURE type_size(T1)
+
+  % Type equivalence for dependent types (A ≃ B)/a : 4.8
+  ;≃(T1, T2)(a)(n): RECURSIVE list[(sexpr?)] =
+    CASES T1 OF
+      fun(A1, B1): CASES T2 OF
+        fun(A2, B2): append((μ(A1)(n) ≃ μ(A2)(n))(n),
+	              cons((π(A1)(n) ≐ π(A2)(n))(fun(μ(A1)(n), bool_(n + 1)))(n),
+		            forall_(A1, (B1 ≃ B2)(app(a, v(0)))(n + 1))(n)))
+	ELSE (: FALSE_(n) :) ENDCASES,
+      prod(A1, A2): CASES T2 OF
+        prod(B1, B2): append((        A1             ≃         B1            )(lproj(a))(n),
+	                     (subst(A2, 0, lproj(a)) ≃ subst(B2, 0, lproj(a)))(rproj(a))(n)) % subst: TODO
+	ELSE (: FALSE_(n) :) ENDCASES
+    ELSE IF T2 = T1 THEN (: :) ELSE (: FALSE_(n) :) ENDIF ENDCASES
+  MEASURE type_size(T1)
 
 END supertype

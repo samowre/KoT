@@ -1,6 +1,6 @@
 tau: THEORY
 BEGIN
-  IMPORTING subst, interp
+  IMPORTING subst, interp, supertype
 
   w: [finseq[(scontext?)], syntaxic -> ordinal]
 
@@ -25,6 +25,7 @@ BEGIN
   x, y, z: VAR nat
   a, b, f, g: VAR syntaxic
   %S: VAR semantic
+  n: VAR nat
 
   %% Type TCCS 
   pretcc: TYPE = syntaxic
@@ -42,7 +43,8 @@ BEGIN
   ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
   CONVERSION- finseq2list, extract1
   ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
-%  π(A)(a): list[pretcc] = cons( app(π(A), a), null)
+  π(A)(a)(n): list[(sexpr?)] =
+    cons( app(π(A)(n), a), null)
   fail: [keyword, list[pretcc]] = (⊥, null)
   k: VAR keyword
 
@@ -63,10 +65,6 @@ BEGIN
   forall_: [(scontext?), syntaxic -> syntaxic]
   forall_: [(scontext?), list[pretcc] -> list[pretcc]]
   bool_: [finseq[(scontext?)] -> syntaxic]
-  μ0: [syntaxic -> syntaxic]
-  ;≃: [syntaxic, syntaxic -> [syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]]
-  ;≃: [syntaxic, syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]
-  π: [syntaxic -> [syntaxic -> [finseq[(scontext?)] -> list[pretcc]]]]
 
   % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
   % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
@@ -176,7 +174,7 @@ BEGIN
 	  fun(A, B):
 	    LET (kwa, tccsa) = τ(Γ)(a)
 	    IN IF KTERM?(kwa) THEN
-	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ≃ TYPEOF(kwa))(a)(Γ) ++ π(A)(a)(Γ))
+	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ≃ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
 	    ELSE fail ENDIF
 	  ELSE fail
 	ENDCASES
@@ -246,7 +244,7 @@ BEGIN
       LET (kwT, tccsT) = τ(Γ)(T)
         , (kwa, tccsa) = τ(Γ)(a)
       IN IF KTYPE?(kwT) AND KTERM?(kwa) THEN
-        (KDECL, tccsT ++ tccsa ++ (T ≃ TYPEOF(kwa))(Γ) ++ π(T)(a)(Γ))
+        (KDECL, tccsT ++ tccsa ++ (T ≃ TYPEOF(kwa))(length(Γ)) ++ π(T)(a)(length(Γ)))
       ELSE fail ENDIF
     % τ(θ)(rest(Δ), decl(Δ)) = CONTEXT  τ(Θ)(rest(Δ)) = CONTEXT
     %				    and τ(Θ, rest(Δ))(decl(Δ)) = THEORY 
