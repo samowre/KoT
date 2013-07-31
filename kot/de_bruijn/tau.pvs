@@ -40,7 +40,7 @@ BEGIN
   END keyword
 
   ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
-  CONVERSION- finseq2list
+  CONVERSION- finseq2list, extract1
   ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
 %  π(A)(a): list[pretcc] = cons( app(π(A), a), null)
   fail: [keyword, list[pretcc]] = (⊥, null)
@@ -75,6 +75,9 @@ BEGIN
   % ax3: AXIOM sexpr?(U) IMPLIES sexpr?(δ(Γ)(U))
   % ax4: AXIOM sexpr?(U) IMPLIES sexpr?(U ↑ (n, b))
   % ax5: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETHEORY IMPLIES theory_def?(Γ(x))
+  % ax6: AXIOM w(Γ ++ SIG(i), x) < w(Γ, dot(i, x))
+  % ax7: AXIOM w(Γ, i) < w(Γ, dot(i, x))
+  % ax8: AXIOM 
   %%%%%%%%%%%%%% LIMIT %%%%%%%%%%%%%%
   % axw: << ⊂ w
 
@@ -112,12 +115,12 @@ BEGIN
   , interp(m, σ):
       LET (kwm, tccsm) = τ(Γ)(m)
       IN IF KTHEORY?(kwm) AND theory?(CTX(kwm)) AND compatible?(decls(CTX(kwm)), σ) THEN
-        LET (kwi, tccsi) = τ(Γ)(interpret(decls(CTX(kwm)), σ))
+        LET (kwi, tccsi) = τ(Γ)(theory_(interpret(decls(CTX(kwm)), σ)))
 	IN (kwi, tccsm ++ tccsi)
       ELSE fail ENDIF
   , theory_(Θ):
-      IF length(Θ) = 0 THEN (KTHEORY(Θ), null) ELSE
-      LET (kwΘ, tccsΘ) = τ(Γ)(rest(Θ, 1)) IN
+      IF length(Θ) = 0 THEN (KTHEORY(theory_(Θ)), null) ELSE
+      LET (kwΘ, tccsΘ) = τ(Γ)(theory_(rest(Θ, 1))) IN
       IF KTHEORY?(kwΘ) AND theory?(CTX(kwΘ)) THEN
         LET (kwD, tccsD) = τ(Γ ++ decls(CTX(kwΘ)))(Θ(0))
 	IN IF KDECL?(kwD) THEN
