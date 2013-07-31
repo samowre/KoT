@@ -4,77 +4,86 @@ BEGIN
   IMPORTING weight
   CONVERSION- extract1
 
-  σ: VAR finseq[(sinterp?)]
-  m: VAR nat
-  S: VAR syntaxic
-  Sig, ρ: VAR (stheory?)
-  U, V: VAR syntaxic
-  M: VAR (scontext?)
-
-%  η(Γ)(ρ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
-%   (S: semantic(Γ ++ def(Γ(m)) ++ ρ) | NOT map?(S)): RECURSIVE
-  η(Sig)(ρ, (m | m ∈ Sig AND stheory?(Sig(m))), (σ | σ`length = length(Sig(m))))(U):
-    RECURSIVE { V: syntaxic | (sexpr?(U) => sexpr?(V)) AND
-			      (sinterp?(U) => sinterp?(V)) AND
-			      (scontext?(U) => scontext?(V)) } =
-%    { U: syntaxic | prekind?(Γ ++ ρ)(U) = prekind?(Γ ++ def(Γ(m)) ++ ρ)(S) } =
+  η(m, n, b)(U): RECURSIVE syntaxic =
     CASES U OF
       v(i):
-        IF i ∈ ρ THEN v(i)
-	ELSIF (i - length(ρ)) < σ`length THEN
-	  IF ikeep?(σ`seq(i - length(ρ)))
-	    THEN dot(interp(v(m + length(ρ)),
-	                    σ WITH [ `seq := LAMBDA (x: below[σ`length]): σ`seq(x) ↑ length(ρ) ]),
-		     Sig(m),
-		     v(i - length(ρ)))
-	    ELSE def(σ`seq(i - length(ρ))) ↑ length(ρ)
-	  ENDIF
-	ELSE v(i - length(Sig(m))) ENDIF
-    , dot(p, Sp, x):
-        dot(η(Sig)(ρ, m, σ)(p), Sp, x)
-    , interp(p, τ):
-        interp(η(Sig)(ρ, m, σ)(p), τ WITH [ `seq := LAMBDA (x: below[τ`length]): η(Sig)(ρ, m, σ)(τ`seq(x)) ])
+        IF i < b THEN v(i)
+	ELSIF i - b < n THEN dot(m, v(i))
+	ELSE v(i - n) ENDIF
+    , dot(i, x): dot(η(m, n, b)(i), x)
+    , interp(i, σ): interp(η(m, n, b)(i), σ WITH [ `seq := LAMBDA (x: below[length(σ)]): η(m, Δ)(σ(
 
-    , fun(A, B):
-        fun(η(Sig)(ρ, m, σ)(A), η(Sig)(ρ ++ k(sconst_def), m, σ)(B))
-    , prod(A, B): prod(η(Sig)(ρ, m, σ)(A), η(Sig)(ρ ++ k(sconst_def), m, σ)(B))
-    , subtype(T, a):
-        subtype(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ ++ k(sconst_def), m, σ)(a))
+%   σ: VAR finseq[(sinterp?)]
+%   m: VAR nat
+%   S: VAR syntaxic
+%   Sig, ρ: VAR (stheory?)
+%   U, V: VAR syntaxic
+%   M: VAR (scontext?)
 
-    , app(f, a): app(η(Sig)(ρ, m, σ)(f), η(Sig)(ρ, m, σ)(a))
-    , lam(T, a): lam(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ ++ k(sconst_def), m, σ)(a))
-    , pair(a, b): pair(η(Sig)(ρ, m, σ)(a), η(Sig)(ρ, m, σ)(b))
-    , lproj(a): lproj(η(Sig)(ρ, m, σ)(a))
-    , rproj(a): rproj(η(Sig)(ρ, m, σ)(a))
+% %  η(Γ)(ρ: pretheory(Γ), (m | m ∈ Γ AND theory_def?(Γ(m))), (σ: preinterp(Γ) | compatible?(def(Γ(m)), σ)))
+% %   (S: semantic(Γ ++ def(Γ(m)) ++ ρ) | NOT map?(S)): RECURSIVE
+%   η(Sig)(ρ, (m | m ∈ Sig AND stheory?(Sig(m))), (σ | σ`length = length(Sig(m))))(U):
+%     RECURSIVE { V: syntaxic | (sexpr?(U) => sexpr?(V)) AND
+% 			      (sinterp?(U) => sinterp?(V)) AND
+% 			      (scontext?(U) => scontext?(V)) } =
+% %    { U: syntaxic | prekind?(Γ ++ ρ)(U) = prekind?(Γ ++ def(Γ(m)) ++ ρ)(S) } =
+%     CASES U OF
+%       v(i):
+%         IF i ∈ ρ THEN v(i)
+% 	ELSIF (i - length(ρ)) < σ`length THEN
+% 	  IF ikeep?(σ`seq(i - length(ρ)))
+% 	    THEN dot(interp(v(m + length(ρ)),
+% 	                    σ WITH [ `seq := LAMBDA (x: below[σ`length]): σ`seq(x) ↑ length(ρ) ]),
+% 		     Sig(m),
+% 		     v(i - length(ρ)))
+% 	    ELSE def(σ`seq(i - length(ρ))) ↑ length(ρ)
+% 	  ENDIF
+% 	ELSE v(i - length(Sig(m))) ENDIF
+%     , dot(p, Sp, x):
+%         dot(η(Sig)(ρ, m, σ)(p), Sp, x)
+%     , interp(p, τ):
+%         interp(η(Sig)(ρ, m, σ)(p), τ WITH [ `seq := LAMBDA (x: below[τ`length]): η(Sig)(ρ, m, σ)(τ`seq(x)) ])
 
-    , type_decl: type_decl
-    , type_var: type_var
-    , type_def(T): type_def(η(Sig)(ρ, m, σ)(T))
-    , const_decl(T): const_decl(η(Sig)(ρ, m, σ)(T))
-    , const_var(T): const_var(η(Sig)(ρ, m, σ)(T))
-    , const_def(T, a): const_def(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ, m, σ)(a))
-    , theory_def(f):
-        theory_def(f WITH [ `seq := LAMBDA (x: below[f`length]): η(Sig)(ρ ++ rest(signature(U), x), m, σ)(f`seq(x)) ])
+%     , fun(A, B):
+%         fun(η(Sig)(ρ, m, σ)(A), η(Sig)(ρ ++ k(sconst_def), m, σ)(B))
+%     , prod(A, B): prod(η(Sig)(ρ, m, σ)(A), η(Sig)(ρ ++ k(sconst_def), m, σ)(B))
+%     , subtype(T, a):
+%         subtype(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ ++ k(sconst_def), m, σ)(a))
 
-    , ikeep: ikeep
-    , itype(T): itype(η(Sig)(ρ, m, σ)(T))
-    , iterm(a): iterm(η(Sig)(ρ, m, σ)(a))
-    ENDCASES
-  MEASURE size(U)
-  AUTO_REWRITE η
+%     , app(f, a): app(η(Sig)(ρ, m, σ)(f), η(Sig)(ρ, m, σ)(a))
+%     , lam(T, a): lam(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ ++ k(sconst_def), m, σ)(a))
+%     , pair(a, b): pair(η(Sig)(ρ, m, σ)(a), η(Sig)(ρ, m, σ)(b))
+%     , lproj(a): lproj(η(Sig)(ρ, m, σ)(a))
+%     , rproj(a): rproj(η(Sig)(ρ, m, σ)(a))
 
-  signature_eta: THEOREM
-    m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
-    signature(η(Sig)(ρ, m, σ)(M)) = signature(M)
+%     , type_decl: type_decl
+%     , type_var: type_var
+%     , type_def(T): type_def(η(Sig)(ρ, m, σ)(T))
+%     , const_decl(T): const_decl(η(Sig)(ρ, m, σ)(T))
+%     , const_var(T): const_var(η(Sig)(ρ, m, σ)(T))
+%     , const_def(T, a): const_def(η(Sig)(ρ, m, σ)(T), η(Sig)(ρ, m, σ)(a))
+%     , theory_def(f):
+%         theory_def(f WITH [ `seq := LAMBDA (x: below[f`length]): η(Sig)(ρ ++ rest(signature(U), x), m, σ)(f`seq(x)) ])
 
-  % TODO: check if the second line hypothesis is used in the proof, 
-  % because I don't remeber using it.
-  pretau_eta: THEOREM 
-    m ∈ Sig AND stheory?(Sig(m)) AND σ`length = length(Sig(m))
-    AND (FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(Sig(m)(x))) IMPLIES
-    pretau(Sig ++ ρ)(η(Sig)(ρ, m, σ)(U)) = pretau(Sig ++ Sig(m) ++ ρ)(U)
+%     , ikeep: ikeep
+%     , itype(T): itype(η(Sig)(ρ, m, σ)(T))
+%     , iterm(a): iterm(η(Sig)(ρ, m, σ)(a))
+%     ENDCASES
+%   MEASURE size(U)
+%   AUTO_REWRITE η
 
-  % weight_eta: THEOREM
-  %   m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
+%   signature_eta: THEOREM
+%     m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
+%     signature(η(Sig)(ρ, m, σ)(M)) = signature(M)
+
+%   % TODO: check if the second line hypothesis is used in the proof, 
+%   % because I don't remeber using it.
+%   pretau_eta: THEOREM 
+%     m ∈ Sig AND stheory?(Sig(m)) AND σ`length = length(Sig(m))
+%     AND (FORALL (x: below[σ`length]): pretau(Sig)(σ`seq(x))(Sig(m)(x))) IMPLIES
+%     pretau(Sig ++ ρ)(η(Sig)(ρ, m, σ)(U)) = pretau(Sig ++ Sig(m) ++ ρ)(U)
+
+%   % weight_eta: THEOREM
+%   %   m ∈ Sig AND stheory?(Sig(m)) AND length(σ) = length(Sig(m)) IMPLIES
     
 END eta
