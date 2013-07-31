@@ -8,27 +8,6 @@ BEGIN
   U, V: VAR syntaxic
   t: VAR (sexpr?)
   nb, c: VAR [nat, nat]
-  Sig, S1, S2: VAR (stheory?)
-  s: VAR signature
-
-  
-  % Special type_size function defined for termination
-  % of functions defined in supertype
-  type_size(U): RECURSIVE nat =
-    CASES U OF
-      fun(A, B): type_size(A) + type_size(B) + 1,
-      prod(A, B): type_size(A) + type_size(B) + 1,
-      subtype(T, a): type_size(T),
-      v(s): 1, 
-      dot(m, σ, s): 1
-      ELSE 0
-    ENDCASES
-  MEASURE U BY <<
-  AUTO_REWRITE+ type_size
-
-
-
-  
 
   AUTO_REWRITE+ sexpr?
   % Shift: classical shift operator for De Bruijn indices
@@ -39,9 +18,12 @@ BEGIN
     CASES U OF
       % Names
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
-    , dot(m, s, e): dot(m ↑ nb, s, e)
-    , interp(m, σ): interp(m ↑ nb, σ WITH [`seq := 
-      		    LAMBDA (x: below[σ`length]): σ(x) ↑ (nb`1, nb`2 + σ`length - 1 - x)])
+    , dot(m, e): dot(m ↑ nb, e)
+    , interp(m, σ):
+        interp(m ↑ nb,
+	       σ WITH [`seq := LAMBDA (x: below[σ`length]): σ(x) ↑ (nb`1, nb`2 + σ`length - 1 - x) ])
+    , theory_(Θ):
+        theory_(Θ WITH [ `seq := LAMBDA (x: below[length(Θ)]): Θ(x) ↑ (nb`1, nb`2 + length(Θ) - 1 - x) ])
 
       % Types
     , subtype(T, a): subtype(T ↑ nb, a ↑ (nb`1, nb`2 + 1))
@@ -63,8 +45,7 @@ BEGIN
     , const_decl(T): const_decl(T ↑ nb)
     , const_var(T): const_var(T ↑ nb)
     , const_def(T, a): const_def(T ↑ nb, a ↑ nb)
-    , theory_def(Θ): theory_def(Θ WITH [`seq := 
-      		     LAMBDA (x: below[Θ`length]): Θ(x) ↑ (nb`1, nb`2 + Θ`length - 1 - x)])
+    , theory_def(Th): theory_def(Th ↑ nb)
 
       % Interpretations
     , ikeep: ikeep
@@ -82,47 +63,25 @@ BEGIN
   ;↑(U, (n: nat)): MACRO syntaxic =
     (U ↑ (n, 0))
 
-
-  length_shift: THEOREM
-    length(Γ ↑ nb) = length(Γ)
-  shift_plus: THEOREM
-    (U ↑ (i, n)) ↑ (j, n) = U ↑ (i + j, n)
-  AUTO_REWRITE+ shift_plus, length_shift
-  shift_k: THEOREM
-    k(M) ↑ nb = k(M ↑ nb)
-  shift_concat: THEOREM
-    (Γ ++ Δ) ↑ nb = (Γ ↑ nb) ++ (Δ ↑ (nb`1, nb`2 + length(Γ)))
-  AUTO_REWRITE shift_k, shift_concat
- 
-    % Subtype judgements
-  strong_prektau_shift: THEOREM
-    pretau(S1 ++ Sig ++ S2)(U ↑ (length(Sig), length(S2)))(s)
-    IFF pretau(S1 ++ S2)(U)(s)
-  shift_pretau: THEOREM
-    pretau(S1 ++ S2)(U ↑ length(S2)) = pretau(S1)(U)
-
-
-  % Shift preserves type_size
-  shift_type_size: THEOREM type_size(U ↑ nb) = type_size(U)
-  
-
-
   AUTO_REWRITE+ sexpr?
   % This is a "true" substitution - this really removes the bound variable.
   % Outer variables see their index decreased.
   % Definition 2.15, 4.3, modified for the De Bruijn index
   subst(U, x, t): RECURSIVE 
   { V | (sexpr?(U) IFF sexpr?(V)) AND 
-         (sinterp?(U) IFF sinterp?(V)) AND
-	 (scontext?(U) IFF scontext?(V)) } = 
+        (sinterp?(U) IFF sinterp?(V)) AND
+	(scontext?(U) IFF scontext?(V)) } = 
     CASES U OF
       % n ↦ t
       % x ↦ x where the λ-binder for n has been removed
       v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF
       % /!\ Case x = m not handled
-    , dot(m, s, e): dot(subst(m, x, t), s, e)
-    , interp(m, σ): interp(subst(m, x, t), σ WITH [`seq := 
-        LAMBDA (y: below[σ`length]): subst(σ(y), x + σ`length - 1 - y, t ↑ (σ`length - 1 - y))])
+    , dot(m, e): dot(subst(m, x, t), e)
+    , interp(m, σ):
+        interp(subst(m, x, t),
+	       σ WITH [`seq := LAMBDA (y: below[σ`length]): subst(σ(y), x + σ`length - 1 - y, t ↑ (σ`length - 1 - y)) ])
+    , theory_(Θ):
+        theory_(Θ WITH [ `seq := LAMBDA (y: below[length(Θ)]): subst(Θ(y), x + length(Θ) - 1 - y, t ↑ (length(Θ) - 1 - y)) ])
 
       % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
       %                        λ——————————————————————\___________/
@@ -153,8 +112,7 @@ BEGIN
     , const_decl(T): const_decl(subst(T, x, t))
     , const_var(T): const_var(subst(T, x, t))
     , const_def(T, a): const_def(subst(T, x, t), subst(a, x, t))
-    , theory_def(Θ): theory_def(Θ WITH [`seq := 
-        LAMBDA (y: below[Θ`length]): subst(Θ(y), x + Θ`length - 1 - y, t ↑ (Θ`length - 1 - y))])
+    , theory_def(Th): theory_def(subst(Th, x, t))
 
       % Interpretations
     , ikeep: ikeep
@@ -165,18 +123,68 @@ BEGIN
   AUTO_REWRITE subst
   AUTO_REWRITE- sexpr?
 
-  % Subtype judgements
-  strong_pretau_subst: THEOREM
-    pretau(S1 ++ S2)(t)(sconst_def) IMPLIES
-    (pretau(S1 ++ S2)(subst(U, length(S2), t))(s) IFF 
-     pretau(S1 ++ k(sconst_def) ++ S2)(U)(s))
-  pretau_subst: THEOREM
-    pretau(S1)(t)(sconst_def) IMPLIES
-    pretau(S1)(subst(U, 0, t)) = pretau(S1 ++ k(sconst_def))(U)
+%%%%% LATER %%%%%%
+
+  
+  % % Special type_size function defined for termination
+  % % of functions defined in supertype
+  % type_size(U): RECURSIVE nat =
+  %   CASES U OF
+  %     fun(A, B): type_size(A) + type_size(B) + 1,
+  %     prod(A, B): type_size(A) + type_size(B) + 1,
+  %     subtype(T, a): type_size(T),
+  %     v(s): 1, 
+  %     dot(m, σ, s): 1
+  %     ELSE 0
+  %   ENDCASES
+  % MEASURE U BY <<
+  % AUTO_REWRITE+ type_size
 
 
-  subst_type_size: THEOREM
-    type_size(subst(U, x, t)) = type_size(U)
-  AUTO_REWRITE subst_type_size
+
+  
+
+  % length_shift: THEOREM
+  %   length(Γ ↑ nb) = length(Γ)
+  % shift_plus: THEOREM
+  %   (U ↑ (i, n)) ↑ (j, n) = U ↑ (i + j, n)
+  % AUTO_REWRITE+ shift_plus, length_shift
+  % shift_k: THEOREM
+  %   k(M) ↑ nb = k(M ↑ nb)
+  % shift_concat: THEOREM
+  %   (Γ ++ Δ) ↑ nb = (Γ ↑ nb) ++ (Δ ↑ (nb`1, nb`2 + length(Γ)))
+  % AUTO_REWRITE shift_k, shift_concat
+ 
+  % signature_shift: THEOREM
+  %   signature(M ↑ nb) = signature(M)
+  
+  % % Subtype judgements
+  % strong_prektau_shift: THEOREM
+  %   pretau(S1 ++ Sig ++ S2)(U ↑ (length(Sig), length(S2)))(s)
+  %   IFF pretau(S1 ++ S2)(U)(s)
+  % shift_pretau: THEOREM
+  %   pretau(S1 ++ S2)(U ↑ length(S2)) = pretau(S1)(U)
+
+
+  % % Shift preserves type_size
+  % shift_type_size: THEOREM type_size(U ↑ nb) = type_size(U)
+  
+
+  % signature_subst: THEOREM
+  %   signature(subst(M, x, t)) = signature(M)
+
+  % % Subtype judgements
+  % strong_pretau_subst: THEOREM
+  %   pretau(S1 ++ S2)(t)(sconst_def) IMPLIES
+  %   (pretau(S1 ++ S2)(subst(U, length(S2), t))(s) IFF 
+  %    pretau(S1 ++ k(sconst_def) ++ S2)(U)(s))
+  % pretau_subst: THEOREM
+  %   pretau(S1)(t)(sconst_def) IMPLIES
+  %   pretau(S1)(subst(U, 0, t)) = pretau(S1 ++ k(sconst_def))(U)
+
+
+  % subst_type_size: THEOREM
+  %   type_size(subst(U, x, t)) = type_size(U)
+  % AUTO_REWRITE subst_type_size
 
 END subst
