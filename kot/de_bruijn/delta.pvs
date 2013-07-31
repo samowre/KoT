@@ -1,16 +1,50 @@
 delta: THEORY
 BEGIN
-  δ(Γ)
+  IMPORTING eta, decl, interp
+
+  Γ: VAR (theory_def?)
+  U, V: VAR syntaxic
+  Sig, S: VAR signature
+  x: VAR nat
+
+  w: [(theory_def?), syntaxic -> ordinal]
+  w_definition: AXIOM x ∈ Γ AND definition?(Γ)(x) IMPLIES
+    w(rest(Γ, x), definition(Γ)(x)) < w(Γ, v(x))
+
+  δ(Γ)(U):
+    RECURSIVE { V | (sexpr?(U) => sexpr?(V)) AND
+                    sinterp?(U) => sinterp?(V) } =
     CASES U OF
       v(x):
-        IF definition?(Γ)(x)
+        IF x ∈ Γ AND definition?(Γ)(x)
 	  THEN δ(rest(Γ, x))(definition(Γ)(x))
 	  ELSE v(x)
 	ENDIF
-    , dot(m, S, x):
-    , interp(m, σ):
-        interp(δ(Γ)(m), σ)
-    , fun(A, B):
-    , prod
-    , subtype
+    , dot(m, S, x): IF NOT v?(x) THEN dot(m, S, x) ELSE
+        CASES m OF interp(m, σ): IF NOT v?(m) OR NOT i(m) ∈ Γ THEN dot(interp(m, σ), S, x) ELSE
+	  LET m = i(m), x = i(x) IN
+	  LET Δ = Γ(m) IN
+	  IF x ∈ Δ AND theory_def?(Δ) AND definition?(Δ)(x)
+	    THEN δ(Γ)(η(signature(Γ))(S, m, σ)(definition(Δ)(x)))
+	    ELSE dot(interp(v(m),
+	                    σ WITH [ `seq := LAMBDA (x: below[length(σ)]):
+			                       δ(Γ ++ rest(interp(Γ)(S, interp(v(m), σ)), x))(σ(x)) ]),
+		     S, v(x))
+	  ENDIF ENDIF
+	ENDCASES ENDIF
+
+    , fun(A, B): fun(δ(Γ)(A), δ(Γ ++ k(const_var(A)))(B))
+    , prod(A, B): prod(δ(Γ)(A), δ(Γ ++ k(const_var(A)))(B))
+    , subtype(T, a): subtype(δ(Γ)(T), a)
+
+    , ikeep: ikeep
+    , itype(T): itype(δ(Γ)(T))
+    , iterm(a): iterm(δ(Γ)(a))
+
+      ELSE U
+    ENDCASES
+  MEASURE w(Γ, U)
+
+  delta_pretau: THEOREM
+    pretau(Sig)(U)(S) IMPLIES pretau(Sig)(δ(Γ)(U))(S)
 END delta
