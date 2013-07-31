@@ -1,19 +1,25 @@
 interp: THEORY
 BEGIN
-  IMPORTING subst
-  Θ: VAR (theory_def?) % FINSeQ
-  σ: VAR finseq[(sinterp?)]
-  s: VAR signature  
+  IMPORTING language
 
-  interp(Θ, (σ | length(σ) = length(Θ))): (theory_def?) =
-    theory_def(def(Θ) WITH [`seq := LAMBDA (z: below[length(Θ)]):
-      CASES Θ(z) OF
-        type_decl: IF σ(z) = ikeep THEN type_decl ELSE type_def(def(σ(z))) ENDIF
-      , type_var: type_var
-      , type_def(T): type_def(T)
-      , const_decl(T): IF σ(z) = ikeep THEN const_decl(T) ELSE const_def(T, def(σ(z))) ENDIF
-      , const_var(T): const_var(T)
-      , const_def(T, a): const_def(T, a)
-      , theory_def(Γ): theory_def(Γ)
-      ENDCASES ])
+  Γ: VAR finseq[(scontext?)]
+  σ: VAR finseq[(sinterp?)]
+  
+  compatible?(Γ, σ): bool =
+    length(Γ) = length(σ) AND
+    FORALL (x: below[length(Γ)]):
+      CASES σ(x) OF
+        ikeep: TRUE
+      , itype(T): type_decl?(Γ(x))
+      , iterm(a): const_decl?(Γ(x))
+      ENDCASES
+
+  interpret(Γ, (σ | compatible?(Γ, σ))): finseq[(scontext?)] =
+    Γ WITH
+      [ `seq :=
+        LAMBDA (x: below[length(Γ)]):
+	  IF ikeep?(σ(x)) THEN Γ(x)
+	  ELSIF itype?(σ(x)) THEN type_def(def(σ(x)))
+	  ELSE const_def(type_(Γ(x)), def(σ(x)))
+	  ENDIF ]
 END interp
