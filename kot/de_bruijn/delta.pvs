@@ -5,11 +5,14 @@ BEGIN
   Γ: VAR (theory_def?)
   U, V: VAR syntaxic
   Sig, S: VAR signature
-  x: VAR nat
+  m, x: VAR nat
+  σ: VAR finseq[(sinterp?)]
 
   w: [(theory_def?), syntaxic -> ordinal]
   w_definition: AXIOM x ∈ Γ AND definition?(Γ)(x) IMPLIES
     w(rest(Γ, x), definition(Γ)(x)) < w(Γ, v(x))
+  w_eta: AXIOM m ∈ Γ AND theory_def?(Γ(m)) AND x ∈ Γ(m) AND definition?(Γ(m))(x) AND length(σ) = length(Γ(m)) AND stheory?(S) IMPLIES
+    w(Γ, η(signature(Γ))(S, m, σ)(definition(Γ(m))(x)))  < w(Γ, dot(interp(v(m), σ), S, v(x)))
 
   δ(Γ)(U):
     RECURSIVE { V | (sexpr?(U) => sexpr?(V)) AND
@@ -24,7 +27,7 @@ BEGIN
         CASES m OF interp(m, σ): IF NOT v?(m) OR NOT i(m) ∈ Γ THEN dot(interp(m, σ), S, x) ELSE
 	  LET m = i(m), x = i(x) IN
 	  LET Δ = Γ(m) IN
-	  IF x ∈ Δ AND theory_def?(Δ) AND definition?(Δ)(x)
+	  IF theory_def?(Δ) AND x ∈ Δ AND definition?(Δ)(x) AND length(σ) = length(Δ)
 	    THEN δ(Γ)(η(signature(Γ))(S, m, σ)(definition(Δ)(x)))
 	    ELSE dot(interp(v(m),
 	                    σ WITH [ `seq := LAMBDA (x: below[length(σ)]):
