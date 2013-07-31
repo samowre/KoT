@@ -76,8 +76,13 @@ BEGIN
   % ax4: AXIOM sexpr?(U) IMPLIES sexpr?(U ↑ (n, b))
   % ax5: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETHEORY IMPLIES theory_def?(Γ(x))
   % ax6: AXIOM w(Γ ++ SIG(i), x) < w(Γ, dot(i, x))
-  % ax7: AXIOM w(Γ, i) < w(Γ, dot(i, x))
-  % ax8: AXIOM 
+  % ax7: AXIOM U << V IMPLIES w(Γ, U) < w(Γ, V)
+  % ax8: AXIOM w(Γ, theory_(interpret(SIG(m), σ))) < w(Γ, interp(m, σ))
+  % ax9: AXIOM w(Γ ++ rest(Θ, 1), Θ(0)) < w(Γ, Θ)
+  % ax10: AXIOM w(Γ, theory_(rest(Θ, 1))) < w(Γ, Θ)
+  % ax11: AXIOM w(Γ ++ k(const_var(A)), B) < w(Γ, fun(A, B))
+  % ax12: AXIOM w(Γ, A) < w(Γ, fun(A, B))
+  % ax13: AXIOM w(Γ ++ k(const_var(A)), B) < w(Γ, prod(A, B))
   %%%%%%%%%%%%%% LIMIT %%%%%%%%%%%%%%
 
 
