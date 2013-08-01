@@ -1,6 +1,6 @@
 supertype: THEORY
 BEGIN
-  IMPORTING subst
+  IMPORTING subst, init_context
 
   U, V: VAR syntaxic
   x, y: VAR nat
@@ -10,13 +10,7 @@ BEGIN
   Γ: VAR finseq[(scontext?)]
   n: VAR nat
 
-  ;∧: [(sexpr?), (sexpr?) -> [nat -> (sexpr?)]]
-  ;forall_: [(sexpr?), (sexpr?) -> [nat -> (sexpr?)]]
   ;forall_: [(sexpr?), list[(sexpr?)] -> [nat -> list[(sexpr?)]]]
-  ;TRUE_: [nat -> (sexpr?)]
-  ;FALSE_: [nat -> (sexpr?)]
-  ;bool_: [nat -> (sexpr?)]
-  ;≐: [(sexpr?), (sexpr?) -> [(sexpr?) -> [nat -> (sexpr?)]]]
 
   % Special type_size function defined for termination
   % of functions defined in supertype

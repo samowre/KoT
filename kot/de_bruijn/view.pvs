@@ -4,62 +4,62 @@ BEGIN
   
   syntaxic_: DATATYPE
   BEGIN
-    v_(i: nat): v?
-    dot_(m: syntaxic_, x: syntaxic_): dot?
-    interp_(m: syntaxic_, map: list[syntaxic_]): interp?
-    theory__(decls: list[syntaxic_]): theory?
+    v_(i: nat): v_?
+    dot_(m_: syntaxic_, x_: syntaxic_): dot_?
+    interp_(m_: syntaxic_, map: list[syntaxic_]): interp_?
+    theory__(decls: list[syntaxic_]): theory_?
 
-    fun_(dom: syntaxic_, range: syntaxic_): fun?
-    prod_(left: syntaxic_, right: syntaxic_): prod?
-    subtype_(supertype: syntaxic_, pred: syntaxic_): subtype?
+    fun_(dom_: syntaxic_, range_: syntaxic_): fun_?
+    prod_(left_: syntaxic_, right_: syntaxic_): prod_?
+    subtype_(supertype_: syntaxic_, pred_: syntaxic_): subtype_?
 
-    app_(op: syntaxic_, arg: syntaxic_): app?
-    lam_(type_: syntaxic_, body: syntaxic_): lam?
-    pair_(left: syntaxic_, right: syntaxic_): pair?
-    lproj_(arg: syntaxic_): lproj?
-    rproj_(arg: syntaxic_): rproj?
+    app_(op_: syntaxic_, arg_: syntaxic_): app_?
+    lam_(type__: syntaxic_, body_: syntaxic_): lam_?
+    pair_(left_: syntaxic_, right_: syntaxic_): pair_?
+    lproj_(arg_: syntaxic_): lproj_?
+    rproj_(arg_: syntaxic_): rproj_?
 
-    type_decl_: type_decl?
-    type_var_: type_var?
-    type_def_(def: syntaxic_): type_def?
-    const_decl_(type_: syntaxic_): const_decl?
-    const_var_(type_: syntaxic_): const_var?
-    const_def_(type_: syntaxic_, def: syntaxic_): const_def?
-    theory_def_(def: syntaxic_): theory_def?
+    type_decl_: type_decl_?
+    type_var_: type_var_?
+    type_def_(def_: syntaxic_): type_def_?
+    const_decl_(type__: syntaxic_): const_decl_?
+    const_var_(type__: syntaxic_): const_var_?
+    const_def_(type__: syntaxic_, def_: syntaxic_): const_def_?
+    theory_def_(def_: syntaxic_): theory_def_?
 
-    ikeep_: ikeep?
-    itype_(def: syntaxic_): itype?
-    iterm_(def: syntaxic_): iterm?
+    ikeep_: ikeep_?
+    itype_(def_: syntaxic_): itype_?
+    iterm_(def_: syntaxic_): iterm_?
   END syntaxic_
 
-  language2view(S: syntaxic): RECURSIVE syntaxic_ =
+  φ(S: syntaxic): RECURSIVE syntaxic_ =
     CASES S OF
-      v(i): v_(i)
-    , dot(m, x): dot_(language2view(m), language2view(x))
-    , interp(m, map): interp_(language2view(m), finseq2list((# length := length(map), seq := LAMBDA (x: below[length(map)]): language2view(map(x)) #)))
-    , theory_(decls): theory__(finseq2list((# length := length(decls), seq := LAMBDA (x: below[length(decls)]): language2view(decls(x)) #)))
+       v(i): v_(i)
+     % , dot(m, x): dot_(φ(m), φ(x))
+     % , interp(m, map): interp_(φ(m), finseq2list((# length := length(map), seq := LAMBDA (x: below[length(map)]): φ(map(x)) #)))
+    % , theory_(decls): theory__(finseq2list((# length := length(decls), seq := LAMBDA (x: below[length(decls)]): φ(decls(x)) #)))
 
-    , fun(A, B): fun_(language2view(A), language2view(B))
-    , prod(A, B): prod_(language2view(A), language2view(B))
-    , subtype(T, a): subtype_(language2view(T), language2view(a))
+    % , fun(A, B): fun_(φ(A), φ(B))
+    % , prod(A, B): prod_(φ(A), φ(B))
+    % , subtype(T, a): subtype_(φ(T), φ(a))
 
-    , app(f, a): app_(language2view(f), language2view(a))
-    , lam(T, a): lam_(language2view(T), language2view(a))
-    , pair(a, b): pair_(language2view(a), language2view(b))
-    , lproj(a): lproj_(language2view(a))
-    , rproj(a): rproj_(language2view(a))
+    % , app(f, a): app_(φ(f), φ(a))
+    % , lam(T, a): lam_(φ(T), φ(a))
+    % , pair(a, b): pair_(φ(a), φ(b))
+    % , lproj(a): lproj_(φ(a))
+    % , rproj(a): rproj_(φ(a))
 
-    , type_decl: type_decl_
-    , type_var: type_var_
-    , type_def(T): type_def_(language2view(T))
-    , const_decl(T): const_decl_(language2view(T))
-    , const_var(T): const_var_(language2view(T))
-    , const_def(T, a): const_def_(language2view(T), language2view(a))
-    , theory_def(Th): theory_def_(language2view(Th))
+    % , type_decl: type_decl_
+    % , type_var: type_var_
+    % , type_def(T): type_def_(φ(T))
+    % , const_decl(T): const_decl_(φ(T))
+    % , const_var(T): const_var_(φ(T))
+    % , const_def(T, a): const_def_(φ(T), φ(a))
+    % , theory_def(Th): theory_def_(φ(Th))
 
-    , ikeep: ikeep_
-    , itype(T): itype_(language2view(T))
-    , iterm(a): iterm_(language2view(a))
+      , ikeep: ikeep_
+      , itype(T): itype_(φ(T))
+    % , iterm(a): iterm_(φ(a))
     ENDCASES
   MEASURE S BY <<
 END view
