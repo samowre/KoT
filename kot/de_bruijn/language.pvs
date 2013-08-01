@@ -34,7 +34,46 @@ BEGIN
 %    itheory(def: syntaxic): itheory?
   END syntaxic
 
+  % % TODO: move
+  % sum(len: nat, f: [below[len] -> nat]):
+  %   RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
+  %   IF len = 0 THEN 0
+  %   ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
+  % MEASURE len
 
+  % % Size function, useful for termination
+  % size(len, U): RECURSIVE nat =
+  %   CASES U OF
+  %     v(x): len - x
+  %   , dot(m, x): size(m) + size(x) + 2
+  %   , interp(m, σ): size(m) + sum(σ`length, LAMBDA (x: below[σ`length]): size(σ`seq(x))) + 2
+  %   , theory_(Θ): sum(Θ`length, LAMBDA (x: below[Θ`length]): size(Θ(x))) + 2
+
+  %   , fun(A, B): size(A) + size(B) + 2
+  %   , prod(A, B): size(A) + size(B) + 2
+  %   , subtype(T, a): size(T) + size(a) + 2
+
+  %   , app(f, a): size(f) + size(a) + 2
+  %   , lam(T, a): size(T) + size(a) + 2
+  %   , pair(a, b): size(a) + size(b) + 2
+  %   , lproj(a): size(a) + 2
+  %   , rproj(a): size(a) + 2
+
+  %   , type_decl: 1
+  %   , type_var: 1
+  %   , type_def(T): size(T) + 1
+  %   , const_decl(T): size(T) + 1
+  %   , const_var(T): size(T) + 1
+  %   , const_def(T, a): size(T) + size(a) + 1
+  %   , theory_def(Th): size(Th) + 1
+
+  %   , ikeep: 1
+  %   , itype(T): size(T) + 4
+  %   , iterm(a): size(a) + 4
+
+  %   ENDCASES
+  % MEASURE U BY <<
+  % AUTO_REWRITE+ size
 
     
 
@@ -119,46 +158,6 @@ BEGIN
   % x, y: VAR nat
   % i, j, n: VAR nat
   % M, N, P: VAR (theory_def?)
-
-  % % TODO: move
-  % sum(len: nat, f: [below[len] -> nat]):
-  %   RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
-  %   IF len = 0 THEN 0
-  %   ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
-  % MEASURE len
-
-  % % Size function, useful for termination
-  % size(U): RECURSIVE nat =
-  %   CASES U OF
-  %     v(x): 2
-  %   , dot(m, S, x): size(m) + size(x) + 2
-  %   , interp(m, σ): size(m) + sum(σ`length, LAMBDA (x: below[σ`length]): size(σ`seq(x))) + 2
-
-  %   , fun(A, B): size(A) + size(B) + 2
-  %   , prod(A, B): size(A) + size(B) + 2
-  %   , subtype(T, a): size(T) + size(a) + 2
-
-  %   , app(f, a): size(f) + size(a) + 2
-  %   , lam(T, a): size(T) + size(a) + 2
-  %   , pair(a, b): size(a) + size(b) + 2
-  %   , lproj(a): size(a) + 2
-  %   , rproj(a): size(a) + 2
-
-  %   , type_decl: 1
-  %   , type_var: 1
-  %   , type_def(T): size(T) + 1
-  %   , const_decl(T): size(T) + 1
-  %   , const_var(T): size(T) + 1
-  %   , const_def(T, a): size(T) + size(a) + 1
-
-  %   , ikeep: 1
-  %   , itype(T): size(T) + 4
-  %   , iterm(a): size(a) + 4
-
-  %   , theory_def(f): sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x)))
-  %   ENDCASES
-  % MEASURE U BY <<
-  % AUTO_REWRITE+ size
 
   % % TODO: should it be a conversion ?
   % % Creates a context/signature of length one from a decl  

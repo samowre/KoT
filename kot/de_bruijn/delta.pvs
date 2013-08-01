@@ -3,13 +3,14 @@ BEGIN
   IMPORTING subst, interp
 
   Γ: VAR finseq[(scontext?)]
+  Θ: VAR finseq[(scontext?)]
   U, V: VAR syntaxic
   x: VAR nat
   σ: VAR finseq[(sinterp?)]
   n: VAR nat
   m: VAR (sexpr?)
   a: VAR (sexpr?)
-
+  
   w: [finseq[(scontext?)], syntaxic -> ordinal]
   definition?(U): bool =
     theory_def?(U) OR const_def?(U) OR type_def?(U)
@@ -18,11 +19,6 @@ BEGIN
   ;rest[T: TYPE]: [finseq[T], nat -> finseq[T]]
   k: [(scontext?) -> finseq[(scontext?)]]
   ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
-
-  wdef: AXIOM x < length(Γ) AND definition?(Γ(x)) IMPLIES
-    w(rest(Γ, x), def(Γ(x))) < w(Γ, v(x))
-  wdot: AXIOM
-    w(Γ, m) < w(Γ, dot(m, a))
 
   η(m, n)(U): RECURSIVE same(U) =
     IF n = 0 THEN U
@@ -36,11 +32,25 @@ BEGIN
     ENDCASES
   MEASURE length(l)
 
-  δ(Γ)(U): RECURSIVE same(U) =
+  wdef: AXIOM x < length(Γ) AND definition?(Γ(x)) IMPLIES
+    w(rest(Γ, x), def(Γ(x))) < w(Γ, v(x))
+  wdot: AXIOM
+    w(Γ, m) < w(Γ, dot(m, a))
+  winterp: AXIOM
+    w(Γ, m) < w(Γ, interp(m, σ))
+  wrest: AXIOM
+    w(Γ, U ↑ x) <= w(rest(Γ, x), U)
+  wtheory: AXIOM
+    w(Θ, m) < w(Γ, theory_(Θ))
+  winterpret: AXIOM compatible?(Θ, σ) IMPLIES
+    w(Γ, theory_(interpret(Θ, σ))) < w(Γ, interp(theory_(Θ), σ))
+
+  δ(Γ)(U): RECURSIVE
+    { V: same(U) | w(Γ, V) <= w(Γ, U) } =
     CASES U OF
       v(x):
         IF x < length(Γ) AND definition?(Γ(x))
-	  THEN δ(rest(Γ, x))(def(Γ(x))) ↑ x
+	  THEN δ(rest(Γ, x))(def(Γ(x))) ↑ (x + 1)
 	  ELSE U
 	ENDIF
     , dot(m, x):
@@ -54,8 +64,12 @@ BEGIN
 	ENDCASES
     , interp(m, σ):
         CASES δ(Γ)(m) OF
-	  theory_(Θ): δ(Γ)(theory_(interpret(Θ, σ)))
-	  ELSE interp(δ(Γ)(m), σ) % Doesn't happen
+	  theory_(Θ):
+	    IF compatible?(Θ, σ)
+	      THEN δ(Γ)(theory_(interpret(Θ, σ)))
+	      ELSE interp(m, σ) % Shouldn't happen, but hard to prove it
+	    ENDIF
+	  ELSE interp(δ(Γ)(m), σ) % Shouldn't happen
 	ENDCASES
     , theory_(Θ):
         theory_(Θ WITH [ `seq := LAMBDA (x: below[length(Θ)]): δ(Γ ++ rest(Θ, x))(Θ(x)) ])
