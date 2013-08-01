@@ -2,7 +2,7 @@ init_context: THEORY
 BEGIN
   IMPORTING subst
 
-  len: VAR nat
+  AUTO_REWRITE+ sexpr?
   T, p: VAR (sexpr?)
   a, b: VAR (sexpr?)
   t1, t2: VAR (sexpr?)
@@ -16,7 +16,7 @@ BEGIN
   %    	  if_theory: THEORY BEGIN T: TYPE, IF: [bool -> ({c: * | b} -> T) -> ({c: * | ¬b} -> T) -> T] = ext END,
   %	  and: [[bool, bool] -> bool] = λ(b1, b2): IF b1 THEN b2 ELSE FALSE, 
   %	  or: [[bool, bool] -> bool] = λ(b1, b2): IF b1 THEN TRUE ELSE b2, 
-  star(len): (sexpr?) = v(len - 1)
+  star(len: above(0)): (sexpr?) = v(len - 1)
 
   bool_theory: (theory?) = theory_((#
     length := 3, 
@@ -25,9 +25,9 @@ BEGIN
       x = 1 -> const_var(v(0)),	 % TRUE: bool = ext
       x = 0 -> const_var(v(1))	 % FALSE: bool = ext
     ENDCOND #))
-  bool_(len): (sexpr?) = dot(v(len - 2), v(2))
-  TRUE_(len): (sexpr?) = dot(v(len - 2), v(1))
-  FALSE_(len): (sexpr?) = dot(v(len - 2), v(0))
+  bool_(len: above(1)): (sexpr?) = dot(v(len - 2), v(2))
+  TRUE_(len: above(1)): (sexpr?) = dot(v(len - 2), v(1))
+  FALSE_(len: above(1)): (sexpr?) = dot(v(len - 2), v(0))
 
   equalities: (theory?) = theory_((#
     length := 2,
@@ -39,15 +39,15 @@ BEGIN
     ENDCOND #))
    
   % =::[[T -> T] -> bool] ≡ equalities
-  equal(T)(len): (sexpr?) = dot(interp(v(len - 3), list2finseq((: ikeep, itype(T) :))), v(0))
-  ;≐(a, b)(T)(len): (sexpr?) = app(equal(T)(len), pair(a, b))
+  equal(T)(len: above(2)): (sexpr?) = dot(interp(v(len - 3), list2finseq((: ikeep, itype(T) :))), v(0))
+  ;≐(a, b)(T)(len: above(2)): (sexpr?) = app(equal(T)(len), pair(a, b))
 
-  not_(len): (sexpr?) = v(len - 4)
-  ¬(b)(len): (sexpr?) = app(not_(len), b)
+  not_(len: above(3)): (sexpr?) = v(len - 4)
+  ¬(b)(len: above(3)): (sexpr?) = app(not_(len), b)
   % 	     	 ∀(x: T): p(x) ≡                        (λ(x: T): p(x) = λx TRUE)
-  forall_(T, p)(len): (sexpr?) = app(equal(fun(T, bool_(len)))(len), pair( lam(T, p), lam(T, TRUE_(len + 1))))
+  forall_(T, p)(len: above(2)): (sexpr?) = app(equal(fun(T, bool_(len)))(len), pair( lam(T, p), lam(T, TRUE_(len + 1))))
   % 	     	 ∃(x: T): p(x) ≡ ¬ ∀(x: T): ¬p(x)
-  exists_(T, p)(len): (sexpr?) = app(not_(len), forall_(T, app(not_(len + 1), p))(len))
+  exists_(T, p)(len: above(3)): (sexpr?) = app(not_(len), forall_(T, app(not_(len + 1), p))(len))
 
   if_theory: (theory?) = theory_((#
     length := 2, 
@@ -57,19 +57,19 @@ BEGIN
       % IF: 	   [	      bool    ->     (     {   c:  *    |   b } -> T  ) ->      (     {    c: *    |    ¬ b  }    ->   T)  ->  T   ] = ext
       x = 0 -> const_var( fun(bool_(5), fun( fun(subtype(star(6), v(1)) , v(2)) ,  fun( fun(subtype(star(7), (¬(v(2)))(7)) , v(3)) ,  v(3)))))
     ENDCOND #))
-  ifte_(T)(len): (sexpr?) = dot(interp(v(len - 5), list2finseq((: ikeep, itype(T) :))), v(0))
-  if_(b, t1, t2)(T)(len): (sexpr?) = app(app(app(ifte_(T)(len), b), lam(subtype(star(len), b ↑ 1), t1 ↑ 1)), lam(subtype(star(len), (¬(b ↑ 1))(len + 1)), t2 ↑ 1))
+  ifte_(T)(len: above(4)): (sexpr?) = dot(interp(v(len - 5), list2finseq((: ikeep, itype(T) :))), v(0))
+  if_(b, t1, t2)(T)(len: above(4)): (sexpr?) = app(app(app(ifte_(T)(len), b), lam(subtype(star(len), b ↑ 1), t1 ↑ 1)), lam(subtype(star(len), (¬(b ↑ 1))(len + 1)), t2 ↑ 1))
 
-  and_(len): (sexpr?) = v(len - 6)
-  or_(len): (sexpr?) = v(len -7)
-  ;∧(a, b)(len): (sexpr?) = app(and_(len), pair(a, b))
-  ;∨(a, b)(len): (sexpr?) = app(or_(len), pair(a, b))
+  and_(len: above(5)): (sexpr?) = v(len - 6)
+  or_(len: above(6)): (sexpr?) = v(len -7)
+  ;∧(a, b)(len: above(5)): (sexpr?) = app(and_(len), pair(a, b))
+  ;∨(a, b)(len: above(6)): (sexpr?) = app(or_(len), pair(a, b))
 
 
   init_context: (theory?) = theory_((# 
     length := 7, 
     seq := LAMBDA (x: below[7]): COND
-      x = 6 -> theory_def(type_var),
+      x = 6 -> type_var,
       x = 5 -> theory_def(bool_theory),
       x = 4 -> theory_def(equalities),
       %                ¬:    [ bool   -> bool   ] =  λ  (b: bool) :      b  = FALSE
@@ -80,6 +80,9 @@ BEGIN
       %		       ∨:    [   [  bool   -> bool   ] -> bool   ]:  λ (b: [   bool   ,  bool ] ):   IF    b`1   THEN   TRUE    ELSE b`2   
       x = 0 -> const_def( fun(prod(bool_(5), bool_(6)), bool_(6)) , lam( prod(bool_(5), bool_(6)) , if_(lproj(v(0)), TRUE_(6), rproj(v(0)))(bool_(6))(6)))
     ENDCOND #))
+
+  %T: sexpr | finseq(scontext) -> sexpr
+  %p: sexpr | list[sexpr] -> list
 
 
 END init_context
