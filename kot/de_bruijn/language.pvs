@@ -34,11 +34,42 @@ BEGIN
 %    itheory(def: syntaxic): itheory?
   END syntaxic
 
+  Γ, Δ: VAR finseq[(scontext?)]
+  x: VAR nat  
+  U: VAR syntaxic
+  d: VAR (scontext?)
 
 
-    
+  % Basic functions for contexts
+  ∈(x, Γ): MACRO bool = x < length(Γ) 
+  rest(Γ, x): finseq[(scontext?)] = 
+    Γ ^^ (x + 1, length(Γ))
+  ;++(Γ, Δ): finseq[(scontext?)] = Δ o Γ 
+  k(d): finseq[(scontext?)] = 
+    (# length := 1, seq := LAMBDA (x: below[1]): d#)
 
+  % Function Kind
+  prekeyword: TYPE = { PRETYPE, PRETERM, PRETHEORY }
+  kind(d): prekeyword = 
+    CASES d OF
+      type_decl: PRETYPE
+    , type_var: PRETYPE
+    , type_def(T): PRETYPE
+    , const_decl(T): PRETERM
+    , const_var(T): PRETERM
+    , const_def(T, a): PRETERM
+    , theory_def(Θ): PRETHEORY
+    ENDCASES
+  % Function definition
+  definition?(U): bool = 
+    theory_def?(U) OR const_def?(U) OR type_def?(U)
+  var?(U): bool = 
+    const_var?(U) OR type_var?(U)
 
+  
+      
+
+  
 
 %%%%% LATER %%%%%%
 

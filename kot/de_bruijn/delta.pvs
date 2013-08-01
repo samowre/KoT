@@ -11,13 +11,7 @@ BEGIN
   a: VAR (sexpr?)
 
   w: [finseq[(scontext?)], syntaxic -> ordinal]
-  definition?(U): bool =
-    theory_def?(U) OR const_def?(U) OR type_def?(U)
-  var?(U): bool =
-    const_var?(U) OR type_var?(U)
-  ;rest[T: TYPE]: [finseq[T], nat -> finseq[T]]
-  k: [(scontext?) -> finseq[(scontext?)]]
-  ;++(s1, s2: finseq[(scontext?)]): finseq[(scontext?)] = s2 o s1
+
 
   wdef: AXIOM x < length(Γ) AND definition?(Γ(x)) IMPLIES
     w(rest(Γ, x), def(Γ(x))) < w(Γ, v(x))

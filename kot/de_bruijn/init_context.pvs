@@ -81,8 +81,14 @@ BEGIN
       x = 0 -> const_def( fun(prod(bool_(5), bool_(6)), bool_(6)) , lam( prod(bool_(5), bool_(6)) , if_(lproj(v(0)), TRUE_(6), rproj(v(0)))(bool_(6))(6)))
     ENDCOND #))
 
-  %T: sexpr | finseq(scontext) -> sexpr
-  %p: sexpr | list[sexpr] -> list
+  
+  forall_(T, (l: list[(sexpr?)]))(len: above(2)): list[(sexpr?)] =
+    map(LAMBDA (x: (sexpr?)): forall_(T, x)(len), l)
+
+
+  admissible?(Γ: finseq[(scontext?)]): bool =
+    length(Γ) > 6 AND 
+    Γ ^^ (length(Γ) - 7, length(Γ)) = decls(init_context)
 
 
 END init_context
