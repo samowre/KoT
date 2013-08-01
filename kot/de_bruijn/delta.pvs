@@ -40,27 +40,22 @@ BEGIN
     CASES U OF
       v(x):
         IF x < length(Γ) AND definition?(Γ(x))
-	  THEN δ(rest(Γ, x))(def(Γ(x)))
-	  ELSE v(x)
+	  THEN δ(rest(Γ, x))(def(Γ(x))) ↑ x
+	  ELSE U
 	ENDIF
     , dot(m, x):
         CASES δ(Γ)(m) OF
 	  theory_(Θ):
-	    IF v?(x) AND i(x) < length(Θ) THEN
-	      IF definition?(Θ(i(x)))
-	        THEN δ(Γ)(η(m, length(Θ) - i(x))(def(Θ(i(x)))))
-	      ELSIF var?(Θ(i(x)))
-	        THEN dot(m, x)
-	      ELSE dot(theory_(Θ), x)
-	      ENDIF
-	    ELSE dot(theory_(Θ), x)
+	    IF δ(Θ)(x) = x
+	      THEN U
+	      ELSE δ(Γ)(η(m, length(Θ))(δ(Θ)(x)))
 	    ENDIF
 	  ELSE dot(δ(Γ)(m), x)
 	ENDCASES
     , interp(m, σ):
         CASES δ(Γ)(m) OF
 	  theory_(Θ): δ(Γ)(theory_(interpret(Θ, σ)))
-	  ELSE interp(δ(Γ)(m), σ)
+	  ELSE interp(δ(Γ)(m), σ) % Doesn't happen
 	ENDCASES
     , theory_(Θ):
         theory_(Θ WITH [ `seq := LAMBDA (x: below[length(Θ)]): δ(Γ ++ rest(Θ, x))(Θ(x)) ])
