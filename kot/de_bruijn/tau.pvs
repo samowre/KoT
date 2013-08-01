@@ -12,21 +12,22 @@ BEGIN
   %    since they can only occur in a stheory itself (i.e a context)
   %  - all constructors of subtype (sinterp?) since they must occur
   %    only in the right hand side of a interp constructor.
-
+  AUTO_REWRITE+ sexpr?
 
   % Variable declaration
-  Γ, Δ, Θ: VAR finseq[(scontext?)]
+  Γ, Δ, Θ: VAR (admissible?)
   M, N: VAR (scontext?)
   U, V: VAR syntaxic
-  A, B, T: VAR syntaxic
+  A, B, T: VAR (sexpr?)
   %n, m: VAR name
   x, y, z: VAR nat
-  a, b, f, g: VAR syntaxic
+  a, b, f, g: VAR (sexpr?)
   %S: VAR semantic
   n: VAR nat
+  m: VAR (sexpr?)
 
   %% Type TCCS 
-  pretcc: TYPE = syntaxic
+  pretcc: TYPE = (sexpr?)
 
   %%% Type keyword
   keyword: DATATYPE
@@ -44,18 +45,17 @@ BEGIN
     cons( app(π(A)(n), a), null)
   fail: [keyword, list[pretcc]] = (⊥, null)
   k: VAR keyword
-
-  prekeyword: TYPE = { PRETYPE, PRETERM, PRETHEORY }
-
-  %%% TODO
-  ;∈: [nat, finseq[(scontext?)] -> bool]
-  ;kind: [(scontext?) -> prekeyword]
-
-  ;η: [(sexpr?), nat -> [keyword -> keyword]]
-  ;η: [(sexpr?), nat -> [list[pretcc] -> list[pretcc]]]
-  forall_: [(scontext?), syntaxic -> syntaxic]
-  forall_: [(scontext?), list[pretcc] -> list[pretcc]]
-
+    
+  η(m, n)(k): keyword = 
+    CASES k OF
+      ⊥: ⊥,
+      KTHEORY: KTHEORY,
+      KDECL: KDECL,
+      KTYPE: KTYPE,
+      KTERM(T): KTERM(η(m, n)(T))
+    ENDCASES
+      
+  
   % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
   % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
   % ax3: AXIOM sexpr?(U) IMPLIES sexpr?(δ(Γ)(U))
@@ -72,6 +72,8 @@ BEGIN
   %%%%%%%%%%%%%% LIMIT %%%%%%%%%%%%%%
   % axw: << ⊂ w
 
+
+
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
   τ(Γ)(U): RECURSIVE 
     { x: [keyword, list[pretcc]] | TRUE } =
@@ -84,7 +86,7 @@ BEGIN
     v(s):
       IF s ∈ Γ THEN CASES kind(Γ(s)) OF
 	PRETYPE: (KTYPE, null)
-      , PRETERM: (KTERM( δ(rest(Γ, s))(type_(Γ(s))) ↑ s ), null)
+      , PRETERM: (KTERM( δ(rest(Γ, s))(type_(Γ(s))) ↑ (s + 1) ), null)
       , PRETHEORY: (KTHEORY, null)
       ENDCASES ELSE fail ENDIF
     % τ(Γ)(m{{ σ }}.s) = TYPE if kind(Γ(m)) = THEORY
@@ -113,11 +115,11 @@ BEGIN
       ELSE fail ENDIF
   , theory_(Θ):
       IF length(Θ) = 0 THEN (KTHEORY, null) ELSE
-      LET (kwΘ, tccsΘ) = τ(Γ)(theory_(rest(Θ, 1))) IN
+      LET (kwΘ, tccsΘ) = τ(Γ)(theory_(rest(Θ, 0))) IN
       IF KTHEORY?(kwΘ) THEN
-        LET (kwD, tccsD) = τ(Γ ++ rest(Θ, 1))(Θ(0))
+        LET (kwD, tccsD) = τ(Γ ++ rest(Θ, 0))(Θ(0))
 	IN IF KDECL?(kwD) THEN
-	  (KTHEORY, tccsΘ ++ η(theory_(rest(Θ, 1)), length(Θ) - 1)(tccsD))
+	  (KTHEORY, tccsΘ ++ η(theory_(rest(Θ, 0)), length(Θ) - 1)(tccsD))
 	ELSE fail ENDIF
       ELSE fail ENDIF ENDIF
 		       
@@ -129,7 +131,7 @@ BEGIN
       IN IF KTYPE?(kwA) THEN
         LET (kwB, tccsB) = τ(Γ ++ k(const_var(A)))(B)
 	IN IF KTYPE?(kwB) THEN
-	  (KTYPE, tccsA ++ forall_(const_var(A), tccsB))
+	  (KTYPE, tccsA ++ forall_(A, tccsB)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ(Γ)([x: A, B]) = TYPE if τ(Γ)(A) = TYPE 
@@ -139,7 +141,7 @@ BEGIN
       IN IF KTYPE?(kwA) THEN
         LET (kwB, tccsB) = τ(Γ ++ k(const_var(A)))(B)
 	IN IF KTYPE?(kwB) THEN
-	  (KTYPE, tccsA ++ forall_(const_var(A), tccsB))
+	  (KTYPE, tccsA ++ forall_(A, tccsB)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ(Γ)({x:T | a}) = TYPE if τ(Γ)(T) = TYPE
@@ -149,7 +151,7 @@ BEGIN
       IN IF KTYPE?(kwT) THEN
         LET (kwa, tccsa) = τ(Γ ++ k(const_var(T)))(a)
 	IN IF KTERM?(kwa) AND TYPEOF(kwa) = bool_(length(Γ)) THEN
-	  (KTYPE, tccsT ++ forall_(const_var(T), tccsa))
+	  (KTYPE, tccsT ++ forall_(T, tccsa)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
 
@@ -179,7 +181,7 @@ BEGIN
       IN IF KTYPE?(kwA) THEN
         LET (kwa, tccsa) = τ(Γ ++ k(const_var(A)))(a)
 	IN IF KTERM?(kwa) THEN
-	  (KTERM(fun(A, TYPEOF(kwa))), tccsA ++ forall_(const_var(A), tccsa))
+	  (KTERM(fun(A, TYPEOF(kwa))), tccsA ++ forall_(A, tccsa)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ(Γ)((a1, a2)) = [x: τ(Γ)(a1), τ(Γ)(a2)]
