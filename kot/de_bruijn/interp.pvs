@@ -7,7 +7,7 @@ BEGIN
   
   compatible?(Γ, σ): bool =
     length(Γ) = length(σ) AND
-    FORALL (x: below[length(Γ)]):
+    FORALL (x: below(length(Γ))):
       CASES σ(x) OF
         ikeep: TRUE
       , itype(T): type_decl?(Γ(x))
