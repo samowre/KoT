@@ -6,11 +6,10 @@ BEGIN
   a: VAR syntaxic
 
   AUTO_REWRITE- sexpr?
-  AUTO_REWRITE+ τ
+  AUTO_REWRITE fail
+  %AUTO_REWRITE τ
 
-  τ(Γ)(U): MACRO keyword = τ(Γ)(U)`1
-  tccs(Γ)(U): MACRO list[pretcc] = τ(Γ)(U)`2
-
+ 
 
   context?(U): MACRO bool = KTHEORY?(τ(empty_seq)(U))	
   context?(Γ): MACRO bool = context?(theory_(Γ))
@@ -30,6 +29,13 @@ BEGIN
   % delta preserves tau (on types)
   % shift preserves tau (on types)
   % eta preserves tau (on types)
+  % interpret preserves tau
+  % subst preserves tau (on types)
+  % shift preserves tau
+  % μ0 preserves tau
+
+  % μ0(μ0(T)) = μ0(T)
+  % δ(δ(T)) = δ(T)
 
   % tcc correctness
   tcc_correctness: THEOREM
