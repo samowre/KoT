@@ -10,6 +10,7 @@ BEGIN
   l: VAR list[pretcc]
   nb: VAR [nat, nat]
   n: VAR nat
+  d: VAR (scontext?)
 
 
   tau(Γ)(U): MACRO keyword = τ(Γ)(U)`1
@@ -21,30 +22,29 @@ BEGIN
   % We first have to define these functions over [keyword, list[tcc]] and keyword
   over_keyword(f: [syntaxic -> syntaxic])(k): keyword = 
     CASES k OF
-      ⊥: ⊥,
-      KTHEORY: KTHEORY,
-      KDECL: KDECL,
-      KTYPE: KTYPE,
       KTERM(T): KTERM(f(T))
+      ELSE k
     ENDCASES
   AUTO_REWRITE over_keyword
 
-  ;↑(Γ, nb): finseq[(scontext?)] = decls(theory_(Γ) ↑ nb)
-  ;↑(k, nb): keyword = over_keyword(LAMBDA U: U ↑ nb)(k)
-  ;↑(l, nb): list[pretcc] = map(LAMBDA U: U ↑ nb)(l)
-  subst(Γ, x, t): finseq[(scontext?)] = decls(subst(theory_(Γ), x, t))
-  subst(k, x, t): keyword = over_keyword(LAMBDA U: subst(U, x, t))(k)
-  subst(l, x, t): list[pretcc] = map(LAMBDA U: subst(U, x, t))(l)
+  ;↑(Γ, nb): MACRO finseq[(scontext?)] = decls(theory_(Γ) ↑ nb)
+  ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb)(k)
+  ;↑(l, nb): MACRO list[pretcc] = map(LAMBDA U: U ↑ nb)(l)
+  subst(Γ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Γ), x, t))
+  subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t))(k)
+  subst(l, x, t): MACRO list[pretcc] = map(LAMBDA U: subst(U, x, t))(l)
 
+
+  nadine: THEOREM FALSE
 
   strong_shift_preserves: THEOREM
-    tau(Γ ++ Δ ++ Θ ↑ (length(Δ), 0))(U ↑ (length(Δ), length(Θ))) 
+    tau(Γ ++ Δ ++ (Θ ↑ (length(Δ), 0)))(U ↑ (length(Δ), length(Θ))) 
     = tau(Γ ++ Θ)(U) ↑ (length(Δ), length(Θ))
   shift_preserves: THEOREM
     tau(Γ ++ Δ)(U ↑ length(Δ)) = tau(Γ)(U) ↑ (length(Δ), 0)
 
   strong_shift_tccs: THEOREM
-    tccs(Γ ++ Δ ++ Θ ↑ (length(Δ), 0))(U ↑ (length(Δ), length(Θ)))
+    tccs(Γ ++ Δ ++ (Θ ↑ (length(Δ), 0)))(U ↑ (length(Δ), length(Θ)))
     = tccs(Γ ++ Θ)(U) ↑ (length(Δ), length(Θ))
   shift_tccs: THEOREM
     tccs(Γ ++ Δ)(U ↑ length(Δ)) = tccs(Γ)(U) ↑ (length(Δ), 0)

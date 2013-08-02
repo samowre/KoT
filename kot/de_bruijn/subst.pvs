@@ -8,10 +8,8 @@ BEGIN
   U, V: VAR syntaxic
   t: VAR (sexpr?)
   nb, c: VAR [nat, nat]
+  d: VAR (scontext?)
 
-  same(U): TYPE = { V | (sexpr?(U) => sexpr?(V)) AND
-                        (sinterp?(U) => sinterp?(V)) AND
-			(scontext?(U) => scontext?(V)) }
 
   AUTO_REWRITE+ sexpr?
   % Shift: classical shift operator for De Bruijn indices
@@ -68,6 +66,14 @@ BEGIN
   AUTO_REWRITE+ shift_zero
   ;↑(U, (n: nat)): MACRO syntaxic =
     (U ↑ (n, 0))
+
+  % Some theorem on shift
+  kind_shift: THEOREM
+    kind(d ↑ nb) = kind(d)
+
+
+
+
 
   AUTO_REWRITE+ sexpr?
   % This is a "true" substitution - this really removes the bound variable.
