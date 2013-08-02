@@ -110,12 +110,12 @@ BEGIN
 	%     ENDIF
 	%   ELSE interp(δ(Γ)(m), σ)
 	% ENDCASES
-%     , theory_(Θ): theory_(Θ)
-% %        theory_(Θ WITH [ `seq := LAMBDA (x: below[length(Θ)]): δ(Γ ++ rest(Θ, x))(Θ(x)) ])
+    , theory_(Θ): theory_(Θ)
+%        theory_(Θ WITH [ `seq := LAMBDA (x: below[length(Θ)]): δ(Γ ++ rest(Θ, x))(Θ(x)) ])
 
-%     , fun(A, B): fun(δ(Γ)(A), δ(Γ ++ k(const_var(δ(Γ)(A))))(B))
-%     , prod(A, B): prod(δ(Γ)(A), δ(Γ ++ k(const_var(δ(Γ)(A))))(B))
-%     , subtype(T, a): subtype(δ(Γ)(T), a)
+    , fun(A, B): fun(δ(Γ)(A), δ(Γ ++ k(const_var(δ(Γ)(A))))(B))
+    , prod(A, B): prod(δ(Γ)(A), δ(Γ ++ k(const_var(δ(Γ)(A))))(B))
+    , subtype(T, a): subtype(δ(Γ)(T), a)
 
 %     , type_decl: type_decl
 %     , type_var: type_var
