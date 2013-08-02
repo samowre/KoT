@@ -2,16 +2,6 @@ tau: THEORY
 BEGIN
   IMPORTING subst, interp, supertype, delta, init_context
 
-  % TODO:
-  % note: the function tau is defined only on what can	
-  % be a PVS expression on its own, not on subterms of such.
-  % Therefore tau is not defined on the following constructors
-  %  - interp, that should only occur on a dot left hand side
-  %    (until we handle first-class theory)
-  %  - all constructors of subtype (scontext?) except stheory
-  %    since they can only occur in a stheory itself (i.e a context)
-  %  - all constructors of subtype (sinterp?) since they must occur
-  %    only in the right hand side of a interp constructor.
   AUTO_REWRITE+ sexpr?
 
   % Variable declaration
