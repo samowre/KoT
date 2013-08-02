@@ -255,13 +255,13 @@ BEGIN
 
   % Important invariants of τ to prove :
   %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
-  %    -> done implicitely with type wf_context in every theorems of tau_props.pvs
+  %    -> done implicitely with type context in every theorems of tau_props.pvs
   %  - KTERM(T) is written only if τ(Θ)(T) = TYPE
   %    -> see thm 2.11
   %  - KTERM(T) is written only if μ0(T) = T (T is not a subtype)
-  %    
-  %  - KTERM(T) is written only if δ(Γ(T)) = T (T is fully expanded)
+  %  - KTERM(T) is written only if δ(Γ)(T) = T (T is fully expanded)
+  %    -> both checked in tau_props (type expansion)
   %  - τ(Γ)(_) generates tccs that are correct (typecheckable) in the context Γ
   %    i.e τ(Γ)(tcc) = KTERM for each tcc generated.
-  %    -> done in tau_props.pvs
+  %    -> see tcc_correctness in tau_props
 END tau
