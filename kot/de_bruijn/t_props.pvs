@@ -1,0 +1,44 @@
+tau_props: THEORY
+BEGIN
+  IMPORTING tau
+  Γ: VAR finseq[(scontext?)]  
+  U: VAR syntaxic
+  a: VAR syntaxic
+
+  AUTO_REWRITE- sexpr?
+  AUTO_REWRITE+ τ
+
+  τ(Γ)(U): MACRO keyword = τ(Γ)(U)`1
+  tccs(Γ)(U): MACRO list[pretcc] = τ(Γ)(U)`2
+
+
+  context?(U): MACRO bool = KTHEORY?(τ(empty_seq)(U))	
+  context?(Γ): MACRO bool = context?(theory_(Γ))
+  context: TYPE = (context? :: [syntaxic -> bool])
+  
+  type?(Γ)(U): MACRO bool = KTYPE?(τ(Γ)(U))
+  term?(Γ)(U): MACRO bool = KTERM?(τ(Γ)(U))
+  ttype(Γ): TYPE = (type?(Γ))
+  term(Γ): TYPE = (term?(Γ))
+
+  % (2.11) type rules correctness
+  type_correctness: THEOREM
+    context?(Γ) AND term?(Γ)(a) IMPLIES
+    type?(Γ)(TYPEOF(τ(Γ)(a)))
+
+  % TODO
+  % delta preserves tau (on types)
+  % shift preserves tau (on types)
+  % eta preserves tau (on types)
+
+  % tcc correctness
+  tcc_correctness: THEOREM
+    context?(Γ) AND NOT UNDEFINED?(τ(Γ)(U)) IMPLIES
+    every(LAMBDA (x: (sexpr?)): KTERM?(τ(Γ)(x)))(tccs(Γ)(U))
+
+  % type full expansion
+  type_expansion: THEOREM
+    context?(Γ) AND term?(Γ)(a) IMPLIES
+    LET T = TYPEOF(τ(Γ)(a)) IN
+    μ0(T) = T AND δ(Γ)(T) = T
+END tau_props
