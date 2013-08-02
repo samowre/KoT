@@ -22,9 +22,7 @@ BEGIN
     CASES U OF
       % Names
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
-    , dot(m, S, e): dot(m ↑ nb,
-                        S WITH [ `seq := LAMBDA (x: below(length(S))): S(x) ↑ (nb`1, nb`2 + length(S) - 1 - x) ],
-			e ↑ (nb`1, nb`2 + length(S)))
+    , dot(m, e): dot(m ↑ nb, e)
     , interp(m, σ):
         interp(m ↑ nb,
 	       σ WITH [`seq := LAMBDA (x: below(σ`length)): σ(x) ↑ (nb`1, nb`2 + σ`length - 1 - x) ])
@@ -82,9 +80,7 @@ BEGIN
       % x ↦ x where the λ-binder for n has been removed
       v(i): IF i > x THEN v(i - 1) ELSIF i = x THEN t ELSE v(i) ENDIF
       % /!\ Case x = m not handled
-    , dot(m, S, e): dot(subst(m, x, t),
-                        S WITH [ `seq := LAMBDA (y: below(length(S))): subst(S(y), x + length(S) - 1 - y, t ↑ (length(S) - 1 - y)) ],
-			subst(e, x + length(S), t ↑ length(S)))
+    , dot(m, e): dot(subst(m, x, t), e)
     , interp(m, σ):
         interp(subst(m, x, t),
 	       σ WITH [`seq := LAMBDA (y: below(σ`length)): subst(σ(y), x + σ`length - 1 - y, t ↑ (σ`length - 1 - y)) ])

@@ -47,13 +47,13 @@ BEGIN
   fail: [keyword, list[pretcc]] = (⊥, null)
   k: VAR keyword
     
-  η(m, S, n)(k): keyword = 
+  η(m, n)(k): keyword = 
     CASES k OF
       ⊥: ⊥,
       KTHEORY: KTHEORY,
       KDECL: KDECL,
       KTYPE: KTYPE,
-      KTERM(T): KTERM(η(m, S, n)(T))
+      KTERM(T): KTERM(η(m, n)(T))
     ENDCASES
       
   
@@ -100,18 +100,18 @@ BEGIN
     % Note: there is no need to have a τ(Θ)(σ) = INTERP since we already
     % check τ(Θ)(interp(Δ, σ)). Hence we don't have to define τ over the
     % interpretations.
-  , dot(i, S, x):
+  , dot(i, x):
       LET (kwi, tccsi) = τ(Γ)(i)
-        , di = δ(Γ)(i)
-      IN IF KTHEORY?(kwi) AND v?(x) AND theory?(di) AND decls(di) = S AND i(x) < length(S) THEN
-        LET (kwx, tccsx) = τ(Γ ++ decls(di))(x)
-	IN (η(i, S, length(decls(di)))(kwx), tccsi ++ η(i, S, length(decls(di)))(tccsx))
+        , S = signature(Γ, i)
+      IN IF KTHEORY?(kwi) AND v?(x) AND theory?(S) AND i(x) < length(decls(S)) THEN
+        LET (kwx, tccsx) = τ(Γ ++ decls(S))(x)
+	IN (η(i, length(decls(S)))(kwx), tccsi ++ η(i, length(decls(S)))(tccsx))
       ELSE fail ENDIF
   , interp(m, σ):
       LET (kwm, tccsm) = τ(Γ)(m)
-        , dm = δ(Γ)(m)
-      IN IF KTHEORY?(kwm) AND theory?(dm) AND compatible?(decls(dm), σ) THEN
-        LET (kwi, tccsi) = τ(Γ)(theory_(interpret(decls(dm), σ)))
+        , sigM = signature(Γ, m)
+      IN IF KTHEORY?(kwm) AND theory?(sigM) AND compatible?(decls(sigM), σ) THEN
+        LET (kwi, tccsi) = τ(Γ)(theory_(interpret(decls(sigM), σ)))
 	IN (kwi, tccsm ++ tccsi)
       ELSE fail ENDIF
   , theory_(Θ):
@@ -120,7 +120,7 @@ BEGIN
       IF KTHEORY?(kwΘ) THEN
         LET (kwD, tccsD) = τ(Γ ++ rest(Θ, 0))(Θ(0))
 	IN IF KDECL?(kwD) THEN
-	  (KTHEORY, tccsΘ ++ η(theory_(rest(Θ, 0)), rest(Θ, 0), length(Θ) - 1)(tccsD))
+	  (KTHEORY, tccsΘ ++ η(theory_(rest(Θ, 0)), length(Θ) - 1)(tccsD))
 	ELSE fail ENDIF
       ELSE fail ENDIF ENDIF
 		       

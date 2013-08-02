@@ -33,13 +33,13 @@ BEGIN
       % or: boolop
       x = 0 -> const_var(v(2))
     ENDCOND #))
-  bool_(len: above(0)): (sexpr?) = dot(v(len - 1), decls(bool_theory ↑ (len - 1)), v(6))
-  TRUE_(len: above(0)): (sexpr?) = dot(v(len - 1), decls(bool_theory ↑ (len - 1)), v(5))
-  FALSE_(len: above(0)): (sexpr?) = dot(v(len - 1), decls(bool_theory ↑ (len - 1)), v(4))
-  boolop(len: above(0)): (sexpr?) = dot(v(len - 1), decls(bool_theory ↑ (len - 1)), v(3))
-  not_(len: above(0)): (sexpr?) = dot(v(len - 1), decls(bool_theory ↑ (len - 1)), v(2))
-  and_(len: above(0)): (sexpr?) = dot(v(len - 1), decls(bool_theory ↑ (len - 1)), v(1))
-  or_(len: above(0)): (sexpr?) = dot(v(len - 1), decls(bool_theory ↑ (len - 1)), v(0))
+  bool_(len: above(0)): (sexpr?) = dot(v(len - 1), v(6))
+  TRUE_(len: above(0)): (sexpr?) = dot(v(len - 1), v(5))
+  FALSE_(len: above(0)): (sexpr?) = dot(v(len - 1), v(4))
+  boolop(len: above(0)): (sexpr?) = dot(v(len - 1), v(3))
+  not_(len: above(0)): (sexpr?) = dot(v(len - 1), v(2))
+  and_(len: above(0)): (sexpr?) = dot(v(len - 1), v(1))
+  or_(len: above(0)): (sexpr?) = dot(v(len - 1), v(0))
 
   ¬(b)(len: above(0)): (sexpr?) = app(not_(len), b)
   ;∧(a, b)(len: above(0)): (sexpr?) = app(and_(len), pair(a, b))
@@ -57,7 +57,7 @@ BEGIN
   % =::[[T -> T] -> bool] ≡ equalities
   equal(T)(len: above(1)): (sexpr?) =
     LET σ = list2finseq((: ikeep, itype(T) :)) IN
-    dot(interp(v(len - 2), σ), interpret(decls(equalities ↑ (len - 2)), σ), v(0))
+    dot(interp(v(len - 2), σ), v(0))
   ;≐(a, b)(T)(len: above(1)): (sexpr?) = app(equal(T)(len), pair(a, b))
   % 	     	 ∀(x: T): p(x) ≡                        (λ(x: T): p(x) = λx TRUE)
   forall_(T, p)(len: above(2)): (sexpr?) = app(equal(fun(T, bool_(len + 1)))(len), pair( lam(T, p), lam(T, TRUE_(len + 1))))
