@@ -6,7 +6,7 @@ BEGIN
     v(i: nat): v?: sexpr?
     % Update this with finseq for nested theories:
     % finseq[ (sinterp?) ], nat
-    dot(m: (sexpr?), S: finseq[(scontext?)], x: (sexpr?)): dot?: sexpr?
+    dot(m: (sexpr?), x: (sexpr?)): dot?: sexpr?
     interp(m: (sexpr?), map: finseq[(sinterp?)]): interp?: sexpr?
     theory_(decls: finseq[(scontext?)]): theory?: sexpr?
 
@@ -53,7 +53,7 @@ BEGIN
   size(U: syntaxic): RECURSIVE nat =
     CASES U OF
       v(x): 2
-    , dot(m, S, x): size(m) + size(x) + 2 % TODO 
+    , dot(m, x): size(m) + size(x) + 2 % TODO 
     , interp(m, σ): size(m) + sum(σ`length, LAMBDA (x: below[σ`length]): size(σ`seq(x))) + 2
     , theory_(Θ): sum(Θ`length, LAMBDA (x: below[Θ`length]): size(Θ(x))) + 2
 
