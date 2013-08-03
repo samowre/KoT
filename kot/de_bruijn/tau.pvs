@@ -5,7 +5,7 @@ BEGIN
   AUTO_REWRITE+ sexpr?
 
   % Variable declaration
-  Γ, Δ, Θ: VAR (admissible?)
+  Γ, Δ, Θ: VAR finseq[(scontext?)]
   M, N: VAR (scontext?)
   U, V: VAR syntaxic
   A, B, T: VAR (sexpr?)
@@ -254,4 +254,5 @@ BEGIN
   %  - τ(Γ)(_) generates tccs that are correct (typecheckable) in the context Γ
   %    i.e τ(Γ)(tcc) = KTERM for each tcc generated.
   %    -> see tcc_correctness in tau_props
+
 END tau

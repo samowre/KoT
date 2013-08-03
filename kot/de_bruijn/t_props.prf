@@ -1,534 +1,149 @@
 (tau_props
- (τ_TCC1 0
-  (τ_TCC1-1 nil 3584445120 ("" (subtype-tcc) nil nil) nil nil))
- (type_correctness_TCC1 0
-  (type_correctness_TCC1-1 nil 3584445120 ("" (subtype-tcc) nil nil)
-   nil nil))
  (type_correctness 0
   (type_correctness-1 nil 3584447740
    ("" (induct a)
     (("1" (skosimp* :preds? t)
-      (("1" (auto-rewrite τ)
-        (("1" (assert)
-          (("1" (lift-if)
-            (("1" (split 1)
-              (("1" (flatten)
-                (("1" (split 1)
-                  (("1" (expand term?)
-                    (("1" (flatten) (("1" (assert) nil nil)) nil)) nil)
-                   ("2" (flatten)
-                    (("2" (split 2)
-                      (("1" (flatten)
-                        (("1" (expand (term? type?))
-                          (("1" (expand τ)
-                            (("1" (assert) (("1" (postpone) nil nil))
-                              nil))
-                            nil))
-                          nil))
-                        nil)
+      (("1" (assert)
+        (("1" (expand τ -3)
+          (("1" (expand τ 1 2)
+            (("1" (lift-if)
+              (("1" (split -3)
+                (("1" (flatten)
+                  (("1" (assert)
+                    (("1" (split -2)
+                      (("1" (propax) nil nil)
                        ("2" (flatten)
                         (("2" (assert)
-                          (("2" (expand term?) (("2" (assert) nil nil))
-                            nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil)
-               ("2" (flatten)
-                (("2" (expand term?)
-                  (("2" (assert) (("2" (grind) nil nil)) nil)) nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("2" (skosimp* :preds? t)
-      (("2" (stop-rewrite sexpr?)
-        (("2" (assert)
-          (("2" (expand term?)
-            (("2" (assert)
-              (("2" (auto-rewrite τ)
-                (("2" (assert)
-                  (("2" (lift-if)
-                    (("2" (split 1)
-                      (("1" (flatten) (("1" (postpone) nil nil)) nil)
-                       ("2" (flatten) (("2" (grind) nil nil)) nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("3" (stop-rewrite sexpr?)
-      (("3" (auto-rewrite τ)
-        (("3" (skosimp* :preds? t)
-          (("3" (expand term?)
-            (("3" (assert)
-              (("3" (lift-if)
-                (("3" (split -5)
-                  (("1" (flatten) (("1" (postpone) nil nil)) nil)
-                   ("2" (flatten) (("2" (grind) nil nil)) nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("4" (stop-rewrite sexpr?)
-      (("4" (skosimp* :preds? t)
-        (("4" (assert)
-          (("4" (expand term?)
-            (("4" (rewrite τ)
-              (("4" (expand τ -3)
-                (("4" (lift-if)
-                  (("4" (split -3)
-                    (("1" (flatten) (("1" (assert) nil nil)) nil)
-                     ("2" (flatten)
-                      (("2" (split -1)
-                        (("1" (flatten)
-                          (("1" (split -2)
-                            (("1" (flatten) (("1" (assert) nil nil))
-                              nil)
-                             ("2" (flatten)
-                              (("2"
-                                (assert)
-                                (("2" (grind) nil nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil)
-                         ("2" (flatten) (("2" (grind) nil nil)) nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("5" (skosimp* :preds? t)
-      (("5" (stop-rewrite sexpr?)
-        (("5" (assert)
-          (("5" (expand term?)
-            (("5" (expand τ -6)
-              (("5" (expand τ -6)
-                (("5" (lift-if)
-                  (("5" (split -6)
-                    (("1" (flatten)
-                      (("1" (split -2)
-                        (("1" (flatten) (("1" (assert) nil nil)) nil)
-                         ("2" (flatten)
-                          (("2" (assert) (("2" (grind) nil nil)) nil))
-                          nil))
-                        nil))
-                      nil)
-                     ("2" (grind) nil nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("6" (skosimp* :preds? t)
-      (("6" (expand term?)
-        (("6" (expand τ -6)
-          (("6" (expand τ -6)
-            (("6" (lift-if)
-              (("6" (split -6)
-                (("1" (flatten)
-                  (("1" (split -2)
-                    (("1" (flatten) (("1" (assert) nil nil)) nil)
-                     ("2" (grind) nil nil))
-                    nil))
-                  nil)
-                 ("2" (grind) nil nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("7" (skosimp* :preds? t)
-      (("7" (expand term?)
-        (("7" (expand τ -6)
-          (("7" (expand τ -6)
-            (("7" (lift-if)
-              (("7" (split -6)
-                (("1" (flatten)
-                  (("1" (split -2)
-                    (("1" (flatten) (("1" (assert) nil nil)) nil)
-                     ("2" (grind) nil nil))
-                    nil))
-                  nil)
-                 ("2" (grind) nil nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("8" (skosimp* :preds? t)
-      (("8" (expand τ 1)
-        (("8" (expand τ 1)
-          (("8" (lift-if)
-            (("8" (expand term?)
-              (("8" (expand τ -6)
-                (("8" (expand τ -6)
-                  (("8" (stop-rewrite sexpr?)
-                    (("8" (assert)
-                      (("8" (split 1)
-                        (("1" (flatten)
-                          (("1" (assert)
-                            (("1" (split 1)
+                          (("2" (split -1)
+                            (("1" (assert)
                               (("1"
-                                (flatten)
+                                (expand finseq_appl)
                                 (("1"
-                                  (assert)
+                                  (lemma shift_preserves)
                                   (("1"
-                                    (split 1)
+                                    (invoke
+                                     (inst
+                                      -
+                                      "%1"
+                                      "%2"
+                                      "Γ!1 ^^ (0, v1_var!1 + 1)")
+                                     (~ "δ(%)(%)")
+                                     (~ "δ(%1)(%)"))
                                     (("1"
-                                      (flatten)
+                                      (case
+                                       "rest(Γ!1, v1_var!1) ++ Γ!1 ^^ (0, v1_var!1 + 1) = Γ!1")
                                       (("1"
-                                        (assert)
-                                        (("1" (postpone) nil nil))
-                                        nil))
-                                      nil)
-                                     ("2"
-                                      (flatten)
-                                      (("2"
-                                        (assert)
-                                        (("2" (grind) nil nil))
-                                        nil))
-                                      nil))
-                                    nil))
-                                  nil))
-                                nil)
-                               ("2"
-                                (flatten)
-                                (("2"
-                                  (assert)
-                                  (("2" (grind) nil nil))
-                                  nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil)
-                         ("2" (flatten)
-                          (("2" (assert) (("2" (grind) nil nil)) nil))
-                          nil))
-                        nil))
-                      nil))
-                    nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("9" (skosimp* :preds? t)
-      (("9" (expand (term? type?))
-        (("9" (auto-rewrite τ)
-          (("9" (stop-rewrite sexpr?)
-            (("9" (assert)
-              (("9" (lift-if)
-                (("9" (split 1)
-                  (("1" (flatten)
-                    (("1" (split 1)
-                      (("1" (flatten)
-                        (("1" (assert)
-                          (("1" (lift-if 1)
-                            (("1" (split 1)
-                              (("1" (assert) nil nil)
-                               ("2"
-                                (flatten)
-                                (("2"
-                                  (assert)
-                                  (("2"
-                                    (split -8)
-                                    (("1"
-                                      (flatten)
-                                      (("1"
-                                        (assert)
+                                        (rewrite -1)
                                         (("1"
-                                          (hide -7)
+                                          (expand ^^ -1 1)
                                           (("1"
-                                            (inst
-                                             -
-                                             "Γ!1 ++ k(const_var(lam1_var!1))")
+                                            (expand min)
                                             (("1"
-                                              (assert)
+                                              (expand over_keyword)
                                               (("1"
-                                                (expand context?)
+                                                (rewrite -1)
                                                 (("1"
-                                                  (expand context?)
+                                                  (assert)
                                                   (("1"
-                                                    (stop-rewrite τ)
+                                                    (rewrite
+                                                     delta_preserves)
                                                     (("1"
-                                                      (expand τ 3)
+                                                      (use tau_type)
                                                       (("1"
-                                                        (expand τ 3)
+                                                        (split -1)
                                                         (("1"
-                                                          (lift-if)
+                                                          (expand
+                                                           finseq_appl)
                                                           (("1"
-                                                            (split 3)
+                                                            (case
+                                                             "empty_seq ++ rest(Γ!1, v1_var!1) = rest(Γ!1, v1_var!1)")
                                                             (("1"
-                                                              (flatten)
+                                                              (rewrite
+                                                               -1)
                                                               (("1"
-                                                                (expand
-                                                                 (k ++)
-                                                                 -1)
-                                                                (("1"
-                                                                  (expand
-                                                                   o)
-                                                                  (("1"
-                                                                    (assert)
+                                                                (assert)
+                                                                nil
+                                                                nil))
+                                                              nil)
+                                                             ("2"
+                                                              (hide-all-but
+                                                               (1
+                                                                -3
+                                                                -4))
+                                                              (("2"
+                                                                (grind-with-ext)
+                                                                (("2"
+                                                                  (typepred
+                                                                   x!1)
+                                                                  (("2"
+                                                                    (grind)
                                                                     nil
                                                                     nil))
                                                                   nil))
                                                                 nil))
-                                                              nil)
-                                                             ("2"
-                                                              (flatten)
-                                                              (("2"
-                                                                (expand
-                                                                 rest
+                                                              nil))
+                                                            nil))
+                                                          nil)
+                                                         ("2"
+                                                          (propax)
+                                                          nil
+                                                          nil)
+                                                         ("3"
+                                                          (expand
+                                                           kind
+                                                           -1)
+                                                          (("3"
+                                                            (expand
+                                                             typed?)
+                                                            (("3"
+                                                              (expand
+                                                               finseq_appl)
+                                                              (("3"
+                                                                (hide
                                                                  2
-                                                                 1)
-                                                                (("2"
-                                                                  (expand
-                                                                   ^^)
-                                                                  (("2"
-                                                                    (split
-                                                                     2)
+                                                                 3)
+                                                                (("3"
+                                                                  (lift-if)
+                                                                  (("3"
+                                                                    (bddsimp
+                                                                     -1)
                                                                     (("1"
-                                                                      (flatten)
-                                                                      (("1"
-                                                                        (split
-                                                                         1)
-                                                                        (("1"
-                                                                          (propax)
-                                                                          nil
-                                                                          nil)
-                                                                         ("2"
-                                                                          (flatten)
-                                                                          (("2"
-                                                                            (expand
-                                                                             finseq_appl)
-                                                                            (("2"
-                                                                              (expand
-                                                                               ++
-                                                                               1)
-                                                                              (("2"
-                                                                                (expand
-                                                                                 o
-                                                                                 1
-                                                                                 3)
-                                                                                (("2"
-                                                                                  (assert)
-                                                                                  (("2"
-                                                                                    (lift-if)
-                                                                                    (("2"
-                                                                                      (expand
-                                                                                       k
-                                                                                       1
-                                                                                       1)
-                                                                                      (("2"
-                                                                                        (expand
-                                                                                         k
-                                                                                         1
-                                                                                         2)
-                                                                                        (("2"
-                                                                                          (expand
-                                                                                           rest
-                                                                                           1)
-                                                                                          (("2"
-                                                                                            (case
-                                                                                             "(k(const_var(lam1_var!1)) o Γ!1) ^^
-                          (1, length(k(const_var(lam1_var!1)) o Γ!1))
-                          o empty_seq = Γ!1")
-                                                                                            (("1"
-                                                                                              (rewrite
-                                                                                               -1)
-                                                                                              (("1"
-                                                                                                (expand
-                                                                                                 τ
-                                                                                                 1)
-                                                                                                (("1"
-                                                                                                  (propax)
-                                                                                                  nil
-                                                                                                  nil))
-                                                                                                nil))
-                                                                                              nil)
-                                                                                             ("2"
-                                                                                              (hide-all-but
-                                                                                               1)
-                                                                                              (("2"
-                                                                                                (grind-with-ext)
-                                                                                                (("1"
-                                                                                                  (typepred
-                                                                                                   x!1)
-                                                                                                  (("1"
-                                                                                                    (grind)
-                                                                                                    nil
-                                                                                                    nil))
-                                                                                                  nil)
-                                                                                                 ("2"
-                                                                                                  (typepred
-                                                                                                   x!1)
-                                                                                                  (("2"
-                                                                                                    (grind)
-                                                                                                    nil
-                                                                                                    nil))
-                                                                                                  nil))
-                                                                                                nil))
-                                                                                              nil))
-                                                                                            nil))
-                                                                                          nil))
-                                                                                        nil))
-                                                                                      nil))
-                                                                                    nil))
-                                                                                  nil))
-                                                                                nil))
-                                                                              nil))
-                                                                            nil))
-                                                                          nil))
-                                                                        nil))
+                                                                      (assert)
+                                                                      nil
                                                                       nil)
                                                                      ("2"
-                                                                      (flatten)
-                                                                      (("2"
-                                                                        (expand
-                                                                         k
-                                                                         1
-                                                                         1)
-                                                                        (("2"
-                                                                          (expand
-                                                                           ++
-                                                                           1
-                                                                           1)
-                                                                          (("2"
-                                                                            (expand
-                                                                             o
-                                                                             1
-                                                                             1)
-                                                                            (("2"
-                                                                              (assert)
-                                                                              (("2"
-                                                                                (lift-if)
-                                                                                (("2"
-                                                                                  (split
-                                                                                   1)
-                                                                                  (("1"
-                                                                                    (flatten)
-                                                                                    (("1"
-                                                                                      (expand
-                                                                                       τ
-                                                                                       1)
-                                                                                      (("1"
-                                                                                        (grind)
-                                                                                        nil
-                                                                                        nil))
-                                                                                      nil))
-                                                                                    nil)
-                                                                                   ("2"
-                                                                                    (flatten)
-                                                                                    (("2"
-                                                                                      (assert)
-                                                                                      (("2"
-                                                                                        (case
-                                                                                         "(# length
-                              := min(length
-                                     (Γ!1 ++ k(const_var(lam1_var!1)))
-                                     -
-                                     1,
-                                     (Γ!1
-                                      ++
-                                      k(const_var(lam1_var!1)))`length
-                                     -
-                                     1),
-                            seq
-                              := LAMBDA (x:
-                                         below
-                                         [min
-                                          (length
-                                           (Γ!1
-                                            ++
-                                            k(const_var(lam1_var!1)))
-                                           -
-                                           1,
-                                           (Γ!1
-                                            ++
-                                            k
-                                            (const_var(lam1_var!1)))`length
-                                           -
-                                           1)]):
-                                   (Γ!1 ++ k(const_var(lam1_var!1)))`seq
-                                       (1 + x) #) = Γ!1")
-                                                                                        (("1"
-                                                                                          (grind)
-                                                                                          nil
-                                                                                          nil)
-                                                                                         ("2"
-                                                                                          (hide-all-but
-                                                                                           1)
-                                                                                          (("2"
-                                                                                            (grind-with-ext)
-                                                                                            (("1"
-                                                                                              (grind)
-                                                                                              (("1"
-                                                                                                (expand
-                                                                                                 scontext?)
-                                                                                                (("1"
-                                                                                                  (propax)
-                                                                                                  nil
-                                                                                                  nil))
-                                                                                                nil))
-                                                                                              nil)
-                                                                                             ("2"
-                                                                                              (expand
-                                                                                               scontext?)
-                                                                                              (("2"
-                                                                                                (propax)
-                                                                                                nil
-                                                                                                nil))
-                                                                                              nil))
-                                                                                            nil))
-                                                                                          nil)
-                                                                                         ("3"
-                                                                                          (grind)
-                                                                                          nil
-                                                                                          nil)
-                                                                                         ("4"
-                                                                                          (grind)
-                                                                                          nil
-                                                                                          nil))
-                                                                                        nil))
-                                                                                      nil))
-                                                                                    nil))
-                                                                                  nil))
-                                                                                nil))
-                                                                              nil))
-                                                                            nil))
-                                                                          nil))
-                                                                        nil))
+                                                                      (assert)
+                                                                      nil
+                                                                      nil)
+                                                                     ("3"
+                                                                      (assert)
+                                                                      nil
+                                                                      nil)
+                                                                     ("4"
+                                                                      (assert)
+                                                                      nil
+                                                                      nil)
+                                                                     ("5"
+                                                                      (assert)
+                                                                      nil
+                                                                      nil)
+                                                                     ("6"
+                                                                      (assert)
+                                                                      nil
+                                                                      nil)
+                                                                     ("7"
+                                                                      (assert)
+                                                                      nil
                                                                       nil))
                                                                     nil))
                                                                   nil))
                                                                 nil))
                                                               nil))
                                                             nil))
+                                                          nil)
+                                                         ("4"
+                                                          (propax)
+                                                          nil
                                                           nil))
                                                         nil))
                                                       nil))
@@ -538,106 +153,81 @@
                                               nil))
                                             nil))
                                           nil))
-                                        nil))
-                                      nil)
-                                     ("2" (flatten) nil nil))
-                                    nil))
-                                  nil))
-                                nil))
-                              nil))
-                            nil))
-                          nil))
-                        nil)
-                       ("2" (flatten)
-                        (("2" (assert) (("2" (grind) nil nil)) nil))
-                        nil))
-                      nil))
-                    nil)
-                   ("2" (flatten)
-                    (("2" (assert) (("2" (grind) nil nil)) nil)) nil))
-                  nil))
-                nil))
-              nil))
-            nil))
-          nil))
-        nil))
-      nil)
-     ("10" (skosimp* :preds? t)
-      (("10" (expand (type? term?))
-        (("10" (expand τ 1 2)
-          (("10" (expand τ 1 2)
-            (("10" (expand τ -6)
-              (("10" (expand τ -6)
-                (("10" (stop-rewrite sexpr?)
-                  (("10" (assert)
-                    (("10" (lift-if)
-                      (("10" (split 1)
-                        (("1" (assert)
-                          (("1" (flatten)
-                            (("1" (assert)
-                              (("1"
-                                (inst - Γ!1)
-                                (("1"
-                                  (inst - Γ!1)
-                                  (("1"
-                                    (assert)
-                                    (("1"
-                                      (bddsimp -5)
-                                      (("1"
-                                        (bddsimp -6)
-                                        (("1"
-                                          (assert)
-                                          (("1" (postpone) nil nil))
-                                          nil)
-                                         ("2"
-                                          (assert)
-                                          (("2"
-                                            (bddsimp -7)
-                                            (("1"
-                                              (expand τ 1)
-                                              (("1" (propax) nil nil))
-                                              nil)
-                                             ("2"
-                                              (expand τ 1)
-                                              (("2" (propax) nil nil))
-                                              nil))
-                                            nil))
-                                          nil))
                                         nil)
                                        ("2"
-                                        (expand τ 1)
-                                        (("2" (propax) nil nil))
+                                        (hide-all-but (1 -3 -4))
+                                        (("2"
+                                          (grind-with-ext)
+                                          (("2"
+                                            (typepred x!1)
+                                            (("2" (grind) nil nil))
+                                            nil))
+                                          nil))
                                         nil))
                                       nil))
                                     nil))
                                   nil))
                                 nil))
-                              nil))
-                            nil))
-                          nil)
-                         ("2" (flatten)
-                          (("2" (split -6)
-                            (("1" (grind) nil nil)
-                             ("2" (grind) nil nil))
+                              nil)
+                             ("2" (propax) nil nil))
                             nil))
                           nil))
                         nil))
                       nil))
                     nil))
-                  nil))
+                  nil)
+                 ("2" (flatten) (("2" (assert) nil nil)) nil))
                 nil))
               nil))
             nil))
           nil))
         nil))
       nil)
-     ("11" (skosimp* :preds? t) (("11" (postpone) nil nil)) nil)
-     ("12" (postpone) nil nil) ("13" (postpone) nil nil)
-     ("14" (postpone) nil nil) ("15" (postpone) nil nil)
-     ("16" (postpone) nil nil) ("17" (postpone) nil nil)
-     ("18" (postpone) nil nil) ("19" (postpone) nil nil)
-     ("20" (postpone) nil nil) ("21" (postpone) nil nil)
-     ("22" (postpone) nil nil) ("23" (postpone) nil nil))
+     ("2" (skosimp* :preds? t)
+      (("2" (expand τ -6)
+        (("2" (expand τ 1 2)
+          (("2" (lift-if)
+            (("2" (assert)
+              (("2" (split -6)
+                (("1" (flatten)
+                  (("1" (assert)
+                    (("1" (hide -8)
+                      (("1" (lemma eta_preserves)
+                        (("1" (inst - dot2_var!1 dot1_var!1 "Γ!1")
+                          (("1" (assert)
+                            (("1"
+                              (inst -
+                               "Γ!1 ++ decls(signature(Γ!1, dot1_var!1))")
+                              (("1"
+                                (split -9)
+                                (("1" (postpone) nil nil)
+                                 ("2" (postpone) nil nil)
+                                 ("3" (postpone) nil nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil)
+                 ("2" (propax) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("3" (postpone) nil nil) ("4" (postpone) nil nil)
+     ("5" (postpone) nil nil) ("6" (postpone) nil nil)
+     ("7" (postpone) nil nil) ("8" (postpone) nil nil)
+     ("9" (postpone) nil nil) ("10" (postpone) nil nil)
+     ("11" (postpone) nil nil) ("12" (postpone) nil nil)
+     ("13" (postpone) nil nil) ("14" (postpone) nil nil)
+     ("15" (postpone) nil nil) ("16" (postpone) nil nil)
+     ("17" (postpone) nil nil) ("18" (postpone) nil nil)
+     ("19" (postpone) nil nil) ("20" (postpone) nil nil)
+     ("21" (postpone) nil nil) ("22" (postpone) nil nil))
     nil)
    nil shostak)))
 

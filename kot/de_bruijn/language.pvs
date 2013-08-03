@@ -113,6 +113,8 @@ BEGIN
     theory_def?(U) OR const_def?(U) OR type_def?(U)
   var?(U): bool = 
     const_var?(U) OR type_var?(U)
+  typed?(U): bool =
+    const_decl?(U) OR const_var?(U) OR const_def?(U)
 
   
 

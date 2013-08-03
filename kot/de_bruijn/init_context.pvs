@@ -78,10 +78,9 @@ BEGIN
 
 
   admissible?(Γ: finseq[(scontext?)]): bool =
-    (length(Γ) > 1 AND 
-     Γ ^^ (length(Γ) - 2, length(Γ)) = decls(init_context))
-    OR Γ = rest(decls(init_context), 0)
-    OR Γ = empty_seq
+    Γ = empty_seq OR
+    Γ = rest(decls(init_context), 0) OR
+    Γ ^^ (length(Γ) - 2, length(Γ)) = decls(init_context)
 
 END init_context
 

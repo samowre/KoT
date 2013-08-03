@@ -17,21 +17,45 @@ BEGIN
   tccs(Γ)(U): MACRO list[pretcc] = τ(Γ)(U)`2
 
 
+
+  % Very basic properties of τ
+  
+
+  tau_rest: THEOREM x < length(Θ) AND
+    KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES 
+    KTHEORY?(tau(Γ)(theory_(rest(Θ, x))))
+  tau_decl: THEOREM x < length(Θ) AND
+    KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES 
+    KDECL?(tau(Γ ++ rest(Θ, x))(Θ(x)))
+  tau_def: THEOREM x < length(Θ) AND definition?(Θ(x)) AND
+    KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES
+    NOT UNDEFINED?(tau(Γ ++ rest(Θ, x))(def(Θ(x))))
+  tau_type: THEOREM x < length(Θ) AND typed?(Θ(x)) AND
+    KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES
+    KTYPE?(tau(Γ ++ rest(Θ, x))(type_(Θ(x))))
+
+  tau_concat: THEOREM
+  KTHEORY?(tau(Γ)(theory_(Δ ++ Θ))) IFF 
+  KTHEORY?(tau(Γ)(theory_(Δ))) AND KTHEORY?(tau(Γ ++ Δ)(theory_(Θ)))
+
+  tau_signature: THEOREM
+    KTHEORY?(tau(Γ)(m)) IMPLIES KTHEORY?(tau(Γ)(signature(Γ, m)))
+
   % The following functions preserves tau:
   % ↑, subst, μ0, η, δ
   % We first have to define these functions over [keyword, list[tcc]] and keyword
-  over_keyword(f: [syntaxic -> syntaxic])(k): keyword = 
+  over_keyword(f: [U: syntaxic -> same(U)], k): keyword = 
     CASES k OF
       KTERM(T): KTERM(f(T))
       ELSE k
     ENDCASES
-  AUTO_REWRITE over_keyword
+  %AUTO_REWRITE over_keyword
 
-  ;↑(Γ, nb): MACRO finseq[(scontext?)] = decls(theory_(Γ) ↑ nb)
-  ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb)(k)
+  ;↑(Δ, nb): MACRO finseq[(scontext?)] = decls(theory_(Δ) ↑ nb)
+  ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb, k)
   ;↑(l, nb): MACRO list[pretcc] = map(LAMBDA U: U ↑ nb)(l)
-  subst(Γ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Γ), x, t))
-  subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t))(k)
+  subst(Δ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Δ), x, t))
+  subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t), k)
   subst(l, x, t): MACRO list[pretcc] = map(LAMBDA U: subst(U, x, t))(l)
 
 
@@ -73,22 +97,27 @@ BEGIN
   mu0_idempotent: THEOREM
     μ0(μ0(U)) = μ0(U)
   delta_idempotent: THEOREM
-    δ(Γ)(δ(Γ)(U)) = δ(Γ)(U)
+    δ(Δ)(δ(Δ)(U)) = δ(Δ)(U)
 
 
   mu0_preserves: THEOREM
     τ(Γ)(μ0(U)) = τ(Γ)(U)
 
   eta_preserves: THEOREM
-    δ(Γ)(m) = theory_(Δ) IMPLIES
-    tau(Γ)(η(m, Δ, n)(U)) = η(m, Δ, n)(tau(Γ ++ Δ)(U))
+    LET Δ = signature(Γ, m) IN
+    theory?(Δ) IMPLIES
+    tau(Γ)(η(m, length(decls(Δ)))(U)) = η(m, length(decls(Δ)))(tau(Γ ++ decls(Δ))(U))
 
   eta_tccs: THEOREM
-    δ(Γ)(m) = theory_(Δ) IMPLIES
-    tccs(Γ)(η(m, Δ, n)(U)) = η(m, Δ, n)(tccs(Γ ++ Δ)(U))
+    LET Δ = signature(Γ, m) IN
+    theory?(Δ) IMPLIES
+    tccs(Γ)(η(m, length(decls(Δ)))(U)) = η(m, length(decls(Δ)))(tccs(Γ ++ decls(Δ))(U))
 
   delta_preserves: THEOREM
     τ(Γ)(δ(Γ)(U)) = τ(Γ)(U)
+
+
+
 
 END preserves_tau
 
