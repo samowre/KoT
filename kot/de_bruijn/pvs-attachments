@@ -1,0 +1,249 @@
+(ql:quickload :esrap)
+(load "ideal-pvs.lisp")
+
+(in-package :ideal-pvs)
+;; Convert to PVS
+(defgeneric ideal2syntaxic* (expr)
+  (:method ((v sym))
+    (format nil "v(~a)" (slot-value v 'index)))
+  (:method ((d dot))
+    (format nil "dot(~a, ~a)" 
+	    (ideal2syntaxic* (slot-value d 'module))
+	    (ideal2syntaxic* (slot-value d 'expr))))
+  (:method ((i interpretation))
+    (format nil "interp(~a, list2finseq((:~{~a~^, ~} :)))"
+	    (ideal2syntaxic* (slot-value i 'module))
+	    (loop for x to (1- (slot-value i 'length)) collect
+		 (if (and (gethash x (slot-value i 'constructors))
+			  (gethash x (slot-value i 'interp)))
+		     (format nil "~a(~a)" (gethash x (slot-value i 'constructors))
+			     (ideal2syntaxic* (gethash x (slot-value i 'interp))))
+		     "ikeep"))))
+  (:method ((th theory))
+    (format nil "theory_(list2finseq((: ~{~a~^, ~} :)))"
+	    (loop for decl in (slot-value th 'decls) collect
+		 (ideal2syntaxic* decl))))
+  (:method ((f fun))
+    (format nil "fun(~a, ~a)"
+	    (ideal2syntaxic* (slot-value (slot-value f 'domain) 'type))
+	    (ideal2syntaxic* (slot-value f 'range))))
+  (:method ((p prod))
+    (format nil "prod(~a, ~a)"
+	    (ideal2syntaxic* (slot-value (slot-value p 'left) 'type))
+	    (ideal2syntaxic* (slot-value p 'right))))
+  (:method ((s subtype))
+    (format nil "subtype(~a, ~a)"
+	    (ideal2syntaxic* (slot-value (slot-value s 'supertype) 'type))
+	    (ideal2syntaxic* (slot-value s 'predicate))))
+  (:method ((a app))
+    (format nil "app(~a, ~a)"
+	    (ideal2syntaxic* (slot-value a 'fun))
+	    (ideal2syntaxic* (slot-value a 'arg))))
+  (:method ((l lam))
+    (format nil "lam(~a, ~a)"
+	    (ideal2syntaxic* (slot-value (slot-value l 'type) 'type))
+	    (ideal2syntaxic* (slot-value l 'body))))
+  (:method ((p pair))
+    (format nil "pair(~a, ~a)"
+	    (ideal2syntaxic* (slot-value p 'left))
+	    (ideal2syntaxic* (slot-value p 'right))))
+  (:method ((p proj))
+    (with-slots (expr side) p
+      (format nil
+	      (if (eq side 'left) "lproj(~a)" "rproj(~a)")
+	      (ideal2syntaxic* expr))))
+  (:method ((d decl))
+    (let ((args
+	   (append
+	    (when (and (slot-boundp d 'type) (slot-value d 'type))
+	      (list (ideal2syntaxic* (slot-value d 'type))))
+	    (when (and (slot-boundp d 'def) (slot-value d 'def))
+	      (list (ideal2syntaxic* (slot-value d 'def))))))
+	  (con (format nil "~a_~a"
+		       (cond ((theory-decl? d) "theory")
+			     ((type-decl? d) "type")
+			     ((term-decl? d) "const"))
+		       (cond ((is-decl? d) "decl")
+			     ((is-var? d) "var")
+			     ((is-def? d) "def")))))
+      (if args
+	  (format nil "~a(~{~a~^, ~})" con args)
+	  con)))
+  )
+
+(defun ideal2syntaxic (expr)
+  (ideal2syntaxic* expr))
+
+;; From PVS
+(defun syntaxic2ideal (s)
+  (let ((con (if (pvs::application? s) (pvs::id (pvs::operator s)) (pvs::id s)))
+	(args (when (pvs::application? s) (pvs::arguments s))))
+    (cond ((eq con 'pvs::|v|)
+	   (make-instance 'sym :index (number (car args))))
+	  ((eq con 'pvs::|dot|)
+	   (make-instance 'dot
+			  :module (syntaxic2ideal (car args))
+			  :expr (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|interp|)
+	   (let* ((interp (syntaxic2ideal (cadr args)))
+		  (ideal (make-instance 'interpretation
+					:module (syntaxic2ideal (car args))
+					:length (length interp))))
+	     (loop for i in interp counting t into nb do
+		  (when (consp i)
+		    (setf (gethash (1- nb) (slot-value ideal 'constructors)) (car i))
+		    (setf (gethash (1- nb) (slot-value ideal 'interp) (cdr i)))))))
+	  ((eq con 'pvs::|theory_|)
+	   (make-instance 'theory
+			  :decls (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|fun|)
+	   (make-instance 'fun
+			  :domain (syntaxic2ideal (car args))
+			  :range (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|prod|)
+	   (make-instance 'prod
+			  :left (syntaxic2ideal (car args))
+			  :right (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|subtype|)
+	   (make-instance 'subtype
+			  :supertype (syntaxic2ideal (car args))
+			  :predicate (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|app|)
+	   (make-instance 'app
+			  :fun (syntaxic2ideal (car args))
+			  :arg (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|lam|)
+	   (make-instance 'lam
+			  :type (syntaxic2ideal (car args))
+			  :body (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|pair|)
+	   (make-instance 'pair
+			  :left (syntaxic2ideal (car args))
+			  :right (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|lproj|)
+	   (make-instance 'proj
+			  :expr (syntaxic2ideal (car args))
+			  :side 'left))
+	  ((eq con 'pvs::|rproj|)
+	   (make-instance 'proj
+			  :expr (syntaxic2ideal (car args))
+			  :side 'right))
+	  ((eq con 'pvs::|type_decl|)
+	   (make-instance 'decl))
+	  ((eq con 'pvs::|type_var|)
+	   (make-instance 'decl
+			  :def nil))
+	  ((eq con 'pvs::|type_def|)
+	   (make-instance 'decl
+			  :def (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|const_decl|)
+	   (make-instance 'typed-decl
+			  :type (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|const_var|)
+	   (make-instance 'typed-decl
+			  :def nil
+			  :type (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|const_def|)
+	   (make-instance 'typed-decl
+			  :def (syntaxic2ideal (cadr args))
+			  :type (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|theory_def|)
+	   (make-instance 'decl
+			  :type nil
+			  :def (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|ikeep|)
+	   ikeep)
+	  ((eq con 'pvs::|itype|)
+	   (cons 'itype (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|iterm|)
+	   (cons 'iterm (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|list2finseq|)
+	   (syntaxic2ideal (car args)))
+	  ((eq con 'pvs::|cons|)
+	   (cons (syntaxic2ideal (car args))
+		 (syntaxic2ideal (cadr args))))
+	  ((eq con 'pvs::|null|)
+	   nil)
+	  (t
+	   (break)))))
+
+(defun parse-syntaxic (ctx-str expr-str)
+  (let ((ctx (parse 'expr ctx-str))
+	(expr (parse 'expr expr-str)))
+    (when (typep ctx 'theory)
+      (ideal2syntaxic (debruijn expr (slot-value (debruijn ctx) 'decls))))))
+
+(defun print-syntaxic (ctx-str expr-pvs)
+  (let ((ctx (parse 'expr ctx-str))
+	(expr (syntaxic2ideal expr-pvs)))
+    (when (typep ctx 'theory)
+      (with-output-to-string (*standard-output*)
+	(pp (undebruijn expr (slot-value (undebruijn ctx) 'decls)))))))
+
+(in-package :pvs)
+
+(attachments
+ |read|
+ (defattach |ideal2syntaxic| (sctx sexpr)
+   (eval (pvs2cl (pc-typecheck (pc-parse (ideal-pvs::parse-syntaxic sctx sexpr) 'expr)))))
+ )
+
+(defvar *cl2pvs-enable-specials* nil)
+(defvar *cl2pvs-specials* (make-hash-table))
+
+(defun cl2pvs-register-special (id special)
+  (if special
+      (setf (gethash id *cl2pvs-specials*) special)
+      (remhash id *cl2pvs-specials*)))
+
+(defun cl2pvs-unregister-special (id)
+  (cl2pvs-register-special id nil))
+
+(defmacro with-cl2pvs-special (id special &body body)
+  (let ((old (gensym))
+	(sid (gensym)))
+    `(let* ((,sid ,id)
+	    (,old (gethash ,sid *cl2pvs-specials*)))
+       (cl2pvs-register-special ,sid ,special)
+       ,@body
+       (if ,old
+	   (cl2pvs-register-special ,sid ,old)
+	   (cl2pvs-unregister-special ,sid)))))
+
+(defmethod cl2pvs* :around (sexpr type context)
+  (or (when *cl2pvs-enable-specials*
+	(loop for special being the hash-values of *cl2pvs-specials* 
+	   when (funcall special sexpr type context)
+	   return it))
+      (call-next-method)))
+
+(in-package :ideal-pvs)
+
+(defvar *ideal-context* nil)
+
+(pvs::cl2pvs-register-special
+ 'cl2pvs-special-view
+ #'(lambda (expr type context)
+     (when (and (pvs::adt-type-name? (pvs::find-supertype type))
+		(eq (pvs::id (pvs::find-supertype type)) pvs::'|view|))
+       (let ((*ideal-context* (parse 'theory (slot-value expr pvs::'ctx))))
+	 (pvs::cl2pvs* (slot-value expr pvs::'expr)
+		       (pvs::type-value (car (pvs::actuals (pvs::find-supertype type))))
+		       context)))))
+
+(pvs::cl2pvs-register-special
+ 'cl2pvs-special
+ #'(lambda (expr type context)
+     (when (and *ideal-context*
+		(pvs::adt-type-name? (pvs::find-supertype type))
+		(eq (pvs::id (pvs::find-supertype type)) pvs::'|syntaxic|))
+       (let ((str (with-output-to-string (*standard-output*)
+		    (pp
+		     (undebruijn
+		      (syntaxic2ideal (let ((*ideal-context* nil))
+					  (pvs::cl2pvs* expr type context)))
+		      (slot-value *ideal-context* 'decls))))))
+	 (pvs::mk-application (pvs::mk-name-expr '|in_context|)
+			      (pvs::cl2pvs*-string (with-output-to-string (*standard-output*)
+						     (pp *ideal-context*)))
+			      (pvs::cl2pvs*-string str))))))
