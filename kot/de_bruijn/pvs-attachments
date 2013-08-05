@@ -92,7 +92,8 @@
 	     (loop for i in interp counting t into nb do
 		  (when (consp i)
 		    (setf (gethash (1- nb) (slot-value ideal 'constructors)) (car i))
-		    (setf (gethash (1- nb) (slot-value ideal 'interp) (cdr i)))))))
+		    (setf (gethash (1- nb) (slot-value ideal 'interp)) (cdr i))))
+	     ideal))
 	  ((eq con 'pvs::|theory_|)
 	   (make-instance 'theory
 			  :decls (syntaxic2ideal (car args))))
@@ -137,14 +138,14 @@
 	   (make-instance 'decl
 			  :def (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|const_decl|)
-	   (make-instance 'typed-decl
+	   (make-instance 'decl
 			  :type (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|const_var|)
-	   (make-instance 'typed-decl
+	   (make-instance 'decl
 			  :def nil
 			  :type (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|const_def|)
-	   (make-instance 'typed-decl
+	   (make-instance 'decl
 			  :def (syntaxic2ideal (cadr args))
 			  :type (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|theory_def|)
@@ -152,11 +153,11 @@
 			  :type nil
 			  :def (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|ikeep|)
-	   ikeep)
+	   'ikeep)
 	  ((eq con 'pvs::|itype|)
-	   (cons 'itype (syntaxic2ideal (car args))))
+	   (cons "itype" (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|iterm|)
-	   (cons 'iterm (syntaxic2ideal (car args))))
+	   (cons "iterm" (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|list2finseq|)
 	   (syntaxic2ideal (car args)))
 	  ((eq con 'pvs::|cons|)

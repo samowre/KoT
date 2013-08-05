@@ -44,6 +44,7 @@ END"
   %% ideal2syntaxic(ctx, expr) parses expr in context ctx and converts it to De Bruijn representation
   ideal2syntaxic(ctx, expr: ideal): syntaxic
   init2syntaxic(expr: ideal): syntaxic = ideal2syntaxic(init_string, expr)
+  init_context: syntaxic = ideal2syntaxic("BEGIN END", init_string)
 END read
 
 view[T: TYPE]: DATATYPE
@@ -58,6 +59,6 @@ END view
 %% This is for having a correct context inside PVSio
 hook: THEORY
 BEGIN
-  IMPORTING view
+  IMPORTING view, tau
   in_init[T: TYPE](expr: T): view[T] = in_context(init_string, expr)
 END hook
