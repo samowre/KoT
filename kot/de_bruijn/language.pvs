@@ -83,7 +83,7 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE+ size
   
-  Γ, Δ: VAR finseq[(scontext?)]
+  Γ, Δ, Θ: VAR finseq[(scontext?)]
   x: VAR nat  
   d: VAR (scontext?)
 
@@ -115,6 +115,15 @@ BEGIN
     const_var?(U) OR type_var?(U)
   typed?(U): bool =
     const_decl?(U) OR const_var?(U) OR const_def?(U)
+
+
+  % Finseq props
+  concat_empty: THEOREM empty_seq ++ Γ = Γ
+  concat__empty: THEOREM Γ ++ empty_seq = Γ
+  concat_assoc: THEOREM (Γ ++ Δ) ++ Θ = Γ ++ (Δ ++ Θ)
+  rest_concat: THEOREM 
+    rest(Γ ++ Δ, x) = IF x < length(Δ) THEN Γ ++ rest(Δ, x) ELSE rest(Γ, x - length(Δ)) ENDIF
+  AUTO_REWRITE concat_empty, concat__empty, concat_assoc, rest_concat
 
   
 

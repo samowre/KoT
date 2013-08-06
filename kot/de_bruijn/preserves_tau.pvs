@@ -38,8 +38,6 @@ BEGIN
   KTHEORY?(tau(Γ)(theory_(Δ ++ Θ))) IFF 
   KTHEORY?(tau(Γ)(theory_(Δ))) AND KTHEORY?(tau(Γ ++ Δ)(theory_(Θ)))
 
-  tau_signature: THEOREM
-    KTHEORY?(tau(Γ)(m)) IMPLIES KTHEORY?(tau(Γ)(signature(Γ, m)))
 
   % The following functions preserves tau:
   % ↑, subst, μ0, η, δ
@@ -98,6 +96,11 @@ BEGIN
     μ0(μ0(U)) = μ0(U)
   delta_idempotent: THEOREM
     δ(Δ)(δ(Δ)(U)) = δ(Δ)(U)
+
+
+  % This one requires shift_preserves
+  tau_signature: THEOREM
+    KTHEORY?(tau(Γ)(U)) IMPLIES KTHEORY?(tau(Γ)(signature(Γ, U)))
 
 
   mu0_preserves: THEOREM
