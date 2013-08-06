@@ -11,7 +11,7 @@
 	    (ideal2syntaxic* (slot-value d 'module))
 	    (ideal2syntaxic* (slot-value d 'expr))))
   (:method ((i interpretation))
-    (format nil "interp(~a, list2finseq((:~{~a~^, ~} :)))"
+    (format nil "interp(~a, ideep(list2finseq((:~{~a~^, ~} :))))"
 	    (ideal2syntaxic* (slot-value i 'module))
 	    (loop for x to (1- (slot-value i 'length)) collect
 		 (if (and (gethash x (slot-value i 'constructors))
@@ -158,6 +158,8 @@
 	   (cons "itype" (syntaxic2ideal (car args))))
 	  ((eq con 'pvs::|iterm|)
 	   (cons "iterm" (syntaxic2ideal (car args))))
+	  ((eq con 'pvs::|ideep|)
+	   (syntaxic2ideal (car args)))
 	  ((eq con 'pvs::|list2finseq|)
 	   (syntaxic2ideal (car args)))
 	  ((eq con 'pvs::|cons|)

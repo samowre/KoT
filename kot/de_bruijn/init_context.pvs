@@ -57,7 +57,7 @@ BEGIN
   % =::[[T -> T] -> bool] ≡ equalities
   equal(T)(len: above(1)): (sexpr?) =
     LET σ = list2finseq((: ikeep, itype(T) :)) IN
-    dot(interp(v(len - 2), σ), v(0))
+    dot(interp(v(len - 2), ideep(σ)), v(0))
   ;≐(a, b)(T)(len: above(1)): (sexpr?) = app(equal(T)(len), pair(a, b))
   % 	     	 ∀(x: T): p(x) ≡                        (λ(x: T): p(x) = λx TRUE)
   forall_(T, p)(len: above(2)): (sexpr?) = app(equal(fun(T, bool_(len + 1)))(len), pair( lam(T, p), lam(T, TRUE_(len + 1))))

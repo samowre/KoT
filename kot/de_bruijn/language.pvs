@@ -1,5 +1,6 @@
 language: THEORY
 BEGIN
+  CONVERSION- extract1
   % TODO: Paste intro from datatype + modify
   syntaxic: DATATYPE WITH SUBTYPES sexpr?, scontext?, sinterp?
   BEGIN
@@ -7,7 +8,7 @@ BEGIN
     % Update this with finseq for nested theories:
     % finseq[ (sinterp?) ], nat
     dot(m: (sexpr?), x: (sexpr?)): dot?: sexpr?
-    interp(m: (sexpr?), map: finseq[(sinterp?)]): interp?: sexpr?
+    interp(m: (sexpr?), map: (sinterp?)): interp?: sexpr?
     theory_(decls: finseq[(scontext?)]): theory?: sexpr?
 
     fun(dom: (sexpr?), range: (sexpr?)): fun?: sexpr?
@@ -31,7 +32,7 @@ BEGIN
     ikeep: ikeep?: sinterp?
     itype(def: (sexpr?)): itype?: sinterp?
     iterm(def: (sexpr?)): iterm?: sinterp?
-%    itheory(def: syntaxic): itheory?
+    ideep(map: finseq[(sinterp?)]): ideep?: sinterp?
   END syntaxic
 
   U, V: VAR syntaxic
@@ -51,7 +52,7 @@ BEGIN
     CASES U OF
       v(x): 2
     , dot(m, x): size(m) + size(x) + 2 % TODO 
-    , interp(m, σ): size(m) + sum(σ`length, LAMBDA (x: below[σ`length]): size(σ`seq(x))) + 2
+    , interp(m, σ): size(m) + size(σ) + 2
     , theory_(Θ): sum(Θ`length, LAMBDA (x: below[Θ`length]): size(Θ(x))) + 2
 
     , fun(A, B): size(A) + size(B) + 2
@@ -75,6 +76,7 @@ BEGIN
     , ikeep: 1
     , itype(T): size(T) + 4
     , iterm(a): size(a) + 4
+    , ideep(σ): sum(σ`length, LAMBDA (x: below[σ`length]): size(σ`seq(x))) + 4
 
     ENDCASES
   MEASURE U BY <<

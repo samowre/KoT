@@ -39,6 +39,10 @@ BEGIN
     T: TYPE
     =: [[T, T] -> bool_def.bool] = EXTERNAL
   END
+
+  orders: THEORY
+  BEGIN
+  END
 END"
 
   %% ideal2syntaxic(ctx, expr) parses expr in context ctx and converts it to De Bruijn representation
@@ -59,6 +63,8 @@ END view
 %% This is for having a correct context inside PVSio
 hook: THEORY
 BEGIN
-  IMPORTING view, tau
+  IMPORTING view, delta, tau
+  IMPORTING init_context
   in_init[T: TYPE](expr: T): view[T] = in_context(init_string, expr)
+  hook: THEOREM ρ0(decls(init_context), interp(v(0), ideep(list2finseq((: ikeep, itype(dot(v(1), v(6))) :))))) = v(0)
 END hook

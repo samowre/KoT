@@ -22,8 +22,8 @@ BEGIN
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
     , dot(m, e): dot(m ↑ nb, e)
     , interp(m, σ):
-        interp(m ↑ nb,
-	       σ WITH [`seq := LAMBDA (x: below(σ`length)): σ(x) ↑ (nb`1, nb`2 + σ`length - 1 - x) ])
+        interp(m ↑ nb, σ ↑ nb)
+	       
     , theory_(Θ):
         theory_(Θ WITH [ `seq := LAMBDA (x: below(length(Θ))): Θ(x) ↑ (nb`1, nb`2 + length(Θ) - 1 - x) ])
 
@@ -53,6 +53,8 @@ BEGIN
     , ikeep: ikeep
     , itype(T): itype(T ↑ nb)
     , iterm(a): iterm(a ↑ nb)
+    , ideep(σ):
+        ideep(σ WITH [`seq := LAMBDA (x: below(σ`length)): σ(x) ↑ (nb`1, nb`2 + σ`length - 1 - x) ])
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE+ ↑
@@ -88,10 +90,10 @@ BEGIN
       % /!\ Case x = m not handled
     , dot(m, e): dot(subst(m, x, t), e)
     , interp(m, σ):
-        interp(subst(m, x, t),
-	       σ WITH [`seq := LAMBDA (y: below(σ`length)): subst(σ(y), x + σ`length - 1 - y, t ↑ (σ`length - 1 - y)) ])
+        interp(subst(m, x, t), subst(σ, x, t))
     , theory_(Θ):
-        theory_(Θ WITH [ `seq := LAMBDA (y: below(length(Θ))): subst(Θ(y), x + length(Θ) - 1 - y, t ↑ (length(Θ) - 1 - y)) ])
+        theory_(Θ WITH [ `seq := LAMBDA (y: below(length(Θ))):
+	  subst(Θ(y), x + length(Θ) - 1 - y, t ↑ (length(Θ) - 1 - y)) ])
 
       % { y:  T | a } ↦      { y:   T[ x ← t]    |   a[   x  ←   t ] }
       %                        λ——————————————————————\___________/
@@ -128,6 +130,9 @@ BEGIN
     , ikeep: ikeep
     , itype(T): itype(subst(T, x, t))
     , iterm(a): iterm(subst(a, x, t))
+    , ideep(σ):
+        ideep(σ WITH [`seq := LAMBDA (y: below(σ`length)):
+	  subst(σ(y), x + σ`length - 1 - y, t ↑ (σ`length - 1 - y)) ])
     ENDCASES
   MEASURE U BY <<
   AUTO_REWRITE subst

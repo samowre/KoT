@@ -282,13 +282,13 @@
   (:method ((v sym))
     "Displays the symbol's name.
     Falls back to De Bruijn representation prefixed by '#' if it has no name."
-    (if (and (slot-boundp v 'name)
+    (when (and (slot-boundp v 'name)
 	     (or (not *pp-debruijn*)
 		 (not (slot-boundp v 'index))))
-	(princ (slot-value v 'name))
-	(progn
+	(princ (slot-value v 'name)))
+    (when (slot-boundp v 'index)
 	  (write-char #\#)
-	  (princ (slot-value v 'index)))))
+	  (princ (slot-value v 'index))))
   (:method ((d dot))
     "Displays the lhs and rhs of the dot separated by '.'"
     (with-slots (module expr) d

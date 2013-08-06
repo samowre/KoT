@@ -2,6 +2,7 @@ interp: THEORY
 BEGIN
   IMPORTING language
 
+  m: VAR (sexpr?)
   Γ: VAR finseq[(scontext?)]
   σ: VAR finseq[(sinterp?)]
   
@@ -12,13 +13,19 @@ BEGIN
         ikeep: TRUE
       , itype(T): type_decl?(Γ(x))
       , iterm(a): const_decl?(Γ(x))
+      , ideep(σ): FALSE % Later, or never.
       ENDCASES
 
-  interpret(Γ, (σ | compatible?(Γ, σ))): finseq[(scontext?)] =
+  interpret(m, Γ, (σ | compatible?(Γ, σ))): finseq[(scontext?)] =
     Γ WITH
       [ `seq :=
         LAMBDA (x: below[length(Γ)]):
-	  IF ikeep?(σ(x)) THEN Γ(x)
+	  IF ikeep?(σ(x)) THEN
+	    CASES Γ(x) OF
+	      type_var: type_def(dot(m, v(x)))
+	    , const_var(T): const_def(T, dot(m, v(x)))
+	      ELSE Γ(x)
+	    ENDCASES
 	  ELSIF itype?(σ(x)) THEN type_def(def(σ(x)))
 	  ELSE const_def(type_(Γ(x)), def(σ(x)))
 	  ENDIF ]
