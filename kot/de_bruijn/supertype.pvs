@@ -135,16 +135,16 @@ BEGIN
   MEASURE type_size(T1)
 
   % Type equivalence for dependent types (A ≃ B)/a : 4.8
-  ;≃(T1, T2)(a)(n): RECURSIVE list[(sexpr?)] =
+  ;∼(T1, T2)(a)(n): RECURSIVE list[(sexpr?)] =
     CASES T1 OF
       fun(A1, B1): CASES T2 OF
         fun(A2, B2): append((μ(A1)(n) ≃ μ(A2)(n))(n),
 	              cons((π(A1)(n) ≐ π(A2)(n))(fun(μ(A1)(n), bool_(n + 1)))(n),
-		            forall_(A1, (B1 ≃ B2)(app(a, v(0)))(n + 1))(n)))
+		            forall_(A1, (B1 ∼ B2)(app(a, v(0)))(n + 1))(n)))
 	ELSE (: FALSE_(n) :) ENDCASES,
       prod(A1, A2): CASES T2 OF
-        prod(B1, B2): append((        A1             ≃         B1            )(lproj(a))(n),
-	                     (subst(A2, 0, lproj(a)) ≃ subst(B2, 0, lproj(a)))(rproj(a))(n)) % subst: TODO
+        prod(B1, B2): append((        A1             ∼         B1            )(lproj(a))(n),
+	                     (subst(A2, 0, lproj(a)) ∼ subst(B2, 0, lproj(a)))(rproj(a))(n)) % subst: TODO
 	ELSE (: FALSE_(n) :) ENDCASES
     ELSE IF T2 = T1 THEN (: :) ELSE (: FALSE_(n) :) ENDIF ENDCASES
   MEASURE type_size(T1)

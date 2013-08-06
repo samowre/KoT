@@ -104,7 +104,7 @@ BEGIN
         LET (kwi, tccsi) = τ(Γ)(theory_(interpret(decls(sigM), σ)))
 	IN (kwi, tccsm ++ tccsi)
       ELSE fail ENDIF
-  , theory_(Θ):
+  , theory_(Θ): % TODO: δ0
       IF length(Θ) = 0 THEN (KTHEORY, null) ELSE
       LET (kwΘ, tccsΘ) = τ(Γ)(theory_(rest(Θ, 0))) IN
       IF KTHEORY?(kwΘ) THEN
@@ -159,7 +159,7 @@ BEGIN
 	  fun(A, B):
 	    LET (kwa, tccsa) = τ(Γ)(a)
 	    IN IF KTERM?(kwa) THEN
-	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ≃ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
+	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ∼ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
 	    ELSE fail ENDIF
 	  ELSE fail
 	ENDCASES
@@ -241,7 +241,7 @@ BEGIN
   , itype(T): fail
   , iterm(a): fail
   ENDCASES
-  MEASURE w(Γ, U)
+  MEASURE U BY <<
 
   % Important invariants of τ to prove :
   %  - τ(Θ)(_) occurs in the definition of τ only if τ(〈〉)(Θ) = CONTEXT
