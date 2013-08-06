@@ -1,0 +1,64 @@
+%% This file, along with ideal-pvs.lisp and the pvs-attachments file,
+%% allows to read/display terms in a somewhat more readable way.
+%% Here are the instructions to (hopefully) make it work:
+%%  - Download http://beta.quicklisp.org/quicklisp.lisp
+%%  - Go to buffer *pvs* and type
+%%     pvs(1): (load "/path/to/quicklisp.lisp")
+%%     pvs(2): (quicklisp-quickstart:install)
+%%     pvs(3): (ql:add-to-init-file "~/.pvs.lisp")
+%%  - Use M-x load-pvs-attachments in this file to load the
+%%    attachments (it might be long the first time as it has to download esrap)
+%%  - You can now use the different functions in PVSio.
+
+%% IMPORTANT:
+%%  You need to have cl2pvs special displays enabled to see the result.
+%%  Enable it by typing in *pvs*
+%%    pvs(1): (setf *cl2pvs-enable-specials* t)
+
+read: THEORY
+BEGIN
+  IMPORTING language
+
+  ideal: TYPE = string
+
+  init_string: ideal =
+"BEGIN
+  bool_def: THEORY
+  BEGIN
+    bool: TYPE = EXTERNAL
+    TRUE: bool = EXTERNAL
+    FALSE: bool = EXTERNAL
+    boolop: TYPE = [[bool, bool] -> bool]
+    not: [bool -> bool] = EXTERNAL
+    and: boolop = EXTERNAL
+    or: boolop = EXTERNAL
+  END
+
+  equalities: THEORY
+  BEGIN
+    T: TYPE
+    =: [[T, T] -> bool_def.bool] = EXTERNAL
+  END
+END"
+
+  %% ideal2syntaxic(ctx, expr) parses expr in context ctx and converts it to De Bruijn representation
+  ideal2syntaxic(ctx, expr: ideal): syntaxic
+  init2syntaxic(expr: ideal): syntaxic = ideal2syntaxic(init_string, expr)
+  init_context: syntaxic = ideal2syntaxic("BEGIN END", init_string)
+END read
+
+view[T: TYPE]: DATATYPE
+BEGIN
+  IMPORTING read
+  %% in_context is going to print every syntaxic subterms of expr as the expression
+  %% in_context(ctx, s-expr) where s-expr is a string (with names) valid in the context
+  %% ctx.
+  in_context(ctx: ideal, expr: T): in_context?
+END view
+
+%% This is for having a correct context inside PVSio
+hook: THEORY
+BEGIN
+  IMPORTING view, tau
+  in_init[T: TYPE](expr: T): view[T] = in_context(init_string, expr)
+END hook
