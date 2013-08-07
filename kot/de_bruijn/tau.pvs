@@ -16,6 +16,8 @@ BEGIN
   S: VAR finseq[(scontext?)]
   n: VAR nat
   m: VAR (sexpr?)
+  nb: VAR [nat, nat]
+  t: VAR (sexpr?)
 
   %% Type TCCS 
   pretcc: TYPE = (sexpr?)
@@ -49,9 +51,28 @@ BEGIN
       KTERM(T): KTERM(externalize(m, T))
       ELSE k
     ENDCASES
-  externalize(m, l): list[pretcc] = 
-    map(LAMBDA (x: pretcc): externalize(m, x), l) 
-  
+
+  % The following functions preserves tau:
+  % ↑, subst, μ0, η, δ
+  % We first have to define these functions over [keyword, list[tcc]] and keyword
+  over_keyword(f: [U: syntaxic -> same(U)], k): keyword = 
+    CASES k OF
+      KTERM(T): KTERM(f(T))
+      ELSE k
+    ENDCASES
+  %AUTO_REWRITE over_keyword
+
+  ;↑(Δ, nb): MACRO finseq[(scontext?)] = decls(theory_(Δ) ↑ nb)
+  ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb, k)
+  ;↑(l, nb): MACRO list[pretcc] = map(LAMBDA U: U ↑ nb)(l)
+  subst(Δ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Δ), x, t))
+  subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t), k)
+  subst(l, x, t): MACRO list[pretcc] = map(LAMBDA U: subst(U, x, t))(l)
+
+
+%TODO 
+  interpret0: [[(scontext?), (sinterp?)] -> (scontext?)] 
+
   % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
   % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
   % ax3: AXIOM sexpr?(U) IMPLIES sexpr?(δ(Γ)(U))
@@ -100,14 +121,14 @@ BEGIN
     % interpretations.
   , dot(i, x):
       LET (kwi, tccsi) = τ0(Γ)(i)
-        , S = ρ0(Γ, i)
+        , S = ρ0(Γ)(i)
       IN IF KTHEORY?(kwi) AND v?(x) AND theory?(S) AND i(x) < length(decls(S)) THEN
         LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x)
 	IN (η(i, length(decls(S)))(kwx), tccsi ++ η(i, length(decls(S)))(tccsx))
       ELSE fail ENDIF
   , interp(m, σ):
       LET (kwm, tccsm) = τ0(Γ)(m)
-        , sigM = ρ0(Γ, m)
+        , sigM = ρ0(Γ)(m)
       IN IF KTHEORY?(kwm) AND theory?(sigM) AND ideep?(σ) AND
             length(decls(sigM)) = length(map(σ)) THEN
         LET (kwi, tccsi) = τ0(Γ ++ decls(sigM))(σ)
@@ -267,11 +288,12 @@ BEGIN
       LET pos = length(σ) - 1 IN
       LET (kwI, tccsI) = τ0(Γ ^^ (pos, length(Γ)))(σ(pos)) IN
       IF KINTERP?(kwI) THEN
-        LET (kwσ, tccsσ) = τ0((Γ WITH [ pos := interpret(Γ(pos), σ(pos)) ]))(ideep(σ ^^ (0, pos))) IN
+        LET (kwσ, tccsσ) = τ0((Γ WITH [ `seq(pos) := interpret0(Γ(pos), σ(pos)) ]))(ideep(σ ^^ (0, pos))) IN
 	IF KINTERP?(kwσ) THEN
-	  (KINTERP, (tccsI ↑ (pos + 1)) ++ tccsσ)
+	  (KINTERP, (tccsI ↑ (pos + 1, 0)) ++ tccsσ)
 	ELSE fail ENDIF
-      ELSE fail ENDIF
+      ELSE fail ENDIF 
+      ENDIF
   ENDCASES
   MEASURE U BY <<
 
@@ -294,7 +316,7 @@ BEGIN
   ρ(Γ)(U): same(U) =
     ρ0(expand_ctx(Γ))(U)
 
-  τ(Γ)(U): same(U) =
+  τ(Γ)(U): [keyword, list[pretcc]] =
     τ0(expand_ctx(Γ))(U)
 
 END tau

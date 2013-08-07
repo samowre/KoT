@@ -39,22 +39,7 @@ BEGIN
   KTHEORY?(tau(Γ)(theory_(Δ))) AND KTHEORY?(tau(Γ ++ Δ)(theory_(Θ)))
 
 
-  % The following functions preserves tau:
-  % ↑, subst, μ0, η, δ
-  % We first have to define these functions over [keyword, list[tcc]] and keyword
-  over_keyword(f: [U: syntaxic -> same(U)], k): keyword = 
-    CASES k OF
-      KTERM(T): KTERM(f(T))
-      ELSE k
-    ENDCASES
-  %AUTO_REWRITE over_keyword
 
-  ;↑(Δ, nb): MACRO finseq[(scontext?)] = decls(theory_(Δ) ↑ nb)
-  ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb, k)
-  ;↑(l, nb): MACRO list[pretcc] = map(LAMBDA U: U ↑ nb)(l)
-  subst(Δ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Δ), x, t))
-  subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t), k)
-  subst(l, x, t): MACRO list[pretcc] = map(LAMBDA U: subst(U, x, t))(l)
 
 
   hook: THEOREM FALSE
