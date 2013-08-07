@@ -103,10 +103,12 @@ BEGIN
   , interp(m, σ):
       LET (kwm, tccsm) = τ0(Γ)(m)
         , sigM = ρ0(Γ, m)
-      IN IF KTHEORY?(kwm) AND theory?(sigM) AND ideep?(σ) AND 
-      	    compatible?(decls(sigM), map(σ)) THEN
-        LET (kwi, tccsi) = τ0(Γ)(theory_(interpret(m, decls(sigM), σ)))
-	IN (kwi, tccsm ++ tccsi)
+      IN IF KTHEORY?(kwm) AND theory?(sigM) AND ideep?(σ) AND
+            length(decls(sigM)) = length(map(σ)) THEN
+        LET (kwi, tccsi) = τ0(Γ ++ decls(sigM))(σ)
+	IN IF KINTERP?(kwi)
+	  THEN (KTHEORY, tccsm ++ η(theory_(interpret(interp(m, σ), decls(sigM), map(σ))), length(map(σ)))(tccsi))
+	  ELSE fail ENDIF
       ELSE fail ENDIF
   , theory_(Θ):
       IF length(Θ) = 0 THEN (KTHEORY, null) ELSE
@@ -242,10 +244,29 @@ BEGIN
   , theory_def(Th):
       LET (kwTh, tccsTh) = τ0(Γ)(Th)
       IN IF KTHEORY?(kwTh) THEN (KDECL, tccsTh) ELSE fail ENDIF
-  , ikeep: fail
-  , itype(T): fail
-  , iterm(a): fail
-  , ideep(σ): fail
+  , ikeep: IF 0 < length(Γ) THEN (KINTERP, null) ELSE fail ENDIF
+  , itype(T):
+      IF 0 < length(Γ) AND type_decl?(Γ(0)) THEN
+        LET (kwT, tccsT) = τ0(rest(Γ, 0))(T) IN
+	IF KTYPE?(kwT) THEN (KINTERP, tccsT) ELSE fail ENDIF
+      ELSE fail ENDIF
+  , iterm(a):
+      IF 0 < length(Γ) AND const_decl?(Γ(0)) THEN
+        LET (kwa, tccsa) = τ0(rest(Γ, 0))(a) IN
+	IF KTERM?(kwa) THEN
+	  (KINTERP, tccsa ++ (type_(Γ(0)) ≃ TYPEOF(kwa))(length(Γ) - 1) ++ π(type_(Γ(0)))(a)(length(Γ) - 1))
+	ELSE fail ENDIF
+      ELSE fail ENDIF
+  , ideep(σ):
+      IF length(σ) = 0 THEN (KINTERP, null) ELSE
+      LET pos = length(σ) - 1 IN
+      LET (kwI, tccsI) = τ0(Γ ^^ (pos, length(Γ)))(σ(pos)) IN
+      IF KINTERP?(kwI) THEN
+        LET (kwσ, tccsσ) = τ0((Γ WITH [ pos := interpret(Γ(pos), σ(pos)) ]))(ideep(σ ^^ (0, pos))) IN
+	IF KINTERP?(kwσ) THEN
+	  (KINTERP, (tccsI ↑ (pos + 1)) ++ tccsσ)
+	ELSE fail ENDIF
+      ELSE fail ENDIF
   ENDCASES
   MEASURE U BY <<
 
