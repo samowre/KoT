@@ -23,7 +23,7 @@ BEGIN
 
   init_string: ideal =
 "BEGIN
-  bool_def: THEORY
+  booleans: THEORY
   BEGIN
     bool: TYPE = EXTERNAL
     TRUE: bool = EXTERNAL
@@ -37,14 +37,80 @@ BEGIN
   equalities: THEORY
   BEGIN
     T: TYPE
-    =: [[T, T] -> bool_def.bool] = EXTERNAL
+    =: [[T, T] -> booleans.bool] = EXTERNAL
+  END
+  
+  forall: THEORY
+  BEGIN
+    T: TYPE
+    p: [T -> booleans.bool]
+    res: booleans.bool =
+      equalities {{ T := [ T -> booleans.bool ] }}
+        .=(p, LAMBDA (x: T): booleans.TRUE)
+  END
+END"
+rest:string="
+  exists: THEORY
+  BEGIN
+    T: TYPE
+    p: [T -> booleans.bool]
+    res: booleans.bool =
+      booleans.not(
+        forall {{ T := T,
+	          p := (LAMBDA (x: T): booleans.not(p(x)))
+	       }}.res
+      )
+  END
+END"
+
+  resto: string ="
+  orders: THEORY
+  BEGIN
+    T: TYPE
+    well_founded: [[[T, T] -> booleans.bool] -> booleans.bool] =
+      LAMBDA (r: [[T, T] -> booleans.bool]):
+	equalities {{ T := [ T -> booleans.bool ] }}.=(
+	  (LAMBDA (p: [T -> booleans.bool]):
+	    booleans.or(
+	      equalities {{ T := [ T -> booleans.bool ] }}.=(
+	        (LAMBDA (x: T): booleans.not(p(x))),
+	        (LAMBDA (x: T): booleans.TRUE)
+	      ),
+	      booleans.not(
+	        equalities {{ T := [ { x: T | p(x) } -> booleans.bool ] }}.=(
+	          (LAMBDA (y: { x: T | p(x) }):
+	            booleans.not(
+	              equalities {{ T := [ { x: T | p(x) } -> booleans.bool ] }}.=(
+		        (LAMBDA (x: { x: T | p(x) }):
+		          booleans.not(r(x, y))),
+		        (LAMBDA (x: { x: T | p(x) }):
+		          booleans.TRUE)
+		      )
+		    )
+	          ),
+	          (LAMBDA (x: { x: T | p(x) }):
+	            booleans.TRUE)
+	        )
+	      )
+            )
+	  ),
+	  (LAMBDA (p: [T -> booleans.bool]):
+	    booleans.TRUE)
+        )
+  END
+  ycomb: THEORY
+  BEGIN
+    D: TYPE
+    R: TYPE
+    r: { r: [[D, D] -> booleans.bool] | orders {{ T := D }}.well_founded(r) }
+    Y: [[[ x: D, [{ y: D | r(y, x) } -> R]] -> R] -> [ D -> R] ] = EXTERNAL
   END
 END"
 
   %% ideal2syntaxic(ctx, expr) parses expr in context ctx and converts it to De Bruijn representation
   ideal2syntaxic(ctx, expr: ideal): syntaxic
   init2syntaxic(expr: ideal): syntaxic = ideal2syntaxic(init_string, expr)
-  init_context: syntaxic = ideal2syntaxic("BEGIN END", init_string)
+  init: syntaxic = ideal2syntaxic("BEGIN END", init_string)
 END read
 
 view[T: TYPE]: DATATYPE

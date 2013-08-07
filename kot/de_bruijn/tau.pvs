@@ -121,7 +121,9 @@ BEGIN
         , S = ρ0(Γ)(i)
       IN IF KTHEORY?(kwi) AND v?(x) AND theory?(S) AND i(x) < length(decls(S)) THEN
         LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x)
-	IN (η(i, length(decls(S)))(kwx), tccsi ++ η(i, length(decls(S)))(tccsx))
+	IN (LET kw = η(i, length(decls(S)))(kwx) IN
+	    IF KTERM?(kw) THEN KTERM(δ0(Γ)(TYPEOF(kw))) ELSE kw ENDIF,
+	    tccsi ++ η(i, length(decls(S)))(tccsx))
       ELSE fail ENDIF
   , interp(m, σ):
       LET (kwm, tccsm) = τ0(Γ)(m)
@@ -138,9 +140,10 @@ BEGIN
       LET pos = length(Θ) - 1 IN
       LET (kwD, tccsD) = τ0(Γ)(Θ(pos)) IN
       IF KDECL?(kwD) THEN
-        LET (kwΘ, tccsΘ) = τ0(Γ ++ k(ρ0(Γ)(Θ(pos))))(theory_(Θ ^^ (0, pos))) IN
+        LET epos = ρ0(Γ)(Θ(pos)) IN
+        LET (kwΘ, tccsΘ) = τ0(Γ ++ k(epos))(theory_(Θ ^^ (0, pos))) IN
 	IF KTHEORY?(kwΘ) THEN
-	  (KTHEORY, tccsD ++ η(Θ(0), 1)(tccsΘ))
+	  (KTHEORY, (tccsD ↑ (length(Θ), 0)) ++ tccsΘ)
 	ELSE fail ENDIF
       ELSE fail ENDIF ENDIF
 		       
@@ -266,7 +269,9 @@ BEGIN
     %	(THEORY = context without theory declarations)
   , theory_def(Th):
       LET (kwTh, tccsTh) = τ0(Γ)(Th)
-      IN IF KTHEORY?(kwTh) THEN (KDECL, tccsTh) ELSE fail ENDIF
+      IN IF KTHEORY?(kwTh) THEN
+        (KDECL, IF theory?(Th) THEN η(v(0), length(decls(Th)))(tccsTh) ELSE tccsTh ENDIF)
+      ELSE fail ENDIF
   , ikeep: IF 0 < length(Γ) THEN (KINTERP, null) ELSE fail ENDIF
   , itype(T):
       IF 0 < length(Γ) AND type_decl?(Γ(0)) THEN

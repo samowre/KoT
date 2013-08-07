@@ -202,13 +202,18 @@
 	(make-instance 'app :fun f :arg arg))))
 
 ;; lam
+(defrule pvs-lambda
+    "LAMBDA"
+  (:constant
+   #'(lambda (&key type body) (make-instance 'lam :type type :body body))))
+
 (defrule lam
-    (and (and "LAMBDA" (? ws) #\( (? ws)) (is-term-decl? decl)
+    (and pvs-lambda (and (? ws) #\( (? ws)) (is-term-decl? decl)
 	 (and (? ws) #\) (? ws) #\: (? ws))
 	 term)
-  (:destructure (open typ colon body)
+  (:destructure (mk open typ colon body)
 		(declare (ignore open colon))
-		(make-instance 'lam :type typ :body body)))
+		(funcall mk :type typ :body body)))
 
 ;; pair
 (defrule tuple-term
@@ -653,7 +658,7 @@
 ;; Initial theory
 (defparameter init-theory
   (debruijn (parse 'theory "BEGIN
-  bool_def: THEORY
+  booleans: THEORY
   BEGIN
     bool: TYPE = EXTERNAL
     TRUE: bool = EXTERNAL
@@ -667,13 +672,13 @@
   equalities: THEORY
   BEGIN
     T: TYPE
-    =: [[T, T] -> bool_def.bool] = EXTERNAL
+    =: [[T, T] -> booleans.bool] = EXTERNAL
   END
 END")))
 
 (defparameter bool-theory
   (with-slots (decls) init-theory
-    (slot-value (elt decls (find-index decls '|bool_def|)) 'def)))
+    (slot-value (elt decls (find-index decls '|booleans|)) 'def)))
 
 (defparameter equalities-theory
   (with-slots (decls) init-theory
