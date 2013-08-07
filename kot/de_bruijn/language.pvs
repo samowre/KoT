@@ -82,18 +82,25 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE+ size
   
-  Γ, Δ, Θ: VAR finseq[(scontext?)]
+  Γ, Δ, Θ: VAR finseq[syntaxic]
   x: VAR nat  
   d: VAR (scontext?)
 
+  finseq_scontext?(Γ): bool = FORALL (x: below(length(Γ))): scontext?(Γ(x))
+  finseq_sinterp?(Γ): bool = FORALL (x: below(length(Γ))): sinterp?(Γ(x))
+
+  same_map(Γ): TYPE = { Δ | (finseq_scontext?(Γ) IMPLIES finseq_scontext?(Δ)) AND
+   	       	      	    (finseq_sinterp?(Γ) IMPLIES finseq_sinterp?(Δ)) }
 
   % Basic functions for contexts
   ∈(x, Γ): MACRO bool = x < length(Γ) 
-  rest(Γ, x): finseq[(scontext?)] = 
+  rest(Γ, x): same_map(Γ) = 
     Γ ^^ (x + 1, length(Γ))
-  ;++(Γ, Δ): finseq[(scontext?)] = Δ o Γ 
+  ;++(Γ, Δ): same_map(Γ) = Δ o Γ 
   k(d): finseq[(scontext?)] = 
-    (# length := 1, seq := LAMBDA (x: below[1]): d#)
+    (# length := 1, seq := LAMBDA (x: below[1]): d #)
+  AUTO_REWRITE+ o, ^^
+  AUTO_REWRITE k
 
   % Function Kind
   prekeyword: TYPE = { PRETYPE, PRETERM, PRETHEORY }

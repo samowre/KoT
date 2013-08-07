@@ -97,12 +97,6 @@ BEGIN
   delta_idempotent: THEOREM
     δ(Δ)(δ(Δ)(U)) = δ(Δ)(U)
 
-
-  % This one requires shift_preserves
-  tau_signature: THEOREM
-    KTHEORY?(tau(Γ)(U)) IMPLIES KTHEORY?(tau(Γ)(signature(Γ, U)))
-
-
   mu0_preserves: THEOREM
     τ(Γ)(μ0(U)) = τ(Γ)(U)
 
@@ -115,6 +109,12 @@ BEGIN
     LET Δ = signature(Γ, m) IN
     theory?(Δ) IMPLIES
     tccs(Γ)(η(m, length(decls(Δ)))(U)) = η(m, length(decls(Δ)))(tccs(Γ ++ decls(Δ))(U))
+
+
+  % This one needs eta preservess 
+  tau_signature: THEOREM
+    KTHEORY?(tau(Γ)(U)) IMPLIES KTHEORY?(tau(Γ)(signature(Γ, U)))
+
 
   delta_preserves: THEOREM
     τ(Γ)(δ(Γ)(U)) = τ(Γ)(U)

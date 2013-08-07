@@ -103,7 +103,8 @@ BEGIN
   , interp(m, σ):
       LET (kwm, tccsm) = τ0(Γ)(m)
         , sigM = ρ0(Γ, m)
-      IN IF KTHEORY?(kwm) AND theory?(sigM) AND compatible?(decls(sigM), σ) THEN
+      IN IF KTHEORY?(kwm) AND theory?(sigM) AND ideep?(σ) AND 
+      	    compatible?(decls(sigM), map(σ)) THEN
         LET (kwi, tccsi) = τ0(Γ)(theory_(interpret(m, decls(sigM), σ)))
 	IN (kwi, tccsm ++ tccsi)
       ELSE fail ENDIF
@@ -244,6 +245,7 @@ BEGIN
   , ikeep: fail
   , itype(T): fail
   , iterm(a): fail
+  , ideep(σ): fail
   ENDCASES
   MEASURE U BY <<
 
