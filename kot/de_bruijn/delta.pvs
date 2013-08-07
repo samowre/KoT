@@ -12,19 +12,8 @@ BEGIN
   a: VAR (sexpr?)
   S: VAR finseq[(scontext?)]
   
-%  w: [finseq[(scontext?)], syntaxic -> ordinal]
 
-  ;≡(Γ, Δ): bool =
-    length(Γ) = length(Δ) AND
-    FORALL (x: below[length(Γ)]):
-      (type_decl?(Γ(x)) => type_decl?(Δ(x))) AND
-      (type_var?(Γ(x)) => type_var?(Δ(x))) AND
-      (type_def?(Γ(x)) => type_def?(Δ(x))) AND
-      (const_decl?(Γ(x)) => const_decl?(Δ(x))) AND
-      (const_var?(Γ(x)) => const_var?(Δ(x))) AND
-      (const_def?(Γ(x)) => const_def?(Δ(x))) AND
-      (theory_def?(Γ(x)) => theory_def?(Δ(x)))
-      
+
   η(m, n)(U): RECURSIVE same(U) =
     IF n = 0 THEN U
     ELSE η(m, n - 1)(subst(U, n - 1, dot(m ↑ (n - 1), v(n - 1))))
@@ -38,33 +27,8 @@ BEGIN
     ENDCASES
   MEASURE length(l)
 
-  constrs_at_end(τ, (σ | length(σ) >= length(τ))): bool =
-    FORALL (x: below[length(τ)]):
-      LET pos = length(σ) - length(τ) + x IN
-      (ikeep?(τ(x)) AND ikeep?(σ(pos))) OR
-      (itype?(τ(x)) AND itype?(σ(pos))) OR
-      (iterm?(τ(x)) AND iterm?(σ(pos)))
 
-  on_interp(σ, (n: nat | n <= length(σ)),
-            f: [ x: { τ | length(τ) < length(σ) AND constrs_at_end(τ, σ) } ->
-                 { τ | length(τ) = length(x) + 1 AND constrs_at_end(τ, σ) }]):
-    RECURSIVE { τ | length(τ) = n AND constrs_at_end(τ, σ) } =
-    IF n = 0
-      THEN empty_seq
-      ELSE f(on_interp(σ, n - 1, f))
-    ENDIF
-  MEASURE n
-
-  same_interp(U): TYPE = { V | (sexpr?(U) => sexpr?(V)) AND
-                               (ikeep?(U) => ikeep?(V)) AND
-			       (itype?(U) => itype?(V)) AND
-			       (iterm?(U) => iterm?(V)) AND
-			       (scontext?(U) => scontext?(V)) }
-
-
-% sinterp?() => compatible?(Γ, stuff)
-
-  externalize(m, U): syntaxic =
+  externalize(m, U): same(U) =
     CASES U OF
       theory_(Θ):
         theory_(Θ WITH [ `seq := LAMBDA (x: below[length(Θ)]):
@@ -76,7 +40,7 @@ BEGIN
       ELSE U
     ENDCASES
 
-  expand(ths?: bool)(Γ, U): RECURSIVE same_interp(U) = % todo: ikeep, itype, iterm preserved
+  expand(ths?: bool)(Γ, U): RECURSIVE syntaxic = 
     CASES U OF
       v(x):
         IF x < length(Γ) AND definition?(Γ(x)) AND (ths? OR NOT theory_def?(Γ(x)))
@@ -91,10 +55,7 @@ BEGIN
     , interp(m, σ):
         CASES expand(ths?)(Γ, m) OF
   	  theory_(Θ):
-	    IF TRUE THEN %compatible?(Θ, σ) THEN
-	      externalize(interp(expand(FALSE)(Γ, m), σ), expand(ths?)(Γ ++ Θ, σ))
-	    ELSE U
-	    ENDIF
+	    externalize(interp(expand(FALSE)(Γ, m), σ), expand(ths?)(Γ ++ Θ, σ))
   	  ELSE U % Doesn't happen until we have theory_{decl,var}
   	ENDCASES
     , theory_(Θ):
@@ -132,7 +93,7 @@ BEGIN
        IF length(σ) = 0
          THEN theory_(empty_seq)
 	 ELSE
-	   CASES expand(ths?)(rest(Γ, 0), ideep(rest(σ, 0))) OF
+	   CASES expand(ths?)(rest(Γ, 0), ideep(irest(σ, 0))) OF
 	     theory_(Δ): theory_(Δ ++ k(expand(ths?)(rest(Γ, length(Δ)) ++ Δ ++ k(Γ(0)), σ(0))))
 	     ELSE U
 	   ENDCASES

@@ -40,6 +40,11 @@ BEGIN
     TYPE = { V | (sexpr?(U) => sexpr?(V)) AND
                  (sinterp?(U) => sinterp?(V)) AND
 		 (scontext?(U) => scontext?(V)) }
+  same_interp(U): TYPE = { V | (sexpr?(U) => sexpr?(V)) AND
+                               (ikeep?(U) => ikeep?(V)) AND
+			       (itype?(U) => itype?(V)) AND
+			       (iterm?(U) => iterm?(V)) AND
+			       (scontext?(U) => scontext?(V)) }
 
   sum(len: nat, f: [below[len] -> nat]):
     RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
@@ -82,25 +87,36 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE+ size
   
-  Γ, Δ, Θ: VAR finseq[syntaxic]
+  Γ, Δ, Θ: VAR finseq[(scontext?)]
+  σ, τ: VAR finseq[(sinterp?)]
   x: VAR nat  
   d: VAR (scontext?)
 
-  finseq_scontext?(Γ): bool = FORALL (x: below(length(Γ))): scontext?(Γ(x))
-  finseq_sinterp?(Γ): bool = FORALL (x: below(length(Γ))): sinterp?(Γ(x))
-
-  same_map(Γ): TYPE = { Δ | (finseq_scontext?(Γ) IMPLIES finseq_scontext?(Δ)) AND
-   	       	      	    (finseq_sinterp?(Γ) IMPLIES finseq_sinterp?(Δ)) }
 
   % Basic functions for contexts
   ∈(x, Γ): MACRO bool = x < length(Γ) 
-  rest(Γ, x): same_map(Γ) = 
+  rest(Γ, x): finseq[(scontext?)] = 
     Γ ^^ (x + 1, length(Γ))
-  ;++(Γ, Δ): same_map(Γ) = Δ o Γ 
+  irest(σ, x): finseq[(sinterp?)] = 
+    σ ^^ (x + 1, length(σ))
+  ;++(Γ, Δ): finseq[(scontext?)] = Δ o Γ 
+  ;⊕(σ, τ): finseq[(sinterp?)] = τ o σ
   k(d): finseq[(scontext?)] = 
     (# length := 1, seq := LAMBDA (x: below[1]): d #)
   AUTO_REWRITE+ o, ^^
   AUTO_REWRITE k
+  AUTO_REWRITE+ finseq_appl
+
+  ;≡(Γ, Δ): bool =
+    length(Γ) = length(Δ) AND
+    FORALL (x: below[length(Γ)]):
+      (type_decl?(Γ(x)) => type_decl?(Δ(x))) AND
+      (type_var?(Γ(x)) => type_var?(Δ(x))) AND
+      (type_def?(Γ(x)) => type_def?(Δ(x))) AND
+      (const_decl?(Γ(x)) => const_decl?(Δ(x))) AND
+      (const_var?(Γ(x)) => const_var?(Δ(x))) AND
+      (const_def?(Γ(x)) => const_def?(Δ(x))) AND
+      (theory_def?(Γ(x)) => theory_def?(Δ(x)))
 
   % Function Kind
   prekeyword: TYPE = { PRETYPE, PRETERM, PRETHEORY }
