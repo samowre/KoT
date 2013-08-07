@@ -19,6 +19,7 @@ BEGIN
 
   %% Type TCCS 
   pretcc: TYPE = (sexpr?)
+  l: VAR list[pretcc]
 
   %%% Type keyword
   keyword: DATATYPE
@@ -26,6 +27,7 @@ BEGIN
     ⊥: UNDEFINED?
     KTHEORY: KTHEORY?
     KDECL: KDECL?
+    KINTERP: KINTERP?    
     KTYPE: KTYPE?
     KTERM(TYPEOF: (sexpr?)): KTERM?
   END keyword
@@ -39,13 +41,16 @@ BEGIN
     
   η(m, n)(k): keyword = 
     CASES k OF
-      ⊥: ⊥,
-      KTHEORY: KTHEORY,
-      KDECL: KDECL,
-      KTYPE: KTYPE,
       KTERM(T): KTERM(η(m, n)(T))
+      ELSE k
     ENDCASES
-      
+  externalize(m, k): keyword = 
+    CASES k OF
+      KTERM(T): KTERM(externalize(m, T))
+      ELSE k
+    ENDCASES
+  externalize(m, l): list[pretcc] = 
+    map(LAMBDA (x: pretcc): externalize(m, x), l) 
   
   % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
   % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
