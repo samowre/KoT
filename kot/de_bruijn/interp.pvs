@@ -16,6 +16,12 @@ BEGIN
       , ideep(σ): FALSE % Later, or never.
       ENDCASES
 
+  interpret0(x: (scontext?), y: (sinterp?)): (scontext?) =
+    CASES y OF
+      ikeep: x
+    , itype(T): type_def(T)
+    , iterm(a): const_def(type_(x), a)
+    ENDCASES
   interpret(m, Γ, (σ | compatible?(Γ, σ))): finseq[(scontext?)] =
     Γ WITH
       [ `seq :=

@@ -70,9 +70,6 @@ BEGIN
   subst(l, x, t): MACRO list[pretcc] = map(LAMBDA U: subst(U, x, t))(l)
 
 
-%TODO 
-  interpret0: [[(scontext?), (sinterp?)] -> (scontext?)] 
-
   % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
   % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
   % ax3: AXIOM sexpr?(U) IMPLIES sexpr?(δ(Γ)(U))
@@ -288,7 +285,7 @@ BEGIN
       LET pos = length(σ) - 1 IN
       LET (kwI, tccsI) = τ0(Γ ^^ (pos, length(Γ)))(σ(pos)) IN
       IF KINTERP?(kwI) THEN
-        LET (kwσ, tccsσ) = τ0((Γ WITH [ `seq(pos) := interpret0(Γ(pos), σ(pos)) ]))(ideep(σ ^^ (0, pos))) IN
+        LET (kwσ, tccsσ) = τ0((Γ WITH [ `seq(pos) := interpret0(Γ(pos), ρ0(Γ ^^ (pos, length(Γ)))(σ(pos))) ]))(ideep(σ ^^ (0, pos))) IN
 	IF KINTERP?(kwσ) THEN
 	  (KINTERP, (tccsI ↑ (pos + 1, 0)) ++ tccsσ)
 	ELSE fail ENDIF
@@ -317,6 +314,9 @@ BEGIN
     ρ0(expand_ctx(Γ))(U)
 
   τ(Γ)(U): [keyword, list[pretcc]] =
-    τ0(expand_ctx(Γ))(U)
+    LET Δ = expand_ctx(Γ) IN
+    LET (kw, tccs) = τ0(Δ)(U) IN
+    (IF KTERM?(kw) THEN KTERM(ρ0(Δ)(TYPEOF(kw))) ELSE kw ENDIF,
+     map(ρ0(Δ), tccs))
 
 END tau
