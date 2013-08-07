@@ -174,7 +174,7 @@ BEGIN
       LET (kwT, tccsT) = τ0(Γ)(T)
       IN IF KTYPE?(kwT) THEN
         LET (kwa, tccsa) = τ0(Γ ++ k(const_var(ρ0(Γ)(T))))(a)
-	IN IF KTERM?(kwa) AND TYPEOF(kwa) = bool_(length(Γ)) THEN
+	IN IF KTERM?(kwa) AND TYPEOF(kwa) = bool_(length(Γ) + 1) THEN
 	  (KTYPE, tccsT ++ forall_(T, tccsa)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
