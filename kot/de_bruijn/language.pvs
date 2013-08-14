@@ -1,6 +1,6 @@
 language: THEORY
 BEGIN
-  CONVERSION- extract1
+  CONVERSION- extract1, finseq2list
   % TODO: Paste intro from datatype + modify
   syntaxic: DATATYPE WITH SUBTYPES sexpr?, scontext?, sinterp?
   BEGIN
@@ -149,195 +149,58 @@ BEGIN
 
   size_extract: THEOREM length(Γ) > j IMPLIES
     size(theory_(Γ ^^ (0, j))) < size(theory_(Γ))
+  size_iextract: THEOREM length(σ) > j IMPLIES
+    size(ideep(σ ^^ (0, j))) < size(ideep(σ))
+
 
   size_rest: THEOREM length(Γ) > 0 IMPLIES
     size(theory_(rest(Γ, 0))) < size(theory_(Γ))
   size_irest: THEOREM length(σ) > 0 IMPLIES
     size(ideep(irest(σ, 0))) < size(ideep(σ))
 
+  extract_concat: THEOREM
+    (Γ ++ Δ) ^^ (0, length(Δ)) = Δ
+
   
+  % Some definitions for the tau function
+  %% Type TCCS 
+  tccs: DATATYPE BEGIN 
+    tcc(expr: finseq[(sexpr?)]): tcc?
+    tccs(map: finseq[tccs]): tccs?
+  END tccs
 
-%%%%% LATER %%%%%%
+  same(x: tccs): TYPE = { y: tccs | (tcc?(x) IMPLIES tcc?(y)) AND
+  	  	      	   	  (tccs?(x) IMPLIES tccs?(y)) }
+  ++(x: tccs, y: same(x)): same(x) = 
+    CASES x OF
+      tcc(f): tcc(expr(y) o f),
+      tccs(f): tccs(map(y) o f) 
+    ENDCASES
+  t(t: (sexpr?)): (tcc?) = 
+    tcc((# length := 1,
+       seq := LAMBDA (x: below(1)): t #))
+  k(t: tccs): (tccs?) = 
+    tccs((# length := 1,
+       seq := LAMBDA (x: below(1)): t #))
 
 
-  % Γ: VAR finseq[(scontext?)]
+  %%% Type keyword
+  keyword: DATATYPE
+  BEGIN
+    ⊥: UNDEFINED?
+    KTHEORY: KTHEORY?
+    KDECL: KDECL?
+    KINTERP: KINTERP?    
+    KTYPE: KTYPE?
+    KTERM(TYPEOF: (sexpr?)): KTERM?
+  END keyword
 
-  % % Pretau is a weaker tau function.
-  % % It checks that: 
-  % %    - variables and symbols are indeed declared in the current context
-  % %    - terms and types are well_formed (eg fun takes two types as arguments)
-  % % The function creating a term of type syntaxic from a real PVS expression
-  % % should always return a term verifying pretau. Indeed, if the given expression
-  % % does not verify pretau, we can't build the associated De Bruijn representation
-  % pretau(Γ)(U): RECURSIVE bool =
-  %   CASES U OF
-  %     v(x): x ∈ Γ AND k = kw(Γ(x))
-  %   , dot(m, x):
-  %       pretau(Γ)(m)
-
-  %       pretau(Sig)(m)(S) AND
-  % 	pretau(S)(x)(s) AND
-  % 	% Additional stuff to remove with nested & first-class theories
-  % 	interp?(m) AND v?(x)
-  %   , interp(m, σ):
-  % 	% Additional stuff to remove with nested & first-class theories
-  %       v?(m) AND
-  %       etheory?(s) AND
-  % 	σ`length = length(sig(s)) AND
-  %       pretau(Sig)(m)(etheory(sig(s) - σ)) AND
-  % 	FORALL (x: below[σ`length]): pretau(Sig ++ rest(stheory(sig(s)), x))(σ`seq(x))(sig(s)(x))
-
-  %   , fun(A, B):
-  %       s = etype AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)
-  %   , prod(A, B):
-  %       s = etype AND pretau(Sig)(A)(s) AND pretau(Sig ++ k(sconst_def))(B)(s)
-  %   , subtype(T, a):
-  %       s = etype AND pretau(Sig)(T)(s) AND pretau(Sig ++ k(sconst_def))(a)(eterm)
-
-  %   , app(f, a):
-  %       s = etype AND pretau(Sig)(f)(s) AND pretau(Sig)(a)(s)
-  %   , lam(T, a):
-  %       s = etype AND pretau(Sig)(T)(etype) AND pretau(Sig ++ k(sconst_def))(a)(s)
-  %   , pair(a, b):
-  %       s = etype AND pretau(Sig)(a)(s) AND pretau(Sig)(b)(s)
-  %   , lproj(a):
-  %       s = etype AND pretau(Sig)(a)(etype)
-  %   , rproj(a):
-  %       s = etype AND pretau(Sig)(a)(etype)
-
-  %   , ikeep: stype_def?(s) OR sconst_def?(s) OR stype_decl?(s) OR sconst_decl?(s)
-  %   , itype(T): stype_def?(s) AND pretau(Sig)(T)(etype)
-  %   , iterm(a): sconst_def?(s) AND pretau(Sig)(a)(eterm)
-
-  %   , type_decl: stype_decl?(s)
-  %   , type_var: stype_def?(s)
-  %   , type_def(T): stype_def?(s) AND pretau(Sig)(T)(etype)
-  %   , const_decl(T): sconst_decl?(s) AND pretau(Sig)(T)(etype)
-  %   , const_var(T): sconst_def?(s) AND pretau(Sig)(T)(etype)
-  %   , const_def(T, a) :
-  %       sconst_def?(s) AND pretau(Sig)(T)(etype) AND pretau(Sig)(a)(eterm)
-  %   , theory_def(f):
-  % 	stheory?(s) AND length(s) = f`length AND % s = signature(U) AND
-  % 	FORALL (x: below[f`length]): pretau(Sig ++ rest(s, x))(f`seq(x))(s(x))
-  %   ENDCASES
-  % MEASURE U BY <<
-  % AUTO_REWRITE pretau
+  notcc: MACRO (tcc?) = tcc(empty_seq)
+  notccth(n: nat): MACRO (tccs?) = tccs(
+    (# length := n,
+        seq := LAMBDA (x: below(n)): notcc #))
+  fail: MACRO [keyword, tccs] = (⊥, notcc)
 
 
 
-
-
-
-
-
-
-
-  % U, V, S: VAR syntaxic
-  % x, y: VAR nat
-  % i, j, n: VAR nat
-  % M, N, P: VAR (theory_def?)
-
-  % % TODO: should it be a conversion ?
-  % % Creates a context/signature of length one from a decl  
-  % k(d: (scontext?)): (theory_def?) =
-  %   theory_def((# length := 1, seq := LAMBDA (x: below[1]): d #))
-  % k(d: (decl?)): (stheory?) = 
-  %   stheory((# length := 1, seq := LAMBDA (x: below[1]): d #))
-  % % empty context/signature
-  % empty: MACRO (scontext?) = theory_def(empty_seq)
-  % sempty: MACRO (stheory?) = stheory(empty_seq)
-
-  % % Basic functions on contexts/signatures
-  % length(M): nat =
-  %   def(M)`length
-  % length(Sig): nat = 
-  %   sig(Sig)`length
-  % AUTO_REWRITE+ length
-  % ;∈(x, M): bool =
-  %   x < length(M)
-  % ;∈(x, Sig): bool = 
-  %   x < length(Sig)
-  % AUTO_REWRITE+ ∈
-  % apply(M)(x | x ∈ M): (scontext?) =
-  %   def(M)`seq(x)
-  % sapply(Sig)(x | x ∈ Sig): signature = 
-  %   sig(Sig)`seq(x)
-  % CONVERSION+ apply, sapply
-  % rest(M, (x | x ∈ M)): (theory_def?) =
-  %   theory_def(def(M) ^^ (x + 1, length(M)))
-  % rest(Sig, (x | x ∈ Sig)): (stheory?) = 
-  %   stheory(sig(Sig) ^^ (x + 1, length(Sig)))
-  % ;++(M, N): (theory_def?) =
-  %   theory_def(def(N) o def(M))
-  % ;++(S1, S2: (stheory?)): (stheory?) = 
-  %   stheory(sig(S2) o sig(S1))
-  % % Basic theorems about these functions
-  % concat_empty: THEOREM
-  %   empty ++ M = M
-  % concat__empty: THEOREM
-  %   M ++ empty = M
-  % concat_assoc: THEOREM
-  %   M ++ (N ++ P) = (M ++ N) ++ P
-  % rest_concat: THEOREM x < length(M) + length(N) IMPLIES
-  %   rest(M ++ N, x) =
-  %     IF x < length(N)
-  %       THEN M ++ rest(N, x)
-  % 	ELSE rest(M, x - length(N))
-  %     ENDIF
-  % AUTO_REWRITE+ concat_empty, concat__empty, concat_assoc, rest_concat
-
-  % sconcat_sempty: THEOREM
-  %   sempty ++ Sig = Sig
-  % sconcat__sempty: THEOREM
-  %   Sig ++ sempty = Sig
-  % sconcat_assoc: THEOREM FORALL (Sig, S1, S2: (stheory?)):
-  %   Sig ++ (S1 ++ S2) = (Sig ++ S1) ++ S2
-  % srest_sconcat: THEOREM FORALL (S1, S2: (stheory?)):
-  %   x < length(S1) + length(S2) IMPLIES
-  %   rest(S1 ++ S2, x) = 
-  %     IF x < length(S2)
-  %       THEN S1 ++ rest(S2, x)
-  % 	ELSE rest(S1, x - length(S2))
-  %     ENDIF
-  % AUTO_REWRITE+ sconcat_sempty, sconcat__sempty, sconcat_assoc, srest_sconcat
-
-  % length_concat: THEOREM
-  %   length(M ++ N) = length(M) + length(N)
-  % length_k: THEOREM FORALL (d: (scontext?)):
-  %   length(k(d)) = 1
-  % AUTO_REWRITE length_concat, length_k
-
-  % slength_concat: THEOREM FORALL (S1, S2: (stheory?)):
-  %   length(S1 ++ S2) = length(S1) + length(S2)
-  % slength_k: THEOREM FORALL (s: (decl?)):
-  %   length(k(s)) = 1
-  % AUTO_REWRITE slength_concat, slength_k
-   
-  % % Not used anymore 
-  % prefix_size: THEOREM FORALL (f, g: finseq[syntaxic]):
-  %   f`length < g`length AND (FORALL (x: below[f`length]): f`seq(x) = g`seq(g`length - f`length + x)) IMPLIES
-  %     sum(f`length, LAMBDA (x: below[f`length]): 1 + size(f(x))) < sum(g`length, LAMBDA (x: below[g`length]): 1 + size(g(x)))
-
-  % ;-(Sig: finseq[(decl?)], (σ: finseq[(sinterp?)] | length(σ) = length(Sig))): finseq[(decl?)] =
-  %   Sig WITH [ `seq := LAMBDA (x: below[length(Sig)]): IF σ(x) = ikeep THEN Sig(x) ELSE undefine(Sig(x)) ENDIF ]
-
-  % Γ, Δ: VAR (scontext?)
-  % S1, S2: VAR signature
-  % e: VAR (sexpr?)
-
-  % % This theorem is false because of the case ikeep
-  % %kw_pretau: THEOREM
-  % %  pretau(Sig)(U)(S1) AND pretau(Sig)(U)(S2) IMPLIES kw(S1) = kw(S2)
-
-  % % Determinism of pretau
-  % pretau_unique: THEOREM
-  %   U /= ikeep AND pretau(Sig)(U)(S1) AND pretau(Sig)(U)(S2) IMPLIES S1 = S2
-  
-  % % pretau_concat: THEOREM stheory?(S1) AND stheory?(S2) AND theory_def?(Γ) AND theory_def?(Δ) AND length(S1) = length(Γ) AND length(S2) = length(Δ) IMPLIES
-  % %   (pretau(Sig)(Γ ++ Δ)(S1 ++ S2) IFF
-  % %      pretau(Sig)(Γ)(S1) AND pretau(Sig ++ S1)(Δ)(S2))
-
-  % % pretau_apply: THEOREM theory_def?(Γ) AND stheory?(S1) IMPLIES
-  % %   pretau(Sig)(Γ)(S1) AND i ∈ Γ IMPLIES
-  % %     pretau(Sig ++ rest(S1, i))(Γ(i))(S1(i))
 END language

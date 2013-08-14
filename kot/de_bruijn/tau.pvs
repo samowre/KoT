@@ -18,35 +18,10 @@ BEGIN
   m: VAR (sexpr?)
   nb: VAR [nat, nat]
   t: VAR (sexpr?)
-
-  %% Type TCCS 
-  tccs: DATATYPE = 
-    tcc(expr: (sexpr?)): tcc?
-    tccs(map: finseq[tccs]): tccs?
-  END tccs
-  ++(x, y: (tccs?)): (tccs?) = tccs(map(y) o map(x))
-  k(t: tccs): finseq[tccs] = 
-    (# length := 1,
-       seq := LAMBDA (x: below(1)): t #)
-
-  %%% Type keyword
-  keyword: DATATYPE
-  BEGIN
-    ⊥: UNDEFINED?
-    KTHEORY: KTHEORY?
-    KDECL: KDECL?
-    KINTERP: KINTERP?    
-    KTYPE: KTYPE?
-    KTERM(TYPEOF: (sexpr?)): KTERM?
-  END keyword
-
-  % ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
-  CONVERSION- finseq2list, extract1
-  π(A)(a)(n: above(1)): list[(sexpr?)] =
-    k(app(π(A)(n), a))
-  notcc: MACRO (tccs?) = tccs(empty_seq)
-  fail: MACRO [keyword, (tccs?)] = (⊥, notcc)
   k: VAR keyword
+
+  π(A)(a)(n: above(1)): (tcc?) =
+    t(app(π(A)(n), a))
     
   η(m, n)(k): keyword = 
     CASES k OF
@@ -59,39 +34,21 @@ BEGIN
       ELSE k
     ENDCASES
 
-  % The following functions preserves tau:
-  % ↑, subst, μ0, η, δ
-  % We first have to define these functions over [keyword, list[tcc]] and keyword
+
   over_keyword(f: [U: syntaxic -> same(U)], k): keyword = 
     CASES k OF
       KTERM(T): KTERM(f(T))
       ELSE k
     ENDCASES
-  %AUTO_REWRITE over_keyword
+
+
+
 
   ;↑(Δ, nb): MACRO finseq[(scontext?)] = decls(theory_(Δ) ↑ nb)
   ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb, k)
-  ;↑(l, nb): MACRO list[pretcc] = map(LAMBDA U: U ↑ nb)(l)
   subst(Δ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Δ), x, t))
   subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t), k)
-  subst(l, x, t): MACRO list[pretcc] = map(LAMBDA U: subst(U, x, t))(l)
 
-
-  % ax1: AXIOM x ∈ Γ IMPLIES x < length(Γ)
-  % ax2: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETERM IMPLIES (const_def?(Γ(s)) OR const_var?(Γ(s)) OR const_decl?(Γ(s)))
-  % ax3: AXIOM sexpr?(U) IMPLIES sexpr?(δ(Γ)(U))
-  % ax4: AXIOM sexpr?(U) IMPLIES sexpr?(U ↑ (n, b))
-  % ax5: AXIOM x ∈ Γ AND kind(Γ(x)) = PRETHEORY IMPLIES theory_def?(Γ(x))
-  % ax6: AXIOM w(Γ ++ SIG(i), x) < w(Γ, dot(i, x))
-  % ax7: AXIOM U << V IMPLIES w(Γ, U) < w(Γ, V)
-  % ax8: AXIOM w(Γ, theory_(interpret(SIG(m), σ))) < w(Γ, interp(m, σ))
-  % ax9: AXIOM w(Γ ++ rest(Θ, 1), Θ(0)) < w(Γ, Θ)
-  % ax10: AXIOM w(Γ, theory_(rest(Θ, 1))) < w(Γ, Θ)
-  % ax11: AXIOM w(Γ ++ k(const_var(A)), B) < w(Γ, fun(A, B))
-  % ax12: AXIOM w(Γ, A) < w(Γ, fun(A, B))
-  % ax13: AXIOM w(Γ ++ k(const_var(A)), B) < w(Γ, prod(A, B))
-  %%%%%%%%%%%%%% LIMIT %%%%%%%%%%%%%%
-  % axw: << ⊂ w
 
   typecheckable?(Γ)(U): bool = 
     (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES length(Γ) > 0) AND 
@@ -99,13 +56,13 @@ BEGIN
 
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
   τ0(Γ)(U: (typecheckable?(Γ))): RECURSIVE 
-    { x: [keyword, (tccs?)] | LET (k, t) = x IN
-      (KTHEORY?(k) IMPLIES sexpr?(U)) AND
+    { x: [keyword, tccs] | LET (k, t) = x IN
+      (KTHEORY?(k) IMPLIES sexpr?(U) AND theory?(ρ0(Γ)(U)) AND tccs?(t) AND length(decls(ρ0(Γ)(U))) = length(map(t))) AND
       (KDECL?(k) IMPLIES scontext?(U)) AND
-      (KINTERP?(k) AND ideep?(U) IMPLIES compatible?(Γ ^^ (0, length(map(U))), map(U))) AND
+      (KINTERP?(k) AND ideep?(U) IMPLIES compatible?(Γ ^^ (0, length(map(U))), map(U)) AND tccs?(t) AND length(map(U)) = length(map(t))) AND
       (KINTERP?(k) AND (ikeep?(U) OR itype?(U) OR iterm?(U)) IMPLIES compatible0?(Γ(0), U)) AND
-      (KTYPE?(k) IMPLIES sexpr?(U)) AND
-      (KTERM?(k) IMPLIES sexpr?(U)) } =
+      (KTYPE?(k) IMPLIES sexpr?(U) AND tcc?(t)) AND
+      (KTERM?(k) IMPLIES sexpr?(U) AND tcc?(t)) } =
   CASES U OF
 
   %% Names
@@ -118,52 +75,47 @@ BEGIN
 	% Γ is supposed to be fully expanded already, so there is no need
 	% to call δ0 again.
       , PRETERM: (KTERM( type_(Γ(s)) ↑ (s + 1) ), notcc)
-      %δ0(rest(Γ, s))(type_(Γ(s))) ↑ (s + 1) ), null)
-      , PRETHEORY: (KTHEORY, notcc)
+      % TODO: δ0(rest(Γ, s))(type_(Γ(s))) ↑ (s + 1) ), null)
+      , PRETHEORY: IF theory?(ρ0(Γ)(v(s))) THEN % Useless check for typepred
+      		   (KTHEORY, notccth(length(decls(ρ0(Γ)(v(s))))))
+		   ELSE fail ENDIF
       ENDCASES ELSE fail ENDIF
-    % τ0(Γ)(m{{ σ }}.s) = TYPE if kind(Γ(m)) = THEORY
-    % 	       	       	      and σ is a valid interpretation for definition(Γ(m))
-    % 	       	       	      and kind( definition(Γ(m))(s) ) = TYPE
-    % τ0(Γ)(m{{ σ }}.s) = δ0(Γ)( η(Γ, m{{ σ }})(type( definition(Γ(m))(s) )))
-    %  	       	       	      if kind(Γ(m)) = THEORY
-    % 	       	       	      and σ is a valid interpretation for definition(Γ(m))
-    %			      and kind( definition(Γ(m))(s) ) = CONSTANT
-    % Note: there is no need to have a τ0(Θ)(σ) = INTERP since we already
-    % check τ0(Θ)(interp(Δ0, σ)). Hence we don't have to define τ0 over the
-    % interpretations.
   , dot(i, x):
-      IF NOT theory?(i) THEN % We forbid "BEGIN ... END.x"
+      IF v?(i) THEN % We lose chomsky here, we don't allow inlined theories in the dot
       LET (kwi, tccsi) = τ0(Γ)(i)
         , S = ρ0(Γ)(i)
-      IN IF KTHEORY?(kwi) AND v?(x) AND theory?(S) AND i(x) < length(decls(S)) THEN
-        % LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x)
-	% IN (LET kw = η(i, length(decls(S)))(kwx) IN
-	%     IF KTERM?(kw) THEN KTERM(δ0(Γ)(TYPEOF(kw))) ELSE kw ENDIF,
-	%     tccsi ++ η(i, length(decls(S)))(tccsx))
-        LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x) % We know for sure that tccsx = notcc
-	IN (η(i, length(decls(S)))(kwx), tccsi) %TODO : talk about it
+      IN IF KTHEORY?(kwi) AND v?(x) AND i(x) < length(decls(S)) THEN  % The assumption theory?(S) can now be proved
+        LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x) IN % We know for sure that tccsx = notcc
+  	% TODO:     IF KTERM?(kwx) THEN KTERM(η(i, length(decls(S)))(δ0(Γ)(TYPEOF(kw)))) ELSE kw ENDIF,
+	CASES kwx OF
+	  KTYPE: (KTYPE, notcc),
+	  KTERM(T): (KTERM(η(i, length(decls(S)))(T)), notcc)
+	  ELSE fail % Nested theories are allowed but we can't access a nested theory
+	ENDCASES
+      ELSE fail ENDIF
       ELSE fail ENDIF
   , interp(m, σ):
+      % Nested theories are allowed but we can't interpret a theory containg a nested theory
       LET (kwm, tccsm) = τ0(Γ)(m)
         , sigM = ρ0(Γ)(m)
-      IN IF KTHEORY(kwm) AND theory?(sigM) AND ideep?(σ) AND
-            length(decls(sigM)) = length(map(σ)) THEN
+      IN IF KTHEORY?(kwm) AND length(decls(sigM)) = length(map(σ)) AND % theory?(SigM) can now be proved        
+      	 (FORALL (j: below(length(map(tccsm)))): tcc?((map(tccsm))(j))) THEN % Useless check to prove typepred
         LET (kwi, tccsi) = τ0(Γ ++ decls(sigM))(σ)
-	IN IF KINTERP?(kwi)
-	  THEN (KTHEORY, tccsm ++ (tccsi ↑ (length(map(SigM)), 0)))
+	IN IF KINTERP?(kwi) AND (FORALL (j: below(length(map(tccsi)))): tcc?((map(tccsi))(j))) % Useless check to prove typepred
+	  THEN (KTHEORY, tccs( (# length := length(map(tccsm)), 
+    	       		 seq := LAMBDA (z: below(length(map(tccsm)))): 
+			 (map(tccsm))(z) ++ (map(tccsi))(z) #)))
 	  ELSE fail ENDIF
       ELSE fail ENDIF
-      ELSE fail ENDIF
   , theory_(Θ):
-      IF length(Θ) = 0 THEN (KTHEORY, null) ELSE
+      IF length(Θ) = 0 THEN (KTHEORY, notccth(0)) ELSE
       LET pos = length(Θ) - 1 IN
       LET (kwD, tccsD) = τ0(Γ)(Θ(pos)) IN
       IF KDECL?(kwD) THEN
         LET epos = ρ0(Γ)(Θ(pos)) IN
         LET (kwΘ, tccsΘ) = τ0(Γ ++ k(epos))(theory_(Θ ^^ (0, pos))) IN
 	IF KTHEORY?(kwΘ) THEN
-	  % (KTHEORY, (tccsD ↑ (length(Θ), 0)) ++ tccsΘ)
-	  (KTHEORY, tccsD ++ tccsΘ)
+	  (KTHEORY, k(tccsD) ++ tccsΘ)
 	ELSE fail ENDIF
       ELSE fail ENDIF ENDIF
 		       
@@ -174,8 +126,8 @@ BEGIN
       LET (kwA, tccsA) = τ0(Γ)(A)
       IN IF KTYPE?(kwA) THEN
         LET (kwB, tccsB) = τ0(Γ ++ k(const_var(ρ0(Γ)(A))))(B)
-	IN IF KTYPE?(kwB) THEN
-	  (KTYPE, k(tccsA ++ forall_(A, car(tccsB))(length(Γ))))
+	IN IF KTYPE?(kwB) AND length(Γ) > 1 THEN
+	  (KTYPE, tccsA ++ forall_(A, tccsB)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ0(Γ)([x: A, B]) = TYPE if τ0(Γ)(A) = TYPE 
@@ -184,8 +136,8 @@ BEGIN
       LET (kwA, tccsA) = τ0(Γ)(A)
       IN IF KTYPE?(kwA) THEN
         LET (kwB, tccsB) = τ0(Γ ++ k(const_var(ρ0(Γ)(A))))(B)
-	IN IF KTYPE?(kwB) THEN
-	  (KTYPE, k(tccsA ++ forall_(A, car(tccsB))(length(Γ))))
+	IN IF KTYPE?(kwB) AND length(Γ) > 1 THEN
+	  (KTYPE, tccsA ++ forall_(A, tccsB)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ0(Γ)({x:T | a}) = TYPE if τ0(Γ)(T) = TYPE
@@ -194,8 +146,9 @@ BEGIN
       LET (kwT, tccsT) = τ0(Γ)(T)
       IN IF KTYPE?(kwT) THEN
         LET (kwa, tccsa) = τ0(Γ ++ k(const_var(ρ0(Γ)(T))))(a)
-	IN IF KTERM?(kwa) AND TYPEOF(kwa) = bool_(length(Γ) + 1) THEN
-	  (KTYPE, k(tccsT ++ forall_(T, car(tccsa))(length(Γ))))
+	IN IF KTERM?(kwa) AND length(Γ) > 1 AND
+	      TYPEOF(kwa) = bool_(length(Γ) + 1) THEN
+	  (KTYPE, tccsT ++ forall_(T, tccsa)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
 
@@ -211,8 +164,8 @@ BEGIN
         CASES μ0(TYPEOF(kwf)) OF
 	  fun(A, B):
 	    LET (kwa, tccsa) = τ0(Γ)(a)
-	    IN IF KTERM?(kwa) THEN
-	      (KTERM(subst(B, 0, a)), k(tccsf ++ tccsa ++ (A ∼ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
+	    IN IF KTERM?(kwa) AND length(Γ) > 1 THEN
+	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ∼ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
 	    ELSE fail ENDIF
 	  ELSE fail
 	ENDCASES
@@ -224,8 +177,8 @@ BEGIN
       LET (kwA, tccsA) = τ0(Γ)(A)
       IN IF KTYPE?(kwA) THEN
         LET (kwa, tccsa) = τ0(Γ ++ k(const_var(ρ0(Γ)(A))))(a)
-	IN IF KTERM?(kwa) THEN
-	  (KTERM(fun(A, TYPEOF(kwa))), (: car(tccsA) ++ forall_(A, car(tccsa))(length(Γ)) :))
+	IN IF KTERM?(kwa) AND length(Γ) > 1 THEN
+	  (KTERM(fun(A, TYPEOF(kwa))), tccsA ++ forall_(A, tccsa)(length(Γ)))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ0(Γ)((a1, a2)) = [x: τ0(Γ)(a1), τ0(Γ)(a2)]
@@ -234,7 +187,7 @@ BEGIN
       LET (kwa1, tccsa1) = τ0(Γ)(a1)
         , (kwa2, tccsa2) = τ0(Γ)(a2)
       IN IF KTERM?(kwa1) AND KTERM?(kwa2) THEN
-        (KTERM(prod(TYPEOF(kwa1), TYPEOF(kwa2) ↑ 1)), (: car(tccsa1) ++ car(tccsa2) :))
+        (KTERM(prod(TYPEOF(kwa1), TYPEOF(kwa2) ↑ 1)), tccsa1 ++ tccsa2)
       ELSE fail ENDIF
     % τ0(Γ)(p1 a) = A1, where μ0(τ0(Γ)(a)) = [x: A1, A2]
   , lproj(a):
@@ -281,18 +234,15 @@ BEGIN
   , const_def(T, a):
       LET (kwT, tccsT) = τ0(Γ)(T)
         , (kwa, tccsa) = τ0(Γ)(a)
-      IN IF KTYPE?(kwT) AND KTERM?(kwa) THEN
-        (KDECL, (: car(tccsT) ++ car(tccsa) ++ (T ≃ TYPEOF(kwa))(length(Γ)) ++ π(T)(a)(length(Γ)) :))
+      IN IF KTYPE?(kwT) AND KTERM?(kwa) AND length(Γ) > 1 THEN
+        (KDECL, tccsT ++ tccsa ++ (T ≃ TYPEOF(kwa))(length(Γ)) ++ π(T)(a)(length(Γ)))
       ELSE fail ENDIF
     % τ0(θ)(rest(Δ0), decl(Δ0)) = CONTEXT  τ0(Θ)(rest(Δ0)) = CONTEXT
     %				    and τ0(Θ, rest(Δ0))(decl(Δ0)) = THEORY 
     %	(THEORY = context without theory declarations)
   , theory_def(Th):
       LET (kwTh, tccsTh) = τ0(Γ)(Th)
-      % IN IF KTHEORY?(kwTh) THEN
-      %   (KDECL, IF theory?(Th) THEN η(v(0), length(decls(Th)))(tccsTh) ELSE tccsTh ENDIF)
-      % ELSE fail ENDIF
-      IN IF KTHEORY?(kwTh) THEN (KDECL, η(v(0), length(ρ0(Γ)(Th))(flatten(tccsTh)) ELSE fail ENDIF % TODO: what prefix do we use ??? + check flatten
+      IN IF KTHEORY?(kwTh) THEN (KDECL, tccsTh) ELSE fail ENDIF
   , ikeep: IF 0 < length(Γ) THEN (KINTERP, notcc) ELSE fail ENDIF
   , itype(T):
       IF 0 < length(Γ) AND type_decl?(Γ(0)) THEN
@@ -302,20 +252,22 @@ BEGIN
   , iterm(a):
       IF 0 < length(Γ) AND const_decl?(Γ(0)) THEN
         LET (kwa, tccsa) = τ0(rest(Γ, 0))(a) IN
-	IF KTERM?(kwa) THEN
+	IF KTERM?(kwa) AND length(Γ) > 2 THEN
 	  (KINTERP, tccsa ++ (type_(Γ(0)) ≃ TYPEOF(kwa))(length(Γ) - 1) ++ π(type_(Γ(0)))(a)(length(Γ) - 1))
 	ELSE fail ENDIF
       ELSE fail ENDIF
   , ideep(σ):
-      IF length(σ) = 0 THEN (KINTERP, null) ELSE
+      IF length(σ) = 0 THEN (KINTERP, notccth(0)) ELSE
       LET pos = length(σ) - 1 IN
+      IF NOT ideep?(σ(pos)) THEN
       LET (kwI, tccsI) = τ0(Γ ^^ (pos, length(Γ)))(σ(pos)) IN
       IF KINTERP?(kwI) THEN
-        LET (kwσ, tccsσ) = τ0((Γ WITH [ `seq(pos) := interpret0(Γ(pos), ρ0(Γ ^^ (pos, length(Γ)))(σ(pos))) ]))(ideep(σ ^^ (0, pos))) IN
+        LET (kwσ, tccsσ) = τ0((Γ WITH [ `seq(pos) := ρ0(Γ ^^ (pos, length(Γ)))(σ(pos)) ]))(ideep(σ ^^ (0, pos))) IN
 	IF KINTERP?(kwσ) THEN
-	  (KINTERP, (tccsI ↑ (pos + 1, 0)) ++ tccsσ)
+	  (KINTERP, k(tccsI) ++ tccsσ)
 	ELSE fail ENDIF
       ELSE fail ENDIF 
+      ELSE fail ENDIF
       ENDIF
   ENDCASES
   MEASURE size(U)
@@ -333,16 +285,13 @@ BEGIN
   %    -> see tcc_correctness in tau_props
 
   % Definitions without assumptions over the contexts
-  δ(Γ)(U): same(U) =
+  δ(Γ)(U: (expandable?(Γ))): syntaxic =
     δ0(expand_ctx(Γ))(U)
 
-  ρ(Γ)(U): same(U) =
+  ρ(Γ)(U: (expandable?(Γ))): syntaxic =
     ρ0(expand_ctx(Γ))(U)
 
-  τ(Γ)(U): [keyword, list[pretcc]] =
-    LET Δ = expand_ctx(Γ) IN
-    LET (kw, tccs) = τ0(Δ)(U) IN
-    (IF KTERM?(kw) THEN KTERM(ρ0(Δ)(TYPEOF(kw))) ELSE kw ENDIF,
-     map(ρ0(Δ), tccs))
+  τ(Γ)(U: (typecheckable?(Γ))): [keyword, tccs] =
+    τ0(expand_ctx(Γ))(U)
 
 END tau

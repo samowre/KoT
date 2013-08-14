@@ -118,33 +118,33 @@ BEGIN
     subst(U, x, (a | type_size(a) = 0)) HAS_TYPE { V | type_size(V) = type_size(U) }
 
   % Type equivalence proof obligations : 3.6
-  ;≃(T1, T2)(n: above(1)): RECURSIVE list[(sexpr?)] =
+  ;≃(T1, T2)(n: above(1)): RECURSIVE (tcc?) =
     CASES T1 OF
       fun(A1, B1): CASES T2 OF
-        fun(A2, B2): append((μ(A1)(n) ≃ μ(A2)(n))(n),
-	               cons((π(A1)(n) ≐ π(A2)(n))(fun(μ(A1)(n), bool_(n + 1)))(n),
-		            forall_(A1, (B1 ≃ B2)(n + 1))(n)))
-	ELSE (: FALSE_(n) :) ENDCASES,
+        fun(A2, B2): (μ(A1)(n) ≃ μ(A2)(n))(n) ++ 
+	             t((π(A1)(n) ≐ π(A2)(n))(fun(μ(A1)(n), bool_(n + 1)))(n)) ++
+		     forall_(A1, (B1 ≃ B2)(n + 1))(n)
+	ELSE  t(FALSE_(n)) ENDCASES,
       prod(A1, B1): CASES T2 OF
-        prod(A2, B2): append((A1 ≃ A2)(n),
-	                     forall_(A1, (B1 ≃ B2)(n + 1))(n))
-	ELSE (: FALSE_(n) :) ENDCASES
-    ELSE IF T2 = T1 THEN (: :) ELSE (: FALSE_(n) :) ENDIF ENDCASES
+        prod(A2, B2): (A1 ≃ A2)(n) ++
+	              forall_(A1, (B1 ≃ B2)(n + 1))(n)
+	ELSE t(FALSE_(n)) ENDCASES
+    ELSE IF T2 = T1 THEN notcc ELSE t(FALSE_(n)) ENDIF ENDCASES
   MEASURE type_size(T1)
 
   % Type equivalence for dependent types (A ≃ B)/a : 4.8
-  ;∼(T1, T2)(a)(n: above(1)): RECURSIVE list[(sexpr?)] =
+  ;∼(T1, T2)(a)(n: above(1)): RECURSIVE (tcc?) =
     CASES T1 OF
       fun(A1, B1): CASES T2 OF
-        fun(A2, B2): append((μ(A1)(n) ≃ μ(A2)(n))(n),
-	              cons((π(A1)(n) ≐ π(A2)(n))(fun(μ(A1)(n), bool_(n + 1)))(n),
-		            forall_(A1, (B1 ∼ B2)(app(a, v(0)))(n + 1))(n)))
-	ELSE (: FALSE_(n) :) ENDCASES,
+        fun(A2, B2): (μ(A1)(n) ≃ μ(A2)(n))(n) ++
+	             t((π(A1)(n) ≐ π(A2)(n))(fun(μ(A1)(n), bool_(n + 1)))(n)) ++
+		     forall_(A1, (B1 ∼ B2)(app(a, v(0)))(n + 1))(n)
+	ELSE t(FALSE_(n)) ENDCASES,
       prod(A1, A2): CASES T2 OF
-        prod(B1, B2): append((        A1             ∼         B1            )(lproj(a))(n),
-	                     (subst(A2, 0, lproj(a)) ∼ subst(B2, 0, lproj(a)))(rproj(a))(n)) % subst: TODO
-	ELSE (: FALSE_(n) :) ENDCASES
-    ELSE IF T2 = T1 THEN (: :) ELSE (: FALSE_(n) :) ENDIF ENDCASES
+        prod(B1, B2): (        A1             ∼         B1            )(lproj(a))(n) ++
+	              (subst(A2, 0, lproj(a)) ∼ subst(B2, 0, lproj(a)))(rproj(a))(n) % subst: TODO
+	ELSE t(FALSE_(n)) ENDCASES
+    ELSE IF T2 = T1 THEN notcc ELSE t(FALSE_(n)) ENDIF ENDCASES
   MEASURE type_size(T1)
 
 END supertype

@@ -72,10 +72,9 @@ BEGIN
       x = 0 -> theory_def(equalities)
     ENDCOND #))
 
-  
-  forall_(T, (l: list[(sexpr?)]))(len: above(2)): list[(sexpr?)] =
-    map(LAMBDA (x: (sexpr?)): forall_(T, x)(len), l)
-
+  forall_(T, (t: (tcc?)))(len: above(1)): (tcc?) =
+    tcc( expr(t) WITH [`seq := LAMBDA (x: below(length(expr(t)))): 
+    	 forall_(T, (expr(t))(x))(len)])
 
   admissible?(Γ: finseq[(scontext?)]): bool =
     Γ = empty_seq OR

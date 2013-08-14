@@ -74,15 +74,14 @@ BEGIN
   	  ELSE U % Doesn't happen until we have theory_{decl,var}
   	ENDCASES
     , theory_(Θ):
-        IF length(Θ) = 0
-	  THEN U
-	  ELSE
-	    CASES expand(ths?)(Γ, theory_(rest(Θ, 0))) OF
-	      theory_(Δ): theory_(Δ ++ k(expand(ths?)(Γ ++ Δ, Θ(0))))
-	      ELSE U % Does not happen
-	    ENDCASES
+        IF length(Θ) = 0 THEN U ELSE
+	LET pos = length(Θ) - 1,
+	    epos = k(expand(ths?)(Γ, Θ(pos))) IN
+	CASES expand(ths?)(Γ ++ epos, theory_(Θ ^^ (0, pos))) OF
+	  theory_(Δ): theory_(epos ++ Δ)
+	  ELSE U % Does not happen
+ 	ENDCASES
 	ENDIF
-
     , fun(A, B):
         LET eA = expand(ths?)(Γ, A) IN
 	fun(eA, expand(ths?)(Γ ++ k(const_var(eA)), B))
@@ -146,8 +145,16 @@ BEGIN
     ENDCASES
   MEASURE size(U)
 
+
+  expand_preserves_theory: THEOREM
+    theory?(expand(ths?)(Γ, theory_(Δ)))
   expand_size: THEOREM 
     length(decls(expand(ths?)(Γ, theory_(Δ)))) = length(Δ)
+  expand_size_ideep: THEOREM
+    expandable?(Γ)(ideep(σ)) IMPLIES
+    length(decls(expand(ths?)(Γ, ideep(σ)))) = length(σ)
+  expand_equiv: THEOREM
+    decls(expand(ths?)(Γ, theory_(Δ))) ≡ Δ
 
   expand_ctx(Γ): { Δ | Δ ≡ Γ } =
     decls(expand(TRUE)(empty_seq, theory_(Γ)))
@@ -158,35 +165,37 @@ BEGIN
   ρ0(Γ)(U: (expandable?(Γ))): syntaxic =
     expand(TRUE)(Γ, U)
 
-  % length for tccs
-  tlength(Γ)(U): nat = 
-    CASES U OF
-      v(i): 0
-    , dot(m, x): 1
-    , interp(m, σ): 
-    , theory_(Θ):
-      
-    , fun(A, B): 1
-    , prod(A, B): 1
-    , subtype(T, a): 1
-      
-    , app(f, a): 1
-    , lamb(T, a): 1
-    , pair(a, b): 1
-    , lproj(a): 1
-    , rproj(a): 1
 
-    , type_decl: 0
-    , type_var: 0
-    , type_def: 1
-    , const_decl: 1
-    , const_var: 1
-    , const_def: 1
-    , theory_def:
 
-    , ikeep:
-    , itype:
-    , iterm:	
-    , ideep:
+  % % length for tccs
+  % tlength(Γ)(U): nat = 
+  %   CASES U OF
+  %     v(i): 0
+  %   , dot(m, x): 1
+  %   , interp(m, σ): 
+  %   , theory_(Θ):
+      
+  %   , fun(A, B): 1
+  %   , prod(A, B): 1
+  %   , subtype(T, a): 1
+      
+  %   , app(f, a): 1
+  %   , lamb(T, a): 1
+  %   , pair(a, b): 1
+  %   , lproj(a): 1
+  %   , rproj(a): 1
+
+  %   , type_decl: 0
+  %   , type_var: 0
+  %   , type_def: 1
+  %   , const_decl: 1
+  %   , const_var: 1
+  %   , const_def: 1
+  %   , theory_def:
+
+  %   , ikeep:
+  %   , itype:
+  %   , iterm:	
+  %   , ideep:
 
 END delta
