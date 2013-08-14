@@ -8,7 +8,7 @@ BEGIN
   T, a, T1, T2: VAR (sexpr?)
   A: VAR (sexpr?)
   Γ: VAR finseq[(scontext?)]
-  n: VAR nat
+  n: VAR above(1)
 
   % Special type_size function defined for termination
   % of functions defined in supertype
@@ -118,7 +118,7 @@ BEGIN
     subst(U, x, (a | type_size(a) = 0)) HAS_TYPE { V | type_size(V) = type_size(U) }
 
   % Type equivalence proof obligations : 3.6
-  ;≃(T1, T2)(n): RECURSIVE list[(sexpr?)] =
+  ;≃(T1, T2)(n: above(1)): RECURSIVE list[(sexpr?)] =
     CASES T1 OF
       fun(A1, B1): CASES T2 OF
         fun(A2, B2): append((μ(A1)(n) ≃ μ(A2)(n))(n),
@@ -133,7 +133,7 @@ BEGIN
   MEASURE type_size(T1)
 
   % Type equivalence for dependent types (A ≃ B)/a : 4.8
-  ;∼(T1, T2)(a)(n): RECURSIVE list[(sexpr?)] =
+  ;∼(T1, T2)(a)(n: above(1)): RECURSIVE list[(sexpr?)] =
     CASES T1 OF
       fun(A1, B1): CASES T2 OF
         fun(A2, B2): append((μ(A1)(n) ≃ μ(A2)(n))(n),

@@ -1,6 +1,6 @@
 init_context: THEORY
 BEGIN
-  IMPORTING subst, interp
+  IMPORTING language
 
   AUTO_REWRITE+ sexpr?
   T, p: VAR (sexpr?)
@@ -60,9 +60,9 @@ BEGIN
     dot(interp(v(len - 2), ideep(σ)), v(0))
   ;≐(a, b)(T)(len: above(1)): (sexpr?) = app(equal(T)(len), pair(a, b))
   % 	     	 ∀(x: T): p(x) ≡                        (λ(x: T): p(x) = λx TRUE)
-  forall_(T, p)(len: above(2)): (sexpr?) = app(equal(fun(T, bool_(len + 1)))(len), pair( lam(T, p), lam(T, TRUE_(len + 1))))
+  forall_(T, p)(len: above(1)): (sexpr?) = app(equal(fun(T, bool_(len + 1)))(len), pair( lam(T, p), lam(T, TRUE_(len + 1))))
   % 	     	 ∃(x: T): p(x) ≡ ¬ ∀(x: T): ¬p(x)
-  exists_(T, p)(len: above(3)): (sexpr?) = app(not_(len), forall_(T, app(not_(len + 1), p))(len))
+  exists_(T, p)(len: above(1)): (sexpr?) = app(not_(len), forall_(T, (¬p)(len + 1))(len))
 
 
   init_context: (theory?) = theory_((# 
@@ -80,7 +80,8 @@ BEGIN
   admissible?(Γ: finseq[(scontext?)]): bool =
     Γ = empty_seq OR
     Γ = rest(decls(init_context), 0) OR
-    Γ ^^ (length(Γ) - 2, length(Γ)) = decls(init_context)
+    (length(Γ) > 1 AND
+    Γ ^^ (length(Γ) - 2, length(Γ)) = decls(init_context))
 
 END init_context
 

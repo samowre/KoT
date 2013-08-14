@@ -20,8 +20,14 @@ BEGIN
   t: VAR (sexpr?)
 
   %% Type TCCS 
-  pretcc: TYPE = (sexpr?)
-  l: VAR list[pretcc]
+  tccs: DATATYPE = 
+    tcc(expr: (sexpr?)): tcc?
+    tccs(map: finseq[tccs]): tccs?
+  END tccs
+  ++(x, y: (tccs?)): (tccs?) = tccs(map(y) o map(x))
+  k(t: tccs): finseq[tccs] = 
+    (# length := 1,
+       seq := LAMBDA (x: below(1)): t #)
 
   %%% Type keyword
   keyword: DATATYPE
@@ -34,11 +40,12 @@ BEGIN
     KTERM(TYPEOF: (sexpr?)): KTERM?
   END keyword
 
-  ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
+  % ;++(l1, l2: list[pretcc]): list[pretcc] = append(l1, l2)
   CONVERSION- finseq2list, extract1
-  π(A)(a)(n): list[(sexpr?)] =
-    cons( app(π(A)(n), a), null)
-  fail: MACRO [keyword, list[pretcc]] = (⊥, null)
+  π(A)(a)(n: above(1)): list[(sexpr?)] =
+    k(app(π(A)(n), a))
+  notcc: MACRO (tccs?) = tccs(empty_seq)
+  fail: MACRO [keyword, (tccs?)] = (⊥, notcc)
   k: VAR keyword
     
   η(m, n)(k): keyword = 
@@ -86,11 +93,19 @@ BEGIN
   %%%%%%%%%%%%%% LIMIT %%%%%%%%%%%%%%
   % axw: << ⊂ w
 
-
+  typecheckable?(Γ)(U): bool = 
+    (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES length(Γ) > 0) AND 
+    (ideep?(U) IMPLIES length(Γ) >= length(map(U)))
 
   % type rules : 2.4, 2.17, 3.10, 4.9, 5.1, 5.3, 5.7, 5.12, 5.14, 5.15, + some modifications
-  τ0(Γ)(U): RECURSIVE 
-    { x: [keyword, list[pretcc]] | TRUE } =
+  τ0(Γ)(U: (typecheckable?(Γ))): RECURSIVE 
+    { x: [keyword, (tccs?)] | LET (k, t) = x IN
+      (KTHEORY?(k) IMPLIES sexpr?(U)) AND
+      (KDECL?(k) IMPLIES scontext?(U)) AND
+      (KINTERP?(k) AND ideep?(U) IMPLIES compatible?(Γ ^^ (0, length(map(U))), map(U))) AND
+      (KINTERP?(k) AND (ikeep?(U) OR itype?(U) OR iterm?(U)) IMPLIES compatible0?(Γ(0), U)) AND
+      (KTYPE?(k) IMPLIES sexpr?(U)) AND
+      (KTERM?(k) IMPLIES sexpr?(U)) } =
   CASES U OF
 
   %% Names
@@ -99,12 +114,12 @@ BEGIN
     % τ0(Γ)(s) = δ0(Γ)(type(Γ(s))) if kind(Γ(s)) = VARIABLE
     v(s):
       IF s ∈ Γ THEN CASES kind(Γ(s)) OF
-	PRETYPE: (KTYPE, null)
+	PRETYPE: (KTYPE, notcc )
 	% Γ is supposed to be fully expanded already, so there is no need
 	% to call δ0 again.
-      , PRETERM: (KTERM( type_(Γ(s)) ↑ (s + 1) ), null)
+      , PRETERM: (KTERM( type_(Γ(s)) ↑ (s + 1) ), notcc)
       %δ0(rest(Γ, s))(type_(Γ(s))) ↑ (s + 1) ), null)
-      , PRETHEORY: (KTHEORY, null)
+      , PRETHEORY: (KTHEORY, notcc)
       ENDCASES ELSE fail ENDIF
     % τ0(Γ)(m{{ σ }}.s) = TYPE if kind(Γ(m)) = THEORY
     % 	       	       	      and σ is a valid interpretation for definition(Γ(m))
@@ -117,23 +132,27 @@ BEGIN
     % check τ0(Θ)(interp(Δ0, σ)). Hence we don't have to define τ0 over the
     % interpretations.
   , dot(i, x):
+      IF NOT theory?(i) THEN % We forbid "BEGIN ... END.x"
       LET (kwi, tccsi) = τ0(Γ)(i)
         , S = ρ0(Γ)(i)
       IN IF KTHEORY?(kwi) AND v?(x) AND theory?(S) AND i(x) < length(decls(S)) THEN
-        LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x)
-	IN (LET kw = η(i, length(decls(S)))(kwx) IN
-	    IF KTERM?(kw) THEN KTERM(δ0(Γ)(TYPEOF(kw))) ELSE kw ENDIF,
-	    tccsi ++ η(i, length(decls(S)))(tccsx))
+        % LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x)
+	% IN (LET kw = η(i, length(decls(S)))(kwx) IN
+	%     IF KTERM?(kw) THEN KTERM(δ0(Γ)(TYPEOF(kw))) ELSE kw ENDIF,
+	%     tccsi ++ η(i, length(decls(S)))(tccsx))
+        LET (kwx, tccsx) = τ0(Γ ++ decls(S))(x) % We know for sure that tccsx = notcc
+	IN (η(i, length(decls(S)))(kwx), tccsi) %TODO : talk about it
       ELSE fail ENDIF
   , interp(m, σ):
       LET (kwm, tccsm) = τ0(Γ)(m)
         , sigM = ρ0(Γ)(m)
-      IN IF KTHEORY?(kwm) AND theory?(sigM) AND ideep?(σ) AND
+      IN IF KTHEORY(kwm) AND theory?(sigM) AND ideep?(σ) AND
             length(decls(sigM)) = length(map(σ)) THEN
         LET (kwi, tccsi) = τ0(Γ ++ decls(sigM))(σ)
 	IN IF KINTERP?(kwi)
-	  THEN (KTHEORY, tccsm ++ η(theory_(interpret(interp(m, σ), decls(sigM), map(σ))), length(map(σ)))(tccsi))
+	  THEN (KTHEORY, tccsm ++ (tccsi ↑ (length(map(SigM)), 0)))
 	  ELSE fail ENDIF
+      ELSE fail ENDIF
       ELSE fail ENDIF
   , theory_(Θ):
       IF length(Θ) = 0 THEN (KTHEORY, null) ELSE
@@ -143,7 +162,8 @@ BEGIN
         LET epos = ρ0(Γ)(Θ(pos)) IN
         LET (kwΘ, tccsΘ) = τ0(Γ ++ k(epos))(theory_(Θ ^^ (0, pos))) IN
 	IF KTHEORY?(kwΘ) THEN
-	  (KTHEORY, (tccsD ↑ (length(Θ), 0)) ++ tccsΘ)
+	  % (KTHEORY, (tccsD ↑ (length(Θ), 0)) ++ tccsΘ)
+	  (KTHEORY, tccsD ++ tccsΘ)
 	ELSE fail ENDIF
       ELSE fail ENDIF ENDIF
 		       
@@ -155,7 +175,7 @@ BEGIN
       IN IF KTYPE?(kwA) THEN
         LET (kwB, tccsB) = τ0(Γ ++ k(const_var(ρ0(Γ)(A))))(B)
 	IN IF KTYPE?(kwB) THEN
-	  (KTYPE, tccsA ++ forall_(A, tccsB)(length(Γ)))
+	  (KTYPE, k(tccsA ++ forall_(A, car(tccsB))(length(Γ))))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ0(Γ)([x: A, B]) = TYPE if τ0(Γ)(A) = TYPE 
@@ -165,7 +185,7 @@ BEGIN
       IN IF KTYPE?(kwA) THEN
         LET (kwB, tccsB) = τ0(Γ ++ k(const_var(ρ0(Γ)(A))))(B)
 	IN IF KTYPE?(kwB) THEN
-	  (KTYPE, tccsA ++ forall_(A, tccsB)(length(Γ)))
+	  (KTYPE, k(tccsA ++ forall_(A, car(tccsB))(length(Γ))))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ0(Γ)({x:T | a}) = TYPE if τ0(Γ)(T) = TYPE
@@ -175,7 +195,7 @@ BEGIN
       IN IF KTYPE?(kwT) THEN
         LET (kwa, tccsa) = τ0(Γ ++ k(const_var(ρ0(Γ)(T))))(a)
 	IN IF KTERM?(kwa) AND TYPEOF(kwa) = bool_(length(Γ) + 1) THEN
-	  (KTYPE, tccsT ++ forall_(T, tccsa)(length(Γ)))
+	  (KTYPE, k(tccsT ++ forall_(T, car(tccsa))(length(Γ))))
 	ELSE fail ENDIF
       ELSE fail ENDIF
 
@@ -192,7 +212,7 @@ BEGIN
 	  fun(A, B):
 	    LET (kwa, tccsa) = τ0(Γ)(a)
 	    IN IF KTERM?(kwa) THEN
-	      (KTERM(subst(B, 0, a)), tccsf ++ tccsa ++ (A ∼ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
+	      (KTERM(subst(B, 0, a)), k(tccsf ++ tccsa ++ (A ∼ TYPEOF(kwa))(a)(length(Γ)) ++ π(A)(a)(length(Γ)))
 	    ELSE fail ENDIF
 	  ELSE fail
 	ENDCASES
@@ -205,7 +225,7 @@ BEGIN
       IN IF KTYPE?(kwA) THEN
         LET (kwa, tccsa) = τ0(Γ ++ k(const_var(ρ0(Γ)(A))))(a)
 	IN IF KTERM?(kwa) THEN
-	  (KTERM(fun(A, TYPEOF(kwa))), tccsA ++ forall_(A, tccsa)(length(Γ)))
+	  (KTERM(fun(A, TYPEOF(kwa))), (: car(tccsA) ++ forall_(A, car(tccsa))(length(Γ)) :))
 	ELSE fail ENDIF
       ELSE fail ENDIF
     % τ0(Γ)((a1, a2)) = [x: τ0(Γ)(a1), τ0(Γ)(a2)]
@@ -214,7 +234,7 @@ BEGIN
       LET (kwa1, tccsa1) = τ0(Γ)(a1)
         , (kwa2, tccsa2) = τ0(Γ)(a2)
       IN IF KTERM?(kwa1) AND KTERM?(kwa2) THEN
-        (KTERM(prod(TYPEOF(kwa1), TYPEOF(kwa2) ↑ 1)), tccsa1 ++ tccsa2)
+        (KTERM(prod(TYPEOF(kwa1), TYPEOF(kwa2) ↑ 1)), (: car(tccsa1) ++ car(tccsa2) :))
       ELSE fail ENDIF
     % τ0(Γ)(p1 a) = A1, where μ0(τ0(Γ)(a)) = [x: A1, A2]
   , lproj(a):
@@ -239,9 +259,9 @@ BEGIN
    % that s is not already defined before.
      
     % τ0(Θ)(s: TYPE) = CONTEXT
-  , type_decl: (KDECL, null)
+  , type_decl: (KDECL, notcc)
     % For τ0 : var <-> decl
-  , type_var: (KDECL, null)
+  , type_var: (KDECL, notcc)
     % τ0(Θ)(s: TYPE = T) = CONTEXT if τ0(Θ)(T) = TYPE
   , type_def(T):
       LET (kwT, tccsT) = τ0(Γ)(T) IN
@@ -262,17 +282,18 @@ BEGIN
       LET (kwT, tccsT) = τ0(Γ)(T)
         , (kwa, tccsa) = τ0(Γ)(a)
       IN IF KTYPE?(kwT) AND KTERM?(kwa) THEN
-        (KDECL, tccsT ++ tccsa ++ (T ≃ TYPEOF(kwa))(length(Γ)) ++ π(T)(a)(length(Γ)))
+        (KDECL, (: car(tccsT) ++ car(tccsa) ++ (T ≃ TYPEOF(kwa))(length(Γ)) ++ π(T)(a)(length(Γ)) :))
       ELSE fail ENDIF
     % τ0(θ)(rest(Δ0), decl(Δ0)) = CONTEXT  τ0(Θ)(rest(Δ0)) = CONTEXT
     %				    and τ0(Θ, rest(Δ0))(decl(Δ0)) = THEORY 
     %	(THEORY = context without theory declarations)
   , theory_def(Th):
       LET (kwTh, tccsTh) = τ0(Γ)(Th)
-      IN IF KTHEORY?(kwTh) THEN
-        (KDECL, IF theory?(Th) THEN η(v(0), length(decls(Th)))(tccsTh) ELSE tccsTh ENDIF)
-      ELSE fail ENDIF
-  , ikeep: IF 0 < length(Γ) THEN (KINTERP, null) ELSE fail ENDIF
+      % IN IF KTHEORY?(kwTh) THEN
+      %   (KDECL, IF theory?(Th) THEN η(v(0), length(decls(Th)))(tccsTh) ELSE tccsTh ENDIF)
+      % ELSE fail ENDIF
+      IN IF KTHEORY?(kwTh) THEN (KDECL, η(v(0), length(ρ0(Γ)(Th))(flatten(tccsTh)) ELSE fail ENDIF % TODO: what prefix do we use ??? + check flatten
+  , ikeep: IF 0 < length(Γ) THEN (KINTERP, notcc) ELSE fail ENDIF
   , itype(T):
       IF 0 < length(Γ) AND type_decl?(Γ(0)) THEN
         LET (kwT, tccsT) = τ0(rest(Γ, 0))(T) IN
@@ -297,7 +318,7 @@ BEGIN
       ELSE fail ENDIF 
       ENDIF
   ENDCASES
-  MEASURE U BY <<
+  MEASURE size(U)
 
   % Important invariants of τ0 to prove :
   %  - τ0(Θ)(_) occurs in the definition of τ0 only if τ0(〈〉)(Θ) = CONTEXT

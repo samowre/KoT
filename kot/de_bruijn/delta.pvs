@@ -1,6 +1,8 @@
 delta: THEORY
 BEGIN
   IMPORTING subst, interp
+  AUTO_REWRITE+ sexpr?, scontext?, sinterp?
+
 
   Γ, Δ: VAR finseq[(scontext?)]
   Θ: VAR finseq[(scontext?)]
@@ -11,6 +13,7 @@ BEGIN
   m: VAR (sexpr?)
   a: VAR (sexpr?)
   S: VAR finseq[(scontext?)]
+  ths?: VAR bool
   
 
 
@@ -19,7 +22,6 @@ BEGIN
     ELSE η(m, n - 1)(subst(U, n - 1, dot(m ↑ (n - 1), v(n - 1))))
     ENDIF
   MEASURE n
-  AUTO_REWRITE+ sexpr?, scontext?, sinterp?
   η(m, n)(l: list[(sexpr?)]): RECURSIVE list[(sexpr?)] =
     CASES l OF
       null: null
@@ -40,7 +42,18 @@ BEGIN
       ELSE U
     ENDCASES
 
-  expand(ths?: bool)(Γ, U): RECURSIVE syntaxic = 
+  AUTO_REWRITE- sexpr?, scontext?, sinterp?
+  expandable?(Γ)(U): bool =
+    (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES length(Γ) > 0 AND compatible0?(Γ(0), U)) AND 
+    (ideep?(U) IMPLIES LET σ = map(U) IN 
+      length(Γ) >= length(σ) AND compatible?(Γ ^^ (0, length(σ)), σ))
+
+
+  expand(ths?)(Γ, (U :(expandable?(Γ)))): RECURSIVE 
+    { V | (sexpr?(U) IMPLIES sexpr?(V)) AND
+      	  (scontext?(U) IMPLIES scontext?(V)) AND
+	  (ideep?(U) IMPLIES theory?(V)) AND
+	  (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V)) } = 
     CASES U OF
       v(x):
         IF x < length(Γ) AND definition?(Γ(x)) AND (ths? OR NOT theory_def?(Γ(x)))
@@ -55,7 +68,9 @@ BEGIN
     , interp(m, σ):
         CASES expand(ths?)(Γ, m) OF
   	  theory_(Θ):
-	    externalize(interp(expand(FALSE)(Γ, m), σ), expand(ths?)(Γ ++ Θ, σ))
+	    IF compatible?(Θ, map(σ)) THEN
+	      externalize(interp(expand(FALSE)(Γ, m), σ), expand(ths?)(Γ ++ Θ, σ))
+	    ELSE U ENDIF
   	  ELSE U % Doesn't happen until we have theory_{decl,var}
   	ENDCASES
     , theory_(Θ):
@@ -131,12 +146,47 @@ BEGIN
     ENDCASES
   MEASURE size(U)
 
+  expand_size: THEOREM 
+    length(decls(expand(ths?)(Γ, theory_(Δ)))) = length(Δ)
+
   expand_ctx(Γ): { Δ | Δ ≡ Γ } =
     decls(expand(TRUE)(empty_seq, theory_(Γ)))
   
-  δ0(Γ)(U): same(U) =
+  δ0(Γ)(U: (expandable?(Γ))): syntaxic =
     expand(FALSE)(Γ, U)
 
-  ρ0(Γ)(U): same(U) =
+  ρ0(Γ)(U: (expandable?(Γ))): syntaxic =
     expand(TRUE)(Γ, U)
+
+  % length for tccs
+  tlength(Γ)(U): nat = 
+    CASES U OF
+      v(i): 0
+    , dot(m, x): 1
+    , interp(m, σ): 
+    , theory_(Θ):
+      
+    , fun(A, B): 1
+    , prod(A, B): 1
+    , subtype(T, a): 1
+      
+    , app(f, a): 1
+    , lamb(T, a): 1
+    , pair(a, b): 1
+    , lproj(a): 1
+    , rproj(a): 1
+
+    , type_decl: 0
+    , type_var: 0
+    , type_def: 1
+    , const_decl: 1
+    , const_var: 1
+    , const_def: 1
+    , theory_def:
+
+    , ikeep:
+    , itype:
+    , iterm:	
+    , ideep:
+
 END delta

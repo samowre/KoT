@@ -8,7 +8,7 @@ BEGIN
     % Update this with finseq for nested theories:
     % finseq[ (sinterp?) ], nat
     dot(m: (sexpr?), x: (sexpr?)): dot?: sexpr?
-    interp(m: (sexpr?), map: (sinterp?)): interp?: sexpr?
+    interp(m: (sexpr?), map: (ideep?)): interp?: sexpr?
     theory_(decls: finseq[(scontext?)]): theory?: sexpr?
 
     fun(dom: (sexpr?), range: (sexpr?)): fun?: sexpr?
@@ -49,11 +49,11 @@ BEGIN
   sum(len: nat, f: [below[len] -> nat]):
     RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
     IF len = 0 THEN 0
-    ELSE f(len - 1) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x)) ENDIF
+    ELSE f(0) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x + 1)) ENDIF
   MEASURE len
 
   % Size function, useful for termination
-  size(U: syntaxic): RECURSIVE nat =
+  size(U: syntaxic): RECURSIVE posnat =
     CASES U OF
       v(x): 2
     , dot(m, x): size(m) + size(x) + 2 % TODO 
@@ -89,7 +89,7 @@ BEGIN
   
   Γ, Δ, Θ: VAR finseq[(scontext?)]
   σ, τ: VAR finseq[(sinterp?)]
-  x: VAR nat  
+  x, i, j: VAR nat  
   d: VAR (scontext?)
 
 
@@ -146,6 +146,14 @@ BEGIN
   rest_concat: THEOREM 
     rest(Γ ++ Δ, x) = IF x < length(Δ) THEN Γ ++ rest(Δ, x) ELSE rest(Γ, x - length(Δ)) ENDIF
   AUTO_REWRITE concat_empty, concat__empty, concat_assoc, rest_concat
+
+  size_extract: THEOREM length(Γ) > j IMPLIES
+    size(theory_(Γ ^^ (0, j))) < size(theory_(Γ))
+
+  size_rest: THEOREM length(Γ) > 0 IMPLIES
+    size(theory_(rest(Γ, 0))) < size(theory_(Γ))
+  size_irest: THEOREM length(σ) > 0 IMPLIES
+    size(ideep(irest(σ, 0))) < size(ideep(σ))
 
   
 

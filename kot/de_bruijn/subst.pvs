@@ -16,7 +16,8 @@ BEGIN
   ;↑(U, nb): RECURSIVE 
    { V | (sexpr?(U) IFF sexpr?(V)) AND 
          (sinterp?(U) IFF sinterp?(V)) AND
-	 (scontext?(U) IFF scontext?(V)) } = 
+	 (scontext?(U) IFF scontext?(V)) AND
+	 (ideep?(U) IFF ideep?(V)) } = 
     CASES U OF
       % Names
       v(i): IF i < nb`2 THEN v(i) ELSE v(i + nb`1) ENDIF
@@ -82,7 +83,8 @@ BEGIN
   subst(U, x, t): RECURSIVE 
   { V | (sexpr?(U) IFF sexpr?(V)) AND 
         (sinterp?(U) IFF sinterp?(V)) AND
-	(scontext?(U) IFF scontext?(V)) } = 
+	(scontext?(U) IFF scontext?(V)) AND
+	(ideep?(U) IFF ideep?(V)) } = 
     CASES U OF
       % n ↦ t
       % x ↦ x where the λ-binder for n has been removed
