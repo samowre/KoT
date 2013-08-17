@@ -183,6 +183,19 @@ BEGIN
     tccs((# length := 1,
        seq := LAMBDA (x: below(1)): t #))
 
+  tsize(t: tccs): RECURSIVE posnat =
+    CASES t OF
+      tcc(f): 0,
+      tccs(f): sum(f`length, LAMBDA (x: below[f`length]): tsize(f`seq(x))) + 1
+    ENDCASES
+  MEASURE t BY <<
+  AUTO_REWRITE+ tsize
+
+  f: VAR finseq[tccs]
+  size_textract: THEOREM length(f) > j IMPLIES
+    tsize(tccs(f ^^ (0, j))) < tsize(tccs(f))
+    
+
 
   %%% Type keyword
   keyword: DATATYPE
