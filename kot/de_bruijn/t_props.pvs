@@ -9,21 +9,23 @@ BEGIN
   AUTO_REWRITE fail
   %AUTO_REWRITE τ
 
- 
+  Τ(Γ)(U: (typecheckable?(Γ))): MACRO keyword = τ(Γ)(U)`1
+  Tccs(Γ)(U: (typecheckable?(Γ))): MACRO tccs = τ(Γ)(U)`2
 
-  context?(U): MACRO bool = KTHEORY?(tau(empty_seq)(U))	
-  context?(Γ): MACRO bool = context?(theory_(Γ))
-  context: TYPE = (context? :: [syntaxic -> bool])
+ context?(U): MACRO bool = typecheckable?(empty_seq)(U) AND KTHEORY?(tau(empty_seq)(U))	
+ fcontext?(Γ): MACRO bool = KTHEORY?(tau(empty_seq)(theory_(Γ)))
+ context: TYPE = (context?)
+ fcontext: TYPE = (fcontext?)
   
-  type?(Γ)(U): MACRO bool = KTYPE?(tau(Γ)(U))
-  term?(Γ)(U): MACRO bool = KTERM?(tau(Γ)(U))
-  ttype(Γ): TYPE = (type?(Γ))
-  term(Γ): TYPE = (term?(Γ))
+ type?(Γ)(U): MACRO bool = typecheckable?(Γ)(U) AND KTYPE?(Τ(Γ)(U))
+ term?(Γ)(U): MACRO bool = typecheckable?(Γ)(U) AND KTERM?(Τ(Γ)(U))
+ ttype(Γ): TYPE = (type?(Γ))
+ term(Γ): TYPE = (term?(Γ))
 
-  % (2.11) type rules correctness
+  %(2.11) type rules correctness
   type_correctness: THEOREM
-    context?(Γ) AND term?(Γ)(a) IMPLIES
-    type?(Γ)(TYPEOF(tau(Γ)(a)))
+    fcontext?(Γ) AND term?(Γ)(a) IMPLIES
+    type?(Γ)(TYPEOF(Τ(Γ)(a)))
 
   % TODO
   % delta preserves tau (on types)
@@ -37,14 +39,35 @@ BEGIN
   % μ0(μ0(T)) = μ0(T)
   % δ(δ(T)) = δ(T)
 
+  τ(Γ: fcontext)(t: tccs): RECURSIVE bool =
+    CASES t OF
+      tcc(f): (length(f) > 0 IMPLIES length(Γ) > 0) AND
+      	      FORALL (x: below(length(f))): Τ(Γ)(f(x)) = KTERM(bool_(length(Γ))),
+      tccs(f): length(Γ) >= length(f) AND
+      	       (length(f) = 0 OR
+      	       LET pos = length(f) - 1,
+      	       	   Θ = Γ ^^ (pos + 1, length(Γ)) IN
+      	       CASES f(pos) OF
+      	         tcc(g): τ(Θ)(f(pos)),
+  		 tccs(g): LET Δ = ρ(Θ)(Γ(pos)) IN
+  		   theory?(Δ) AND τ(Θ ++ decls(Δ))(f(pos))  
+  	       ENDCASES
+  	       AND τ(Γ)(tccs(f ^^ (0, pos))))
+    ENDCASES
+  MEASURE tsize(t)
+
   % tcc correctness
   tcc_correctness: THEOREM
-    context?(Γ) AND NOT UNDEFINED?(tau(Γ)(U)) IMPLIES
-    every(LAMBDA (x: (sexpr?)): KTERM?(tau(Γ)(x)))(tccs(Γ)(U))
+    fcontext?(Γ) AND typecheckable?(Γ)(U) AND 
+    NOT UNDEFINED?(Τ(Γ)(U)) IMPLIES
+    τ(Γ)(Tccs(Γ)(U))
+
+  % tccs dont generate more tccs
+  
 
   % type full expansion
   type_expansion: THEOREM
-    context?(Γ) AND term?(Γ)(a) IMPLIES
+    fcontext?(Γ) AND term?(Γ)(a) IMPLIES
     LET T = TYPEOF(tau(Γ)(a)) IN
     μ0(T) = T AND δ(Γ)(T) = T
 END tau_props

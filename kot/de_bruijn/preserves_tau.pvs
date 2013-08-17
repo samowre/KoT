@@ -7,33 +7,30 @@ BEGIN
   x: VAR nat
   m, t: VAR (sexpr?)
   k: VAR keyword
-  l: VAR list[pretcc]
   nb: VAR [nat, nat]
   n: VAR nat
   d: VAR (scontext?)
   ths?: VAR bool
 
 
-  tau(Γ)(U): MACRO keyword = τ0(Γ)(U)`1
-  tccs(Γ)(U): MACRO list[pretcc] = τ0(Γ)(U)`2
+  tau(Γ)(U: (typecheckable?(Γ))): MACRO keyword = τ0(Γ)(U)`1
+  tccs(Γ)(U: (typecheckable?(Γ))): MACRO tccs = τ0(Γ)(U)`2
 
 
 
   % Very basic properties of τ0
-  
-
   tau_rest: THEOREM x < length(Θ) AND
     KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES 
     KTHEORY?(tau(Γ)(theory_(rest(Θ, x))))
-  tau_decl: THEOREM x < length(Θ) AND
-    KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES 
-    KDECL?(tau(Γ ++ rest(Θ, x))(Θ(x)))
-  tau_def: THEOREM x < length(Θ) AND definition?(Θ(x)) AND
-    KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES
-    NOT UNDEFINED?(tau(Γ ++ rest(Θ, x))(def(Θ(x))))
-  tau_type: THEOREM x < length(Θ) AND typed?(Θ(x)) AND
-    KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES
-    KTYPE?(tau(Γ ++ rest(Θ, x))(type_(Θ(x))))
+  % tau_decl: THEOREM x < length(Θ) AND
+  %   KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES 
+  %   KDECL?(tau(Γ ++ rest(Θ, x))(Θ(x)))
+  % tau_def: THEOREM x < length(Θ) AND definition?(Θ(x)) AND
+  %   KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES
+  %   NOT UNDEFINED?(tau(Γ ++ rest(Θ, x))(def(Θ(x))))
+  % tau_type: THEOREM x < length(Θ) AND typed?(Θ(x)) AND
+  %   KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES
+  %   KTYPE?(tau(Γ ++ rest(Θ, x))(type_(Θ(x))))
 
   tau_concat: THEOREM
   KTHEORY?(tau(Γ)(theory_(Δ ++ Θ))) IFF 
@@ -47,11 +44,11 @@ BEGIN
   shift_preserves: THEOREM
     tau(Γ ++ Δ)(U ↑ length(Δ)) = tau(Γ)(U) ↑ (length(Δ), 0)
 
-  strong_shift_tccs: THEOREM
-    tccs(Γ ++ Δ ++ (Θ ↑ (length(Δ), 0)))(U ↑ (length(Δ), length(Θ)))
-    = tccs(Γ ++ Θ)(U) ↑ (length(Δ), length(Θ))
-  shift_tccs: THEOREM
-    tccs(Γ ++ Δ)(U ↑ length(Δ)) = tccs(Γ)(U) ↑ (length(Δ), 0)
+  %strong_shift_tccs: THEOREM
+  %  tccs(Γ ++ Δ ++ (Θ ↑ (length(Δ), 0)))(U ↑ (length(Δ), length(Θ)))
+  %  = tccs(Γ ++ Θ)(U) ↑ (length(Δ), length(Θ))
+  %shift_tccs: THEOREM
+  %  tccs(Γ ++ Δ)(U ↑ length(Δ)) = tccs(Γ)(U) ↑ (length(Δ), 0)
 
   strong_subst_preserves: THEOREM
     KTERM?(tau(Γ)(t)) IMPLIES
@@ -63,15 +60,15 @@ BEGIN
     LET T = TYPEOF(τ0(Γ)(t)`1) IN
     tau(Γ)(subst(U, 0, t)) = subst(tau(Γ ++ k(const_var(T)))(U), 0, t)
 
-  strong_subst_tccs: THEOREM
-    KTERM?(tau(Γ)(t)) IMPLIES
-    LET T = TYPEOF(τ0(Γ)(t)`1) IN
-    tccs(Γ ++ subst(Δ, 0, t))(subst(U, length(Δ), t ↑ length(Δ)))
-    = subst(tccs(Γ ++ k(const_var(T)) ++ Δ)(U), length(Δ), t)
-  subst_tccs: THEOREM
-    KTERM?(tau(Γ)(t)) IMPLIES
-    LET T = TYPEOF(τ0(Γ)(t)`1) IN
-    tccs(Γ)(subst(U, 0, t)) = subst(tccs(Γ ++ k(const_var(T)))(U), 0, t)
+  %strong_subst_tccs: THEOREM
+  %  KTERM?(tau(Γ)(t)) IMPLIES
+  %  LET T = TYPEOF(τ0(Γ)(t)`1) IN
+  %  tccs(Γ ++ subst(Δ, 0, t))(subst(U, length(Δ), t ↑ length(Δ)))
+  %  = subst(tccs(Γ ++ k(const_var(T)) ++ Δ)(U), length(Δ), t)
+  %subst_tccs: THEOREM
+  %  KTERM?(tau(Γ)(t)) IMPLIES
+  %  LET T = TYPEOF(τ0(Γ)(t)`1) IN
+  %  tccs(Γ)(subst(U, 0, t)) = subst(tccs(Γ ++ k(const_var(T)))(U), 0, t)
 
 
   mu0_idempotent: THEOREM
@@ -93,9 +90,6 @@ BEGIN
 
   expand_preserves: THEOREM
     tau(Γ)(expand(ths?)(Γ, U)) = tau(Γ)(U)
-
-
-
 
 END preserves_tau
 
