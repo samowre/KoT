@@ -1,0 +1,552 @@
+(expand_props
+ (expand_apply_TCC1 0
+  (expand_apply_TCC1-1 nil 3586288068 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_apply_TCC2 0
+  (expand_apply_TCC2-1 nil 3586288068 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_apply 0
+  (expand_apply-1 nil 3586288073
+   ("" (measure-induct+ "length(Γ)" "Γ")
+    (("1" (skosimp* :preds? t)
+      (("1" (case "length(x!1) = 0")
+        (("1" (grind) nil nil)
+         ("2" (assert) (("2" (postpone) nil nil)) nil))
+        nil))
+      nil)
+     ("2" (expand expand_ctx 1) (("2" (rewrite expand_size) nil nil))
+      nil)
+     ("3" (typepred "y!1`seq(x!2)")
+      (("3" (typepred "y!1`seq(x!2) ↑ ((1 + x!2), 0)")
+        (("3" (assert)
+          (("3" (expand scontext? -5)
+            (("3" (expand expandable? 1) (("3" (grind) nil nil)) nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("4" (expand expand_ctx 1) (("4" (rewrite expand_size) nil nil))
+      nil)
+     ("5" (typepred "Γ!1`seq(x!1)")
+      (("5" (typepred "Γ!1`seq(x!1) ↑ ((1 + x!1), 0)")
+        (("5" (assert)
+          (("5" (expand scontext? -5)
+            (("5" (expand expandable? 1) (("5" (grind) nil nil)) nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   nil shostak))
+ (expand_strong_idempotence_TCC1 0
+  (expand_strong_idempotence_TCC1-1 nil 3586281699
+   ("" (skosimp* :preds? t)
+    (("" (expand expandable?)
+      (("" (flatten)
+        (("" (assert)
+          (("" (typepred "expand(ths?!1)(Γ!1, U!1)")
+            (("1" (expand (sexpr? scontext?))
+              (("1" (assert)
+                (("1" (grind :exclude (compatible? expand)) nil nil))
+                nil))
+              nil)
+             ("2" (expand expandable?)
+              (("2" (assert)
+                (("2" (split 1)
+                  (("1" (propax) nil nil) ("2" (propax) nil nil)) nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((expandable? const-decl "bool" delta nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
+                 nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (syntaxic type-decl nil language nil)
+    (sexpr? adt-def-decl "boolean" language nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (below type-eq-decl nil nat_types nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (ideep? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (theory? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (ikeep? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+            delta nil))
+   nil))
+ (expand_strong_idempotence_TCC2 0
+  (expand_strong_idempotence_TCC2-1 nil 3586281699
+   ("" (skosimp* :preds? t)
+    (("" (expand expandable?)
+      (("" (flatten)
+        (("" (assert)
+          (("" (split 1)
+            (("1" (flatten)
+              (("1" (split -2)
+                (("1" (expand expand_ctx 1 1)
+                  (("1" (rewrite expand_size)
+                    (("1" (flatten)
+                      (("1" (assert)
+                        (("1" (expand compatible0?)
+                          (("1" (typepred "expand_ctx(Γ!1)")
+                            (("1" (expand ≡)
+                              (("1"
+                                (flatten)
+                                (("1"
+                                  (inst - 0)
+                                  (("1"
+                                    (flatten)
+                                    (("1"
+                                      (assert)
+                                      (("1"
+                                        (grind
+                                         :exclude
+                                         (compatible?
+                                          expand
+                                          expand_ctx))
+                                        (("1"
+                                          (typepred
+                                           "expand_ctx(Γ!1)`seq(0)")
+                                          (("1"
+                                            (expand scontext?)
+                                            (("1" (propax) nil nil))
+                                            nil))
+                                          nil)
+                                         ("2"
+                                          (typepred
+                                           "expand_ctx(Γ!1)`seq(0)")
+                                          (("2"
+                                            (expand scontext?)
+                                            (("2" (propax) nil nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2" (assert) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil)
+                 ("2" (propax) nil nil))
+                nil))
+              nil)
+             ("2" (flatten)
+              (("2" (assert)
+                (("2" (hide -2)
+                  (("2" (expand expand_ctx 1 1)
+                    (("2" (rewrite expand_size)
+                      (("2" (flatten)
+                        (("2" (assert)
+                          (("2" (expand compatible?)
+                            (("2" (flatten)
+                              (("2"
+                                (assert)
+                                (("2"
+                                  (expand ^^ 1 1)
+                                  (("2"
+                                    (split 1)
+                                    (("1"
+                                      (assert)
+                                      (("1"
+                                        (hide -4)
+                                        (("1"
+                                          (lift-if)
+                                          (("1"
+                                            (split 1)
+                                            (("1"
+                                              (flatten)
+                                              (("1"
+                                                (expand expand_ctx -1)
+                                                (("1"
+                                                  (rewrite expand_size)
+                                                  (("1"
+                                                    (assert)
+                                                    (("1"
+                                                      (grind)
+                                                      nil
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (flatten)
+                                              (("2"
+                                                (expand min)
+                                                (("2"
+                                                  (lift-if)
+                                                  (("2"
+                                                    (expand
+                                                     expand_ctx
+                                                     3)
+                                                    (("2"
+                                                      (rewrite
+                                                       expand_size)
+                                                      (("2"
+                                                        (assert)
+                                                        nil
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil)
+                                     ("2"
+                                      (skosimp* :preds? t)
+                                      (("2"
+                                        (inst - x!1)
+                                        (("1"
+                                          (assert)
+                                          (("1"
+                                            (expand finseq_appl)
+                                            (("1"
+                                              (typepred
+                                               "expand_ctx(Γ!1)")
+                                              (("1"
+                                                (expand ≡)
+                                                (("1"
+                                                  (flatten)
+                                                  (("1"
+                                                    (inst - x!1)
+                                                    (("1"
+                                                      (flatten)
+                                                      (("1"
+                                                        (typepred
+                                                         "expand_ctx(Γ!1)`seq(x!1)")
+                                                        (("1"
+                                                          (expand ^^)
+                                                          (("1"
+                                                            (assert)
+                                                            (("1"
+                                                              (grind
+                                                               :exclude
+                                                               (compatible?
+                                                                expand
+                                                                expand_ctx))
+                                                              (("1"
+                                                                (expand
+                                                                 scontext?)
+                                                                (("1"
+                                                                  (propax)
+                                                                  nil
+                                                                  nil))
+                                                                nil)
+                                                               ("2"
+                                                                (expand
+                                                                 scontext?)
+                                                                (("2"
+                                                                  (propax)
+                                                                  nil
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil)
+                                                         ("2"
+                                                          (expand
+                                                           ^^
+                                                           -9)
+                                                          (("2"
+                                                            (lift-if)
+                                                            (("2"
+                                                              (split
+                                                               -9)
+                                                              (("1"
+                                                                (flatten)
+                                                                (("1"
+                                                                  (assert)
+                                                                  (("1"
+                                                                    (expand
+                                                                     empty_seq
+                                                                     -2)
+                                                                    (("1"
+                                                                      (assert)
+                                                                      nil
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil)
+                                                               ("2"
+                                                                (flatten)
+                                                                (("2"
+                                                                  (expand
+                                                                   min)
+                                                                  (("2"
+                                                                    (lift-if)
+                                                                    (("2"
+                                                                      (expand
+                                                                       expand_ctx
+                                                                       -1)
+                                                                      (("2"
+                                                                        (rewrite
+                                                                         expand_size)
+                                                                        (("2"
+                                                                          (assert)
+                                                                          nil
+                                                                          nil))
+                                                                        nil))
+                                                                      nil))
+                                                                    nil))
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil)
+                                                     ("2"
+                                                      (expand ^^ -2)
+                                                      (("2"
+                                                        (lift-if)
+                                                        (("2"
+                                                          (split -2)
+                                                          (("1"
+                                                            (flatten)
+                                                            (("1"
+                                                              (assert)
+                                                              (("1"
+                                                                (grind)
+                                                                nil
+                                                                nil))
+                                                              nil))
+                                                            nil)
+                                                           ("2"
+                                                            (flatten)
+                                                            (("2"
+                                                              (expand
+                                                               min)
+                                                              (("2"
+                                                                (rewrite
+                                                                 -2)
+                                                                (("2"
+                                                                  (assert)
+                                                                  nil
+                                                                  nil))
+                                                                nil))
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil)
+                                         ("2"
+                                          (assert)
+                                          (("2"
+                                            (hide 2)
+                                            (("2"
+                                              (expand ^^)
+                                              (("2"
+                                                (expand expand_ctx)
+                                                (("2"
+                                                  (rewrite expand_size)
+                                                  nil
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((expandable? const-decl "bool" delta nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
+                 nil)
+    (^^ const-decl "finseq" finite_sequences nil)
+    (below type-eq-decl nil naturalnumbers nil)
+    (map adt-accessor-decl "[(ideep?) -> finseq[(sinterp?)]]" language
+         nil)
+    (sinterp? adt-def-decl "boolean" language nil)
+    (ideep? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+            delta nil)
+    (minus_odd_is_odd application-judgement "odd_int" integers nil) nil
+    nil
+    (nat_min application-judgement "{k: nat | k <= i AND k <= j}"
+     real_defs nil)
+    (int_min application-judgement "{k: int | k <= i AND k <= j}"
+     real_defs nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
+    (compatible? const-decl "bool" interp nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (expand_ctx const-decl "{Δ | Δ ≡ Γ}" delta nil)
+    (compatible0? const-decl "bool" interp nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (< const-decl "bool" reals nil) nil
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil) (≡ const-decl "bool" language nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (syntaxic type-decl nil language nil)
+    (below type-eq-decl nil nat_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (TRUE const-decl "bool" booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (expand_size formula-decl nil delta nil))
+   nil))
+ (expand_strong_idempotence 0
+  (expand_strong_idempotence-1 nil 3586282986
+   ("" (induct U)
+    (("1" (skosimp* :preds? t)
+      (("1" (expand expand 1 2)
+        (("1" (lift-if)
+          (("1" (split 1)
+            (("1" (flatten)
+              (("1" (assert)
+                (("1" (expand expand 1 2)
+                  (("1" (lift-if)
+                    (("1" (assert)
+                      (("1" (expand expand_ctx 1 1)
+                        (("1" (rewrite expand_size)
+                          (("1" (assert)
+                            (("1" (split 1)
+                              (("1"
+                                (flatten)
+                                (("1" (postpone) nil nil))
+                                nil)
+                               ("2"
+                                (flatten)
+                                (("2"
+                                  (typepred "expand_ctx(Γ!1)")
+                                  (("2" (postpone) nil nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("2" (propax) nil nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("2" (skosimp* :preds? t)
+      (("2" (expand expand 1 2)
+        (("2" (lift-if)
+          (("2" (split 1)
+            (("1" (flatten)
+              (("1" (expand expand 1 6)
+                (("1" (lift-if)
+                  (("1" (split 1)
+                    (("1" (flatten) (("1" (postpone) nil nil)) nil)
+                     ("2" (postpone) nil nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("2" (postpone) nil nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("3" (postpone) nil nil) ("4" (postpone) nil nil)
+     ("5" (postpone) nil nil) ("6" (postpone) nil nil)
+     ("7" (postpone) nil nil) ("8" (postpone) nil nil)
+     ("9" (postpone) nil nil) ("10" (postpone) nil nil)
+     ("11" (postpone) nil nil) ("12" (postpone) nil nil)
+     ("13" (postpone) nil nil) ("14" (postpone) nil nil)
+     ("15" (postpone) nil nil) ("16" (postpone) nil nil)
+     ("17" (postpone) nil nil) ("18" (postpone) nil nil)
+     ("19" (postpone) nil nil) ("20" (postpone) nil nil)
+     ("21" (postpone) nil nil) ("22" (postpone) nil nil)
+     ("23" (postpone) nil nil) ("24" (postpone) nil nil)
+     ("25" (postpone) nil nil))
+    nil)
+   nil shostak))
+ (expand_idempotence_TCC1 0
+  (expand_idempotence_TCC1-1 nil 3586281699 ("" (subtype-tcc) nil nil)
+   nil nil))
+ (expand_concat_TCC1 0
+  (expand_concat_TCC1-1 nil 3586281699 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_concat_TCC2 0
+  (expand_concat_TCC2-1 nil 3586281699 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_concat_TCC3 0
+  (expand_concat_TCC3-1 nil 3586281699 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_concat_TCC4 0
+  (expand_concat_TCC4-1 nil 3586281699 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_concat_TCC5 0
+  (expand_concat_TCC5-1 nil 3586281699 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_ctx_concat_TCC1 0
+  (expand_ctx_concat_TCC1-1 nil 3586281699 ("" (subtype-tcc) nil nil)
+   nil nil))
+ (expand_ctx_concat_TCC2 0
+  (expand_ctx_concat_TCC2-1 nil 3586281699 ("" (subtype-tcc) nil nil)
+   nil nil)))
+

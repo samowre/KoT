@@ -1,0 +1,53 @@
+expand_props: THEORY
+BEGIN
+  IMPORTING delta
+
+  Γ, Θ, Δ: VAR finseq[(scontext?)]
+  ths?: VAR bool
+  U: VAR syntaxic
+  x: VAR nat
+
+
+  strong_expand_shift: THEOREM
+    expandable?(Γ ++ Θ)(U) IMPLIES
+    expand(ths?)(Γ ++ Δ ++ (Θ ↑ (length(Δ), 0)), U ↑ (length(Δ), length(Θ)))
+    = expand(ths?)(Γ ++ Θ, U) ↑ (length(Δ), length(Θ))
+  expand_shift: THEOREM
+    expandable?(Γ ++ Θ)(U) IMPLIES
+    expand(ths?)(Γ ++ Δ, U ↑ length(Δ)) = expand(ths?)(Γ, U) ↑ (length(Δ))
+
+  expand_rest: THEOREM
+    x < length(Γ) IMPLIES
+    expand(ths?)(rest(Γ, x), Γ(x)) = expand_ctx(Γ)(x)
+
+  expand_apply: THEOREM
+  x < length(Γ) IMPLIES
+  expand(ths?)(expand_ctx(Γ), Γ(x) ↑ (1 + x)) = expand_ctx(Γ)(x) ↑ (1 + x)
+
+  expand_strong_idempotence: THEOREM
+    expandable?(Γ)(U) IMPLIES
+    expand(ths?)(expand_ctx(Γ), expand(ths?)(Γ, U)) = expand(ths?)(expand_ctx(Γ), U)
+
+  % Trivially implies:
+  expand_ctx_idempotence: THEOREM
+    expand_ctx(expand_ctx(Γ)) = expand_ctx(Γ)
+  expand_idempotence: THEOREM
+    expandable?(Γ)(U) IMPLIES
+    expand(ths?)(expand_ctx(Γ), expand(ths?)(expand_ctx(Γ), U)) = expand(ths?)(expand_ctx(Γ), U)
+
+  expand_concat: THEOREM
+    expand(ths?)(Γ, theory_(Θ ++ Δ)) = 
+    theory_(decls(expand(ths?)(Γ, theory_(Θ))) ++ 
+    	    decls(expand(ths?)(Γ ++ decls(expand(ths?)(Γ, theory_(Θ))), theory_(Δ))))
+  % Trivially implies:
+  expand_ctx_concat: THEOREM
+    expand_ctx(Γ ++ Θ) = expand_ctx(Γ) ++ decls(expand(TRUE)(expand_ctx(Γ), theory_(Θ)))
+
+
+
+  % decls(expand(TRUE)(expand_ctx(Γ), theory_(k(expand(TRUE)(Γ, x))))) = 
+  % k(expand(TRUE)(expand_ctx(Γ), expand(TRUE)(Γ, x)))))
+  % k(expand(TRUE)(expand_ctx(Γ), x))  
+
+
+END expand_props

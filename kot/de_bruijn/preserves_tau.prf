@@ -1,0 +1,795 @@
+(preserves_tau
+ (tau_concat_TCC1 0
+  (tau_concat_TCC1-1 nil 3584890053 ("" (subtype-tcc) nil nil)
+   ((O const-decl "finseq" finite_sequences nil)
+    (++ const-decl "finseq[(scontext?)]" language nil)
+    (typecheckable? const-decl "bool" tau nil))
+   nil))
+ (tau_concat_TCC2 0
+  (tau_concat_TCC2-1 nil 3584890053 ("" (subtype-tcc) nil nil)
+   ((typecheckable? const-decl "bool" tau nil)) nil))
+ (tau_concat_TCC3 0
+  (tau_concat_TCC3-1 nil 3585451099 ("" (subtype-tcc) nil nil)
+   ((empty_seq const-decl "finseq" finite_sequences nil)
+    (expand_ctx const-decl "{Δ | Δ ≡ Γ}" delta nil)
+    (τ const-decl "[keyword, tccs]" tau nil)
+    (typecheckable? const-decl "bool" tau nil))
+   nil))
+ (tau_concat_TCC4 0
+  (tau_concat_TCC4-1 nil 3585451099 ("" (subtype-tcc) nil nil)
+   ((empty_seq const-decl "finseq" finite_sequences nil)
+    (expand_ctx const-decl "{Δ | Δ ≡ Γ}" delta nil)
+    (τ const-decl "[keyword, tccs]" tau nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (++ const-decl "finseq[(scontext?)]" language nil)
+    (typecheckable? const-decl "bool" tau nil))
+   nil))
+ (tau_concat 0
+  (tau_concat-1 nil 3584489336
+   ("" (measure-induct+ "length(Δ)" "Δ")
+    (("1" (skosimp* :preds? t)
+      (("1" (case "length(x!1) = 0")
+        (("1" (case "x!1 = empty_seq")
+          (("1" (assert)
+            (("1" (rewrite -1)
+              (("1" (assert)
+                (("1" (lemma concat_empty)
+                  (("1" (inst - Θ!1)
+                    (("1" (expand τ0 1 2)
+                      (("1" (lemma concat__empty)
+                        (("1" (inst - Γ!1)
+                          (("1"
+                            (grind :if-match nil :exclude
+                             (expand_ctx τ0))
+                            nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil)
+           ("2" (decompose-equality 1)
+            (("1" (grind) nil nil) ("2" (decompose-equality 1) nil nil)
+             ("3" (skosimp* :preds? t) (("3" (grind) nil nil)) nil))
+            nil))
+          nil)
+         ("2" (inst - "x!1 ^^ (0, length(x!1) - 1)")
+          (("1"
+            (inst - "Γ!1 ++ k(ρ0(Γ!1)(x!1(length(x!1) - 1)))" "Θ!1")
+            (("1" (split -1)
+              (("1" (expand finseq_appl)
+                (("1" (assert)
+                  (("1" (expand τ0 2 1)
+                    (("1" (lift-if)
+                      (("1" (expand ++ 2 1)
+                        (("1" (expand o 2 1)
+                          (("1" (assert)
+                            (("1" (split 2)
+                              (("1" (assert) nil nil)
+                               ("2"
+                                (flatten)
+                                (("2"
+                                  (split 2)
+                                  (("1"
+                                    (flatten)
+                                    (("1"
+                                      (split 1)
+                                      (("1"
+                                        (flatten)
+                                        (("1"
+                                          (hide -4)
+                                          (("1"
+                                            (split -3)
+                                            (("1"
+                                              (flatten)
+                                              (("1"
+                                                (split 1)
+                                                (("1"
+                                                  (expand τ0 1)
+                                                  (("1"
+                                                    (lift-if)
+                                                    (("1"
+                                                      (assert)
+                                                      (("1"
+                                                        (expand ++ -4)
+                                                        (("1"
+                                                          (assert)
+                                                          (("1"
+                                                            (split 1)
+                                                            (("1"
+                                                              (propax)
+                                                              nil
+                                                              nil)
+                                                             ("2"
+                                                              (postpone)
+                                                              nil
+                                                              nil))
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil)
+                                                 ("2"
+                                                  (postpone)
+                                                  nil
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (case
+                                               "(x!1 ++ Θ!1) ^^ (0, length(x!1 ++ Θ!1) - 1) = (x!1 ^^ (0, length(x!1) - 1) ++ Θ!1)")
+                                              (("1"
+                                                (rewrite -1)
+                                                (("1"
+                                                  (postpone)
+                                                  nil
+                                                  nil))
+                                                nil)
+                                               ("2"
+                                                (hide -1 2 3)
+                                                (("2"
+                                                  (hide -1)
+                                                  (("2"
+                                                    (grind-with-ext)
+                                                    nil
+                                                    nil))
+                                                  nil))
+                                                nil)
+                                               ("3"
+                                                (expand ++ 1)
+                                                (("3"
+                                                  (expand o 1)
+                                                  (("3"
+                                                    (assert)
+                                                    nil
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2"
+                                        (flatten)
+                                        (("2"
+                                          (hide -4)
+                                          (("2"
+                                            (split -4)
+                                            (("1" (postpone) nil nil)
+                                             ("2"
+                                              (hide 2)
+                                              (("2"
+                                                (expand τ0 -1)
+                                                (("2"
+                                                  (lift-if)
+                                                  (("2"
+                                                    (assert)
+                                                    (("2"
+                                                      (expand ++ -3)
+                                                      (("2"
+                                                        (assert)
+                                                        (("2"
+                                                          (split -1)
+                                                          (("1"
+                                                            (postpone)
+                                                            nil
+                                                            nil)
+                                                           ("2"
+                                                            (propax)
+                                                            nil
+                                                            nil))
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("3"
+                                              (hide 2)
+                                              (("3"
+                                                (postpone)
+                                                nil
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2"
+                                    (flatten)
+                                    (("2"
+                                      (hide -3 -4)
+                                      (("2"
+                                        (expand τ0 -1)
+                                        (("2"
+                                          (lift-if)
+                                          (("2"
+                                            (split -1)
+                                            (("1"
+                                              (flatten)
+                                              (("1"
+                                                (assert)
+                                                (("1"
+                                                  (expand ++ 1)
+                                                  (("1"
+                                                    (assert)
+                                                    nil
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil)
+                                             ("2"
+                                              (flatten)
+                                              (("2" (assert) nil nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil))
+                              nil))
+                            nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil))
+                nil)
+               ("2" (expand ^^ 1)
+                (("2" (assert)
+                  (("2" (lift-if)
+                    (("2" (split 1)
+                      (("1" (grind) nil nil)
+                       ("2" (flatten) (("2" (assert) nil nil)) nil))
+                      nil))
+                    nil))
+                  nil))
+                nil))
+              nil)
+             ("2" (expand ρ0) (("2" (propax) nil nil)) nil)
+             ("3" (expand expandable? 1)
+              (("3" (typepred "x!1`seq(length(x!1) - 1)")
+                (("1" (expand scontext? -1)
+                  (("1" (assert) (("1" (grind) nil nil)) nil)) nil)
+                 ("2" (assert) nil nil))
+                nil))
+              nil)
+             ("4" (assert) nil nil))
+            nil)
+           ("2" (assert) nil nil))
+          nil))
+        nil))
+      nil)
+     ("2" (expand typecheckable? 1) (("2" (propax) nil nil)) nil)
+     ("3" (expand typecheckable? 1) (("3" (propax) nil nil)) nil)
+     ("4" (expand typecheckable? 1) (("4" (propax) nil nil)) nil)
+     ("5" (expand typecheckable? 1) (("5" (propax) nil nil)) nil)
+     ("6" (expand typecheckable? 1) (("6" (propax) nil nil)) nil)
+     ("7" (expand typecheckable? 1) (("7" (propax) nil nil)) nil))
+    nil)
+   ((pred type-eq-decl nil defined_types nil)
+    (well_founded? const-decl "bool" orders nil)
+    (measure_induction formula-decl nil measure_induction nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (below type-eq-decl nil nat_types nil)
+    (syntaxic type-decl nil language nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (>= const-decl "bool" reals nil)
+    (naturalnumber type-eq-decl nil naturalnumbers nil)
+    (< const-decl "bool" reals nil)
+    (wf_nat formula-decl nil naturalnumbers nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (list type-decl nil list_adt nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (sexpr? adt-def-decl "boolean" language nil)
+    (TRUE const-decl "bool" booleans nil)
+    (theory? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (theory_ adt-constructor-decl "[finseq[(scontext?)] -> (theory?)]"
+     language nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
+     integers nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (nonneg_int nonempty-type-eq-decl nil integers nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (FALSE const-decl "bool" booleans nil)
+    (epsilon const-decl "T" epsilons nil)
+    (rest_concat formula-decl nil language nil)
+    (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
+     nil)
+    (^^ const-decl "finseq" finite_sequences nil)
+    (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (int_min application-judgement "{k: int | k <= i AND k <= j}"
+     real_defs nil)
+    (concat_assoc formula-decl nil language nil)
+    (rest const-decl "finseq[(scontext?)]" language nil))
+   shostak))
+ (tau_rest_TCC1 0
+  (tau_rest_TCC1-1 nil 3584890053
+   ("" (skosimp* :preds? t)
+    (("" (all-typepreds) (("" (assert) (("" (grind) nil nil)) nil))
+      nil))
+    nil)
+   ((theory_ adt-constructor-decl "[finseq[(scontext?)] -> (theory?)]"
+     language nil)
+    (theory? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (syntaxic type-decl nil language nil)
+    (below type-eq-decl nil nat_types nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (< const-decl "bool" reals nil)
+    (strict_total_order? const-decl "bool" orders nil)
+    (pred type-eq-decl nil defined_types nil)
+    (even? const-decl "bool" integers nil)
+    (total_order? const-decl "bool" orders nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (typecheckable? const-decl "bool" tau nil)
+    (trichotomous? const-decl "bool" orders nil)
+    (strict_order? const-decl "bool" orders nil)
+    (irreflexive? const-decl "bool" relations nil)
+    (dichotomous? const-decl "bool" orders nil)
+    (partial_order? const-decl "bool" orders nil)
+    (antisymmetric? const-decl "bool" relations nil)
+    (preorder? const-decl "bool" orders nil)
+    (transitive? const-decl "bool" relations nil)
+    (reflexive? const-decl "bool" relations nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil))
+   nil))
+ (tau_rest_TCC2 0
+  (tau_rest_TCC2-1 nil 3585451099 ("" (subtype-tcc) nil nil)
+   ((empty_seq const-decl "finseq" finite_sequences nil)
+    (expand_ctx const-decl "{Δ | Δ ≡ Γ}" delta nil)
+    (τ const-decl "[keyword, tccs]" tau nil)
+    (rest const-decl "finseq[(scontext?)]" language nil)
+    (typecheckable? const-decl "bool" tau nil))
+   nil))
+ (tau_rest_TCC3 0
+  (tau_rest_TCC3-1 nil 3585451099 ("" (subtype-tcc) nil nil)
+   ((empty_seq const-decl "finseq" finite_sequences nil)
+    (expand_ctx const-decl "{Δ | Δ ≡ Γ}" delta nil)
+    (τ const-decl "[keyword, tccs]" tau nil)
+    (rest const-decl "finseq[(scontext?)]" language nil)
+    (typecheckable? const-decl "bool" tau nil))
+   nil))
+ (tau_rest 0
+  (tau_rest-2 nil 3584890561
+   ("" (induct x)
+    (("1" (skosimp* :preds? t)
+      (("1" (assert) (("1" (expand τ0 -2) (("1" (propax) nil)))))))
+     ("2" (skosimp* :preds? t)
+      (("2" (inst - Γ!1 Θ!1)
+        (("2" (prop)
+          (("1" (expand τ0 -1)
+            (("1" (lift-if)
+              (("1" (split -1)
+                (("1" (flatten)
+                  (("1" (expand rest -1)
+                    (("1" (expand ^^ -1)
+                      (("1" (assert)
+                        (("1" (expand min)
+                          (("1" (assert) nil)))))))))))
+                 ("2" (flatten)
+                  (("2" (split -1)
+                    (("1" (flatten)
+                      (("1"
+                        (invoke (case "%1 = %2")
+                         (~ -1 "τ0(%)(theory_(%1))")
+                         (~ + "theory_(%1)"))
+                        (("1" (assert) nil)
+                         ("2" (hide-all-but (1 2 -4 -3))
+                          (("2" (grind-with-ext) nil)))))))
+                     ("2" (flatten) (("2" (assert) nil)))))))))))))
+           ("2" (assert) nil))))))))
+    nil)
+   nil nil)
+  (tau_rest-1 nil 3584478138
+   ("" (induct x)
+    (("1" (skosimp* :preds? t)
+      (("1" (assert) (("1" (expand τ -2) (("1" (propax) nil nil)) nil))
+        nil))
+      nil)
+     ("2" (skosimp* :preds? t)
+      (("2" (inst - Γ!1 Θ!1)
+        (("2" (prop)
+          (("1" (expand τ -1)
+            (("1" (lift-if)
+              (("1" (split -1)
+                (("1" (flatten)
+                  (("1" (expand rest -1)
+                    (("1" (expand ^^ -1)
+                      (("1" (assert)
+                        (("1" (expand min) (("1" (assert) nil nil))
+                          nil))
+                        nil))
+                      nil))
+                    nil))
+                  nil)
+                 ("2" (flatten)
+                  (("2" (split -1)
+                    (("1" (flatten)
+                      (("1"
+                        (invoke (case "%1 = %2")
+                         (~ -1 "τ(%)(theory_(%1))")
+                         (~ + "theory_(%1)"))
+                        (("1" (assert) nil nil)
+                         ("2" (hide-all-but (1 2 -4 -3))
+                          (("2" (grind-with-ext) nil nil)) nil))
+                        nil))
+                      nil)
+                     ("2" (flatten) (("2" (assert) nil nil)) nil))
+                    nil))
+                  nil))
+                nil))
+              nil))
+            nil)
+           ("2" (assert) nil nil))
+          nil))
+        nil))
+      nil))
+    nil)
+   ((NOT const-decl "[bool -> bool]" booleans nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (IF const-decl "[boolean, T, T -> T]" if_def nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (^^ const-decl "finseq" finite_sequences nil)
+    (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (int_min application-judgement "{k: int | k <= i AND k <= j}"
+     real_defs nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (nat_induction formula-decl nil naturalnumbers nil)
+    (rest const-decl "finseq[(scontext?)]" language nil)
+    (theory_ adt-constructor-decl "[finseq[(scontext?)] -> (theory?)]"
+     language nil)
+    (theory? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
+    (TRUE const-decl "bool" booleans nil)
+    (sexpr? adt-def-decl "boolean" language nil)
+    (PRED type-eq-decl nil defined_types nil)
+    (list type-decl nil list_adt nil) (< const-decl "bool" reals nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (syntaxic type-decl nil language nil)
+    (below type-eq-decl nil nat_types nil)
+    (pred type-eq-decl nil defined_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (>= const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number nonempty-type-decl nil numbers nil))
+   shostak))
+ (strong_shift_preserves_TCC1 0
+  (strong_shift_preserves_TCC1-1 nil 3584459921
+   ("" (skosimp* :preds? t)
+    (("" (expand ↑) (("" (propax) nil nil)) nil)) nil)
+   ((↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND
+           (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
+     subst nil))
+   nil))
+ (strong_shift_preserves_TCC2 0
+  (strong_shift_preserves_TCC2-1 nil 3584890053
+   ("" (subtype-tcc) nil nil) nil nil))
+ (strong_shift_preserves_TCC3 0
+  (strong_shift_preserves_TCC3-1 nil 3585451099
+   ("" (subtype-tcc) nil nil) nil nil))
+ (strong_shift_preserves_TCC4 0
+  (strong_shift_preserves_TCC4-1 nil 3585451099
+   ("" (subtype-tcc) nil nil)
+   ((finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
+     nil)
+    (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND
+           (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
+     subst nil)
+    (int_minus_int_is_int application-judgement "int" integers nil))
+   nil))
+ (strong_shift_preserves_TCC5 0
+  (strong_shift_preserves_TCC5-1 nil 3585451099
+   ("" (subtype-tcc) nil nil) nil nil))
+ (strong_shift_preserves 0
+  (strong_shift_preserves-1 nil 3584459921
+   ("" (induct U)
+    (("1" (skosimp* :preds? t)
+      (("1" (expand ↑ 1 2)
+        (("1" (lift-if)
+          (("1" (expand τ 1)
+            (("1" (lift-if)
+              (("1" (split 1)
+                (("1" (flatten)
+                  (("1" (split 1)
+                    (("1" (flatten)
+                      (("1" (split 1)
+                        (("1" (flatten)
+                          (("1" (lift-if)
+                            (("1" (split 1)
+                              (("1"
+                                (flatten)
+                                (("1"
+                                  (split 1)
+                                  (("1"
+                                    (flatten)
+                                    (("1"
+                                      (expand ↑ 1)
+                                      (("1"
+                                        (expand over_keyword)
+                                        (("1" (propax) nil nil))
+                                        nil))
+                                      nil))
+                                    nil)
+                                   ("2"
+                                    (flatten)
+                                    (("2"
+                                      (split 2)
+                                      (("1"
+                                        (flatten)
+                                        (("1"
+                                          (hide 1)
+                                          (("1"
+                                            (expand finseq_appl)
+                                            (("1"
+                                              (expand ++ 1)
+                                              (("1"
+                                                (expand ++ -3)
+                                                (("1"
+                                                  (expand o)
+                                                  (("1"
+                                                    (hide -1)
+                                                    (("1"
+                                                      (lift-if)
+                                                      (("1"
+                                                        (split 1)
+                                                        (("1"
+                                                          (flatten)
+                                                          (("1"
+                                                            (postpone)
+                                                            nil
+                                                            nil))
+                                                          nil)
+                                                         ("2"
+                                                          (postpone)
+                                                          nil
+                                                          nil))
+                                                        nil))
+                                                      nil))
+                                                    nil))
+                                                  nil))
+                                                nil))
+                                              nil))
+                                            nil))
+                                          nil))
+                                        nil)
+                                       ("2" (postpone) nil nil))
+                                      nil))
+                                    nil))
+                                  nil))
+                                nil)
+                               ("2" (postpone) nil nil))
+                              nil))
+                            nil))
+                          nil)
+                         ("2" (postpone) nil nil))
+                        nil))
+                      nil)
+                     ("2" (postpone) nil nil))
+                    nil))
+                  nil)
+                 ("2" (postpone) nil nil))
+                nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("2" (postpone) nil nil) ("3" (postpone) nil nil)
+     ("4" (postpone) nil nil) ("5" (postpone) nil nil)
+     ("6" (postpone) nil nil) ("7" (postpone) nil nil)
+     ("8" (postpone) nil nil) ("9" (postpone) nil nil)
+     ("10" (postpone) nil nil) ("11" (postpone) nil nil)
+     ("12" (postpone) nil nil) ("13" (postpone) nil nil)
+     ("14" (postpone) nil nil) ("15" (postpone) nil nil)
+     ("16" (postpone) nil nil) ("17" (postpone) nil nil)
+     ("18" (postpone) nil nil) ("19" (postpone) nil nil)
+     ("20" (postpone) nil nil) ("21" (postpone) nil nil)
+     ("22" (postpone) nil nil) ("23" (postpone) nil nil)
+     ("24" (postpone) nil nil))
+    nil)
+   nil shostak))
+ (shift_preserves_TCC1 0
+  (shift_preserves_TCC1-1 nil 3584890053 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (shift_preserves_TCC2 0
+  (shift_preserves_TCC2-1 nil 3585451099 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (strong_subst_preserves_TCC1 0
+  (strong_subst_preserves_TCC1-1 nil 3584459921
+   ("" (skosimp* :preds? t)
+    (("" (invoke (typepred "%1") (~ + "sexpr?(%1)")) nil nil)) nil)
+   ((shift_size application-judgement
+     "{V | type_size(V) = type_size(U)}" supertype nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (AND const-decl "[bool, bool -> bool]" booleans nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (sinterp? adt-def-decl "boolean" language nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND
+           (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
+     subst nil)
+    (below type-eq-decl nil nat_types nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (= const-decl "[T, T -> boolean]" equalities nil)
+    (type_size def-decl "nat" supertype nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (syntaxic type-decl nil language nil)
+    (sexpr? adt-def-decl "boolean" language nil))
+   nil))
+ (strong_subst_preserves_TCC2 0
+  (strong_subst_preserves_TCC2-1 nil 3584459921
+   ("" (skosimp* :preds? t) (("" (assert) nil nil)) nil)
+   ((subst def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND
+           (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
+           subst
+      nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (syntaxic type-decl nil language nil)
+    (sexpr? adt-def-decl "boolean" language nil))
+   nil))
+ (strong_subst_preserves_TCC3 0
+  (strong_subst_preserves_TCC3-1 nil 3584459921
+   ("" (skosimp* :preds? t)
+    (("" (expand scontext?) (("" (propax) nil nil)) nil)) nil)
+   ((scontext? adt-def-decl "boolean" language nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (syntaxic type-decl nil language nil)
+    (sexpr? adt-def-decl "boolean" language nil))
+   nil))
+ (strong_subst_preserves_TCC4 0
+  (strong_subst_preserves_TCC4-1 nil 3584890053
+   ("" (subtype-tcc) nil nil)
+   ((empty_seq const-decl "finseq" finite_sequences nil)
+    (expand_ctx const-decl "{Δ | Δ ≡ Γ}" delta nil)
+    (τ const-decl "[keyword, tccs]" tau nil)
+    (shift_size application-judgement
+     "{V | type_size(V) = type_size(U)}" supertype nil))
+   nil))
+ (strong_subst_preserves_TCC5 0
+  (strong_subst_preserves_TCC5-1 nil 3584890053
+   ("" (subtype-tcc) nil nil) nil nil))
+ (strong_subst_preserves_TCC6 0
+  (strong_subst_preserves_TCC6-1 nil 3585451099
+   ("" (subtype-tcc) nil nil) nil nil))
+ (strong_subst_preserves_TCC7 0
+  (strong_subst_preserves_TCC7-1 nil 3585451099
+   ("" (subtype-tcc) nil nil) nil nil))
+ (strong_subst_preserves_TCC8 0
+  (strong_subst_preserves_TCC8-1 nil 3586262444
+   ("" (subtype-tcc) nil nil) nil nil))
+ (strong_subst_preserves 0
+  (strong_subst_preserves-1 nil 3586277338 ("" (postpone) nil nil) nil
+   shostak))
+ (subst_preserves_TCC1 0
+  (subst_preserves_TCC1-1 nil 3584890053 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (subst_preserves_TCC2 0
+  (subst_preserves_TCC2-1 nil 3585451099 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (subst_preserves_TCC3 0
+  (subst_preserves_TCC3-1 nil 3585451099 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (mu0_preserves_TCC1 0
+  (mu0_preserves_TCC1-1 nil 3585451099 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (eta_preserves_TCC1 0
+  (eta_preserves_TCC1-1 nil 3584890053 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (eta_preserves_TCC2 0
+  (eta_preserves_TCC2-1 nil 3585451099 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (eta_preserves_TCC3 0
+  (eta_preserves_TCC3-1 nil 3585451099 ("" (subtype-tcc) nil nil) nil
+   nil))
+ (expand_preserves_TCC1 0
+  (expand_preserves_TCC1-1 nil 3585451099 ("" (subtype-tcc) nil nil)
+   nil nil))
+ (expand_preserves_TCC2 0
+  (expand_preserves_TCC2-1 nil 3585451099 ("" (subtype-tcc) nil nil)
+   nil nil))
+ (expand_preserves_TCC3 0
+  (expand_preserves_TCC3-1 nil 3585451099 ("" (subtype-tcc) nil nil)
+   nil nil)))
+
