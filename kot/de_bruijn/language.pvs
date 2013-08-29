@@ -118,6 +118,9 @@ BEGIN
       (const_def?(Γ(x)) => const_def?(Δ(x))) AND
       (theory_def?(Γ(x)) => theory_def?(Δ(x)))
 
+  equiv_commut: THEOREM
+    Γ ≡ Δ IFF Δ ≡ Γ
+
   % Function Kind
   prekeyword: TYPE = { PRETYPE, PRETERM, PRETHEORY }
   kind(d): prekeyword = 
@@ -145,13 +148,15 @@ BEGIN
   concat_assoc: THEOREM (Γ ++ Δ) ++ Θ = Γ ++ (Δ ++ Θ)
   rest_concat: THEOREM 
     rest(Γ ++ Δ, x) = IF x < length(Δ) THEN Γ ++ rest(Δ, x) ELSE rest(Γ, x - length(Δ)) ENDIF
+  concat_rest: THEOREM
+    x < length(Γ) IMPLIES
+    EXISTS Δ: rest(Γ, x) ++ Δ = Γ
   AUTO_REWRITE concat_empty, concat__empty, concat_assoc, rest_concat
 
   size_extract: THEOREM length(Γ) > j IMPLIES
     size(theory_(Γ ^^ (0, j))) < size(theory_(Γ))
   size_iextract: THEOREM length(σ) > j IMPLIES
     size(ideep(σ ^^ (0, j))) < size(ideep(σ))
-
 
   size_rest: THEOREM length(Γ) > 0 IMPLIES
     size(theory_(rest(Γ, 0))) < size(theory_(Γ))
@@ -213,6 +218,13 @@ BEGIN
     (# length := n,
         seq := LAMBDA (x: below(n)): notcc #))
   fail: MACRO [keyword, tccs] = (⊥, notcc)
+
+  over_keyword(f: [U: syntaxic -> same(U)], k: keyword): keyword = 
+    CASES k OF
+      KTERM(T): KTERM(f(T))
+      ELSE k
+    ENDCASES
+
 
 
 

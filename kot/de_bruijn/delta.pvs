@@ -22,12 +22,17 @@ BEGIN
     ELSE η(m, n - 1)(subst(U, n - 1, dot(m ↑ (n - 1), v(n - 1))))
     ENDIF
   MEASURE n
-  η(m, n)(l: list[(sexpr?)]): RECURSIVE list[(sexpr?)] =
-    CASES l OF
-      null: null
-    , cons(h, t): cons(η(m, n)(h), η(m, n)(t))
+  % η(m, n)(l: list[(sexpr?)]): RECURSIVE list[(sexpr?)] =
+  %   CASES l OF
+  %     null: null
+  %   , cons(h, t): cons(η(m, n)(h), η(m, n)(t))
+  %   ENDCASES
+  % MEASURE length(l)
+  η(m, n)(k: keyword): keyword = 
+    CASES k OF
+      KTERM(T): KTERM(η(m, n)(T))
+      ELSE k
     ENDCASES
-  MEASURE length(l)
 
 
   externalize(m, U): same(U) =
@@ -41,6 +46,13 @@ BEGIN
 	  ENDCASES ])
       ELSE U
     ENDCASES
+  externalize(m, (k: keyword)): keyword = 
+    CASES k OF
+      KTERM(T): KTERM(externalize(m, T))
+      ELSE k
+    ENDCASES
+
+
 
   AUTO_REWRITE- sexpr?, scontext?, sinterp?
   expandable?(Γ)(U): bool =

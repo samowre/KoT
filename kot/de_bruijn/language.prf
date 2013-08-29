@@ -168,7 +168,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
  (size_TCC6 0
   (size_TCC6-1 nil 3583528309 ("" (termination-tcc) nil nil)
@@ -417,7 +417,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
  (equiv_TCC2 0
   (equiv_TCC2-1 nil 3584974066 ("" (subtype-tcc) nil nil)
@@ -442,7 +442,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
  (equiv_TCC3 0
   (equiv_TCC3-1 nil 3584974066 ("" (subtype-tcc) nil nil)
@@ -467,7 +467,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
  (equiv_TCC4 0
   (equiv_TCC4-1 nil 3584974066 ("" (subtype-tcc) nil nil)
@@ -492,7 +492,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
  (equiv_TCC5 0
   (equiv_TCC5-1 nil 3584974066 ("" (subtype-tcc) nil nil)
@@ -517,7 +517,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
  (equiv_TCC6 0
   (equiv_TCC6-1 nil 3584974066 ("" (subtype-tcc) nil nil)
@@ -542,7 +542,7 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
  (equiv_TCC7 0
   (equiv_TCC7-1 nil 3584974066 ("" (subtype-tcc) nil nil)
@@ -567,8 +567,74 @@
     (bool nonempty-type-eq-decl nil booleans nil)
     (boolean nonempty-type-decl nil booleans nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil))
+                 nil))
    nil))
+ (equiv_commut 0
+  (equiv_commut-1 nil 3586287860
+   ("" (grind)
+    (("1" (typepred "Γ!1`seq(x!1)")
+      (("1" (expand scontext?) (("1" (propax) nil nil)) nil)) nil)
+     ("2" (typepred "Γ!1`seq(x!1)")
+      (("2" (expand scontext?) (("2" (propax) nil nil)) nil)) nil)
+     ("3" (typepred "Γ!1`seq(x!1)")
+      (("3" (expand scontext?) (("3" (propax) nil nil)) nil)) nil)
+     ("4" (typepred "Γ!1`seq(x!1)")
+      (("4" (expand scontext?) (("4" (propax) nil nil)) nil)) nil)
+     ("5" (typepred "Γ!1`seq(x!1)")
+      (("5" (expand scontext?) (("5" (propax) nil nil)) nil)) nil)
+     ("6" (typepred "Γ!1`seq(x!1)")
+      (("6" (expand scontext?) (("6" (propax) nil nil)) nil)) nil)
+     ("7" (typepred "Γ!1`seq(x!1)")
+      (("7" (expand scontext?) (("7" (propax) nil nil)) nil)) nil)
+     ("8" (typepred "Γ!1`seq(x!1)")
+      (("8" (expand scontext?)
+        (("8" (typepred "Γ!1`seq(x!1)")
+          (("8" (expand scontext?)
+            (("8" (typepred "Δ!1`seq(x!1)")
+              (("8" (expand scontext?) (("8" (propax) nil nil)) nil))
+              nil))
+            nil))
+          nil))
+        nil))
+      nil)
+     ("9" (typepred "Δ!1`seq(x!1)")
+      (("9" (expand scontext?) (("9" (propax) nil nil)) nil)) nil)
+     ("10" (typepred "Δ!1`seq(x!1)")
+      (("10" (expand scontext?) (("10" (propax) nil nil)) nil)) nil)
+     ("11" (typepred "Δ!1`seq(x!1)")
+      (("11" (expand scontext?) (("11" (propax) nil nil)) nil)) nil)
+     ("12" (typepred "Δ!1`seq(x!1)")
+      (("12" (expand scontext?) (("12" (propax) nil nil)) nil)) nil)
+     ("13" (typepred "Δ!1`seq(x!1)")
+      (("13" (expand scontext?) (("13" (propax) nil nil)) nil)) nil)
+     ("14" (typepred "Δ!1`seq(x!1)")
+      (("14" (expand scontext?) (("14" (propax) nil nil)) nil)) nil))
+    nil)
+   ((NOT const-decl "[bool -> bool]" booleans nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    nil nil (finseq type-eq-decl nil finite_sequences nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (syntaxic type-decl nil language nil)
+    (below type-eq-decl nil nat_types nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil)
+    (< const-decl "bool" reals nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (>= const-decl "bool" reals nil) (≡ const-decl "bool" language nil)
+    (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
+                 nil))
+   shostak))
  (kind_TCC1 0
   (kind_TCC1-1 nil 3584498672
    ("" (skosimp* :preds? t) (("" (grind) nil nil)) nil)
@@ -760,6 +826,69 @@
     (int nonempty-type-eq-decl nil integers nil)
     (nat nonempty-type-eq-decl nil naturalnumbers nil))
    shostak))
+ (concat_rest 0
+  (concat_rest-1 nil 3586289544
+   ("" (skosimp* :preds? t)
+    (("" (inst + "Γ!1 ^^ (0, x!1 + 1)")
+      (("" (grind-with-ext)
+        (("" (typepred x!2) (("" (grind) nil nil)) nil)) nil))
+      nil))
+    nil)
+   ((nnint_plus_posint_is_posint application-judgement "posint"
+     integers nil)
+    (below type-eq-decl nil nat_types nil)
+    (syntaxic type-decl nil language nil)
+    (scontext? adt-def-decl "boolean" language nil)
+    (finseq type-eq-decl nil finite_sequences nil)
+    (^^ const-decl "finseq" finite_sequences nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (minus_odd_is_odd application-judgement "odd_int" integers nil)
+    (IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
+    (TRUE const-decl "bool" booleans nil)
+    (epsilon const-decl "T" epsilons nil)
+    (pred type-eq-decl nil defined_types nil)
+    (x!1 skolem-const-decl "nat" language nil)
+    (Γ!1 skolem-const-decl "finseq[(scontext?)]" language nil)
+    (IFF const-decl "[bool, bool -> bool]" booleans nil)
+    (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (OR const-decl "[bool, bool -> bool]" booleans nil)
+    (IF const-decl "[boolean, T, T -> T]" if_def nil)
+    (< const-decl "bool" reals nil)
+    (nonneg_int nonempty-type-eq-decl nil integers nil)
+    (int_plus_int_is_int application-judgement "int" integers nil)
+    (real_gt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (int_minus_int_is_int application-judgement "int" integers nil)
+    (int_min application-judgement "{k: int | k <= i AND k <= j}"
+     real_defs nil)
+    (posint_plus_nnint_is_posint application-judgement "posint"
+     integers nil)
+    (real_lt_is_strict_total_order name-judgement
+     "(strict_total_order?[real])" real_props nil)
+    (real_ge_is_total_order name-judgement "(total_order?[real])"
+     real_props nil)
+    (empty_seq const-decl "finseq" finite_sequences nil)
+    (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
+    (rest const-decl "finseq[(scontext?)]" language nil)
+    (O const-decl "finseq" finite_sequences nil)
+    (++ const-decl "finseq[(scontext?)]" language nil)
+    (boolean nonempty-type-decl nil booleans nil)
+    (bool nonempty-type-eq-decl nil booleans nil)
+    (NOT const-decl "[bool -> bool]" booleans nil)
+    (number nonempty-type-decl nil numbers nil)
+    (number_field_pred const-decl "[number -> boolean]" number_fields
+     nil)
+    (number_field nonempty-type-from-decl nil number_fields nil)
+    (real_pred const-decl "[number_field -> boolean]" reals nil)
+    (real nonempty-type-from-decl nil reals nil)
+    (>= const-decl "bool" reals nil)
+    (rational_pred const-decl "[real -> boolean]" rationals nil)
+    (rational nonempty-type-from-decl nil rationals nil)
+    (integer_pred const-decl "[rational -> boolean]" integers nil)
+    (int nonempty-type-eq-decl nil integers nil)
+    (nat nonempty-type-eq-decl nil naturalnumbers nil))
+   shostak))
  (size_extract 0
   (size_extract-1 nil 3584992569
    ("" (measure-induct+ "length(Γ)" ("Γ"))
@@ -873,7 +1002,7 @@
      integers nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil)
+                 nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (real_gt_is_strict_total_order name-judgement
@@ -1168,7 +1297,7 @@
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil)
+                 nil)
     (size def-decl "posnat" language nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
@@ -1597,13 +1726,11 @@
      real_defs nil)
     (odd_minus_odd_is_even application-judgement "even_int" integers
      nil)
-    (x!1 skolem-const-decl "finseq[tccs]" language nil)
     (IFF const-decl "[bool, bool -> bool]" booleans nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (<= const-decl "bool" reals nil)
     (AND const-decl "[bool, bool -> bool]" booleans nil)
     (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
-    (j!1 skolem-const-decl "nat" language nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (NOT const-decl "[bool -> bool]" booleans nil))

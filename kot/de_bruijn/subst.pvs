@@ -2,14 +2,14 @@ subst: THEORY
 BEGIN
   IMPORTING language
 
-  Γ, Δ, Θ: VAR (theory_def?)
+  Γ, Δ, Θ: VAR finseq[(scontext?)]
   M, N, P: VAR (scontext?)
   i, j, n, x: VAR nat
   U, V: VAR syntaxic
   t: VAR (sexpr?)
   nb, c: VAR [nat, nat]
   d: VAR (scontext?)
-
+  k: VAR keyword
 
   AUTO_REWRITE+ sexpr?
   % Shift: classical shift operator for De Bruijn indices
@@ -139,6 +139,13 @@ BEGIN
   MEASURE U BY <<
   AUTO_REWRITE subst
   AUTO_REWRITE- sexpr?
+
+
+  ;↑(Δ, nb): MACRO finseq[(scontext?)] = decls(theory_(Δ) ↑ nb)
+  ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb, k)
+  subst(Δ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Δ), x, t))
+  subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t), k)
+
 
 %%%%% LATER %%%%%%
 

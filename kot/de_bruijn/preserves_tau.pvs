@@ -1,6 +1,7 @@
 preserves_tau: THEORY
 BEGIN
   IMPORTING tau
+  IMPORTING expand_props
 
   Γ, Δ, Θ: VAR finseq[(scontext?)]
   U: VAR syntaxic
@@ -13,12 +14,15 @@ BEGIN
   ths?: VAR bool
 
 
-  tau(Γ)(U: (typecheckable?(Γ))): MACRO keyword = τ0(Γ)(U)`1
-  tccs(Γ)(U: (typecheckable?(Γ))): MACRO tccs = τ0(Γ)(U)`2
+  tau(Γ)(U: (typecheckable?(Γ))): MACRO keyword = τ(Γ)(U)`1
+  tccs(Γ)(U: (typecheckable?(Γ))): MACRO tccs = τ(Γ)(U)`2
 
 
+  % Basic properties of τ
+  tau_concat: THEOREM
+  KTHEORY?(tau(Γ)(theory_(Δ ++ Θ))) IFF 
+  KTHEORY?(tau(Γ)(theory_(Δ))) AND KTHEORY?(tau(Γ ++ Δ)(theory_(Θ)))
 
-  % Very basic properties of τ0
   tau_rest: THEOREM x < length(Θ) AND
     KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES 
     KTHEORY?(tau(Γ)(theory_(rest(Θ, x))))
@@ -32,9 +36,6 @@ BEGIN
   %   KTHEORY?(tau(Γ)(theory_(Θ))) IMPLIES
   %   KTYPE?(tau(Γ ++ rest(Θ, x))(type_(Θ(x))))
 
-  tau_concat: THEOREM
-  KTHEORY?(tau(Γ)(theory_(Δ ++ Θ))) IFF 
-  KTHEORY?(tau(Γ)(theory_(Δ))) AND KTHEORY?(tau(Γ ++ Δ)(theory_(Θ)))
 
 
 

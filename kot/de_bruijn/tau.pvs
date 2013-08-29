@@ -23,32 +23,6 @@ BEGIN
   π(A)(a)(n: above(1)): (tcc?) =
     t(app(π(A)(n), a))
     
-  η(m, n)(k): keyword = 
-    CASES k OF
-      KTERM(T): KTERM(η(m, n)(T))
-      ELSE k
-    ENDCASES
-  externalize(m, k): keyword = 
-    CASES k OF
-      KTERM(T): KTERM(externalize(m, T))
-      ELSE k
-    ENDCASES
-
-
-  over_keyword(f: [U: syntaxic -> same(U)], k): keyword = 
-    CASES k OF
-      KTERM(T): KTERM(f(T))
-      ELSE k
-    ENDCASES
-
-
-
-
-  ;↑(Δ, nb): MACRO finseq[(scontext?)] = decls(theory_(Δ) ↑ nb)
-  ;↑(k, nb): MACRO keyword = over_keyword(LAMBDA (U: syntaxic): U ↑ nb, k)
-  subst(Δ, x, t): MACRO finseq[(scontext?)] = decls(subst(theory_(Δ), x, t))
-  subst(k, x, t): MACRO keyword = over_keyword(LAMBDA U: subst(U, x, t), k)
-
 
   typecheckable?(Γ)(U): bool = 
     (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES length(Γ) > 0) AND 
@@ -293,5 +267,7 @@ BEGIN
 
   τ(Γ)(U: (typecheckable?(Γ))): [keyword, tccs] =
     τ0(expand_ctx(Γ))(U)
+
+  AUTO_REWRITE+ τ
 
 END tau

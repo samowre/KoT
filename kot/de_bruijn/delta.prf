@@ -102,16 +102,20 @@
     nil)
    ((v adt-constructor-decl "[nat -> (v?)]" language nil)
     (v? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-    (↑ def-decl
-     "{V | (sexpr?(U) IFF sexpr?(V)) AND (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
+    (↑ def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND
+           (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
      subst nil)
     (dot adt-constructor-decl "[[(sexpr?), (sexpr?)] -> (dot?)]"
      language nil)
     (dot? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
-    (subst def-decl
-           "{V | (sexpr?(U) IFF sexpr?(V)) AND (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
+    (subst def-decl "{V |
+         (sexpr?(U) IFF sexpr?(V)) AND
+          (sinterp?(U) IFF sinterp?(V)) AND
+           (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
            subst
       nil)
     (ideep? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
@@ -4281,8 +4285,11 @@
      real_props nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
     (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
@@ -4430,8 +4437,11 @@
     (decls adt-accessor-decl "[(theory?) -> finseq[(scontext?)]]"
      language nil)
     (= const-decl "[T, T -> boolean]" equalities nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
     (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
@@ -4573,8 +4583,11 @@
     (irest const-decl "finseq[(sinterp?)]" language nil)
     (++ const-decl "finseq[(scontext?)]" language nil)
     (empty_seq const-decl "finseq" finite_sequences nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
     (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
@@ -5527,12 +5540,23 @@
     (<= const-decl "bool" reals nil)
     (x!2 skolem-const-decl "below
     [length
-       ((# length := 1, seq := LAMBDA (x: below[1]): expand(ths?!1)(Γ!1, x!1`seq(length(x!1) - 1)) #) ++
-         decls(expand(ths?!1)(Γ!1 ++ (# length := 1, seq := LAMBDA (x: below[1]): expand(ths?!1)(Γ!1, x!1`seq(length(x!1) - 1)) #), theory_(x!1 ^^ (0, length(x!1) - 1)))))]"
-     delta nil)
+       ((# length := 1,
+           seq
+             := LAMBDA (x: below[1]):
+                  expand(ths?!1)(Γ!1, x!1`seq(length(x!1) - 1)) #)
+         ++
+         decls(expand(ths?!1)
+                     (Γ!1 ++
+                       (# length := 1,
+                          seq
+                            := LAMBDA (x: below[1]):
+                                 expand(ths?!1)
+                                       (Γ!1, x!1`seq(length(x!1) - 1)) #),
+                      theory_(x!1 ^^ (0, length(x!1) - 1)))))]" delta
+     nil)
     (ths?!1 skolem-const-decl "bool" delta nil)
-    (IF const-decl "[boolean, T, T -> T]" if_def nil)
     (+ const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (IF const-decl "[boolean, T, T -> T]" if_def nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
     (expand_preserves_theory formula-decl nil delta nil)
@@ -5550,10 +5574,10 @@
      real_defs nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (Γ!1 skolem-const-decl "finseq[(scontext?)]" delta nil)
-    (x!1 skolem-const-decl "finseq[(scontext?)]" delta nil)
-    (numfield nonempty-type-eq-decl nil number_fields nil)
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
+    (numfield nonempty-type-eq-decl nil number_fields nil)
+    (x!1 skolem-const-decl "finseq[(scontext?)]" delta nil)
+    (Γ!1 skolem-const-decl "finseq[(scontext?)]" delta nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (odd_minus_odd_is_even application-judgement "even_int" integers
@@ -5572,8 +5596,11 @@
     (decls adt-accessor-decl "[(theory?) -> finseq[(scontext?)]]"
      language nil)
     (≡ const-decl "bool" language nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (iterm? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
     (itype? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
@@ -5648,8 +5675,11 @@
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil))
    nil))
  (expand_ctx_TCC3 0
