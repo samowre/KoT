@@ -1,13 +1,27 @@
 language: THEORY
 BEGIN
-  CONVERSION- extract1, finseq2list
+  % We don't want extract1 because it is too aggressive and apply even when
+  % the finseq is *clearly* not a singleton.
+  % If `f` has type `[T -> S]` and `s` has type `finseq[T]`, the semantic we
+  % would want for `f(s)` is `map(f, s)`, *not* `f(s(0))`.
+  CONVERSION- extract1
+  % We don't want finseq2list as we are mostly using finseqs, while PVS has
+  % more properties on lists that doesn't transfer nicely to finseqs.
+  % One would want to write properties on finseqs using `FORALL`, `EXISTS`, etc.
+  % quantifiers, while properties on lists are defined recursively on the first,
+  % second, ... elements.
+  CONVERSION- finseq2list
+
   % TODO: Paste intro from datatype + modify
   syntaxic: DATATYPE WITH SUBTYPES sexpr?, scontext?, sinterp?
   BEGIN
+    % De Bruijn indexed variable
     v(i: nat): v?: sexpr?
-    % Update this with finseq for nested theories:
-    % finseq[ (sinterp?) ], nat
+    % We currently enforce both `m' and `x' to actually be variables when
+    % typechecking. It is unclear whether it would be needed to relax these
+    % constraints at some point.
     dot(m: (sexpr?), x: (sexpr?)): dot?: sexpr?
+    % m {{ map }}
     interp(m: (sexpr?), map: (ideep?)): interp?: sexpr?
     theory_(decls: finseq[(scontext?)]): theory?: sexpr?
 
@@ -46,13 +60,15 @@ BEGIN
 			       (iterm?(U) => iterm?(V)) AND
 			       (scontext?(U) => scontext?(V)) }
 
+  % TODO: This should be moved to some util.pvs
   sum(len: nat, f: [below[len] -> nat]):
     RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
     IF len = 0 THEN 0
-    ELSE f(0) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x + 1)) ENDIF
+    ELSE f(0) + sum(len - 1, LAMBDA (x: below[len]): f(x + 1)) ENDIF
   MEASURE len
 
-  % Size function, useful for termination
+  % Size function over syntaxic, allows for easier termination
+  % proofs than using structural inductions. 
   size(U: syntaxic): RECURSIVE posnat =
     CASES U OF
       v(x): 2
@@ -92,7 +108,6 @@ BEGIN
   x, i, j: VAR nat  
   d: VAR (scontext?)
 
-
   % Basic functions for contexts
   ∈(x, Γ): MACRO bool = x < length(Γ) 
   rest(Γ, x): finseq[(scontext?)] = 
@@ -107,6 +122,7 @@ BEGIN
   AUTO_REWRITE k
   AUTO_REWRITE+ finseq_appl
 
+  % Express the fact that `Γ' and `Δ' are two contexts of the same shape.
   ;≡(Γ, Δ): bool =
     length(Γ) = length(Δ) AND
     FORALL (x: below[length(Γ)]):
@@ -118,10 +134,11 @@ BEGIN
       (const_def?(Γ(x)) => const_def?(Δ(x))) AND
       (theory_def?(Γ(x)) => theory_def?(Δ(x)))
 
+  % TODO: equiv actually is an equivalence relation.
   equiv_commut: THEOREM
     Γ ≡ Δ IFF Δ ≡ Γ
 
-  % Function Kind
+  % The `kind' function classify contexts into three syntaxic category
   prekeyword: TYPE = { PRETYPE, PRETERM, PRETHEORY }
   kind(d): prekeyword = 
     CASES d OF
@@ -142,7 +159,7 @@ BEGIN
     const_decl?(U) OR const_var?(U) OR const_def?(U)
 
 
-  % Finseq props
+  % TODO: These should probably move to some util.pvs
   concat_empty: THEOREM empty_seq ++ Γ = Γ
   concat__empty: THEOREM Γ ++ empty_seq = Γ
   concat_assoc: THEOREM (Γ ++ Δ) ++ Θ = Γ ++ (Δ ++ Θ)
@@ -165,7 +182,6 @@ BEGIN
 
   extract_concat: THEOREM
     (Γ ++ Δ) ^^ (0, length(Δ)) = Δ
-
   
   % Some definitions for the tau function
   %% Type TCCS 
@@ -190,7 +206,7 @@ BEGIN
 
   tsize(t: tccs): RECURSIVE posnat =
     CASES t OF
-      tcc(f): 0,
+      tcc(f): 1,
       tccs(f): sum(f`length, LAMBDA (x: below[f`length]): tsize(f`seq(x))) + 1
     ENDCASES
   MEASURE t BY <<
@@ -199,8 +215,6 @@ BEGIN
   f: VAR finseq[tccs]
   size_textract: THEOREM length(f) > j IMPLIES
     tsize(tccs(f ^^ (0, j))) < tsize(tccs(f))
-    
-
 
   %%% Type keyword
   keyword: DATATYPE
@@ -224,8 +238,4 @@ BEGIN
       KTERM(T): KTERM(f(T))
       ELSE k
     ENDCASES
-
-
-
-
 END language

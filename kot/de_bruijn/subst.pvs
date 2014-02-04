@@ -12,7 +12,7 @@ BEGIN
   k: VAR keyword
 
   AUTO_REWRITE+ sexpr?
-  % Shift: classical shift operator for De Bruijn indices
+  % Shift: usual shifting operator for De Bruijn indices
   ;↑(U, nb): RECURSIVE 
    { V | (sexpr?(U) IFF sexpr?(V)) AND 
          (sinterp?(U) IFF sinterp?(V)) AND
@@ -34,7 +34,6 @@ BEGIN
     , prod(A, B): prod(A ↑ nb, B ↑ (nb`1, nb`2 + 1))
 
       % Terms
-
     , app(f, a): app(f ↑ nb, a ↑ nb)
     , lam(T, a): lam(T ↑ nb, a ↑ (nb`1, nb`2 + 1))
     , pair(a, b): pair(a ↑ nb, b ↑ nb)
@@ -71,10 +70,6 @@ BEGIN
   % Some theorem on shift
   kind_shift: THEOREM
     kind(d ↑ nb) = kind(d)
-
-
-
-
 
   AUTO_REWRITE+ sexpr?
   % This is a "true" substitution - this really removes the bound variable.

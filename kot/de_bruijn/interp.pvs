@@ -7,7 +7,9 @@ BEGIN
   σ: VAR finseq[(sinterp?)]
   x: VAR (scontext?)
   y: VAR (sinterp?)
-  
+
+  % Checks whether an interpretation σ is compatible with a context Γ,
+  % that is, whether two 
   compatible?(Γ, σ): bool =
     length(Γ) = length(σ) AND
     FORALL (x: below(length(Γ))):

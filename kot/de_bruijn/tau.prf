@@ -3,61 +3,6 @@
   (π_TCC1-1 nil 3584367711
    ("" (grind) (("" (grind :rewrites (sexpr?)) nil nil)) nil)
    ((sexpr? adt-def-decl "boolean" language nil)) nil))
- (uparrow_TCC1 0
-  (uparrow_TCC1-1 nil 3584986495 ("" (subtype-tcc) nil nil)
-   ((finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil)
-    (↑ def-decl
-     "{V | (sexpr?(U) IFF sexpr?(V)) AND (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
-     subst nil)
-    (int_minus_int_is_int application-judgement "int" integers nil))
-   nil))
- (subst_TCC1 0
-  (subst_TCC1-1 nil 3584986495
-   ("" (skosimp* :preds? t)
-    (("" (invoke (typepred "%1") (~ + "theory?(%1)"))
-      (("" (assert) nil nil)) nil))
-    nil)
-   ((IMPLIES const-decl "[bool, bool -> bool]" booleans nil)
-    (below type-eq-decl nil nat_types nil)
-    (scontext? adt-def-decl "boolean" language nil)
-    (finseq type-eq-decl nil finite_sequences nil)
-    (theory? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-    (theory_ adt-constructor-decl "[finseq[(scontext?)] -> (theory?)]"
-     language nil)
-    (AND const-decl "[bool, bool -> bool]" booleans nil)
-    (IFF const-decl "[bool, bool -> bool]" booleans nil)
-    (sinterp? adt-def-decl "boolean" language nil)
-    (ideep? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
-    (subst def-decl
-           "{V | (sexpr?(U) IFF sexpr?(V)) AND (sinterp?(U) IFF sinterp?(V)) AND (scontext?(U) IFF scontext?(V)) AND (ideep?(U) IFF ideep?(V))}"
-           subst
-      nil)
-    (int_minus_int_is_int application-judgement "int" integers nil)
-    (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
-     integers nil)
-    (real_ge_is_total_order name-judgement "(total_order?[real])"
-     real_props nil)
-    (finseq_appl const-decl "[below[length(fs)] -> T]" finite_sequences
-     nil)
-    (boolean nonempty-type-decl nil booleans nil)
-    (bool nonempty-type-eq-decl nil booleans nil)
-    (NOT const-decl "[bool -> bool]" booleans nil)
-    (number nonempty-type-decl nil numbers nil)
-    (number_field_pred const-decl "[number -> boolean]" number_fields
-     nil)
-    (number_field nonempty-type-from-decl nil number_fields nil)
-    (real_pred const-decl "[number_field -> boolean]" reals nil)
-    (real nonempty-type-from-decl nil reals nil)
-    (>= const-decl "bool" reals nil)
-    (rational_pred const-decl "[real -> boolean]" rationals nil)
-    (rational nonempty-type-from-decl nil rationals nil)
-    (integer_pred const-decl "[rational -> boolean]" integers nil)
-    (int nonempty-type-eq-decl nil integers nil)
-    (nat nonempty-type-eq-decl nil naturalnumbers nil)
-    (syntaxic type-decl nil language nil)
-    (sexpr? adt-def-decl "boolean" language nil))
-   nil))
  (τ0_TCC1 0
   (τ0_TCC1-1 nil 3584986495
    ("" (skosimp* :preds? t) (("" (assert) (("" (grind) nil nil)) nil))
@@ -438,8 +383,11 @@
      integers nil)
     (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
     (empty_seq const-decl "finseq" finite_sequences nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (definition? const-decl "bool" language nil)
     (real_gt_is_strict_total_order name-judgement
@@ -918,8 +866,11 @@
      "(strict_total_order?[real])" real_props nil)
     (nnint_plus_nnint_is_nnint application-judgement "nonneg_int"
      integers nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (definition? const-decl "bool" language nil)
     (ρ0 const-decl "syntaxic" delta nil)
@@ -947,8 +898,11 @@
      integers nil)
     (++ const-decl "finseq[(scontext?)]" language nil)
     (O const-decl "finseq" finite_sequences nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (definition? const-decl "bool" language nil)
     (empty_seq const-decl "finseq" finite_sequences nil)
@@ -2185,8 +2139,11 @@
         nil))
       nil))
     nil)
-   ((expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+   ((expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (real_gt_is_strict_total_order name-judgement
      "(strict_total_order?[real])" real_props nil)
@@ -2456,8 +2413,11 @@
      "(strict_total_order?[real])" real_props nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (sexpr? adt-def-decl "boolean" language nil)
     (ρ0 const-decl "syntaxic" delta nil)
@@ -2920,8 +2880,11 @@
     (O const-decl "finseq" finite_sequences nil)
     (empty_seq const-decl "finseq" finite_sequences nil)
     (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (++ const-decl "finseq[(scontext?)]" language nil)
     (epos!1 skolem-const-decl "syntaxic" tau nil)
@@ -3062,8 +3025,11 @@
     (k const-decl "finseq[(scontext?)]" language nil)
     (epos!1 skolem-const-decl "syntaxic" tau nil)
     (++ const-decl "finseq[(scontext?)]" language nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
@@ -6712,8 +6678,11 @@
     (k const-decl "finseq[(scontext?)]" language nil)
     (O const-decl "finseq" finite_sequences nil)
     (++ const-decl "finseq[(scontext?)]" language nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
@@ -7976,9 +7945,9 @@
     (- const-decl "[numfield, numfield -> numfield]" number_fields nil)
     (numfield nonempty-type-eq-decl nil number_fields nil)
     (TYPEOF adt-accessor-decl "[(KTERM?) -> (sexpr?)]" language nil)
-    (type_ shared-adt-accessor-decl
-     "[{x: syntaxic | const_def?(x) OR const_var?(x) OR const_decl?(x) OR lam?(x)} -> (sexpr?)]"
-     language nil)
+    (type_ shared-adt-accessor-decl "[{x: syntaxic |
+          const_def?(x) OR const_var?(x) OR const_decl?(x) OR lam?(x)} ->
+   (sexpr?)]" language nil)
     (lam? adt-recognizer-decl "[syntaxic -> boolean]" language nil)
     (const_decl? adt-recognizer-decl "[syntaxic -> boolean]" language
      nil)
@@ -8630,8 +8599,11 @@
     nil)
    ((real_ge_is_total_order name-judgement "(total_order?[real])"
      real_props nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (TRUE const-decl "bool" booleans nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
@@ -8801,8 +8773,11 @@
     (ideep adt-constructor-decl "[finseq[(sinterp?)] -> (ideep?)]"
      language nil)
     (TRUE const-decl "bool" booleans nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (int_minus_int_is_int application-judgement "int" integers nil)
     (real_ge_is_total_order name-judgement "(total_order?[real])"
@@ -9064,8 +9039,11 @@
      integers nil)
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (min const-decl "{p: real | p <= m AND p <= n}" real_defs nil)
     (int_plus_int_is_int application-judgement "int" integers nil)
@@ -9599,8 +9577,11 @@
     (posint_plus_nnint_is_posint application-judgement "posint"
      integers nil)
     (odd_plus_even_is_odd application-judgement "odd_int" integers nil)
-    (expand def-decl
-            "{V | (sexpr?(U) IMPLIES sexpr?(V)) AND (scontext?(U) IMPLIES scontext?(V)) AND (ideep?(U) IMPLIES theory?(V)) AND (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
+    (expand def-decl "{V |
+         (sexpr?(U) IMPLIES sexpr?(V)) AND
+          (scontext?(U) IMPLIES scontext?(V)) AND
+           (ideep?(U) IMPLIES theory?(V)) AND
+            (ikeep?(U) OR itype?(U) OR iterm?(U) IMPLIES scontext?(V))}"
             delta nil)
     (++ const-decl "finseq[(scontext?)]" language nil)
     (O const-decl "finseq" finite_sequences nil)
