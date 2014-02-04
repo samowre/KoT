@@ -64,7 +64,7 @@ BEGIN
   sum(len: nat, f: [below[len] -> nat]):
     RECURSIVE { n: nat | FORALL (x: below[len]): f(x) <= n } =
     IF len = 0 THEN 0
-    ELSE f(0) + sum(len - 1, LAMBDA (x: below[len]): f(x + 1)) ENDIF
+    ELSE f(0) + sum(len - 1, LAMBDA (x: below[len - 1]): f(x + 1)) ENDIF
   MEASURE len
 
   % Size function over syntaxic, allows for easier termination
