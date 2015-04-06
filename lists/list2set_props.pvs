@@ -1,0 +1,47 @@
+list2set_props[T:TYPE]: THEORY
+BEGIN
+  %lists: LIBRARY "../lists"
+  IMPORTING more_list_props[T]
+%  IMPORTING sets@more_sets_props[T]
+
+  l, m, l1, l2: VAR list[T]
+  s, t, s1, s2: VAR finite_set[T]
+  ll: VAR list[list[T]]
+  p: VAR pred[T]
+  P: VAR pred[list[T]]
+  a, b, c: VAR T
+  x, y, z: VAR T
+
+
+  list2set_member: RECURSIVE JUDGEMENT list2set(l) HAS_TYPE 
+  		   { s | FORALL x: member(x,s) IFF member(x,l)  }
+
+  list2set_null	  : LEMMA list2set(l) = emptyset IFF null?(l)
+  list2set_cons	  : LEMMA list2set(cons(x,l)) = add(x,list2set(l))
+  list2set_append : LEMMA list2set(append(l,m)) = union(list2set(l),list2set(m))
+  list2set_reverse: LEMMA list2set(reverse(l)) = list2set(l)
+  list2set_filter : LEMMA list2set(filter(l,p)) = filter(list2set(l),p)
+
+  list2set_subset : LEMMA subset?(l,m) IMPLIES subset?(list2set(l),list2set(m))
+  list2set_equal  : LEMMA equal?(l,m) IMPLIES list2set(l) = list2set(m)
+
+END list2set_props
+
+
+% Et set2list ca existe pas ? :( On se demande pourquoi
+
+
+%list2finseq_props[T:TYPE]: THEORY
+%BEGIN
+%  lists: LIBRARY "../lists"
+%  finseq: LIBRARY "../finseq"
+%  IMPORTING lists@more_list_props[T]
+%  IMPORTING finseq@more_finseq_props[T]
+%
+%  test : THEOREM TRUE
+%
+%END list2finseq_props
+
+
+%finseq2set_props 
+%finseq2list_props
